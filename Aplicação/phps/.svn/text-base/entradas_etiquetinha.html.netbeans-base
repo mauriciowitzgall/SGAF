@@ -1,0 +1,129 @@
+<style type="text/css">
+.campo
+{
+    height: 22px;
+    border-collapse:collapse; 
+    background-color: white;
+    font-size: 10pt;
+    border: 1px gray solid;
+}
+.campo:disabled
+{
+    background-color: transparent;
+    border: 1px white solid;
+    color: black;
+    border-bottom: 1px gray solid;
+}
+.textarea
+{
+    border-collapse:collapse; 
+    background-color: white;
+    font-size: 10pt;
+    border: 1px gray solid;
+    height: 110px;
+    width: 260px;
+}
+.textarea:disabled
+{
+    background-color: transparent;
+    border: 1px transparent solid;   
+    color: black;
+    
+}
+.tabela {
+    width: 100%;
+    <!-- border-bottom: 2px gray dotted; -->
+}
+.linha {    
+    border-bottom: 2px gray dotted;
+}
+.produto {
+    font-size: 13;
+    font-weight: bold;
+}  
+.for_id  {
+    font-size: 9;
+}
+.valor {
+    font-size: 18;
+    font-weight: bold;
+}    
+.demais {
+    font-size: 12;
+    font-style: italic;
+} 
+.peso {
+    font-size: 14;
+    font-style: italic;
+}      
+.titulo {
+    font-size: 10;
+    font-weight: bold;    
+}    
+.eti_fonte1 {
+    font-size: 20;
+    font-weight: bold;    
+}    
+.eti_fonte2 {
+    font-size: 12;
+    color: black;
+}    
+.frase {
+    font-size: 16; 
+    font-weight: bold;
+    color: #333333;
+} 
+.bordacentral {
+    border-right: 1px gray dotted;
+}
+
+
+</style>
+<!-- BEGIN BLOCK_ETIQUETA_TABELA --> 
+<table border="0" class="tabela">
+<!-- BEGIN BLOCK_ETIQUETA_LINHA -->
+    <tr class="">
+        <!-- BEGIN BLOCK_ETIQUETA_COLUNA -->
+        <td width="" align="center" class="linha">            
+            <span class="produto">{PRODUTO}</span> <span class="for_id">({FORNECEDOR_ID}) </span> <br>
+           
+                <!-- BEGIN BLOCK_CODBARRAS -->
+                <table border="0">
+                    <tr>
+                        <td>
+                            <img src="../imagens/icones/codigo_barras/p.gif" width={FINO} height={ALTURA} border=0><img
+                                src="../imagens/icones/codigo_barras/b.gif" width={FINO} height={ALTURA} border=0><img
+                                src="../imagens/icones/codigo_barras/p.gif" width={FINO} height={ALTURA} border=0><img
+                                src="../imagens/icones/codigo_barras/b.gif" width={FINO} height={ALTURA} border=0><img
+                                <!-- BEGIN BLOCK_ITEM -->
+                                    <!-- BEGIN BLOCK_1 -->
+                                        src="../imagens/icones/codigo_barras/p.gif" width={F1} height={ALTURA} border=0><img
+                                        <!-- END BLOCK_1 -->
+                                        <!-- BEGIN BLOCK_2 -->
+                                        src="../imagens/icones/codigo_barras/b.gif" width={F2} height={ALTURA} border=0><img
+                                        <!-- END BLOCK_2 -->
+                                <!-- END BLOCK_ITEM -->        
+                                src="../imagens/icones/codigo_barras/p.gif" width={LARGO} height={ALTURA} border=0><img
+                                src="../imagens/icones/codigo_barras/b.gif" width={FINO} height={ALTURA} border=0><img
+                                src="../imagens/icones/codigo_barras/p.gif" width=1 height={ALTURA} border=0>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">{VALOR}</td>
+                    </tr>
+                </table>
+                <!-- END BLOCK_CODBARRAS -->            
+            <span class="peso">{QUANTIDADE} {SIGLA} </span><span class="demais">{VALOR_UNITARIO} {SIGLA2}</span>  <br>
+            <span class="valor">{VALOR_TOTAL}</span> <br>
+            <span class="demais">{VALIDADE}</span>  <br>
+        </td> 
+        <!-- END BLOCK_ETIQUETA_COLUNA -->
+    </tr>
+    <!-- END BLOCK_ETIQUETA_LINHA --> 
+</table> 
+<table>
+	<tr>
+	    <td height="161px">&nbsp;</td>
+	</tr>
+</table>
+<!-- END BLOCK_ETIQUETA_TABELA --> 

@@ -1,0 +1,19 @@
+//Código de acompanhamento usado para realizar analises de acesso atravéz
+// do google analytics
+
+//Coopaf UA-32232134-1
+//Cooesperanca UA-32232134-4
+//Base Teste UA-32232134-2
+//Portal UA-32232134-3
+
+
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-32232134-7', 'ecosoli.org');
+  ga('send', 'pageview');
+
+

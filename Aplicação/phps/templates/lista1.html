@@ -1,0 +1,157 @@
+<script type="text/javascript" src="paginacao.js"></script>
+<style type="text/css">
+    .tab {
+        font-size: 10pt;
+        background-color: transparent;
+        color: black;           
+        border-collapse: collapse;    
+        border: 1px gray solid;
+    }
+
+    .tab_cabecalho {
+        font-weight: bold;
+        text-align: center;
+        background-color: #E4E4E4;	
+        border: 1px gray solid;
+    }
+
+    .tab_linhas {    
+        border: 1px gray solid;
+    }
+    .tab_linhas:hover {
+        border: 1px gray solid;
+        background-color: #E0EEE0;
+    }
+    
+    .tab_linhas2 {    
+        border: 1px gray solid;
+    }    
+    
+    .tab_subtotal {
+        font-weight: bold; 
+        
+    }  
+    
+
+    .tab_operacao {
+        background-color: #E4E4E4;
+    }  
+    
+    
+    .tab_totgeral {
+        background-color: #E4E4E4;
+        font-weight: bold;
+    }
+    
+</style>
+
+
+<br>
+
+
+<!-- BEGIN BLOCK_LISTA1 -->
+<table 
+    border="1" 
+    class="tab" 
+    cellpadding="4" 
+    width="
+        <!-- BEGIN BLOCK_TABELA_CHEIA -->
+        100% 
+        <!-- END BLOCK_TABELA_CHEIA -->
+        {TABELA_TAMANHO}
+    "
+>
+    <thead>
+        <tr valign="middle" class="tab_cabecalho">                    
+            <!-- BEGIN BLOCK_LISTA_CABECALHO -->
+            <th width="{CABECALHO_COLUNA_TAMANHO}" colspan="{CABECALHO_COLUNA_COLSPAN}">
+                {CABECALHO_COLUNA_NOME}
+            </th>     
+            <!-- END BLOCK_LISTA_CABECALHO -->
+        </tr>
+    </thead>      
+    
+        <!-- BEGIN BLOCK_LISTA -->
+        <tr class="
+            <!-- BEGIN BLOCK_LISTA_CLASSE_PADRAO -->
+            tab_linhas
+            <!-- END BLOCK_LISTA_CLASSE_PADRAO -->            
+            <!-- BEGIN BLOCK_LISTA_CLASSE -->
+            {LISTA_CLASSE}
+            <!-- END BLOCK_LISTA_CLASSE -->
+        ">
+
+            <!-- BEGIN BLOCK_LISTA_COLUNA -->
+            <td 
+                align="{LISTA_COLUNA_ALINHAMENTO}" 
+                class="{LISTA_COLUNA_CLASSE}"  
+                colspan="{LISTA_COLUNA_COLSPAN}"
+                width="{LISTA_COLUNA_TAMANHO}" 
+            >
+                
+            <!-- BEGIN BLOCK_COLUNA_LINK --> 
+            <a 
+                href="{COLUNA_LINK_ARQUIVO}" 
+                class="
+                    <!-- BEGIN BLOCK_COLUNA_LINK_PADRAO --> 
+                    link
+                    <!-- END BLOCK_COLUNA_LINK_PADRAO -->
+                    {COLUNA_LINK_CLASSE}
+                " 
+                target="{COLUNA_LINK_TARGET}"
+            >
+            <!-- END BLOCK_COLUNA_LINK -->                  
+                {LISTA_COLUNA_VALOR}
+            </a>
+            </td> 
+            <!-- END BLOCK_LISTA_COLUNA -->                                          
+
+            
+            <!-- BEGIN BLOCK_LISTA_COLUNA_ICONES -->
+            <td align="center" class="" width="100px" style="background-color: white">                               
+                <!-- BEGIN BLOCK_LISTA_COLUNA_IMAGEM -->
+                <a href="{LINK}" class="link">
+                    <img   width="{IMAGEM_TAMANHO}" src="{IMAGEM_PASTA}{IMAGEM_NOMEARQUIVO}" title="{IMAGEM_TITULO}"  alt="{IMAGEM_TITULO}" />
+                </a>
+                <!-- END BLOCK_LISTA_COLUNA_IMAGEM -->
+            </td>
+            <!-- END BLOCK_LISTA_COLUNA_ICONES -->
+
+
+            <!-- BEGIN BLOCK_LISTA_COLUNA_OPERACAO -->
+            <td align="center" class="fundo1">                
+                <a href="{LINK}?codigo={CODIGO}{LINK_COMPLEMENTO}" class="link1">
+                    <img width="15px" src="{ICONE_ARQUIVO}" title="{OPERACAO_NOME}"  alt="{OPERACAO_NOME}" />
+                </a>
+            </td>
+            <!-- END BLOCK_LISTA_COLUNA_OPERACAO -->
+        </tr>         
+        <!-- END BLOCK_LISTA -->
+    
+        <!-- BEGIN BLOCK_LISTA_NADA -->
+        <tr>
+            <td colspan="10" align="center" class="errado"> Nenhum resultado!</td>
+        </tr>
+        <!-- END BLOCK_LISTA_NADA -->     
+    
+
+</table>
+<!-- END BLOCK_LISTA1 -->
+
+<!-- BEGIN BLOCK_PAGINACAO -->          
+<table class="paginacaopadrao_fundo" width="100%" border="0">
+    <tr valign="middle" align="center" class="paginacaopadrao_linha">
+    <td align="right">
+        <input onclick="paginacao_retroceder()" type="image" width="25px"   src="{PASTA_ICONES}esquerda.png"  title="Anterior" alt="Anterior" />
+    </td>
+    <td width="170px">
+        <input size="5" type="text" name="paginaatual" class="campofiltro" value="{PAGINAATUAL}">
+        <span>/</span>
+        <input disabled size="5" type="text" name="paginas" class="campofiltro" value="{PAGINAS}">
+    </td>
+    <td align="left">
+        <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Próxima" alt="Próxima" />
+    </td>
+</tr>
+</table>
+<!-- END BLOCK_PAGINACAO -->        

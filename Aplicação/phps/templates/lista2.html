@@ -1,0 +1,296 @@
+<script type="text/javascript" src="paginacao.js"></script>
+<style type="text/css">
+    .tab {
+        font-size: 10pt;
+        background-color: transparent;
+        color: black;           
+        border-collapse: collapse;    
+        border: 1px gray solid;
+    }
+    .tab_cabecalho {
+        font-weight: bold;
+        text-align: center;
+        background-color: #E4E4E4;	
+        border: 1px gray solid;
+    }
+    .tab_linhas {    
+        border: 1px gray solid;
+    }
+    .tab_linhas:hover {
+        border: 1px gray solid;
+        background-color: #E0EEE0;
+    }
+    .tab_linhas_amarelo {
+        background: lemonchiffon;
+    }
+    .tab_linhas_vermelho {
+        background: #FFE4E1;
+    }
+    .tab_linhas_vermelho1 {
+        background: #F5A9A9;
+    }
+    .tab_linhas_vermelho2 {
+        background: #F6CECE;
+    }
+    .tab_linhas_vermelho3 {
+        background: #F8E0E0;
+    }
+    .tab_linhas_vermelho4 {
+        background: #FBEFEF;
+    }
+    .tab_linhas_azul1 {
+        background: #EFF8FB;
+    }
+    .tab_linhas_azul2 {
+        background: #E0F2F7;
+    }
+    .tab_linhas_azul3 {
+        background: #CEECF5;
+    }    
+    .tab_linhas_azul4 {
+        background: #A9E2F3;
+    }  
+    
+    .tab_linhas2 {    
+        border: 1px gray solid;
+    }  
+    .tab_coluna {
+        background-color: white; 
+    }
+    .tab_subtotal {
+        font-weight: bold; 
+    }     
+    .tab_operacao {
+        background-color: #E4E4E4;
+    }      
+    .tab_icones {
+        background-color: white;
+    }      
+    .tab_totgeral {
+        background-color: #E4E4E4;
+        font-weight: bold;
+    }
+    .tab_titcabecalho {
+        
+    }
+    .texto {
+        
+    }
+    .linha_nada {
+        color: red;
+        font-weight: bold;        
+    }
+    .operacaodica {
+        color: #333;
+        font-weight: bold;
+        font-size: xx-small;
+    }
+</style>
+
+<br>
+
+<!-- BEGIN BLOCK_LISTAGEM -->
+<table 
+    border="1" 
+    id=""
+    class="tab" 
+    cellpadding="4" 
+    width="
+        <!-- BEGIN BLOCK_TABELA_CHEIA -->
+        100% 
+        <!-- END BLOCK_TABELA_CHEIA -->
+        {TABELA_TAMANHO}
+    "
+>
+    <!-- BEGIN BLOCK_CABECALHO -->
+    <thead>
+        <!-- BEGIN BLOCK_CABECALHO_LINHA -->
+        <tr valign="middle" class="tab_cabecalho">                    
+            <!-- BEGIN BLOCK_CABECALHO_COLUNA -->
+            <th width="{CABECALHO_COLUNA_TAMANHO}" colspan="{CABECALHO_COLUNA_COLSPAN}" rowspan="{CABECALHO_COLUNA_ROWSPAN}">
+                <span class="tab_titcabecalho"> {CABECALHO_COLUNA_NOME}</span>
+            </th> 
+            <!-- END BLOCK_CABECALHO_COLUNA -->            
+        </tr>
+        
+        <!-- END BLOCK_CABECALHO_LINHA -->        
+    </thead> 
+    <!-- END BLOCK_CABECALHO -->
+    
+    
+    <!-- BEGIN BLOCK_CORPO -->
+    <tbody>
+        <!-- BEGIN BLOCK_LINHA -->
+        <tr class="
+            <!-- BEGIN BLOCK_LINHA_PADRAO -->
+            tab_linhas 
+            <!-- END BLOCK_LINHA_PADRAO -->            
+            <!-- BEGIN BLOCK_LINHA_DINAMICA -->
+            {LINHA_CLASSE}
+            <!-- END BLOCK_LINHA_DINAMICA -->
+        ">
+
+            <!-- BEGIN BLOCK_COLUNA -->
+            <td 
+                align="{COLUNA_ALINHAMENTO}" 
+                width="{COLUNA_TAMANHO}" 
+                class="
+                    <!-- BEGIN BLOCK_COLUNA_PADRAO -->
+                    tab_coluna
+                    <!-- END BLOCK_COLUNA_PADRAO -->
+
+                    <!-- BEGIN BLOCK_COLUNA_ICONES -->
+                    tab_icones
+                    <!-- END BLOCK_COLUNA_ICONES -->
+
+                    <!-- BEGIN BLOCK_COLUNA_OPERACAO -->
+                    tab_operacao
+                    <!-- END BLOCK_COLUNA_OPERACAO -->
+
+                    <!-- BEGIN BLOCK_COLUNA_DINAMICA -->
+                    {COLUNA_CLASSE}
+                    <!-- END BLOCK_COLUNA_DINAMICA -->
+                "
+                colspan="{COLUNA_COLSPAN}" 
+                rowspan="{COLUNA_ROWSPAN}" 
+            >
+                
+                <!-- BEGIN BLOCK_CONTEUDO --> 
+
+                <!-- BEGIN BLOCK_CONTEUDO_LINK --> 
+                <a 
+                    href="{CONTEUDO_LINK_ARQUIVO}" 
+                    class="link"                
+                    <!-- BEGIN BLOCK_CONTEUDO_LINK_NOVAJANELA --> 
+                    target="_blank"
+                    <!-- END BLOCK_CONTEUDO_LINK_NOVAJANELA --> 
+                >
+                <!-- END BLOCK_CONTEUDO_LINK -->                  
+
+                
+                
+                <!-- BEGIN BLOCK_TEXTO -->             
+                <span class="texto">{TEXTO}</span>                        
+                <!-- END BLOCK_TEXTO -->  
+                
+                
+                
+                <!-- BEGIN BLOCK_ICONE -->
+                <img 
+                    width="{ICONE_TAMANHO}" 
+                    src="{ICONE_CAMINHO}{ICONE_NOMEARQUIVO}" 
+                    title="{ICONE_DICA}" 
+                    alt="{ICONE_NOMEALTERNATIVO}"
+                >                
+                <!-- END BLOCK_ICONE -->
+                    
+                
+                <!-- BEGIN BLOCK_OPERACAO -->
+                <img 
+                    width="15px" 
+                    <!-- BEGIN BLOCK_OPERACAO_DETALHES -->
+                    <!-- BEGIN BLOCK_OPERACAO_DETALHES_HABILITADO -->
+                    src="{ICONES_CAMINHO}detalhes.png" 
+                    <!-- END BLOCK_OPERACAO_DETALHES_HABILITADO -->                        
+                    <!-- BEGIN BLOCK_OPERACAO_DETALHES_DESABILITADO -->
+                    src="{ICONES_CAMINHO}detalhes_desabilitado.png" 
+                    <!-- END BLOCK_OPERACAO_DETALHES_DESABILITADO -->
+                    title="Detalhes" 
+                    alt="Detalhes" 
+                    <!-- END BLOCK_OPERACAO_DETALHES -->
+                    
+                    <!-- BEGIN BLOCK_OPERACAO_IMPRIMIR -->
+                    <!-- BEGIN BLOCK_OPERACAO_IMPRIMIR_HABILITADO -->
+                    src="{ICONES_CAMINHO}imprimir.png" 
+                    <!-- END BLOCK_OPERACAO_IMPRIMIR_HABILITADO -->                        
+                    <!-- BEGIN BLOCK_OPERACAO_IMPRIMIR_DESABILITADO -->
+                    src="{ICONES_CAMINHO}imprimir_desabilitado.png" 
+                    <!-- END BLOCK_OPERACAO_IMPRIMIR_DESABILITADO -->
+                    title="Imprimir" 
+                    alt="Imprimir" 
+                    <!-- END BLOCK_OPERACAO_IMPRIMIR -->
+                    
+                    <!-- BEGIN BLOCK_OPERACAO_EDITAR -->
+                    <!-- BEGIN BLOCK_OPERACAO_EDITAR_HABILITADO -->
+                    src="{ICONES_CAMINHO}editar.png" 
+                    <!-- END BLOCK_OPERACAO_EDITAR_HABILITADO -->                        
+                    <!-- BEGIN BLOCK_OPERACAO_EDITAR_DESABILITADO -->
+                    src="{ICONES_CAMINHO}editar_desabilitado.png" 
+                    <!-- END BLOCK_OPERACAO_EDITAR_DESABILITADO -->
+                    <!-- BEGIN BLOCK_OPERACAO_EDITAR_TITULOPADRAO -->
+                    title="Editar" 
+                    <!-- END BLOCK_OPERACAO_EDITAR_TITULOPADRAO -->
+                    <!-- BEGIN BLOCK_OPERACAO_EDITAR_TITULO -->
+                    title="{ICONES_TITULO}" 
+                    <!-- END BLOCK_OPERACAO_EDITAR_TITULO -->
+                    alt="Editar" 
+                    <!-- END BLOCK_OPERACAO_EDITAR -->
+                    
+                    <!-- BEGIN BLOCK_OPERACAO_EXCLUIR -->
+                    <!-- BEGIN BLOCK_OPERACAO_EXCLUIR_HABILITADO -->
+                    src="{ICONES_CAMINHO}excluir.png" 
+                    <!-- END BLOCK_OPERACAO_EXCLUIR_HABILITADO -->                        
+                    <!-- BEGIN BLOCK_OPERACAO_EXCLUIR_DESABILITADO -->
+                    src="{ICONES_CAMINHO}excluir_desabilitado.png" 
+                    <!-- END BLOCK_OPERACAO_EXCLUIR_DESABILITADO -->
+                    <!-- BEGIN BLOCK_OPERACAO_EXCLUIR_TITULOPADRAO -->
+                    title="Excluir" 
+                    <!-- END BLOCK_OPERACAO_EXCLUIR_TITULOPADRAO -->
+                    <!-- BEGIN BLOCK_OPERACAO_EXCLUIR_TITULO -->
+                    title="{ICONES_TITULO}" 
+                    <!-- END BLOCK_OPERACAO_EXCLUIR_TITULO -->
+                    
+                    alt="Excluir" 
+                    <!-- END BLOCK_OPERACAO_EXCLUIR -->
+                    
+                 />
+                 <!-- BEGIN BLOCK_OPERACAO_IMPRIMIR_DICA -->                       
+                 <span class="operacaodica">IMPRIMIR</span>
+                 <!-- END BLOCK_OPERACAO_IMPRIMIR_DICA -->                       
+                 <!-- BEGIN BLOCK_OPERACAO_DETALHES_DICA -->                       
+                 <span class="operacaodica">DETALHES</span>
+                 <!-- END BLOCK_OPERACAO_DETALHES_DICA -->                       
+                 <!-- BEGIN BLOCK_OPERACAO_EDITAR_DICA -->                       
+                 <span class="operacaodica">EDITAR</span>
+                 <!-- END BLOCK_OPERACAO_EDITAR_DICA -->                       
+                 <!-- BEGIN BLOCK_OPERACAO_EXCLUIR_DICA -->                       
+                 <span class="operacaodica">EXCLUIR</span>
+                 <!-- END BLOCK_OPERACAO_EXCLUIR_DICA -->                       
+                 
+                 <!-- END BLOCK_OPERACAO -->                       
+                </a>
+                <!-- END BLOCK_CONTEUDO --> 
+            </td> 
+            <!-- END BLOCK_COLUNA -->                                          
+        </tr>         
+        <!-- END BLOCK_LINHA -->
+    
+        <!-- BEGIN BLOCK_LINHA_NADA -->
+        <tr>
+            <td colspan="{LINHA_NADA_COLSPAN}" align="center" class="linha_nada"> Nenhum resultado!</td>
+        </tr>
+        <!-- END BLOCK_LINHA_NADA -->  
+        
+    </tbody> 
+    <!-- END BLOCK_CORPO -->
+    
+</table>
+<!-- END BLOCK_LISTAGEM -->
+
+<!-- BEGIN BLOCK_PAGINACAO -->          
+<table class="paginacaopadrao_fundo" width="100%" border="0">
+    <tr valign="middle" align="center" class="paginacaopadrao_linha">
+    <td align="right">
+        <input onclick="paginacao_retroceder()" type="image" width="25px"   src="{PASTA_ICONES}esquerda.png"  title="Anterior" alt="Anterior" />
+    </td>
+    <td width="170px">
+        <input size="5" type="text" name="paginaatual" class="campofiltro" value="{PAGINAATUAL}">
+        <span>/</span>
+        <input disabled size="5" type="text" name="paginas" class="campofiltro" value="{PAGINAS}">
+    </td>
+    <td align="left">
+        <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Próxima" alt="Próxima" />
+    </td>
+</tr>
+</table>
+<!-- END BLOCK_PAGINACAO -->     

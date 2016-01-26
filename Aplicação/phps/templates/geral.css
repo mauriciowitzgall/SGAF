@@ -1,0 +1,126 @@
+/* 
+    Document   : geral
+    Created on : 25/04/2012, 23:18:06
+    Author     : mauricio
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.link {
+    text-decoration: none;
+    color: black;
+    background-color: transparent;
+}
+
+
+.campopadrao {
+    height: 22px;
+    border-collapse:collapse; 
+    background-color: white;
+    font-size: 10pt;
+    border: 1px gray solid;
+    color: black;
+}
+.campopadrao:disabled {
+    background-color: transparent;
+    border: 1px transparent solid;
+    color: black;
+    border-bottom: 1px gray solid;    
+}
+.campopadrao:required {    
+    border: 1px darkolivegreen solid;    
+}
+.campopadrao:focus {    
+    
+    border: 1px orange solid;    
+}
+
+
+.campofiltro
+{
+    height: 22px;
+    border-collapse:collapse; 
+    background-color: white;
+    font-size: 10pt;
+    border: 1px gray solid;
+}
+.campofiltro:disabled
+{
+    background-color: #E5E5E5;
+    border: 1px white solid;
+    color: gray;
+    border: 1px #DCDCDC solid;
+}
+
+.campofiltro:required {    
+    border: 1px darkolivegreen solid;    
+}
+.campofiltro:focus {    
+    
+    border: 1px orange solid;    
+}
+
+.textarea {
+    height: 80px;
+    border-collapse:collapse; 
+    background-color: white;
+    font-size: 10pt;
+    border: 1px gray solid;
+}
+.textarea:disabled {
+    background-color: transparent;
+    border: 1px transparent solid;
+    color: black;
+    border-left-color: gray;
+    border-bottom-color: gray;
+}
+
+.botaopadrao {
+    border-collapse:collapse;	
+    background-color: #E4E4E4;
+    border: 1px gray solid;
+    color: black;
+    font-weight: bold; 
+    height: 28px;
+    font-family: Arial;
+    font-size: 9pt;
+    color: black;
+    font-weight: bold;    
+}
+.botaopadrao:hover {
+    background-color: green;
+    color: white;
+}
+.botaopadrao:disabled {
+    background-color: #E5E5E5;
+    border: 1px white solid;
+    color: gray;
+    border: 1px #DCDCDC solid;
+}
+.botaopadrao:focus {
+    border: 2px darkolivegreen solid;
+}
+
+.botaopadraocadastrar {
+    background-color: #E0EEE0;        
+    
+}
+.paginacaopadrao_fundo {
+    border: 1px gray solid;
+    border-top-color: transparent;
+    background-color: #E4E4E4;
+}
+.paginacaopadrao_linha {
+    height: 15px;
+    border-top-color: transparent;
+}
+.lin {    
+    border: 1px gray solid;
+}
+.lin:hover {
+    border: 1px gray solid;
+    background-color: #E0EEE0;
+}
+.negrito {
+    font-weight: bold;
+}

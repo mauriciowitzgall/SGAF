@@ -1,0 +1,92 @@
+<script type="text/javascript" src="paginacao.js"></script>
+<table summary="" class="" border="0">
+    <tr>
+        <td width="35px"><img width="50px" src="{ICONES_CAMINHO}estoque.png" alt="" ></td>
+        <td valign="bottom">
+            <label class="titulo" > ESTOQUE</label><br />
+            <label class="subtitulo"> VENCIMENTO </label>
+        </td>
+
+    </tr>
+</table>
+<hr align="left" class="linhacurta" >
+<br>
+<form action="estoque_validade.php" method="post" name="form">
+<!-- BEGIN BLOCK_FILTRO  -->
+    <table width="" class="tabelafiltro">
+        <tr>             
+            <td><b>&nbsp;Produtos:</b><br>
+                <select name="filtroproduto" class="campofiltro">
+                    <option value="">Todos</option> 
+                    <!-- BEGIN BLOCK_FILTRO_PRODUTO  -->
+                    <option value="{PRODUTO_CODIGO}" {PRODUTO_SELECIONADO}>{PRODUTO_NOME}</option>
+                    <!-- END BLOCK_FILTRO_PRODUTO  -->
+                </select>
+            </td>
+            <td width="15px"></td>           
+            <td><b>&nbsp;Fornecedor:</b><br>
+                <select name="filtrofornecedor" class="campofiltro">
+                    <option value="">Todos</option> 
+                    <!-- BEGIN BLOCK_FILTRO_FORNECEDOR  -->
+                    <option value="{FORNECEDOR_CODIGO}" {FORNECEDOR_SELECIONADO} >{FORNECEDOR_NOME}</option>
+                    <!-- END BLOCK_FILTRO_FORNECEDOR -->
+                </select>
+            </td>
+            <td width="15px"></td>          
+        </tr>      
+    </table>
+    <br>
+    <input type="submit" class="botao fonte3" value="PESQUISAR">&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="estoque_validade.php" class="link"><input type="button" value="REINICIAR PESQUISA" class="botao fonte3"></a>
+    <br>
+    <br>
+    <!-- END BLOCK_FILTRO  -->
+
+    <table border="1" class="tabela1" cellpadding="4" width="100%">
+        <tr valign="middle" class="tabelacabecalho1">
+            <td width="">PRODUTO</td>        
+            <td width=""  colspan="2">FORNECEDOR</td>        
+            <td width="" >LOTE</td>
+            <td width="" colspan="2">QUANTIDADE</td>
+            <td width="100px" >DATA VENC.</td>
+            <td width="100px" >DIAS PARA VENCER</td>
+        </tr>
+        <!-- BEGIN BLOCK_LISTA -->
+        <tr>
+            <td align="left"> <a href="produtos_cadastrar.php?codigo={PRODUTO_CODIGO}&ver=1&link=estoque_validade.php" class="link " title="Ver detalhes"><span class="{VENCEU}">{PRODUTO}</span></a></td>
+            <td class="{VENCEU}" align="right">{FORNECEDOR_ID}</td>
+            <td align="left"><a href="pessoas_cadastrar.php?codigo={FORNECEDOR_CODIGO}&operacao=ver" class="link " title="Ver detalhes"><span class="{VENCEU}">{FORNECEDOR}</span></a></td>
+            <td align="right"><a href="entradas_ver.php?codigo={LOTE}" class="link {VENCEU}"><span class="{VENCEU}">{LOTE}</span></a></td>
+            <td class="{VENCEU}" align="right">{QTD}</td>
+            <td class="{VENCEU}" align="left">{SIGLA}</td>
+            <td class="{VENCEU}" align="right">{DATAVENCIMENTO}</td>
+            <td class="{VENCEU}" align="right">{VALIDADE}</td>                
+        </tr>
+        <!-- END BLOCK_LISTA -->
+
+        <!-- BEGIN BLOCK_LISTA_NADA -->
+        <tr>
+            <td colspan="10" align="center" class="errado"> Nenhum resultado!"</td>
+        </tr>
+        <!-- END BLOCK_LISTA_NADA -->
+
+    </table>
+<!-- BEGIN BLOCK_PAGINACAO -->          
+<table class="paginacao_fundo" width="100%" border="0">
+    <tr valign="middle" align="center" class="paginacao_linha">
+    <td align="right">
+        <input onclick="paginacao_retroceder()" type="image" width="25px"   src="{PASTA_ICONES}esquerda.png"  title="Anterior" alt="Anterior" />
+    </td>
+    <td width="170px">
+        <input size="5" type="text" name="paginaatual" class="campofiltro" value="{PAGINAATUAL}">
+        <span>/</span>
+        <input disabled size="5" type="text" name="paginas" class="campofiltro" value="{PAGINAS}">
+    </td>
+    <td align="left">
+        <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Próxima" alt="Próxima" />
+    </td>
+</tr>
+</table>
+<!-- END BLOCK_PAGINACAO -->  
+</form>    
+<br />

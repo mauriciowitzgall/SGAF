@@ -1,0 +1,283 @@
+<style type="text/css">
+    .tabcad {
+        border-collapse:collapse;
+        font-size: 10pt;
+        background-color: white;
+        color: black;    
+    }
+    .tabcadlinha {        
+    }
+    .tabcadcoluna {
+        background-color: #E4E4E4;            
+    }
+    .titulo {
+        font-size: 10pt;
+        font-weight: bold;
+    }   
+</style>
+<link rel="stylesheet" type="text/css" href="templates/geral.css" />
+
+<!-- BEGIN BLOCK_FORM -->
+<form action="{FORM_LINK}" target="{FORM_TARGET}" method="post" name="{FORM_NOME}">   
+<!-- END BLOCK_FORM -->    
+
+    <table summary="" border="0" class="tabcad" cellpadding="4">
+        <!-- BEGIN BLOCK_LINHA -->
+        <tr class="{LINHA_CLASSE}">  
+            <!-- BEGIN BLOCK_COLUNA -->
+            <td 
+                align="{COLUNA_ALINHAMENTO}" 
+                width="{COLUNA_TAMANHO}" 
+                class="
+                <!-- BEGIN BLOCK_COLUNA_PADRAO -->
+                tabcadcoluna 
+                {COLUNA_CLASSE}
+                <!-- END BLOCK_COLUNA_PADRAO -->
+
+                <!-- BEGIN BLOCK_COLUNA_DINAMICO -->
+                {COLUNA_CLASSE}
+                <!-- END BLOCK_COLUNA_DINAMICO -->
+                "
+                rowspan="{COLUNA_ROWSPAN}" 
+                colspan="{COLUNA_COLSPAN}"
+                >
+                <!-- BEGIN BLOCK_CONTEUDO --> 
+
+                <!-- BEGIN BLOCK_COLUNA_LINK --> 
+                <a 
+                    href="{COLUNA_LINK_ARQUIVO}" 
+                    class="
+                    <!-- BEGIN BLOCK_COLUNA_LINK_PADRAO --> 
+                    link
+                    <!-- END BLOCK_COLUNA_LINK_PADRAO -->
+                    {COLUNA_LINK_CLASSE}
+                    " 
+                    target="{COLUNA_LINK_TARGET}"
+                    >
+                    <!-- END BLOCK_COLUNA_LINK -->  
+
+
+                    <!-- BEGIN BLOCK_TITULO -->             
+                    <span class="titulo">{TITULO}:</span>                        
+                    <!-- END BLOCK_TITULO -->  
+
+
+                    <!-- BEGIN BLOCK_CAMPO --> 
+                    <input
+                        type="{CAMPO_TIPO}" 
+                        name="{CAMPO_NOME}" 
+                        id="{CAMPO_ID}" 
+                        size="{CAMPO_TAMANHO}"
+                        value="{CAMPO_VALOR}"
+                        maxlength="{CAMPO_QTDCARACTERES}"                
+                        onkeyup="{CAMPO_ONKEYUP}"
+                        onkeydown="{CAMPO_ONKEYDOWN}"
+                        onclick="
+                        <!-- BEGIN BLOCK_CAMPO_AUTOSELECIONAR -->
+                        this.select()    
+                        <!-- END BLOCK_CAMPO_AUTOSELECIONAR -->
+                        {CAMPO_AOCLICAR}
+                        " 
+                        placeholder="{CAMPO_DICA}" 
+
+                        <!-- BEGIN BLOCK_CAMPO_HISTORICODESATIVADO -->
+                        autocomplete="off"
+                        <!-- END BLOCK_CAMPO_HISTORICODESATIVADO -->
+
+                        <!-- BEGIN BLOCK_CAMPO_AUTOFOCO -->
+                        autofocus
+                        <!-- END BLOCK_CAMPO_AUTOFOCO -->
+
+                        <!-- BEGIN BLOCK_CAMPO_DESABILITADO -->
+                        disabled                 
+                        <!-- END BLOCK_CAMPO_DESABILITADO -->
+
+                        <!-- BEGIN BLOCK_CAMPO_MARCADO -->
+                        checked 
+                        <!-- END BLOCK_CAMPO_MARCADO -->   
+
+                        <!-- BEGIN BLOCK_CAMPO_OBRIGATORIO -->
+                        required                 
+                        <!-- END BLOCK_CAMPO_OBRIGATORIO -->
+
+                        <!-- BEGIN BLOCK_CAMPO_PADRAO -->
+                        class=" campopadrao {CAMPO_CLASSE}" 
+                        <!-- END BLOCK_CAMPO_PADRAO -->                
+
+                        <!-- BEGIN BLOCK_CAMPO_DINAMICO -->
+                        class=" {CAMPO_CLASSE} " 
+                        <!-- END BLOCK_CAMPO_DINAMICO -->   
+                        >
+                        <!-- END BLOCK_CAMPO --> 
+
+
+                        <!-- BEGIN BLOCK_SELECT --> 
+                        <select
+                        name="{SELECT_NOME}"
+                        id="{SELECT_ID}"
+                        size="{SELECT_TAMANHO}"                 
+                        onchange="{SELECT_AOTROCAR}" 
+                        onclick="{SELECT_AOCLICAR}" 
+
+
+                        <!-- BEGIN BLOCK_SELECT_AUTOFOCO -->
+                        autofocus
+                        <!-- END BLOCK_SELECT_AUTOFOCO -->
+
+                        <!-- BEGIN BLOCK_SELECT_DESABILITADO -->
+                        disabled                 
+                        <!-- END BLOCK_SELECT_DESABILITADO -->
+
+                        <!-- BEGIN BLOCK_SELECT_OBRIGATORIO -->
+                        required                 
+                        <!-- END BLOCK_SELECT_OBRIGATORIO -->
+
+                        <!-- BEGIN BLOCK_SELECT_PADRAO -->
+                        class="campopadrao {SELECT_CLASSE} " 
+                        <!-- END BLOCK_SELECT_PADRAO -->                
+
+                        <!-- BEGIN BLOCK_SELECT_DINAMICO -->
+                        class=" {SELECT_CLASSE} " 
+                        <!-- END BLOCK_SELECT_DINAMICO -->                   
+                        >           
+                        <!-- BEGIN BLOCK_OPTION_PADRAO --> 
+                        <option value="">Selecione</option>
+                        <!-- END BLOCK_OPTION_PADRAO --> 
+                        >           
+                        <!-- BEGIN BLOCK_OPTION_TODOS --> 
+                        <option value="">Todos</option>
+                        <!-- END BLOCK_OPTION_TODOS --> 
+
+                        <!-- BEGIN BLOCK_OPTION --> 
+                        <option 
+                            value="{OPTION_VALOR}" 
+                            <!-- BEGIN BLOCK_OPTION_SELECIONADO -->
+                            selected
+                            <!-- END BLOCK_OPTION_SELECIONADO -->
+                            >
+                            {OPTION_TEXTO}
+                    </option> 
+                    <!-- END BLOCK_OPTION --> 
+                </select>
+                <!-- END BLOCK_SELECT --> 
+
+                <!-- BEGIN BLOCK_TEXTAREA --> 
+                <textarea                 
+                    cols="{TEXTAREA_TAMANHO}"
+                    name="{TEXTAREA_NOME}" 
+                    id="{TEXTAREA_ID}" 
+                    maxlength="{TEXTAREA_QTDCARACTERES}"
+                    onkeyup="{TEXTAREA_ONKEYUP}"
+                    onkeydown="{TEXTAREA_ONKEYDOWN}"
+                    onkeypress="{TEXTAREA_ONKEYPRESS}"
+                    placeholder="{TEXTAREA_DICA}"
+
+                    onclick="
+                    <!-- BEGIN BLOCK_TEXTAREA_AUTOSELECIONAR -->
+                    this.select()    
+                    <!-- END BLOCK_TEXTAREA_AUTOSELECIONAR -->
+                    {TEXTAREA_AOCLICAR}
+                    " 
+
+                    <!-- BEGIN BLOCK_TEXTAREA_DESABILITADO -->
+                    disabled 
+                    <!-- END BLOCK_TEXTAREA_DESABILITADO --> 
+
+                    <!-- BEGIN BLOCK_TEXTAREA_AUTOFOCO -->
+                    autofocus
+                    <!-- END BLOCK_TEXTAREA_AUTOFOCO -->
+
+                    <!-- BEGIN BLOCK_TEXTAREA_OBRIGATORIO -->
+                    required                 
+                    <!-- END BLOCK_TEXTAREA_OBRIGATORIO -->
+
+                    <!-- BEGIN BLOCK_TEXTAREA_PADRAO -->
+                    class=" campopadrao textarea {TEXTAREA_CLASSE} " 
+                    <!-- END BLOCK_TEXTAREA_PADRAO -->                
+
+                    <!-- BEGIN BLOCK_TEXTAREA_DINAMICO -->
+                    class=" {TEXTAREA_CLASSE} " 
+                    <!-- END BLOCK_TEXTAREA_DINAMICO -->   
+                    >{TEXTAREA_TEXTO}</textarea>
+                <!-- END BLOCK_TEXTAREA --> 
+
+
+                <!-- BEGIN BLOCK_ICONE -->                
+                <img 
+                    src="{ICONE_ARQUIVO}" 
+                    width="
+                    <!-- BEGIN BLOCK_ICONE_TAMANHOPADRAO --> 
+                    12px
+                    <!-- END BLOCK_ICONE_TAMANHOPADRAO -->                
+                    {ICONE_TAMANHO}
+                    " 
+                    title="{ICONE_DICA}" 
+                    alt="{ICONE_ALTERNATIVO}"
+                    id="{ICONE_ID}"
+                    onclick="{ICONE_AOCLICAR}
+                    " 
+                    >
+                <!-- END BLOCK_ICONE --> 
+
+
+                <!-- BEGIN BLOCK_TEXTO --> 
+                <span 
+                    name="{TEXTO_NOME}"
+                    id="{TEXTO_ID}"
+                    class="{TEXTO_CLASSE}"
+                    >{TEXTO_VALOR}    
+                </span>            
+                <!-- END BLOCK_TEXTO --> 
+
+
+                <!-- BEGIN BLOCK_BOTAO -->  
+                <input 
+                    accesskey="{BOTAO_TECLA}"
+                    type="{BOTAO_TIPO}" 
+                    value="{BOTAO_VALOR}" 
+                    name="{BOTAO_NOME}" 
+                    id="{BOTAO_ID}"
+                    title="{BOTAO_DICA}"
+                    onclick="{BOTAO_ONCLICK}"
+
+                    <!-- BEGIN BLOCK_BOTAO_PADRAO --> 
+                    class="botao {BOTAO_CLASSE}"
+                    <!-- END BLOCK_BOTAO_PADRAO --> 
+
+                    <!-- BEGIN BLOCK_BOTAO_DINAMICO --> 
+                    class="{BOTAO_CLASSE}"
+                    <!-- END BLOCK_BOTAO_DINAMICO -->                     
+
+                    <!-- BEGIN BLOCK_BOTAO_DESABILITADO --> 
+                    disabled 
+                    <!-- END BLOCK_BOTAO_DESABILITADO -->  
+
+                    <!-- BEGIN BLOCK_BOTAO_AUTOFOCO --> 
+                    autofocus
+                    <!-- END BLOCK_BOTAO_AUTOFOCO -->  
+                    >
+                    <!-- END BLOCK_BOTAO -->            
+
+                    <!-- BEGIN BLOCK_BR -->            
+                    <br />
+                <!-- END BLOCK_BR -->            
+
+
+
+            </a>
+            <!-- END BLOCK_CONTEUDO -->             
+        </td>          
+        <!-- END BLOCK_COLUNA -->
+    </tr>
+    <!-- END BLOCK_LINHA -->
+</table>
+
+
+<!-- BEGIN BLOCK_CAMPOOCULTO -->
+<input type="hidden" name="{CAMPOOCULTO_NOME}" value="{CAMPOOCULTO_VALOR}">
+<!-- END BLOCK_CAMPOOCULTO -->
+
+
+<!-- BEGIN BLOCK_FECHARFORM -->
+</form>
+<!-- END BLOCK_FECHARFORM -->

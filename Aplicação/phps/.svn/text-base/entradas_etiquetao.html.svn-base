@@ -1,0 +1,138 @@
+<style type="text/css">
+.campo
+{
+    height: 22px;
+    border-collapse:collapse; 
+    background-color: white;
+    font-size: 10pt;
+    border: 1px gray solid;
+}
+.campo:disabled
+{
+    background-color: transparent;
+    border: 1px white solid;
+    color: black;
+    border-bottom: 1px gray solid;
+}
+.textarea
+{
+    border-collapse:collapse; 
+    background-color: white;
+    font-size: 10pt;
+    border: 1px gray solid;
+    height: 110px;
+    width: 260px;
+}
+.textarea:disabled
+{
+    background-color: transparent;
+    border: 1px transparent solid;   
+    color: black;
+    
+}
+.tabela {
+    width: 100%;
+    <!-- border-bottom: 2px gray dotted; -->
+}
+.linha {    
+    border-bottom: 1px gray dotted;
+}
+.produto {
+    font-size: 13;
+    font-weight: bold;
+}  
+.for_id  {
+    font-size: 9;
+}
+.valor {
+    font-size: 18;
+    font-weight: bold;
+}    
+.demais {
+    font-size: 12;
+    font-style: italic;
+} 
+.peso {
+    font-size: 14;
+    font-style: italic;
+}      
+.titulo {
+    font-size: 10;
+    font-weight: bold;    
+}    
+.eti_fonte1 {
+    font-size: 20;
+    font-weight: bold;    
+}    
+.eti_fonte2 {
+    font-size: 12;
+    color: black;
+}    
+.frase {
+    font-size: 16; 
+    font-weight: bold;
+    color: #333333;
+} 
+.bordacentral {
+    border-right: 1px gray dotted;
+}
+
+
+</style>
+
+<!-- BEGIN BLOCK_ETIQUETA -->
+<table border="0" class="tabela">
+    <tr>
+        <td width="25%" align="center" class="linha">            
+            <span class="produto">{PRODUTO}</span> <span class="for_id">({FORNECEDOR_ID}) </span> <br>
+           
+                <!-- BEGIN BLOCK_CODBARRAS -->
+                <table border="0">
+                    <tr>
+                        <td>
+                            <img src="../imagens/icones/codigo_barras/p.gif" width={FINO} height={ALTURA} border=0><img
+                                src="../imagens/icones/codigo_barras/b.gif" width={FINO} height={ALTURA} border=0><img
+                                src="../imagens/icones/codigo_barras/p.gif" width={FINO} height={ALTURA} border=0><img
+                                src="../imagens/icones/codigo_barras/b.gif" width={FINO} height={ALTURA} border=0><img
+                                <!-- BEGIN BLOCK_ITEM -->
+                                    <!-- BEGIN BLOCK_1 -->
+                                        src="../imagens/icones/codigo_barras/p.gif" width={F1} height={ALTURA} border=0><img
+                                        <!-- END BLOCK_1 -->
+                                        <!-- BEGIN BLOCK_2 -->
+                                        src="../imagens/icones/codigo_barras/b.gif" width={F2} height={ALTURA} border=0><img
+                                        <!-- END BLOCK_2 -->
+                                <!-- END BLOCK_ITEM -->        
+                                src="../imagens/icones/codigo_barras/p.gif" width={LARGO} height={ALTURA} border=0><img
+                                src="../imagens/icones/codigo_barras/b.gif" width={FINO} height={ALTURA} border=0><img
+                                src="../imagens/icones/codigo_barras/p.gif" width=1 height={ALTURA} border=0>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">{VALOR}</td>
+                    </tr>
+                </table>
+                <!-- END BLOCK_CODBARRAS -->            
+            <span class="peso">{QUANTIDADE} {SIGLA} </span><span class="demais">{VALOR_UNITARIO} {SIGLA2}</span>  <br>
+            <span class="valor">{VALOR_TOTAL}</span> <br>
+            <span class="demais">{VALIDADE}</span>  <br>
+        </td>
+        <td width="35%" align="left" class="bordacentral linha">
+           <span class="titulo">Elaborado por:</span><br>
+            <input size="15" type="text" name="fornecedor" class="campo" value="{CAMPO_VALOR}" disabled >          
+            <br><br>
+            <span class="titulo">Descrição:</span><br>
+            <textarea name="" disabled class="textarea">{TEXTAREA_VALOR}</textarea>        
+        <td width="40%" align="center" class="linha">
+            <span class="eti_fonte1">{QUIOSQUE}</span><BR>
+            <span class="eti_fonte2">
+                {CIDADE} - {ESTADO} {CEP} <br>
+                {ENDERECO} {TELEFONE}
+            </span> <br>
+            <span class="eti_fonte2">{EMAIL}</span> <br>
+            <span class="frase">{FRASE}</span> <br><br>
+            <span class="eti_fonte2"><b>{COOP_SIGLA}</b></span>        
+            <span class="eti_fonte2"> - {COOP_NOME}</span>        
+        </td>
+    </tr>
+</table>
+<!-- END BLOCK_ETIQUETA -->

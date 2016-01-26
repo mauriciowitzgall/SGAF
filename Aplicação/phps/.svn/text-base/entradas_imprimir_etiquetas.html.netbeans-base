@@ -1,0 +1,54 @@
+<form action="entradas_imprimir_etiquetas2.php" method="post" name="form1">
+    <table summary="" border="0" class="tabela1" cellpadding="4">
+        <tr><td align="right" width="200px"><b>Numero/Lote: <label class="obrigatorio"></label></b></td>
+            <td><input type="text" size="8" required name="numero" class="campo1" disabled value="{ENTRADAS_CODIGO}"></td>            
+        </tr>
+        <tr>
+            <td align="right"><b>Data: <label class="obrigatorio"></label></b></td>
+            <td><input type="text" size="8" required name="data1" class="campo1" disabled value="{ENTRADAS_DATA}"> </td>
+        </tr>    
+        <tr>
+            <td align="right"><b>Hora: <label class="obrigatorio"></label></b></td>
+            <td><input type="text" size="8" required name="hora1" class="campo1" disabled value="{ENTRADAS_HORA}"></td>
+        </tr> 
+        <tr>
+            <td align="right" width="200px"><b>Fornecedor: <label class="obrigatorio"></label></b></td>
+            <td>
+                <select autofocus="1" name="fornecedor" class="campo1" disabled >
+                        <option value="0">{ENTRADAS_FORNECEDOR}</option>	                    
+                </select>               
+            </td>                        
+        </tr>
+    </table>
+    <br>
+    <table border="1" class="tabela1" cellpadding="4" width="">
+        <tr valign="middle" class="tabelacabecalho1">
+            <td width="">Nº</td>
+            <td width="" colspan="2">PRODUTOS</td>
+            <td width="" align="center">QUANTIDADE</td>	
+            <td width="">LOCAL/PRATELEIRA</td>
+            <td width="" align="center">QUANTIDADE DE ETIQUETAS</td>            
+        </tr>
+
+        <!--  BEGIN BLOCK_LISTA -->
+        <tr>
+            <td>{ENTRADAS_NUMERO}</td>
+            <td width="70px" align="right">{ENTRADAS_PRODUTO}</td>
+            <td width="200px">{ENTRADAS_PRODUTO_NOME}</td>
+            <td width="130px" align="right">{ENTRADAS_QTD}</td>
+            <td width="150px">{ENTRADAS_LOCAL}</td>
+            <td width="200px"><input type="number" name="{PRODUTO_COD}" value="0" class="campo1" maxlength="4" size=""> </td>                  
+        </tr>
+        <!--  END BLOCK_LISTA -->
+
+        <!--  BEGIN BLOCK_LISTA_NADA -->
+        <tr><td colspan="10" align="center" class="errado">Nenhum produto na lista!</td></tr>
+        <!--  END BLOCK_LISTA_NADA -->
+    </table>
+    <br>
+    <hr class="linhagrande">
+    <input type="hidden" name="codigo" value="{ENTRADAS_CODIGO}">
+    <input type="submit" class="botao fonte3" value="GERAR ETIQUETAS" {GERAR_DESABILIDADO} >&nbsp;&nbsp;&nbsp;&nbsp;
+    <a class="link" href="entradas.php"><input type="button" class="botao fonte3" value="CANCELAR"></a>
+</form>
+

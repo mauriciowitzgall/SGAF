@@ -1,0 +1,128 @@
+<script type="text/javascript" src="paginacao.js"></script>
+<table summary="" class="" border="0">
+    <tr>
+        <td width="35px"><img width="50px" src="{ICONES_CAMINHO}estoque.png" alt="" ></td>
+        <td valign="bottom">
+            <label class="titulo" > ESTOQUE</label><br />
+            <label class="subtitulo"> POR PRODUTO </label>
+        </td>
+
+    </tr>
+</table>
+<hr align="left" class="linhacurta" >
+<br>
+
+<!-- BEGIN BLOCK_FILTRO  -->
+<form action="estoque.php" method="post" name="formfiltro">
+<table width="" class="tabelafiltro">
+    <tr>             
+        <td><b>&nbsp;Produtos:</b><br>
+            <select name="filtroproduto" class="campofiltro">
+                <option value="">Todos</option> 
+                <!-- BEGIN BLOCK_FILTRO_PRODUTO  -->
+                <option value="{PRODUTO_CODIGO}" {PRODUTO_SELECIONADO}>{PRODUTO_NOME}</option>
+                <!-- END BLOCK_FILTRO_PRODUTO  -->
+            </select>
+        </td>
+        <td width="15px"></td>
+        <td><b>&nbsp;Categoria:</b><br>
+            <select name="filtrocategoria" class="campofiltro">
+                <option value="">Todos</option> 
+                <!-- BEGIN BLOCK_FILTRO_CATEGORIA  -->
+                <option value="{CATEGORIA_CODIGO}" {CATEGORIA_SELECIONADA}>{CATEGORIA_NOME}</option>
+                <!-- END BLOCK_FILTRO_CATEGORIA  -->
+            </select>
+        </td>         
+    </tr>      
+</table>
+<br>
+<input type="submit" class="botao fonte3" value="PESQUISAR">
+<a href="estoque.php" class="link"><input type="button" value="REINICIAR PESQUISA" class="botao fonte3"></a>
+<br>
+<br>
+<!-- END BLOCK_FILTRO  -->
+
+
+<table border="1" class="tabela1" cellpadding="4" width="100%">
+    <tr valign="middle" class="tabelacabecalho1">
+        <td width="">PRODUTO</td>        
+        <td colspan="2">QUANTIDADE</td>        
+        <td width="">VAL. UNIT. MÉD.</td>        
+        <!-- BEGIN BLOCK_LISTA_CABECALHO_TOTAL -->
+        <td width="" >VALOR TOTAL.</td>
+        <!-- END BLOCK_LISTA_CABECALHO_TOTAL -->
+        <!-- BEGIN BLOCK_LISTA_CABECALHO_FORNECEDORES -->
+        <td width="100px" colspan="2">FORNECEDORES </td>
+        <!-- END BLOCK_LISTA_CABECALHO_FORNECEDORES -->
+        <td width="" align="center">CATEGORIA</td>	
+    </tr>
+    <!-- BEGIN BLOCK_LISTA -->
+    <tr class="{ATINGIU_ESTOQUE_MINIMO}">
+        <td><a href="produtos_cadastrar.php?codigo={PRODUTO_CODIGO}&ver=1&link=estoque.php" class="link {ATINGIU_ESTOQUE_MINIMO}" title="Ver detalhes"><span class="{ATINGIU_ESTOQUE_MINIMO}">{PRODUTO}</span></a></td>
+        <td align="right" width="" >{QUANTIDADE}</td>        
+        <td align="left" width="" >{SIGLA}</td>        
+        <td align="right" width="" >{MEDIA}</td>        
+        <!-- BEGIN BLOCK_LISTA_TOTAL -->
+        <td align="right">{VALOR_TOTAL}</td>
+        <!-- END BLOCK_LISTA_TOTAL -->
+        <!-- BEGIN BLOCK_LISTA_FORNECEDORES -->
+        <td align="right" class=""><b>({QTD_FORNECEDORES})</b></td>
+        <td align="left" class=""> 
+            <a href="estoque_fornecedores.php?produto={PRODUTO_CODIGO}" class="link">
+                <img src="{ICONES_CAMINHO}procurar.png" title="Ver fornecedores" width="15px">
+            </a>
+        </td>
+        <!-- END BLOCK_LISTA_FORNECEDORES -->
+        <td align="left" class=""> 
+            <a href="categorias_cadastrar?codigo={CATEGORIA_CODIGO}&ver=1&link=estoque.php" class="link">
+                <span class="">{CATEGORIA}</span>
+            </a>
+        </td>
+  
+    </tr>
+    <!-- END BLOCK_LISTA -->
+
+    <!-- BEGIN BLOCK_LISTA_NADA -->
+    <tr>
+        <td colspan="10" align="center" class="errado"> Nenhum resultado!"</td>
+    </tr>
+    <!-- END BLOCK_LISTA_NADA -->
+    <!-- BEGIN BLOCK_LISTA_RODAPE -->
+    <tr class="tabelarodape1">
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <!-- BEGIN BLOCK_LISTA_RODAPE_TOTAL -->
+        <td align="right">{VALOR_TOTAL_GERAL}</td>
+        <!-- END BLOCK_LISTA_RODAPE_TOTAL -->
+        <!-- BEGIN BLOCK_LISTA_RODAPE_FORNECEDORES -->
+        <td> </td>
+        <td> </td>
+        <!-- END BLOCK_LISTA_RODAPE_FORNECEDORES -->
+        <td> </td>
+    </tr>
+    <!-- END BLOCK_LISTA_RODAPE -->    
+
+</table>
+
+<!-- BEGIN BLOCK_PAGINACAO -->          
+<table class="paginacao_fundo" width="100%" border="0">
+    <tr valign="middle" align="center" class="paginacao_linha">
+    <td align="right">
+        <input onclick="paginacao_retroceder()" type="image" width="25px"   src="{PASTA_ICONES}esquerda.png"  title="Anterior" alt="Anterior" />
+    </td>
+    <td width="170px">
+        <input size="5" type="text" name="paginaatual" class="campofiltro" value="{PAGINAATUAL}">
+        <span>/</span>
+        <input disabled size="5" type="text" name="paginas" class="campofiltro" value="{PAGINAS}">
+    </td>
+    <td align="left">
+        <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Próxima" alt="Próxima" />
+    </td>
+</tr>
+</table>
+<!-- END BLOCK_PAGINACAO -->  
+<br />
+</form>
+

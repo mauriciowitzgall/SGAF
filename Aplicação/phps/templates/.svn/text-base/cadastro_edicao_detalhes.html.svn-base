@@ -1,0 +1,72 @@
+<!-- BEGIN BLOCK_JS -->
+<script type="text/javascript" src="{JS_CAMINHO}"></script>
+<!-- END BLOCK_JS --> 
+<script type="text/javascript" src="js/capitular.js"></script>
+
+<br>
+<form action="{LINK_DESTINO}" method="post" name="form1">
+<table summary="" border="0" class="tabela1" cellpadding="4">
+    <!-- BEGIN BLOCK_ITEM -->
+    <tr>  
+        <td align="right" width="200px">
+            
+            <!-- BEGIN BLOCK_TITULO --> 
+            <b>{TITULO}:<label class="obrigatorio">{ASTERISCO}</label></b>
+            <!-- END BLOCK_TITULO --> 
+            
+        </td>            
+        <td align="left" width="">            
+            
+            <!-- BEGIN BLOCK_CAMPO --> 
+            <input
+                type="text"
+                name="{CAMPO_NOME}"
+                size="{CAMPO_TAMANHO}"
+                class="campo1 <!-- BEGIN BLOCK_CAMPO_CLASSE_OBRIGATORIO --> campoobrigatorio <!-- END BLOCK_CAMPO_CLASSE_OBRIGATORIO -->"
+                value="{CAMPO_VALOR}"
+                maxlength="{CAMPO_QTD_CARACTERES}"
+                onkeypress="{CAMPO_ONKEYPRESS}" 
+                id="{CAMPO_ID}" 
+                {CAMPO_DESABILITADO}
+                {CAMPO_OBRIGATORIO}
+                {CAMPO_FOCO}
+            >           
+            <!-- END BLOCK_CAMPO --> 
+            
+            <!-- BEGIN BLOCK_SELECT --> 
+            <select name="{SELECT_NOME}" size="{SELECT_TAMANHO}" class="campo1" {SELECT_DESABILITADO} {SELECT_OBRIGATORIO} {SELECT_FOCO}>           
+                <option value="">Selecione</option> 
+                <!-- BEGIN BLOCK_SELECT_OPTION --> 
+                <option value="{OPTION_VALOR}" {OPTION_SELECIONADO}>{OPTION_NOME}</option> 
+                <!-- END BLOCK_SELECT_OPTION --> 
+            </select>
+            <!-- END BLOCK_SELECT --> 
+            
+            <!-- BEGIN BLOCK_BOTAO1 -->  
+            <input type="{BOTAO_TIPO}" value="{BOTAO_VALOR}" name="{BOTAO_NOME}" class="botao fonte3" {BOTAO_FOCO}>
+            <!-- END BLOCK_BOTAO1 -->  
+            
+            <!-- BEGIN BLOCK_TEXTAREA --> 
+            <textarea class="textarea1" cols="{TEXTAREA_TAMANHO}" name="{TEXTAREA_NOME}" {TEXTAREA_DESABILITADO} >{TEXTAREA_TEXTO}</textarea>                       
+            <!-- END BLOCK_TEXTAREA --> 
+          
+        </td>            
+    </tr>
+    <!-- END BLOCK_ITEM -->
+</table>
+
+<!-- BEGIN BLOCK_BOTOES -->
+<hr align="left" >
+<input type="submit" value="SALVAR" name="submit1" class="botao fonte3">
+<a href="{LINK_CANCELAR}" class="link">&nbsp; <input type="button" value="CANCELAR" class="botao fonte3"> </a> 
+<br>
+<!-- END BLOCK_BOTOES -->
+
+<input type="hidden" name="codigo" value="{CODIGO}">
+<input type="hidden" name="nome2" value="{NOME}">
+<input type="hidden" name="link" value="{LINK_ATUAL}">
+<!-- BEGIN BLOCK_CAMPOSOCULTOS -->
+<input type="hidden" name="{CAMPOOCULTO_NOME}" value="{CAMPOOCULTO_VALOR}">
+<!-- END BLOCK_CAMPOSOCULTOS -->
+
+</form>

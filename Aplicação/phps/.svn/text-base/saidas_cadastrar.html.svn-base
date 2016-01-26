@@ -1,0 +1,158 @@
+<script type="text/javascript" src="js/jquery.price_format.1.5.js"></script>
+<!-- BEGIN BLOCK_JS -->
+<script type="text/javascript" src="{JS_CAMINHO}"></script>
+<!-- END BLOCK_JS --> 
+
+
+<br>
+<form action="{LINK_DESTINO}" method="post" name="form1">
+    <table summary="" border="0" class="tabela1" cellpadding="4" >
+        <!-- BEGIN BLOCK_ITEM -->
+        <tr>  
+            <td align="right" width="200px">
+
+                <!-- BEGIN BLOCK_TITULO --> 
+                <b>{TITULO}:<label class="obrigatorio">{ASTERISCO}</label></b>
+                <!-- END BLOCK_TITULO -->             
+            </td>            
+            <td align="left" width="">
+                <!-- BEGIN BLOCK_CAMPO --> 
+                <input type="{CAMPO_TIPO}" name="{CAMPO_NOME}" id="{CAMPO_NOME}" size="{CAMPO_TAMANHO}" onkeypress="{CAMPO_ONKEYPRESS}"  onkeyup="{CAMPO_ONKEYUP}" onkeydown="{CAMPO_ONKEYDOWN}" onblur ="{CAMPO_ONFOCUS}" class="campo1" value="{CAMPO_VALOR}" maxlength="{CAMPO_QTD_CARACTERES}" autocomplete="off" onclick="this.select()" {CAMPO_DESABILITADO} {CAMPO_OBRIGATORIO} {CAMPO_FOCO} >                                                  
+                <!-- BEGIN BLOCK_SPAN --> 
+                <span name="{SPAN_NOME}" id="{SPAN_NOME}" class="fonte_estoqueatual {SPAN_CLASS}">{SPAN_VALOR}</span>       
+                <!-- END BLOCK_SPAN --> 
+                <!-- END BLOCK_CAMPO --> 
+
+                <!-- BEGIN BLOCK_SELECT --> 
+                <select name="{SELECT_NOME}" class="campo1" style="width:200px"  {SELECT_DESABILITADO} {SELECT_OBRIGATORIO} {SELECT_FOCO}>           
+                <!-- BEGIN BLOCK_SELECT_OPTION --> 
+                <option value="{OPTION_VALOR}"{OPTION_SELECIONADO}>{OPTION_NOME}</option> 
+                <!-- END BLOCK_SELECT_OPTION --> 
+                </select>
+                <!-- BEGIN BLOCK_SPAN2 --> 
+                <span name="{SPAN2_NOME}" id="{SPAN2_NOME}" class="fonte1">{SPAN2_VALOR}</span>       
+                <!-- END BLOCK_SPAN2 --> 
+                <!-- END BLOCK_SELECT --> 
+
+                <!-- BEGIN BLOCK_BOTAO1 -->  
+                <input <!-- BEGIN BLOCK_FOCO --> autofocus <!-- END BLOCK_FOCO --> type="{BOTAO_TIPO}" value="{BOTAO_VALOR}" name="{BOTAO_NOME}"  class="botao fonte3" {BOTAO_FOCO} {BOTAO_DESABILITADO}>
+                <!-- END BLOCK_BOTAO1 -->  
+
+                <!-- BEGIN BLOCK_TEXTAREA --> 
+                <textarea class="textarea1" cols="{TEXTAREA_TAMANHO}" name="{TEXTAREA_NOME}" {TEXTAREA_DESABILITADO} >{TEXTAREA_TEXTO}</textarea>                       
+                <!-- END BLOCK_TEXTAREA --> 
+
+
+            </td>            
+        </tr>
+        <!-- END BLOCK_ITEM -->
+    </table>
+
+    <input type="hidden" name="codigo" value="{CODIGO}">
+    <input type="hidden" name="nome2" value="{NOME}">
+    <input type="hidden" name="link" value="{LINK_ATUAL}">
+    <!-- BEGIN BLOCK_CAMPOSOCULTOS -->
+    <input type="hidden" name="{CAMPOOCULTO_NOME}" value="{CAMPOOCULTO_VALOR}">
+    <!-- END BLOCK_CAMPOSOCULTOS -->
+</form>
+
+<!-- BEGIN BLOCK_LISTAGEM -->
+<hr class="linha">
+<!-- BEGIN BLOCK_CAMPOSOCULTOS_LISTA -->
+<input type="hidden" name="{CAMPOOCULTO_LISTA_NOME}" value="{CAMPOOCULTO_LISTA_VALOR}">
+<!-- END BLOCK_CAMPOSOCULTOS_LISTA -->       
+<table border="1" class="tabela1" cellpadding="4" width="100%">
+    <tr valign="middle" class="tabelacabecalho1">                   
+        <td width="" colspan="">Nº</td>     
+        <td width="" colspan="">PRODUTO</td>
+        <td width="" colspan="">FORNECEDOR</td>
+        <td width="" colspan="">LOTE</td>
+        <td width="" colspan="">QUANTIDADE</td>
+        <td width="" colspan="">VALOR UNIT.</td>
+        <td width="" colspan="">VALOR TOT..</td>
+        <td width="35px" colspan="">OPERAÇÃO.</td>
+    </tr>
+    <!-- BEGIN BLOCK_LISTA -->
+    <tr >
+        <td>{LISTA_NUM}</td>     
+        <td>{LISTA_PRODUTO}</td>
+        <td>{LISTA_FORNECEDOR}</td>
+        <td>{LISTA_LOTE}</td>
+        <td align="right">{LISTA_QTD}</td>
+        <td align="right">{LISTA_VALUNI}</td>
+        <td align="right">{LISTA_VALTOT}</td>
+        <!--  BEGIN BLOCK_LISTA_EXCLUIR -->
+        <td align="center" class="fundo1" width="35px">
+            <a href="saidas_cadastrar.php?retirar_produto=1&consumidor={LISTA_GET_CONSUMIDOR}&tiposaida={LISTA_GET_TIPOSAIDA}&saida={LISTA_GET_SAIDA}&passo={LISTA_GET_PASSO}&saipro={LISTA_GET_SAIPRO}&lote={LISTA_LOTE}&qtd={LISTA_QTD}&produto={LISTA_PRODUTO_COD}">
+                <img width="18px"  src="{ICONES_CAMINHO}remover.png"  title="Remover" alt="Remover">
+            </a> 
+        </td>
+        <!--  END BLOCK_LISTA_EXCLUIR -->          
+        </td>
+    </tr>
+    <!-- END BLOCK_LISTA -->
+
+    <!-- BEGIN BLOCK_LISTA_NADA -->
+    <tr>
+        <td colspan="10" align="center" class="errado"> Nenhum resultado!"</td>
+    </tr>
+    <!-- END BLOCK_LISTA_NADA -->          
+    <tr valign="middle" class="tabelacabecalho1">                   
+        <td width="" colspan=""> </td>     
+        <td width="" colspan=""> </td>
+        <td width="" colspan=""> </td>
+        <td width="" colspan=""> </td>
+        <td width="" colspan=""> </td>
+        <td width="" colspan=""> </td>
+        <td align="right" colspan="" class="">{TOTAL_GERAL}</td>
+        <td width="" colspan=""> </td>
+    </tr>
+</table>
+<!-- END BLOCK_LISTAGEM -->
+
+<!-- BEGIN BLOCK_BOTOES_RODAPE -->
+<form name="form2" action="{FORM_LINK}" method="post">
+<hr align="left" >
+<input type="hidden" name="valbru2" value="{VALBRU2}">
+<input type="hidden" name="saida" value="{LISTA_GET_SAIDA}">
+<input type="hidden" name="passo" value="1">
+<table>
+    <tr>
+            
+        <!-- BEGIN BLOCK_BOTOES_RODAPE_ELIMINAR -->
+        <td width="100%" align="left">
+            <a href="{LINK_CANCELAR}" class="link">
+                <input type="button" value="ELIMINAR A VENDA" class="botao botaovermelho fonte3"  >
+            </a>    
+        </td>
+        <!-- END BLOCK_BOTOES_RODAPE_ELIMINAR -->
+        
+        <!-- BEGIN BLOCK_BOTOES_RODAPE_CANCELAR -->
+        <td>
+            <a href="{LINK_CANCELAR}" class="link">
+                <input type="button" value="CANCELAR" class="botao fonte3"  >
+            </a>        
+        </td>
+        <!-- END BLOCK_BOTOES_RODAPE_CANCELAR -->
+        
+        <!-- BEGIN BLOCK_BOTOES_RODAPE_SALVAR -->
+        <td>
+                <input type="submit"
+                       <!-- BEGIN BLOCK_SALVAR_VENDA -->
+                       value="FINALIZAR VENDA"
+                       <!-- END BLOCK_SALVAR_VENDA -->
+                       <!-- BEGIN BLOCK_SALVAR_DEVOLUCAO -->
+                       value="FINALIZAR DEVOLUÇÃO"
+                       <!-- END BLOCK_SALVAR_DEVOLUCAO -->
+                       
+                       class="botao fonte3"
+                       {SALVAR_DESABILIDADO}
+                >
+        </td>
+        <!-- END BLOCK_BOTOES_RODAPE_SALVAR -->            
+    </tr>
+</table>
+
+<br>
+</form>
+<!-- END BLOCK_BOTOES_RODAPE -->

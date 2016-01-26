@@ -1,0 +1,96 @@
+<script type="text/javascript" src="paginacao.js"></script>
+<form action="{LINK_NOME}.php" method="post" name="formfiltro">
+    <table width="" class="tabelafiltro">
+        <tr>             
+            <td><b>&nbsp;Nome:</b><br>
+                <input size="30" type="text" name="filtronome" class="campofiltro" value="{FILTRO_NOME}">
+            </td>
+            <td width="15px"></td> 
+            <td><b>&nbsp;Pais:</b><br>
+                <select name="filtropais" class="campofiltro">
+                    <option value="">Todos</option> 
+                    <!-- BEGIN BLOCK_FILTRO_PAIS  -->
+                    <option value="{PAIS_CODIGO}" {PAIS_SELECIONADO}>{PAIS_NOME}</option>
+                    <!-- END BLOCK_FILTRO_PAIS  -->
+                </select>
+            </td>  
+        </tr>
+    </table>
+    <br>
+    <table>
+        <tr>
+            <td>
+                 <input type="submit" class="botao fonte3" value="PESQUISAR">
+            </td>
+            <td>
+                <a href="{LINK_NOME}.php" class="link"><input type="button" value="REINICIAR PESQUISA" class="botao fonte3"></a>
+            </td>
+            <td width="100%" align="right">
+                <!-- BEGIN BLOCK_BOTAO -->
+                <a href="{LINK_NOME}_cadastrar.php" class="link"><input type="button" value="CADASTRAR" class="botaopadrao botaopadraocadastrar" autofocus></a>
+                <!-- END BLOCK_BOTAO -->
+                <!-- BEGIN BLOCK_BOTAO_DESABILITADO -->
+                <input type="button" value="CADASTRAR" class="botaopadrao botaopadraocadastrar" disabled>
+                <!-- END BLOCK_BOTAO_DESABILITADO -->
+            </td>                
+        </tr>
+    </table>
+    <br>
+    
+
+    <table border="1" class="tabela1" cellpadding="4" width="100%">
+        <tr valign="middle" class="tabelacabecalho1">                   
+            <td width="">ESTADO</td>          
+            <td width="">SIGLA</td>          
+            <td width="">PAIS</td>                      
+            <td width="" colspan="2">OPERAÇÕES </td>
+        </tr>
+        <!-- BEGIN BLOCK_LISTA -->
+        <tr class="">
+            <td>{NOME}</td>            
+            <td>{SIGLA}</td>
+            <td>{PAIS}</td>            
+            <td align="center" class="fundo1" width="35px">
+                <!-- BEGIN BLOCK_EDITAR -->
+                <a href="{LINK_NOME}_cadastrar.php?codigo={CODIGO}" class="link1"><img   width="15px" src="{ICONES_CAMINHO}editar.png" title="Editar"  alt="Editar" /></a>
+                <!-- END BLOCK_EDITAR -->
+                <!-- BEGIN BLOCK_EDITAR_DESABILITADO -->
+                <img   width="15px" src="{ICONES_CAMINHO}editar_desabilitado.png" title="Você não tem permissão para editar estados! Contate um administrador!"  alt="Editar" />
+                <!-- END BLOCK_EDITAR_DESABILITADO -->
+            </td>
+            <td align="center" class="fundo1" width="35px">
+                <!-- BEGIN BLOCK_EXCLUIR -->
+                <a href="{LINK_NOME}_deletar.php?codigo={CODIGO}" class="link1"><img  width="15px"  src="{ICONES_CAMINHO}excluir.png"  title="Excluir" alt="Excluir" /></a> 
+                <!-- END BLOCK_EXCLUIR -->
+                <!-- BEGIN BLOCK_EXCLUIR_DESABILITADO -->
+                <img  width="15px"  src="{ICONES_CAMINHO}excluir_desabilitado.png"  title="Você não tem permissão para excluir estados! Contate um administrador!" alt="Excluir" />
+                <!-- END BLOCK_EXCLUIR_DESABILITADO -->
+            </td>
+        </tr>
+        <!-- END BLOCK_LISTA -->
+
+        <!-- BEGIN BLOCK_LISTA_NADA -->
+        <tr>
+            <td colspan="10" align="center" class="errado"> Nenhum resultado!"</td>
+        </tr>
+        <!-- END BLOCK_LISTA_NADA -->
+    </table>
+    <!-- BEGIN BLOCK_PAGINACAO -->          
+    <table class="paginacao_fundo" width="100%" border="0">
+        <tr valign="middle" align="center" class="paginacao_linha">
+        <td align="right">
+            <input onclick="paginacao_retroceder()" type="image" width="25px"   src="{PASTA_ICONES}esquerda.png"  title="Anterior" alt="Anterior" />
+        </td>
+        <td width="170px">
+            <input size="5" type="text" name="paginaatual" class="campofiltro" value="{PAGINAATUAL}">
+            <span>/</span>
+            <input disabled size="5" type="text" name="paginas" class="campofiltro" value="{PAGINAS}">
+        </td>
+        <td align="left">
+            <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Próxima" alt="Próxima" />
+        </td>
+    </tr>
+    </table>
+    <!-- END BLOCK_PAGINACAO -->     
+    
+   </form>

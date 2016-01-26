@@ -1,0 +1,94 @@
+<style type="text/css">
+.campo
+{
+    height: 22px;
+    border-collapse:collapse; 
+    background-color: white;
+    font-size: 10pt;
+    border: 1px gray solid;
+}
+.campo:disabled
+{
+    background-color: transparent;
+    border: 1px white solid;
+    color: black;
+    border-bottom: 1px gray solid;
+}
+    .textarea
+    {
+        height: 80px;
+        border-collapse:collapse; 
+        background-color: white;
+        font-size: 10pt;
+        border: 1px gray solid;
+    }
+    .textarea:disabled
+    {
+        background-color: transparent;
+        border: 1px gray solid;
+        color: black;
+    }
+    .tabela {
+        width: 100%;
+    } 
+    
+
+</style>
+
+<table border="1" class="tabela">
+    <tr>
+        <td width="25%">
+            <span class="">{PRODUTO}</span> <br>
+            <span class="">{LOCAL}</span> <br>
+            <!-- BEGIN BLOCK_CODBARRAS -->
+            <table border="0">
+                <tr>
+                    <td>
+                        <img src="../imagens/icones/codigo_barras/p.gif" width={FINO} height={ALTURA} border=0><img
+                            src="../imagens/icones/codigo_barras/b.gif" width={FINO} height={ALTURA} border=0><img
+                            src="../imagens/icones/codigo_barras/p.gif" width={FINO} height={ALTURA} border=0><img
+                            src="../imagens/icones/codigo_barras/b.gif" width={FINO} height={ALTURA} border=0><img
+                            <!-- BEGIN BLOCK_ITEM -->
+                                <!-- BEGIN BLOCK_1 -->
+                                    src="../imagens/icones/codigo_barras/p.gif" width={F1} height={ALTURA} border=0><img
+                                    <!-- END BLOCK_1 -->
+                                    <!-- BEGIN BLOCK_2 -->
+                                    src="../imagens/icones/codigo_barras/b.gif" width={F2} height={ALTURA} border=0><img
+                                    <!-- END BLOCK_2 -->
+                            <!-- END BLOCK_ITEM -->        
+                            src="../imagens/icones/codigo_barras/p.gif" width={LARGO} height={ALTURA} border=0><img
+                            src="../imagens/icones/codigo_barras/b.gif" width={FINO} height={ALTURA} border=0><img
+                            src="../imagens/icones/codigo_barras/p.gif" width=1 height={ALTURA} border=0>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">{VALOR}</td>
+                </tr>
+            </table>
+            <!-- END BLOCK_CODBARRAS -->
+            <br>
+            <span class="">{VALOR_TOTAL}</span> <br>
+            <span class="">{QUANTIDADE} / {VALOR_UNITARIO} por {SIGLA}</span>  <br>
+            <span class="">Válido até {VALIDADE}</span>  <br>
+        </td>
+        <td width="25%">
+            <b>&nbsp;{CAMPO_TITULO}:</b><br>
+            <input size="15" type="text" name="fornecedor" class="campo" value="{CAMPO_VALOR}" disabled >          
+            <br><br>
+            <textarea name="" disabled class="textarea">{TEXTAREA_VALOR}</textarea>        
+        <td width="50%">
+            <span class="">{QUIOSQUE}</span><BR>
+            <span class="">
+                {CIDADE} - {ESTADO} / {CEP} <br>
+                {ENDERECO} / {TELEFONE}
+            </span> <br>
+            <span class="">{EMAIL}</span> <br>
+            <span class="">{FRASE}</span> <br>
+            <span class="">{COOP_SIGLA} - {COOP_NOME}</span>        
+        </td>
+    </tr>
+</table>
+
+
+
+

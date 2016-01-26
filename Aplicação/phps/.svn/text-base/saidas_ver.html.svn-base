@@ -1,0 +1,155 @@
+<span class="titulogrande">DADOS GERAIS DA VENDA</span>
+<table summary="" border="0" class="tabela1" cellpadding="4">        
+    <!-- BEGIN BLOCK_ITEM -->
+    <tr>  
+        <td align="right" width="200px">
+
+            <!-- BEGIN BLOCK_TITULO --> 
+            <b>{TITULO}:<label class="obrigatorio">{ASTERISCO}</label></b>
+            <!-- END BLOCK_TITULO -->             
+        </td>            
+        <td align="left" width="">
+            <!-- BEGIN BLOCK_CAMPO --> 
+            <input type="{CAMPO_TIPO}" name="{CAMPO_NOME}" id="{CAMPO_NOME}" size="{CAMPO_TAMANHO}" onkeypress="{CAMPO_ONKEYPRESS}"  onkeyup="{CAMPO_ONKEYUP}" onkeydown="{CAMPO_ONKEYDOWN}" onblur ="{CAMPO_ONFOCUS}" class="campo1" value="{CAMPO_VALOR}" maxlength="{CAMPO_QTD_CARACTERES}" autocomplete="off" onclick="this.select()" {CAMPO_DESABILITADO} {CAMPO_OBRIGATORIO} {CAMPO_FOCO} >                                                  
+                   <!-- BEGIN BLOCK_SPAN --> 
+                   <span name="{SPAN_NOME}" id="{SPAN_NOME}" class="fonte1">{SPAN_VALOR}</span>       
+            <!-- END BLOCK_SPAN --> 
+            <!-- END BLOCK_CAMPO --> 
+
+            <!-- BEGIN BLOCK_SELECT --> 
+            <select name="{SELECT_NOME}" class="campo1" style="width:200px"  {SELECT_DESABILITADO} {SELECT_OBRIGATORIO} {SELECT_FOCO}>           
+                    <!-- BEGIN BLOCK_SELECT_OPTION --> 
+                    <option value="{OPTION_VALOR}"{OPTION_SELECIONADO}>{OPTION_NOME}</option> 
+                <!-- END BLOCK_SELECT_OPTION --> 
+            </select>
+            <!-- BEGIN BLOCK_SPAN2 --> 
+            <span name="{SPAN2_NOME}" id="{SPAN2_NOME}" class="fonte1">{SPAN2_VALOR}</span>       
+            <!-- END BLOCK_SPAN2 --> 
+            <!-- END BLOCK_SELECT --> 
+
+            <!-- BEGIN BLOCK_BOTAO1 -->  
+            <input type="{BOTAO_TIPO}" value="{BOTAO_VALOR}" name="{BOTAO_NOME}"  class="botao fonte3" {BOTAO_FOCO}>
+                   <!-- END BLOCK_BOTAO1 -->  
+
+                   <!-- BEGIN BLOCK_TEXTAREA --> 
+                   <textarea class="textarea1" cols="{TEXTAREA_TAMANHO}" name="{TEXTAREA_NOME}" {TEXTAREA_DESABILITADO} >{TEXTAREA_TEXTO}</textarea>                       
+            <!-- END BLOCK_TEXTAREA --> 
+        </td>            
+    </tr>
+    <!-- END BLOCK_ITEM -->
+</table>    
+
+<hr>
+
+<hr class="linha">
+<!-- BEGIN BLOCK_LISTAGEM -->
+
+<table border="1" class="tabela1" cellpadding="4">
+    <tr valign="middle" class="tabelacabecalho1">                   
+        <td width="" colspan="">Nº</td>     
+        <td width="" colspan="">PRODUTO</td>
+        <td width="" colspan="">FORNECEDOR</td>
+        <td width="" colspan="">LOTE</td>
+        <td width="" colspan="">QUANTIDADE</td>
+        <td width="" colspan="">VALOR UNIT.</td>
+        <td width="" colspan="">VALOR TOT..</td>
+    </tr>
+    <!-- BEGIN BLOCK_LISTA -->
+    <tr >
+        <td>{LISTA_NUM}</td>     
+        <td>{LISTA_PRODUTO}</td>
+        <td>{LISTA_FORNECEDOR}</td>
+        <td>{LISTA_LOTE}</td>
+        <td align="right">{LISTA_QTD}</td>
+        <td aligh="right">{LISTA_VALUNI}</td>
+        <td align="right">{LISTA_VALTOT}</td>
+    </tr>
+    <!-- END BLOCK_LISTA -->
+
+    <!-- BEGIN BLOCK_LISTA_NADA -->
+    <tr>
+        <td colspan="10" align="center" class="errado"> Nenhum resultado!"</td>
+    </tr>
+    <!-- END BLOCK_LISTA_NADA -->          
+    <tr valign="middle" class="tabelacabecalho1">                   
+        <td width="" colspan=""> </td>     
+        <td width="" colspan=""> </td>
+        <td width="" colspan=""> </td>
+        <td width="" colspan=""> </td>
+        <td width="" colspan=""> </td>
+        <td width="" colspan=""> </td>
+        <td width="right" colspan="" class="">{TOTAL_GERAL}</td>        
+    </tr>
+</table>
+<!-- END BLOCK_LISTAGEM -->
+
+
+<table summary="" border="0" class="tabela1" cellpadding="4" >        
+    <tr class="linha_lista_cinza">  
+        <td align="right" width="200px">                
+            <b>Valor Total:</b>                            
+        </td>            
+        <td align="left" width="">                
+            <input type="text" name="valbru" size="15" class="campo2" value="{VALBRU_VALOR}" disabled="disabeld" >                                                                 
+        </td>  
+    </tr>
+    <tr class="linha_lista_cinza">  
+        <td align="right" width="">                
+            <b>Desconto:</b>                            
+        </td>            
+        <td align="left" width="">                
+            <input type="text" name="descper" id="descper" size="3" class="campo2" value="{DESCPER_VALOR}" onkeyup="desconto(this)" onfocus="desconto(this)" onclick="this.select()" onkeypress="" autocomplete="off" {DESCPER_DESABILITADO}>%
+                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="text" name="descval" id="descval" size="15" placeholder="R$ " class="campo1" value="{DESCVAL_VALOR}"  onkeyup="desconto2(this)"  onclick="this.select()" onfocus="" {DESCVAL_DESABILITADO}>
+        </td>             
+    </tr>
+    <tr class="linha_lista_cinza">  
+        <td align="right" width="">                
+            <b>Total:</b>                            
+        </td>            
+        <td align="left" width="">                
+            <input type="text" name="total" size="15" class="campo2 negrito" value="{TOTAL_VALOR}" disabled>                                                                 
+        </td>  
+    </tr>        
+    <tr>  
+        <td align="right" width="">                
+            <b>Dinheiro:</b>                            
+        </td>            
+        <td align="left" width="">                
+            <input type="text" name="dinheiro" id="dinheiro" size="15" class="campo1" value="{DINHEIRO_VALOR}" onkeyup="mascara_dinheiro()" onkeypress="" placeholder="R$" autofocus {DINHEIRO_DESABILITADO}>                                                                 
+        </td>  
+    </tr>       
+    
+    <tr>  
+        <td align="right" width="">                
+            <b>Troco:</b>                            
+        </td>            
+        <td align="left" width="">                
+            <input type="text" name="troco" id="troco" size="15" class="campo1" value="{TROCO_VALOR}" disabled>                                                                 
+        </td>  
+    </tr>       
+    <tr>  
+        <td align="right" width="">                
+            <b>Troco Devolvido:</b>                            
+        </td>            
+        <td align="left" width="">                
+            <input type="text" name="troco_devolvido" id="troco_devolvido" size="15" class="campo1" value="{TROCO_DEVOLVIDO_VALOR}" {TROCO_DEVOLVIDO_DESABILIDADO}>                                                                 
+        </td>  
+    </tr>       
+    <tr>  
+        <td align="right" width="">                
+            <b>Desconto Forçado:</b>                            
+        </td>            
+        <td align="left" width="">                
+            <input type="text" name="desc_forcado" id="desc_forcado" size="15" class="campo1" value="{DESCONTO_FORCADO_VALOR}" {DESCONTO_FORCADO_DESABILIDADO}>                                                                 
+        </td>  
+    </tr>       
+    <tr>  
+        <td align="right" width="">                
+            <b>Acréscimo Forçado</b>                            
+        </td>            
+        <td align="left" width="">                
+            <input type="text" name="acre_forcado" id="acre_forcado" size="15" class="campo1" value="{ACRESCIMO_FORCADO_VALOR}" {DESCONTO_FORCADO_DESABILIDADO}>                                                                 
+        </td>  
+    </tr>           
+</table>

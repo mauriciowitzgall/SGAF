@@ -1,0 +1,234 @@
+<!-- BEGIN BLOCK_JS -->
+<script type="text/javascript" src="{JS_CAMINHO}"></script>
+<!-- END BLOCK_JS --> 
+<script type="text/javascript" src="js/capitular.js"></script>
+
+<br>
+<form action="{LINK_DESTINO}" target="{LINK_TARGET}" method="post" name="form1">
+<table summary="" border="0" class="tabela1" cellpadding="4">
+    <!-- BEGIN BLOCK_ITEM -->
+    <tr>  
+        <td align="right" width="200px">
+            
+            <!-- BEGIN BLOCK_TITULO --> 
+            <b>
+            <span 
+                class="titulo1"
+                <!-- BEGIN BLOCK_TITULO_ID --> 
+                id="{TITULO_ID}"
+                <!-- END BLOCK_TITULO_ID --> 
+            >
+                {TITULO}:
+            </span>
+            <label class="obrigatorio">{ASTERISCO}</label>
+            </b>
+            <!-- END BLOCK_TITULO --> 
+            
+        </td>            
+        <td align="left" width="" class="fundo1">            
+            <!-- BEGIN BLOCK_CONTEUDO -->  
+            <!-- BEGIN BLOCK_CAMPO --> 
+            <input
+                type="{CAMPO_TIPO}" 
+                name="{CAMPO_NOME}" 
+                id="{CAMPO_ID}" 
+                size="{CAMPO_TAMANHO}"
+                value="{CAMPO_VALOR}"
+                maxlength="{CAMPO_QTD_CARACTERES}"                
+                onkeyup="{CAMPO_ONKEYUP}"
+                onkeydown="{CAMPO_ONKEYDOWN}"
+                onkeypress="{CAMPO_ONKEYPRESS}"
+                onclick="{CAMPO_ONCLICK}" 
+                placeholder="{CAMPO_DICA}" 
+                
+                <!-- BEGIN BLOCK_CAMPO_AUTOSELECIONAR -->
+                onclick="this.select()"    
+                <!-- END BLOCK_CAMPO_AUTOSELECIONAR -->
+                
+                <!-- BEGIN BLOCK_CAMPO_HISTORICO_DESATIVADO -->
+                autocomplete="off"
+                <!-- END BLOCK_CAMPO_HISTORICO_DESATIVADO -->
+                
+                <!-- BEGIN BLOCK_CAMPO_FOCO -->
+                autofocus
+                <!-- END BLOCK_CAMPO_FOCO -->
+                
+                <!-- BEGIN BLOCK_CAMPO_OBRIGATORIO -->
+                class="campopadrao campoobrigatorio " 
+                required 
+                <!-- END BLOCK_CAMPO_OBRIGATORIO -->                
+                
+                <!-- BEGIN BLOCK_CAMPO_NORMAL -->
+                class="campopadrao"
+                <!-- END BLOCK_CAMPO_NORMAL -->                
+
+                <!-- BEGIN BLOCK_CAMPO_PASSWORD -->
+                class="campopadrao password"
+                <!-- END BLOCK_CAMPO_PASSWORD -->                
+                
+                <!-- BEGIN BLOCK_CAMPO_PASSWORD_OBRIGATORIO -->
+                class="campopadrao password campoobrigatorio" 
+                required 
+                <!-- END BLOCK_CAMPO_PASSWORD_OBRIGATORIO -->                
+                
+                <!-- BEGIN BLOCK_CAMPO_DESABILITADO -->
+                disabled                 
+                <!-- END BLOCK_CAMPO_DESABILITADO -->
+            >           
+            <!-- END BLOCK_CAMPO --> 
+            
+            <!-- BEGIN BLOCK_SELECT --> 
+            <select
+                name="{SELECT_NOME}"
+                id="{SELECT_ID}"
+                size="{SELECT_TAMANHO}" 
+               
+                <!-- BEGIN BLOCK_SELECT_FOCO -->
+                autofocus 
+                <!-- END BLOCK_SELECT_FOCO -->
+                
+                <!-- BEGIN BLOCK_SELECT_NORMAL -->
+                class="campopadrao"
+                <!-- END BLOCK_SELECT_NORMAL -->                
+             
+                <!-- BEGIN BLOCK_SELECT_OBRIGATORIO -->
+                class="campopadrao campoobrigatorio"
+                required 
+                <!-- END BLOCK_SELECT_OBRIGATORIO -->                
+                
+                <!-- BEGIN BLOCK_SELECT_DESABILITADO -->
+                disabled
+                <!-- END BLOCK_SELECT_DESABILITADO -->
+             >           
+                <!-- BEGIN BLOCK_SELECT_OPTION_PADRAO --> 
+                <option value="">Selecione</option>
+                <!-- END BLOCK_SELECT_OPTION_PADRAO --> 
+                <!-- BEGIN BLOCK_SELECT_OPTION --> 
+                <option 
+                    value="{OPTION_VALOR}" 
+                    <!-- BEGIN BLOCK_SELECT_OPTION_SELECIONADO -->
+                    selected
+                    <!-- END BLOCK_SELECT_OPTION_SELECIONADO -->
+                >
+                    {OPTION_NOME}
+                </option> 
+                <!-- END BLOCK_SELECT_OPTION --> 
+            </select>
+            <!-- END BLOCK_SELECT --> 
+            
+            <!-- BEGIN BLOCK_CHECKBOX --> 
+            <input 
+                type="checkbox"
+                value="{CHECKBOX_VALOR}" 
+                name="{CHECKBOX_NOME}" 
+                
+                <!-- BEGIN BLOCK_CHECKBOX_SELECIONADO -->
+                checked 
+                <!-- END BLOCK_CHECKBOX_SELECIONADO -->
+                <!-- BEGIN BLOCK_CHECKBOX_DESABILITADO -->
+                disabled 
+                <!-- END BLOCK_CHECKBOX_DESABILITADO -->
+            ><label>{LABEL_NOME}</label>
+            <!-- BEGIN BLOCK_CHECKBOX_ICONE -->
+            <img src="{CHECKBOX_ICONE_ARQUIVO}" width="12px" title="{CHECKBOX_ICONE_MENSAGEM}" alt="{CHECKBOX_ICONE_MENSAGEM}">            
+            <!-- END BLOCK_CHECKBOX_ICONE -->
+            <br />
+            <!-- END BLOCK_CHECKBOX --> 
+            
+            <!-- BEGIN BLOCK_TEXTAREA --> 
+            <textarea 
+                class="textarea1"
+                cols="{TEXTAREA_TAMANHO}"
+                name="{TEXTAREA_NOME}" 
+                <!-- BEGIN BLOCK_TEXTAREA_DESABILITADO -->
+                disabled 
+                <!-- END BLOCK_TEXTAREA_DESABILITADO -->                
+            >{TEXTAREA_TEXTO}</textarea>                       
+            <!-- END BLOCK_TEXTAREA --> 
+            
+
+                      
+            <!-- BEGIN BLOCK_COMPLEMENTO_ICONE -->                
+            <img src="{COMPLEMENTO_ICONE_ARQUIVO}" width="12px" title="{COMPLEMENTO_ICONE_MENSAGEM}" alt="{COMPLEMENTO_ICONE_MENSAGEM}">
+            <!-- END BLOCK_COMPLEMENTO_ICONE --> 
+            
+            <!-- BEGIN BLOCK_COMPLEMENTO -->
+            <span 
+                name="{SPAN_NOME}" 
+                id="{SPAN_ID}" 
+                class="obrigatorio" 
+            >
+                {SPAN_CONTEUDO}
+            </span>
+            <!-- END BLOCK_COMPLEMENTO -->  
+            
+            <!-- BEGIN BLOCK_TEXTO -->
+            <span class="">{TEXTO}</span>
+            <!-- END BLOCK_TEXTO -->  
+            <!-- END BLOCK_CONTEUDO -->  
+        </td>        
+    </tr>
+    <!-- END BLOCK_ITEM -->
+    <!-- BEGIN BLOCK_BOTAO1 -->  
+    <tr>
+        <td>&nbsp;</td>
+        <td>
+            <!-- BEGIN BLOCK_BOTAO1_COMLINK --> 
+            <a href="{BOTAO1_LINK}" class="link" target="{LINK_TARGET}">
+                <input type="{BOTAO_TIPO}" value="{BOTAO_VALOR}" name="{BOTAO_NOME}" class="botaopadrao fonte3" {BOTAO_FOCO}>
+            </a>       
+            <!-- END BLOCK_BOTAO1_COMLINK -->        
+            <!-- BEGIN BLOCK_BOTAO1_SEMLINK --> 
+            <input type="{BOTAO_TIPO}" value="{BOTAO_VALOR}" name="{BOTAO_NOME}" class="botaopadrao fonte3" {BOTAO_FOCO}>
+            <!-- END BLOCK_BOTAO1_SEMLINK -->        
+        </td>
+    </tr>
+    <!-- END BLOCK_BOTAO1 -->  
+</table>
+
+
+    
+<!-- BEGIN BLOCK_CAMPOSOCULTOS -->
+<input type="hidden" name="{CAMPOOCULTO_NOME}" value="{CAMPOOCULTO_VALOR}">
+<!-- END BLOCK_CAMPOSOCULTOS -->
+
+
+
+<!-- BEGIN BLOCK_BOTOES -->
+<hr align="left" >
+    <!-- BEGIN BLOCK_BOTAO -->
+    <a href="{BOTAO_LINK}" class="link">
+    <input type="{BOTAO_TIPO}" value="{BOTAO_VALOR}" name="{BOTAO_NOME}" class="botaopadrao" onclick="{BOTAO_ONCLICK}">
+    </a> 
+    <!-- END BLOCK_BOTAO -->
+
+    <!-- BEGIN BLOCK_BOTAO_SALVAR -->
+    <input type="submit" value="SALVAR" class="botaopadrao">
+    <!-- END BLOCK_BOTAO_SALVAR -->
+
+    <!-- BEGIN BLOCK_BOTAO_GERAL -->
+    <input type="submit" value="{BOTAO_NOME}" class="botaopadrao">
+    <!-- END BLOCK_BOTAO_GERAL -->
+
+    <!-- BEGIN BLOCK_BOTAO_CANCELAR -->
+    <a href="{BOTAO_LINK}" class="link">
+    <input type="button" value="CANCELAR" name="cancelar" class="botaopadrao">
+    </a> 
+    <!-- END BLOCK_BOTAO_CANCELAR -->
+
+    <!-- BEGIN BLOCK_BOTAO_VARIADO -->
+    <a href="{BOTAO_LINK}" class="link">
+        <input type="button" value="{BOTAO_NOME}" name="{BOTAO_NOME}" class="botaopadrao">    
+    </a> 
+    <!-- END BLOCK_BOTAO_VARIADO -->
+
+    <!-- BEGIN BLOCK_BOTAO_VOLTAR -->
+    <a href="javascript:window.history.go(-1)" class="link">
+    <input type="button" value="VOLTAR" name="voltar" class="botaopadrao">
+    </a> 
+    <!-- END BLOCK_BOTAO_VOLTAR -->
+<br>
+<!-- END BLOCK_BOTOES -->
+
+
+</form>

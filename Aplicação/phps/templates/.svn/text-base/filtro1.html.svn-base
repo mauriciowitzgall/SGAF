@@ -1,0 +1,156 @@
+<!-- BEGIN BLOCK_JS -->
+<script type="text/javascript" src="{JS_CAMINHO}"></script>
+<!-- END BLOCK_JS --> 
+
+<style type="text/css">
+.titulo {
+    font-size: 10pt;
+    font-weight: bold;
+}   
+</style>
+
+<body  onload="{FORM_ONLOAD}">    
+
+    <!-- BEGIN BLOCK_FORM -->
+    <form action="{FORM_LINK}" target="{FORM_TARGET}" method="post" name="{FORM_NOME}">   
+    <!-- END BLOCK_FORM -->     
+    
+    <!-- BEGIN BLOCK_FILTRO_CAMPOS -->
+    <table width="" class="" border="0" >
+        <!-- BEGIN BLOCK_LINHA -->
+        <tr>             
+            <!-- BEGIN BLOCK_COLUNA -->
+            <td>
+                <!-- BEGIN BLOCK_CAMPO_TITULO -->
+                <span class="titulo">&nbsp;{CAMPO_TITULO}:</span><br>
+                <!-- END BLOCK_CAMPO_TITULO -->
+                
+                <!-- BEGIN BLOCK_CAMPO --> 
+                <input
+                    type="{CAMPO_TIPO}" 
+                    name="{CAMPO_NOME}" 
+                    id="{CAMPO_ID}" 
+                    size="{CAMPO_TAMANHO}"
+                    value="{CAMPO_VALOR}"
+                    maxlength="{CAMPO_QTDCARACTERES}"                
+                    onkeyup="{CAMPO_ONKEYUP}"
+                    onkeydown="{CAMPO_ONKEYDOWN}"
+                    onclick="
+                        <!-- BEGIN BLOCK_CAMPO_AUTOSELECIONAR -->
+                        this.select()    
+                        <!-- END BLOCK_CAMPO_AUTOSELECIONAR -->
+                        {CAMPO_AOCLICAR}
+                    " 
+                    placeholder="{CAMPO_DICA}" 
+
+                    <!-- BEGIN BLOCK_CAMPO_HISTORICODESATIVADO -->
+                    autocomplete="off"
+                    <!-- END BLOCK_CAMPO_HISTORICODESATIVADO -->
+
+                    <!-- BEGIN BLOCK_CAMPO_AUTOFOCO -->
+                    autofocus
+                    <!-- END BLOCK_CAMPO_AUTOFOCO -->
+
+                    <!-- BEGIN BLOCK_CAMPO_DESABILITADO -->
+                    disabled                 
+                    <!-- END BLOCK_CAMPO_DESABILITADO -->
+
+                    <!-- BEGIN BLOCK_CAMPO_MARCADO -->
+                    checked 
+                    <!-- END BLOCK_CAMPO_MARCADO -->   
+
+                    <!-- BEGIN BLOCK_CAMPO_OBRIGATORIO -->
+                    required                 
+                    <!-- END BLOCK_CAMPO_OBRIGATORIO -->
+
+                    <!-- BEGIN BLOCK_CAMPO_PADRAO -->
+                    class=" campopadrao {CAMPO_CLASSE}" 
+                    <!-- END BLOCK_CAMPO_PADRAO -->                
+
+                    <!-- BEGIN BLOCK_CAMPO_FILTRO -->
+                    class=" campofiltro {CAMPO_CLASSE}" 
+                    <!-- END BLOCK_CAMPO_FILTRO -->                
+
+                    <!-- BEGIN BLOCK_CAMPO_DINAMICO -->
+                    class=" {CAMPO_CLASSE} " 
+                    <!-- END BLOCK_CAMPO_DINAMICO -->   
+                >
+                <!-- END BLOCK_CAMPO --> 
+
+
+                <!-- BEGIN BLOCK_SELECT --> 
+                <select
+                    name="{SELECT_NOME}"
+                    id="{SELECT_ID}"
+                    size="{SELECT_TAMANHO}"                 
+                    onchange="{SELECT_AOTROCAR}" 
+                    onclick="
+                        <!-- BEGIN BLOCK_SELECT_AUTOSELECIONAR -->
+                        this.select()    
+                        <!-- END BLOCK_SELECT_AUTOSELECIONAR -->
+                        {SELECT_AOCLICAR}
+                    " 
+
+                    <!-- BEGIN BLOCK_SELECT_HISTORICODESATIVADO -->
+                    autocomplete="off"
+                    <!-- END BLOCK_SELECT_HISTORICODESATIVADO -->
+
+                    <!-- BEGIN BLOCK_SELECT_AUTOFOCO -->
+                    autofocus
+                    <!-- END BLOCK_SELECT_AUTOFOCO -->
+
+                    <!-- BEGIN BLOCK_SELECT_DESABILITADO -->
+                    disabled                 
+                    <!-- END BLOCK_SELECT_DESABILITADO -->
+
+                    <!-- BEGIN BLOCK_SELECT_OBRIGATORIO -->
+                    required                 
+                    <!-- END BLOCK_SELECT_OBRIGATORIO -->
+
+                    <!-- BEGIN BLOCK_SELECT_PADRAO -->
+                    class="campopadrao {SELECT_CLASSE} " 
+                    <!-- END BLOCK_SELECT_PADRAO -->                
+
+                    <!-- BEGIN BLOCK_SELECT_FILTRO -->
+                    class="campofiltro {SELECT_CLASSE} " 
+                    <!-- END BLOCK_SELECT_FILTRO -->                
+
+                    <!-- BEGIN BLOCK_SELECT_DINAMICO -->
+                    class=" {SELECT_CLASSE} " 
+                    <!-- END BLOCK_SELECT_DINAMICO -->                   
+                >           
+                    <!-- BEGIN BLOCK_OPTION_PADRAO --> 
+                    <option value="">Todos</option>
+                    <!-- END BLOCK_OPTION_PADRAO --> 
+
+                    <!-- BEGIN BLOCK_OPTION --> 
+                    <option 
+                        value="{OPTION_VALOR}" 
+                        <!-- BEGIN BLOCK_OPTION_SELECIONADO -->
+                        selected
+                        <!-- END BLOCK_OPTION_SELECIONADO -->
+                    >
+                        {OPTION_TEXTO}
+                    </option> 
+                    <!-- END BLOCK_OPTION --> 
+                </select>
+                <!-- END BLOCK_SELECT --> 
+
+            </td>
+
+            <!-- BEGIN BLOCK_ESPACO -->
+            <td width="15px"></td> 
+            <!-- END BLOCK_ESPACO -->
+            
+            <!-- END BLOCK_COLUNA -->
+            
+
+        </tr>
+        <!-- END BLOCK_LINHA -->
+    </table>
+    <!-- END BLOCK_FILTRO_CAMPOS -->
+</body>
+
+<!-- BEGIN BLOCK_QUEBRA -->
+<br>
+<!-- END BLOCK_QUEBRA -->

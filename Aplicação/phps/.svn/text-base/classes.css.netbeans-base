@@ -1,0 +1,486 @@
+.pagina 
+{
+    font-family: Arial;
+    font-size: 10pt;
+    color: black;
+    width: 999px;
+    border: 1px gray solid; 
+    background-color: white;
+
+}
+
+.corpo
+{
+    padding:8px;	
+}
+.cabecalhocentro 
+{
+    background-color: white;
+}
+.cabecalho1
+{
+    border-collapse:collapse;    
+    border-bottom: 1px solid black;      
+
+}
+.menulinha {                
+    margin-top: 3px;
+    border-bottom: 1px solid black;  
+
+}
+.menulink {
+    font-size: 10pt;
+    color: gray;
+    text-decoration: none;
+}
+.menulink2 {
+    font-size: 10pt;
+    color: #DCDCDC;
+}
+.menulink:hover {
+    color: black;
+}
+.teste1:hover {
+    background-color:  #E0EEE0;
+}
+
+.tabela1
+{
+    border-collapse:collapse;
+    border-color: gray;
+    font-size: 10pt;
+    background-color: white;
+    color: black;  
+}
+.notificacao
+{
+    border-collapse:collapse;
+    font-size: 10pt;
+    background-color: white;
+    color: black;   
+    width: 500px;
+}
+
+
+
+.tabelafiltro 
+{
+    border-collapse:collapse;
+    font-size: 10pt;
+    background-color: white;
+    color: black;
+    border-color: green;
+}
+
+.subtotal
+{
+    font-weight: bold;
+    background-color: transparent;
+    border-top-color: black; 
+}
+.titulo
+{
+    font-family: Arial;
+    font-size: 12pt;
+    font-weight: bold;
+}
+.subtitulo
+{
+    font-family: Arial;
+    font-size: 10pt;
+    font-style: italic;
+    color: gray;
+    font-weight: bold; 
+}
+.linhacurta
+{
+    width: 300px;
+    border-bottom-width: 1px;
+    border-color: green; 
+
+}
+.linhagrande
+{
+    border-bottom-width: 1px;
+    border-color: green; 
+}
+.link
+{
+    text-decoration: none;
+    color: black;
+    background-color: transparent;
+}
+.botao
+{
+    border-collapse:collapse;	
+    background-color: #E4E4E4;
+    border: 1px gray solid;
+    color: black;
+    font-weight: bold; 
+    height: 28px;
+}
+.botao:hover
+{
+    background-color: green;
+    color: white;
+}
+.botao:disabled
+{
+    background-color: #E5E5E5;
+    border: 1px white solid;
+    color: gray;
+    border: 1px #DCDCDC solid;
+}
+.botaogrande {    
+    width: 300px;
+}
+.botaomedio {    
+    width: 200px;
+}
+.botaopequeno {    
+    width: 100px;
+}
+.botaomuitopequeno {    
+    width: 50px;
+}
+.botaovermelho {    
+    background-color: #FFE4E1;
+}
+.botaovermelho:hover {    
+    background-color: #900000;
+    color:white;
+}
+.botaoverde {    
+    background-color: #E0EEE0
+}
+.botaoverde:hover {    
+    background-color: darkolivegreen;
+    color:white;
+}
+.fonte_branca
+{
+    color:black;
+}
+.fonte_branca:hover
+{
+    color:white;
+}
+
+
+
+.bsalvar
+{
+    background-image: url(../imagens/icones/icones2/salvar.png); /* Insere a imagem */
+    width: 150px;/* Faz a largura ficar igual a da largura da imagem de exemplo */
+    height: 150px;/* Faz a altura ficar igual a da altura da imagem de exemplo */
+
+
+}
+
+.campo1
+{
+    height: 22px;
+    border-collapse:collapse; 
+    background-color: white;
+    font-size: 10pt;
+    border: 1px gray solid;
+    color: black;
+}
+.campo1:disabled
+{
+    background-color: transparent;
+    border: 1px transparent solid;
+    color: black;
+    border-bottom: 1px gray solid; 
+}
+.campo1:required {    
+    border: 1px darkolivegreen solid;    
+}
+.campo1:focus {    
+    
+    border: 1px orange solid;    
+}
+
+.campo5
+{
+    height: 22px;
+    border-collapse:collapse; 
+    background-color: white;
+    font-size: 10pt;
+    border: 1px gray solid;
+    color: black;
+}
+.campo5:disabled
+{
+    background-color: transparent;
+    border: 1px #E4E4E4 solid;
+    color: black;
+    border-bottom: 1px gray solid;    
+}
+.campo5:required {    
+    background-color: #E0EEE0; 
+}
+.campo5:focus {    
+    border: 2px darkolivegreen solid;    
+}
+.campoobrigatorio
+{    
+    background-color: #E0EEE0; 
+}
+
+.campofiltro
+{
+    height: 22px;
+    border-collapse:collapse; 
+    background-color: white;
+    font-size: 10pt;
+    border: 1px gray solid;
+}
+.campofiltro:disabled
+{
+    background-color: #E5E5E5;
+    border: 1px white solid;
+    color: gray;
+    border: 1px #DCDCDC solid;
+}
+.campofiltro:required {    
+    border: 1px darkolivegreen solid;    
+}
+.campofiltro:focus {    
+    
+    border: 1px orange solid;    
+}
+.textarea1
+{
+    height: 80px;
+    border-collapse:collapse; 
+    background-color: white;
+    font-size: 10pt;
+    border: 1px gray solid;
+}
+.textarea1:disabled
+{
+    background-color: transparent;
+    border: 1px gray solid;
+    color: black;
+}
+
+.celula1 { border-right-color: white; }
+
+.fonte1
+{
+    font-family: Arial;
+    font-size: 11pt;
+    font-style: italic;
+    color: black;
+}
+.fonte_estoqueatual
+{
+    font-family: Arial;
+    font-size: 10pt;
+    font-style: italic;
+    color: black;
+}
+.fonte2
+{
+    font-family: Arial;
+    font-size: 9pt;
+    font-style: italic;
+    color: gray;
+    font-weight: normal;	
+}
+.fonte3
+{
+    font-family: Arial;
+    font-size: 9pt;
+    color: black;
+    font-weight: bold;
+}
+.fonte4
+{
+    font-family: Arial;
+    font-size: 5pt;
+    color: black;
+    font-weight: bold;	
+}
+.fonte6
+{
+    font-family: Arial;
+    font-size: 11pt;
+    font-style: italic;
+    color: gray;
+
+}
+.fonte7
+{
+    font-family: Arial;
+    font-size: 16pt;    
+    color: black;
+    font-weight: bold;	
+}
+.fonte8
+{
+    font-family: Arial;
+    font-size: 12pt;    
+    color: black;
+    font-weight: bold;	
+}
+
+
+
+.obrigatorio
+{
+    font-family: Arial;
+    font-size: 11pt;
+    color: red;
+
+}
+.fundo1
+{
+    background-color: #E4E4E4;
+}
+.correto
+{
+    color: blue;
+    font-weight: bold;
+}
+.errado
+{
+    color: red;
+    font-weight: bold;
+}
+.tabelalinhavermelha
+{
+    color: red;
+}
+.tabelalinhafundovermelho
+{
+    background: #FFE4E1;
+}
+.tabelalinhafundoamarelo
+{
+    background: lemonchiffon;
+}
+.tabelalinhaverde
+{
+    color: green;
+}
+.linha_lista_cinza {
+    background: #E5E5E5;
+}
+
+.negrito {
+    font-weight: bold;
+}
+
+.titulo1 {
+    background-color: #f6f6f6;
+    height: 45px;        
+}
+.titulo2 {
+    background-color: #f6f6f6;
+    height: 25px;        
+}
+
+.tabela_login{
+    border: 1px #E5E5E5 solid;   
+    border-collapse:collapse;
+    font-size: 10pt;
+    background-color: white;
+    color: black;      
+
+}
+.logo_login{
+    width: 1024px;
+}
+.pagina2 
+{
+    font-family: Arial;
+    font-size: 10pt;    
+    width: 1024px;
+    border: 0px gray solid;
+    text-align: center;
+
+}
+.fonte5
+{    
+    font-size: 14pt;    
+    color: black;
+    font-weight: normal;	
+}
+.sembordadireita {
+    border-right: transparent;
+}
+.sembordaesquerda {
+    border-left: transparent;
+}
+.sembordabaixo {
+    border-bottom: transparent;
+}
+.sembordatopo {
+    border-top: transparent;
+}
+.pagina3 {
+    font-family: Arial;
+    font-size: 10pt;
+    color: black;
+    width: 1024px;
+    height: 600px;
+    border: 1px gray solid; 
+}
+.titulogrande {
+    font-size: 16pt;    
+    color: black;
+    font-weight: bold;
+}
+.descricaodosistema {
+    margin-left: 15px;
+    margin-right: 15px;    
+}
+
+.tabelacabecalho1 {
+    font-weight: bold;
+    text-align: center;
+    background-color: #E4E4E4;	
+}
+
+.tabelarodape1
+{
+    font-weight: bold;
+    background-color: #E4E4E4;	
+}
+.rodape {
+    border-top: 1px black solid;
+    text-align: center;
+}
+
+
+
+.pstrength-info {
+    margin-left: 3px;
+    font-weight: bold;
+}
+.msgnotificacao {
+    font-size: 14pt;    
+    color: black;
+    font-weight: bold;    
+    vertical-align: middle;
+}
+.notificacao_motivo_complemento {
+
+    font-weight: bold;    
+}
+.paginacao_fundo {
+    border: 1px gray solid;
+    border-top-color: transparent;
+    background-color: #E4E4E4;
+}
+.paginacao_linha {
+    height: 15px;
+    border-top-color: transparent;
+}
+.operacaodica {
+    color: #333;
+    font-weight: bold;
+    font-size: xx-small;
+}
