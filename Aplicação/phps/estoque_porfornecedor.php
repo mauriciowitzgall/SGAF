@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_estoque_ver <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -75,9 +75,9 @@ ORDER BY
 
 
 
-//Paginação
-//Executa primeiro o SQL sem a paginação para pegar o valor total do estoque 
-//que será mostrado no rodapé da ultima pagina
+//Pagina��o
+//Executa primeiro o SQL sem a pagina��o para pegar o valor total do estoque 
+//que ser� mostrado no rodap� da ultima pagina
 $query = mysql_query($sql);
 if (!$query)
     die("Erro SQL Principal Paginação:" . mysql_error());
@@ -89,7 +89,7 @@ $tpl->VALOR_TOTAL_GERAL = "R$ " . number_format($valor_total_geral, 2, ',', '.')
 $por_pagina = $usuario_paginacao;
 $paginaatual = $_POST["paginaatual"];
 $paginas = ceil($linhas / $por_pagina);
-//Se é a primeira vez que acessa a pagina então começar na pagina 1
+//Se � a primeira vez que acessa a pagina ent�o come�ar na pagina 1
 if (($paginaatual == "") || ($paginas < $paginaatual) || ($paginaatual <= 0)) {
     $paginaatual = 1;
 }
@@ -103,12 +103,6 @@ if ($paginaatual == $paginas) {
     $tpl->block("BLOCK_LISTA_RODAPE");
 }
 
-
-
-
-
-
-
 $query = mysql_query($sql);
 if (!$query)
     die("Erro: " . mysql_error());
@@ -121,7 +115,12 @@ if ($linhas != "") {
 
         //Conta quantos produtos cada fornecedor possui
         $fornecedor = $dados['pes_codigo'];
-        $sql2 = "SELECT etq_produto FROM `estoque` WHERE etq_fornecedor=$fornecedor GROUP BY etq_produto";
+        $sql2 = "
+            SELECT etq_produto 
+            FROM estoque 
+            WHERE etq_fornecedor=$fornecedor 
+            AND etq_quiosque=$usuario_quiosque
+            GROUP BY etq_produto";
         $query2 = mysql_query($sql2);
         if (!$query2)
             die("Erro: " . mysql_error());
@@ -130,7 +129,12 @@ if ($linhas != "") {
 
         //Calcula o valor total dos produtos cada fornecedor possui
         $fornecedor = $dados['pes_codigo'];
-        $sql2 = "SELECT round(sum(etq_valorunitario*etq_quantidade),2) as tot FROM `estoque` WHERE etq_fornecedor=$fornecedor ";
+        $sql2 = "
+            SELECT round(sum(etq_valorunitario*etq_quantidade),2) as tot 
+            FROM estoque 
+            WHERE etq_fornecedor=$fornecedor 
+            AND etq_quiosque=$usuario_quiosque
+        ";
         $query2 = mysql_query($sql2);
         if (!$query2)
             die("Erro: " . mysql_error());

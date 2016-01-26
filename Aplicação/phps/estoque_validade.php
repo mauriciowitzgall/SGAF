@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_estoque_ver <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -14,6 +14,9 @@ $tpl = new Template("estoque_validade.html");
 $tpl->ICONES_CAMINHO = "$icones";
 
 $filtro_produto = $_POST["filtroproduto"];
+$filtro_produto_nome = $_POST["filtroprodutonome"];
+if (!empty($filtro_produto_nome)) {
+    $sql_filtro= $sql_filtro." and pro_nome like '%$filtro_produto_nome%'";
 $filtro_fornecedor = $_POST["filtrofornecedor"];
 if (($usuario_grupo == 5) && ($filtro_fornecedor != $usuario_codigo)) {
     $filtro_fornecedor = $usuario_codigo;
@@ -22,32 +25,11 @@ if (($usuario_grupo == 5) && ($filtro_fornecedor != $usuario_codigo)) {
 if ($usuario_grupo != 5) {
 
 //Filtro produto
-    $sql_produto = "
-    SELECT DISTINCT
-        etq_produto,pro_codigo,pro_nome
-    FROM
-        estoque
-        join produtos on (etq_produto=pro_codigo)  
-    WHERE
-        etq_quiosque=$usuario_quiosque 
-    ORDER BY 
-        pro_nome
-";
-    $query_produto = mysql_query($sql_produto);
-    if (!$query_produto) {
-        DIE("Erro1 SQL:" . mysql_error());
-    }
-    while ($dados_produto = mysql_fetch_array($query_produto)) {
-        $produto_codigo = $dados_produto['pro_codigo'];
-        $tpl->PRODUTO_CODIGO = $produto_codigo;
-        $tpl->PRODUTO_NOME = $dados_produto['pro_nome'];
-        if ($produto_codigo == $filtro_produto) {
-            $tpl->PRODUTO_SELECIONADO = " selected ";
-        } else {
-            $tpl->PRODUTO_SELECIONADO = " ";
-        }
-        $tpl->block("BLOCK_FILTRO_PRODUTO");
-    }
+$tpl->PRODUTO_NOME="$filtro_produto_nome";    
+    
+    
+    
+}
 //Filtro fornecedor
     $sql1 = "
     SELECT DISTINCT
@@ -75,9 +57,9 @@ if ($usuario_grupo != 5) {
         }
         $tpl->block("BLOCK_FILTRO_FORNECEDOR");
     }
-    $tpl->block("BLOCK_FILTRO");
 }
 
+$tpl->block("BLOCK_FILTRO");
 
 if ($filtro_fornecedor != "")
     $sql_filtro = $sql_filtro . " and etq_fornecedor= '$filtro_fornecedor' ";
@@ -112,15 +94,15 @@ ORDER BY
     etq_validade
 ";
 
-//Paginação
+//Pagina��o
 $query = mysql_query($sql);
 if (!$query)
-    die("@@@@Erro SQL Principal Paginação:" . mysql_error());
+    die("@@@@Erro SQL Principal Pagina��o:" . mysql_error());
 $linhas = mysql_num_rows($query);
 $por_pagina = $usuario_paginacao;
 $paginaatual = $_POST["paginaatual"];
 $paginas = ceil($linhas / $por_pagina);
-//Se é a primeira vez que acessa a pagina então começar na pagina 1
+//Se � a primeira vez que acessa a pagina ent�o come�ar na pagina 1
 if (($paginaatual == "") || ($paginas < $paginaatual) || ($paginaatual <= 0)) {
     $paginaatual = 1;
 }

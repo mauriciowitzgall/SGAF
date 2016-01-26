@@ -1,5 +1,5 @@
 <?php
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if (($permissao_categorias_cadastrar <> 1) &&  ($permissao_categorias_ver<>1)){
     header("Location: permissoes_semacesso.php"); 
@@ -36,7 +36,7 @@ while($array = mysql_fetch_array($query))
 <table summary="" border="0" class="tabela1" cellpadding="4">
 <tr>
 	<td align="right" width="200px"><b>Nome: <label class="obrigatorio">*</label></b></td>
-	<td align="left" width=""><input onkeypress="capitalize()"  id="capitalizar" type="text" name="nome" autofocus size="30" class="campo1" required value="<?php echo "$nome"; ?>" <?php if ($ver==1) echo" disabled ";?> ></td>
+	<td align="left" width=""><input onkeypress="capitalize()"  id="capitalizar" type="text" name="nome" autofocus size="30" class="campopadrao" required value="<?php echo "$nome"; ?>" <?php if ($ver==1) echo" disabled ";?> ></td>
 </tr>
 </tr>
 <tr>
@@ -48,7 +48,7 @@ while($array = mysql_fetch_array($query))
 <br />
 <hr align="left" >
 <?php
-//Verifica o link destino do botão voltar
+//Verifica o link destino do bot�o voltar
 $linkanterior=$_GET["link"];
 if ($linkanterior=="") { $link_destino="categorias.php"; } else {
     $link_destino=$linkanterior;

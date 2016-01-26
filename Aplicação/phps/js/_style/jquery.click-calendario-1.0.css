@@ -12,13 +12,13 @@ div.calendario a.fechar {
 	position: absolute;
 	top: -19px;
 	right: 0px;
-	height: 18px;
+	height: 15px;
 	text-decoration: none;
 	background: #fff;
 	width: 20px;
 	text-align:center;
 	vertical-align: center;
-	line-height: 18px;
+	line-height: 15px;
 	color: #000;
 	font:bold 12px Tahoma;
 }
@@ -41,12 +41,12 @@ div.calendario a.bt_avancar_mes { right: 2px; }
 div.calendario p.nome_mes {
 	text-align: center;
 	display: block;
-	height: 18px;
+	height: 15px;
 	background: #efeff0;
 	font-size: 12px;
 	font-weight: bold;
 	color: #6d6d6d;
-	line-height:18px;
+	line-height:15px;
 	vertical-align: middle;
 	margin: 0;
 }
@@ -58,7 +58,7 @@ div.calendario ul {
 div.calendario ul li {
 	display: block;
 	float: left;
-	width: 22px;
+	width: 18px;
 	height: 17px;
 	text-align: center;
 	font-size: 11px;

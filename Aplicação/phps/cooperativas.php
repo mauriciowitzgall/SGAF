@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_cooperativa_ver <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -47,7 +47,7 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 $tpl->block("BLOCK_FILTRO");
 
 //Listagem Inicio
-//Cabeçalho
+//Cabe�alho
 $tpl->CABECALHO_COLUNA_TAMANHO = "150px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "ABREVIAÇÃO";
@@ -81,7 +81,7 @@ if ($filtro_abreviacao <> "") {
 
 //Listagem
 $sql = "SELECT * FROM cooperativas WHERE 1 $sql_filtro ORDER BY coo_nomecompleto";
-//Paginação
+//Pagina��o
 $query = mysql_query($sql);
 if (!$query)
     die("Erro SQL Principal Paginação:" . mysql_error());
@@ -89,7 +89,7 @@ $linhas = mysql_num_rows($query);
 $por_pagina = $usuario_paginacao;
 $paginaatual = $_POST["paginaatual"];
 $paginas = ceil($linhas / $por_pagina);
-//Se é a primeira vez que acessa a pagina então começar na pagina 1
+//Se � a primeira vez que acessa a pagina ent�o come�ar na pagina 1
 if (($paginaatual == "") || ($paginas < $paginaatual) || ($paginaatual <= 0)) {
     $paginaatual = 1;
 }
@@ -112,7 +112,7 @@ while ($dados = mysql_fetch_array($query)) {
     $presidente = $dados["coo_presidente"];
     $tpl->LISTA_LINHA_CLASSE = "";
 
-    //Coluna Abreviação
+    //Coluna Abrevia��o
     $tpl->LISTA_COLUNA_VALOR = $abreviacao;
     $tpl->block("BLOCK_LISTA_COLUNA");
 
@@ -122,16 +122,19 @@ while ($dados = mysql_fetch_array($query)) {
 
 
     //Coluna Presidente
+    $tpl->COLUNA_LINK="pessoas_cadastrar.php?codigo=$presidente&operacao=ver";
+    $tpl->block("BLOCK_LISTA_COLUNA_LINK");
     $sql2 = "SELECT * FROM pessoas WHERE pes_codigo=$presidente ORDER BY pes_nome";
     $query2 = mysql_query($sql2);
     if (!$query2)
         die("Erro: " . mysql_error());
     $dados2 = mysql_fetch_array($query2);
     $tpl->LISTA_COLUNA_VALOR = $dados2["pes_nome"];
+    $tpl->block("BLOCK_LISTA_COLUNA_LINK_FIM");
     $tpl->block("BLOCK_LISTA_COLUNA");
 
 
-    //Coluna Operações
+    //Coluna Opera�ões
     $tpl->CODIGO = $codigo;
     //editar  
     IF ($permissao_cooperativa_editar==1) {
@@ -166,6 +169,7 @@ while ($dados = mysql_fetch_array($query)) {
 $tpl->LINK_CADASTRO = "cooperativas_cadastrar.php?operacao=cadastrar";
 $tpl->CADASTRAR_NOME = "CADASTRAR";
 if (mysql_num_rows($query) == 0) {
+    $tpl->LISTANADA="4";
     $tpl->block("BLOCK_LISTA_NADA");
 }
 

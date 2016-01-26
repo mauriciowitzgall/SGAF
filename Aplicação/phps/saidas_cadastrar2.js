@@ -19,7 +19,7 @@ function desconto(campo) {
     
     //Zera o Desconto Valor e Dinheiro
     $("input[name=descval]").val("R$ 0,00"); 
-    $("input[name=dinheiro]").val("R$ 0,00"); 
+    $("input[name=dinheiro]").val(""); 
 
 }
 //Campo Desconto Valor

@@ -1,9 +1,0 @@
-<style type="text/css">
-    .teste {
-    font-weight: bold;
-    position: absolute;
-    left:{POSICAO_X}px;
-    top:{POSICAO_Y}px;
-    }
-</style>
-<div class="teste">{CONTEUDO}</div>

@@ -16,6 +16,8 @@ $operacao = $_GET["operacao"];
 
 $erro = 0;
 
+//print_r($_REQUEST);
+
 //Caso a operação seja SALVAR então apenas trocar o status da entrada para ATIVO
 //e inserir produtos no estoque
 if ($salvar == 1) {
@@ -68,7 +70,7 @@ if ($salvar == 1) {
 
         if ($status == '0') {
 
-            //Verifica se o produto já existe no estoque, se sim insere, senão apenas incrementa
+            //Verifica se o produto já existe no estoque, se sim insere, sendo apenas incrementa
             $sql5 = "
             SELECT 
                 *

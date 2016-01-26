@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usuário tem permissço para acessar este conteúdo
 require "login_verifica.php";
 if ($permissao_relatorios_ver <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -192,7 +192,7 @@ $linhas = mysql_num_rows($query);
 $por_pagina = $usuario_paginacao;
 $paginaatual = $_POST["paginaatual"];
 $paginas = ceil($linhas / $por_pagina);
-//Se é a primeira vez que acessa a pagina então começar na pagina 1
+//Se � a primeira vez que acessa a pagina ent�o come�ar na pagina 1
 if (($paginaatual == "") || ($paginas < $paginaatual) || ($paginaatual <= 0)) {
     $paginaatual = 1;
 }
@@ -219,7 +219,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $data = converte_data($dados["rel_datacadastro"]);
     $hora = $dados["rel_horacadastro"];
 
-    //Código
+    //C�digo
     $tpl2->COLUNA_TAMANHO = "";
     $tpl2->COLUNA_ALINHAMENTO = "";
     $tpl2->TEXTO = "$codigo";
@@ -235,7 +235,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl2->block("BLOCK_CONTEUDO");
     $tpl2->block("BLOCK_COLUNA");
 
-    //Descrição
+    //Descri��o
     $tpl2->COLUNA_TAMANHO = "";
     $tpl2->COLUNA_ALINHAMENTO = "";
     $tpl2->TEXTO = "$descricao";
@@ -322,11 +322,11 @@ while ($dados = mysql_fetch_assoc($query)) {
                 die("Erro SQL" . mysql_error());
             $linhas3 = mysql_num_rows($query3);
             if ($linhas3 > 0)
-                $tpl2->ICONE_NOMEARQUIVO = "vendedor.png";
+                $tpl2->ICONE_NOMEARQUIVO = "caixa.png";
             else
-                $tpl2->ICONE_NOMEARQUIVO = "vendedor2.png";
-            $tpl2->ICONE_DICA = "Vendedor";
-            $tpl2->ICONE_NOMEALTERNATIVO = "Vendedor";
+                $tpl2->ICONE_NOMEARQUIVO = "caixa2.png";
+            $tpl2->ICONE_DICA = "Caixa";
+            $tpl2->ICONE_NOMEALTERNATIVO = "Caixa";
         } else if ($tipo == 5) {
             $sql3 = "
                 SELECT *
@@ -351,7 +351,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl2->block("BLOCK_COLUNA_ICONES");    
     $tpl2->block("BLOCK_COLUNA");
 
-    //Operações
+    //Opera�ões
     $tpl2->ICONES_CAMINHO = $icones;
 
     //Icone Gerar
@@ -370,7 +370,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl2->block("BLOCK_CONTEUDO");
     $tpl2->block("BLOCK_COLUNA");
 
-    //Operação Editar
+    //Opera��o Editar
     if ($permissao_relatorios_editar == 1) {
         $tpl2->COLUNA_TAMANHO = "35px";
         $tpl2->COLUNA_ALINHAMENTO = "center";
@@ -385,7 +385,7 @@ while ($dados = mysql_fetch_assoc($query)) {
         $tpl2->block("BLOCK_COLUNA");
     }
 
-    //Operação Excluir
+    //Opera��o Excluir
     if ($permissao_relatorios_excluir == 1) {
         $tpl2->COLUNA_TAMANHO = "35px";
         $tpl2->COLUNA_ALINHAMENTO = "center";

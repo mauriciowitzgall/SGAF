@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_entradas_etiquetas <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -46,7 +46,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $local = $dados["entpro_local"];
 }
 
-//Funções necessárias para o Código de Barras
+//Fun�ões necess�rias para o C�digo de Barras
 function esquerda($entra, $comp) {
     return substr($entra, 0, $comp);
 }
@@ -55,7 +55,7 @@ function direita($entra, $comp) {
     return substr($entra, strlen($entra) - $comp, $comp);
 }
 
-//Cria o código 
+//Cria o c�digo 
 $produto_barra = str_pad($produto, 6, "0", STR_PAD_LEFT);
 $lote_barra = str_pad($lote, 8, "0", STR_PAD_LEFT);
 $etiqueta = $produto_barra . $lote_barra;
@@ -69,7 +69,7 @@ for ($cont = 1; $cont <= $qtd_etiquetas; $cont++) {
 
     $tpl->FORNECEDOR_ID = $fornecedor_id;
     $tpl->PRODUTO = "$produto_nome";
-    //Código de Barras
+    //C�digo de Barras
     $fino = 1;
     $largo = 3;
     $altura = 50;
@@ -131,7 +131,7 @@ for ($cont = 1; $cont <= $qtd_etiquetas; $cont++) {
     $tpl->block("BLOCK_CODBARRAS");
 
 
-    //Fornecedor e Descrição do Produto
+    //Fornecedor e Descri��o do Produto
     if ($tipo_contagem == 1) {
         $tpl->QUANTIDADE = "";
         $tpl->VALOR_UNITARIO = "";
@@ -144,6 +144,7 @@ for ($cont = 1; $cont <= $qtd_etiquetas; $cont++) {
         $tpl->VALOR_UNITARIO = " \ R$ " . number_format($valuni, 2, ',', '.');
         $tpl->SIGLA = "$sigla";
         $tpl->SIGLA2 = "por $sigla";
+        $tpl->block("BLOCK_PORQUILO");
     }
     $tpl->VALOR_TOTAL = "R$ " . number_format($valtot, 2, ',', '.');
     

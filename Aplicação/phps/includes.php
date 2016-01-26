@@ -1,4 +1,5 @@
 <?php
+include "acentuacao.html";
 require("templates/Template.class.php");
 
 //Pasta a partir da raiz, onde ficará os arquivos do sistema
@@ -7,10 +8,9 @@ $raiz = $_SERVER["DOCUMENT_ROOT"] ."/".$pastasistema;
 ?>
 <html>
     <head>
-        <title><?php $titulopagina ?></title>
-        <meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8" />
+        <title><?php $titulopagina ?></title>         
         <link rel="stylesheet" type="text/css" href="classes.css" />
-        <link rel="stylesheet" type="text/css" href="templates/geral.css">
+        <link rel="stylesheet" type="text/css" href="templates/geral.css">        
         <script language="JavaScript" src="js/shortcut.js"></script>
         <script language="JavaScript" src="atalhos_teclado.js"></script>
         <script language="JavaScript" src="funcoes.js"></script>        
@@ -33,9 +33,9 @@ $raiz = $_SERVER["DOCUMENT_ROOT"] ."/".$pastasistema;
         <div class="pagina" >
             <?php
             include "controle/conexao.php";
-            include "controle/conexao_tipo.php";
-            include "funcoes.php";
-            include "conexao_tipo.php";
+            //include "controle/conexao_tipo.php";
+            require_once "funcoes.php";
+            //include "conexao_tipo.php";
             include "cabecalho.php";
             include "menu.php";
             include "js/mascaras.php";

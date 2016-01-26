@@ -6,6 +6,10 @@
     <td align="right" width="47%"> <img src="{ICONES}confirmar.png" > </td>
     <td align="left"> CONFIRMADO </td>      
     <!-- END BLOCK_CONFIRMAR -->
+    <!-- BEGIN BLOCK_TITULO -->            
+    <td align="right" width="37%"> <img src="{ICONES}{ICONE_ARQUIVO}" > </td>
+    <td align="left"> {TITULO} </td>      
+    <!-- END BLOCK_TITULO -->
 
     <!-- BEGIN BLOCK_ERRO -->
     <td align="right" width="47%"> <img src="{ICONES}erro.png" > </td>
@@ -110,7 +114,6 @@
        <!-- END BLOCK_BOTAO_VOLTAR2 -->         
        
        <!-- BEGIN BLOCK_BOTAO_SIMNAO -->       
-       <a class="link" href="{LINK}" target="{LINK_TARGET}"><input type="button" value="SIM" class="botao fonte3 botaomuitopequeno" ></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
        <a 
            class="link"            
            <!-- BEGIN BLOCK_BOTAO_NAO_LINK -->       
@@ -120,9 +123,20 @@
            href="javascript:window.history.go(-1)"
            <!-- END BLOCK_BOTAO_NAO_VOLTAR -->      
        >
-           <input type="button" value="NÃO" class="botao fonte3 botaomuitopequeno" autofocus>
+       <input type="button" value="NÃO" class="botao fonte3 botaomuitopequeno" autofocus>
+       </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       <a class="link" href="{LINK}" target="{LINK_TARGET}">
+           <input type="button" value="SIM" class="botao fonte3 botaomuitopequeno" >
        </a>
        <!-- END BLOCK_BOTAO_SIMNAO -->
+        <!-- BEGIN BLOCK_BOTAO_FORM -->
+        <form action="{FORM_DESTINO}">       
+               <!-- BEGIN BLOCK_BOTAO_FORM_CAMPOOCULTO -->
+               <input type="hidden" name="{CAMPOOCULTO_NOME}" value="{CAMPOOCULTO_VALOR}">
+               <!-- END BLOCK_BOTAO_FORM_CAMPOOCULTO -->
+               <input type="submit" value="CONTINUAR" class="botao fonte3" autofocus="1">
+        </form>
+        <!-- END BLOCK_BOTAO_FORM -->       
    </td>
 </tr>
 </table>

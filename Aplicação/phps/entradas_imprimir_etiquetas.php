@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuÃ¡rio tem permissÃ£o para acessar este conteÃºdo
+//Verifica se o usuário tem permissão para acessar este conteúdo
 require "login_verifica.php";
 if ($permissao_entradas_etiquetas <> 1) {
     header("Location: permissoes_semacesso.php");

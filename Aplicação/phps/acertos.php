@@ -8,17 +8,18 @@ if ($permissao_acertos_ver <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
-$tipopagina = "acertos";
+$tipopagina = "negociacoes";
 include "includes.php";
 
 
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
-$tpl_titulo->TITULO = "ACERTOS  ";
+$tpl_titulo->TITULO = "ACERTOS DE CONSIGNAÇÕES ";
 $tpl_titulo->SUBTITULO = "PEQUISA/LISTAGEM";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "acertos2.jpg";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "consignacao.png";
 $tpl_titulo->show();
+
 
 $tpl = new Template("templates/listagem_2.html");
 $tpl->FORM_ONLOAD = "";
@@ -141,10 +142,15 @@ $tpl->CABECALHO_COLUNA_NOME = "FORNECEDOR";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
+$tpl->CABECALHO_COLUNA_COLSPAN = "3";
+$tpl->CABECALHO_COLUNA_NOME = "PERÍODO";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
+$tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "BRUTO";
 $tpl->block("BLOCK_LISTA_CABECALHO");
-
+/*
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "TAXAS";
@@ -159,11 +165,11 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 //$tpl->CABECALHO_COLUNA_COLSPAN = "";
 //$tpl->CABECALHO_COLUNA_NOME = "PAGO";
 //$tpl->block("BLOCK_LISTA_CABECALHO");
-
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "PENDENTE";
 $tpl->block("BLOCK_LISTA_CABECALHO");
+*/
 
 $oper = 0;
 $oper_tamanho = 0;
@@ -201,7 +207,7 @@ if ($filtro_fornecedor <> "") {
 //Inicio das tuplas
 $sql = "
 SELECT DISTINCT
-    ace_codigo,ace_data,ace_hora,ace_supervisor,ace_fornecedor,ace_valorbruto,ace_valortaxas,ace_valorpendente,ace_valortotal,ace_valorpago,ace_trocodevolvido,ace_quiosque
+    ace_codigo,ace_data,ace_hora,ace_supervisor,ace_fornecedor,ace_valorbruto,ace_valortaxas,ace_valorpendente,ace_valortotal,ace_valorpago,ace_trocodevolvido,ace_quiosque,ace_dataini,ace_datafim
 FROM 
     acertos 
     join pessoas on (ace_fornecedor=pes_codigo or ace_supervisor=pes_codigo)
@@ -220,7 +226,7 @@ $linhas = mysql_num_rows($query);
 $por_pagina = $usuario_paginacao;
 $paginaatual = $_POST["paginaatual"];
 $paginas = ceil($linhas / $por_pagina);
-//Se é a primeira vez que acessa a pagina então começar na pagina 1
+//Se é a primeira vez que acessa a pagina ent�o come�ar na pagina 1
 if (($paginaatual == "") || ($paginas < $paginaatual) || ($paginaatual <= 0)) {
     $paginaatual = 1;
 }
@@ -250,8 +256,10 @@ while ($dados = mysql_fetch_assoc($query)) {
     $valortotal = $dados["ace_valortotal"];
     $valorpago = $dados["ace_valorpago"];
     $trocodevolvido = $dados["ace_trocodevolvido"];
+    $datade = $dados["ace_dataini"];
+    $dataate = $dados["ace_datafim"];
 
-    //Coluna Código
+    //Coluna C�digo
     $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
     $tpl->LISTA_COLUNA_VALOR = $dados["ace_codigo"];
     $tpl->block("BLOCK_LISTA_COLUNA");
@@ -289,11 +297,26 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl->LISTA_COLUNA_VALOR = $fornecedor_nome;
     $tpl->block("BLOCK_LISTA_COLUNA");
 
+    //Período De Até
+    $datade2=  converte_data($datade);
+    $dataate2=  converte_data($dataate);
+    $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
+    $tpl->LISTA_COLUNA_VALOR = "$datade2";
+    $tpl->block("BLOCK_LISTA_COLUNA");
+    $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
+    $tpl->LISTA_COLUNA_VALOR = " até ";
+    $tpl->block("BLOCK_LISTA_COLUNA");
+    //Período De Até
+    $tpl->LISTA_COLUNA_ALINHAMENTO = "left";
+    $tpl->LISTA_COLUNA_VALOR = "$dataate2";
+    $tpl->block("BLOCK_LISTA_COLUNA");
+
     //Coluna Valor Bruto
     $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
     $tpl->LISTA_COLUNA_VALOR = "R$ " . number_format($valorbruto, 2, ',', '.');
     $tpl->block("BLOCK_LISTA_COLUNA");
 
+    /*
     //Coluna Valor Taxas
     $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
     $tpl->LISTA_COLUNA_VALOR = "R$ " . number_format($valortaxas, 2, ',', '.');
@@ -312,11 +335,11 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
     $tpl->LISTA_COLUNA_VALOR = "R$ " . number_format($valorpendente, 2, ',', '.');
     $tpl->block("BLOCK_LISTA_COLUNA");
+*/
 
-    //Coluna Operações    
+    //Coluna Opera�ões    
     $tpl->ICONE_ARQUIVO = $icones;
     $tpl->CODIGO = $codigo;
-
 
     if ($permissao_acertos_ver == 1) {
         //imprimir

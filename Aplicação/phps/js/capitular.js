@@ -4,7 +4,7 @@ function pID(id){
     return document.getElementById(id);
 }
 		
-// Objetivo	::	Tornar as letras iniciais das palavras em maiÃºsculas exceto nos casos das palavras: de, do, da, dos ou das.
+// Objetivo	::	Tornar as letras iniciais das palavras em maiúsculas exceto nos casos das palavras: de, do, da, dos ou das.
 function capitalize(){
     var palavras="";
     var strPalavras = "";
@@ -16,11 +16,11 @@ function capitalize(){
     // Quebra a string em um vetor composto pelas palavras da frase
     var array = string.split(" ");
 
-    // LaÃ§o para capitalizar cada palavra individualmente
+    // Laço para capitalizar cada palavra individualmente
     for(var i=0; i<array.length; i++){
         var word = array[i].toLowerCase();
 				
-        // Aqui basta digitar as palavras que nÃ£o devem ser capitalizadas, exemplo: word == "dos" basta colocar como o modelo abaixo
+        // Aqui basta digitar as palavras que não devem ser capitalizadas, exemplo: word == "dos" basta colocar como o modelo abaixo
         if(word == "de" || word == "do" || word == "da" || word == "dos"){
             strPalavras += " " + word;
         }
@@ -32,7 +32,7 @@ function capitalize(){
         }
     }
 			
-    // Verifica se a primeira letra da frase formada Ã© um espaÃ§o, se for deleta-o da palavra
+    // Verifica se a primeira letra da frase formada é um espaço, se for deleta-o da palavra
     for(var j=0; j<strPalavras.length;j++){
         var primeiroCaracter = strPalavras.charAt(0);
         if(primeiroCaracter == " "){
@@ -40,12 +40,12 @@ function capitalize(){
         }
         else{
 				
-            // Se o primeiro cacter nÃ£o for um espaÃ§o entÃ£o apenas o copia para a variÃ¡vel
+            // Se o primeiro cacter não for um espaço então apenas o copia para a variável
             strPalavras = strPalavras;
         }
     }
 			
-    // Altera o conteÃºdo do campo
+    // Altera o conteúdo do campo
     sString.value = strPalavras;
 }
 		

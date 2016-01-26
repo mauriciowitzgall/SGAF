@@ -19,12 +19,12 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "entradas.png";
 $tpl_titulo->show();
 
-//Inicio da exclusÃ£o de entradas
+//Inicio da exclusão de entradas
 $tpl = new Template("templates/notificacao.html");
 $tpl->ICONES = $icones;
 $tpl->DESTINO = "entradas.php"; 
 
-//Verifica se ja foi efetuado saÃ­das quaisquer para o lote/entrada em questÃ£o
+//Verifica se ja foi efetuado Saídas quaisquer para o lote/entrada em questão
 $sql3 = "SELECT * FROM saidas_produtos WHERE saipro_lote=$entrada";
 $query3 = mysql_query($sql3);
 if (!$query3) {
@@ -32,11 +32,11 @@ if (!$query3) {
 }
 $linhas = mysql_num_rows($query3);
 
-//Se jÃ¡ houve saÃ­das referentes a esta entrada entÃ£o nÃ£o pode-se exclui-la
+//Se já houve Saídas referentes a esta entrada então não pode-se exclui-la
 if ($linhas > 0) {        
     $tpl->block("BLOCK_ERRO");
     $tpl->block("BLOCK_NAOAPAGADO");
-    $tpl->MOTIVO_COMPLEMENTO = "JÃ¡ aconteceram vendas de produtos pertencentes a esta entrada/lote";    
+    $tpl->MOTIVO_COMPLEMENTO = "Já aconteceram vendas de produtos pertencentes a esta entrada/lote";    
     $tpl->block("BLOCK_BOTAO_VOLTAR");  
 } else {
     

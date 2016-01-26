@@ -4,7 +4,7 @@ require "login_verifica.php";
 include "controle/conexao.php";
 include "controle/conexao_tipo.php";
 
-echo $sql = "
+$sql = "
 SELECT DISTINCT
     pro_codigo,pro_nome
 FROM

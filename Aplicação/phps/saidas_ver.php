@@ -1,5 +1,5 @@
 <?php
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 $tiposaida = $_GET["tiposaida"];
 if ($tiposaida == 1) {
@@ -36,29 +36,13 @@ $tpl_titulo->show();
 //Pega valores
 $sql = "
 SELECT 
-    sai_consumidor,
-    sai_tipo,
-    sai_saidajustificada,
-    sai_descricao,
-    sai_totalbruto, 
-    sai_descontopercentual, 
-    sai_descontovalor, 
-    sai_totalcomdesconto, 
-    sai_valorecebido, 
-    sai_troco, 
-    sai_trocodevolvido, 
-    sai_descontoforcado, 
-    sai_acrescimoforcado, 
-    sai_totalliquido,
-    pes_nome,
-    saitip_nome,
-    saimot_nome
+    *
 FROM
     saidas
-    join pessoas on (sai_consumidor=pes_codigo)
     join saidas_tipo on (saitip_codigo=sai_tipo)
     left join saidas_motivo on (saimot_codigo=sai_saidajustificada)
-WHERE   
+    left join pessoas on (sai_consumidor=pes_codigo)
+WHERE       
     sai_codigo=$saida
 ";
 $query = mysql_query($sql);
@@ -72,6 +56,10 @@ else
 $tipo_nome = $dados["saitip_nome"];
 $descricao = $dados["sai_descricao"];
 
+$totalbruto = $dados["sai_totalbruto"];
+$areceber = $dados["sai_areceber"];
+
+
 
 //DADOS GERAIS DA VENDA
 $tpl1_tit = new Template("templates/tituloemlinha_1.html");
@@ -79,6 +67,8 @@ $tpl1_tit->LISTA_TITULO = "DADOS GERAIS DA VENDA";
 $tpl1_tit->block("BLOCK_QUEBRA1");
 $tpl1_tit->block("BLOCK_TITULO");
 $tpl1_tit->show();
+
+
 
 $tpl = new Template("templates/cadastro1.html");
 
@@ -132,7 +122,7 @@ if ($tiposaida == 3) {
         $tpl->block("BLOCK_LINHA");
 
 
-        //Descrição
+        //Descri��o
         //Titulo
         $tpl->COLUNA_ALINHAMENTO = "right";
         $tpl->COLUNA_TAMANHO = "200px";
@@ -198,7 +188,7 @@ $tpl2->CABECALHO_COLUNA_COLSPAN = "";
 $tpl2->CABECALHO_COLUNA_NOME = "VALOR TOTAL";
 $tpl2->block(BLOCK_LISTA_CABECALHO);
 
-//Mostra todos os produtos da saida em questão
+//Mostra todos os produtos da saida em quest�o
 $sql2 = "
 SELECT 
     saipro_codigo,pro_nome,pes_nome,saipro_lote,saipro_quantidade,protip_sigla,protip_codigo,saipro_valorunitario,saipro_valortotal
@@ -217,6 +207,7 @@ $query2 = mysql_query($sql2);
 if (!$query2)
     die("Erro43" . mysql_error());
 $total = 0;
+
 while ($dados2 = mysql_fetch_assoc($query2)) {
     $tpl2->LISTA_CLASSE = "tab_linhas2";
     $tpl2->block("BLOCK_LISTA_CLASSE");
@@ -247,7 +238,7 @@ while ($dados2 = mysql_fetch_assoc($query2)) {
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "right";
     $tpl2->LISTA_COLUNA_TAMANHO = "100px";
     $tpl2->LISTA_COLUNA_CLASSE = "";
-    $tipocontagem=$dados2["protip_codigo"];
+    $tipocontagem = $dados2["protip_codigo"];
     if ($tipocontagem == 2)
         $tpl2->LISTA_COLUNA_VALOR = number_format($dados2['saipro_quantidade'], 3, ',', '.');
     else
@@ -275,7 +266,7 @@ while ($dados2 = mysql_fetch_assoc($query2)) {
     $total = $total + $dados2['saipro_valortotal'];
     $tpl2->block("BLOCK_LISTA");
 }
-//Rodapé da listagem
+//Rodap� da listagem
 $tpl2->LISTA_CLASSE = "tabelarodape1";
 
 $tpl2->LISTA_CLASSE = "tabelarodape1";
@@ -324,7 +315,7 @@ $tpl3->COLUNA_TAMANHO = "";
 //Campo
 $tpl3->CAMPO_TIPO = "text";
 $tpl3->CAMPO_NOME = "valortotal";
-$totalbruto = $dados["sai_totalbruto"];
+
 $tpl3->CAMPO_VALOR = "R$ " . number_format($totalbruto, 2, ',', '.');
 $tpl3->block("BLOCK_CAMPO_PADRAO");
 $tpl3->block("BLOCK_CAMPO_DESABILITADO");
@@ -388,137 +379,140 @@ $tpl3->block("BLOCK_CONTEUDO");
 $tpl3->block("BLOCK_COLUNA");
 $tpl3->block("BLOCK_LINHA");
 
+if ($areceber != 1) {
+
 //Valor Recebido
 //Titulo
-$tpl3->COLUNA_ALINHAMENTO = "right";
-$tpl3->COLUNA_TAMANHO = "200px";
-$tpl3->TITULO = "Valor Recebido";
-$tpl3->block("BLOCK_TITULO");
-$tpl3->block("BLOCK_CONTEUDO");
-$tpl3->block("BLOCK_COLUNA");
-$tpl3->COLUNA_ALINHAMENTO = "";
-$tpl3->COLUNA_TAMANHO = "";
+    $tpl3->COLUNA_ALINHAMENTO = "right";
+    $tpl3->COLUNA_TAMANHO = "200px";
+    $tpl3->TITULO = "Valor Recebido";
+    $tpl3->block("BLOCK_TITULO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "";
+    $tpl3->COLUNA_TAMANHO = "";
 //Campo
-$tpl3->CAMPO_TIPO = "text";
-$tpl3->CAMPO_NOME = "valorecebido";
-$valorecebido = $dados["sai_valorecebido"];
-$tpl3->CAMPO_VALOR = "R$ " . number_format($valorecebido, 2, ',', '.');
-$tpl3->block("BLOCK_CAMPO_PADRAO");
-$tpl3->block("BLOCK_CAMPO_DESABILITADO");
-$tpl3->block("BLOCK_CAMPO");
-$tpl3->block("BLOCK_CONTEUDO");
-$tpl3->block("BLOCK_COLUNA");
-$tpl3->block("BLOCK_LINHA");
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_NOME = "valorecebido";
+    $valorecebido = $dados["sai_valorecebido"];
+    $tpl3->CAMPO_VALOR = "R$ " . number_format($valorecebido, 2, ',', '.');
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->block("BLOCK_LINHA");
 
 //Troco
 //Titulo
-$tpl3->COLUNA_ALINHAMENTO = "right";
-$tpl3->COLUNA_TAMANHO = "200px";
-$tpl3->TITULO = "Troco";
-$tpl3->block("BLOCK_TITULO");
-$tpl3->block("BLOCK_CONTEUDO");
-$tpl3->block("BLOCK_COLUNA");
-$tpl3->COLUNA_ALINHAMENTO = "";
-$tpl3->COLUNA_TAMANHO = "";
+    $tpl3->COLUNA_ALINHAMENTO = "right";
+    $tpl3->COLUNA_TAMANHO = "200px";
+    $tpl3->TITULO = "Troco";
+    $tpl3->block("BLOCK_TITULO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "";
+    $tpl3->COLUNA_TAMANHO = "";
 //Campo
-$tpl3->CAMPO_TIPO = "text";
-$tpl3->CAMPO_NOME = "totalcomdesconto";
-$troco = $dados["sai_troco"];
-$tpl3->CAMPO_VALOR = "R$ " . number_format($troco, 2, ',', '.');
-$tpl3->block("BLOCK_CAMPO_PADRAO");
-$tpl3->block("BLOCK_CAMPO_DESABILITADO");
-$tpl3->block("BLOCK_CAMPO");
-$tpl3->block("BLOCK_CONTEUDO");
-$tpl3->block("BLOCK_COLUNA");
-$tpl3->block("BLOCK_LINHA");
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_NOME = "totalcomdesconto";
+    $troco = $dados["sai_troco"];
+    $tpl3->CAMPO_VALOR = "R$ " . number_format($troco, 2, ',', '.');
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->block("BLOCK_LINHA");
 
 //Troco Devolvido
 //Titulo
-$tpl3->COLUNA_ALINHAMENTO = "right";
-$tpl3->COLUNA_TAMANHO = "200px";
-$tpl3->TITULO = "Troco Devolvido";
-$tpl3->block("BLOCK_TITULO");
-$tpl3->block("BLOCK_CONTEUDO");
-$tpl3->block("BLOCK_COLUNA");
-$tpl3->COLUNA_ALINHAMENTO = "";
-$tpl3->COLUNA_TAMANHO = "";
+    $tpl3->COLUNA_ALINHAMENTO = "right";
+    $tpl3->COLUNA_TAMANHO = "200px";
+    $tpl3->TITULO = "Troco Devolvido";
+    $tpl3->block("BLOCK_TITULO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "";
+    $tpl3->COLUNA_TAMANHO = "";
 //Campo
-$tpl3->CAMPO_TIPO = "text";
-$tpl3->CAMPO_NOME = "trocodevolvido";
-$trocodevolvido = $dados["sai_trocodevolvido"];
-$tpl3->CAMPO_VALOR = "R$ " . number_format($trocodevolvido, 2, ',', '.');
-$tpl3->block("BLOCK_CAMPO_PADRAO");
-$tpl3->block("BLOCK_CAMPO_DESABILITADO");
-$tpl3->block("BLOCK_CAMPO");
-$tpl3->block("BLOCK_CONTEUDO");
-$tpl3->block("BLOCK_COLUNA");
-$tpl3->block("BLOCK_LINHA");
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_NOME = "trocodevolvido";
+    $trocodevolvido = $dados["sai_trocodevolvido"];
+    $tpl3->CAMPO_VALOR = "R$ " . number_format($trocodevolvido, 2, ',', '.');
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->block("BLOCK_LINHA");
 
-//Desconto Forçado
+//Desconto For�ado
 //Titulo
-$tpl3->COLUNA_ALINHAMENTO = "right";
-$tpl3->COLUNA_TAMANHO = "200px";
-$tpl3->TITULO = "Desconto Forçado";
-$tpl3->block("BLOCK_TITULO");
-$tpl3->block("BLOCK_CONTEUDO");
-$tpl3->block("BLOCK_COLUNA");
-$tpl3->COLUNA_ALINHAMENTO = "";
-$tpl3->COLUNA_TAMANHO = "";
+    $tpl3->COLUNA_ALINHAMENTO = "right";
+    $tpl3->COLUNA_TAMANHO = "200px";
+    $tpl3->TITULO = "Desconto Forçado";
+    $tpl3->block("BLOCK_TITULO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "";
+    $tpl3->COLUNA_TAMANHO = "";
 //Campo
-$tpl3->CAMPO_TIPO = "text";
-$tpl3->CAMPO_NOME = "descontoforcado";
-$descontoforcado = $dados["sai_descontoforcado"];
-$tpl3->CAMPO_VALOR = "R$ " . number_format($descontoforcado, 2, ',', '.');
-$tpl3->block("BLOCK_CAMPO_PADRAO");
-$tpl3->block("BLOCK_CAMPO_DESABILITADO");
-$tpl3->block("BLOCK_CAMPO");
-$tpl3->block("BLOCK_CONTEUDO");
-$tpl3->block("BLOCK_COLUNA");
-$tpl3->block("BLOCK_LINHA");
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_NOME = "descontoforcado";
+    $descontoforcado = $dados["sai_descontoforcado"];
+    $tpl3->CAMPO_VALOR = "R$ " . number_format($descontoforcado, 2, ',', '.');
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->block("BLOCK_LINHA");
 
-//Acrescimo Forçado
+//Acrescimo For�ado
 //Titulo
-$tpl3->COLUNA_ALINHAMENTO = "right";
-$tpl3->COLUNA_TAMANHO = "200px";
-$tpl3->TITULO = "Acréscimo Forçado";
-$tpl3->block("BLOCK_TITULO");
-$tpl3->block("BLOCK_CONTEUDO");
-$tpl3->block("BLOCK_COLUNA");
-$tpl3->COLUNA_ALINHAMENTO = "";
-$tpl3->COLUNA_TAMANHO = "";
+    $tpl3->COLUNA_ALINHAMENTO = "right";
+    $tpl3->COLUNA_TAMANHO = "200px";
+    $tpl3->TITULO = "Acréscimo Forçado";
+    $tpl3->block("BLOCK_TITULO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "";
+    $tpl3->COLUNA_TAMANHO = "";
 //Campo
-$tpl3->CAMPO_TIPO = "text";
-$tpl3->CAMPO_NOME = "acrescimoforcado";
-$acrescimoforcado = $dados["sai_acrescimoforcado"];
-$tpl3->CAMPO_VALOR = "R$ " . number_format($acrescimoforcado, 2, ',', '.');
-$tpl3->block("BLOCK_CAMPO_PADRAO");
-$tpl3->block("BLOCK_CAMPO_DESABILITADO");
-$tpl3->block("BLOCK_CAMPO");
-$tpl3->block("BLOCK_CONTEUDO");
-$tpl3->block("BLOCK_COLUNA");
-$tpl3->block("BLOCK_LINHA");
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_NOME = "acrescimoforcado";
+    $acrescimoforcado = $dados["sai_acrescimoforcado"];
+    $tpl3->CAMPO_VALOR = "R$ " . number_format($acrescimoforcado, 2, ',', '.');
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->block("BLOCK_LINHA");
 
 //Total Liquido
 //Titulo
-$tpl3->COLUNA_ALINHAMENTO = "right";
-$tpl3->COLUNA_TAMANHO = "200px";
-$tpl3->TITULO = "Total Liquido";
-$tpl3->block("BLOCK_TITULO");
-$tpl3->block("BLOCK_CONTEUDO");
-$tpl3->block("BLOCK_COLUNA");
-$tpl3->COLUNA_ALINHAMENTO = "";
-$tpl3->COLUNA_TAMANHO = "";
+    $tpl3->COLUNA_ALINHAMENTO = "right";
+    $tpl3->COLUNA_TAMANHO = "200px";
+    $tpl3->TITULO = "Total Liquido";
+    $tpl3->block("BLOCK_TITULO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "";
+    $tpl3->COLUNA_TAMANHO = "";
 //Campo
-$tpl3->CAMPO_TIPO = "text";
-$tpl3->CAMPO_NOME = "totalliquido";
-$totalliquido = $dados["sai_totalliquido"];
-$tpl3->CAMPO_VALOR = "R$ " . number_format($totalliquido, 2, ',', '.');
-$tpl3->block("BLOCK_CAMPO_PADRAO");
-$tpl3->block("BLOCK_CAMPO_DESABILITADO");
-$tpl3->block("BLOCK_CAMPO");
-$tpl3->block("BLOCK_CONTEUDO");
-$tpl3->block("BLOCK_COLUNA");
-$tpl3->block("BLOCK_LINHA");
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_NOME = "totalliquido";
+    $totalliquido = $dados["sai_totalliquido"];
+    $tpl3->CAMPO_VALOR = "R$ " . number_format($totalliquido, 2, ',', '.');
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->block("BLOCK_LINHA");
+}
 
 $tpl3->show();
 
@@ -526,7 +520,7 @@ if ($ope != 4) {
 
     $tpl4 = new Template("templates/botoes1.html");
 
-    //Botão Voltar
+    //Bot�o Voltar
     $tpl4->block("BLOCK_LINHAHORIZONTAL_EMCIMA");
     $tpl4->block("BLOCK_COLUNA_LINK_VOLTAR");
     $tpl4->COLUNA_LINK_ARQUIVO = "";
@@ -538,7 +532,7 @@ if ($ope != 4) {
     $tpl->block("BLOCK_CONTEUDO");
     $tpl4->block("BLOCK_COLUNA");
 
-    //Botão Imprimir
+    //Bot�o Imprimir
     $tpl4->COLUNA_LINK_ARQUIVO = "saidas_ver.php?codigo=$saida&tiposaida=$tiposaida&ope=4";
     $tpl4->COLUNA_LINK_TARGET = "_blank";
     $tpl4->block("BLOCK_COLUNA_LINK");

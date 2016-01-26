@@ -34,7 +34,7 @@ while($array = mysql_fetch_array($query))
 	<td width="35px"><img width="50px" src="<?php echo $icones;?>quiosques.png" alt="" ></td>
 	<td valign="bottom">
 		<label class="titulo"> QUIOSQUES </label><br />
-		<label class="subtitulo"> CADASTRO/EDIÇÃO </label>
+		<label class="subtitulo"> CADASTRO/EDI��O </label>
 	</td>
 </tr>
 </table>
@@ -73,9 +73,9 @@ while($array = mysql_fetch_array($query))
 	<td align="left" width=""><input type="text" name="bairro" size="45" class="campo1" value="<?php echo "$bairro"; ?>" <?php if ($ver==1) echo" disabled ";?> ></td>
 </tr>
 <tr>
-	<td align="right" width="200px"><b>Endereço: <label class="obrigatorio">*</label></b></td>
+	<td align="right" width="200px"><b>Endere�o: <label class="obrigatorio">*</label></b></td>
 	<td align="left" width=""><input type="text" name="endereco" id="endereco" size="35" class="campo1" required value="<?php echo "$endereco"; ?>"  <?php if ($ver==1) { echo" disabled ";} else { ?> placeholder="Nome da Rua" <?php }?> >
-	<input type="text" name="numero" size="8" class="campo1" value="<?php echo "$numero"; ?>"  <?php if ($ver==1) { echo" disabled ";} else { ?> placeholder="Nº" <?php }?> ></td>
+	<input type="text" name="numero" size="8" class="campo1" value="<?php echo "$numero"; ?>"  <?php if ($ver==1) { echo" disabled ";} else { ?> placeholder="N�" <?php }?> ></td>
 </tr>
 <tr>
 	<td align="right" width="200px"><b>CEP: </b></td>
@@ -118,7 +118,7 @@ while($array = mysql_fetch_array($query))
 			?><option value="<?php echo"$array2[0]";?>" <?php if($array2[0]==$presidente) { echo "selected ";} ?>  ><?php echo"$array2[1]";?></option><?php
 		}
 		?>
-		</select> <label class="fonte1"> Presitentes, Vendedores ou Administradores</label> 
+		</select> <label class="fonte1"> Presitentes, Caixas ou Administradores</label> 
 	</td>
 </tr>
 </table>

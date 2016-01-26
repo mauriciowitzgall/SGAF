@@ -32,7 +32,7 @@ class PDF extends FPDF {
         $this->Image('../../imagens/logos/sgaf1.png', 180, 13, 17);
         $this->Ln(5);
         
-        //Linha de baixo do cabeÃ§alho
+        //Linha de baixo do cabeçalho
         $this->Cell(190, 0, "", 'B', 1);
     }
 

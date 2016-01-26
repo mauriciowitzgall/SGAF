@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usu√°rio tem permiss√£o para acessar este conte√∫do
+//Verifica se o usu·rio tem permiss„o para acessar este conte˙do
 require "login_verifica.php";
 if ($permissao_entradas_etiquetas <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -49,7 +49,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $local = $dados["entpro_local"];
 }
 
-//Fun√ß√µes necess√°rias para o C√≥digo de Barras
+//FunÁ√µes necess·rias para o CÛdigo de Barras
 function esquerda($entra, $comp) {
     return substr($entra, 0, $comp);
 }
@@ -58,7 +58,7 @@ function direita($entra, $comp) {
     return substr($entra, strlen($entra) - $comp, $comp);
 }
 
-//Cria o c√≥digo 
+//Cria o cÛdigo 
 $produto_barra = str_pad($produto, 6, "0", STR_PAD_LEFT);
 $lote_barra = str_pad($lote, 8, "0", STR_PAD_LEFT);
 $etiqueta = $produto_barra . $lote_barra;
@@ -74,7 +74,7 @@ for ($cont = 1; $cont <= $qtd_etiquetas; $cont++) {
         $tpl->LOCAL = "$local";
         $tpl->PRODUTO = "$produto_nome";
 
-        //C√≥digo de Barras
+        //CÛdigo de Barras
         $fino = 1;
         $largo = 3;
         $altura = 50;
@@ -145,7 +145,7 @@ for ($cont = 1; $cont <= $qtd_etiquetas; $cont++) {
         if ($validade == "0000-00-00") {
             $tpl->VALIDADE = "";
         } else {
-            $tpl->VALIDADE = "V√°lido at√© " . converte_data($validade);
+            $tpl->VALIDADE = "V·lido atÈ " . converte_data($validade);
         }
 
         $tpl->FORNECEDOR_ID = "$fornecedor_id";

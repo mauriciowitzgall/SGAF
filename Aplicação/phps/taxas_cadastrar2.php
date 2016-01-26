@@ -13,6 +13,10 @@ $operacao = $_POST['operacao'];
 $codigo = $_POST['codigo'];
 $taxanome = $_POST['taxanome'];
 $descricao = $_POST['descricao'];
+$quiosque = $_POST['quiosque'];
+if ($quiosque=="") 
+    $quiosque=$usuario_quiosque;
+$tiponegociacao = $_POST['tiponegociacao'];
 
 
 //TÍTULO PRINCIPAL
@@ -54,16 +58,21 @@ if ($operacao == 'cadastrar') {
             taxas (
                 tax_nome,
                 tax_descricao,
-                tax_cooperativa
+                tax_cooperativa,
+                tax_quiosque,
+                tax_tiponegociacao
             )
         VALUES (
             '$taxanome',
             '$descricao',
-            '$usuario_cooperativa'
+            '$usuario_cooperativa',
+            '$quiosque',
+            '$tiponegociacao'
         )";
         $query2 = mysql_query($sql2);
         if (!$query2)
             die("Erro de SQL:" . mysql_error());
+        
         $tpl_notificacao->MOTIVO_COMPLEMENTO = "";
         $tpl_notificacao->block("BLOCK_CONFIRMAR");
         $tpl_notificacao->block("BLOCK_CADASTRADO");
@@ -97,7 +106,9 @@ if ($operacao == 'editar') {
         taxas
     SET            
         tax_nome='$taxanome',
-        tax_descricao='$descricao'
+        tax_descricao='$descricao',
+        tax_tiponegociacao='$tiponegociacao',
+        tax_quiosque='$quiosque'
     WHERE
         tax_codigo='$codigo'
     ";

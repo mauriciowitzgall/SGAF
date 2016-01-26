@@ -9,6 +9,7 @@
 }   
 </style>
 
+
 <body  onload="{FORM_ONLOAD}">    
 
     <!-- BEGIN BLOCK_FORM -->
@@ -24,6 +25,9 @@
                 <!-- BEGIN BLOCK_CAMPO_TITULO -->
                 <span class="titulo">&nbsp;{CAMPO_TITULO}:</span><br>
                 <!-- END BLOCK_CAMPO_TITULO -->
+                <!-- BEGIN BLOCK_CAMPO_TITULO_VAZIO -->
+                <span class="titulo">&nbsp;</span><br>
+                <!-- END BLOCK_CAMPO_TITULO_VAZIO -->
                 
                 <!-- BEGIN BLOCK_CAMPO --> 
                 <input
@@ -68,7 +72,7 @@
                     <!-- END BLOCK_CAMPO_PADRAO -->                
 
                     <!-- BEGIN BLOCK_CAMPO_FILTRO -->
-                    class=" campofiltro {CAMPO_CLASSE}" 
+                    class=" campopadrao {CAMPO_CLASSE}" 
                     <!-- END BLOCK_CAMPO_FILTRO -->                
 
                     <!-- BEGIN BLOCK_CAMPO_DINAMICO -->
@@ -112,7 +116,7 @@
                     <!-- END BLOCK_SELECT_PADRAO -->                
 
                     <!-- BEGIN BLOCK_SELECT_FILTRO -->
-                    class="campofiltro {SELECT_CLASSE} " 
+                    class="campopadrao {SELECT_CLASSE} " 
                     <!-- END BLOCK_SELECT_FILTRO -->                
 
                     <!-- BEGIN BLOCK_SELECT_DINAMICO -->

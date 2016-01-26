@@ -1,5 +1,5 @@
 <?php
-//Verifica se o usuÃ¡rio tem permissÃ£o para acessar este conteÃºdo
+//Verifica se o usuário tem permissão para acessar este conteúdo
 require "login_verifica.php";
 if ($permissao_produtos_excluir <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -42,7 +42,7 @@ $paginadestino="produtos.php";
 	<td valign="middle" align="right" class="celula1"><?php if(mysql_query($sql)) {?><img src="<?php echo $icones;?>confirmar.png" ><?php } else {?><img src="<?php echo $icones;?>erro.png" ><?php } ?></td><td class="celula2">
 	<?php
 		if(mysql_query($sql)) { echo "<b>Os dados foram apagados com sucesso!<b>"; }
-		else { echo "<b>NÃ£o foi possivel apagar os dados!</b> <br>"; echo mysql_error(); }
+		else { echo "<b>Não foi possivel apagar os dados!</b> <br>"; echo mysql_error(); }
 	?>
 	</td>
 <tr>

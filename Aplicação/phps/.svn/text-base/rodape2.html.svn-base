@@ -1,8 +1,0 @@
-        </div>        
-        <div class="rodape">
-            {QUIOSQUE} {CIDADE} {ENDERECO} <BR>
-            {TELEFONE1} {TELEFONE2} {EMAIL}    
-        </div>
-    </div>
-</body>
-</html>

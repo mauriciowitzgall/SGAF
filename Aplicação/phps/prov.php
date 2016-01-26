@@ -9,7 +9,7 @@
     $tpl3_tit->block("BLOCK_TITULO");
     $tpl3_tit->show();
 
-    //Ficou no estoque - Listagem - CabeÃ§alho   
+    //Ficou no estoque - Listagem - Cabeçalho   
     $tpl3->CABECALHO_COLUNA_TAMANHO = "";    
     $tpl3->CABECALHO_COLUNA_COLSPAN = "2";
     $tpl3->CABECALHO_COLUNA_NOME = "PRODUTO";
@@ -146,7 +146,7 @@
                 if ($validade_saldo == 0) {
                     $validade_saldo = "hoje";
                 } else if ($validade_saldo == 1) {
-                    $validade_saldo = "amanhÃ£";
+                    $validade_saldo = "amanhã";
                 }
             }
             $tpl3->LISTA_COLUNA_VALOR = $validade_saldo;

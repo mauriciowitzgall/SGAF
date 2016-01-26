@@ -1,5 +1,5 @@
 <?php
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if (($permissao_estoque_ver <> 1)||($usuario_grupo==5)) {
     header("Location: permissoes_semacesso.php");
@@ -23,18 +23,20 @@ FROM
     join produtos on (pro_codigo=etq_produto)
     join pessoas on (etq_fornecedor=pes_codigo)
     join produtos_tipo on (pro_tipocontagem=protip_codigo)
+    join entradas on (etq_lote=ent_codigo)
 WHERE
-    etq_produto='$produto'    
+    etq_produto='$produto'  
+    and ent_quiosque=$usuario_quiosque
 GROUP BY
     pes_nome
 ORDER BY
     pro_nome
 
 ";
-//Paginação
+//Pagina��o
 $query = mysql_query($sql);
 if (!$query)
-    die("Erro SQL Principal Paginação:" . mysql_error());
+    die("Erro SQL Principal Pagina��o:" . mysql_error());
 $linhas = mysql_num_rows($query);
 $valor_total_geral=0;
 while ($dados= mysql_fetch_assoc($query)) {
@@ -46,7 +48,7 @@ $tpl->QTD_TOTAL = number_format($valor_total_qtd,2,',','.');
 $por_pagina = $usuario_paginacao;
 $paginaatual = $_POST["paginaatual"];
 $paginas = ceil($linhas / $por_pagina);
-//Se é a primeira vez que acessa a pagina então começar na pagina 1
+//Se � a primeira vez que acessa a pagina ent�o come�ar na pagina 1
 if (($paginaatual == "") || ($paginas < $paginaatual) || ($paginaatual <= 0)) {
     $paginaatual = 1;
 }

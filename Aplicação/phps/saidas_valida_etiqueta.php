@@ -3,9 +3,9 @@
 include "controle/conexao.php";
 $etiqueta = $_POST[etiqueta];
 
-//Divide o c√≥digo da etiqueta em 2 peda√ßos
-$produto = substr($etiqueta, 0, 6); //Os 6 primeiros digitos s√£o referente ao produto
-$lote = substr($etiqueta, 6, 14); //Os 8 demais digitos s√£o referente ao lote
+//Divide o cÛdigo da etiqueta em 2 pedaÁos
+$produto = substr($etiqueta, 0, 6); //Os 6 primeiros digitos s„o referente ao produto
+$lote = substr($etiqueta, 6, 14); //Os 8 demais digitos s„o referente ao lote
 
 //Verifica se o produto e o lote existem no banco
 //Produto
@@ -21,7 +21,7 @@ if (!$query2)
     die("Erro: " . mysql_error());
 $linhas2 = mysql_num_rows($query2);
 
-//Efetua a verifica√ß√£o se os dados da estique est√£o corretos
+//Efetua a verificaÁ„o se os dados da estique est„o corretos
 if (($linhas == 0) OR ($linhas2 == 0)) {
     echo "invalida";
 } else {    
@@ -32,7 +32,7 @@ if (($linhas == 0) OR ($linhas2 == 0)) {
         die("Erro: " . mysql_error());
     $linhas3 = mysql_num_rows($query3);
     if ($linhas3 == 0) {
-        //echo "Este produto n√£o consta no estoque do sistema. Por favor, anote o n√∫mero desta etiqueta para analisar depois. Etiqueta: $etiqueta";
+        //echo "Este produto n„o consta no estoque do sistema. Por favor, anote o n˙mero desta etiqueta para analisar depois. Etiqueta: $etiqueta";
         echo "semestoque";
     } else {        
         echo "$produto $lote";

@@ -5,7 +5,7 @@
     if(mes==2)if(ano%100==0)return 28;
     if(mes==2)if(ano%4==0)return 29;else return 28;
 }
-var nomeMes=new Array("Janeiro","Fevereiro","MarÃ§o","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro");
+var nomeMes=new Array("Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro");
 var hoje=new Date();
 var diaAtual=hoje.getDate();
 var mesAtual=hoje.getMonth()+1;

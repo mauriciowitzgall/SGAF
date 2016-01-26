@@ -26,6 +26,7 @@
 .menulinha {                
     margin-top: 3px;
     border-bottom: 1px solid black;  
+    background-color: #f6f6f6;
 
 }
 .menulink {
@@ -177,33 +178,10 @@
 
 }
 
-.campo1
-{
-    height: 22px;
-    border-collapse:collapse; 
-    background-color: white;
-    font-size: 10pt;
-    border: 1px gray solid;
-    color: black;
-}
-.campo1:disabled
-{
-    background-color: transparent;
-    border: 1px transparent solid;
-    color: black;
-    border-bottom: 1px gray solid; 
-}
-.campo1:required {    
-    border: 1px darkolivegreen solid;    
-}
-.campo1:focus {    
-    
-    border: 1px orange solid;    
-}
 
 .campo5
 {
-    height: 22px;
+    height: 18px;
     border-collapse:collapse; 
     background-color: white;
     font-size: 10pt;
@@ -223,33 +201,9 @@
 .campo5:focus {    
     border: 2px darkolivegreen solid;    
 }
-.campoobrigatorio
-{    
-    background-color: #E0EEE0; 
-}
 
-.campofiltro
-{
-    height: 22px;
-    border-collapse:collapse; 
-    background-color: white;
-    font-size: 10pt;
-    border: 1px gray solid;
-}
-.campofiltro:disabled
-{
-    background-color: #E5E5E5;
-    border: 1px white solid;
-    color: gray;
-    border: 1px #DCDCDC solid;
-}
-.campofiltro:required {    
-    border: 1px darkolivegreen solid;    
-}
-.campofiltro:focus {    
-    
-    border: 1px orange solid;    
-}
+
+
 .textarea1
 {
     height: 80px;
@@ -337,7 +291,7 @@
 }
 .fundo1
 {
-    background-color: #E4E4E4;
+    background-color: transparent;
 }
 .correto
 {
@@ -365,6 +319,10 @@
 {
     color: green;
 }
+.tabelalinhaazul
+{
+    color: blue;
+}
 .linha_lista_cinza {
     background: #E5E5E5;
 }
@@ -374,7 +332,7 @@
 }
 
 .titulo1 {
-    background-color: #f6f6f6;
+    background-color: transparent;
     height: 45px;        
 }
 .titulo2 {
@@ -483,4 +441,11 @@
     color: #333;
     font-weight: bold;
     font-size: xx-small;
+}
+
+.aparece {
+    display: block;
+}
+.some {
+    display: none;
 }

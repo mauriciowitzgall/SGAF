@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usuário tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_pessoas_ver <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -25,6 +25,7 @@ $tpl->FORM_ONLOAD = "pessoas_filtro_id()";
 $filtro_id = $_POST["filtro_id"];
 $filtro_nome = $_POST["filtro_nome"];
 $filtro_tipo = $_POST["filtro_tipo"];
+$filtro_tipopessoa = $_POST["filtro_tipopessoa"];
 $filtro_possuiacesso = $_POST["filtro_possuiacesso"];
 $tpl->LINK_FILTRO = "pessoas.php";
 
@@ -48,8 +49,8 @@ $tpl->CAMPO_QTD_CARACTERES = "70";
 $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
-if ($permissao_pessoas_criarusuarios==1) {
 //Filtro Tipo
+if ($permissao_pessoas_criarusuarios == 1) {
     $tpl->SELECT_TITULO = "Tipo";
     $tpl->SELECT_NOME = "filtro_tipo";
     $tpl->SELECT_TAMANHO = "";
@@ -71,7 +72,7 @@ ORDER BY
         if ((($tipo == 1) && ($permissao_pessoas_ver_administradores == 1)) ||
                 (($tipo == 2) && ($permissao_pessoas_ver_presidentes == 1)) ||
                 (($tipo == 3) && ($permissao_pessoas_ver_supervisores == 1)) ||
-                (($tipo == 4) && ($permissao_pessoas_ver_vendedores == 1)) ||
+                (($tipo == 4) && ($permissao_pessoas_ver_caixas == 1)) ||
                 (($tipo == 5) && ($permissao_pessoas_ver_fornecedores == 1)) ||
                 (($tipo == 6) && ($permissao_pessoas_ver_supervisores == 1))
         ) {
@@ -85,8 +86,30 @@ ORDER BY
     $tpl->block("BLOCK_FILTRO_COLUNA");
 }
 
+//Filtro Tipo Pessoa
+$tpl->SELECT_TITULO = "Tipo de Pessoa";
+$tpl->SELECT_NOME = "filtro_tipopessoa";
+$tpl->SELECT_TAMANHO = "";
+$sql = "
+SELECT DISTINCT * FROM pessoas_tipopessoa ORDER BY pestippes_codigo";
+$query = mysql_query($sql);
+if (!$query)
+    die("Erro: " . mysql_error());
+while ($dados = mysql_fetch_assoc($query)) {
+    $tpl->OPTION_VALOR = $dados["pestippes_codigo"];
+    $tpl->OPTION_NOME = $dados["pestippes_nome"];
+    $tipo = $dados["pestippes_codigo"];
+    if ($dados["pestippes_codigo"] == $filtro_tipopessoa) {
+        $tpl->block("BLOCK_FILTRO_SELECT_OPTION_SELECIONADO");
+    }
+    $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+}
+$tpl->block("BLOCK_FILTRO_SELECT");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
+
 //Filtro Acesso
-if ($permissao_pessoas_criarusuarios==1) {
+if ($permissao_pessoas_criarusuarios == 1) {
 
     $tpl->SELECT_TITULO = "Acesso";
     $tpl->SELECT_NOME = "filtro_possuiacesso";
@@ -123,7 +146,7 @@ $tpl->block("BLOCK_FILTRO");
 
 //Filtro Fim
 //LISTAGEM INICIO
-//Cabeçalho
+//Cabe�alho
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "ID";
@@ -136,6 +159,11 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
+$tpl->CABECALHO_COLUNA_NOME = "TIPO PESSOA";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
+$tpl->CABECALHO_COLUNA_TAMANHO = "";
+$tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "CIDADE";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
@@ -144,15 +172,21 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "TELEFONE 01";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-if ($permissao_pessoas_criarusuarios==1) {
+if ($permissao_pessoas_criarusuarios == 1) {
     $tpl->CABECALHO_COLUNA_TAMANHO = "80PX";
     $tpl->CABECALHO_COLUNA_COLSPAN = "";
     $tpl->CABECALHO_COLUNA_NOME = "POSSUI ACESSO";
     $tpl->block("BLOCK_LISTA_CABECALHO");
 }
-$tpl->CABECALHO_COLUNA_TAMANHO = "110px";
+
+$tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "TIPO";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
+$tpl->CABECALHO_COLUNA_TAMANHO = "";
+$tpl->CABECALHO_COLUNA_COLSPAN = "";
+$tpl->CABECALHO_COLUNA_NOME = "TIPO NEG.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 $tpl->CABECALHO_COLUNA_COLSPAN = "3";
@@ -163,17 +197,19 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 //Lista linhas
 //Verifica quais filtros devem ser considerados no sql principal
 $sql_filtro = "";
-if ($filtro_id <> "") 
+if ($filtro_id <> "")
     $sql_filtro = $sql_filtro . " and pes_id = $filtro_id";
-if ($filtro_nome <> "") 
+if ($filtro_nome <> "")
     $sql_filtro = $sql_filtro . " and pes_nome LIKE '%$filtro_nome%'";
-if ($filtro_tipo <> "") 
+if ($filtro_tipo <> "")
     $sql_filtro = $sql_filtro . " and mespestip_tipo = $filtro_tipo ";
-if ($filtro_possuiacesso <> "") 
+if ($filtro_tipopessoa <> "")
+    $sql_filtro = $sql_filtro . " and pes_tipopessoa = $filtro_tipopessoa ";
+if ($filtro_possuiacesso <> "")
     $sql_filtro = $sql_filtro . " and pes_possuiacesso = $filtro_possuiacesso ";
-if ($filtro_possuiacesso <> "") 
+if ($filtro_possuiacesso <> "")
     $sql_filtro = $sql_filtro . " and pes_possuiacesso = $filtro_possuiacesso ";
-if ($usuario_grupo != 7) 
+if ($usuario_grupo != 7)
     $sql_filtro = $sql_filtro . " and pes_cooperativa=$usuario_cooperativa ";
 $cont = 0;
 if ($permissao_pessoas_ver_administradores == 0) {
@@ -198,7 +234,7 @@ if ($permissao_pessoas_ver_supervisores == 0) {
     else
         $sql_filtro2 = $sql_filtro2 . " or mespestip_tipo=3";
 }
-if ($permissao_pessoas_ver_vendedores == 0) {
+if ($permissao_pessoas_ver_caixas == 0) {
     $cont++;
     if ($cont == 1)
         $sql_filtro2 = $sql_filtro2 . " mespestip_tipo=4";
@@ -223,27 +259,28 @@ if ($filtro2 == 1) {
     $sql_filtro = $sql_filtro . " and pes_codigo not in (SELECT mespestip_pessoa FROM mestre_pessoas_tipo WHERE $sql_filtro2 )";
 }
 
-//Se o usuário for o Root então só mostrar os administradores
-if ($usuario_grupo==7) {
-    $sql_filtro=" and mespestip_tipo=1";
+//Se o usu�rio for o Root ent�o s� mostrar os administradores
+if ($usuario_grupo == 7) {
+    $sql_filtro = " and mespestip_tipo=1";
 }
 
 
 //Inicio das tuplas
 $sql = "
 SELECT DISTINCT
-    pes_codigo,pes_nome,cid_nome,pes_fone1,pes_fone2,pes_possuiacesso,pes_id
+    pes_codigo,pes_nome,cid_nome,pes_fone1,pes_fone2,pes_possuiacesso,pes_id,pestippes_nome,pestippes_codigo
 FROM
     pessoas    
     JOIN cidades on (pes_cidade=cid_codigo)    
     JOIN mestre_pessoas_tipo on (mespestip_pessoa=pes_codigo)    
+    left join pessoas_tipopessoa on (pes_tipopessoa=pestippes_codigo)
 WHERE
     1 $sql_filtro 
 ORDER BY
     pes_nome
 ";
 
-//Paginação
+//Pagina��o
 $query = mysql_query($sql);
 if (!$query)
     die("Erro SQL Principal Paginação:" . mysql_error());
@@ -251,7 +288,7 @@ $linhas = mysql_num_rows($query);
 $por_pagina = $usuario_paginacao;
 $paginaatual = $_POST["paginaatual"];
 $paginas = ceil($linhas / $por_pagina);
-//Se é a primeira vez que acessa a pagina então começar na pagina 1
+//Se � a primeira vez que acessa a pagina ent�o come�ar na pagina 1
 if (($paginaatual == "") || ($paginas < $paginaatual) || ($paginaatual <= 0)) {
     $paginaatual = 1;
 }
@@ -270,6 +307,7 @@ $cont = 0;
 while ($dados = mysql_fetch_assoc($query)) {
     $codigo = $dados["pes_codigo"];
     $cont++;
+    $tipopessoa = $dados["pestippes_codigo"];
 
     //Coluna ID
     $tpl->LISTA_COLUNA_VALOR = $dados["pes_id"];
@@ -280,6 +318,10 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl->block("BLOCK_LISTA_COLUNA");
 
     //Coluna Cidade
+    $tpl->LISTA_COLUNA_VALOR = $dados["pestippes_nome"];
+    $tpl->block("BLOCK_LISTA_COLUNA");
+
+    //Coluna Cidade
     $tpl->LISTA_COLUNA_VALOR = $dados["cid_nome"];
     $tpl->block("BLOCK_LISTA_COLUNA");
 
@@ -287,7 +329,8 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl->LISTA_COLUNA_VALOR = $dados["pes_fone1"];
     $tpl->block("BLOCK_LISTA_COLUNA");
 
-    if ($permissao_pessoas_criarusuarios==1) {
+    //Coluna Possui acesso
+    if ($permissao_pessoas_criarusuarios == 1) {
         //Coluna Acesso
         if ($dados["pes_possuiacesso"] == 1) {
             $acesso = 'Sim';
@@ -299,7 +342,9 @@ while ($dados = mysql_fetch_assoc($query)) {
     }
 
 
+
     //Coluna Tipo    
+    $tpl->IMAGEM_ALINHAMENTO="right";
     $sql_tipo = "SELECT * FROM mestre_pessoas_tipo WHERE mespestip_pessoa='$codigo'";
     $query_tipo = mysql_query($sql_tipo);
     if (!$query)
@@ -307,7 +352,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tipo_administrador = 0;
     $tipo_presidente = 0;
     $tipo_supervisor = 0;
-    $tipo_vendedor = 0;
+    $tipo_caixa = 0;
     $tipo_fornecedor = 0;
     $tipo_consumidor = 0;
     while ($dados_tipo = mysql_fetch_assoc($query_tipo)) {
@@ -323,7 +368,7 @@ while ($dados = mysql_fetch_assoc($query)) {
             $tipo_supervisor = 1;
         }
         if ($tipo == 4) {
-            $tipo_vendedor = 1;
+            $tipo_caixa = 1;
         }
         if ($tipo == 5) {
             $tipo_fornecedor = 1;
@@ -337,66 +382,74 @@ while ($dados = mysql_fetch_assoc($query)) {
     $icone_tamanho = "10px";
     $tpl->IMAGEM_TAMANHO = $icone_tamanho;
 
-    //Administrador
-    if ($tipo_administrador == 1) {
-        $tpl->LINK = "#";
-        $tpl->IMAGEM_PASTA = "$icones2";
-        $tpl->IMAGEM_NOMEARQUIVO = "administrador.png";
-        $tpl->IMAGEM_TITULO = "Administrador";
-        $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
-    } else {
-        $tpl->LINK = "#";
-        $tpl->IMAGEM_TAMANHO = $icone_tamanho;
-        $tpl->IMAGEM_PASTA = "$icones2";
-        $tpl->IMAGEM_NOMEARQUIVO = "administrador2.png";
-        $tpl->IMAGEM_TITULO = "Administrador";
-        $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
-    }
+    if ($tipopessoa == 1) {
+        //Administrador
+        if ($tipo_administrador == 1) {
+            $tpl->LINK = "#";
+            $tpl->IMAGEM_PASTA = "$icones2";
+            $tpl->IMAGEM_NOMEARQUIVO = "administrador.png";
+            $tpl->IMAGEM_TITULO = "Administrador";
+            $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+        } else {
+            $tpl->LINK = "#";
+            $tpl->IMAGEM_TAMANHO = $icone_tamanho;
+            $tpl->IMAGEM_PASTA = "$icones2";
+            $tpl->IMAGEM_NOMEARQUIVO = "administrador2.png";
+            $tpl->IMAGEM_TITULO = "Administrador";
+            $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+        }
 
-    //Presidente
-    $tpl->IMAGEM_TITULO = "Presidente";
-    if ($tipo_presidente == 1) {
-        $tpl->LINK = "#";
-        $tpl->IMAGEM_PASTA = "$icones2";
-        $tpl->IMAGEM_NOMEARQUIVO = "presidente.png";
-        $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
-    } else {
-        $tpl->LINK = "#";
-        $tpl->IMAGEM_TAMANHO = $icone_tamanho;
-        $tpl->IMAGEM_PASTA = "$icones2";
-        $tpl->IMAGEM_NOMEARQUIVO = "presidente2.png";
 
-        $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
-    }
+        //Presidente
+        $tpl->IMAGEM_TITULO = "Presidente";
+        if ($tipo_presidente == 1) {
+            $tpl->LINK = "#";
+            $tpl->IMAGEM_PASTA = "$icones2";
+            $tpl->IMAGEM_NOMEARQUIVO = "presidente.png";
+            $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+        } else {
+            $tpl->LINK = "#";
+            $tpl->IMAGEM_TAMANHO = $icone_tamanho;
+            $tpl->IMAGEM_PASTA = "$icones2";
+            $tpl->IMAGEM_NOMEARQUIVO = "presidente2.png";
 
-    //Supervisor
-    $tpl->IMAGEM_TITULO = "Supervisor";
-    if ($tipo_supervisor == 1) {
-        $tpl->LINK = "#";
-        $tpl->IMAGEM_PASTA = "$icones2";
-        $tpl->IMAGEM_NOMEARQUIVO = "supervisor.png";
-        $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
-    } else {
-        $tpl->LINK = "#";
-        $tpl->IMAGEM_TAMANHO = $icone_tamanho;
-        $tpl->IMAGEM_PASTA = "$icones2";
-        $tpl->IMAGEM_NOMEARQUIVO = "supervisor2.png";
-        $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
-    }
+            $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+        }
 
-    //Vendedor
-    $tpl->IMAGEM_TITULO = "Vendedor";
-    if ($tipo_vendedor == 1) {
-        $tpl->LINK = "#";
-        $tpl->IMAGEM_PASTA = "$icones2";
-        $tpl->IMAGEM_NOMEARQUIVO = "vendedor.png";
-        $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
-    } else {
-        $tpl->LINK = "#";
-        $tpl->IMAGEM_TAMANHO = $icone_tamanho;
-        $tpl->IMAGEM_PASTA = "$icones2";
-        $tpl->IMAGEM_NOMEARQUIVO = "vendedor2.png";
-        $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+
+        //Supervisor
+
+
+        $tpl->IMAGEM_TITULO = "Supervisor";
+        if ($tipo_supervisor == 1) {
+            $tpl->LINK = "#";
+            $tpl->IMAGEM_PASTA = "$icones2";
+            $tpl->IMAGEM_NOMEARQUIVO = "supervisor.png";
+            $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+        } else {
+            $tpl->LINK = "#";
+            $tpl->IMAGEM_TAMANHO = $icone_tamanho;
+            $tpl->IMAGEM_PASTA = "$icones2";
+            $tpl->IMAGEM_NOMEARQUIVO = "supervisor2.png";
+            $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+        }
+
+
+
+        //caixa
+        $tpl->IMAGEM_TITULO = "Caixa";
+        if ($tipo_caixa == 1) {
+            $tpl->LINK = "#";
+            $tpl->IMAGEM_PASTA = "$icones2";
+            $tpl->IMAGEM_NOMEARQUIVO = "caixa.png";
+            $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+        } else {
+            $tpl->LINK = "#";
+            $tpl->IMAGEM_TAMANHO = $icone_tamanho;
+            $tpl->IMAGEM_PASTA = "$icones2";
+            $tpl->IMAGEM_NOMEARQUIVO = "caixa2.png";
+            $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+        }
     }
 
     //Fornecedor
@@ -430,7 +483,49 @@ while ($dados = mysql_fetch_assoc($query)) {
     }
     $tpl->block("BLOCK_LISTA_COLUNA_ICONES");
 
-    //Coluna Operações    
+
+
+
+    //Tipo de negociação  
+    $tpl->IMAGEM_ALINHAMENTO="center";
+    if ($tipo_fornecedor == 1) {
+
+        $icone_tamanho = "18px";
+        $sql2 = "SELECT * FROM fornecedores_tiponegociacao WHERE fortipneg_pessoa=$codigo";
+        $query2 = mysql_query($sql2);
+        if (!$query2)
+            die("Erro: 8" . mysql_error());
+        $tpl->LINK = "#";
+        $tpl->IMAGEM_TAMANHO = $icone_tamanho;
+        $tpl->IMAGEM_PASTA = "$icones";
+        $tipo_consignacao = 0;
+        $tipo_revenda = 0;
+        while ($dados2 = mysql_fetch_assoc($query2)) {
+            $tipo2 = $dados2["fortipneg_tiponegociacao"];
+            if ($tipo2 == 1)
+                $tipo_consignacao = 1;
+            if ($tipo2 == 2)
+                $tipo_revenda = 1;
+        }
+        $tpl->IMAGEM_TITULO = "Consignação";
+        $tpl->IMAGEM_NOMEARQUIVO = "consignacao_desabilitado.png";
+        if ($tipo_consignacao == 1) {
+            $tpl->IMAGEM_NOMEARQUIVO = "consignacao.png";
+        }
+        $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+        $tpl->IMAGEM_TITULO = "Revenda";
+        $tpl->IMAGEM_NOMEARQUIVO = "revenda_desabilitado.png";
+        if ($tipo_revenda == 1) {
+            $tpl->IMAGEM_NOMEARQUIVO = "revenda.png";
+        }
+        $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+    }
+    $tpl->block("BLOCK_LISTA_COLUNA_ICONES");
+
+
+
+
+    //Coluna Opera�ões    
     $tpl->ICONE_ARQUIVO = $icones;
     $tpl->CODIGO = $codigo;
     //detalhes

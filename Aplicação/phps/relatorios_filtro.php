@@ -27,7 +27,7 @@ if (empty($operacao))
     $operacao = "cadastrar";
 
 
-//TÍTULO PRINCIPAL
+//TÃTULO PRINCIPAL
 $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "RELATÓRIOS";
 $tpl_titulo->SUBTITULO = "FILTRO";
@@ -110,7 +110,7 @@ $tpl->block("BLOCK_LINHA");
 $tpl->show();
 
 
-//Título Filtro
+//TÃ­tulo Filtro
 $tpl2_tit = new Template("templates/tituloemlinha_2.html");
 $tpl2_tit->LISTA_TITULO = "FILTROS";
 $tpl2_tit->block("BLOCK_QUEBRA1");

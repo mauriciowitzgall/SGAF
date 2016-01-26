@@ -56,7 +56,7 @@
                     type="text" 
                     name="{CAMPO_NOME}" 
                     id="{CAMPO_NOME}"
-                    class="campofiltro" 
+                    class="campopadrao" 
                     value="{CAMPO_VALOR}" 
                     maxlength="{CAMPO_QTD_CARACTERES}" 
                     onkeyup="{CAMPO_ONKEYUP}" 
@@ -74,7 +74,7 @@
                 <select
                     name="{SELECT_NOME}" 
                     size="{SELECT_TAMANHO}" 
-                    class="campofiltro"   
+                    class="campopadrao"   
 
                     <!-- BEGIN BLOCK_SELECT_FOCO -->
                     autofocus
@@ -108,7 +108,9 @@
                         type="button" 
                         value="{BOTAO_NOME}" 
                         class="botaopadrao botaopadraocadastrar" 
+                        <!-- BEGIN BLOCK_AUTOFOCO -->
                         autofocus="1" 
+                        <!-- END BLOCK_AUTOFOCO -->
                         <!-- BEGIN BLOCK_RODAPE_BOTAO_MODELO_DESABILITADO -->
                         disabled 
                         <!-- END BLOCK_RODAPE_BOTAO_MODELO_DESABILITADO -->
@@ -212,7 +214,7 @@
                  
                 
                 <!-- BEGIN BLOCK_LISTA_COLUNA_ICONES -->
-                <td align="center" class="" width="100px" style="background-color: white">                               
+                <td  align="{IMAGEM_ALINHAMENTO}" class="" width="100px" style="">                               
                     <!-- BEGIN BLOCK_LISTA_COLUNA_IMAGEM -->
                     <a href="{LINK}" class="link">
                         <img   width="{IMAGEM_TAMANHO}" src="{IMAGEM_PASTA}{IMAGEM_NOMEARQUIVO}" title="{IMAGEM_TITULO}"  alt="{IMAGEM_TITULO}" />
@@ -305,12 +307,12 @@
             <input onclick="paginacao_retroceder()" type="image" width="25px"   src="{PASTA_ICONES}esquerda.png"  title="Anterior" alt="Anterior" />
         </td>
         <td width="170px">
-            <input size="5" type="text" name="paginaatual" class="campofiltro" value="{PAGINAATUAL}">
+            <input size="5" type="text" name="paginaatual" class="campopadrao" value="{PAGINAATUAL}">
             <span>/</span>
-            <input disabled size="5" type="text" name="paginas" class="campofiltro" value="{PAGINAS}">
+            <input disabled size="5" type="text" name="paginas" class="campopadrao" value="{PAGINAS}">
         </td>
         <td align="left">
-            <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Próxima" alt="Próxima" />
+            <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Pr�xima" alt="Pr�xima" />
         </td>
     </tr>
     </table>
@@ -330,7 +332,6 @@
                     type="button" 
                     value="VOLTAR" 
                     class="botao fonte3" 
-                    autofocus="1" 
                     <!-- BEGIN BLOCK_RODAPE_BOTAO_VOLTAR_DESABILITADO -->
                     disabled 
                     <!-- END BLOCK_RODAPE_BOTAO_VOLTAR_DESABILITADO -->

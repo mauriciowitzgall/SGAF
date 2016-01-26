@@ -27,10 +27,12 @@ function converte_hora($hora) {
 }
 
 function dinheiro_para_numero($dinheiro) {
-    $dinheiro = explode(" ", $dinheiro);
-    $dinheiro = $dinheiro[1];
-    $dinheiro = str_replace('.', '', $dinheiro);
-    $dinheiro = str_replace(',', '.', $dinheiro);
+    $dinheiro2 = explode(" ", $dinheiro);
+    if ($dinheiro2[1] != "") {
+        $dinheiro = $dinheiro2[1];
+        $dinheiro = str_replace('.', '', $dinheiro);
+        $dinheiro = str_replace(',', '.', $dinheiro);
+    }
     return $dinheiro;
 }
 
@@ -40,7 +42,7 @@ function dinheirosemcrifrao_para_numero($dinheiro) {
     return $dinheiro;
 }
 
-//Calcula a diferença entre duas datas
+//Calcula a diferen�a entre duas datas
 //A data deve estar no formato Y-m-d
 function diferenca_data($d1, $d2, $type = '', $sep = '-') {
     $d1 = explode($sep, $d1);
@@ -69,7 +71,7 @@ function diferenca_data($d1, $d2, $type = '', $sep = '-') {
 
 //Formado da data deve ser ..
 function diferenca_entre_datahora($tempo1, $tempo2) {
-    
+
     $t1 = explode("_", $tempo1);
     $t1_data = $t1[0];
     $t1_data = explode("-", $t1_data);
@@ -103,6 +105,19 @@ function diferenca_entre_datahora($tempo1, $tempo2) {
     //Em segundos
     return $total_segundos;
     //$tempo=gmdate("H:i",$total_segundos);
+}
+
+function limpa_cpf($valor) {
+    $valor = str_replace('.', '', $valor);
+    $valor = str_replace('-', '', $valor);
+    return $valor;
+}
+
+function limpa_cnpj($valor) {
+    $valor = str_replace('.', '', $valor);
+    $valor = str_replace('-', '', $valor);
+    $valor = str_replace('/', '', $valor);
+    return $valor;
 }
 
 ?>

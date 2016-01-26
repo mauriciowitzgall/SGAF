@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_relatorios_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -25,7 +25,7 @@ $tpl_titulo->show();
 
 
 
-//FORMULÁRIO
+//FORMUL�RIO
 $tpl = new Template("templates/cadastro1.html");
 $codigo = $_GET["codigo"];
 
@@ -68,7 +68,7 @@ $tpl->block("BLOCK_COLUNA_PADRAO");
 $tpl->block("BLOCK_COLUNA");
 $tpl->block("BLOCK_LINHA");
 
-//Descrição
+//Descri��o
 $tpl->COLUNA_ALINHAMENTO = "right";
 $tpl->COLUNA_TAMANHO = "";
 $tpl->COLUNA_ROWSPAN = "";
@@ -146,7 +146,7 @@ $tpl->CAMPOOCULTO_NOME = "operacao";
 $tpl->CAMPOOCULTO_VALOR = "$operacao";
 $tpl->block("BLOCK_CAMPOOCULTO");
 
-//Campo Código
+//Campo C�digo
 $tpl->CAMPOOCULTO_NOME = "codigo";
 $tpl->CAMPOOCULTO_VALOR = "$codigo";
 $tpl->block("BLOCK_CAMPOOCULTO");

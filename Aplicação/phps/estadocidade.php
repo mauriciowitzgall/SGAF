@@ -1,12 +1,12 @@
 <?php
 
 include "controle/conexao.php";
-include "conexao_tipo.php";
+include "controle/conexao_tipo.php";
 
 
 $estado = $_POST["estado"];
 
-//Se a variavel veio nula então mostrar a opção padrão
+//Se a variavel veio nula ent�o mostrar a op��o padr�o
 if ($estado == "") {
     echo "<option value=''>Selecione</option>";
 } else {

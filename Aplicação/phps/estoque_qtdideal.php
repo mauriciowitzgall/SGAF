@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_estoque_qtdide_definir <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -30,7 +30,7 @@ $tpl_filtro->block("BLOCK_FORM");
 $filtro_codigoproduto = $_POST["filtro_codigoproduto"];
 $filtro_nomeproduto = $_POST["filtro_nomeproduto"];
 
-//Filtro Código do produto
+//Filtro C�digo do produto
 $tpl_filtro->CAMPO_TITULO = "Produto";
 $tpl_filtro->block("BLOCK_CAMPO_TITULO");
 $tpl_filtro->CAMPO_TIPO = "text";
@@ -61,7 +61,7 @@ $tpl_filtro->show();
 
 $tpl4 = new Template("templates/botoes1.html");
 
-//Botão Pesquisar
+//Bot�o Pesquisar
 $tpl4->COLUNA_TAMANHO = "";
 $tpl4->COLUNA_ALINHAMENTO = "";
 $tpl4->block("BLOCK_BOTAOPADRAO_SUBMIT");
@@ -69,7 +69,7 @@ $tpl4->block("BLOCK_BOTAOPADRAO_PESQUISAR");
 $tpl4->block("BLOCK_BOTAOPADRAO");
 $tpl4->block("BLOCK_COLUNA");
 
-//Botão Limpar filtro
+//Bot�o Limpar filtro
 $tpl4->COLUNA_LINK_ARQUIVO = "estoque_qtdideal.php";
 $tpl4->COLUNA_LINK_TARGET = "";
 $tpl4->COLUNA_TAMANHO = "";

@@ -26,7 +26,7 @@ if ($permissao_quiosque_ver == 1) {
     $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
     $tpl_menu->block("BLOCK_MENU_ITEM");
 }
-
+/*
 //Locais
 $tpl_menu->IMAGEM_TITULO = "Locais";
 $tpl_menu->TITULO = "Locais";
@@ -36,7 +36,7 @@ if ($permissao_cidades_ver == 1) {
     $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
     $tpl_menu->block("BLOCK_MENU_ITEM");
 }
-
+*/
 //Pessoas
 $tpl_menu->IMAGEM_TITULO = "Pessoas";
 $tpl_menu->TITULO = "Pessoas";
@@ -61,45 +61,59 @@ if ($permissao_produtos_ver == 1) {
 $tpl_menu->IMAGEM_TITULO = "Estoque";
 $tpl_menu->TITULO = "Estoque";
 if ($permissao_estoque_ver == 1) {
-    $tpl_menu->IMAGEM_ARQUIVO = "estoque.png";
-    if ($usuario_grupo == 5)
-        $tpl_menu->LINK = "estoque_porfornecedor_produto.php?fornecedor=$usuario_codigo";
-    else if ($usuario_quiosque == 0)
-        $tpl_menu->LINK = "estoque_porquiosques.php";
-    else
-        $tpl_menu->LINK = "estoque.php";
-    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-    $tpl_menu->block("BLOCK_MENU_ITEM");
+    if ($usuario_quiosque != 0) {
+
+        $tpl_menu->IMAGEM_ARQUIVO = "estoque.png";
+        if ($usuario_grupo == 5)
+            $tpl_menu->LINK = "estoque_porfornecedor_produto.php?fornecedor=$usuario_codigo";
+        else
+            $tpl_menu->LINK = "estoque.php";
+        $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+        $tpl_menu->block("BLOCK_MENU_ITEM");
+    }
 }
+
 
 //Entradas
 $tpl_menu->IMAGEM_TITULO = "Entradas";
 $tpl_menu->TITULO = "Entradas";
 if ($permissao_entradas_ver == 1) {
-    $tpl_menu->IMAGEM_ARQUIVO = "entradas.png";
-    $tpl_menu->LINK = "entradas.php";
-    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-    $tpl_menu->block("BLOCK_MENU_ITEM");
+    if ($usuario_quiosque != 0) {
+        $tpl_menu->IMAGEM_ARQUIVO = "entradas.png";
+        $tpl_menu->LINK = "entradas.php";
+        $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+        $tpl_menu->block("BLOCK_MENU_ITEM");
+    }
 }
 
 //Saidas
 $tpl_menu->IMAGEM_TITULO = "Saídas";
 $tpl_menu->TITULO = "Saídas";
+
+
+
 if ($permissao_saidas_ver == 1) {
-    $tpl_menu->IMAGEM_ARQUIVO = "saidas.png";
-    $tpl_menu->LINK = "saidas.php";
-    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-    $tpl_menu->block("BLOCK_MENU_ITEM");
+    if ($usuario_quiosque != 0) {
+        $tpl_menu->IMAGEM_ARQUIVO = "saidas.png";
+        $tpl_menu->LINK = "saidas.php";
+        $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+        $tpl_menu->block("BLOCK_MENU_ITEM");
+    }
 }
 
-//Acertos
-$tpl_menu->IMAGEM_TITULO = "Acertos";
-$tpl_menu->TITULO = "Acertos";
+//Negociações
+$tpl_menu->IMAGEM_TITULO = "Negociações";
+$tpl_menu->TITULO = "Negociações";
 if ($permissao_acertos_ver == 1) {
-    $tpl_menu->IMAGEM_ARQUIVO = "acertos2.jpg";
-    $tpl_menu->LINK = "acertos.php";
-    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-    $tpl_menu->block("BLOCK_MENU_ITEM");
+    if ($usuario_quiosque != 0) {
+        $tpl_menu->IMAGEM_ARQUIVO = "acertos3.png";
+        if ($quiosque_consignacao==1)
+            $tpl_menu->LINK = "acertos.php";
+        else
+            $tpl_menu->LINK = "acertos_revenda.php";
+        $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+        $tpl_menu->block("BLOCK_MENU_ITEM");
+    }
 }
 
 //Relatórios
@@ -331,7 +345,26 @@ if ($tipopagina == "saidas") {
     }
 }
 
-
+//Negociações
+if ($tipopagina == "negociacoes") {
+    //Consignados
+    if ($quiosque_consignacao == 1) {
+        $tpl_menu->LINK = "acertos.php";
+        $tpl_menu->IMAGEM_ARQUIVO = "consignacao.png";
+        $tpl_menu->IMAGEM_TITULO = "Acertos Consignações";
+        $tpl_menu->TITULO = "Acertos Consignações";
+        $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+        $tpl_menu->block("BLOCK_MENU_ITEM");
+    }
+    if ($quiosque_revenda == 1) {
+        $tpl_menu->LINK = "acertos_revenda.php";
+        $tpl_menu->IMAGEM_ARQUIVO = "revenda.png";
+        $tpl_menu->IMAGEM_TITULO = "Fechamento Revendas";
+        $tpl_menu->TITULO = "Fechamento Revendas";
+        $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+        $tpl_menu->block("BLOCK_MENU_ITEM");
+    }
+}
 
 
 

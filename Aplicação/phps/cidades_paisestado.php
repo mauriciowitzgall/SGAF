@@ -28,7 +28,7 @@ if ($pais == "") {
             echo "<option value='$codigo'>$nome</option>";
         }
     } else {
-        echo "<option value=''>N√£o h√° registros</option>";
+        echo "<option value=''>N„o h· registros</option>";
     }
 }
 ?>

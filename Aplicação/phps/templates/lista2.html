@@ -13,6 +13,11 @@
         background-color: #E4E4E4;	
         border: 1px gray solid;
     }
+    .tab_rodape {
+        font-weight: bold;        
+        background-color: #E4E4E4;	
+        border: 1px gray solid;
+    }
     .tab_linhas {    
         border: 1px gray solid;
     }
@@ -64,7 +69,7 @@
         background-color: #E4E4E4;
     }      
     .tab_icones {
-        background-color: white;
+        /*background-color: white;*/
     }      
     .tab_totgeral {
         background-color: #E4E4E4;
@@ -75,6 +80,12 @@
     }
     .texto {
         
+    }
+    .texto_vermelho {
+        color: red;
+    }
+    .texto_azul {
+        color: blue;
     }
     .linha_nada {
         color: red;
@@ -117,7 +128,6 @@
     </thead> 
     <!-- END BLOCK_CABECALHO -->
     
-    
     <!-- BEGIN BLOCK_CORPO -->
     <tbody>
         <!-- BEGIN BLOCK_LINHA -->
@@ -125,6 +135,9 @@
             <!-- BEGIN BLOCK_LINHA_PADRAO -->
             tab_linhas 
             <!-- END BLOCK_LINHA_PADRAO -->            
+            <!-- BEGIN BLOCK_LINHA_SUBTOTAL -->
+            tab_subtotal 
+            <!-- END BLOCK_LINHA_SUBTOTAL -->            
             <!-- BEGIN BLOCK_LINHA_DINAMICA -->
             {LINHA_CLASSE}
             <!-- END BLOCK_LINHA_DINAMICA -->
@@ -170,7 +183,11 @@
                 
                 
                 <!-- BEGIN BLOCK_TEXTO -->             
-                <span class="texto">{TEXTO}</span>                        
+                <span class="texto 
+                      <!-- BEGIN BLOCK_TEXTO_CLASSE_EXTRA -->             
+                      {TEXTO_CLASSE}
+                      <!-- END BLOCK_TEXTO_CLASSE_EXTRA -->             
+                ">{TEXTO}</span>                        
                 <!-- END BLOCK_TEXTO -->  
                 
                 
@@ -270,9 +287,34 @@
             <td colspan="{LINHA_NADA_COLSPAN}" align="center" class="linha_nada"> Nenhum resultado!</td>
         </tr>
         <!-- END BLOCK_LINHA_NADA -->  
-        
     </tbody> 
     <!-- END BLOCK_CORPO -->
+    <!-- BEGIN BLOCK_RODAPE -->
+    <tfoot>
+        <!-- BEGIN BLOCK_RODAPE_LINHA -->
+        <tr valign="middle" class="tab_rodape">                    
+            <!-- BEGIN BLOCK_RODAPE_COLUNA -->
+            <td width="{RODAPE_COLUNA_TAMANHO}" colspan="{RODAPE_COLUNA_COLSPAN}" rowspan="{RODAPE_COLUNA_ROWSPAN}" align="{RODAPE_COLUNA_ALINHAMENTO}">
+                <span class="tab_titrodape"> {RODAPE_COLUNA_NOME}</span>
+                <!-- BEGIN BLOCK_RODAPE_CONTEUDO -->
+                <!-- BEGIN BLOCK_RODAPE_ICONE -->
+                <img 
+                    width="{ICONE_RODAPE_TAMANHO}" 
+                    src="{ICONE_RODAPE_CAMINHO}{ICONE_RODAPE_NOMEARQUIVO}" 
+                    title="{ICONE_RODAPE_DICA}" 
+                    alt="{ICONE_RODAPE_NOMEALTERNATIVO}"
+                >                
+                <!-- END BLOCK_RODAPE_ICONE -->
+                <!-- END BLOCK_RODAPE_CONTEUDO -->
+                
+                
+            </td> 
+            <!-- END BLOCK_RODAPE_COLUNA -->            
+        </tr>        
+        <!-- END BLOCK_RODAPE_LINHA -->        
+    </tfoot>
+    <!-- END BLOCK_RODAPE -->
+    
     
 </table>
 <!-- END BLOCK_LISTAGEM -->
@@ -284,13 +326,25 @@
         <input onclick="paginacao_retroceder()" type="image" width="25px"   src="{PASTA_ICONES}esquerda.png"  title="Anterior" alt="Anterior" />
     </td>
     <td width="170px">
-        <input size="5" type="text" name="paginaatual" class="campofiltro" value="{PAGINAATUAL}">
+        <input size="5" type="text" name="paginaatual" class="campopadrao" value="{PAGINAATUAL}">
         <span>/</span>
-        <input disabled size="5" type="text" name="paginas" class="campofiltro" value="{PAGINAS}">
+        <input disabled size="5" type="text" name="paginas" class="campopadrao" value="{PAGINAS}">
     </td>
     <td align="left">
-        <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Próxima" alt="Próxima" />
+        <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Pr�xima" alt="Pr�xima" />
     </td>
 </tr>
 </table>
 <!-- END BLOCK_PAGINACAO -->     
+<!-- BEGIN BLOCK_FIMFORM -->   
+</form>
+<!-- END BLOCK_FIMFORM -->     
+
+<!-- BEGIN BLOCK_QUEBRA -->
+<br>
+<!-- END BLOCK_QUEBRA -->
+
+<!-- BEGIN BLOCK_LINHAHORIZONTAL_EMBAIXO -->
+<hr align="{LINHAHORINZONTAL_ALINHAMENTO}" class="{LINHAHORINZONTAL_CLASSE}">
+<!-- END BLOCK_LINHAHORIZONTAL_EMBAIXO -->
+

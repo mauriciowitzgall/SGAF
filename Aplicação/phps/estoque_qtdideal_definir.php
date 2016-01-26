@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuÃ¡rio tem permissÃ£o para acessar este conteÃºdo
+//Verifica se o usuário tem permissão para acessar este conteúdo
 require "login_verifica.php";
 if ($permissao_estoque_qtdide_definir <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -21,7 +21,7 @@ $tpl_titulo->show();
 $produto = $_GET["codigo"];
 if (!$qtdide = $_GET["qtdide"])
     $qtdide="0,00";
-//FORMULÃRIO
+//FORMULáRIO
 $tpl = new Template("templates/cadastro1.html");
 $tpl->FORM_NOME = "";
 $tpl->FORM_TARGET = "";
@@ -89,7 +89,7 @@ $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_COLUNA");
 $tpl->block("BLOCK_LINHA");
 
-//Campo CÃ³digo
+//Campo Código
 $tpl->CAMPOOCULTO_NOME = "produto";
 $tpl->CAMPOOCULTO_VALOR = "$produto";
 $tpl->block("BLOCK_CAMPOOCULTO");

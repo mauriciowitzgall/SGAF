@@ -1,47 +1,76 @@
 <?php
+
 session_cache_expire(180);
 session_start();
 
 include "controle/conexao.php";
-include "conexao_tipo.php";
+include "controle/conexao_tipo.php";
+include "funcoes.php";
 $_SESSION["sessiontime"] = time();
 
-$id = isset($_POST["codigo"]) ? addslashes(trim($_POST["codigo"])) : FALSE;
+$cpf = isset($_POST["cpf"]) ? addslashes(trim($_POST["cpf"])) : FALSE;
+$cpf = limpa_cpf($cpf);
+$cnpj = isset($_POST["cnpj"]) ? addslashes(trim($_POST["cnpj"])) : FALSE;
+$cnpj = limpa_cnpj($cnpj);
 $senha = isset($_POST["senha"]) ? md5(trim($_POST["senha"])) : FALSE;
+$tipopessoa = $_POST["tipopessoa"];
 
-if (!$id || !$senha) {
-    echo "Você deve preencher os campos!";
+
+//print_r($_REQUEST);
+if ($tipopessoa == 2) {
+    $filtro = "pes_cnpj='$cnpj'";
+    if ($cnpj == "") {
+        echo "Preencha os campos!";
+        exit;
+    }
+} else if ($tipopessoa == 1) {
+    $filtro = "pes_cpf='$cpf'";
+    if ($cpf == "") {
+        echo "Preencha os campos!";
+        exit;
+    }
+} else {
+    echo "Preencha os campos!";
+    exit;
 }
+
 $sql = "
 SELECT 
-    pes_id,
+    pes_cpf,
+    pes_cnpj,
     pes_codigo,
     pes_nome, 
     pes_senha,
     pes_grupopermissoes,
     pes_cooperativa,
-    pes_quiosqueusuario
+    pes_quiosqueusuario,
+    pes_cidade,
+    cid_estado,
+    est_pais
 FROM 
     pessoas
+    left join cidades on (pes_cidade=cid_codigo)
+    left join estados on (cid_estado=est_codigo)
 WHERE 
-    pes_id='$id'
+    $filtro
 ";
 $resultado = mysql_query($sql) or die("Erro de SQL 1:" . mysql_error());
 $total = mysql_num_rows($resultado);
 
 if ($total) {
     $dados = mysql_fetch_array($resultado);
-    //$senha2=$dados["pes_senha"];
-    //echo "( $senha - $senha2 )";
     if (!strcmp($senha, $dados["pes_senha"])) {
-        //Deu tudo certo, usuário e senha estão corretos
+        //Deu tudo certo, usu�rio e senha est�o corretos
         $_SESSION["usuario_codigo"] = $dados["pes_codigo"];
-        $_SESSION["usuario_id"] = $dados["pes_id"];
+        $_SESSION["usuario_cpf"] = $dados["pes_cpf"];
+        $_SESSION["usuario_cnpj"] = $dados["pes_cnpj"];
         $_SESSION["usuario_nome"] = stripslashes($dados["pes_nome"]);
         $_SESSION["usuario_grupo"] = $dados["pes_grupopermissoes"];
         $_SESSION["usuario_cooperativa"] = $dados["pes_cooperativa"];
         $_SESSION["usuario_quiosque"] = $dados["pes_quiosqueusuario"];
-
+        $_SESSION["usuario_cidade"] = $dados["pes_cidade"];
+        $_SESSION["usuario_estado"] = $dados["cid_estado"];
+        $_SESSION["usuario_pais"] = $dados["est_pais"];
         //Define o nome do quiosque
         $quiosque = $dados["pes_quiosqueusuario"];
         $sql2 = "SELECT qui_codigo,qui_nome FROM quiosques WHERE qui_codigo=$quiosque";
@@ -51,7 +80,6 @@ if ($total) {
         $dados2 = mysql_fetch_assoc($query2);
         $_SESSION["usuario_quiosquenome"] = $dados2["qui_nome"];
         $_SESSION["usuario_quiosque"] = $dados["pes_quiosqueusuario"];
-
         //Define o nome da cooperativa
         $cooperativa = $dados["pes_cooperativa"];
         $sql3 = "SELECT coo_codigo,coo_abreviacao,coo_nomecompleto FROM cooperativas WHERE coo_codigo=$cooperativa";
@@ -67,7 +95,6 @@ if ($total) {
         echo "Senha Errada!";
     }
 } else {
-    echo "ID Errado!";
+    echo "CPF não encontrado!";
 }
-
 ?>

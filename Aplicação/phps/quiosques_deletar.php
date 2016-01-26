@@ -1,5 +1,5 @@
 <?php
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_quiosque_excluir <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -16,7 +16,7 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "quiosques.png";
 $tpl_titulo->show();
 
-//Inicio da exclusão
+//Inicio da exclus�o
 $codigo = $_GET["codigo"];
 $operacao = $_GET["operacao"];
 
@@ -25,15 +25,15 @@ $tpl_notificacao->DESTINO = "quiosques.php";
 $tpl_notificacao->ICONES = $icones;
 
 
-//Verifica se há vendedores
-$sql = "SELECT * FROM quiosques_vendedores WHERE quiven_quiosque=$codigo";
+//Verifica se h� caixas
+$sql = "SELECT * FROM quiosques_caixas WHERE quicai_quiosque=$codigo";
 $query = mysql_query($sql);
 if (!$query) {
     die("Erro SQL1: " . mysql_error());
 }
 $linhas = mysql_num_rows($query);
 if ($linhas > 0) {
-    $tpl_notificacao->MOTIVO_COMPLEMENTO = "vendedores";
+    $tpl_notificacao->MOTIVO_COMPLEMENTO = "Caixas";
     $tpl_notificacao->block("BLOCK_ERRO");
     $tpl_notificacao->block("BLOCK_NAOAPAGADO");
     $tpl_notificacao->block("BLOCK_MOTIVO_EMUSO");
@@ -42,7 +42,7 @@ if ($linhas > 0) {
     exit;
 }       
 
-//Verifica se há supervisores
+//Verifica se h� supervisores
 $sql = "SELECT * FROM quiosques_supervisores WHERE quisup_quiosque=$codigo";
 $query = mysql_query($sql);
 if (!$query) {
@@ -59,7 +59,7 @@ if ($linhas > 0) {
     exit;
 }       
             
-//Verifica se há entradas
+//Verifica se h� entradas
 $sql = "SELECT * FROM entradas WHERE ent_quiosque=$codigo";
 $query = mysql_query($sql);
 if (!$query) {
@@ -76,7 +76,7 @@ if ($linhas > 0) {
     exit;
 }
  
-//Verifica se há saidas
+//Verifica se h� saidas
 $sql = "SELECT * FROM saidas WHERE sai_quiosque=$codigo";
 $query = mysql_query($sql);
 if (!$query) {
@@ -93,7 +93,7 @@ if ($linhas > 0) {
     exit;
 }
  
-//Verifica se há usuários
+//Verifica se h� usu�rios
 $sql = "SELECT * FROM pessoas WHERE pes_quiosqueusuario=$codigo";
 $query = mysql_query($sql);
 if (!$query) {
@@ -110,7 +110,7 @@ if ($linhas > 0) {
     exit;
 }
  
-//Verifica se há taxas
+//Verifica se h� taxas
 $sql = "SELECT * FROM quiosques_taxas WHERE quitax_quiosque=$codigo";
 $query = mysql_query($sql);
 if (!$query) {
@@ -129,6 +129,11 @@ if ($linhas > 0) {
 
 //Pode deletar o quiosque
 $sql3 = "DELETE FROM quiosques WHERE qui_codigo='$codigo'";
+$query3 = mysql_query($sql3);
+if (!$query3) {
+    die("Erro SQL: " . mysql_error());
+}
+$sql3 = "DELETE FROM quiosques_tiponegociacao WHERE quitipneg_quiosque='$codigo'";
 $query3 = mysql_query($sql3);
 if (!$query3) {
     die("Erro SQL: " . mysql_error());

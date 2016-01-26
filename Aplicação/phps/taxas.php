@@ -1,3 +1,4 @@
+
 <?php
 
 //Verifica se o usuário tem permissão para acessar este conteúdo
@@ -56,9 +57,41 @@ $tpl_filtro->block("BLOCK_CAMPO");
 $tpl_filtro->block("BLOCK_ESPACO");
 $tpl_filtro->block("BLOCK_COLUNA");
 
+
+//Quiosque
+$tpl_filtro->CAMPO_TITULO = "Quiosque";
+$tpl_filtro->block("BLOCK_CAMPO_TITULO");
+$tpl_filtro->SELECT_NOME = "filtro_quiosque";
+$tpl_filtro->SELECT_ID = "";
+$tpl_filtro->SELECT_TAMANHO = "";
+$tpl_filtro->block("BLOCK_SELECT_FILTRO");
+$tpl_filtro->block("BLOCK_OPTION_PADRAO");
+$sql = "
+    SELECT DISTINCT qui_nome
+    FROM quiosques 
+    JOIN taxas on (tax_quiosque=qui_codigo)    
+    ORDER BY qui_nome
+";
+if (!$query = mysql_query($sql))
+    die("Erro SQL 0: " . mysql_error());
+while ($dados = mysql_fetch_assoc($query)) {
+    $codigo = $dados["qui_codigo"];
+    if ($codigo == $filtro_quiosque)
+        $tpl_filtro->block("BLOCK_OPTION_SELECIONADO");
+    $tpl_filtro->OPTION_VALOR = $dados["qui_codigo"];
+    $tpl_filtro->OPTION_TEXTO = $dados["qui_nome"];
+    $tpl_filtro->block("BLOCK_OPTION");
+}
+$tpl_filtro->block("BLOCK_SELECT");
+$tpl_filtro->block("BLOCK_ESPACO");
+$tpl_filtro->block("BLOCK_COLUNA");
+
 $tpl_filtro->block("BLOCK_LINHA");
 $tpl_filtro->block("BLOCK_FILTRO_CAMPOS");
 $tpl_filtro->block("BLOCK_QUEBRA");
+
+
+
 $tpl_filtro->show();
 
 $tpl4 = new Template("templates/botoes1.html");
@@ -105,24 +138,26 @@ $tpl4->show();
 //LISTAGEM
 $tpl2 = new Template("templates/lista2.html");
 $tpl2->block("BLOCK_TABELA_CHEIA");
-
-$tpl2->CABECALHO_COLUNA_COLSPAN = "";
-$tpl2->CABECALHO_COLUNA_TAMANHO = "";
-$tpl2->CABECALHO_COLUNA_NOME = "COD.";
+$tpl2->CABECALHO_COLUNA_COLSPAN = "2";
+$tpl2->CABECALHO_COLUNA_TAMANHO = "300px";
+$tpl2->CABECALHO_COLUNA_NOME = "TAXA";
 $tpl2->block("BLOCK_CABECALHO_COLUNA");
 $tpl2->CABECALHO_COLUNA_COLSPAN = "";
-$tpl2->CABECALHO_COLUNA_TAMANHO = "";
-$tpl2->CABECALHO_COLUNA_NOME = "TAXA";
+$tpl2->CABECALHO_COLUNA_TAMANHO = "70px";
+$tpl2->CABECALHO_COLUNA_NOME = "TIPO NEG.";
 $tpl2->block("BLOCK_CABECALHO_COLUNA");
 $tpl2->CABECALHO_COLUNA_COLSPAN = "";
 $tpl2->CABECALHO_COLUNA_TAMANHO = "";
 $tpl2->CABECALHO_COLUNA_NOME = "DESCRIÇÃO";
 $tpl2->block("BLOCK_CABECALHO_COLUNA");
-
+$tpl2->CABECALHO_COLUNA_COLSPAN = "2";
+$tpl2->CABECALHO_COLUNA_TAMANHO = "180px";
+$tpl2->CABECALHO_COLUNA_NOME = "QUIOSQUE";
+$tpl2->block("BLOCK_CABECALHO_COLUNA");
 if ($permissao_taxas_cadastrar == 1) {
     $tpl2->CABECALHO_COLUNA_COLSPAN = "2";
     $tpl2->CABECALHO_COLUNA_TAMANHO = "";
-    $tpl2->CABECALHO_COLUNA_NOME = "OPERAÇÃO";
+    $tpl2->CABECALHO_COLUNA_NOME = "OPERAÇÕES";
     $tpl2->block("BLOCK_CABECALHO_COLUNA");
 }
 $tpl2->block("BLOCK_CABECALHO_LINHA");
@@ -132,19 +167,28 @@ if (!empty($filtro_codigo))
     $sql_filtro = " and tax_codigo=$filtro_codigo ";
 if (!empty($filtro_nometaxa))
     $sql_filtro = " and tax_nome like '%$filtro_nometaxa%'";
+if (($usuario_grupo != 1) && ($usuario_grupo != 2))
+    $sql_filtro = $sql_filtro . " and (tax_quiosque=$usuario_quiosque OR tax_quiosque is NULL)";
 
 $sql = "
 SELECT 
     tax_codigo,
     tax_nome,
-    tax_descricao 
+    tax_descricao,
+    tax_quiosque,
+    tax_cooperativa,
+    tax_tiponegociacao,
+    tipneg_nome,
+    qui_nome
 FROM 
     taxas 
+    join tipo_negociacao on (tax_tiponegociacao=tipneg_codigo)
+    left join quiosques on (tax_quiosque = qui_codigo)
 WHERE 
     tax_cooperativa=$usuario_cooperativa
     $sql_filtro 
 ORDER BY 
-    tax_nome
+    qui_nome,tax_tiponegociacao,tax_nome
 ";
 //Paginação
 $query = mysql_query($sql);
@@ -170,7 +214,7 @@ $query = mysql_query($sql);
 if (!$query)
     die("Erro SQL principal da Listagem: " . mysql_error());
 if (mysql_num_rows($query) == 0) {
-    $tpl2->LINHA_NADA_COLSPAN = "4";
+    $tpl2->LINHA_NADA_COLSPAN = "5";
     $tpl2->block("BLOCK_LINHA_NADA");
 }
 
@@ -178,21 +222,48 @@ while ($dados = mysql_fetch_assoc($query)) {
     $codigo = $dados["tax_codigo"];
     $nome = $dados["tax_nome"];
     $descricao = $dados["tax_descricao"];
+    $tax_quiosque = $dados["tax_quiosque"];
+    $tax_cooperativa = $dados["tax_cooperativa"];
+    $quiosque_nome = $dados["qui_nome"];
+    $tiponegociacao = $dados["tax_tiponegociacao"];
 
-
-    //Código
+    //Taxa
     $tpl2->COLUNA_TAMANHO = "";
-    $tpl2->COLUNA_ALINHAMENTO = "";
+    $tpl2->COLUNA_ALINHAMENTO = "right";
     $tpl2->TEXTO = "$codigo";
     $tpl2->block("BLOCK_TEXTO");
     $tpl2->block("BLOCK_CONTEUDO");
     $tpl2->block("BLOCK_COLUNA");
-
-    //Nome
     $tpl2->COLUNA_TAMANHO = "";
-    $tpl2->COLUNA_ALINHAMENTO = "";
+    $tpl2->COLUNA_ALINHAMENTO = "left";
     $tpl2->TEXTO = "$nome";
     $tpl2->block("BLOCK_TEXTO");
+    $tpl2->block("BLOCK_CONTEUDO");
+    $tpl2->block("BLOCK_COLUNA");
+
+    //Tipo de negociação
+    $tpl2->COLUNA_TAMANHO = "";
+    $tpl2->COLUNA_ALINHAMENTO = "center";
+    $tpl2->block("BLOCK_COLUNA_ICONES");
+    //$tpl2->CONTEUDO_LINK_ARQUIVO = "";
+    //$tpl2->block("BLOCK_CONTEUDO_LINK_NOVAJANELA");
+    //$tpl2->block("BLOCK_CONTEUDO_LINK");
+    $tpl2->ICONE_TAMANHO = "18px";
+    $tpl2->ICONE_CAMINHO = "$icones";
+    if ($tiponegociacao == 1) {
+        $tpl2->ICONE_NOMEARQUIVO = "consignacao.png";
+        $tpl2->ICONE_DICA = "Consignação";
+        $tpl2->ICONE_NOMEALTERNATIVO = "Consignação";
+    } else if ($tiponegociacao == 2) {
+        $tpl2->ICONE_NOMEARQUIVO = "revenda.png";
+        $tpl2->ICONE_DICA = "Revenda";
+        $tpl2->ICONE_NOMEALTERNATIVO = "Revenda";
+    } else {
+        $tpl2->ICONE_NOMEARQUIVO = "";
+        $tpl2->ICONE_DICA = "";
+        $tpl2->ICONE_NOMEALTERNATIVO = "";
+    }
+    $tpl2->block("BLOCK_ICONE");
     $tpl2->block("BLOCK_CONTEUDO");
     $tpl2->block("BLOCK_COLUNA");
 
@@ -205,36 +276,86 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl2->block("BLOCK_COLUNA");
 
 
+    //Tipo de taxa (quiosque ou cooperativa)
+    $tpl2->COLUNA_TAMANHO = "";
+    $tpl2->COLUNA_ALINHAMENTO = "center";
+    $tpl2->block("BLOCK_COLUNA_ICONES");
+    //$tpl2->CONTEUDO_LINK_ARQUIVO = "";
+    //$tpl2->block("BLOCK_CONTEUDO_LINK_NOVAJANELA");
+    //$tpl2->block("BLOCK_CONTEUDO_LINK");
+    $tpl2->ICONE_TAMANHO = "15px";
+    $tpl2->ICONE_CAMINHO = "$icones";
+    if ($quiosque_nome == "") {
+        $tpl2->ICONE_NOMEARQUIVO = "cooperativas.png";
+        $tpl2->ICONE_DICA = "Taxa global, para todos os quiosques da cooperativa";
+        $tpl2->ICONE_NOMEALTERNATIVO = "Cooperativa";
+    } else {
+        $tpl2->ICONE_NOMEARQUIVO = "quiosques.png";
+        $tpl2->ICONE_DICA = "Taxa específica, apenas para este quiosque";
+        $tpl2->ICONE_NOMEALTERNATIVO = "Quiosques";
+    }
+    $tpl2->block("BLOCK_ICONE");
+    $tpl2->block("BLOCK_CONTEUDO");
+    $tpl2->block("BLOCK_COLUNA");
+
+
+    //Quiosque
+        $tpl2->COLUNA_TAMANHO = "";
+        $tpl2->COLUNA_ALINHAMENTO = "";
+        if ($quiosque_nome == "")
+            $quiosque_nome = "Todos";
+        $tpl2->TEXTO = "$quiosque_nome";
+        $tpl2->block("BLOCK_TEXTO");
+        $tpl2->block("BLOCK_CONTEUDO");
+        $tpl2->block("BLOCK_COLUNA");
+
+
     //Operações
     $tpl2->ICONES_CAMINHO = $icones;
-    if ($permissao_taxas_cadastrar == 1) {
-        //Operação Editar
-        $tpl2->COLUNA_TAMANHO = "50px";
-        $tpl2->COLUNA_ALINHAMENTO = "center";
+    //Operação Editar
+    $tpl2->COLUNA_TAMANHO = "50px";
+    $tpl2->COLUNA_ALINHAMENTO = "center";
+    if (($permissao_taxas_excluir == 1) && (($usuario_grupo == 1) || (($usuario_grupo == 2) && ($tax_quiosque == 0)) || (($usuario_grupo == 3) && ($tax_quiosque == $usuario_quiosque)))) {
         $tpl2->CONTEUDO_LINK_ARQUIVO = "taxas_cadastrar.php?operacao=editar&codigo=$codigo";
         $tpl2->block("BLOCK_CONTEUDO_LINK");
         $tpl2->block("BLOCK_OPERACAO_EDITAR_HABILITADO");
         $tpl2->block("BLOCK_OPERACAO_EDITAR_TITULOPADRAO");
-        $tpl2->block("BLOCK_OPERACAO_EDITAR");
-        $tpl2->block("BLOCK_OPERACAO");
-        $tpl2->block("BLOCK_CONTEUDO");
-        $tpl2->block("BLOCK_COLUNA_OPERACAO");
-        $tpl2->block("BLOCK_COLUNA");
+    } else {
+        $tpl2->CONTEUDO_LINK_ARQUIVO = "";
+        $tpl2->block("BLOCK_CONTEUDO_LINK");
+        $tpl2->block("BLOCK_OPERACAO_EDITAR_DESABILITADO");
+        $tpl2->ICONES_TITULO = "Apenas os supervisores podem excluir taxas específicas, e presidentes ou administradores porem excluir/editar taxas globais (da cooperativa)";
+        $tpl2->block("BLOCK_OPERACAO_EDITAR_TITULO");
+    }
+    $tpl2->block("BLOCK_OPERACAO_EDITAR");
+    $tpl2->block("BLOCK_OPERACAO");
+    $tpl2->block("BLOCK_CONTEUDO");
+    $tpl2->block("BLOCK_COLUNA_OPERACAO");
+    $tpl2->block("BLOCK_COLUNA");
 
-        //Operação Excluir
-        $tpl2->COLUNA_TAMANHO = "50px";
-        $tpl2->COLUNA_ALINHAMENTO = "center";
-        $tpl2->ICONES_CAMINHO = $icones;
+    //Operação Excluir
+    $tpl2->COLUNA_TAMANHO = "50px";
+    $tpl2->COLUNA_ALINHAMENTO = "center";
+    $tpl2->ICONES_CAMINHO = $icones;
+
+    if (($permissao_taxas_editar == 1) && (($usuario_grupo == 1) || (($usuario_grupo == 2) && ($tax_quiosque == 0)) || (($usuario_grupo == 3) && ($tax_quiosque == $usuario_quiosque)))) {
         $tpl2->CONTEUDO_LINK_ARQUIVO = "taxas_deletar.php?operacao=excluir&codigo=$codigo";
         $tpl2->block("BLOCK_CONTEUDO_LINK");
         $tpl2->block("BLOCK_OPERACAO_EXCLUIR_HABILITADO");
         $tpl2->block("BLOCK_OPERACAO_EXCLUIR_TITULOPADRAO");
-        $tpl2->block("BLOCK_OPERACAO_EXCLUIR");
-        $tpl2->block("BLOCK_OPERACAO");
-        $tpl2->block("BLOCK_CONTEUDO");
-        $tpl2->block("BLOCK_COLUNA_OPERACAO");
-        $tpl2->block("BLOCK_COLUNA");
+    } else {
+        $tpl2->CONTEUDO_LINK_ARQUIVO = "";
+        $tpl2->block("BLOCK_CONTEUDO_LINK");
+        $tpl2->block("BLOCK_OPERACAO_EXCLUIR_DESABILITADO");
+        $tpl2->ICONES_TITULO = "Apenas os supervisores podem excluir taxas específicas, e presidentes ou administradores porem excluir/editar taxas globais (da cooperativa)";
+        $tpl2->block("BLOCK_OPERACAO_EXCLUIR_TITULO");
     }
+    $tpl2->block("BLOCK_OPERACAO_EXCLUIR");
+    $tpl2->block("BLOCK_OPERACAO");
+    $tpl2->block("BLOCK_CONTEUDO");
+    $tpl2->block("BLOCK_COLUNA_OPERACAO");
+    $tpl2->block("BLOCK_COLUNA");
+
     $tpl2->block("BLOCK_LINHA_PADRAO");
     $tpl2->block("BLOCK_LINHA");
 }

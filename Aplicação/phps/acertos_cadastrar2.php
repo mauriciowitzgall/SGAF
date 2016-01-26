@@ -19,11 +19,21 @@ $hora = $_POST["hora"];
 $valorbruto = $_POST["total_bruto"];
 $valortaxas = $_POST["valtaxas"];
 $valorpendenteanterior = $_POST["valpen"];
-$valortotal = number_format($_POST["valtot"],2,'.',''); //Não precisa usar replace nos , e . pois ele ja vem no formato de banco
+$valortotal = number_format($_POST["valtot"],2,'.',''); //N�o precisa usar replace nos , e . pois ele ja vem no formato de banco
 $valorpago = $_POST["valpago"];
+$datade = $_POST["datade2"];
+$dataate = $_POST["dataate2"];
 $valorpago = dinheiro_para_numero($valorpago);
 $valorpendenteatual = $valortotal - $valorpago;
 
+//print_r($_REQUEST);
+
+$tpl_titulo = new Template("templates/titulos.html");
+$tpl_titulo->TITULO = "ACERTOS DE CONSIGNAÇÕES";
+$tpl_titulo->SUBTITULO = "CADASTRO/EDIÇÂO";
+$tpl_titulo->ICONES_CAMINHO = "$icones";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "consignacao.png";
+$tpl_titulo->show();
 
 
 //echo "valorpendenteatual = $valortotal - $valorpago";
@@ -32,8 +42,8 @@ $valorpendenteatual = $valortotal - $valorpago;
 
 //echo "valortotal $valortotal valorbruto $valorbruto valortaxas $valortaxas valorpago $valorpago valorpendenteatual $valorpendenteatual taxacoo $taxacoo taxaqui $taxaqui ";
 
-//Verifica se há produtos vendidos a serem acertados
-//(Necessário caso o usuário apertou F5, se não tivesse iria duplicar o registro)
+//Verifica se h� produtos vendidos a serem acertados
+//(Necess�rio caso o usu�rio apertou F5, se n�o tivesse iria duplicar o registro)
 $sql = "
             SELECT pro_nome, round(sum(saipro_quantidade),2) as qtd, protip_sigla, avg(saipro_valorunitario) as valuni, round(sum(saipro_valortotal),2) as total
         FROM 
@@ -44,7 +54,9 @@ $sql = "
             join saidas on (saipro_saida=sai_codigo)
         WHERE
             saipro_acertado=0 and
+            ent_tiponegociacao=1 and
             ent_fornecedor=$fornecedor and
+            sai_datacadastro BETWEEN '$datade' AND '$dataate' and
             ent_quiosque=$usuario_quiosque and
             sai_tipo=1 and
             sai_status=1
@@ -81,7 +93,9 @@ INSERT INTO
         ace_valorpendenteanterior,
         ace_valortotal,
         ace_valorpago,        
-        ace_quiosque
+        ace_quiosque,
+        ace_dataini,
+        ace_datafim
     )
 VALUES (
     '$data',
@@ -94,7 +108,9 @@ VALUES (
     '$valorpendenteanterior',
     '$valortotal',
     '$valorpago',    
-    '$usuario_quiosque'        
+    '$usuario_quiosque',
+    '$datade',
+    '$dataate'
     )
 ";
 $query = mysql_query($sql);
@@ -105,11 +121,12 @@ echo "<br><br>";
 
 
 //Inserir as taxas do acerto
-//Verifica quais taxas que o quiosque tem para o acerto em questão
+//Verifica quais taxas que o quiosque tem para o acerto em quest�o
 $sql = "
     SELECT * FROM quiosques_taxas join taxas on (tax_codigo=quitax_taxa)    
 WHERE
     quitax_quiosque=$usuario_quiosque
+        and tax_tiponegociacao=1
 ";
 $query = mysql_query($sql);
 if (!$query)
@@ -152,7 +169,9 @@ SET
 WHERE 
     saipro_acertado=0 and
     ent_fornecedor=$fornecedor and
+    sai_datacadastro BETWEEN '$datade' AND '$dataate' and
     ent_quiosque=$usuario_quiosque and
+    ent_tiponegociacao=1 and
     sai_tipo=1 and
     sai_status=1
 ";

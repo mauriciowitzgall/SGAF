@@ -9,7 +9,7 @@ if ($pais == "") {
 } else {
     $sql = "
     SELECT DISTINCT
-        est_codigo,est_nome
+        est_codigo,est_nome,est_sigla
     FROM
         estados
         join paises on (est_pais=pai_codigo)
@@ -25,7 +25,7 @@ if ($pais == "") {
         echo "<option value=''>Selecione</option>";
         while ($dados = mysql_fetch_array($query)) {
             $codigo = $dados["est_codigo"];
-            $nome = $dados["est_nome"];
+            $nome = $dados["est_sigla"];
             echo "<option value='$codigo'>$nome</option>";
         }
     } else {

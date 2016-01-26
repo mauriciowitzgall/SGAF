@@ -13,7 +13,10 @@
     .titulo {
         font-size: 10pt;
         font-weight: bold;
-    }   
+    }  
+    .informativo {
+        background-color: gray;
+    }
 </style>
 <link rel="stylesheet" type="text/css" href="templates/geral.css" />
 
@@ -21,9 +24,21 @@
 <form action="{FORM_LINK}" target="{FORM_TARGET}" method="post" name="{FORM_NOME}">   
 <!-- END BLOCK_FORM -->    
 
+<!-- BEGIN BLOCK_QUEBRA -->
+<br>
+<!-- END BLOCK_QUEBRA -->
+
     <table summary="" border="0" class="tabcad" cellpadding="4">
         <!-- BEGIN BLOCK_LINHA -->
-        <tr class="{LINHA_CLASSE}">  
+        <tr 
+            class="{LINHA_CLASSE}"
+            <!-- BEGIN BLOCK_TR_OCULTA --> 
+            hidden=""
+            <!-- END BLOCK_TR_OCULTA --> 
+            <!-- BEGIN BLOCK_TR --> 
+                id="{TR_ID}"
+            <!-- END BLOCK_TR --> 
+         >  
             <!-- BEGIN BLOCK_COLUNA -->
             <td 
                 align="{COLUNA_ALINHAMENTO}" 
@@ -64,6 +79,7 @@
 
                     <!-- BEGIN BLOCK_CAMPO --> 
                     <input
+                        
                         type="{CAMPO_TIPO}" 
                         name="{CAMPO_NOME}" 
                         id="{CAMPO_ID}" 
@@ -72,10 +88,17 @@
                         maxlength="{CAMPO_QTDCARACTERES}"                
                         onkeyup="{CAMPO_ONKEYUP}"
                         onkeydown="{CAMPO_ONKEYDOWN}"
+                        onblur="{CAMPO_ONBLUR}"
+                        <!-- BEGIN BLOCK_CAMPO_MIN -->
+                        min="{CAMPO_MIN}"
+                        <!-- END BLOCK_CAMPO_MIN -->
+                        <!-- BEGIN BLOCK_CAMPO_MAX -->
+                        max="{CAMPO_MAX}"
+                        <!-- END BLOCK_CAMPO_MAX -->
                         onclick="
                         <!-- BEGIN BLOCK_CAMPO_AUTOSELECIONAR -->
                         this.select()    
-                        <!-- END BLOCK_CAMPO_AUTOSELECIONAR -->
+                        <!-- END BLOCK_CAMPO_AUTOSELECIONAR -->                        
                         {CAMPO_AOCLICAR}
                         " 
                         placeholder="{CAMPO_DICA}" 
@@ -102,7 +125,11 @@
 
                         <!-- BEGIN BLOCK_CAMPO_PADRAO -->
                         class=" campopadrao {CAMPO_CLASSE}" 
-                        <!-- END BLOCK_CAMPO_PADRAO -->                
+                        <!-- END BLOCK_CAMPO_PADRAO --> 
+                        
+                        <!-- BEGIN BLOCK_CAMPO_PADRAO2 -->
+                        class=" campopadrao2 {CAMPO_CLASSE2}" 
+                        <!-- END BLOCK_CAMPO_PADRAO2 -->                
 
                         <!-- BEGIN BLOCK_CAMPO_DINAMICO -->
                         class=" {CAMPO_CLASSE} " 
@@ -220,7 +247,10 @@
                 <!-- END BLOCK_ICONE --> 
 
 
-                <!-- BEGIN BLOCK_TEXTO --> 
+                <!-- BEGIN BLOCK_TEXTO -->
+                <!-- BEGIN BLOCK_TEXTO_QUEBRA -->
+                <br>
+                <!-- END BLOCK_TEXTO_QUEBRA -->
                 <span 
                     name="{TEXTO_NOME}"
                     id="{TEXTO_ID}"
@@ -271,6 +301,10 @@
     </tr>
     <!-- END BLOCK_LINHA -->
 </table>
+
+<!-- BEGIN BLOCK_BR2 -->            
+<br />
+<!-- END BLOCK_BR2 -->  
 
 
 <!-- BEGIN BLOCK_CAMPOOCULTO -->

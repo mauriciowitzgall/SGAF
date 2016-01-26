@@ -1,5 +1,5 @@
 <?php
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_cooperativa_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -18,7 +18,7 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "cooperativas.png";
 $tpl_titulo->show();
 
-//Pega todos os dados da tabela (Necessário caso seja uma edição ou visulização de detalhes)
+//Pega todos os dados da tabela (Necess�rio caso seja uma edi��o ou visuliza��o de detalhes)
 $codigo = $_GET["codigo"];
 $operacao = $_GET["operacao"];
 $sql = "SELECT * FROM cooperativas WHERE coo_codigo='$codigo'";
@@ -98,23 +98,23 @@ if ($presidente!="") {
 
 //BOTOES
 if (($operacao == "editar") || ($operacao == "cadastrar")) {
-    //Botão Salvar
+    //Bot�o Salvar
     $tpl1->block("BLOCK_BOTAO_SALVAR");
 
-    //Botão Cancelar
+    //Bot�o Cancelar
     if ($codigo != $usuario_codigo) {
         $tpl1->BOTAO_LINK = "cooperativas.php";
         $tpl1->block("BLOCK_BOTAO_CANCELAR");
     }
 } else {
-    //Botão Voltar
+    //Bot�o Voltar
     $tpl1->block("BLOCK_BOTAO_VOLTAR");
 }
 $tpl1->block("BLOCK_BOTOES");
 
 
 
-//Campos ocultos do formulario caso seja uma edição
+//Campos ocultos do formulario caso seja uma edi��o
 if ($codigo != "") {
     //Codigo
     $tpl1->CAMPOOCULTO_NOME = "codigo";

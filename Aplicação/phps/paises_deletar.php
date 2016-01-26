@@ -1,5 +1,5 @@
 <?php
-//Verifica se o usu√°rio tem permiss√£o para acessar este conte√∫do
+//Verifica se o usu·rio tem permiss„o para acessar este conte˙do
 require "login_verifica.php";
 if ($permissao_paises_excluir <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -17,7 +17,7 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "locais.png";
 $tpl_titulo->show();
 
-//Inicio da exclus√£o de entradas
+//Inicio da exclus„o de entradas
 $codigo = $_GET["codigo"];
 
 $tpl_notificacao = new Template("templates/notificacao.html");

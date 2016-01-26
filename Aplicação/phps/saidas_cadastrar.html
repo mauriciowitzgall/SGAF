@@ -25,7 +25,7 @@
                        onkeyup="{CAMPO_ONKEYUP}" 
                        onkeydown="{CAMPO_ONKEYDOWN}" 
                        onblur ="{CAMPO_ONFOCUS}" 
-                       class="campo1" 
+                       class="campopadrao" 
                        value="{CAMPO_VALOR}" 
                        maxlength="{CAMPO_QTD_CARACTERES}" 
                        autocomplete="off" 
@@ -40,7 +40,7 @@
                 <!-- END BLOCK_CAMPO --> 
 
                 <!-- BEGIN BLOCK_SELECT --> 
-                <select name="{SELECT_NOME}" class="campo1" style="width:200px"  {SELECT_DESABILITADO} {SELECT_OBRIGATORIO} {SELECT_FOCO}>           
+                <select name="{SELECT_NOME}" class="campopadrao" style="width:200px"  {SELECT_DESABILITADO} {SELECT_OBRIGATORIO} {SELECT_FOCO} onchange="{SELECT_AOTROCAR}">           
                 <!-- BEGIN BLOCK_SELECT_OPTION --> 
                 <option value="{OPTION_VALOR}"{OPTION_SELECIONADO}>{OPTION_NOME}</option> 
                 <!-- END BLOCK_SELECT_OPTION --> 
@@ -100,7 +100,7 @@
         <!--  BEGIN BLOCK_LISTA_EXCLUIR -->
         <td align="center" class="fundo1" width="35px">
             <a href="saidas_cadastrar.php?retirar_produto=1&consumidor={LISTA_GET_CONSUMIDOR}&tiposaida={LISTA_GET_TIPOSAIDA}&saida={LISTA_GET_SAIDA}&passo={LISTA_GET_PASSO}&saipro={LISTA_GET_SAIPRO}&lote={LISTA_LOTE}&qtd={LISTA_QTD}&produto={LISTA_PRODUTO_COD}">
-                <img width="18px"  src="{ICONES_CAMINHO}remover.png"  title="Remover" alt="Remover">
+                <img width="15px"  src="{ICONES_CAMINHO}remover.png"  title="Remover" alt="Remover">
             </a> 
         </td>
         <!--  END BLOCK_LISTA_EXCLUIR -->          

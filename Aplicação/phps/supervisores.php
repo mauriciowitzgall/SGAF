@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usuário tem permissáo para acessar este conteúdo
 require "login_verifica.php";
 if ($permissao_quiosque_versupervisores <> 1) {
     header("Location: permissoes_semacesso.php");

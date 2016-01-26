@@ -1,4 +1,4 @@
 <?php
 
-echo "EstÃ¡ validando!!!!! Deu certo!!!!";
+echo "Está validando!!!!! Deu certo!!!!";
 ?>

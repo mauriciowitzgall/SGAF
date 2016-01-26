@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 $codigo = $_GET["codigo"];
 $operacao = $_GET["operacao"];
@@ -9,11 +9,18 @@ if ($operacao == 'ver') {
         header("Location: permissoes_semacesso.php");
         exit;
     }
-} else {
+} else if ($operacao == 'cadastrar') {
     if ($permissao_quiosque_cadastrar <> 1) {
         header("Location: permissoes_semacesso.php");
         exit;
-    }    
+    }
+} else {
+    if ((($permissao_quiosque_editar == 1) && ($codigo == $usuario_quiosque)) || ($usuario_grupo == 1)) {
+        //Pode
+    } else {
+        header("Location: permissoes_semacesso.php");
+        exit;
+    }
 }
 
 
@@ -28,7 +35,7 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "quiosques.png";
 $tpl_titulo->show();
 
-//Pega todos os dados da tabela (Necessário caso seja uma edição ou visulização de detalhes)
+//Pega todos os dados da tabela (Necessário caso seja uma edi��o ou visuliza��o de detalhes)
 $sql = "SELECT * FROM quiosques WHERE qui_codigo='$codigo'";
 $query = mysql_query($sql);
 if (!$query)
@@ -49,7 +56,7 @@ while ($array = mysql_fetch_array($query)) {
     $email = $array['qui_email'];
     $cooperativa = $array['qui_cooperativa'];
 
-    //Pega todos os dados da tabela (Necessário caso seja uma edição)
+    //Pega todos os dados da tabela (Necessário caso seja uma edi��o)
     $sql = "SELECT * FROM cidades join estados on (cid_estado=est_codigo) WHERE cid_codigo='$cidade'";
     $query = mysql_query($sql);
     if (!$query)
@@ -97,6 +104,9 @@ $tpl1->SELECT_NOME = "pais";
 $tpl1->CAMPO_DICA = "";
 $tpl1->SELECT_ID = "pais";
 $tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "popula_estados();";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+
 if ($operacao == 'ver')
     $tpl1->block("BLOCK_SELECT_DESABILITADO");
 $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
@@ -131,9 +141,11 @@ $tpl1->block("BLOCK_TITULO");
 $tpl1->SELECT_NOME = "estado";
 $tpl1->SELECT_ID = "estado";
 $tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "popula_cidades();";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
 $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
-$tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
-//Se a operação for editar então mostrar os options, e o option em questão selecionado
+$tpl1->block("BLOCK_SELECT_OPTION_PADRAO2");
+//Se a opera��o for editar ent�o mostrar os options, e o option em quest�o selecionado
 if ($codigo != "") {
     $sql = "SELECT * FROM estados WHERE est_pais=$pais ORDER BY est_nome";
     $query = mysql_query($sql);
@@ -141,7 +153,7 @@ if ($codigo != "") {
         die("Erro: 6" . mysql_error());
     while ($dados = mysql_fetch_assoc($query)) {
         $tpl1->OPTION_VALOR = $dados["est_codigo"];
-        $tpl1->OPTION_NOME = $dados["est_nome"];
+        $tpl1->OPTION_NOME = $dados["est_sigla"];
         if ($estado == $dados["est_codigo"]) {
             $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
         }
@@ -162,7 +174,7 @@ $tpl1->SELECT_ID = "cidade";
 $tpl1->SELECT_TAMANHO = "";
 $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
 $tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
-//Se a operação for editar então mostrar os options, e o option em questão selecionado
+//Se a opera��o for editar ent�o mostrar os options, e o option em quest�o selecionado
 if ($codigo != "") {
     $sql = "SELECT * FROM cidades WHERE cid_estado=$estado ORDER BY cid_nome ";
     $query = mysql_query($sql);
@@ -275,7 +287,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 //Referência do Endereço
-$tpl1->TITULO = "Referência";
+$tpl1->TITULO = "Ponto de Referência";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
 $tpl1->CAMPO_QTD_CARACTERES = "";
@@ -390,7 +402,7 @@ $tpl1->SELECT_NOME = "cooperativa";
 $tpl1->SELECT_ID = "cooperativa";
 $tpl1->SELECT_TAMANHO = "";
 $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
-if (($usuario_grupo == 7) || ($usuario_grupo == 1))
+if ($usuario_grupo == 7)
     $sql = "SELECT * FROM cooperativas ORDER BY coo_abreviacao";
 else
     $sql = "SELECT * FROM cooperativas WHERE coo_codigo=$usuario_cooperativa";
@@ -400,7 +412,7 @@ if (!$query)
 while ($dados = mysql_fetch_assoc($query)) {
     $tpl1->OPTION_VALOR = $dados["coo_codigo"];
     $tpl1->OPTION_NOME = $dados["coo_abreviacao"];
-    //Se a operação for editar então mostrar os options, e o option em questão selecionado
+    //Se a opera��o for editar ent�o mostrar os options, e o option em quest�o selecionado
     if (isset($codigo)) {
         if ($cooperativa == $dados["coo_codigo"]) {
             $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
@@ -414,22 +426,67 @@ $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
+//Tipo de negociação
+$tpl1->TITULO = "Tipo de negociação";
+if (($operacao == "editar") || ($operacao == "ver")) {
+    $sql = "SELECT * FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$codigo";
+    $query = mysql_query($sql);
+    if (!$query)
+        die("Erro: 8" . mysql_error());
+    while ($dados = mysql_fetch_assoc($query)) {
+        $tipo = $dados["quitipneg_tipo"];
+        if ($tipo == 1)
+            $tipo_consignacao = 1;
+        if ($tipo == 2)
+            $tipo_revenda = 1;
+    }
+}
+//Tipo Consignação
+$tpl1->CHECKBOX_NOME = "box[1]";
+$tpl1->CHECKBOX_VALOR = "1";
+$tpl1->LABEL_NOME = "Consignação";
+if ($tipo_consignacao == 1) {
+    $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+}
+if ($operacao == 'ver')
+    $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+$tpl1->CHECKBOX_SPAN_ID = "";
+$tpl1->block("BLOCK_CHECKBOX");
+
+//Tipo Revenda
+$tpl1->CHECKBOX_NOME = "box[2]";
+$tpl1->CHECKBOX_VALOR = "2";
+$tpl1->LABEL_NOME = "Revenda";
+if ($tipo_revenda == 1) {
+    $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+}
+if ($operacao == 'ver')
+    $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+$tpl1->CHECKBOX_SPAN_ID = "";
+$tpl1->block("BLOCK_CHECKBOX");
+$tpl1->block("BLOCK_TITULO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+
+
 //BOTOES
 if (($operacao == "editar") || ($operacao == "cadastrar")) {
-    //Botão Salvar
+    //Bot�o Salvar
     $tpl1->block("BLOCK_BOTAO_SALVAR");
 
-    //Botão Cancelar   
+    //Bot�o Cancelar   
     $tpl1->BOTAO_LINK = "quiosques.php";
     $tpl1->block("BLOCK_BOTAO_CANCELAR");
 } else {
-    //Botão Voltar
+    //Bot�o Voltar
     $tpl1->block("BLOCK_BOTAO_VOLTAR");
 }
 $tpl1->block("BLOCK_BOTOES");
 
 
-//Campos ocultos do formulario caso seja uma edição
+//Campos ocultos do formulario caso seja uma edi��o
 if ($operacao == "editar") {
     //Codigo
     $tpl1->CAMPOOCULTO_NOME = "codigo";
@@ -441,7 +498,7 @@ if ($operacao == "editar") {
     $tpl1->CAMPOOCULTO_VALOR = "$nome";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
 }
-//Operação
+//Opera��o
 $tpl1->CAMPOOCULTO_NOME = "operacao";
 $tpl1->CAMPOOCULTO_VALOR = "$operacao";
 $tpl1->block("BLOCK_CAMPOSOCULTOS");

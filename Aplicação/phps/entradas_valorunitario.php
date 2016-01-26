@@ -6,14 +6,14 @@ include "funcoes.php";
 $produto = $_POST[produto];
 $fornecedor = $_POST[fornecedor];
 
-//Se não tiver nenhum produto selecionado então deixar o campo em branco e não fazer nada
+//Se n�o tiver nenhum produto selecionado ent�o deixar o campo em branco e n�o fazer nada
 if (($produto == "") || ($fornecedor == "")) {
     echo "";
     exit;
 }
 
 
-//Verifica qual é a ultima entrada que o fornecedor em questão realizou com o produto em questão
+//Verifica qual � a ultima entrada que o fornecedor em quest�o realizou com o produto em quest�o
 $sql1 = "
 SELECT 
     MAX( ent_codigo ) as entrada
@@ -30,11 +30,11 @@ if (!$query1)
 $dados1 = mysql_fetch_assoc($query1);
 $entrada_ultima = $dados1["entrada"];
 
-//Se o fornecedor nunca efetuou entradas com este produto então o valor unitário é nulo
+//Se o fornecedor nunca efetuou entradas com este produto ent�o o valor unit�rio � nulo
 if ($entrada_ultima == "") {
     echo "0|";
 } else {
-    //Verifica qual é o produto inserido dentro da entrada
+    //Verifica qual � o produto inserido dentro da entrada
     $sql2 = "
     SELECT 
         MAX( entpro_numero ) as numero_maior
@@ -51,10 +51,10 @@ if ($entrada_ultima == "") {
     $numero_maior = $dados2["numero_maior"];
     //echo "($numero_maior) ";
 
-    //Verifica qual o valor unitário daquele fornecedor e produto na ultima entrada que teve esse produto desse fornecedor
+    //Verifica qual o valor unit�rio daquele fornecedor e produto na ultima entrada que teve esse produto desse fornecedor
     $sql = "
     SELECT 
-        MAX( entpro_valorunitario ) as valorunitario, entpro_validade
+        entpro_valorunitario, entpro_validade, entpro_valunicusto
     FROM        
         entradas_produtos
     WHERE   
@@ -64,11 +64,13 @@ if ($entrada_ultima == "") {
     $query = mysql_query($sql);
     if (!$query)
         die("Erro de SQL 31:" . mysql_error());
-    while ($dados = mysql_fetch_array($query)) {
-        $valuni = $dados['valorunitario'];
-        $valuni = money_format('%i', $valuni);
-        $validade = converte_data($dados["entpro_validade"]);
-        echo "$valuni|$validade";
-    }
+    $dados = mysql_fetch_array($query);
+    $valuni = $dados['entpro_valorunitario'];
+    $valuni = money_format('%i', $valuni); 
+    $valunicusto = $dados['entpro_valunicusto'];
+    $valunicusto = money_format('%i', $valunicusto);
+    $validade = $dados["entpro_validade"];
+    echo "$valuni|$validade|$valunicusto";
+    
 }
 ?>

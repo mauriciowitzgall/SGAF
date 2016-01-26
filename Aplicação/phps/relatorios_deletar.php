@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuÃ¡rio tem permissÃ£o para acessar este conteÃºdo
+//Verifica se o usuário tem permissão para acessar este conteúdo
 require "login_verifica.php";
 if ($permissao_relatorios_excluir <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -12,7 +12,7 @@ include "includes.php";
 
 //TÃTULO PRINCIPAL
 $tpl_titulo = new Template("templates/titulos.html");
-$tpl_titulo->TITULO = "RELATÃ“RIOS";
+$tpl_titulo->TITULO = "RELATÓRIOS";
 $tpl_titulo->SUBTITULO = "CADASTRO";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "relatorios.png";

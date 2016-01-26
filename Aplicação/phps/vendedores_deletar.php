@@ -1,5 +1,5 @@
 <?php
-//Verifica se o usu√°rio tem permiss√£o para acessar este conte√∫do
+//Verifica se o usu·rio tem permiss„o para acessar este conte˙do
 require "login_verifica.php";
 if ($permissao_quiosque_definirvendedores <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -17,11 +17,11 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "../pessoas2/vendedor.png";
 $tpl_titulo->show();
 
-//Inicio da exclus√£o de entradas
+//Inicio da exclus„o de entradas
 $quiosque = $_GET["quiosque"];
 $vendedor = $_GET["vendedor"];
 
-//Limpa o grupo de permiss√µes do usu√°rio da pessoa
+//Limpa o grupo de permiss√µes do usu·rio da pessoa
 $sql = "
 UPDATE
     pessoas
@@ -33,7 +33,7 @@ WHERE
 if (!mysql_query($sql))
     die("Erro: " . mysql_error());
 
-//Excluir a pessoa da fun√ß√£o de vendedor
+//Excluir a pessoa da funÁ„o de vendedor
 $sql2 = "DELETE FROM quiosques_vendedores WHERE quiven_vendedor='$vendedor' and quiven_quiosque=$quiosque";
 $query2 = mysql_query($sql2);
 if (!$query2) {

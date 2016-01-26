@@ -14,31 +14,62 @@
 
 
 .campopadrao {
+    -webkit-appearance: none;
+    background-image: none; /* remove the value that chrome dose not use */
+    background-color: #333; /* set the value it does */
+    border-radius: 3px;     /* make it look kinda like the background image */    
+    border: 1px solid #888;
     height: 22px;
     border-collapse:collapse; 
-    background-color: white;
+    background-color: whitesmoke;
     font-size: 10pt;
-    border: 1px gray solid;
     color: black;
 }
 .campopadrao:disabled {
-    background-color: transparent;
-    border: 1px transparent solid;
-    color: black;
-    border-bottom: 1px gray solid;    
+    border: 0px solid #888;
 }
 .campopadrao:required {    
-    border: 1px darkolivegreen solid;    
-}
-.campopadrao:focus {    
     
-    border: 1px orange solid;    
 }
+.campopadrao:focus {        
+    
+}
+.campo_tamanho_1 {
+    width: 25px;
+}
+.campo_tamanho_2 {
+    width: 50px;
+}
+.campo_tamanho_3 {
+    width: 75px;
+}
+.campo_tamanho_4 {
+    width: 100px;
+}
+.campo_tamanho_5 {
+    width: 150px;
+}
+.campo_tamanho_6 {
+    width: 200px;
+}
+.campo_tamanho_7 {
+    width: 250px;
+}
+.campo_tamanho_8 {
+    width: 500px;
+}
+.campo_tamanho_9 {
+    width: 1000px;
+}
+.campo_qtd {
+    text-align: right
+}
+
 
 
 .campofiltro
 {
-    height: 22px;
+    height: 18px;
     border-collapse:collapse; 
     background-color: white;
     font-size: 10pt;
@@ -122,5 +153,18 @@
     background-color: #E0EEE0;
 }
 .negrito {
+    font-weight: bold;
+}
+.dicacampo {
+    top: 30;
+    font-size: x-small;
+    color: gray;
+    font-style: italic;
+}
+.dicacampo-vermelho {
+    top: 30;
+    font-size: x-small;
+    color: red;
+    font-style: italic;    
     font-weight: bold;
 }

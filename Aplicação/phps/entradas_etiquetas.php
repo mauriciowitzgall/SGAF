@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuÃ¡rio tem permissÃ£o para acessar este conteÃºdo
+//Verifica se o usuário tem permissão para acessar este conteúdo
 require "login_verifica.php";
 if ($permissao_entradas_etiquetas <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -186,7 +186,7 @@ $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
-//BotÃ£o Gerar
+//Botão Gerar
 $tpl1->BOTAO_TIPO = "submit";
 $tpl1->BOTAO_VALOR = "GERAR ETIQUETAS";
 $tpl1->BOTAO_NOME = "GERAR ETIQUETAS";

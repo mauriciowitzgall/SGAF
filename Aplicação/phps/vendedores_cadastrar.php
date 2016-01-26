@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_quiosque_definirvendedores <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -19,7 +19,7 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "../pessoas2/vendedor.png";
 $tpl_titulo->show();
 
-//Pega todos os dados da tabela (Necessário caso seja uma edição)
+//Pega todos os dados da tabela (Necess�rio caso seja uma edi��o)
 $vendedor = $_GET['codigo'];
 $quiosque = $_GET['quiosque'];
 $operacao = $_GET['operacao'];
@@ -102,7 +102,7 @@ $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
-//Data função
+//Data fun��o
 $tpl1->TITULO = "Data Função";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
@@ -129,17 +129,17 @@ $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
 //BOTOES
 if (($operacao == "editar") || ($operacao == "cadastrar")) {
-    //Botão Salvar
+    //Bot�o Salvar
     $tpl1->block("BLOCK_BOTAO_SALVAR");
 
-    //Botão Cancelar
+    //Bot�o Cancelar
     if ($codigo != $usuario_codigo) {
         $tpl1->BOTAO_LINK = "vendedores.php?quiosque=$quiosque";
         $tpl1->block("BLOCK_BOTAO_CANCELAR");
     }
     
 } else {
-    //Botão Voltar
+    //Bot�o Voltar
     $tpl1->block("BLOCK_BOTAO_VOLTAR");
 }
 $tpl1->block("BLOCK_BOTOES");

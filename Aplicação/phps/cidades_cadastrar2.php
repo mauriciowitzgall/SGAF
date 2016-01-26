@@ -1,5 +1,5 @@
 <?php
-//Verifica se o usu√°rio tem permiss√£o para acessar este conte√∫do
+//Verifica se o usu·rio tem permiss„o para acessar este conte˙do
 require "login_verifica.php";
 if ($permissao_cidades_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -13,7 +13,7 @@ include "includes.php";
 //Template de T√≠tulo e Sub-t√≠tulo
 $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "CIDADES";
-$tpl_titulo->SUBTITULO = "CADASTRO/EDI√á√ÉO";
+$tpl_titulo->SUBTITULO = "CADASTRO/EDI«√O";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "locais.png";
 $tpl_titulo->show();
@@ -24,9 +24,9 @@ $nome2 = $_POST["nome2"];
 $estado = $_POST['estado'];
 
  
-//Conforme a opera√ß√£o deve-se inserir novo registro ou atualizar os existentes
-if ($codigo == "") { //Caso a opera√ß√£o seja CADASTRO    
-    //Verifica se j√° existe registros com o mesmo nome
+//Conforme a operaÁ„o deve-se inserir novo registro ou atualizar os existentes
+if ($codigo == "") { //Caso a operaÁ„o seja CADASTRO    
+    //Verifica se j· existe registros com o mesmo nome
     $sql = "SELECT * FROM cidades WHERE cid_nome='$nome'";
     $query = mysql_query($sql);
     if (!$query)
@@ -60,8 +60,8 @@ if ($codigo == "") { //Caso a opera√ß√£o seja CADASTRO
         $tpl_notificacao->block("BLOCK_BOTAO");
         $tpl_notificacao->show();
     }
-} else { //Caso a opera√ß√£o seja EDI√á√ÇO
-    //Verifica se j√° existe registros com o mesmo nome    
+} else { //Caso a operaÁ„o seja EDI«√O
+    //Verifica se j· existe registros com o mesmo nome    
     $sql = "SELECT * FROM cidades WHERE cid_nome='$nome'";
     $query = mysql_query($sql);
     if (!$query)

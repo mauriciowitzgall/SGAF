@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usu√°rio tem permiss√£o para acessar este conte√∫do
+//Verifica se o usu·rio tem permiss„o para acessar este conte˙do
 require "login_verifica.php";
 if ($permissao_relatorios_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -19,26 +19,26 @@ $hora = date("h:i:s");
 
 //T√çTULO PRINCIPAL
 $tpl_titulo = new Template("templates/titulos.html");
-$tpl_titulo->TITULO = "RELAT√ìRIOS";
+$tpl_titulo->TITULO = "RELAT”RIOS";
 if ($operacao == 'cadastrar')
     $tpl_titulo->SUBTITULO = "CADASTRO";
 else
-    $tpl_titulo->SUBTITULO = "EDI√á√ÉO";
+    $tpl_titulo->SUBTITULO = "EDI«√O";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "relatorios.png";
 $tpl_titulo->show();
 
 
 
-//OPERA√á√ïES
-//Estrutura da notifica√ß√£o
+//OPERA«’ES
+//Estrutura da notificaÁ„o
 $tpl_notificacao = new Template("templates/notificacao.html");
 $tpl_notificacao->ICONES = $icones;
 $tpl_notificacao->DESTINO = "relatorios.php";
 
-//Se a opera√ß√£o for cadastro ent√£o
+//Se a operaÁ„o for cadastro ent„o
 if ($operacao == 'cadastrar') {
-    //Verifica se j√° existe um relatorio com mesmo nome    
+    //Verifica se j· existe um relatorio com mesmo nome    
     $sql = "SELECT rel_nome FROM relatorios WHERE rel_nome='$relatorionome'";
     $query = mysql_query($sql);
     if (mysql_num_rows($query) > 0) {
@@ -87,9 +87,9 @@ if ($operacao == 'cadastrar') {
     }
 }
 
-//Se a opera√ß√£o for edi√ß√£o ent√£o
+//Se a operaÁ„o for ediÁ„o ent„o
 if ($operacao == 'editar') {
-    //Verifica se j√° existe registro com o mesmo nome
+    //Verifica se j· existe registro com o mesmo nome
     $sql = "SELECT rel_nome FROM relatorios WHERE rel_codigo='$codigo'";
     $query = mysql_query($sql);
     $dados = mysql_fetch_assoc($query);
@@ -127,7 +127,7 @@ if ($operacao == 'editar') {
     if (!mysql_query($sqldel))
         die("Erro9: " . mysql_error());
 
-    //Aqui √© feito a nova inser√ß√£o dos novos relacionamentos                
+    //Aqui È feito a nova inserÁ„o dos novos relacionamentos                
     foreach ($box as $box) {
         $sql2 = "
             INSERT INTO  relatorios_permissao 

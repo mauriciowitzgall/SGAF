@@ -1,4 +1,4 @@
-//CÃ³digo de acompanhamento usado para realizar analises de acesso atravÃ©z
+//Código de acompanhamento usado para realizar analises de acesso atravéz
 // do google analytics
 
   var _gaq = _gaq || [];

@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuÃ¡rio tem permissÃ£o para acessar este conteÃºdo
+//Verifica se o usuário tem permissão para acessar este conteúdo
 require "login_verifica.php";
 if ($permissao_estoque_qtdide_definir <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -22,7 +22,7 @@ $tpl_titulo->show();
 $produto = $_POST['produto'];
 $qtdide = $_POST['qtdide'];
 
-//Estrutura da notificaÃ§Ã£o
+//Estrutura da notificação
 $tpl_notificacao = new Template("templates/notificacao.html");
 $tpl_notificacao->ICONES = $icones;
 $tpl_notificacao->DESTINO = "estoque_qtdideal.php";
@@ -39,7 +39,7 @@ if (!$query)
     die("Erro no campo produto" . mysql_error());
 $linhas = mysql_num_rows($query);
 
-//Verifica se a o valor do campo qtdideal Ã© zero ou maior
+//Verifica se a o valor do campo qtdideal é zero ou maior
 if ($qtdide == 0) {
     if ($linhas > 0) {
         //Remover o produto do estoque do quiosque
@@ -55,7 +55,7 @@ if ($qtdide == 0) {
         $tpl_notificacao->block("BLOCK_BOTAO");
         $tpl_notificacao->show();
     } else {
-        //NÃ£o faz nada
+        //Não faz nada
         $tpl_notificacao->block("BLOCK_CONFIRMAR");
         $tpl_notificacao->block("BLOCK_EDITADO");
         $tpl_notificacao->block("BLOCK_BOTAO");

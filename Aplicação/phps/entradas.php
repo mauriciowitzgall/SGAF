@@ -1,5 +1,5 @@
 <?php
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_entradas_ver <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -30,7 +30,7 @@ include "includes.php";
     <hr align="left" class="linhacurta" >
 
     <?php
-    //filtro e ordenação
+    //filtro e ordena��o
     $filtronumero = $_POST['filtronumero'];
     $filtrofornecedor = $_POST['filtrofornecedor'];
     $filtrosupervisor = $_POST['filtrosupervisor'];
@@ -40,12 +40,12 @@ include "includes.php";
     <form action="entradas.php" method="post" name="formfiltro">
         <table summary="" class="tabelafiltro" border="0">
             <tr>
-                <td><b>&nbsp;Nº:</b><br><input size="10" type="text" onkeyup="valida_filtro_entradas_numero()" name="filtronumero" class="campofiltro" value="<?php echo "$filtronumero"; ?>"></td>
+                <td><b>&nbsp;Nº:</b><br><input size="10" type="text" onkeyup="valida_filtro_entradas_numero()" name="filtronumero" class="campopadrao" value="<?php echo "$filtronumero"; ?>"></td>
                 <td width="15px"></td>
 
                 <?php if ($usuario_grupo != 5) { ?>                    
                     <td><b>&nbsp;Fornecedor:</b><br>
-                        <select name="filtrofornecedor" class="campofiltro">
+                        <select name="filtrofornecedor" class="campopadrao">
                             <option value="">Todos</option> 
                             <?php
                             $sql2 = "SELECT DISTINCT pes_codigo,pes_nome FROM mestre_pessoas_tipo join pessoas on (pes_codigo=mespestip_pessoa) join entradas on (ent_fornecedor=pes_codigo)
@@ -61,7 +61,7 @@ include "includes.php";
                     </td>
                     <td width="15px"></td>
                     <td ><b>&nbsp;Supervisor:</b><br>
-                        <select name="filtrosupervisor" class="campofiltro" >
+                        <select name="filtrosupervisor" class="campopadrao" >
                             <option value="">Todos</option> 
                             <?php
                             $sql3 = "SELECT DISTINCT pes_codigo,pes_nome
@@ -79,21 +79,7 @@ include "includes.php";
                     </td>
                     <td width="15px"></td>
                     <td ><b>&nbsp;Produtos:</b><br>
-                        <select name="filtroproduto" class="campofiltro" >
-                            <option value="">Todos</option> 
-                            <?php
-                            $sql3 = "SELECT DISTINCT pro_codigo,pro_nome
-			FROM produtos
-                        join entradas_produtos on (entpro_produto=pro_codigo)
-			WHERE pro_cooperativa='$usuario_cooperativa' ORDER BY pro_nome";
-                            $query3 = mysql_query($sql3);
-                            while ($dados3 = mysql_fetch_array($query3)) {
-                                ?> <option value="<?php echo "$dados3[0]"; ?>" <?php
-                        if ($filtroproduto == $dados3[0]) {
-                            echo" selected ";
-                        }
-                                ?>><?php echo "$dados3[1]"; ?></option><?php } ?>
-                        </select>
+                        <input size="25" type="text" onkeyup="" name="filtroproduto" class="campopadrao" value="<?php echo "$filtroproduto"; ?>"></td>
                     </td>
                     <td width="15px"></td>                
                 <?php } ?>
@@ -129,8 +115,8 @@ include "includes.php";
         if ($filtrosupervisor != "")
             $sql_filtro = $sql_filtro . " and ent_supervisor=$filtrosupervisor";
         if ($filtroproduto != "") {
-            $sql_filtro = $sql_filtro . " and entpro_produto=$filtroproduto";
-            $sql_filtro_from = "join entradas_produtos on (entpro_entrada=ent_codigo)";
+            $sql_filtro = $sql_filtro . " and pro_nome like '%$filtroproduto%'";
+            $sql_filtro_from = "join entradas_produtos on (entpro_entrada=ent_codigo) join produtos on (entpro_produto=pro_codigo)";
         }
         
 
@@ -155,7 +141,7 @@ $sql = "
     ";
 
 
-        //Paginação
+        //Pagina��o
         $query = mysql_query($sql);
         if (!$query)
             die("Erro SQL Principal Paginação:" . mysql_error());
@@ -184,6 +170,7 @@ $sql = "
             <tr valign="middle" class="tabelacabecalho1">
                 <td width="35px">LOTE</td>
                 <td width="" colspan="2">DATA</td>            
+                <td width="">TIPO NEG.</td>            
                 <td width="">FORNECEDOR</td>
                 <td width="">SUPERVISOR</td>
                 <td width="">QTD. PROD.</td>            
@@ -217,15 +204,15 @@ $sql = "
                 $status = $array['ent_status'];
                 $total = $array['ent_valortotal'];
 
-                //Verifica se ja foi efetuado saídas quaisquer para o lote/entrada em questão
+                /*
+                //Verifica se ja foi efetuado Saídas quaisquer para o lote/entrada em questão
                 $sql3 = "SELECT * FROM saidas_produtos WHERE saipro_lote=$codigo";
                 $query3 = mysql_query($sql3);
                 if (!$query3) {
                     die("Erro SQL: " . mysql_error());
                 }
                 $linhas3 = mysql_num_rows($query3);
-
-                //Se já houve saídas referentes a esta entrada então não pode-se exclui-la
+                //Se já houve Saídas referentes a esta entrada então não pode-se editá-la
                 if ($linhas3 > 0) {
                     $editar_ocultar = 1;
                     $editar_ocultar_motivo = "Foi vendido produtos desta entrada";
@@ -233,6 +220,7 @@ $sql = "
                     $editar_ocultar = 0;
                     $editar_ocultar_motivo = "";
                 }
+                 */
                 ?>
 
                 <tr class="lin <?php
@@ -259,6 +247,26 @@ $sql = "
                     <td align="right" ><?php echo "$codigo"; ?></td>
                     <td width="80px" align="right"><?php echo converte_data($data); ?></td>
                     <td width="35px"><?php echo converte_hora($hora); ?></td>
+
+                    <!-- COLUNA TIPO NEGOCIAÇÃO -->    
+                    <td align="center">                     
+                        <?php
+                        $sql11 = "SELECT ent_tiponegociacao FROM entradas WHERE ent_codigo=$codigo";
+                        $query11 = mysql_query($sql11);
+                        $dados11 = mysql_fetch_array($query11);                       
+                        $tiponegociacao=$dados11["ent_tiponegociacao"];
+                        if ($tiponegociacao==1) {
+                            $titulo="Consignação";
+                            $imagemtip=$icones."consignacao.png";
+                        }
+                        else {
+                            $imagemtip=$icones."revenda.png";
+                            $titulo="Revenda";
+                        }
+                        ?>    
+                        <img width="15px" src="<?php echo $imagemtip; ?>" title="<?php echo $titulo; ?>" alt="<?php echo $titulo; ?>"/>
+                    </td>                    
+                    
                     <td>
                         <a href="pessoas_cadastrar.php?codigo=<?php echo $fornecedor; ?>&operacao=ver" class="link">
                             <?php
@@ -308,12 +316,14 @@ $sql = "
                             ?></b>
                     </td>
 
+                   
+                    
                     <!-- COLUNA SITUACAO -->    
                     <td align="center">                     
                         <?php
                         if ($status == 2) {
                             if ($usuario_codigo == $supervisor) {
-                                $imagem = "bandeira3_vermelha.png";
+                                $imagem = "star_empty.png";
                                 $titulo = "Incompleta";
                             } else {
                                 $dataatual = date("Y-m-d");
@@ -322,17 +332,17 @@ $sql = "
                                 $tempo2 = $dataatual . "_" . $horaatual;
                                 $total_segundos = diferenca_entre_datahora($tempo1, $tempo2);
                                 if ($total_segundos > 5400) {
-                                    $imagem = "bandeira3_vermelha.png";
+                                    $imagem = "star_empty.png";
                                     $titulo = "Incompleta";                                    
                                 } else {
-                                    $imagem = "bandeira3_laranja.png";
+                                    $imagem = "star_half_full.png";
                                     $titulo = "Esta entrada está em andamento por outro usuário! Este usuário tem 01:30 (uma hora e meia) para finalizá-la caso contrário ela passará a ser 'Incompleta' e você poderá finalizá-la!";
                                     $editar_ocultar = 1;
                                     $editar_ocultar_motivo = "Esta entrada está em andamento por outro usuário! Este usuário tem 01:30 (uma hora e meia) para finalizá-la caso contrário ela passará a ser 'Incompleta' e você poderá finalizá-la!";
                                 }
                             }
                         } else {
-                            $imagem = "bandeira3_verde.png";
+                            $imagem = "star_full.png";
                             $titulo = "Completo";
                         }
                         ?>    
@@ -368,7 +378,7 @@ $sql = "
             <?php } ?>
             <?php if ($linhas == "0") { ?>
                 <tr>
-                    <td colspan="10" align="center" class="errado">
+                    <td colspan="12" align="center" class="errado">
                         <?php echo "Nenhum resultado!" ?>
                     </td>
                 </tr>
@@ -381,12 +391,12 @@ $sql = "
                     <input onclick="paginacao_retroceder()" type="image" width="25px"   src="<?php echo $icones; ?>esquerda.png"  title="Anterior" alt="Anterior" />
                 </td>
                 <td width="170px">
-                    <input size="5" type="text" name="paginaatual" class="campofiltro" value="<?php echo "$paginaatual"; ?>">
+                    <input size="5" type="text" name="paginaatual" class="campopadrao" value="<?php echo "$paginaatual"; ?>">
                     <span>/</span>
-                    <input disabled size="5" type="text" name="paginas" class="campofiltro" value="<?php echo "$paginas"; ?>">
+                    <input disabled size="5" type="text" name="paginas" class="campopadrao" value="<?php echo "$paginas"; ?>">
                 </td>
                 <td align="left">
-                    <input onclick="paginacao_avancar()"  type="image" width="25px"   src="<?php echo $icones; ?>direita.png"  title="Próxima" alt="Próxima" />
+                    <input onclick="paginacao_avancar()"  type="image" width="25px"   src="<?php echo $icones; ?>direita.png"  title="Pr�xima" alt="Pr�xima" />
                 </td>
             </tr>
         </table>

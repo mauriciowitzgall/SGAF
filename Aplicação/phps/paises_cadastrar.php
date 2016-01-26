@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usu√°rio tem permiss√£o para acessar este conte√∫do
+//Verifica se o usu·rio tem permiss„o para acessar este conte˙do
 require "login_verifica.php";
 if ($permissao_paises_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -13,12 +13,12 @@ include "includes.php";
 //Template de T√≠tulo e Sub-t√≠tulo
 $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "PAISES";
-$tpl_titulo->SUBTITULO = "CADASTRO/EDI√á√ÉO";
+$tpl_titulo->SUBTITULO = "CADASTRO/EDI«√O";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "locais.png";
 $tpl_titulo->show();
 
-//Pega todos os dados da tabela (Necess√°rio caso seja uma edi√ß√£o)
+//Pega todos os dados da tabela (Necess·rio caso seja uma ediÁ„o)
 $codigo=$_GET["codigo"];
 $sql = "SELECT * FROM paises WHERE pai_codigo='$codigo'";
 $query = mysql_query($sql);

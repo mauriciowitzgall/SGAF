@@ -129,7 +129,7 @@ $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
 //BOTOES
 if (($operacao == "editar") || ($operacao == "cadastrar")) {
-    //Botão Salvar
+    //Bot�o Salvar
     $tpl1->block("BLOCK_BOTAO_SALVAR");
 
     //Botão Cancelar

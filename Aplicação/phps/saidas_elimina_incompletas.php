@@ -1,11 +1,11 @@
 <?php
 include "controle/conexao.php";
-//Varre a tabela saidas na procura de registros com status incompleto, ou seja, saidas corrompidas ou não salvas
+//Varre a tabela saidas na procura de registros com status incompleto, ou seja, saidas corrompidas ou n�o salvas
 $sql = "
     SELECT * 
     FROM saidas 
     WHERE sai_status=2 
-    and sai_vendedor=$usuario_codigo
+    and sai_caixa=$usuario_codigo
     and sai_quiosque=$usuario_quiosque
 ";
 $query = mysql_query($sql);
@@ -14,7 +14,7 @@ if (!$query)
 while ($dados = mysql_fetch_array($query)) {
     $saida = $dados['sai_codigo'];
 
-    //Verifica se esta saída possui pelo menos um produto inserido
+    //Verifica se esta Sa�da possui pelo menos um produto inserido
     $sql2 = "
     SELECT saipro_produto 
     FROM saidas_produtos
@@ -24,7 +24,7 @@ while ($dados = mysql_fetch_array($query)) {
     if (!$query2)
         die("Erro Qtd Produtos: " . mysql_error());
     $linhas2 = mysql_num_rows($query2);
-    if ($linhas2 == 0) { //Se a saída não contém produtos então dá para deletá-la
+    if ($linhas2 == 0) { //Se a Sa�da n�o cont�m produtos ent�o d� para delet�-la
         $sql3 = "
         DELETE FROM saidas 
         WHERE sai_codigo=$saida

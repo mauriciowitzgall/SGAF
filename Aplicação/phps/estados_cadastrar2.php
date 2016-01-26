@@ -1,5 +1,5 @@
 <?php
-//Verifica se o usu√°rio tem permiss√£o para acessar este conte√∫do
+//Verifica se o usu·rio tem permiss„o para acessar este conte˙do
 require "login_verifica.php";
 if ($permissao_estados_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -13,7 +13,7 @@ include "includes.php";
 //Template de T√≠tulo e Sub-t√≠tulo
 $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "ESTADOS";
-$tpl_titulo->SUBTITULO = "CADASTRO/EDI√á√ÉO";
+$tpl_titulo->SUBTITULO = "CADASTRO/EDI«√O";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "locais.png";
 $tpl_titulo->show();
@@ -24,21 +24,21 @@ $nome2 = ucwords(strtolower($_POST["nome2"]));
 $sigla = strtoupper($_POST['sigla']);
 $pais = $_POST['pais'];
 
-//Estrutura da notifica√ß√£o
+//Estrutura da notificaÁ„o
 $tpl_notificacao = new Template("templates/notificacao.html");
 $tpl_notificacao->ICONES = $icones;
 $tpl_notificacao->DESTINO = "estados.php";
 
 
-//Conforme a opera√ß√£o deve-se inserir novo registro ou atualizar os existentes
-if ($codigo == "") { //Caso a opera√ß√£o seja CADASTRO    
-    //Verifica se j√° existe registros com o mesmo nome
+//Conforme a operaÁ„o deve-se inserir novo registro ou atualizar os existentes
+if ($codigo == "") { //Caso a operaÁ„o seja CADASTRO    
+    //Verifica se j· existe registros com o mesmo nome
     $sql = "SELECT * FROM estados WHERE est_nome='$nome'";
     $query = mysql_query($sql);
     if (!$query)
         die("Erro: " . mysql_error());
     $linhas = mysql_num_rows($query);
-    if ($linhas > 0) { //J√° tem registro com mesmo nome
+    if ($linhas > 0) { //J· tem registro com mesmo nome
         $tpl_notificacao->MOTIVO_COMPLEMENTO = "nome de estado";
         $tpl_notificacao->block("BLOCK_ERRO");
         $tpl_notificacao->block("BLOCK_NAOCADASTRADO");
@@ -60,8 +60,8 @@ if ($codigo == "") { //Caso a opera√ß√£o seja CADASTRO
         $tpl_notificacao->block("BLOCK_BOTAO");
         $tpl_notificacao->show();
     }
-} else { //Caso a opera√ß√£o seja EDI√á√ÇO
-    //Verifica se j√° existe registros com o mesmo nome    
+} else { //Caso a operaÁ„o seja EDI«√O
+    //Verifica se j· existe registros com o mesmo nome    
     $sql = "SELECT * FROM estados WHERE est_nome='$nome'";
     $query = mysql_query($sql);
     if (!$query)

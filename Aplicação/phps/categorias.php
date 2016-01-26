@@ -1,5 +1,5 @@
 <?php $tipopagina="produtos"; 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_categorias_ver <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -20,14 +20,14 @@ if ($permissao_categorias_ver <> 1) {
 </table>
 <hr align="left" class="linhacurta" >
 
-<?php //filtro e ordenação
+<?php //filtro e ordena��o
 $filtronome=$_POST['filtronome'];
 $filtroobs=$_POST['filtroobs'];
 ?>
 <form action="categorias.php" name="form1" method="post">
 <table summary="" class="tabelafiltro" border="0">
 <tr>
-	<td width="245px"><b>&nbsp;Nome:</b><br><input size="25" type="text" name="filtronome" class="campofiltro" value="<?php echo "$filtronome";?>"></td>
+	<td width="245px"><b>&nbsp;Nome:</b><br><input size="25" type="text" name="filtronome" class="campopadrao" value="<?php echo "$filtronome";?>"></td>
 </tr>
 </table>
 <br>
@@ -58,15 +58,15 @@ $filtroobs=$_POST['filtroobs'];
 			WHERE cat_nome like '%$filtronome%' and cat_cooperativa=$usuario_cooperativa
 			ORDER BY cat_nome";
  
- //Paginação
+ //Pagina��o
 $query = mysql_query($sql);
 if (!$query)
-    die("Erro SQL Principal Paginação:" . mysql_error());
+    die("Erro SQL Principal Pagina��o:" . mysql_error());
 $linhas = mysql_num_rows($query);
 $por_pagina = $usuario_paginacao;
 $paginaatual = $_POST["paginaatual"];
 $paginas = ceil($linhas / $por_pagina);
-//Se é a primeira vez que acessa a pagina então começar na pagina 1
+//Se � a primeira vez que acessa a pagina ent�o come�ar na pagina 1
 if (($paginaatual == "") || ($paginas < $paginaatual) || ($paginaatual <= 0)) {
     $paginaatual = 1;
 }
@@ -132,12 +132,12 @@ if ($linhas=="0")
         <input onclick="paginacao_retroceder()" type="image" width="25px"   src="<?php echo $icones; ?>esquerda.png"  title="Anterior" alt="Anterior" />
     </td>
     <td width="170px">
-        <input size="5" type="text" name="paginaatual" class="campofiltro" value="<?php echo $paginaatual; ?>">
+        <input size="5" type="text" name="paginaatual" class="campopadrao" value="<?php echo $paginaatual; ?>">
         <span>/</span>
-        <input disabled size="5" type="text" name="paginas" class="campofiltro" value="<?php echo $paginas; ?>">
+        <input disabled size="5" type="text" name="paginas" class="campopadrao" value="<?php echo $paginas; ?>">
     </td>
     <td align="left">
-        <input onclick="paginacao_avancar()"  type="image" width="25px"   src="<?php echo $icones; ?>direita.png"  title="Próxima" alt="Próxima" />
+        <input onclick="paginacao_avancar()"  type="image" width="25px"   src="<?php echo $icones; ?>direita.png"  title="Pr�xima" alt="Pr�xima" />
     </td>
 </tr>
 </table>

@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usuário tem permissõo para acessar este conteúdo
 require "login_verifica.php";
 if ($permissao_quiosque_vervendedores <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -35,11 +35,12 @@ $tpl->CAMPO_TAMANHO = "";
 $tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
-
-IF ($permissao_quiosque_definirvendedores == 1) {
+if ((($permissao_quiosque_definirvendedores == 1)&&($quiosque==$usuario_quiosque))||($usuario_grupo==1)){
 
     $tpl->LINK = "vendedores_cadastrar.php?quiosque=$quiosque&operacao=cadastrar";
     $tpl->BOTAO_NOME = "INCLUIR VENDEDOR";
+    
+    $tpl->block("BLOCK_AUTOFOCO");
     $tpl->block("BLOCK_RODAPE_BOTAO_MODELO");
 }
 
@@ -48,7 +49,7 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 $tpl->block("BLOCK_FILTRO");
 
 //LISTAGEM INICIO
-//Cabeçalho
+//Cabe�alho
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "ID";
@@ -165,7 +166,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl->block("BLOCK_LISTA");
 }
 
-//Se não tem tuplas então mostrar a frase padrão cujo informa que não há registros
+//Se n�o tem tuplas ent�o mostrar a frase padr�o cujo informa que n�o h� registros
 if (mysql_num_rows($query) == 0) {
     $tpl->block("BLOCK_LISTA_NADA");
 }

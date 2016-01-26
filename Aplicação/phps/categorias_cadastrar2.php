@@ -1,5 +1,5 @@
 <?php
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_categorias_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -22,7 +22,7 @@ $hora=date ("h:i:s");
 	<td width="35px"><img width="50px" src="<?php echo $icones;?>produtos.png" alt="" ></td>
 	<td valign="bottom">
 		<label class="titulo" > CATEGORIAS </label><br />
-		<label class="subtitulo"> CADASTRO/EDIÇÃO </label>
+		<label class="subtitulo"> CADASTRO/EDIÇÃ>
 	</td>
 </tr>
 </table>
@@ -41,7 +41,7 @@ if($codigo=="") //caso seja um cadastro novo fazer isso
 		$sqlerro=mysql_error();
 	}
 }
-else //Caso seja uma alteração de um registro fazer isso
+else //Caso seja uma altera��o de um registro fazer isso
 {
 	$sql = "UPDATE produtos_categorias SET 
 	cat_nome='$nome',

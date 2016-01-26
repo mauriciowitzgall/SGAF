@@ -16,7 +16,7 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "locais.png";
 $tpl_titulo->show();
 
-//Inicio da exclus√£o de entradas
+//Inicio da exclus„o de entradas
 $codigo = $_GET["codigo"];
 
 //Verifica se o item a ser excluido esta sendo referenciado em outras tabelas

@@ -1,6 +1,5 @@
 <?php
 require "login_verifica.php";
-
 //Executar limpeza de vendas incompletas
 //include "saidas_elimina_incompletas.php";
 
@@ -23,7 +22,7 @@ if (($usuario_grupo != 7) && ($usuario_grupo != 1) && ($usuario_grupo != 2)) {
         $tpl = new Template("templates/notificacao.html");
         $tpl->ICONES = $icones;
         $tpl->MOTIVO_COMPLEMENTO = "Houveram alterações no perfil de seu usuario!<br>
-        Isto normalmente acontece quando algum superior seu te adiciona ou remove dos seguinte cargos: presidente, supervisor, vendedor ou fornecedor.<br>
+        Isto normalmente acontece quando algum superior seu te adiciona ou remove dos seguinte cargos: presidente, supervisor, caixa ou fornecedor.<br>
         Para resolver isto, clique no icone 'Meu Perfil' que fica no cabeçalho ao lado do botão 'Sair' e altere o seu grupo de permissão.<br>
         Se mesmo assim não obter sucesso, favor contatar seu adminsitrador!";
         $tpl->block("BLOCK_ATENCAO");

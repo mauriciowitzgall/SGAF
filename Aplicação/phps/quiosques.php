@@ -139,16 +139,22 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "100px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "2";
-$tpl->CABECALHO_COLUNA_NOME = "VENDED.";
+$tpl->CABECALHO_COLUNA_NOME = "CAIXA";
 $tpl->block("BLOCK_LISTA_CABECALHO");
+
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "100px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "2";
 $tpl->CABECALHO_COLUNA_NOME = "TAXAS";
 $tpl->block("BLOCK_LISTA_CABECALHO");
+
+$tpl->CABECALHO_COLUNA_TAMANHO = "15px";
+$tpl->CABECALHO_COLUNA_COLSPAN = "";
+$tpl->CABECALHO_COLUNA_NOME = "TIPO NEG.";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
 $oper = 3;
 $oper_tamanho = 150;
-
 $tpl->CABECALHO_COLUNA_COLSPAN = "$oper";
 $tpl->CABECALHO_COLUNA_TAMANHO = "$oper_tamanho";
 $tpl->CABECALHO_COLUNA_NOME = "OPERAÇÕES";
@@ -208,6 +214,7 @@ if (!$query)
     die("Erro: " . mysql_error());
 while ($dados = mysql_fetch_assoc($query)) {
     $codigo = $dados["qui_codigo"];
+    $quiosque_coop = $dados["qui_cooperativa"];
     $cooperativa_nome = $dados["coo_abreviacao"];
     $nome = $dados["qui_nome"];
     $cidade_nome = $dados["cid_nome"];
@@ -250,22 +257,22 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl->LISTA_COLUNA2_VALOR = "($supervisores)";
     $tpl->block("BLOCK_LISTA_COLUNA2");
 
-    //Coluna Vendedores
+    //Coluna caixas
     $tpl->LISTA_COLUNA2_ALINHAMENTO = "right";
     $tpl->LISTA_COLUNA2_ALINHAMENTO2 = "left";
-    $sqltot = "SELECT * FROM quiosques_vendedores WHERE quiven_quiosque=$codigo";
+    $sqltot = "SELECT * FROM quiosques_caixas WHERE quicai_quiosque=$codigo";
     $querytot = mysql_query($sqltot);
     if (!$querytot)
         die("Erro: " . mysql_error());
-    $vendedores = mysql_num_rows($querytot);
-    if ($permissao_quiosque_vervendedores == 1) {
-        $tpl->LISTA_COLUNA2_LINK = "vendedores.php?quiosque=$codigo";
+    $caixas = mysql_num_rows($querytot);
+    if ($permissao_quiosque_vercaixas == 1) {
+        $tpl->LISTA_COLUNA2_LINK = "caixas.php?quiosque=$codigo";
         $tpl->DESABILITADO = "";
     } else {
         $tpl->LISTA_COLUNA2_LINK = "#";
         $tpl->DESABILITADO = "_desabilitado";
     }
-    $tpl->LISTA_COLUNA2_VALOR = "($vendedores)";
+    $tpl->LISTA_COLUNA2_VALOR = "($caixas)";
     $tpl->block("BLOCK_LISTA_COLUNA2");
 
 
@@ -287,6 +294,40 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl->LISTA_COLUNA2_VALOR = "($taxastot)";
     $tpl->block("BLOCK_LISTA_COLUNA2");
 
+    //Tipo de negociação    
+    $icone_tamanho = "18px";
+    $sql2 = "SELECT * FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$codigo";
+    $query2 = mysql_query($sql2);
+    if (!$query2)
+        die("Erro: 8" . mysql_error());
+    $tpl->LINK = "#";
+    $tpl->IMAGEM_TAMANHO = $icone_tamanho;
+    $tpl->IMAGEM_PASTA = "$icones";
+    $tipo_consignacao=0;
+    $tipo_revenda=0;
+    while ($dados2 = mysql_fetch_assoc($query2)) {
+        $tipo2 = $dados2["quitipneg_tipo"];
+        if ($tipo2 == 1)
+            $tipo_consignacao = 1;
+        if ($tipo2 == 2)
+            $tipo_revenda = 1;
+    }    
+    $tpl->IMAGEM_TITULO = "Consignação";
+    $tpl->IMAGEM_NOMEARQUIVO = "consignacao_desabilitado.png";
+    if ($tipo_consignacao == 1) {
+        $tpl->IMAGEM_NOMEARQUIVO = "consignacao.png";
+    }
+    $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+    $tpl->IMAGEM_TITULO = "Revenda";
+    $tpl->IMAGEM_NOMEARQUIVO = "revenda_desabilitado.png";
+    if ($tipo_revenda == 1) {
+        $tpl->IMAGEM_NOMEARQUIVO = "revenda.png";
+    }
+    $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+    $tpl->IMAGEM_ALINHAMENTO="center";
+    $tpl->block("BLOCK_LISTA_COLUNA_ICONES");
+
+
     //Coluna Operações    
     $tpl->ICONE_ARQUIVO = $icones;
     $tpl->CODIGO = $codigo;
@@ -298,7 +339,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     }
     //editar
 
-    if ((($permissao_quiosque_editar == 1) && ($codigo == $usuario_quiosque)) || ($usuario_grupo == 1)) {
+    if ((($permissao_quiosque_editar == 1) && ($codigo == $usuario_quiosque)) || (($usuario_grupo == 1) && ($usuario_cooperativa == $quiosque_coop))) {
         $tpl->LINK = "quiosques_cadastrar.php";
         $tpl->LINK_COMPLEMENTO = "operacao=editar";
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EDITAR");

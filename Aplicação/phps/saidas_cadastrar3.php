@@ -1,50 +1,83 @@
 <?php
+
 require "login_verifica.php";
 if ($permissao_saidas_cadastrar <> 1) {
-    header("Location: permissoes_semacesso.php"); 
+    header("Location: permissoes_semacesso.php");
     exit;
 }
 
 $tipopagina = "saidas";
 include "includes.php";
 
-$tiposai=$_GET["tiposai"];
-$passo = $_POST["passo"];
-$saida = $_POST["saida"];
-$valbru = $_POST["valbru2"];
-$descper = $_POST["descper2"];
-$descval = $_POST["descval2"];
-$total = $_POST["total2"];
-$dinheiro = $_POST["dinheiro2"];
-$troco = $_POST["troco2"];
-$troco_devolvido = $_POST["troco_devolvido"];
+$tiposai = $_REQUEST["tiposai"];
+$passo = $_REQUEST["passo"];
+$saida = $_REQUEST["saida"];
+//Verifica tipo da entrada, se é devolução ou venda
+$sql_f = "SELECT sai_tipo FROM saidas WHERE sai_codigo=$saida";
+if (!$query_f = mysql_query($sql_f))
+    die("Erro F: " . mysql_error());
+$dados_f = mysql_fetch_array($query_f);
+$tipo = $dados_f["sai_tipo"];
 
-
-//Elimina os cifões de dinheiro e troca as , por .
-$valbru = dinheiro_para_numero($valbru);
-$descper = dinheiro_para_numero($descper);
-$descval = dinheiro_para_numero($descval);
-$total = dinheiro_para_numero($total);
-$dinheiro = dinheiro_para_numero($dinheiro);
-$troco = dinheiro_para_numero($troco);
-$troco_devolvido = dinheiro_para_numero($troco_devolvido);
-
-
-
-//Calcula o valor do desconto ou acréscimo forçado
-if ($troco_devolvido<0) {
-    $troco_devolvido=0;
-}
-$forcado=$troco-$troco_devolvido;
-if ($forcado>0) {
-    $forcadodesc=0;
-    $forcadoacre=$forcado;
+if ($tipo == 1) {
+    $valbru = $_REQUEST["valbru2"];
+    $valbru = number_format($valbru, 2);
 } else {
-    $forcadodesc=$forcado*-1;     
-    $forcadoacre=0;
+    $valbru = dinheiro_para_numero($_REQUEST["valbru2"]);
+    $valbru = number_format($valbru, 2);
 }
-//Calcula o valor liquido total da saída
-$totalliq=$total+$forcadoacre-$forcadodesc;
+
+
+$descper = $_REQUEST["descper2"];
+$descval = $_REQUEST["descval2"];
+$total = $_REQUEST["total2"];
+$metodopag = $_REQUEST["metodopag2"];
+
+//print_r($_REQUEST);
+
+$areceber = $_REQUEST["areceber2"];
+$dinheiro = $_REQUEST["dinheiro2"];
+if ($areceber == 1)
+    $troco = 0;
+else
+    $troco = $_REQUEST["troco2"];
+$troco_devolvido = number_format(dinheiro_para_numero($_REQUEST["troco_devolvido"]), 2, '.', '');
+
+//print_r($_REQUEST);
+//Calcula o valor do desconto ou acr�scimo for�ado
+if ($troco_devolvido == "")
+    $troco_devolvido = 0;
+if ($troco == "")
+    $troco = 0;
+if ($total == "")
+    $total = 0;
+
+$forcado = number_format($troco - $troco_devolvido, 2, '.', '');
+if ($forcado > 0) {
+    $forcadodesc = 0;
+    $forcadoacre = $forcado;
+} else {
+    $forcadodesc = $forcado * -1;
+    $forcadoacre = 0;
+}
+//Calcula o valor liquido total da Sa�da
+$totalliq = $total + $forcado;
+
+/*
+  echo "<br>valbru=$valbru<br>";
+  echo "descper=$descper<br>";
+  echo "descval=$descval<br>";
+  echo "total=$total<br>";
+  echo "dinheiro=$dinheiro<br>";
+  echo "troco=$troco<br>";
+
+  echo "trocodevolvido=$troco_devolvido<br>";
+  echo "forcado=$forcado<br>";
+  echo "totalliq=$totalliq<br>";
+ */
+
+
+
 
 
 //Template de Título e Sub-título
@@ -65,33 +98,43 @@ $tpl_titulo->show();
 //echo "Valor Recebido: $dinheiro <br>";
 //echo "Troco: $troco <br>";
 //echo "Troco Devolvido: $troco_devolvido <br>";
-//echo "Acrescimo Forçado: $forcadoacre <br>";
-//echo "Desconto Forçado: $forcadodesc <br>";
+//echo "Acrescimo For�ado: $forcadoacre <br>";
+//echo "Desconto For�ado: $forcadodesc <br>";
 //echo "Total Liquido: $totalliq <br>";
-  
-//Estrutura da notificação
+//Estrutura da notifica��o
 $tpl_notificacao = new Template("templates/notificacao.html");
 $tpl_notificacao->ICONES = $icones;
-if ($tiposai=="3") 
+if ($tiposai == "3")
     $tpl_notificacao->DESTINO = "saidas_devolucao.php";
 else
-   $tpl_notificacao->DESTINO = "saidas.php";
+    $tpl_notificacao->DESTINO = "saidas.php";
+
+//Se for saida do tipo Venda (não devolução)
+if ($tipo == 1) {
+    $sql_filtro = " 
+       sai_descontopercentual='$descper',
+       sai_descontovalor='$descval',
+       sai_valorecebido='$dinheiro',
+       sai_troco='$troco',
+       sai_trocodevolvido='$troco_devolvido',
+       sai_descontoforcado='$forcadodesc',
+       sai_acrescimoforcado='$forcadoacre',
+       sai_areceber=$areceber, 
+       sai_metpag='$metodopag',
+   ";
+}
+
 
 $sql = "
 UPDATE
     saidas
 SET
-    sai_totalbruto='$valbru',
-    sai_descontopercentual='$descper',
-    sai_descontovalor='$descval',
-    sai_totalcomdesconto='$total',
-    sai_valorecebido='$dinheiro',
-    sai_troco='$troco',
-    sai_trocodevolvido='$troco_devolvido',
-    sai_descontoforcado='$forcadodesc',
-    sai_acrescimoforcado='$forcadoacre',
+    sai_totalbruto='$valbru',    
+    sai_totalcomdesconto='$total',  
     sai_totalliquido='$totalliq',
+    $sql_filtro
     sai_status=1
+
 WHERE
     sai_codigo=$saida
 ";

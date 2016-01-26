@@ -1,118 +1,161 @@
-<script type="text/javascript" src="js/jquery.price_format.1.5.js"></script>
 <script type="text/javascript">
-
-    $(document).ready(function(){
-        var manter =$("input[name=produtomanter]").val();
-        if (manter='on') {
-            valida_produto ();
+    window.onload = function() {
+        var manter = $("input[name=produtomanter]").val();
+        if (manter = 'on') {
+            valida_produto();
             document.forms["form1"].qtd.focus();
         }
-        desabilita_campos ();  
+        desabilita_campos();
         verifica_incluir()
-    });    
-    
-    function valida_produto () {
-        verifica_incluir()
-        $.post("entradas_valorunitario2.php",{
-            produto:$("select[name=produto]").val() , 
-            fornecedor:$("select[name=fornecedor]").val() ,
-            entrada:$("input[name=entrada2]").val() 
-        }, function(valor) {    
-            //alert(valor);
-            if (valor=="naoestanalista") {                    
-                document.forms["form1"].valuni.disabled=false;
-                desabilita_campos ();
-                //alert('não esta na lista');
-                $.post("entradas_valorunitario.php",{
-                    produto:$("select[name=produto]").val() , 
-                    fornecedor:$("select[name=fornecedor]").val() 
-                }, function(valor2) {                
-                    //alert(valor2);
-                    var quebra=valor2.split("|");
-                    var valuni=quebra[0];
-                    $("input[name=valuni]").val(valuni).priceFormat({prefix: 'R$ ',centsSeparator: ',',thousandsSeparator: '.'}); 
-                    $("input[name=valuni2]").val(valuni).priceFormat({prefix: '',centsSeparator: ',',thousandsSeparator: '.'}); 
-                    $("input[name=validade]").val("");
-                    $("input[name=validade2]").val("");  
-                });                     
+    };
 
-            } else {                    
+function mascara_percent() {
+        $('#percent').priceFormat({
+            prefix: '',
+            sufix: '%',
+            centsSeparator: ',',
+            centsLimit: 2,
+            thousandsSeparator: ''
+        });    
+        $('#percent2').priceFormat({
+            prefix: '',
+            centsSeparator: ',',
+            centsLimit: 2,
+            thousandsSeparator: ''
+        });    
+    
+}
+
+    function valida_produto() {
+        verifica_incluir()
+        $("input[name=valuni]").val("").priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
+        $("input[name=valuni]").disabled = true;
+        $("input[name=valunicusto]").val("").priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
+        $("input[name=valunicusto]").disabled = true;
+        $("input[name=percent]").disabled = true;
+        $("input[name=percent2]").disabled = true;
+        $("input[name=qtd]").val("");
+        $("input[name=qtd]").disabled = true;
+        $("input[name=validade]").val("");
+        $("input[name=validade]").disabled = true;
+        $("input[name=local]").val("");        
+        $("span[name=tipocontagem]").html("");
+        $("span[name=qtdtipcon]").html("");
+
+        $.post("entradas_valorunitario2.php", {
+            produto: $("select[name=produto]").val(),
+            fornecedor: $("select[name=fornecedor]").val(),
+            entrada: $("input[name=entrada2]").val()
+        }, function(valor) {
+            //alert(valor);
+            if (valor == "naoestanalista") {
+                document.forms["form1"].valuni.disabled = false;
+                document.forms["form1"].validade.disabled = false;
+                //Se o campo está oculto dá pau no javascript a partir o ponto que o sistema não consegue localizar o campo                
+                document.forms["form1"].valunicusto.disabled = false;
+                desabilita_campos();
+                //alert('n�o esta na lista');
+                $.post("entradas_valorunitario.php", {
+                    produto: $("select[name=produto]").val(),
+                    fornecedor: $("select[name=fornecedor]").val()
+                }, function(valor2) {
+                    var quebra = valor2.split("|");
+                    
+                    var valuni = quebra[0];
+                    var valunicusto = quebra[2];
+                    $("input[name=valuni]").val(valuni).priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
+                    $("input[name=valuni2]").val(valuni).priceFormat({prefix: '', centsSeparator: ',', thousandsSeparator: '.'});
+                    $("input[name=validade]").val("");
+                    $("input[name=validade2]").val("");
+                    $("input[name=valunicusto]").val(valunicusto).priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
+                    $("input[name=valunicusto2]").val(valunicusto).priceFormat({prefix: '', centsSeparator: ',', thousandsSeparator: '.'});
+                });
+
+            } else {
                 //alert(valor);
-                var quebra=valor.split("|");
-                var valuni=quebra[0];
-                var validade=quebra[1]; 
-                if (validade=='00/00/0000') {
-                    validade="";
+                var quebra = valor.split("|");
+                var valuni = quebra[0];
+                var validade = quebra[1];
+                //alert(validade);
+                if (validade == '0000-00-00') {
+                    validade = "";
                 }
-                $("input[name=valuni]").val(valuni).priceFormat({prefix: 'R$ ',centsSeparator: ',',thousandsSeparator: '.'}); 
-                $("input[name=valuni2]").val(valuni).priceFormat({prefix: '',centsSeparator: ',',thousandsSeparator: '.'}); 
-             
+                var valunicusto = quebra[2];
+                $("input[name=valuni]").val(valuni).priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
+                $("input[name=valuni2]").val(valuni).priceFormat({prefix: '', centsSeparator: ',', thousandsSeparator: '.'});
                 $("input[name=validade]").val(validade);
-                $("input[name=validade2]").val(validade);                
-                document.forms["form1"].valuni.disabled=true;
-                document.forms["form1"].validade.disabled=true;
+                $("input[name=validade2]").val(validade);
+                $("input[name=valunicusto]").val(valunicusto).priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
+                $("input[name=valunicusto2]").val(valunicusto).priceFormat({prefix: '', centsSeparator: ',', thousandsSeparator: '.'});
+
+                document.forms["form1"].valuni.disabled = true;
+                document.forms["form1"].valunicusto.disabled = true;
+                document.forms["form1"].percent.disabled = true;
+                document.forms["form1"].percent2.disabled = true;                
+                document.forms["form1"].validade.disabled = true;
                 //alert('esta na lista');
 
-            }                
-        });          
+            }
+        });
 
-        $.post("entradas_tipcon.php",{produto:$("select[name=produto]").val()},function(valor){
+        $.post("entradas_tipcon.php", {produto: $("select[name=produto]").val()}, function(valor) {
             $("span[name=tipocontagem]").html(valor);
         });
-        
 
-        $.post("entradas_qtdtipcon.php",{produto:$("select[name=produto]").val()},function(valor){
+
+        $.post("entradas_qtdtipcon.php", {produto: $("select[name=produto]").val()}, function(valor) {
             $("span[name=qtdtipcon]").html(valor);
-        }); 
+        });
 
         $("input[name=qtd]").val("");
 
-        desabilita_campos ();        
+        desabilita_campos();
     }
-    
-    function desabilita_campos () {
+
+    function desabilita_campos() {
         //alert("entrou");
-        var produto= $("select[name=produto]").val();
-        if (produto!='') {
-            document.forms["form1"].qtd.disabled=false;
-            document.forms["form1"].valuni.disabled=false;
-            document.forms["form1"].validade.disabled=false;
-            document.forms["form1"].local.disabled=false;
+        var produto = $("select[name=produto]").val();
+        if (produto != '') {
+            document.forms["form1"].qtd.disabled = false;
+            document.forms["form1"].valuni.disabled = false;
+            document.forms["form1"].validade.disabled = false;
+            document.forms["form1"].local.disabled = false;
+            document.forms["form1"].valunicusto.disabled = false;
+            document.forms["form1"].percent.disabled = false;
+            document.forms["form1"].percent2.disabled = false;
             //alert("Habilita");
         }
         else {
-            document.forms["form1"].qtd.disabled=true;
-            document.forms["form1"].valuni.disabled=true;
-            document.forms["form1"].validade.disabled=true;
-            document.forms["form1"].validade.value="";
-            document.forms["form1"].local.disabled=true;
+            document.forms["form1"].qtd.disabled = true;
+            document.forms["form1"].valuni.disabled = true;
+            document.forms["form1"].validade.disabled = true;
+            document.forms["form1"].validade.value = "";
+            document.forms["form1"].local.disabled = true;
+            document.forms["form1"].valunicusto.disabled = true;
+            document.forms["form1"].percent.disabled = true;
+            document.forms["form1"].percent2.disabled = true;
             //alert("desabilitar");            
-        } 
+        }
     }
 
     function verifica_incluir() {
-        var valoruni= $("input[name=valuni]").val();
-        var quant= $("input[name=qtd]").val(); 
+        var valoruni = $("input[name=valuni]").val();
+        var quant = $("input[name=qtd]").val();
         //alert (quant);
         //alert (valoruni);
-        
-        if ((valoruni=="")||(valoruni=='R$ 0,00')||(valoruni=='R$ 0,0')||(quant=='0')||(quant=='')||(quant=='0,00')) {
-            document.forms["form1"].incluir.disabled=true;            
+
+        if ((valoruni == "") || (valoruni == 'R$ 0,00') || (valoruni == 'R$ 0,0') || (quant == '0') || (quant == '') || (quant == '0,00')) {
+            document.forms["form1"].incluir.disabled = true;
             //alert('desabilita');
         } else {
-            document.forms["form1"].incluir.disabled=false;
+            document.forms["form1"].incluir.disabled = false;
             //alert('habilita');
-        }  
-        
+        }
+
     }
 
+
 </script>
-
-<link href="js/_style/jquery.click-calendario-1.0.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="js/_scripts/jquery.click-calendario-1.0-min.js"></script>		
-<script type="text/javascript" src="js/_scripts/exemplo-calendario.js"></script>
-<script type="text/javascript" src="funcoes.js"></script>
-
 
 <table summary="" class="tabela1" border="0">
     <tr>
@@ -130,15 +173,64 @@
     <table summary="" border="0" class="tabela1" cellpadding="4">
         <!--  BEGIN BLOCK_SELECT_ENTRADA -->
         <tr>
-            <td align="right" width="200px"><b>Entrada:<label class="obrigatorio"></label></b></td>
-            <td><input type="text" size="8" required name="entrada_codigo" class="campo1" disabled value="{ENTRADA}"> </td>
+            <td class="fun" align="right" width="200px"><b>Entrada:<label class="obrigatorio"></label></b></td>
+            <td class="fundo1" ><input type="text" size="8" required name="entrada_codigo" class="campopadrao" disabled value="{ENTRADA}"> </td>
         </tr>
         <!--  END BLOCK_SELECT_ENTRADA -->
+
+        <!--  BEGIN BLOCK_DATAHORA -->
+        <tr>
+            <td align="right"><b>Data: <label class="obrigatorio"></label></b></td>
+            <td class="fundo1" ><input type="text" size="8" required name="data1" class="campopadrao" disabled value="{ENTRADAS_DATA}"> </td>
+        </tr>    
+        <tr>
+            <td align="right"><b>Hora: <label class="obrigatorio"></label></b></td>
+            <td class="fundo1" ><input type="text" size="8" required name="hora1" class="campopadrao" disabled value="{ENTRADAS_HORA}"></td>
+        </tr> 
+        <!--  END BLOCK_DATAHORA --> 
+
+
+        <!--  BEGIN BLOCK_SELECT_TIPONEGOCIACAO -->
+        <tr>
+            <td align="right" width="200px"><b>Tipo de Negociação: <label class="obrigatorio"></label></b></td>
+            <td class="fundo1" >
+                <select autofocus="1" name="tiponegociacao" onchange="popula_tipopessoa(this.value);" class="campopadrao campo_tamanho_6" {SELECT_OBRIGATORIO} {SELECT_DESABILITADO} >
+                    <option value="">Selecione</option>	
+                    <!--  BEGIN BLOCK_OPTIONS_TIPONEGOCIACAO -->
+                    <option value="{OPTION_VALOR}" {OPTION_SELECIONADO} >{OPTION_TEXTO}</option>
+                    <!--  END BLOCK_OPTIONS_TIPONEGOCIACAO -->
+                </select>
+                <input type="hidden" name="tiponegociacao2" value="{TIPONEGOCIACAO}">
+            </td>            
+        </tr>
+        <!--  END BLOCK_SELECT_TIPONEGOCIACAO -->        
+
+
+        <!--  BEGIN BLOCK_SELECT_TIPOPESSOA -->
+        <tr>
+            <td align="right" width="200px"><b>Tipo de Pessoa: <label class="obrigatorio"></label></b></td>
+            <td class="fundo1" >
+                <select autofocus="" name="tipopessoa" class="campopadrao campo_tamanho_6" {SELECT_TIPOPESSOA_OBRIGATORIO} {SELECT_TIPOPESSOA_DESABILITADO} onchange="popula_fornecedores(this.value);">
+                    <!-- BEGIN BLOCK_OPTIONPADRAO -->
+                    <option value="">Todos</option>	
+                    <!-- END BLOCK_OPTIONPADRAO -->
+                    <!-- BEGIN BLOCK_OPTIONPADRAO2 -->
+                    <option value=""></option>	
+                    <!-- END BLOCK_OPTIONPADRAO2 -->
+                    <!--  BEGIN BLOCK_OPTIONS_TIPOPESSOA -->
+                    <option value="{OPTION_TIPOPESSOA_VALOR}" {OPTION_TIPOPESSOA_SELECIONADO} >{OPTION_TIPOPESSOA_TEXTO}</option>
+                    <!--  END BLOCK_OPTIONS_TIPOPESSOA -->
+                </select>
+                <input type="hidden" name="tipopessoa2" value="{TIPOPESSOA}">
+            </td>            
+        </tr>
+        <!--  END BLOCK_SELECT_TIPOPESSOA -->
+        <!--  BEGIN BLOCK_SELECT_FORNECEDOR -->
         <tr>
             <td align="right" width="200px"><b>Fornecedor: <label class="obrigatorio"></label></b></td>
-            <td>
-                <select autofocus="1" name="fornecedor" class="campo1" {SELECT_OBRIGATORIO} {SELECT_DESABILITADO} >
-                        <option value="">Selecione</option>	
+            <td class="fundo1" >
+                <select autofocus="1" name="fornecedor" class="campopadrao campo_tamanho_6" {SELECT_OBRIGATORIO} {SELECT_DESABILITADO} >
+                    <option value=""></option>	
                     <!--  BEGIN BLOCK_OPTIONS_FORNECEDOR -->
                     <option value="{OPTION_VALOR}" {OPTION_SELECIONADO} >{OPTION_TEXTO}</option>
                     <!--  END BLOCK_OPTIONS_FORNECEDOR -->
@@ -146,12 +238,13 @@
                 <input type="hidden" name="fornecedor2" value="{FORNECEDOR}">
             </td>            
         </tr>
+        <!--  END BLOCK_SELECT_FORNECEDOR -->
         <!--  BEGIN BLOCK_SUPERVISOR -->
         <tr>
             <td align="right" width="200px"><b>Supervisor: <label class="obrigatorio"></label></b></td>
-            <td>
-                <select autofocus="1" name="fornecedor" class="campo1"  {SELECT_OBRIGATORIO} {SELECT_DESABILITADO} >
-                        <option value="">Selecione</option>	
+            <td class="fundo1" >
+                <select autofocus="1" name="supervisor" class="campopadrao campo_tamanho_6"  {SELECT_OBRIGATORIO} {SELECT_DESABILITADO} >
+                    <option value="">Selecione</option>	
                     <!--  BEGIN BLOCK_OPTIONS_SUPERVISOR -->
                     <option value="{OPTION_VALOR}" {OPTION_SELECIONADO} >{OPTION_TEXTO}</option>
                     <!--  END BLOCK_OPTIONS_SUPERVISOR -->
@@ -161,65 +254,88 @@
         </tr>
         <!--  END BLOCK_SUPERVISOR -->      
 
-        <!--  BEGIN BLOCK_DATAHORA -->
-        <tr>
-            <td align="right"><b>Data: <label class="obrigatorio"></label></b></td>
-            <td><input type="text" size="8" required name="data1" class="campo1" disabled value="{ENTRADAS_DATA}"> </td>
-        </tr>    
-        <tr>
-            <td align="right"><b>Hora: <label class="obrigatorio"></label></b></td>
-            <td><input type="text" size="8" required name="hora1" class="campo1" disabled value="{ENTRADAS_HORA}"></td>
-        </tr> 
-        <!--  END BLOCK_DATAHORA -->      
+
 
 
         <!--  BEGIN BLOCK_BOTAO_PASSO1 -->
         <tr>
             <td>&nbsp;</td>
-            <td>
+            <td class="fundo1" >
                 <input type="hidden" name="passo" value="2">
                 <input type="submit" value="CONTINUAR" class="botao fonte3">
             </td>
         </tr>
         <!--  END BLOCK_BOTAO_PASSO1 -->
 
-        <!-- Após a geração da entrada é necessário enviar o codigo da entrada novamente para o php   -->
+        <!-- Ap�s a gera��o da entrada � necess�rio enviar o codigo da entrada novamente para o php   -->
         <input type="hidden" name="entrada" value="{ENTRADA}">
 
         <!--  BEGIN BLOCK_PASSO2 -->
         <tr>
+            <td align="right" width="200px"><b>Marca: <label class="obrigatorio"></label></b></td>
+            <td class="fundo1" >
+                <select name="marca" onchange="popula_produtos_pelamarca(this.value);" id="marca" class="campopadrao campo_tamanho_6" {SELECT_MARCA_OBRIGATORIO} {SELECT_MARCA_DESABILITADO} >
+                    <option value="todas">Todas</option>	
+                    <!--  BEGIN BLOCK_OPTIONS_MARCA -->
+                    <option value="{OPTION_MARCA_VALOR}" {OPTION_MARCA_SELECIONADO} >{OPTION_MARCA_TEXTO}</option>
+                    <!--  END BLOCK_OPTIONS_MARCA -->
+                </select>
+            </td>
+        </tr>
+        <tr>
             <td align="right" width="200px"><b>Produto: <label class="obrigatorio"></label></b></td>
-            <td>
-                <select autofocus="2" name="produto" onchange=" valida_produto()"   id="{SELECT2_NOME}" class="campo1" {SELECT2_OBRIGATORIO} {SELECT2_DESABILITADO} >
-                        <option value="">Selecione</option>	
+            <td class="fundo1" >
+                <select autofocus="2" name="produto" onchange=" valida_produto()"   id="{SELECT2_NOME}" class="campopadrao campo_tamanho_6" {SELECT2_OBRIGATORIO} {SELECT2_DESABILITADO} >
+                    <option value="">Selecione</option>	
                     <!--  BEGIN BLOCK_OPTIONS_PRODUTO -->
                     <option value="{OPTION2_VALOR}" {OPTION2_SELECIONADO} >{OPTION2_TEXTO}</option>
                     <!--  END BLOCK_OPTIONS_PRODUTO -->
                 </select>
-                <input type="checkbox" name="produtomanter" {PRODUTOMANTER_HABILITADO}> <span>Manter</span>
+                <input type="checkbox" name="produtomanter" {PRODUTOMANTER_HABILITADO} class="css-checkbox" id="checkbox4"  title="Manter o produto selecionado">
             </td>
         </tr>
         <tr>
             <td align="right"><b>Quantidade: <label class="obrigatorio"></label></b></td>
-            <td><input type="text" size="8" required name="qtd" id="qtd" onclick="this.select()"  onkeyup="mascara_pesoqtd()" class="campo1" autocomplete="off" >&nbsp;<span name="tipocontagem" class="fonte1"></span></td>
+            <td class="fundo1"> <input type="text" size="6" required  name="qtd" id="qtd" onclick="this.select()"  onkeyup="mascara_pesoqtd()" class="campopadrao campo_tamanho_3 campo_qtd" autocomplete="off" >&nbsp;<span name="tipocontagem" class="dicacampo"></span></td>
         </tr>
+        <!--  BEGIN BLOCK_CAMPO_VALCUSTO -->
         <tr>
-            <td align="right"><b>Valor Unitário: <label class="obrigatorio"></label></b></td>
-            <td><input type="text" size="8" required name="valuni" class="campo1" autocomplete="off" onclick="this.select()" onkeyup="verifica_incluir()" >&nbsp;<span name="qtdtipcon" class="fonte1" autocomplete="off" ></span></td>
+            <td align="right"><b>Valor Unitário Custo: <label class="obrigatorio"></label></b></td>
+            <td class="fundo1" >
+                <input type="text" size="8" required  name="valunicusto" class="campopadrao campo_tamanho_3 campo_qtd" autocomplete="off" onclick="this.select()" onkeyup="" onblur="calcula_valor_percent();">&nbsp;
+                <!-- <span name="qtdtipcon" class="dicacampo" autocomplete="off" ></span> -->
+                <input id="percent2" name="percent2" type="text" value="" class="campopadrao campo_tamanho_2  campo_qtd" size="5" onblur="calcula_valor_venda();" onkeyup="mascara_percent();" onclick="this.select()" >
+                <span name="" class="dicacampo" autocomplete="off" >%</span>            
+            </td>
+        </tr>
+        <!--  END BLOCK_CAMPO_VALCUSTO -->
+        <tr>
+            <td align="right"><b>Valor Unitário Venda: <label class="obrigatorio"></label></b></td>
+            <td class="fundo1" >
+                <input type="text" size="8" required  name="valuni" class="campopadrao campo_tamanho_3  campo_qtd" autocomplete="off" onclick="this.select()" onkeyup="verifica_incluir();" onblur="calcula_valor_percent();">&nbsp;
+                <!-- <span name="qtdtipcon" class="dicacampo" autocomplete="off" ></span> -->
+                <!--  BEGIN BLOCK_PERCENT -->
+                <input id="percent" name="percent" type="text" value="" class="campopadrao campo_tamanho_2  campo_qtd" size="5" onblur="calcula_valor_unitario();" onkeyup="mascara_percent();"  onclick="this.select()" >
+                <span name="" class="dicacampo" autocomplete="off" >%</span>
+                <!--  END BLOCK_PERCENT -->
+            </td>
         </tr>
         <tr>
             <td align="right"><b>Validade: <label class="obrigatorio"></label></b></td>
-            <td><input type="text" size="10" maxlength="10" name="validade" id="data_1" class="campo1"  onclick="this.select()" >
+            <td class="fundo1" >
+                <input type="date" size="" maxlength="" max="{VALIDADE_MAX}" min="{VALIDADE_MIN}" name="validade" id="validade" class="campopadrao campo_tamanho_5"  onclick="" onblur="calcula_saldovalidade(this.value);" disabled="true">
+                <span name="saldovalidade" id="saldovalidade" class="dicacampo" ></span>
+            </td>
         </tr>
         <tr>
             <td align="right"><b>Local/Prateleira: <label class="obrigatorio"></label></b></td>
-            <td><input type="text" size="25" maxlength="" name="local" id="local" class="campo1"  onclick="this.select()" >
+            <td class="fundo1" ><input type="text" size="25" maxlength="" name="local" id="local" class="campopadrao campo_tamanho_6"  onclick="this.select()" >
         </tr>
 
         <!--  BEGIN BLOCK_BOTAO_PASSO2 -->
         <tr>
             <td>&nbsp;</td>
-            <td>
+            <td  class="" >
                 <input type="hidden" name="passo" value="3">
                 <input type="submit" id="incluir" name="incluir" value="INCLUIR PRODUTO" class="botao fonte3" >
             </td>
@@ -236,12 +352,22 @@
     <table border="1" class="tabela1" cellpadding="4" width="100%">
         <tr valign="middle" class="tabelacabecalho1">
             <td width="">Nº</td>
-            <td width="150px">PRODUTOS</td>
-            <td width="" align="center" colspan="2">QUANTIDADE</td>	
-            <td width="" align="center">VALOR UNIT.</td>
-            <td width="100px">LOCAL</td>
-            <td width="" align="center">VALIDADE</td>
-            <td width="" align="center">VALOR TOTAL</td>	
+            <td width="330px" colspan="2">PRODUTO</td>
+            <td width="100px" align="center" colspan="2">QUANTIDADE</td>	
+            <!-- BEGIN BLOCK_CUSTO_CABECALHO -->
+            <td width="" align="center">VALOR UNIT. CUSTO</td>          
+            <td width="" align="center">VALOR TOT. CUSTO</td> 
+            <!-- END BLOCK_CUSTO_CABECALHO -->
+            <!-- BEGIN BLOCK_VENDA_VALUNI_CABECALHO -->
+            <td width="" align="center">VALOR UNIT. VENDA</td>          
+            <!-- END BLOCK_VENDA_VALUNI_CABECALHO -->
+            <!-- BEGIN BLOCK_VENDA_CABECALHO -->            
+            <td width="" align="center">VALOR TOT. VENDA</td>          
+            <!-- END BLOCK_VENDA_CABECALHO -->            
+            <!-- BEGIN BLOCK_LUCRO_CABECALHO -->
+            <td width="" align="center">LUCRO TOT. PREVISTO</td> 
+            <!-- END BLOCK_LUCRO_CABECALHO -->
+            <td width="" align="center">VALIDADE</td> 
             <!--  BEGIN BLOCK_CABECALHO_OPERACAO -->
             <td width="70px" colspan="{OPER_COLSPAN}">OPER.</td>
             <!--  END BLOCK_CABECALHO_OPERACAO -->
@@ -250,25 +376,38 @@
         <!--  BEGIN BLOCK_LISTA -->
         <tr class="lin">
             <td>{ENTRADAS_NUMERO}</td>
+            <td align="right" width="30px">{ENTRADAS_PRODUTO}</td>
             <td>{ENTRADAS_PRODUTO_NOME}</td>
             <td align="right">{ENTRADAS_QTD}</td>
             <td align="left">{SIGLA}</td>
-            <td align="right">{ENTRADAS_VALORUNI}</td>
-            <td>{ENTRADAS_LOCAL}</td>
+            <!-- BEGIN BLOCK_CUSTO -->
+            <td align="right">{ENTRADAS_VALORUNI_CUSTO}</td>
+            <td align="right">{ENTRADAS_VALOR_TOTAL_CUSTO}</td>
+            <!-- END BLOCK_CUSTO -->
+            <!-- BEGIN BLOCK_VENDA_VALUNI -->
+            <td align="right">{ENTRADAS_VALORUNI}</td>    
+            <!-- END BLOCK_VENDA_VALUNI -->
+            <!-- BEGIN BLOCK_VENDA -->
+            <td align="right">{ENTRADAS_VENDA_TOTAL}</td>                        
+            <!-- END BLOCK_VENDA -->
             <td align="right">{ENTRADAS_VALIDADE}</td>
-            <td align="right">{ENTRADAS_VALOR_TOTAL}</td>
+            <!-- BEGIN BLOCK_LUCRO -->
+            <td align="right">{ENTRADAS_VALOR_LUCRO}</td>
+            <!-- END BLOCK_LUCRO -->
             <!--  BEGIN BLOCK_LISTA_OPERACAO -->
             <!--  BEGIN BLOCK_LISTA_OPERACAO_ETIQUETAS -->
             <td align="center" class="fundo1"> 
                 <a href="{IMPRIMIR_LINK}" target="_blank" class="link1">
-                    <img  width="18px"  src="{IMPRIMIR}"  title="Imprimir Etiqueta" alt="Imprimir Etiqueta" />
+                    <img  width="15px"  src="{IMPRIMIR}"  title="Imprimir Etiqueta" alt="Imprimir Etiqueta" />
                 </a>
             </td>
             <!--  END BLOCK_LISTA_OPERACAO_ETIQUETAS -->
             <!--  BEGIN BLOCK_LISTA_OPERACAO_EXCLUIR -->
             <td align="center" class="fundo1">
-                <a href="entradas_cadastrar.php?fornecedor={FORNECEDOR}&cancelar=1&passo=3&entrada={ENTRADA}&produto={PRODUTO}&item_numero={ENTRADAS_NUMERO}" class="link1">
-                    <img  width="18px"  src="{ICONES_CAMINHO}remover.png"  title="Remover" alt="Remover" />
+                <!--  BEGIN BLOCK_LISTA_OPERACAO_EXCLUIR_LINK -->
+                <a href="entradas_cadastrar.php?fornecedor={FORNECEDOR}&cancelar=1&passo=3&entrada={ENTRADA}&produto={PRODUTO}&item_numero={ENTRADAS_NUMERO}&tiponegociacao={TIPONEGOCIACAO}" class="link1">
+                <!--  END BLOCK_LISTA_OPERACAO_EXCLUIR_LINK -->                    
+                    <img  width="15px" src="{ICONES_CAMINHO}{ICONES_ARQUIVO}"  title="{ICONES_TITULO}" alt="Remover" />
                 </a>
             </td>
             <!--  END BLOCK_LISTA_OPERACAO_EXCLUIR -->
@@ -277,7 +416,11 @@
         <!--  END BLOCK_LISTA -->
 
         <!--  BEGIN BLOCK_LISTA_NADA -->
-        <tr><td colspan="11" align="center" class="errado">Nenhum produto na lista!</td></tr>
+        <tr>
+            <td colspan="11" align="center" class="errado">
+                Nenhum produto na lista!
+            </td>
+        </tr>
         <!--  END BLOCK_LISTA_NADA -->
         <tr class="tabelarodape1">
             <td> </td>
@@ -285,9 +428,20 @@
             <td> </td>
             <td> </td>
             <td> </td>
+            <!-- BEGIN BLOCK_CUSTO_RODAPE -->
             <td> </td>
+            <td align="right">{TOTAL_CUSTO}</td>
+            <!-- END BLOCK_CUSTO_RODAPE -->
+            <!-- BEGIN BLOCK_VENDA_VALUNI_RODAPE -->
+            <td> </td>            
+            <!-- END BLOCK_VENDA_VALUNI_RODAPE -->
+            <!-- BEGIN BLOCK_VENDA_RODAPE -->
+            <td align="right">{TOTAL_VENDA}</td>
+            <!-- END BLOCK_VENDA_RODAPE -->
+            <!-- BEGIN BLOCK_LUCRO_RODAPE -->
+            <td align="right">{TOTAL_LUCRO}</td>
+            <!-- END BLOCK_LUCRO_RODAPE -->
             <td> </td>
-            <td align="right">{TOTAL_ENTRADA}</td>
             <!--  BEGIN BLOCK_LISTA_NADA_OPERACAO -->            
             <td> </td>
             <!--  END BLOCK_LISTA_NADA_OPERACAO -->
@@ -295,22 +449,25 @@
 
     </table>
     <br>
-    
+
     <!-- BEGIN BLOCK_HR -->
     <hr >
     <!-- END BLOCK_HR -->
-    
+
     <input type="hidden" name="entrada2" value="{ENTRADA}">
-    <!-- este valor é alimentado pelo javascript, é necessário para quando há mais de um produto na lista de produtos porque o campo fica desabilitado-->
+    <!-- este valor � alimentado pelo javascript, � necess�rio para quando h� mais de um produto na lista de produtos porque o campo fica desabilitado-->
     <input type="hidden" name="valuni2" id="valuni2" value="">
+    <input type="hidden" name="valunicusto2" id="valunicusto2" value="">
     <input type="hidden" name="validade2" id="validade2" value="">
 
     <!-- BEGIN BLOCK_BOTOES -->
     <table border="0">
         <tr class="">
             <td width="100%" align="left">
+                <!-- BEGIN BLOCK_BOTOES_EXCLUIR_LINK -->
                 <a class="link" href="entradas_cancelar.php?codigo={ENTRADA}">
-                    <input type="button" class="botao botaovermelho fonte3" value="ELIMINAR ENTRADA">
+                <!-- END BLOCK_BOTOES_EXCLUIR_LINK -->
+                <input type="button" class="botao fonte3 {EXCLUIR_CLASSE}" value="ELIMINAR ENTRADA" {ELIMINAR_ENTRADA_DESABILITADO} title="{EXCLUIR_TITULO}">
                 </a>    
             </td>
             <td>
@@ -322,25 +479,31 @@
                 <a class="link" href="entradas_cadastrar2.php?salvar=1&entrada={ENTRADA}&operacao={OPERACAO}">
                     <input type="button" 
                            {SALVAR_DESABILIDADO}
-                           class="botao fonte3"
+                           class="botao fonte3 botaopadraocadastrar"
                            value="FINALIZAR ENTRADA"
-                    >
+                           >
                 </a>
             </td>
         </tr>
     </table>
     <!-- END BLOCK_BOTOES -->
-    
-    
+
+
     <!-- BEGIN BLOCK_BOTAO_VOLTAR -->
     <a class="link" href="javascript:window.history.go(-1)"><input type="button" value="VOLTAR" class="botao fonte3" autofocus="1"></a>    
     <!-- END BLOCK_BOTAO_VOLTAR -->
-    
+
     <!-- BEGIN BLOCK_BOTAO_IMPRIMIR -->
-    <a class="link" href="entradas_imprimir.php?codigo={ENTRADA}" target="_blank">
+    <a class="link" href="entradas_imprimir.php?codigo={ENTRADA}&tipo=1" target="_blank">
         <input type="button" value="IMPRIMIR" class="botao fonte3">
     </a>    
     <!-- END BLOCK_BOTAO_IMPRIMIR -->
+
+    <!-- BEGIN BLOCK_BOTAO_IMPRIMIR_CUSTO -->
+    <a class="link" href="entradas_imprimir.php?codigo={ENTRADA}&tipo=2" target="_blank">
+        <input type="button" value="IMPRIMIR CUPOM REVENDA" class="botao fonte3">
+    </a>    
+    <!-- END BLOCK_BOTAO_IMPRIMIR_CUSTO -->
 
 
 
@@ -348,7 +511,9 @@
     <!--  END BLOCK_PASSO3 -->
 
     <script type="text/javascript">
-        {IRPARA}
+    {
+        IRPARA
+    }
     </script>
 </form>
 

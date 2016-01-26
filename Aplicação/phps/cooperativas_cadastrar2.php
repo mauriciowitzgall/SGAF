@@ -30,7 +30,7 @@ $tpl_notificacao->ICONES = $icones;
 $tpl_notificacao->DESTINO = "cooperativas.php";
 
 
-//VALIDAÇÕES
+//VALIDA��ES
 //Verifica se já existe registros com o mesmo nome    
 //Nome Completo
 $sql = "SELECT * FROM cooperativas WHERE coo_nomecompleto='$nome'";
@@ -53,7 +53,7 @@ if ($linhas > $linhatot) {
     $erro = 1;
 }
 
-//Se não houver erro então cadastrar ou atualizar
+//Se n�o houver erro ent�o cadastrar ou atualizar
 if ($erro == 0) {
 //Caso a operação seja CADASTRO    
     if ($codigo == "") {
@@ -71,7 +71,7 @@ if ($erro == 0) {
         $tpl_notificacao->block("BLOCK_CADASTRADO");
         $tpl_notificacao->block("BLOCK_BOTAO");
         $tpl_notificacao->show();
-    } else { //Caso a operação seja EDIÇÂO
+    } else { //Caso a operação seja EDIÇÃO
         
         //Limpa o grupo de permissões do usuário da pessoa que era o antigo presidente
         $sql1="SELECT coo_presidente FROM cooperativas WHERE coo_codigo=$codigo";

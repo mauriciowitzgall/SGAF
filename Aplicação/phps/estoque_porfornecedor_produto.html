@@ -17,7 +17,7 @@
     <tr>
         <td align="right" width="50 px"><b>Fornecedor:</b></td>
         <td>
-            <input type="text" disabled="disabled" name="fornecedor" class="campo1" value="{FORNECEDOR_NOME}">
+            <input type="text" disabled="disabled" name="fornecedor" class="campopadrao" value="{FORNECEDOR_NOME}">
         </td>
     </tr>
 </table>
@@ -25,13 +25,14 @@
 </br>
 <table border="1" class="tabela1" cellpadding="4" width="100%" >
     <tr valign="middle" class="tabelacabecalho1">                 
-        <td width="" >PRODUTOS</td>            
+        <td width="" colspan="2">PRODUTOS</td>            
         <td colspan="2" >QTD. TOTAL</td>            
         <td width="" >VALOR TOTAL</td> 
         <td width="" colspan="2" >LOTES</td>            
     </tr>
     <!-- BEGIN BLOCK_LISTA -->
     <tr>
+        <td align="right" >{PRODUTO_CODIGO}</td> 
         <td align="left" ><a href="produtos_cadastrar.php?codigo={PRODUTO_CODIGO}&ver=1&link=estoque_porfornecedor_produto.php&fornecedor={FORNECEDOR_CODIGO}" title="Ver Detalhes" class="link">{PRODUTO_NOME}</a></td> 
         <td align="right" width="100px">{QUANTIDADE_TOTAL}</td>
         <td align="left" width="35px">{SIGLA}</td>
@@ -60,6 +61,7 @@
         <td align="right">{VALOR_TOTAL_GERAL}</td>
         <td> </td>
         <td> </td>
+        <td> </td>
     </tr>
     <!-- END BLOCK_LISTA_RODAPE -->
 </table>
@@ -70,12 +72,12 @@
         <input onclick="paginacao_retroceder()" type="image" width="25px"   src="{PASTA_ICONES}esquerda.png"  title="Anterior" alt="Anterior" />
     </td>
     <td width="170px">
-        <input size="5" type="text" name="paginaatual" class="campofiltro" value="{PAGINAATUAL}">
+        <input size="5" type="text" name="paginaatual" class="campopadrao" value="{PAGINAATUAL}">
         <span>/</span>
-        <input disabled size="5" type="text" name="paginas" class="campofiltro" value="{PAGINAS}">
+        <input disabled size="5" type="text" name="paginas" class="campopadrao" value="{PAGINAS}">
     </td>
     <td align="left">
-        <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Próxima" alt="Próxima" />
+        <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Pr�xima" alt="Pr�xima" />
     </td>
 </tr>
 </table>

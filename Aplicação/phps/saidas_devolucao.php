@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_saidas_ver_devolucao <> 1) {
     echo $permissao_saidas_ver_devolucao;
@@ -77,7 +77,7 @@ $tpl_filtro->block("BLOCK_SELECT");
 $tpl_filtro->block("BLOCK_ESPACO");
 $tpl_filtro->block("BLOCK_COLUNA");
 
-//Filtro Descrição
+//Filtro Descri��o
 $tpl_filtro->CAMPO_TITULO = "Descrição";
 $tpl_filtro->block("BLOCK_CAMPO_TITULO");
 $tpl_filtro->CAMPO_TIPO = "text";
@@ -101,7 +101,7 @@ $tpl_filtro->block("BLOCK_OPTION_PADRAO");
 $sql = "
     SELECT DISTINCT pes_codigo,pes_nome 
     FROM pessoas
-    JOIN saidas on (sai_vendedor=pes_codigo)    
+    JOIN saidas on (sai_caixa=pes_codigo)    
     WHERE sai_tipo=3
     ORDER BY pes_nome 
 ";
@@ -158,7 +158,7 @@ $tpl_filtro->show();
 
 $tpl4 = new Template("templates/botoes1.html");
 
-//Botão Pesquisar
+//Bot�o Pesquisar
 $tpl4->COLUNA_TAMANHO = "";
 $tpl4->COLUNA_ALINHAMENTO = "";
 $tpl4->block("BLOCK_BOTAOPADRAO_SUBMIT");
@@ -166,7 +166,7 @@ $tpl4->block("BLOCK_BOTAOPADRAO_PESQUISAR");
 $tpl4->block("BLOCK_BOTAOPADRAO");
 $tpl4->block("BLOCK_COLUNA");
 
-//Botão Limpar
+//Bot�o Limpar
 $tpl4->COLUNA_LINK_ARQUIVO = "saidas_devolucao.php";
 $tpl4->COLUNA_LINK_TARGET = "";
 $tpl4->COLUNA_TAMANHO = "";
@@ -177,7 +177,7 @@ $tpl4->block("BLOCK_BOTAOPADRAO_LIMPAR");
 $tpl4->block("BLOCK_BOTAOPADRAO");
 $tpl4->block("BLOCK_COLUNA");
 
-//Botão Cadastrar
+//Bot�o Cadastrar
 if (($permissao_saidas_cadastrar_devolucao == 1) && ($usuario_quiosque != 0)) {
     $tpl4->COLUNA_LINK_ARQUIVO = "saidas_cadastrar.php?tiposaida=3";
     $tpl4->COLUNA_LINK_TARGET = "";
@@ -237,7 +237,7 @@ $tpl2->block("BLOCK_CABECALHO_COLUNA");
 $tpl2->block("BLOCK_CABECALHO_LINHA");
 $tpl2->block("BLOCK_CABECALHO");
 
-//Validação de filtros
+//Valida��o de filtros
 $sql_filtro = "";
 if (!empty($filtro_descricao))
     $sql_filtro = " and sai_descricao like '%$filtro_descricao%' ";
@@ -246,25 +246,25 @@ if (!empty($filtro_numero))
 if (!empty($filtro_motivo))
     $sql_filtro = " and sai_saidajustificada = $filtro_motivo ";
 if (!empty($filtro_supervisor))
-    $sql_filtro = " and sai_vendedor = $filtro_supervisor ";
+    $sql_filtro = " and sai_caixa = $filtro_supervisor ";
 if (!empty($filtro_fornecedor))
     $sql_filtro = " and ent_fornecedor = $filtro_fornecedor ";
 
 
 
 $sql = "
-    SELECT sai_codigo,sai_datacadastro,sai_horacadastro,saimot_nome,pes_nome,sai_totalbruto,sai_descricao,sai_status,pes_codigo
+    SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,saimot_nome,pes_nome,sai_totalbruto,sai_descricao,sai_status,pes_codigo
     FROM saidas
     JOIN saidas_motivo on (sai_saidajustificada=saimot_codigo)
-    JOIN pessoas on (sai_vendedor=pes_codigo)
-    JOIN saidas_produtos on (saipro_saida=sai_codigo)
-    JOIN entradas on (ent_codigo=saipro_lote)
+    JOIN pessoas on (sai_caixa=pes_codigo)
+    left JOIN saidas_produtos on (saipro_saida=sai_codigo)
+    left JOIN entradas on (ent_codigo=saipro_lote)
     WHERE sai_tipo=3
     $sql_filtro
     ORDER BY sai_codigo DESC
 ";
 
-//Paginação
+//Pagina��o
 $query = mysql_query($sql);
 if (!$query)
     die("Erro SQL Principal Paginação:" . mysql_error());
@@ -272,7 +272,7 @@ $linhas = mysql_num_rows($query);
 $por_pagina = $usuario_paginacao;
 $paginaatual = $_POST["paginaatual"];
 $paginas = ceil($linhas / $por_pagina);
-//Se é a primeira vez que acessa a pagina então começar na pagina 1
+//Se � a primeira vez que acessa a pagina ent�o come�ar na pagina 1
 if (($paginaatual == "") || ($paginas < $paginaatual) || ($paginaatual <= 0)) {
     $paginaatual = 1;
 }
@@ -304,7 +304,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $status = $dados["sai_status"];
     $editar_ocultar = 0;
 
-    //Código
+    //C�digo
     $tpl2->COLUNA_TAMANHO = "";
     $tpl2->COLUNA_ALINHAMENTO = "right";
     $tpl2->TEXTO = "$numero";
@@ -336,7 +336,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl2->block("BLOCK_CONTEUDO");
     $tpl2->block("BLOCK_COLUNA");
 
-    //Descrição
+    //Descri��o
     $tpl2->COLUNA_TAMANHO = "";
     $tpl2->COLUNA_ALINHAMENTO = "";
     $tpl2->TEXTO = "$descricao";
@@ -360,7 +360,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl2->block("BLOCK_CONTEUDO");
     $tpl2->block("BLOCK_COLUNA");
 
-    //Icone Situação
+    //Icone Situa��o
     $tpl2->COLUNA_TAMANHO = "35px";
     $tpl2->COLUNA_ALINHAMENTO = "center";
     $tpl2->ICONE_TAMANHO = "15px";
@@ -398,10 +398,10 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl2->block("BLOCK_COLUNA");
 
 
-    //Operações
+    //Opera�ões
     $tpl2->ICONES_CAMINHO = $icones;
 
-    //Operação Imprimir
+    //Opera��o Imprimir
     $tpl2->COLUNA_TAMANHO = "35px";
     $tpl2->COLUNA_ALINHAMENTO = "center";
     $tpl2->block("BLOCK_CONTEUDO_LINK_NOVAJANELA");
@@ -414,7 +414,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl2->block("BLOCK_COLUNA_OPERACAO");
     $tpl2->block("BLOCK_COLUNA");
 
-    //Operação Ver
+    //Opera��o Ver
     $tpl2->COLUNA_TAMANHO = "35px";
     $tpl2->COLUNA_ALINHAMENTO = "center";
     $tpl2->CONTEUDO_LINK_ARQUIVO = "saidas_ver.php?codigo=$numero&tiposaida=3&ope=3";
@@ -426,7 +426,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl2->block("BLOCK_COLUNA_OPERACAO");
     $tpl2->block("BLOCK_COLUNA");
 
-    //Operação Editar
+    //Opera��o Editar
     $tpl2->COLUNA_TAMANHO = "35px";
     $tpl2->COLUNA_ALINHAMENTO = "center";
     $tpl2->CONTEUDO_LINK_ARQUIVO = "saidas_cadastrar.php?operacao=2&saidatipo=3&codigo=$numero";
@@ -450,7 +450,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl2->block("BLOCK_COLUNA_OPERACAO");
     $tpl2->block("BLOCK_COLUNA");
 
-    //Operação Excluir    
+    //Opera��o Excluir    
     $tpl2->COLUNA_TAMANHO = "35px";
     $tpl2->COLUNA_ALINHAMENTO = "center";
     $tpl2->ICONES_CAMINHO = $icones;

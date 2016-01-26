@@ -8,14 +8,14 @@
             
             <!-- BEGIN BLOCK_FILTRO_CAMPO -->
             <td><b>&nbsp;{CAMPO_TITULO}:</b><br>
-                <input size="{CAMPO_TAMANHO}" type="text" name="{CAMPO_NOME}" class="campofiltro" value="{CAMPO_VALOR}" maxlength="{CAMPO_QTD_CARACTERES}" onkeyup="{CAMPO_ONKEYUP}">
+                <input size="{CAMPO_TAMANHO}" type="text" name="{CAMPO_NOME}" class="campopadrao" value="{CAMPO_VALOR}" maxlength="{CAMPO_QTD_CARACTERES}" onkeyup="{CAMPO_ONKEYUP}">
             </td>
             <!-- END BLOCK_FILTRO_CAMPO -->
             
                
             <!-- BEGIN BLOCK_FILTRO_SELECT -->
             <td><b>&nbsp;{SELECT_TITULO}:</b><br>
-                <select name="{SELECT_NOME}" class="campofiltro" {SELECT_OBRIGATORIO}>
+                <select name="{SELECT_NOME}" class="campopadrao" {SELECT_OBRIGATORIO}>
                         <option value="">Todos</option> 
                     <!-- BEGIN BLOCK_FILTRO_SELECT_OPTION -->
                     <option value="{SELECT_OPTION_CODIGO}" {SELECT_OPTION_SELECIONADO} >{SELECT_OPTION_NOME}</option>
@@ -52,7 +52,7 @@
                 </a>
                 <!-- END BLOCK_RODAPE_BOTOES -->
                 <!-- BEGIN BLOCK_RODAPE_BOTOES_DESABILITADOS -->
-                <input type="button" value="{CADASTRAR_NOME}" class="botaopadrao botaopadraocadastrar" autofocus="1" disabled>
+                <input type="button" value="{CADASTRAR_NOME}" class="botaopadrao botaopadraocadastrar" autofocus="1" disabled title="{TITULO}">
                 <!-- END BLOCK_RODAPE_BOTOES_DESABILITADOS -->
                 <!-- BEGIN BLOCK_RODAPE_BOTOES_DICA -->
                 <img   width="20px" src="{DICA_ARQUIVO}" title="{DICA}"  alt="{DICA_NOME}" />
@@ -73,13 +73,26 @@
         </tr>
         <!-- BEGIN BLOCK_LISTA -->
         <tr class="{LISTA_LINHA_CLASSE} lin">
+                        
+            
             <!-- BEGIN BLOCK_LISTA_COLUNA -->
-            <td align="{LISTA_COLUNA_ALINHAMENTO}" class="{LISTA_COLUNA_CLASSE}">{LISTA_COLUNA_VALOR}</td> 
+            <td align="{LISTA_COLUNA_ALINHAMENTO}" class="{LISTA_COLUNA_CLASSE}">
+                <!-- BEGIN BLOCK_LISTA_COLUNA_LINK -->
+                <a href="{COLUNA_LINK}" class="link">
+                <!-- END BLOCK_LISTA_COLUNA_LINK -->
+                    {LISTA_COLUNA_VALOR}
+                <!-- BEGIN BLOCK_LISTA_COLUNA_LINK_FIM -->
+                </a>
+                <!-- END BLOCK_LISTA_COLUNA_LINK_FIM -->                    
+            </td> 
+
+
+
             <!-- END BLOCK_LISTA_COLUNA -->                               
 
             <!-- BEGIN BLOCK_LISTA_COLUNA_ICONE -->
             <td align="center" class="" width="">                                
-                <img   width="15px" src="{ICONE_ARQUIVO}" title="{OPERACAO_NOME}"  alt="{OPERACAO_NOME}" />
+                <img   width="18px" src="{ICONE_ARQUIVO}" title="{OPERACAO_NOME}"  alt="{OPERACAO_NOME}" />
             </td>            
             <!-- END BLOCK_LISTA_COLUNA_ICONE -->  
 
@@ -91,18 +104,20 @@
                 target="_blank"
                 <!-- END BLOCK_LISTA_COLUNA_OPERACAO_NOVAPAGINA -->
                 >
-                   <img   width="15px" src="{ICONE_ARQUIVO}" title="{OPERACAO_NOME}"  alt="{OPERACAO_NOME}" />
+                   <img   width="18px" src="{ICONE_ARQUIVO}" title="{OPERACAO_NOME}"  alt="{OPERACAO_NOME}" />
                 </a>
             </td>
             <!-- END BLOCK_LISTA_COLUNA_OPERACAO -->  
             
             <!-- BEGIN BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO -->
             <td align="center" class="fundo1" width="35px">                                
-                <img  width="15px" src="{ICONE_ARQUIVO}" title="{OPERACAO_NOME}"  alt="{OPERACAO_NOME}" />
+                <img  width="18px" src="{ICONE_ARQUIVO}" title="{OPERACAO_NOME}"  alt="{OPERACAO_NOME}" />
             </td>
             <!-- END BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO -->            
             <!-- END BLOCK_LISTA_COLUNA_OPERACAO_TODAS -->
             </td>
+            
+            
         </tr>
         <!-- END BLOCK_LISTA -->
 
@@ -119,12 +134,12 @@
             <input onclick="paginacao_retroceder()" type="image" width="25px"   src="{PASTA_ICONES}esquerda.png"  title="Anterior" alt="Anterior" />
         </td>
         <td width="170px">
-            <input size="5" type="text" name="paginaatual" class="campofiltro" value="{PAGINAATUAL}">
+            <input size="5" type="text" name="paginaatual" class="campopadrao" value="{PAGINAATUAL}">
             <span>/</span>
-            <input disabled size="5" type="text" name="paginas" class="campofiltro" value="{PAGINAS}">
+            <input disabled size="5" type="text" name="paginas" class="campopadrao" value="{PAGINAS}">
         </td>
         <td align="left">
-            <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Próxima" alt="Próxima" />
+            <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Pr�xima" alt="Pr�xima" />
         </td>
     </tr>
     </table>

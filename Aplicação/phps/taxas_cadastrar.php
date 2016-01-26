@@ -25,18 +25,20 @@ $tpl_titulo->show();
 
 
 
-//FORMULÁRIO
+//FORMUL�RIO
 $tpl = new Template("templates/cadastro1.html");
 
 $codigo = $_GET["codigo"];
 if (!empty($codigo)) {
-    $sql = "SELECT tax_codigo,tax_nome,tax_descricao FROM taxas WHERE tax_codigo=$codigo";
+    $sql = "SELECT tax_codigo,tax_nome,tax_descricao,tax_tiponegociacao,tax_quiosque FROM taxas WHERE tax_codigo=$codigo";
     $query = mysql_query($sql);
     if (!$query)
         die("Erro SQL Leitura Editar:" . mysql_error());
     $dados = mysql_fetch_assoc($query);
     $taxanome = $dados["tax_nome"];
     $descricao = $dados["tax_descricao"];
+    $tiponegociacao = $dados["tax_tiponegociacao"];
+    $quiosque = $dados["tax_quiosque"];
 }
 
 $tpl->FORM_NOME = "";
@@ -65,7 +67,7 @@ $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_COLUNA");
 $tpl->block("BLOCK_LINHA");
 
-//Descrição
+//Descri��o
 $tpl->COLUNA_ALINHAMENTO = "right";
 $tpl->COLUNA_TAMANHO = "";
 $tpl->TITULO = "Descrição";
@@ -82,6 +84,142 @@ $tpl->block("BLOCK_TEXTAREA");
 $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_COLUNA");
 $tpl->block("BLOCK_LINHA");
+
+//Observação
+$tpl->COLUNA_ALINHAMENTO = "right";
+$tpl->COLUNA_TAMANHO = "";
+$tpl->TITULO = "Observação";
+$tpl->block("BLOCK_TITULO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_COLUNA");
+$tpl->COLUNA_ALINHAMENTO = "";
+$tpl->TEXTO_NOME = "Observação";
+//$tpl->_ID="";
+//$tpl->TEXTO_CLASSE="";
+$tpl->TEXTO_VALOR = "
+    Aqui é apenas o cadastro da taxa, para incluir uma taxa em um ponto de venda vá a tela de 'Quiosques'! <br>
+    Os supervisores podem cadastrar, editar e excluir apenas taxas referentes ao quiosque que supervisionam!<br>
+    Os presidentes podem cadastrar, editar e excluir taxas para todos os pontos de venda da cooperativa/grupo!
+";
+$tpl->block("BLOCK_TEXTO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_COLUNA");
+$tpl->block("BLOCK_LINHA");
+
+//Quiosques
+if ($usuario_grupo != 3) {
+    $tpl->COLUNA_ALINHAMENTO = "right";
+    $tpl->COLUNA_TAMANHO = "";
+    $tpl->TITULO = "Quiosque(s)";
+    $tpl->block("BLOCK_TITULO");
+    $tpl->block("BLOCK_CONTEUDO");
+    $tpl->block("BLOCK_COLUNA");
+    $tpl->COLUNA_ALINHAMENTO = "";
+    $tpl->COLUNA_TAMANHO = "";
+    $tpl->SELECT_NOME = "quiosque";
+    $tpl->SELECT_ID = "quiosque";
+    $tpl->SELECT_TAMANHO = "";
+//$tpl->SELECT_AOCLICAR="";
+//$tpl->block("BLOCK_SELECT_AUTOFOCO");
+//$tpl->block("BLOCK_SELECT_DESABILITADO");
+    $tpl->block("BLOCK_SELECT_OBRIGATORIO");
+    $tpl->block("BLOCK_SELECT_PADRAO");
+    if (($usuario_grupo == 2) || ($usuario_grupo == 1)) {
+        $tpl->OPTION_VALOR = " ";
+        $tpl->OPTION_TEXTO = "Todos os quiosques";
+        $tpl->block("BLOCK_OPTION_SELECIONADO");
+        $tpl->block("BLOCK_OPTION");
+    }
+    if (($usuario_grupo == 1)) {
+        $sql = " 
+        SELECT qui_codigo,qui_nome
+        FROM quiosques
+        WHERE qui_cooperativa=$usuario_cooperativa
+        ORDER BY qui_nome
+    ";
+        $tpl->SELECT_AOTROCAR = "popula_quiosque_tiponegociacao(this.value)";
+    } else {
+        $sql = " 
+        SELECT qui_codigo,qui_nome
+        FROM quiosques
+        WHERE qui_codigo=$usuario_quiosque
+        ORDER BY qui_nome
+    ";
+        $tpl->SELECT_AOTROCAR = "";
+    }
+    if ($usuario_grupo != 2) {
+
+//$tpl->block("BLOCK_SELECT_DINAMICO");
+//$tpl->block("BLOCK_OPTION_PADRAO");
+//$tpl->block("BLOCK_OPTION_TODOS");
+        $query = mysql_query($sql);
+        if (!$query)
+            die("Erro SQL QUIOSQUE:" . mysql_error());
+        while ($dados = mysql_fetch_array($query)) {
+            $tpl->OPTION_VALOR = $dados[0];
+            if ($codigotaxa == $dados[0])
+                $tpl->block("BLOCK_OPTION_SELECIONADO");
+            $tpl->OPTION_TEXTO = $dados[1];
+            $tpl->block("BLOCK_OPTION");
+        }
+    }
+    $tpl->block("BLOCK_SELECT");
+    $tpl->block("BLOCK_CONTEUDO");
+    $tpl->block("BLOCK_COLUNA");
+    $tpl->block("BLOCK_LINHA");
+}
+
+
+
+//Tipo de negociação
+$tpl->COLUNA_ALINHAMENTO = "right";
+$tpl->COLUNA_TAMANHO = "";
+$tpl->TITULO = "Tipo de Negociação";
+$tpl->block("BLOCK_TITULO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_COLUNA");
+$tpl->COLUNA_ALINHAMENTO = "";
+$tpl->COLUNA_TAMANHO = "";
+$tpl->SELECT_NOME = "tiponegociacao";
+$tpl->SELECT_ID = "tiponegociacao";
+$tpl->SELECT_TAMANHO = "";
+$tpl->SELECT_AOTROCAR = "";
+//$tpl->SELECT_AOCLICAR="";
+//$tpl->block("BLOCK_SELECT_AUTOFOCO");
+//$tpl->block("BLOCK_SELECT_DESABILITADO");
+$tpl->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl->block("BLOCK_SELECT_PADRAO");
+if (($usuario_grupo == 2) || ($usuario_grupo == 1)) {
+    $sql = " SELECT * FROM tipo_negociacao ORDER BY tipneg_nome";
+} else {
+    $sql = "
+        SELECT * 
+        FROM tipo_negociacao
+        JOIN quiosques_tiponegociacao ON ( quitipneg_tipo = tipneg_codigo ) 
+        WHERE quitipneg_quiosque =1
+        ORDER BY tipneg_nome
+    ";
+}
+//$tpl->block("BLOCK_SELECT_DINAMICO");
+$tpl->block("BLOCK_OPTION_PADRAO");
+//$tpl->block("BLOCK_OPTION_TODOS");
+$query = mysql_query($sql);
+if (!$query)
+    die("Erro SQL QUIOSQUE:" . mysql_error());
+while ($dados = mysql_fetch_array($query)) {
+    $tpl->OPTION_VALOR = $dados[0];
+    if ($tiponegociacao == $dados[0])
+        $tpl->block("BLOCK_OPTION_SELECIONADO");
+    $tpl->OPTION_TEXTO = $dados[1];
+    $tpl->block("BLOCK_OPTION");
+}
+$tpl->block("BLOCK_SELECT");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_COLUNA");
+$tpl->block("BLOCK_LINHA");
+
+
+
 
 //Campo Oculto Operação
 $tpl->CAMPOOCULTO_NOME = "operacao";

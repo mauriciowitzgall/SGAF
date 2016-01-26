@@ -27,7 +27,7 @@ while ($array = mysql_fetch_array($query)) {
         <td width="35px"><img width="50px" src="<?php echo $icones; ?>pessoas.png" alt="" ></td>
         <td valign="bottom">
             <label class="titulo" > PESSOAS </label><br />
-            <label class="subtitulo"> CADASTRO/EDIÃ‡ÃƒO </label>
+            <label class="subtitulo"> CADASTRO/EDIÇÃO </label>
         </td>
     </tr>
 </table>
@@ -70,13 +70,13 @@ while ($array = mysql_fetch_array($query)) {
                     echo" disabled "; ?> ></td>
         </tr>
         <tr>
-            <td align="right" width="200px"><b>EndereÃ§o: </b></td>
+            <td align="right" width="200px"><b>Endereço: </b></td>
             <td align="left" width=""><input type="text" name="endereco" id="endereco" size="35" class="campo1" value="<?php echo "$endereco"; ?>"  <?php if ($ver == 1) {
                     echo" disabled ";
                 } else { ?> placeholder="Nome da Rua" <?php } ?> >
                 <input type="number" name="numero" size="8" class="campo1" value="<?php echo "$numero"; ?>"  <?php if ($ver == 1) {
                     echo" disabled ";
-                } else { ?> placeholder="NÂº" <?php } ?> ></td>
+                } else { ?> placeholder="Nº" <?php } ?> ></td>
         </tr>
         <tr>
             <td align="right" width="200px"><b>CEP: </b></td>
@@ -108,7 +108,7 @@ while ($array = mysql_fetch_array($query)) {
                     $codigo2 = $array2['pestip_codigo'];
                     $nome2 = $array2['pestip_nome'];
                     
-                    //Aqui Ã© verificado se o checkbox deve ser marcado ou nÃ£o, ele verifica no banco se tem registro deste tipo com essa pessoa 
+                    //Aqui é verificado se o checkbox deve ser marcado ou não, ele verifica no banco se tem registro deste tipo com essa pessoa 
                     $sqlcheck = "SELECT * FROM mestre_pessoas_tipo WHERE mespestip_pessoa='$codigo' and mespestip_tipo='$codigo2'";
                     $query = mysql_query($sqlcheck);
                     if ($query) {                        
@@ -122,7 +122,7 @@ while ($array = mysql_fetch_array($query)) {
                         $check = " ";
                     }
                     
-                    //Se for cadastro mantem por padrÃ£o o tipo 'clinte' marcado
+                    //Se for cadastro mantem por padrão o tipo 'clinte' marcado
                     if (($codigo=="")&&($codigo2==5)) {
                         $check=" checked ";
                     }
@@ -141,7 +141,7 @@ while ($array = mysql_fetch_array($query)) {
         echo" disabled "; ?> ></td>
         </tr>
         <tr>
-            <td align="right" width="200px"><b>ObservaÃ§Ã£o: </b></td>
+            <td align="right" width="200px"><b>Observação: </b></td>
             <td align="left" width=""><textarea cols="55" name="obs" id="obs" <?php if ($ver == 1)
         echo" disabled "; ?> class="textarea1" ><?php echo "$obs"; ?></textarea></td>
         </tr>
@@ -150,7 +150,7 @@ while ($array = mysql_fetch_array($query)) {
     <br />
     <hr align="left" >
 <?php
-//Verifica links para atribuir ao botÃ£o voltar
+//Verifica links para atribuir ao botão voltar
 $linkanterior = $_GET["link"];
 $produto = $_GET["produto"];
 

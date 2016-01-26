@@ -45,7 +45,7 @@ shortcut.add("Shift+Ctrl+8", function() {
    window.location = "acertos.php"
 });
 
-//RelatÃ³rios
+//Relatórios
 shortcut.add("Shift+Ctrl+9", function() {
    window.location = "relatorios.php"
 });

@@ -4,26 +4,29 @@ session_cache_expire(180);
 session_start();
 
 include "controle/conexao.php";
-
+//include "controle/conexao_tipo.php";
 //Variaveis globais
-$icones="../imagens/icones/geral/";
-$icones2="../imagens/icones/pessoas2/";
-$usuario_paginacao=15;
+$icones = "../imagens/icones/geral/";
+$icones2 = "../imagens/icones/pessoas2/";
+$usuario_paginacao = 15;
 
 // Verifica se existe os dados da sessão de login
 $usuario_nome = $_SESSION["usuario_nome"];
-$usuario_id = $_SESSION["usuario_id"];
+$usuario_cpf = $_SESSION["usuario_cpf"];
 $usuario_codigo = $_SESSION["usuario_codigo"];
 $usuario_grupo = $_SESSION["usuario_grupo"];
-$usuario_cooperativa= $_SESSION["usuario_cooperativa"];
-$usuario_cooperativanomecompleto= $_SESSION["usuario_cooperativanomecompleto"];
-$usuario_cooperativaabreviacao= $_SESSION["usuario_cooperativaabreviacao"];
-$usuario_quiosque= $_SESSION["usuario_quiosque"];
-$usuario_quiosquenome= $_SESSION["usuario_quiosquenome"];
+$usuario_cooperativa = $_SESSION["usuario_cooperativa"];
+$usuario_cooperativanomecompleto = $_SESSION["usuario_cooperativanomecompleto"];
+$usuario_cooperativaabreviacao = $_SESSION["usuario_cooperativaabreviacao"];
+$usuario_quiosque = $_SESSION["usuario_quiosque"];
+$usuario_quiosquenome = $_SESSION["usuario_quiosquenome"];
+$usuario_cidade = $_SESSION["usuario_cidade"];
+$usuario_estado = $_SESSION["usuario_estado"];
+$usuario_pais = $_SESSION["usuario_pais"];
 
 
 
-if (!isset($_SESSION["usuario_id"]) || !isset($_SESSION["usuario_nome"]) || !isset($_SESSION["usuario_grupo"])) {
+if (!isset($_SESSION["usuario_cpf"]) || !isset($_SESSION["usuario_nome"]) || !isset($_SESSION["usuario_grupo"])) {
     //Sem sessão! Sair do sistema!";
     echo "Não é possível criar sessão!";
     header("Location: ../index.html");
@@ -34,7 +37,7 @@ if (!isset($_SESSION["usuario_id"]) || !isset($_SESSION["usuario_nome"]) || !iss
     if (!$query)
         die("Erro de sql 1:" . mysql_error());
     $dados = mysql_fetch_assoc($query);
-    $permissao_nome = $dados["gruper_nome"];    
+    $permissao_nome = $dados["gruper_nome"];
     $permissao_cooperativa_ver = $dados["gruper_cooperativa_ver"];
     $permissao_cooperativa_cadastrar = $dados["gruper_cooperativa_cadastrar"];
     $permissao_cooperativa_editar = $dados["gruper_cooperativa_editar"];
@@ -45,6 +48,7 @@ if (!isset($_SESSION["usuario_id"]) || !isset($_SESSION["usuario_nome"]) || !iss
     $permissao_quiosque_excluir = $dados["gruper_quiosque_excluir"];
     $permissao_quiosque_definirsupervisores = $dados["gruper_quiosque_definirsupervisores"];
     $permissao_quiosque_definirvendedores = $dados["gruper_quiosque_definirvendedores"];
+    $permissao_quiosque_definircaixas = $dados["gruper_quiosque_definircaixas"];
     $permissao_quiosque_definircooperativa = $dados["gruper_quiosque_definircooperativa"];
     $permissao_pessoas_alterar_cooperativa = $dados["gruper_pessoas_alterar_cooperativa"];
     $permissao_pessoas_cadastrar = $dados["gruper_pessoas_cadastrar"];
@@ -52,6 +56,7 @@ if (!isset($_SESSION["usuario_id"]) || !isset($_SESSION["usuario_nome"]) || !iss
     $permissao_pessoas_cadastrar_presidentes = $dados["gruper_pessoas_cadastrar_presidentes"];
     $permissao_pessoas_cadastrar_supervisores = $dados["gruper_pessoas_cadastrar_supervisores"];
     $permissao_pessoas_cadastrar_vendedores = $dados["gruper_pessoas_cadastrar_vendedores"];
+    $permissao_pessoas_cadastrar_caixas = $dados["gruper_pessoas_cadastrar_caixas"];
     $permissao_pessoas_cadastrar_fornecedores = $dados["gruper_pessoas_cadastrar_fornecedores"];
     $permissao_pessoas_cadastrar_consumidores = $dados["gruper_pessoas_cadastrar_consumidores"];
     $permissao_pessoas_excluir = $dados["gruper_pessoas_excluir"];
@@ -59,12 +64,14 @@ if (!isset($_SESSION["usuario_id"]) || !isset($_SESSION["usuario_nome"]) || !iss
     $permissao_pessoas_excluir_presidentes = $dados["pessoas_gruper_excluir_presidentes"];
     $permissao_pessoas_excluir_supervisores = $dados["gruper_pessoas_excluir_supervisores"];
     $permissao_pessoas_excluir_vendedores = $dados["gruper_pessoas_excluir_vendedores"];
+    $permissao_pessoas_excluir_caixas = $dados["gruper_pessoas_excluir_caixas"];
     $permissao_pessoas_excluir_fornecedores = $dados["gruper_pessoas_excluir_fornecedores"];
     $permissao_pessoas_excluir_consumidores = $dados["gruper_pessoas_excluir_consumidores"];
     $permissao_pessoas_ver = $dados["gruper_pessoas_ver"];
     $permissao_pessoas_ver_presidentes = $dados["gruper_pessoas_ver_presidentes"];
     $permissao_pessoas_ver_supervisores = $dados["gruper_pessoas_ver_supervisores"];
     $permissao_pessoas_ver_vendedores = $dados["gruper_pessoas_ver_vendedores"];
+    $permissao_pessoas_ver_caixas = $dados["gruper_pessoas_ver_caixas"];
     $permissao_pessoas_ver_fornecedores = $dados["gruper_pessoas_ver_fornecedores"];
     $permissao_pessoas_ver_consumidores = $dados["gruper_pessoas_ver_consumidores"];
     $permissao_pessoas_ver_administradores = $dados["gruper_pessoas_ver_administradores"];
@@ -73,6 +80,7 @@ if (!isset($_SESSION["usuario_id"]) || !isset($_SESSION["usuario_nome"]) || !iss
     $permissao_pessoas_definir_grupo_presidentes = $dados["gruper_pessoas_definir_grupo_presidentes"];
     $permissao_pessoas_definir_grupo_supervisores = $dados["gruper_pessoas_definir_grupo_supervisores"];
     $permissao_pessoas_definir_grupo_vendedores = $dados["gruper_pessoas_definir_grupo_vendedores"];
+    $permissao_pessoas_definir_grupo_caixas = $dados["gruper_pessoas_definir_grupo_caixas"];
     $permissao_pessoas_definir_grupo_fornecedores = $dados["gruper_pessoas_definir_grupo_fornecedores"];
     $permissao_pessoas_definir_grupo_consumidores = $dados["gruper_pessoas_definir_grupo_consumidores"];
     $permissao_pessoas_definir_quiosqueusuario = $dados["gruper_pessoas_definir_quiosqueusuario"];
@@ -101,7 +109,7 @@ if (!isset($_SESSION["usuario_id"]) || !isset($_SESSION["usuario_nome"]) || !iss
     $permissao_tipocontagem_editar = $dados["gruper_tipocontagem_editar"];
     $permissao_tipocontagem_excluir = $dados["gruper_tipocontagem_excluir"];
     $permissao_estoque_ver = $dados["gruper_estoque_ver"];
-    $permissao_estoque_qtdide_definir=$dados["gruper_estoque_qtdide_definir"];
+    $permissao_estoque_qtdide_definir = $dados["gruper_estoque_qtdide_definir"];
     $permissao_entradas_ver = $dados["gruper_entradas_ver"];
     $permissao_entradas_cadastrar = $dados["gruper_entradas_cadastrar"];
     $permissao_entradas_editar = $dados["gruper_entradas_editar"];
@@ -122,7 +130,7 @@ if (!isset($_SESSION["usuario_id"]) || !isset($_SESSION["usuario_nome"]) || !iss
     $permissao_relatorios_excluir = $dados["gruper_relatorios_excluir"];
     $permissao_acertos_cadastrar = $dados["gruper_acertos_cadastrar"];
     $permissao_acertos_editar = $dados["gruper_acertos_editar"];
-    $permissao_acertos_ver = $dados["gruper_acertos_ver"];    
+    $permissao_acertos_ver = $dados["gruper_acertos_ver"];
     $permissao_acertos_excluir = $dados["gruper_acertos_excluir"];
     $permissao_taxas_cadastrar = $dados["gruper_taxas_cadastrar"];
     $permissao_taxas_editar = $dados["gruper_taxas_editar"];
@@ -131,7 +139,23 @@ if (!isset($_SESSION["usuario_id"]) || !isset($_SESSION["usuario_nome"]) || !iss
     $permissao_taxas_aplicar = $dados["gruper_taxas_aplicar"];
     $permissao_quiosque_versupervisores = $dados["gruper_quiosque_versupervisores"];
     $permissao_quiosque_vervendedores = $dados["gruper_quiosque_vervendedores"];
+    $permissao_quiosque_vercaixas = $dados["gruper_quiosque_vercaixas"];
     $permissao_quiosque_vertaxas = $dados["gruper_quiosque_vertaxas"];
+}
+
+//Verifica os tipos de negociação do quiosque
+$sql11 = "SELECT quitipneg_tipo FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$usuario_quiosque";
+$query11 = mysql_query($sql11);
+if (!$query11)
+    die("Erro: " . mysql_error());
+$quiosque_consignacao=0;
+$quiosque_revenda=0;
+while ($dados11 = mysql_fetch_array($query11)) {
+    $tipon = $dados11[0];
+    if ($tipon == 1)
+        $quiosque_consignacao = 1;
+    IF ($tipon == 2)
+        $quiosque_revenda = 1;
 }
 
 ?>

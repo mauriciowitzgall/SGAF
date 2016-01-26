@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_produtos_excluir <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -36,9 +36,10 @@ if ($linhas > 0) {
     $tpl_notificacao = new Template("templates/notificacao.html");
     $tpl_notificacao->ICONES = $icones;
     $tpl_notificacao->DESTINO = "produtos.php";
-    $tpl_notificacao->FALTADADOS_MOTIVO = "entradas";
-    $tpl_notificacao->block("BLOCK_MOTIVO_FALTADADOS");
-    $tpl_notificacao->block("BLOCK_MOTIVO_EMUSO");
+    //$tpl_notificacao->FALTADADOS_MOTIVO = "entradas";
+    $tpl_notificacao->MOTIVO = "Você não pode excluir este produto porque exitem entradas atribuídas a ele. Se realmente deseja exclui-lo, deve-se excluir primeiramente todas as entradas relacionadas e este produto!";
+    //$tpl_notificacao->block("BLOCK_MOTIVO_FALTADADOS");
+    $tpl_notificacao->block("BLOCK_MOTIVO");
     $tpl_notificacao->block("BLOCK_ERRO");
     $tpl_notificacao->block("BLOCK_NAOAPAGADO");
     $tpl_notificacao->block("BLOCK_BOTAO");
@@ -62,9 +63,8 @@ if ($linhas > 0) {
     $tpl_notificacao = new Template("templates/notificacao.html");
     $tpl_notificacao->ICONES = $icones;
     $tpl_notificacao->DESTINO = "produtos.php";
-    $tpl_notificacao->FALTADADOS_MOTIVO = "saidas";
-    $tpl_notificacao->block("BLOCK_MOTIVO_FALTADADOS");
-    $tpl_notificacao->block("BLOCK_MOTIVO_EMUSO");
+    $tpl_notificacao->MOTIVO = "Você não pode excluir este produto porque exitem saidas atribuídas a ele. Se realmente deseja exclui-lo, deve-se excluir primeiramente todas as saídas relacionadas e este produto!";
+    $tpl_notificacao->block("BLOCK_MOTIVO");
     $tpl_notificacao->block("BLOCK_ERRO");
     $tpl_notificacao->block("BLOCK_NAOAPAGADO");
     $tpl_notificacao->block("BLOCK_BOTAO");
@@ -78,6 +78,12 @@ $sql = "DELETE FROM produtos WHERE pro_codigo=$produtocodigo";
 //$query = mysql_query($sql);
 $query = mysql_query($sql);
 if (!$query) {
+    die("Erro SQL: " . mysql_error());
+}
+$sql3 = "DELETE FROM mestre_produtos_tipo WHERE mesprotip_produto=$produtocodigo";
+//$query = mysql_query($sql);
+$query3 = mysql_query($sql3);
+if (!$query3) {
     die("Erro SQL: " . mysql_error());
 }
 $tpl_notificacao = new Template("templates/notificacao.html");

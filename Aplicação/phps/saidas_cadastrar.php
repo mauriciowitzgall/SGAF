@@ -20,7 +20,7 @@ if ($permissao_saidas_cadastrar <> 1) {
 }
 
 if ($saida != "") {
-//Verifica se algum produto desta saída já foi acertado
+//Verifica se algum produto desta Sa�da j� foi acertado
     $sql22 = "SELECT saipro_acertado FROM `saidas_produtos` WHERE saipro_saida=$saida and saipro_acertado !=0";
     $query22 = mysql_query($sql22);
     if (!$query22)
@@ -36,13 +36,14 @@ $tipopagina = "saidas";
 include "includes.php";
 
 
+
 //CONTROLE DA OPERAÇÃO
 $dataatual = date("Y/m/d");
 $horaatual = date("H:i:s");
-$operacao = $_GET["operacao"]; //Operação 1=Cadastras 2=Editar 3=Ver
+$operacao = $_GET["operacao"]; //Opera��o 1=Cadastras 2=Editar 3=Ver
 
 $retirar_produto = $_GET["retirar_produto"];
-//Se for eliminação de um produto ja da lista então pegar por get
+//Se for elimina��o de um produto ja da lista ent�o pegar por get
 if ($retirar_produto == '1') {
     $consumidor = $_GET["consumidor"];
     $tiposaida = $_GET["tiposaida"];
@@ -52,7 +53,7 @@ if ($retirar_produto == '1') {
     $lote = $_GET["lote"];
     $qtd = $_GET["qtd"];
     $produto = $_GET["produto"];
-} else { //Se não pegar por post
+} else { //Se n�o pegar por post
     if ($operacao == 2) {
         $saida = $_GET["codigo"];
         $passo = "2";
@@ -100,10 +101,11 @@ if ($retirar_produto == '1') {
     }
 }
 
+
 //Verifica se a saida existe
-//(É necessário por que se o usuário abrir uma nova janela na tela saidas.php o sistema exclui
-//as saidas incompletas e vazias do usuário logado e portanto pode excluir a saida que está 
-//em andamento e ainda não incluiu nenhum produto)
+//(� necess�rio por que se o usu�rio abrir uma nova janela na tela saidas.php o sistema exclui
+//as saidas incompletas e vazias do usu�rio logado e portanto pode excluir a saida que est� 
+//em andamento e ainda n�o incluiu nenhum produto)
 if ($produto != "") {
     $sql7 = "SELECT sai_codigo FROM saidas WHERE sai_codigo=$saida";
     $query7 = mysql_query($sql7);
@@ -153,7 +155,26 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "saidas.png";
 $tpl_titulo->show();
 
-//Inicio do formulário de saidas
+//Verifica se há produtos no estoque
+$sql = "SELECT etq_lote FROM estoque JOIN entradas on (etq_lote=ent_codigo) WHERE ent_quiosque=$usuario_quiosque";
+$query = mysql_query($sql);
+if (!$query)
+    die("Erro: " . mysql_error());
+$linhas = mysql_num_rows($query);
+if ($linhas == 0) {
+    echo "<br><br>";
+    $tpl = new Template("templates/notificacao.html");
+    $tpl->ICONES = $icones;
+    $tpl->MOTIVO_COMPLEMENTO = "Para gerar uma venda ou devolução <b>é necessário que se tenha produtos em seu estoque</b>. <br>Clique no botão abaixo para ir para a tela de cadastro de entradas, que é onde você insere produtos em seu estoque!";
+    $tpl->block("BLOCK_ATENCAO");
+    $tpl->DESTINO = "entradas_cadastrar.php?operacao=cadastrar";
+    $tpl->block("BLOCK_BOTAO");
+    $tpl->show();
+    exit;
+}
+
+
+//Inicio do formul�rio de saidas
 $tpl1 = new Template("saidas_cadastrar.html");
 $tpl1->LINK_DESTINO = "saidas_cadastrar.php?tiposaida=$tiposaida";
 $tpl1->LINK_ATUAL = "saidas_cadastrar.php?tiposaida=$tiposaida";
@@ -164,9 +185,9 @@ $tpl1->block("BLOCK_JS");
 
 
 //Se for para deletar uma produto da lista
-if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da lista
-    //Antes de atualizar o estoque e remover item das saidas verificar se o item da saida que está querendo deletar já não foi deletado
-    //(isso acontece quando o usuário pressiona F5 depois de clicar no botão remover item)        
+if ($retirar_produto == '1') { //Se o usu�rio clicou no excluir produto da lista
+    //Antes de atualizar o estoque e remover item das saidas verificar se o item da saida que est� querendo deletar j� n�o foi deletado
+    //(isso acontece quando o usu�rio pressiona F5 depois de clicar no bot�o remover item)        
     $sql_f5 = "
         SELECT * 
         FROM saidas_produtos
@@ -215,8 +236,8 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
             if (!$query_repor) {
                 die("Erro de SQL2:" . mysql_error());
             }
-        } else { //O produto não existe mais no estoque, vamos inserir
-            //Pegar os demais dados necessários para inserir no estoque
+        } else { //O produto n�o existe mais no estoque, vamos inserir
+            //Pegar os demais dados necess�rios para inserir no estoque
             $sql = "SELECT * FROM `entradas_produtos` join entradas on (entpro_entrada=ent_codigo) WHERE entpro_entrada=$lote";
             $query = mysql_query($sql);
             if (!$query) {
@@ -237,7 +258,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
         }
 
 
-        //Elimina o protudo da saída
+        //Elimina o protudo da Sa�da
         $sql_del = "DELETE FROM saidas_produtos WHERE saipro_saida=$saida and saipro_codigo=$saipro";
         $query_del = mysql_query($sql_del);
         if (!$query_del) {
@@ -251,7 +272,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
             die("Erro de SQL Status: " . mysql_error());
     }
 } else {
-    //Independente se for cadastrou ou edição, só inserir produto na saida se vier os dados do produto e lote etc. dos campos
+    //Independente se for cadastrou ou edi��o, s� inserir produto na saida se vier os dados do produto e lote etc. dos campos
     if (($saida != "") && ($produto != "") && ($lote != "")) {
 
         //Verifica a quantida atual do estoque
@@ -266,16 +287,17 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
 
         //Calculando a quantidade final
         $qtdfinal = $qtdatual - $qtd;
+        //echo "qtdfinal = $qtdatual - $qtd;";
 
-        //Se a quantidade final do estoque ficar negativa então não permitir seja inserido a saida deste produto e nem atualizado o estoque        
-        //(Isso acontece quando o usuário inclui um produto na lista e pressiona F5)
+        //Se a quantidade final do estoque ficar negativa ent�o n�o permitir seja inserido a saida deste produto e nem atualizado o estoque        
+        //(Isso acontece quando o usu�rio inclui um produto na lista e pressiona F5)
         if ($qtdfinal >= 0) {
-            //Inserindo os produtos na saída
+            //Inserindo os produtos na Sa�da
             $sql_saida_produto = "
             INSERT INTO
                 saidas_produtos (saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal)
             VALUES
-                ('$saida','$produto','$lote','$qtd','$valuni','$valtot')        
+                ('$saida','$produto','$lote','$qtd','$valuni',$valuni*$qtd)        
             ";
             $query_saida_produto = mysql_query($sql_saida_produto);
             if (!$query_saida_produto) {
@@ -305,7 +327,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                 die("Erro de SQL8:" . mysql_error());
             }
 
-            //Se a quantidade do etoque zerou então eliminar o produto do estoque
+            //Se a quantidade do etoque zerou ent�o eliminar o produto do estoque
             if ($qtdfinal == "0") {
                 $sql = "DELETE FROM estoque WHERE etq_quiosque=$usuario_quiosque and etq_produto=$produto and etq_lote=$lote";
                 $query = mysql_query($sql);
@@ -313,20 +335,20 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                     die("Erro de SQL9:" . mysql_error());
                 }
             }
-        }
+        } 
     }
 }
 
 
-//Inserir saida principal com o status incompleto. Esse processo é feito uma unica vez, antes de começar 
-//a inserção dos produtos dentro dessa saida
+//Inserir saida principal com o status incompleto. Esse processo � feito uma unica vez, antes de come�ar 
+//a inser��o dos produtos dentro dessa saida
 if (($saida == 0) && ($passo == 2)) {
-
+    $datahoracadastro=$dataatual." ".$horaatual;
     $sql_saida = "
     INSERT INTO
-        saidas (sai_quiosque, sai_vendedor, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status)
+        saidas (sai_quiosque, sai_caixa, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro)
     VALUES
-        ('$usuario_quiosque','$usuario_codigo','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2)        
+        ('$usuario_quiosque','$usuario_codigo','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2,'$datahoracadastro')        
     ";
     $query_saida = mysql_query($sql_saida);
     if (!$query_saida)
@@ -389,7 +411,7 @@ ORDER BY
     $tpl1->block("BLOCK_ITEM");
 }
 
-//Se o tipo de saida for Devolução
+//Se o tipo de saida for Devolu��o
 if ($tiposaida == 3) {
 
 //Motivo
@@ -424,7 +446,7 @@ if ($tiposaida == 3) {
     $tpl1->block("BLOCK_SELECT");
     $tpl1->block("BLOCK_ITEM");
 
-    //Descrição
+    //Descri��o
     $tpl1->TITULO = "Descrição";
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
@@ -439,9 +461,12 @@ if ($tiposaida == 3) {
     $tpl1->block("BLOCK_TEXTAREA");
     $tpl1->block("BLOCK_ITEM");
 
-    //Alguns campos estão desabilitados, portando deve-se enviar atraves de campos ocultos
+    //Alguns campos est�o desabilitados, portando deve-se enviar atraves de campos ocultos
     $tpl1->CAMPOOCULTO_NOME = "consumidor";
     $tpl1->CAMPOOCULTO_VALOR = "$consumidor";
+    $tpl1->block("BLOCK_CAMPOSOCULTOS");
+    $tpl1->CAMPOOCULTO_NOME = "tiposaida";
+    $tpl1->CAMPOOCULTO_VALOR = "$tiposaida";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
     $tpl1->CAMPOOCULTO_NOME = "tiposaida";
     $tpl1->CAMPOOCULTO_VALOR = "$tiposaida";
@@ -453,7 +478,7 @@ if ($passo == 2) {
 
     //Etiqueta
     $tpl1->CAMPO_QTD_CARACTERES = "14";
-    $tpl1->TITULO = "Código da Etiqueta";
+    $tpl1->TITULO = "Etiqueta";
     $tpl1->ASTERISCO = "";
     $tpl1->CAMPO_TIPO = "text";
     $tpl1->CAMPO_NOME = "etiqueta";
@@ -463,6 +488,24 @@ if ($passo == 2) {
     $tpl1->CAMPO_DESABILITADO = "";
     $tpl1->CAMPO_OBRIGATORIO = " ";
     $tpl1->CAMPO_ONKEYUP = "valida_etiqueta(this)";
+    $tpl1->CAMPO_ONKEYDOWN = "";
+    $tpl1->CAMPO_ONFOCUS = "";
+    $tpl1->block("BLOCK_TITULO");
+    $tpl1->block("BLOCK_CAMPO");
+    $tpl1->block("BLOCK_ITEM");
+
+    //Etiqueta Produto Industrializado
+    $tpl1->CAMPO_QTD_CARACTERES = "13";
+    $tpl1->TITULO = "Etiqueta Código Único";
+    $tpl1->ASTERISCO = "";
+    $tpl1->CAMPO_TIPO = "text";
+    $tpl1->CAMPO_NOME = "etiqueta2";
+    $tpl1->CAMPO_TAMANHO = "15";
+    $tpl1->CAMPO_FOCO = "  ";
+    $tpl1->CAMPO_VALOR = "";
+    $tpl1->CAMPO_DESABILITADO = "";
+    $tpl1->CAMPO_OBRIGATORIO = " ";
+    $tpl1->CAMPO_ONKEYUP = "valida_etiqueta2(this)";
     $tpl1->CAMPO_ONKEYDOWN = "";
     $tpl1->CAMPO_ONFOCUS = "";
     $tpl1->block("BLOCK_TITULO");
@@ -486,7 +529,7 @@ if ($passo == 2) {
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
     $tpl1->SELECT_NOME = "fornecedor";
-    $tpl1->SELECT_OBRIGATORIO = " required ";
+    $tpl1->SELECT_OBRIGATORIO = "  ";
     $tpl1->SELECT_FOCO = "  ";
     $tpl1->SELECT_DESABILITADO = "  ";
     $tpl1->block("BLOCK_SELECT");
@@ -500,6 +543,7 @@ if ($passo == 2) {
     $tpl1->SELECT_OBRIGATORIO = " required ";
     $tpl1->SELECT_FOCO = "  ";
     $tpl1->SELECT_DESABILITADO = "  ";
+    $tpl1->SELECT_AOTROCAR = "popula_lote_oculto(this.value);";
     $tpl1->SPAN2_NOME = "prateleira";
     $tpl1->SPAN2_VALOR = "";
     $tpl1->block("BLOCK_SPAN2");
@@ -535,7 +579,7 @@ if ($passo == 2) {
     $tpl1->block("BLOCK_CAMPO");
     $tpl1->block("BLOCK_ITEM");
 
-    //Valor Unitário
+    //Valor Unit�rio
     $tpl1->CAMPO_QTD_CARACTERES = "";
     $tpl1->TITULO = "Valor Unitário";
     $tpl1->ASTERISCO = "";
@@ -553,7 +597,7 @@ if ($passo == 2) {
     $tpl1->block("BLOCK_TITULO");
     $tpl1->block("BLOCK_CAMPO");
     $tpl1->block("BLOCK_ITEM");
-    //Como o campo está desabilitado é necessário criar um campo oculto. Este é populado via javascript
+    //Como o campo est� desabilitado � necess�rio criar um campo oculto. Este � populado via javascript
     $tpl1->CAMPOOCULTO_NOME = "valuni";
     $tpl1->CAMPOOCULTO_VALOR = "";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
@@ -578,7 +622,7 @@ if ($passo == 2) {
     $tpl1->block("BLOCK_CAMPO");
     $tpl1->block("BLOCK_ITEM");
 
-    //Como o campo está desabilitado é necessário criar um campo oculto. Este é populado via javascript
+    //Como o campo est� desabilitado � necess�rio criar um campo oculto. Este � populado via javascript
     $tpl1->CAMPOOCULTO_NOME = "valtot";
     $tpl1->CAMPOOCULTO_VALOR = "";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
@@ -663,7 +707,7 @@ if ($passo == 2) {
         $tpl1->block("BLOCK_SALVAR_DEVOLUCAO");
     }
     $tpl1->block("BLOCK_BOTOES_RODAPE_SALVAR");
-    $tpl1->LINK_CANCELAR = "saidas_deletar.php?codigo=$saida";
+    $tpl1->LINK_CANCELAR = "saidas_deletar.php?codigo=$saida&tiposaida=$tiposaida";
     $tpl1->block("BLOCK_BOTOES_RODAPE_ELIMINAR");
     if ($tiposaida == 1) {
         $tpl1->LINK_CANCELAR = "saidas.php";
@@ -674,7 +718,7 @@ if ($passo == 2) {
     $tpl1->block("BLOCK_BOTOES_RODAPE");
 }
 
-//Botão Continuar
+//Bot�o Continuar
 $tpl1->BOTAO_TIPO = "submit";
 if ($passo == 2) {
     $tpl1->BOTAO_DESABILITADO = " disabled ";

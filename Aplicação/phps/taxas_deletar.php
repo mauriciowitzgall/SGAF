@@ -19,7 +19,7 @@ $tpl_titulo->NOME_ARQUIVO_ICONE = "taxas.png";
 $tpl_titulo->show();
 
 //RESUMO
-//Na exclusão de taxas deve-se verifica se teve algum acerto que utilizou a taxa em questão. Também não é permitido
+//Na exclusão de taxas deve-se verifica se teve algum acerto que utilizou a taxa em quest�o. Tamb�m n�o � permitido
 //excluir taxas que estão vínculadas a algum quiosque
 
 
@@ -28,7 +28,7 @@ $tpl6->ICONES = $icones;
 
 $codigo = $_GET["codigo"];
 
-//Verifica se houve acertos com a taxa em questão
+//Verifica se houve acertos com a taxa em questo
 $sql = "SELECT acetax_taxa FROM acertos_taxas WHERE acetax_taxa=$codigo";
 $query = mysql_query($sql);
 if (!$query)
@@ -52,8 +52,8 @@ if (!$query)
 if (mysql_num_rows($query) > 0) {
     $tpl6->block("BLOCK_ERRO");
     $tpl6->block("BLOCK_NAOAPAGADO");
-    $tpl6->block("BLOCK_MOTIVO_EMUSO");
-    $tpl6->MOTIVO = "quiosque";
+    //$tpl6->block("BLOCK_MOTIVO_EMUSO");
+    $tpl6->MOTIVO = "Não é possível excluir esta taxa por que ela está vinculada a um ou mais quiosques!";
     $tpl6->block("BLOCK_MOTIVO");
     $tpl6->block("BLOCK_BOTAO_VOLTAR");
     $tpl6->show();

@@ -5,7 +5,7 @@
 	if(mes==2) if(ano%100==0) return 28;	
 	if(mes==2) if(ano%4==0) return 29;	else return 28; 
 }
-var nomeMes = new Array("Janeiro","Fevereiro","Mar√ßo","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro");		
+var nomeMes = new Array("Janeiro","Fevereiro","MarÁo","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro");		
 var hoje = new Date();
 var diaAtual = hoje.getDate();
 var mesAtual = hoje.getMonth()+1;
@@ -60,7 +60,7 @@ jQuery.fn.calendario = function(options){
 	this.each(function(){
 	
 		
-		// Verificando se o botao tem id, sen√£o tem, vai atribuir um id pro bot√£o, para evitar de gerar 2 calendarios
+		// Verificando se o botao tem id, sen„o tem, vai atribuir um id pro bot„o, para evitar de gerar 2 calendarios
 		if(jQuery(this).attr('id')==''){
 			contCalendario++;
 			jQuery(this).attr('id','chamada_cal_'+contCalendario)
@@ -71,7 +71,7 @@ jQuery.fn.calendario = function(options){
 		var mes = mesOriginal;
 		var ano = anoOriginal;	
 	
-		// determinando id pro calend√°rio
+		// determinando id pro calend·rio
 		idCalendario = 'cal_'+idChamada;
 		idCalendario = idCalendario.replace('_dia','').replace('_mes','').replace('_ano','');
 		
@@ -88,11 +88,11 @@ jQuery.fn.calendario = function(options){
 
 		function preencher_calendario(idCalendario){
 		
-			// colocando ou alterando t√≠tulo do calend√°rio
+			// colocando ou alterando t√≠tulo do calend·rio
 			var titulo = nomeMes[mes]+" "+ano;
 			$('#'+idCalendario+' p.nome_mes').html(titulo);
 			
-			// Apagando dias do calend√°rio (caso o usuario esteja avancando / voltando o mes)
+			// Apagando dias do calend·rio (caso o usuario esteja avancando / voltando o mes)
 			$('#'+idCalendario+' ul.lista_dia li.dia_vazio').remove();							
 			$('#'+idCalendario+' ul.lista_dia li.dia').remove();
 			
@@ -101,7 +101,7 @@ jQuery.fn.calendario = function(options){
 			primeiro.setFullYear(ano,mes,1);
 			var inicioSemana = primeiro.getDay();
 			
-			// Preenchendo dias vazios no calend√°rio
+			// Preenchendo dias vazios no calend·rio
 			for(i=0;i<inicioSemana;i++){ 
 				$('#'+idCalendario+' ul.lista_dia').append("<li class='dia_vazio'>&nbsp;<\/li>"); 
 			}
@@ -119,7 +119,7 @@ jQuery.fn.calendario = function(options){
 					}
 				}
 			}
-			// verificando se a data preenchida √© hoje
+			// verificando se a data preenchida È hoje
 			if(mes == mesOriginal && ano == anoOriginal){
 				$('#'+idCalendario+' ul.lista_dia li.dia_n'+diaOriginal).addClass('default');
 			} 			

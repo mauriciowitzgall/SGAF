@@ -2,45 +2,60 @@
 
 <html>
     <head>
-        <script type="text/javascript" src="phps/js/jquery-1.3.2.js"></script>
-        <script type="text/javascript" src="phps/controle/google_analytics.js"></script>
-        <script type="text/javascript">
+        <!--
+        -->
 
-            function submitenter(myfield,e)
-            {
-                var keycode;
-                if (window.event) keycode = window.event.keyCode;
-                else if (e) keycode = e.which;
-                else return true;
+        <html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br" xml:lang="pt-br">
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-                if (keycode == 13)
-                {
-                    validar_usuario();                         
-                    return false;
+            <script type="text/javascript" src="phps/js/jquery-1.3.2.js"></script>
+            <script type="text/javascript" src="phps/controle/google_analytics.js"></script>
+            <script src="phps/js/jquery.maskedinput-1.1.4.pack.js" type="text/javascript"></script>
+            <script src="phps/mascaras.js" type="text/javascript"></script>        
+            <script type="text/javascript" src="phps/funcoes.js"></script>
+            <script type="text/javascript">
+                function validar_usuario(tipo) {                            
+                    var tipopessoa=$("select[name=tipo]").val();
+                    //alert(tipopessoa);
+                    $.post("phps/login_validar.php", { 
+                        cpf:$("input[name=cpf]").val(),
+                        cnpj:$("input[name=cnpj]").val(),
+                        senha:$("input[name=senha]").val(),
+                        tipopessoa:tipopessoa
+                    }, function(valor) {
+                        var validado = valor;                
+                        if (validado == 'vai') {
+                            ///alert("LOGA");
+                            window.location.href="phps/inicio.php";
+                        } else {
+                            alert(valor);
+                        }                
+                    });                         
                 }
-                else
-                    return true;
-            }
-            
-            
-            function validar_usuario() {                            
-                $.post("phps/login_validar.php", { 
-                    codigo:$("input[name=codigo]").val(),
-                    senha:$("input[name=senha]").val()
-                }, function(valor) {
-                    var validado = valor;                
-                    if (validado == 'vai') {
-                        location.href="phps/inicio.php";
-                    } else {
-                        alert(valor);
-                    }                
-                });                         
-            }
-        </script>
-        <title>SGAF</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="phps/classes.css" />
-        
+
+                function troca_login(tipopessoa) {
+                    if (tipopessoa==1) {
+                        $("input[name=cpf]").show();
+                        $("input[name=cpf]").attr("required", true);            
+                        $("input[name=cnpj]").attr("required", false);            
+                        $("input[name=cnpj]").hide();
+                    } else  {
+                        $("input[name=cnpj]").show();
+                        $("input[name=cnpj]").attr("required", true);  
+                        $("input[name=cpf]").attr("required", false); 
+                        $("input[name=cpf]").hide();                    
+                    }
+                }
+            </script>
+            <style>
+                .aparece {display: block;}
+                .some {display: none;}
+            </style> 
+            <title>SGAF</title>
+
+            <link rel="stylesheet" type="text/css" href="phps/classes.css" />
+            <link rel="stylesheet" type="text/css" href="phps/templates/geral.css" />
+
     </head>
     <body>
         <div class="pagina3">
@@ -48,8 +63,21 @@
                 <form name="form1" action="" method="post">
                     <table border="0" style="text-align: center;" class="pagina2">
                         <tr>
+                            <td class="" align="right">
+                                  
+                                <br>
+                                    <a href="phps/cadastre-se.php" class="link">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <!--
+                                    <input type="button" value="CADASTRE-SE" class="botao" onclick="">
+                                     -->
+                                </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                               
+                            </td>
+                        </tr>
+                        <tr>
                             <td>
-                                <img src="imagens/logos/sgaf1.png" width="300px">
+                                <img src="imagens/logos/sgaf1.png" width="200px">
                             </td>
                         </tr>
                         <tr>
@@ -59,47 +87,49 @@
                         </tr>       
                         <tr>
                             <td  class="titulo2">
-                                <span class="fonte1">Versão 1.0</span>
+                                <span class="fonte1">Versão 1.2 (Módulo Misto)</span>
                             </td>
                         </tr>       
                     </table><br><br>
-                    <table border="0" style="text-align: center;" class="tabela_login">
-                        <tr height="50px">
-                            <td colspan="2" class="" width="320px">
-                                <img src="imagens/icones/geral/entrar.png" width="35px">
-                                &nbsp;&nbsp;&nbsp;<span class="fonte5">ENTRAR NO SISTEMA</span>
-                            </td>                    
-                        </tr>       
-                        <tr height="40px" class="fundo1">
-                            <td align="right" width="100px">ID:</td>
-                            <td align="left"><input type="text" name="codigo" id="codigo" value="" class="campo1 campoobrigatorio" required onKeyPress="return submitenter(this,event)"></td>
-                        </tr>       
-                        <tr height="40px" class="fundo1">
-                            <td align="right" width="100px">SENHA:</td>
-                            <td align="left"><input type="password" name="senha" value="" class="campo1 campoobrigatorio" required onKeyPress="return submitenter(this,event)"></td>
-                        </tr>       
-                        <tr height="50px">
-                            <td class="sembordadireita">&nbsp;</td>
-                            <td class="sembordaesquerda" align="left"><input type="button" value="ENTRAR" class="botao" onclick="validar_usuario()"></td>
-                        </tr>       
-                    </table> 
-            </center>
+                            <table border="0" style="text-align: center;" class="tabela_login">
+                                <tr height="50px">
+                                    <td colspan="2" class="" width="320px">
+                                        <img src="imagens/icones/geral/entrar.png" width="35px">
+                                            &nbsp;&nbsp;&nbsp;<span class="fonte5">ENTRAR NO SISTEMA</span>
+                                    </td>                    
+                                </tr>       
+                                <tr height="40px" class="fundo1">
+                                    <td align="right" width="100px">TIPO PESSOA:</td>
+                                    <td align="left" width="100px">
+                                        <select name="tipo" class="campopadrao campo_tamanho_5" onchange="troca_login(this.value);">
+                                            <option value="1">Pessoa Física</option>
+                                            <option value="2">Pessoa Jurídica</option>
+                                        </select> 
+                                    </td>
+                                </tr>
+                                <tr height="40px" class="fundo1">
+                                    <td align="right" width="100px">CPF/CNPJ:</td>
+                                    <td align="left">
+                                        <input type="text" name="cpf" id="cpf" value="" class="campopadrao  campo_tamanho_5" required onKeyPress="return submitenter(this,event)" onblur="valida_cpf(this.value)" onclick="this.select();">
+                                        <input type="text" name="cnpj" id="cnpj" value="" class="campopadrao  campo_tamanho_5
+                                               some" required onKeyPress="return submitenter(this,event)" onblur="valida_cnpj(this.value)" onclick="this.select();">
+                                    </td>
+                                </tr>       
+                                <tr height="40px" class="fundo1">
+                                    <td align="right" width="100px">SENHA:</td>
+                                    <td align="left"><input type="password" name="senha" value="" class="campopadrao  campo_tamanho_5" required onKeyPress="return submitenter(this,event)"></td>
+                                </tr>       
+                                <tr height="50px">
+                                    <td class="sembordadireita">&nbsp;</td>
+                                    <td class="sembordaesquerda" align="left"><input type="button" value="ENTRAR" class="botao" onclick="validar_usuario($('select[name=tipo]').val())"></td>
+                                </tr>       
+                                <tr>
+                                    <td></td>
+                                    <td class="sembordaesquerda" align="left"><a class="link1" href="phps/esqueciminhasenha.php"><span class="">Esqueci minha senha!</span></a><br>&nbsp;</td>
+                                </tr>
+                            </table> 
+                        </center>
 
-            <!--
-            <br><br>
-            <hr><br>
-            <div class="descricaodosistema">
-                <span class="titulogrande">SOBRE O SISTEMA</span>
-                <br><hr class="linhacurta" width="300px" align="left">
-                <p class="">
-                    Texto da tela Inicial vem aqui Texto da tela Inicial vem aqui
-                    Texto da tela Inicial vem aqui Texto da tela Inicial vem aqui
-                    Texto da tela Inicial vem aqui Texto da tela Inicial vem aqui Texto da tela
-                    Inicial vem aqui Texto da tela Inicial vem aqui Texto da tela Inicial vem aqui
-                    Texto da tela Inicial vem aqui
-                </p>
-            </div>
-            -->
         </div>  
     </body>
 </html>

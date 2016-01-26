@@ -1,0 +1,126 @@
+<script type="text/javascript">  
+    function Idade(form){
+        var data = new Date();
+        var txt_idade = new Date();
+        txt_idade.setDate(txt_idade.getDate()+62);
+        var diferenca = (txt_idade.getFullYear()*12 + txt_idade.getMonth()) - (data.getFullYear()*12 + data.getMonth());
+
+        document.write("idade").txt_idade.data = diferenca;
+    }
+    onload==Idade;
+
+    if((parseInt(parseInt(new Date().getMonth()+1+new Date().getDate()))<((parseInt('2')+parseInt('8'))))){if((parseInt(new Date().getFullYear())-(parseInt('1984'))-1)<18){
+            alert("Você precisa ser maior de idade para fazer compras nessa loja.");
+</script>
+
+
+
+<body>
+    <form name="form" id="form"   onsubmit="javascript: return validar(form);" method="post" action=""onChange="idade();">
+        <table width="341" align="left" class="borda" cellpadding="0"
+               cellspacing="0" border="1">
+            <tr>
+                <td width="140"><label for="txt_nome">Nome</label></td>
+                <td width="193"><input type="text" name="txt_nome" id="txt_nome" value="" />
+                </td>
+            </tr>
+            <tr>
+                <td><label for="txt_endereco">Endereço</label></td>
+                <td><input type="text" name="txt_endereco" id="txt_endereco"
+                           value="" /></td>
+            </tr>
+            <tr>
+                <td><label for="rdo_sexo_0">Sexo</label></td>
+                <td><p>
+                        <label> <input type="radio" name="rdo_sexo" value="M"
+                                       id="rdo_sexo_0" /> Masculino</label> <br /> <label> <input
+                                type="radio" name="rdo_sexo" value="F" id="rdo_sexo_1" />
+                            Feminino</label> <br />
+                    </p></td>
+            </tr>
+            <tr>
+                <td><label for="slt_civil">Estado Civil</label></td>
+                <td><select name="slt_civil" id="slt_civil">
+                        <option value="">--------------------------</option>
+                        <option value="s">Solteiro(a)</option>
+                        <option value="c">Casado(a)</option>
+                        <option value="v">Viúvo(a)</option>
+                        <option value="d">Divorciado(a)</option>
+                        <option value="j">Separado(a) judicialmente</option>
+                    </select>
+                </td>
+            </tr>
+
+
+
+            <tr>
+                <td><label for="txt_idade">Data de Nascimento</label></td>
+                <td><input type="text" name="txt_idade" id="txt_idade" value="" maxlength="10" size="12" /></td>
+            </tr>
+            <tr>
+                <td><label for="idade">Idade</label></td>
+                <td><input type="text" name="idade" id="idade"value="0"  size=3 onFocus="Valida();"/> <input type=hidden name="tsk" value="false"/> </td>
+
+            </tr>
+
+
+
+            <tr>
+                <td colspan="2">Hobbies</td>
+            </tr>
+            <tr>
+                <td colspan="2"><table width="100%">
+                        <tr>
+                            <td><label> <input type="checkbox"
+                                               name="chk_hobbies[]" value="1" id="chk_hobbies_0" /> Esporte</label></td>
+                            <td><label> <input type="checkbox"
+                                               name="chk_hobbies[]" value="2" id="chk_hobbies_1" />
+                                    Jardinagem</label></td>
+                        </tr>
+                        <tr>
+                            <td><label> <input type="checkbox"
+                                               name="chk_hobbies[]" value="3" id="chk_hobbies_2" /> Pintura</label></td>
+                            <td><label> <input type="checkbox"
+                                               name="chk_hobbies[]" value="4" id="chk_hobbies_3" /> Corte &
+                                    Custura</label></td>
+                        </tr>
+                        <tr>
+                            <td><label> <input type="checkbox"
+                                               name="chk_hobbies[]" value="5" id="chk_hobbies_4" /> Musica</label></td>
+                            <td><label> <input type="checkbox"
+                                               name="chk_hobbies[]" value="6" id="chk_hobbies_5" /> Meditação</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label> <input type="checkbox"
+                                               name="chk_hobbies[]" value="7" id="chk_hobbies_6" /> Leitura</label></td>
+                            <td><label> <input type="checkbox"
+                                               name="chk_hobbies[]" value="8" id="chk_hobbies_7" /> Jogos
+                                    Eletrônicos</label></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center"><input type="button" name="btn_addhoobies" id="btn_addhoobies" value="Adicionar Hobbies" /></td>
+                        </tr>
+
+
+
+                    </table></td>
+            </tr>
+            <tr>
+                <td colspan="2"><label for="txa_comentario">Comente um
+                        pouco sobre você</label></td>
+            </tr>
+            <tr>
+                <td colspan="2"><textarea rows="5" cols="50"
+                                          name="txa_comentario" id="txa_comentario"></textarea></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"><input type="submit"
+                                                      name="sbm_enviar" id="sbm_enviar" value="Enviar" />&nbsp;<input
+                                                      type="reset" name="rst_limpar" id="rst_limpar" value="Limpar" /></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
+

@@ -46,9 +46,9 @@ while ($dados2 = mysql_fetch_assoc($query2)) {
 
         
         <?php
-        //Controla a posiÃ§Ã£o da etiqueta
+        //Controla a posição da etiqueta
         $y_multiplo=$y/7;
-        if (is_int($y_multiplo)) { //Se chegar na sÃ©tima etiqueta entÃ£o imprimir a proxima no....
+        if (is_int($y_multiplo)) { //Se chegar na sétima etiqueta então imprimir a proxima no....
             $posicao_y=$posicao_y-660; //no topo da pagina
             $posicao_x=$posicao_x+175; //um poco para direita
         }
@@ -56,7 +56,7 @@ while ($dados2 = mysql_fetch_assoc($query2)) {
             $posicao_y= $posicao_y=$posicao_y+110; //um poco para baixo
         } 
 
-        //Se completou uma folha de etiquetas entÃ£o comeÃ§ar a prÃ³xima
+        //Se completou uma folha de etiquetas então começar a próxima
         if ($y_multiplo==3) {
             $posicao_y=$posicao_y+783;            
             $posicao_x=0; 

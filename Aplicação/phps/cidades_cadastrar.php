@@ -1,5 +1,5 @@
 <?php
-//Verifica se o usuÃ¡rio tem permissÃ£o para acessar este conteÃºdo
+//Verifica se o usuário tem permissão para acessar este conteúdo
 require "login_verifica.php";
 if ($permissao_cidades_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -12,12 +12,12 @@ include "includes.php";
 //Template de TÃ­tulo e Sub-tÃ­tulo
 $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "CIDADES";
-$tpl_titulo->SUBTITULO = "CADASTRO/EDIÃ‡ÃƒO";
+$tpl_titulo->SUBTITULO = "CADASTRO/EDIÇÃO";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "locais.png";
 $tpl_titulo->show();
 
-//Pega todos os dados da tabela (NecessÃ¡rio caso seja uma ediÃ§Ã£o)
+//Pega todos os dados da tabela (Necessário caso seja uma edição)
 $codigo = $_GET["codigo"];
 $sql = "SELECT * FROM cidades join estados on (cid_estado=est_codigo) WHERE cid_codigo='$codigo'";
 $query = mysql_query($sql);
@@ -99,7 +99,7 @@ if (!$query)
 while ($dados = mysql_fetch_array($query)) {
     $tpl1->OPTION_VALOR = $dados["est_codigo"];
     $tpl1->OPTION_NOME = $dados["est_nome"];    
-    //Se a operaÃ§Ã£o for editar entÃ£o mostrar os options, e o option em questÃ£o selecinado
+    //Se a operação for editar então mostrar os options, e o option em questão selecinado
     if ($codigo != "") { 
         if ($estado == $dados["est_codigo"]) {
             $tpl1->OPTION_SELECIONADO = " selected ";
