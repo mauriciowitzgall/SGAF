@@ -1,5 +1,7 @@
 # Espaço reservado para incluir as alterações de banco de dados necessárias #
 
+# Baixe a versão 3.0. A partir desta estrutura pode executar os scripts abaixo para adaptar para a versão desejada
+
 # Versão 3.1 
 
 # Novo tipo de contagem. Cadastrar 'Sacola' e 'Outros'
@@ -180,3 +182,7 @@ ADD COLUMN `caiopo_supervisor` INT(11) NULL AFTER `caiopo_valorfinal`;
 
 ALTER TABLE `sgaf_online`.`caixas` 
 ADD COLUMN `cai_status` INT(1) NOT NULL DEFAULT 1 AFTER `cai_datahoracadastro`;
+
+# Versão 3.1.1
+
+# ... 

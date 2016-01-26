@@ -30,4 +30,27 @@ Desenvolvido várias melhorias não documentadas. Mas em resumo nesta versão te
 - Criado o Cadastre-se
 - Corrigido vários bugs
 
+3.1 
+
+Melhorias: 
+
+- Supervisores podem ver outros supervisores
+- Alterado tela de produtos incluindo tratamento quando um produto é industrializado ou não
+- Criado módulo de caixa básico, sem sangria
+- Criado Tela para alterar de um quiosque/cooperativa para outro sem precisar fazer logoff
+- Alterado visual dos campos. Campos obrigatórios ficam vermelhor fraco no fundo
+- Criado exclusão de cooperativas e quiosques
+- Alterado tela de suporte permitindo que os usuários enviem e-mails a ecosoli
+- Realizado várias alterações de permissão de acesso conforme o grupo de permissão de cada usuário
+- O acesso de adminsitradores foi alterado, criado um menu específico e habilitado novas telas (cidades, estados, países, cooperativas)
+- Novo tipo de contagem. Cadastrar 'Sacola' e 'Outros'
+
+Erros corrigidos:
+
+- Alterado configurações de banco de dados como engine, collation e FKs
+- Corrigido problemas que impediam a realização de fechamentos
+- Corrigido problemas de exclusão de acertos de consignação
+- Corrigido erro que mostrava campos errados conforme selecionada pessoa física ou jurídica
+- Corrigido problema de campos com hora e data que estavam sem máscara ou sendo gravados nulos
+- Corrigido erros e melhorado tela de inclusão de taxas aos quiosques
 

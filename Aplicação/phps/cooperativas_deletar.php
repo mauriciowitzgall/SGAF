@@ -43,7 +43,7 @@ if ($usuario_grupo==1) {
     } else if ($passo==2) { //Pode deletar o quiosque e suas referencias
         
         // Pessoas
-        echo $sql3 = "DELETE FROM fornecedores_tiponegociacao WHERE fortipneg_pessoa in (SELECT pes_codigo FROM pessoas WHERE pes_cooperativa=$codigo and (pes_grupopermissoes != 1 OR pes_grupopermissoes is null))";
+        $sql3 = "DELETE FROM fornecedores_tiponegociacao WHERE fortipneg_pessoa in (SELECT pes_codigo FROM pessoas WHERE pes_cooperativa=$codigo and (pes_grupopermissoes != 1 OR pes_grupopermissoes is null))";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL1: " . mysql_error());
         $sql3 = "DELETE FROM mestre_pessoas_tipo WHERE mespestip_pessoa in (SELECT pes_codigo FROM pessoas WHERE pes_cooperativa=$codigo and (pes_grupopermissoes != 1 OR pes_grupopermissoes is null))";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL2: " . mysql_error());
