@@ -3,10 +3,10 @@ Instruções
 - Utilize o NetBeans como editor de código fonte. Basta abrir os projetos, que se encontram no mesmo diretório dos códigos fontes
 
 - Para criar os primeiros usuário você deve logar como usuário root.
-Login: 1 
+Login: 999.999.999-99 
 Senha: ecosoliroot
 
-- Crie um usuário administrador. Este usuário poderá fazer tudo. O usuário root só tem permissão para criar usuário administradores.
+- Crie um usuário administrador. Este usuário poderá fazer tudo. O usuário root só tem permissão para criar usuário administradores e cooperativas.
 
 - Configurações PHP.ini
 display_errors=Off

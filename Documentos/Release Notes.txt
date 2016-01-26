@@ -1,0 +1,30 @@
+Release Notes
+
+1.0
+
+- Controle de estoque
+- Emissão de código de barras para colar nos produtos
+- Controle de Vendas
+- Acertos financeiros com os fornecedores
+- Gestão de validade dos produtos em estoque
+- Auxílio no reabastecimento de estoque
+- Relatórios de vendas por produto ou fornecedor
+- Fornecedor acessa o sistema de casa
+
+2.0
+
+Desenvolvido várias melhorias não documentadas. Mas em resumo nesta versão temos os itens abaixo:
+
+- Acesso do presidente ou gestor de cooperativa
+- Adicionado novo método de venda chamado Revenda (preço de custo e preço de venda)
+- Criado fechamento de revendas
+- Novo tipos de taxas (revenda)
+- Relatórios novos
+- Incluso métodos de pagamentos
+- Incluso vendas de carderninho/fiado
+- Login por CPF
+- Adicionado pessoa jurídica
+
+
+
+
