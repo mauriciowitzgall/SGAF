@@ -68,8 +68,9 @@ $tpl_notificacao = new Template("templates/notificacao.html");
 
 
 if ($codigo == "") {
-    $sql = " INSERT INTO quiosques (qui_nome,qui_cidade,qui_cep,qui_bairro,qui_vila,qui_endereco,qui_numero,qui_complemento,qui_referencia,qui_fone1,qui_fone2,qui_email,qui_obs,qui_datacadastro,qui_horacadastro,qui_cooperativa,qui_usuario)
-	VALUES ('$nome','$cidade','$cep','$bairro','$vila','$endereco','$numero','$complemento','$referencia','$fone1','$fone2','$email','$obs','$datacadastro','$horacadastro','$cooperativa','$usuario_codigo');";
+    $idunico=  uniqid();
+    $sql = " INSERT INTO quiosques (qui_nome,qui_cidade,qui_cep,qui_bairro,qui_vila,qui_endereco,qui_numero,qui_complemento,qui_referencia,qui_fone1,qui_fone2,qui_email,qui_obs,qui_datacadastro,qui_horacadastro,qui_cooperativa,qui_usuario,qui_idunico)
+	VALUES ('$nome','$cidade','$cep','$bairro','$vila','$endereco','$numero','$complemento','$referencia','$fone1','$fone2','$email','$obs','$datacadastro','$horacadastro','$cooperativa','$usuario_codigo','$idunico');";
     $query = mysql_query($sql);
     if (!$query)
         die("Erro SQL");    

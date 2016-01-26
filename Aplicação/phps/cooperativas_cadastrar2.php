@@ -21,6 +21,8 @@ $codigo = $_POST["codigo"];
 $nome = $_POST["nome"];
 $abreviacao = $_POST["abreviacao"];
 $presidente = $_POST["presidente"];
+if ($presidente=='')
+    $presidente = 'NULL';
 $erro = 0;
 
 
@@ -58,11 +60,11 @@ if ($erro == 0) {
 //Caso a operação seja CADASTRO    
     if ($codigo == "") {
         //Inserir registro
-        $sql = "
+        echo $sql = "
         INSERT INTO
             cooperativas (coo_nomecompleto,coo_abreviacao,coo_presidente)
         VALUES 
-            ('$nome','$abreviacao','$presidente');
+            ('$nome','$abreviacao',$presidente );
         ";
         if (!mysql_query($sql))
             die("Erro: " . mysql_error());

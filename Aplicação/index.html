@@ -14,36 +14,36 @@
             <script src="phps/mascaras.js" type="text/javascript"></script>        
             <script type="text/javascript" src="phps/funcoes.js"></script>
             <script type="text/javascript">
-                function validar_usuario(tipo) {                            
-                    var tipopessoa=$("select[name=tipo]").val();
+                function validar_usuario(tipo) {
+                    var tipopessoa = $("select[name=tipo]").val();
                     //alert(tipopessoa);
-                    $.post("phps/login_validar.php", { 
-                        cpf:$("input[name=cpf]").val(),
-                        cnpj:$("input[name=cnpj]").val(),
-                        senha:$("input[name=senha]").val(),
-                        tipopessoa:tipopessoa
+                    $.post("phps/login_validar.php", {
+                        cpf: $("input[name=cpf]").val(),
+                        cnpj: $("input[name=cnpj]").val(),
+                        senha: $("input[name=senha]").val(),
+                        tipopessoa: tipopessoa
                     }, function(valor) {
-                        var validado = valor;                
+                        var validado = valor;
                         if (validado == 'vai') {
                             ///alert("LOGA");
-                            window.location.href="phps/inicio.php";
+                            window.location.href = "phps/inicio.php";
                         } else {
                             alert(valor);
-                        }                
-                    });                         
+                        }
+                    });
                 }
 
                 function troca_login(tipopessoa) {
-                    if (tipopessoa==1) {
+                    if (tipopessoa == 1) {
                         $("input[name=cpf]").show();
-                        $("input[name=cpf]").attr("required", true);            
-                        $("input[name=cnpj]").attr("required", false);            
+                        $("input[name=cpf]").attr("required", true);
+                        $("input[name=cnpj]").attr("required", false);
                         $("input[name=cnpj]").hide();
-                    } else  {
+                    } else {
                         $("input[name=cnpj]").show();
-                        $("input[name=cnpj]").attr("required", true);  
-                        $("input[name=cpf]").attr("required", false); 
-                        $("input[name=cpf]").hide();                    
+                        $("input[name=cnpj]").attr("required", true);
+                        $("input[name=cpf]").attr("required", false);
+                        $("input[name=cpf]").hide();
                     }
                 }
             </script>
@@ -64,15 +64,18 @@
                     <table border="0" style="text-align: center;" class="pagina2">
                         <tr>
                             <td class="" align="right">
-                                  
+
                                 <br>
+                                    <a href="http://ecosoli.org" class="link">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input type="button" value="PORTAL" class="botao" onclick="">
+                                    </a>
+
                                     <a href="phps/cadastre-se.php" class="link">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <!--
-                                    <input type="button" value="CADASTRE-SE" class="botao" onclick="">
-                                     -->
-                                </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                               
+                                    &nbsp;
+                                        <input type="button" value="CADASTRE-SE" class="botao" onclick="">
+                                    </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
                             </td>
                         </tr>
                         <tr>
@@ -87,7 +90,7 @@
                         </tr>       
                         <tr>
                             <td  class="titulo2">
-                                <span class="fonte1">Versão 2.0</span>
+                                <span class="fonte1">Versão SGAF Online 1.0</span>
                             </td>
                         </tr>       
                     </table><br><br>
@@ -110,27 +113,27 @@
                                 <tr height="40px" class="fundo1">
                                     <td align="right" width="100px">CPF/CNPJ:</td>
                                     <td align="left">
-                                        <input type="text" name="cpf" id="cpf" value="" class="campopadrao  campo_tamanho_5" required onKeyPress="return submitenter(this,event)" onblur="valida_cpf(this.value)" onclick="this.select();">
-                                        <input type="text" name="cnpj" id="cnpj" value="" class="campopadrao  campo_tamanho_5
-                                               some" required onKeyPress="return submitenter(this,event)" onblur="valida_cnpj(this.value)" onclick="this.select();">
-                                    </td>
-                                </tr>       
-                                <tr height="40px" class="fundo1">
-                                    <td align="right" width="100px">SENHA:</td>
-                                    <td align="left"><input type="password" name="senha" value="" class="campopadrao  campo_tamanho_5" required onKeyPress="return submitenter(this,event)"></td>
-                                </tr>       
-                                <tr height="50px">
-                                    <td class="sembordadireita">&nbsp;</td>
-                                    <td class="sembordaesquerda" align="left"><input type="button" value="ENTRAR" class="botao" onclick="validar_usuario($('select[name=tipo]').val())"></td>
-                                </tr>       
-                                <tr>
-                                    <td></td>
-                                    <td class="sembordaesquerda" align="left"><a class="link1" href="phps/esqueciminhasenha.php"><span class="">Esqueci minha senha!</span></a><br>&nbsp;</td>
-                                </tr>
-                            </table> 
-                        </center>
+                                        <input type="text" name="cpf" id="cpf" value="" class="campopadrao  campo_tamanho_5" required onKeyPress="return submitenter(this, event)" onblur="valida_cpf(this.value)" onclick="this.select();">
+                                            <input type="text" name="cnpj" id="cnpj" value="" class="campopadrao  campo_tamanho_5
+                                                   some" required onKeyPress="return submitenter(this, event)" onblur="valida_cnpj(this.value)" onclick="this.select();">
+                                                </td>
+                                                </tr>       
+                                                <tr height="40px" class="fundo1">
+                                                    <td align="right" width="100px">SENHA:</td>
+                                                    <td align="left"><input type="password" name="senha" value="" class="campopadrao  campo_tamanho_5" required onKeyPress="return submitenter(this, event)"></td>
+                                                </tr>       
+                                                <tr height="50px">
+                                                    <td class="sembordadireita">&nbsp;</td>
+                                                    <td class="sembordaesquerda" align="left"><input type="button" value="ENTRAR" class="botao" onclick="validar_usuario($('select[name=tipo]').val())"></td>
+                                                </tr>       
+                                                <tr>
+                                                    <td></td>
+                                                    <td class="sembordaesquerda" align="left"><a class="link1" href="phps/esqueciminhasenha.php"><span class="">Esqueci minha senha!</span></a><br>&nbsp;</td>
+                                                </tr>
+                                                </table> 
+                                                </center>
 
-        </div>  
-    </body>
-</html>
+                                                </div>  
+                                                </body>
+                                                </html>
 

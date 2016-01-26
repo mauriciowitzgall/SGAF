@@ -10,10 +10,14 @@ if ($quiosque_revenda <> 1) {
 $tipopagina = "negociacoes";
 include "includes.php";
 include "controller/classes.php";
+$obj = new banco();
 
 $passo = $_REQUEST["passo"];
 if (!$passo)
     $passo = 1;
+$passo = $obj->ehnumerico($passo);
+
+
 $dataini = $_REQUEST["dataini"];
 $horaini = $_REQUEST["horaini"];
 $datafim = $_REQUEST["datafim"];
@@ -29,7 +33,6 @@ if (($datafim == "") || ($horafim == ""))
     $datafim_datetime = date("Y-m-d H:i");
 else
     $datafim_datetime = $datafim . " " . $horafim;
-
 
 
 $detprodutos = $_REQUEST["detprodutos"];

@@ -1,6 +1,7 @@
 <?php
 
 //Verifica se o usu�rio tem permiss�o para acessar este conte�do
+
 require "login_verifica.php";
 if ($permissao_saidas_ver <> 1) {
     header("Location: permissoes_semacesso.php");

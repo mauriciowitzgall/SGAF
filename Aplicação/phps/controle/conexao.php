@@ -1,9 +1,9 @@
 <?php 
    
    $hostname = "localhost";
-   $db = "sgaf2";
+   $db = "sgaf3";
    $user = "root";
-   $pass = '' ;
+   $pass = "";
    
    $link = mysql_connect($hostname, $user, $pass);
    if (!$link) {

@@ -1,4 +1,6 @@
+
 <?php
+
 
 //Verifica se o usuário tem permiss�o para acessar este conte�do
 require "login_verifica.php";

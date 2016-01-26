@@ -1,7 +1,13 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br" xml:lang="pt-br">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 <?php
 
 session_cache_expire(180);
 session_start();
+date_default_timezone_set('America/Sao_Paulo');
+    
+error_reporting(E_ERROR | E_PARSE);
 
 include "controle/conexao.php";
 //include "controle/conexao_tipo.php";

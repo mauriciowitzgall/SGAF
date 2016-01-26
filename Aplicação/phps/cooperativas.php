@@ -94,9 +94,9 @@ if (($paginaatual == "") || ($paginas < $paginaatual) || ($paginaatual <= 0)) {
     $paginaatual = 1;
 }
 $comeco = ($paginaatual - 1) * $por_pagina;
-$tpl->PAGINAS="$paginas";
-$tpl->PAGINAATUAL="$paginaatual";
-$tpl->PASTA_ICONES="$icones";
+$tpl->PAGINAS = "$paginas";
+$tpl->PAGINAATUAL = "$paginaatual";
+$tpl->PASTA_ICONES = "$icones";
 $tpl->block("BLOCK_PAGINACAO");
 $sql = $sql . " LIMIT $comeco,$por_pagina ";
 
@@ -122,14 +122,17 @@ while ($dados = mysql_fetch_array($query)) {
 
 
     //Coluna Presidente
-    $tpl->COLUNA_LINK="pessoas_cadastrar.php?codigo=$presidente&operacao=ver";
+    $tpl->COLUNA_LINK = "pessoas_cadastrar.php?codigo=$presidente&operacao=ver";
     $tpl->block("BLOCK_LISTA_COLUNA_LINK");
-    $sql2 = "SELECT * FROM pessoas WHERE pes_codigo=$presidente ORDER BY pes_nome";
-    $query2 = mysql_query($sql2);
-    if (!$query2)
-        die("Erro: " . mysql_error());
-    $dados2 = mysql_fetch_array($query2);
-    $tpl->LISTA_COLUNA_VALOR = $dados2["pes_nome"];
+    if ($presidente != '') {
+
+        $sql2 = "SELECT * FROM pessoas WHERE pes_codigo=$presidente ORDER BY pes_nome";
+        $query2 = mysql_query($sql2);
+        if (!$query2)
+            die("Erro: " . mysql_error());
+        $dados2 = mysql_fetch_array($query2);
+        $tpl->LISTA_COLUNA_VALOR = $dados2["pes_nome"];
+    }
     $tpl->block("BLOCK_LISTA_COLUNA_LINK_FIM");
     $tpl->block("BLOCK_LISTA_COLUNA");
 
@@ -137,39 +140,39 @@ while ($dados = mysql_fetch_array($query)) {
     //Coluna Opera�ões
     $tpl->CODIGO = $codigo;
     //editar  
-    IF ($permissao_cooperativa_editar==1) {
+    IF ($permissao_cooperativa_editar == 1) {
         $tpl->OPERACAO_NOME = "Editar";
         $tpl->LINK = "cooperativas_cadastrar.php";
         $tpl->LINK_COMPLEMENTO = "operacao=editar";
         $tpl->ICONE_ARQUIVO = $icones . "editar.png";
-        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");        
-    } else {  
+        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
+    } else {
         $tpl->OPERACAO_NOME = "Você não tem permissão para editar cooperativas! Contate um administrador!";
-        $tpl->ICONE_ARQUIVO = $icones . "editar_desabilitado.png";            
-        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");        
-    }       
-    $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_TODAS");        
+        $tpl->ICONE_ARQUIVO = $icones . "editar_desabilitado.png";
+        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");
+    }
+    $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_TODAS");
     //excluir
-    IF ($permissao_cooperativa_excluir==1) {
+    IF ($permissao_cooperativa_excluir == 1) {
         $tpl->OPERACAO_NOME = "Excluir";
         $tpl->LINK = "cooperativas_deletar.php";
         $tpl->LINK_COMPLEMENTO = "operacao=excluir";
         $tpl->ICONE_ARQUIVO = $icones . "excluir.png";
-        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");        
-    } else {  
+        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
+    } else {
         $tpl->OPERACAO_NOME = "Você não tem permissão para excluir cooperativas! Contate um administrador!";
-        $tpl->ICONE_ARQUIVO = $icones . "excluir_desabilitado.png";            
-        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");        
-    }       
-    $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_TODAS");        
-       
+        $tpl->ICONE_ARQUIVO = $icones . "excluir_desabilitado.png";
+        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");
+    }
+    $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_TODAS");
+
 
     $tpl->block("BLOCK_LISTA");
 }
 $tpl->LINK_CADASTRO = "cooperativas_cadastrar.php?operacao=cadastrar";
 $tpl->CADASTRAR_NOME = "CADASTRAR";
 if (mysql_num_rows($query) == 0) {
-    $tpl->LISTANADA="4";
+    $tpl->LISTANADA = "4";
     $tpl->block("BLOCK_LISTA_NADA");
 }
 

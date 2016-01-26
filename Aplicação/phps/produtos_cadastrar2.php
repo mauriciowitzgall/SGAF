@@ -72,8 +72,9 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         $tpl_notificacao->block("BLOCK_BOTAO_VOLTAR");
         $tpl_notificacao->show();
     } else {
-        $sql = "INSERT INTO produtos (pro_nome,pro_tipocontagem,pro_categoria,pro_descricao,pro_datacriacao,pro_horacriacao,pro_cooperativa,pro_volume,pro_marca,pro_recipiente,pro_composicao,pro_codigounico)
-	VALUES ('$nome','$tipo','$categoria','$descricao','$data','$hora',$usuario_cooperativa,'$volume','$marca','$recipiente','$composicao','$codigounico');";
+        $idunico=  uniqid();
+        $sql = "INSERT INTO produtos (pro_nome,pro_tipocontagem,pro_categoria,pro_descricao,pro_datacriacao,pro_horacriacao,pro_cooperativa,pro_volume,pro_marca,pro_recipiente,pro_composicao,pro_codigounico,pro_idunico)
+	VALUES ('$nome','$tipo','$categoria','$descricao','$data','$hora',$usuario_cooperativa,'$volume','$marca','$recipiente','$composicao','$codigounico','$idunico');";
         $query = mysql_query($sql);
         if (!$query)
             die("Erro22: " . mysql_error());

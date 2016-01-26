@@ -19,8 +19,8 @@ $destinatario = "mauwitz@gmail.com";
 
 //Configuração do Remetente
 $remetente_nome="Ecosoli Suporte";
-$remetente = "ecosolisistemas@gmail.com";
-$remetente_senha = "m848484e";
+$remetente = "suporte@ecosoli.org";
+$remetente_senha = "suporteECOSOLI";
 
 
 //Estrutua para enviar o e-mail

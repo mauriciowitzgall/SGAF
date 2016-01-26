@@ -124,6 +124,7 @@
 
             //Cadastrar o quiosque dentro da cooperativa
             $cooperativa_ultimo = mysql_insert_id();
+            $idunico=  uniqid();
             $sql2 = "
                 INSERT INTO quiosques (
                 qui_nome,
@@ -141,7 +142,8 @@
                 qui_email,
                 qui_datacadastro,
                 qui_horacadastro,
-                qui_cooperativa
+                qui_cooperativa,
+                qui_idunico
                 ) VALUES (
                 '$nomepv',
                 '$cidadepv',
@@ -158,7 +160,8 @@
                 '$emailpv',
                 '$dataatual',
                 '$horaatual',
-                '$cooperativa_ultimo'
+                '$cooperativa_ultimo',
+                '$idunico'
                 );
             ";
             if (!mysql_query($sql2))

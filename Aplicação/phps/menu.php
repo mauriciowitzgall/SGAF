@@ -17,12 +17,14 @@ $tpl_menu->TD_ALTURA = "72px";
 $tpl_menu->TD_LARGURA = "100px";
 $tpl_menu->TD_ALINHAMENTO_VERTICAL = "bottom";
 
+
+
 //Quiosques
-$tpl_menu->IMAGEM_TITULO = "Quiosques";
-$tpl_menu->TITULO = "Quiosques";
-if ($permissao_quiosque_ver == 1) {
-    $tpl_menu->IMAGEM_ARQUIVO = "quiosques.png";
-    $tpl_menu->LINK = "quiosques.php";
+$tpl_menu->IMAGEM_TITULO = "Pontos de Venda";
+$tpl_menu->TITULO = "Pontos de Venda";
+if ($permissao_cooperativa_ver == 1) {
+    $tpl_menu->IMAGEM_ARQUIVO = "cooperativas.png";
+    $tpl_menu->LINK = "cooperativas.php";
     $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
     $tpl_menu->block("BLOCK_MENU_ITEM");
 }
