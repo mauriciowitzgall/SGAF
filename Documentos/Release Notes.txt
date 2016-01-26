@@ -25,6 +25,9 @@ Desenvolvido várias melhorias não documentadas. Mas em resumo nesta versão te
 - Login por CPF
 - Adicionado pessoa jurídica
 
+3.0
 
+- Criado o Cadastre-se
+- Corrigido vários bugs
 
 

@@ -60,7 +60,7 @@ if ($erro == 0) {
 //Caso a operação seja CADASTRO    
     if ($codigo == "") {
         //Inserir registro
-        echo $sql = "
+        $sql = "
         INSERT INTO
             cooperativas (coo_nomecompleto,coo_abreviacao,coo_presidente)
         VALUES 
