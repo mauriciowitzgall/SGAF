@@ -12,7 +12,7 @@ $tipopagina = "negociacoes";
 include "includes.php";
 
 $datacadastro = date("Y-m-d");
-$horacadastro = date("h:i:s");
+$horacadastro = date("H:i:s");
 $dataini = $_POST["dataini"];
 $datafim = $_POST["datafim"];
 $horaini = $_POST["horaini"];
@@ -32,7 +32,6 @@ $qtdfornecedores = $_POST["qtdfornecedores"];
 $qtdlotes = $_POST["qtdlotes"];
 
 include "controller/classes.php";
-$obj = new banco();
 
 
 //TÍTULO PRINCIPAL
@@ -56,7 +55,9 @@ AND ent_quiosque = $usuario_quiosque
 AND sai_tipo = 1
 AND sai_status = 1
 ";
-$query = $obj->query($sql);
+$query = mysql_query($sql);
+if (!$query)
+    die("Erro: " . mysql_error());
 $linhas = mysql_num_rows($query);
 if ($linhas==0) {
     $tpl11 = new Template("templates/notificacao.html");
@@ -108,10 +109,10 @@ VALUES (
     '$usuario_quiosque'
     )
 ";
-$obj->conectar();
-$obj->query_semconexao($sql);
+$query = mysql_query($sql);
+if (!$query)
+    die("Erro: " . mysql_error());
 $ultimo = mysql_insert_id();
-$obj->desconecta();
 
 echo "<br><br>";
 
@@ -126,7 +127,9 @@ $sql2 = "
     AND tax_quiosque in (0,$usuario_quiosque)
     AND tax_tiponegociacao=2
 ";
-$query2 = $obj->query($sql2);
+$query2 = mysql_query($sql2);
+if (!$query2)
+    die("Erro: " . mysql_error());
 while ($dados2 = mysql_fetch_assoc($query2)) {
     
     $taxa = $dados2["quitax_taxa"];
@@ -144,7 +147,9 @@ while ($dados2 = mysql_fetch_assoc($query2)) {
         '$taxaref',
         '$taxavalor'
     )";
-    $query5 = $obj->query($sql5);
+    $query5 = mysql_query($sql5);
+    if (!$query5)
+        die("Erro: " . mysql_error());
 }
 
 
@@ -162,7 +167,9 @@ $sql8="
     AND sai_datahoracadastro BETWEEN '$dataini_datetime' AND '$datafim_datetime:59'
     AND sai_status=1      
 ";
-$query8 = $obj->query($sql8);
+$query8 = mysql_query($sql8);
+if (!$query8)
+    die("Erro: " . mysql_error());
 
 $tpl6 = new Template("templates/notificacao.html");
 $tpl6->ICONES = $icones;

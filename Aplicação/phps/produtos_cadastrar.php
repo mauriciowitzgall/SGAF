@@ -29,11 +29,34 @@ while ($array = mysql_fetch_array($query)) {
     $volume = $array['pro_volume'];
     $composicao = $array['pro_composicao'];
     $codigounico = $array['pro_codigounico'];
+    $industrializado = $array['pro_industrializado'];
 }
 ?>
 <script type="text/javascript" src="js/capitular.js"></script>
+<script type="text/javascript">
+window.onload = function(){
+    ind=$("select[name=industrializado]").val();
+    if (ind==0) {
+        $("tr[id=id_marca]").hide(); 
+        $("tr[id=id_codigounico]").hide(); 
+    } else {
+        $("tr[id=id_marca]").show(); 
+        $("tr[id=id_codigounico]").show(); 
+    }
+    tipocon=$("select[name=tipo]").val();
+    if (tipocon==1) {
+        $("tr[id=id_volume]").hide(); 
+        $("tr[id=id_recipiente]").hide(); 
+    } else {
+        $("tr[id=id_volume]").show(); 
+        $("tr[id=id_recipiente]").show(); 
+        
+    }
+}
 
+</script>
 
+ 
 <table summary="" class="" border="0">
     <tr>
         <td width="35px"><img width="50px" src="<?php echo $icones; ?>produtos.png" alt="" ></td>
@@ -71,14 +94,71 @@ if ($linhas == 0) {
             <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="nome" autofocus size="45" class="campopadrao" required value="<?php echo "$nome"; ?>" <?php if ($ver == 1) echo" disabled "; ?> ></td>
         </tr>
         <tr>
+            <td align="right" width="200px"><b>Produto industrializado <label class="obrigatorio"></label></b></td>
+            <td align="left" width="">
+                <select name="industrializado" id="industrializado" class="campopadrao" required onchange="produto_industrializado(this.value)" <?php if ($ver==1) echo " disabled "; ?>>
+                    <option>Selecione</option>
+                    <option value="1" <?php if ($industrializado==1) echo " selected "; ?>>Sim</option>
+                    <option value="0" <?php if ($industrializado==0) echo " selected "; ?>>Não</option>
+                </select>
+            </td>
+        </tr>
+        <tr id="id_marca">
             <td align="right" width="200px"><b>Marca: <label class="obrigatorio"></label></b></td>
             <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="marca"  size="30" class="campopadrao"  value="<?php echo "$marca"; ?>" <?php if ($ver == 1) echo" disabled "; ?> ></td>
         </tr>
+        <tr id="id_codigounico">
+            <td align="right" width="200px">
+                <b>Código Único (barras): <label class="obrigatorio"></label>
+                </b>
+            </td>
+            <td align="left" width="">
+                <input  onkeypress=""  id="capitalizar" type="text" name="codigounico" maxlength="13" size="15" class="campopadrao"  value="<?php echo "$codigounico"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder="">
+            </td>
+        </tr>
         <tr>
+           <td align="right" width="200px"><b>Tipo de Contagem: <label class="obrigatorio"></label></b></td>
+           <td align="left" width="">
+               <select name="tipo" id="tipo" class="campopadrao" required="required" onchange="sigla();tipo_contagem(this.value);" 
+               <?php
+               //Se tiver alguma entrada com este produto não dá mais para editar o tipo de contagem
+               $sql8 = "
+               SELECT entpro_produto
+               FROM entradas_produtos
+               WHERE entpro_produto=$codigo
+           ";
+               $query8 = mysql_query($sql8);
+               $linhas8 = mysql_num_rows($query8);
+               
+               if (($linhas8 > 0) || ($ver == 1))
+                   echo " disabled ";
+               ?> >
+                   <option value="">Selecione</option>		
+                   <?php
+                   $sql1 = "SELECT * FROM produtos_tipo ";
+                   $query1 = mysql_query($sql1);
+                   while ($array1 = mysql_fetch_array($query1)) {
+                       ?><option value="<?php echo"$array1[0]"; ?>" <?php
+                   if ($array1[0] == $tipo) {
+                       echo "selected ";
+                   }
+                   if ((empty($tipo))&&($array1[0]==1)) echo " selected "; 
+                       ?> ><?php echo"$array1[1]"; ?></option><?php
+                       }
+                   ?>
+               </select>
+               <?php if ($linhas8>0) {?>
+               <img src="../imagens/icones/geral/info.png" width="12px" title="Não é possível editar o tipo de contagem porque este produto possui entradas" alt="Informação">            
+               <?php } ?>
+               <input type="hidden" name="tipo2" value="<?php echo $tipo; ?>"> 
+           </td>
+       </tr>
+        
+        <tr id="id_volume">
             <td align="right" width="200px"><b>Volume: <label class="obrigatorio"></label></b></td>
             <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="volume"  size="15" class="campopadrao"  value="<?php echo "$volume"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo">Ex: 150g ou 200ml</span></td>
         </tr>
-        <tr>
+        <tr id="id_recipiente">
             <td align="right" width="200px"><b>Recipiente / Embalagem: <label class="obrigatorio"></label></b></td>
             <td align="left" width="">
                 <select name="recipiente" id="tipo" class="campopadrao"  onchange="" 
@@ -101,37 +181,7 @@ if ($linhas == 0) {
                 </select>
             </td>
         </tr>
-        <tr>
-            <td align="right" width="200px"><b>Tipo de Contagem: <label class="obrigatorio"></label></b></td>
-            <td align="left" width="">
-                <select name="tipo" id="tipo" class="campopadrao" required="required" onchange="sigla()" 
-                <?php
-                $sql8 = "
-                SELECT entpro_produto
-                FROM entradas_produtos
-                WHERE entpro_produto=$codigo
-            ";
-                $query8 = mysql_query($sql8);
-                $linhas8 = mysql_num_rows($query8);
-                if (($linhas8 > 0) || ($ver == 1))
-                    echo " disabled ";
-                ?> >
-                    <option value="">Selecione</option>		
-                    <?php
-                    $sql1 = "SELECT * FROM produtos_tipo ";
-                    $query1 = mysql_query($sql1);
-                    while ($array1 = mysql_fetch_array($query1)) {
-                        ?><option value="<?php echo"$array1[0]"; ?>" <?php
-                    if ($array1[0] == $tipo) {
-                        echo "selected ";
-                    }
-                        ?> ><?php echo"$array1[1]"; ?></option><?php
-                        }
-                    ?>
-                </select>
-                <input type="hidden" name="tipo2" value="<?php echo $tipo; ?>"> 
-            </td>
-        </tr>
+       
         <tr>
             <td align="right" width="200px"><b>Categoria: <label class="obrigatorio"></label></b></td>
             <td align="left" width="">
@@ -149,16 +199,6 @@ if ($linhas == 0) {
                         }
                     ?>
                 </select>
-            </td>
-        </tr>
-        <tr>
-            <td align="right" width="200px">
-                <b>Código Único (barras): <label class="obrigatorio"></label>
-                </b>
-            </td>
-            <td align="left" width="">
-                <input  onkeypress=""  id="capitalizar" type="text" name="codigounico" maxlength="13" size="15" class="campopadrao"  value="<?php echo "$codigounico"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder="">
-                <span class="dicacampo">Ex: 150g ou 200ml</span>
             </td>
         </tr>
         <tr>

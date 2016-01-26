@@ -96,22 +96,29 @@
                     $tpl->DESTINO = "../index.html";
                     $tpl->block("BLOCK_BOTAO");
                     $tpl->show();
+                    
+                    //link usando para que o usuário clique e entao seja redirecionado ao sistem para digitar uma nosa senha
+                    $emailmd5=md5($email_banco);                    
+                    $link=$_SERVER["SERVER_NAME"]."/sgaf_online/phps/"."novasenha.php?cpf=$cpf&par=$emailmd5"; 
 
                     //Enviar e-mail ao usuário
-                    $destinatario = "$email";
-                    $titulo="Recuperar senha da conta SGAF Online";
-                    $emailmd5=md5($email_banco);
-                    $link=$_SERVER["SERVER_NAME"]."/sgaf_online/phps/"."novasenha.php?cpf=$cpf&par=$emailmd5";
-                    $textoemail = "
+                    include "email.php";
+                    $de="mauwitz@hotmail.com";
+                    $de_senha="m8w2t84";
+                    $para = "$email";
+                    $de_nome="SGAF Suporte ";
+                    $assunto="Recuperar senha da conta SGAF Online";
+                    $corpo = "
                         Ecosoli Suporte\n\n
                         Recuperação de senha\n
                         Para definir uma nova senha ao seu usuário no sistema SGAF Online, clique no link  a seguir:\n
-                        $link \n
+                         \n
                         Este e-mail foi enviado para você porque este endereço de e-mail está cadastrado como referência para recuperação de senha no sistema SGAF Online (ecosoli.org).\n
                         Se você não sabe do que se trata isso, por favor ignore esta mensagem!\n\n
                         Atenciosamente...\nEquipe Ecosoli Suporte
                     ";
-                    include "email.php";
+                    smtpmailer($para, $de, $de_senha, $de_nome, $assunto, $corpo);
+                    if (!empty($error)) echo $error;
                     
                     
                 } else {
@@ -133,42 +140,7 @@
             }
 
 
-            //$tpl = new Template("templates/notificacao.html");
-            //$tpl->block("BLOCK_CONFIRMAR");
-            //$tpl->block("BLOCK_ERRO");
-            //$tpl->block("BLOCK_ATENCAO");
-            //$tpl->block("BLOCK_APAGADO");
-            //$tpl->block("BLOCK_NAOAPAGADO");
-            //$tpl->block("BLOCK_NAOCADASTRADO");
-            //$tpl->block("BLOCK_NAOEDITADO");
-            //$tpl->block("BLOCK_MOTIVO_JAEXISTE");
-            //$tpl->block("BLOCK_MOTIVO_EMUSO");
-            //$tpl->FALTADADOS_MOTIVO="";
-            //$tpl->block("BLOCK_MOTIVO_FALTADADOS");
-            //$tpl->block("BLOCK_NAOTEMPERMISSAO");
-            //$tpl->MOTIVO="";
-            //$tpl->MOTIVO_COMPLEMENTO="";            
-            //$tpl->block("BLOCK_MOTIVO");
-            //$tpl->PERGUNTA="";
-            //$tpl->block("BLOCK_PERGUNTA");
-            //$tpl->BOTAOGERAL_DESTINO="";
-            //$tpl->block("BLOCK_BOTAOGERAL_NOVAJANELA");
-            //$tpl->BOTAOGERAL_TIPO="";
-            //$tpl->BOTAOGERAL_NOME="";
-            //$tpl->BOTAOGERAL_CLASSE="";
-            //$tpl->block("BLOCK_BOTAOGERAL_AUTOFOCO");
-            //$tpl->block("BLOCK_BOTAOGERAL");            
-            //$tpl->DESTINO = "";
-            //$tpl->block("BLOCK_BOTAO");
-            //$tpl->block("BLOCK_BOTAO_VOLTAR");
-            //$tpl->VOLTAR2_LINK = "";
-            //$tpl->block("BLOCK_BOTAO_VOLTAR2");
-            //$tpl->LINK = "";
-            //$tpl->LINK_TARGET = "";
-            //$tpl->NAO_LINK = "";
-            //$tpl->block("BLOCK_BOTAO_NAO_LINK");
-            //$tpl->block("BLOCK_BOTAO_NAO_VOLTAR");
-            //$tpl->block("BLOCK_BOTAO_SIMNAO");
+       
             ?>
         </div>        
 

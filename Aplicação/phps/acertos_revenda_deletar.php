@@ -26,7 +26,6 @@ $tpl_titulo->show();
  */
 
 $codigo = $_REQUEST["codigo"];
-$obj= new banco();
 
 
 //Altera todos os produtos vendidos que foram acertados para 'n�o acertados'
@@ -39,7 +38,9 @@ $sql = "
     saipro_fechado='$codigo'
     ";
 
-$obj->query($sql);
+$query = mysql_query($sql);
+if (!$query)
+    die("Erro SQL: " . mysql_error());
 
 
 //Deleta todoa as taxas do fechamento para depois excluir o fechamento
@@ -48,7 +49,9 @@ $sql = "
     WHERE fchtax_fechamento=$codigo
 ";
 
-$obj->query($sql);
+$query = mysql_query($sql);
+if (!$query)
+    die("Erro SQL: " . mysql_error());
 
 
 //Deleta o fechamento
@@ -57,8 +60,9 @@ $sql = "
     WHERE fch_codigo=$codigo
 ";
 
-$obj->query($sql);
-
+$query = mysql_query($sql);
+if (!$query)
+    die("Erro SQL: " . mysql_error());
 
 $tpl6 = new Template("templates/notificacao.html");
 $tpl6->ICONES = $icones;

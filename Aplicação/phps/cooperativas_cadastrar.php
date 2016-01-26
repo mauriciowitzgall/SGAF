@@ -7,8 +7,8 @@ if ($permissao_cooperativa_cadastrar <> 1) {
 }
 
 
+$tipopagina = "cooperativa";
 include "includes.php";
-$tipopagina = "cooperativas";
 
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");

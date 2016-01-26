@@ -55,6 +55,9 @@ else
     $consumidor_nome = $dados["pes_nome"];
 $tipo_nome = $dados["saitip_nome"];
 $descricao = $dados["sai_descricao"];
+$data = $dados["sai_datacadastro"];
+$hora = $dados["sai_horacadastro"];
+$numero = $dados["sai_codigo"];
 
 $totalbruto = $dados["sai_totalbruto"];
 $areceber = $dados["sai_areceber"];
@@ -68,14 +71,58 @@ $tpl1_tit->block("BLOCK_QUEBRA1");
 $tpl1_tit->block("BLOCK_TITULO");
 $tpl1_tit->show();
 
-
-
 $tpl = new Template("templates/cadastro1.html");
 
 if ($tiposaida == 1) {
 
+    //Numero
+    $tpl->COLUNA_ALINHAMENTO = "right";
+    $tpl->COLUNA_TAMANHO = "200px";
+    $tpl->TITULO = "Nº";
+    $tpl->block("BLOCK_TITULO");
+    $tpl->block("BLOCK_CONTEUDO");
+    $tpl->block("BLOCK_COLUNA");
+    $tpl->COLUNA_ALINHAMENTO = "left";
+    $tpl->COLUNA_TAMANHO = "";
+    $tpl->CAMPO_TIPO = "text";
+    $tpl->CAMPO_NOME = "numero";
+    $tpl->CAMPO_VALOR = "$numero";
+    $tpl->block("BLOCK_CAMPO_PADRAO");
+    $tpl->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl->block("BLOCK_CAMPO");
+    $tpl->block("BLOCK_CONTEUDO");
+    $tpl->block("BLOCK_COLUNA");
+    $tpl->block("BLOCK_LINHA");
+
+    //Data e Hora
+    $tpl->COLUNA_ALINHAMENTO = "right";
+    $tpl->COLUNA_TAMANHO = "200px";
+    $tpl->TITULO = "Data";
+    $tpl->block("BLOCK_TITULO");
+    $tpl->block("BLOCK_CONTEUDO");
+    $tpl->block("BLOCK_COLUNA");
+    $tpl->COLUNA_ALINHAMENTO = "left";
+    $tpl->COLUNA_TAMANHO = "";
+    $tpl->CAMPO_TIPO = "date";
+    $tpl->CAMPO_NOME = "data";
+    $tpl->CAMPO_VALOR = "$data";
+    $tpl->block("BLOCK_CAMPO_PADRAO");
+    $tpl->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl->block("BLOCK_CAMPO");
+    $tpl->block("BLOCK_CONTEUDO");
+    $tpl->COLUNA_ALINHAMENTO = "left";
+    $tpl->COLUNA_TAMANHO = "";
+    $tpl->CAMPO_TIPO = "time";
+    $tpl->CAMPO_NOME = "hora";
+    $tpl->CAMPO_VALOR = "$hora";
+    $tpl->block("BLOCK_CAMPO_PADRAO");
+    $tpl->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl->block("BLOCK_CAMPO");
+    $tpl->block("BLOCK_CONTEUDO");
+    $tpl->block("BLOCK_COLUNA");
+    $tpl->block("BLOCK_LINHA");
+
     //Consumidor
-    //Titulo
     $tpl->COLUNA_ALINHAMENTO = "right";
     $tpl->COLUNA_TAMANHO = "200px";
     $tpl->TITULO = "Consumidor";
@@ -84,7 +131,6 @@ if ($tiposaida == 1) {
     $tpl->block("BLOCK_COLUNA");
     $tpl->COLUNA_ALINHAMENTO = "left";
     $tpl->COLUNA_TAMANHO = "";
-    //Campo
     $tpl->CAMPO_TIPO = "text";
     $tpl->CAMPO_NOME = "consumidor";
     $tpl->CAMPO_VALOR = "$consumidor_nome";

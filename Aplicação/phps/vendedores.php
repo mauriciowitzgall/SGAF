@@ -7,7 +7,7 @@ if ($permissao_quiosque_vervendedores <> 1) {
     exit;
 }
 
-$tipopagina = "cooperativas";
+$tipopagina = "quiosques";
 include "includes.php";
 
 //Template de Título e Sub-título

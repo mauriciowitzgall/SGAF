@@ -7,7 +7,7 @@ if ($permissao_taxas_excluir <> 1) {
     exit;
 }
 
-$tipopagina = "cooperativas";
+$tipopagina = "quiosques";
 include "includes.php";
 
 //TÍTULO PRINCIPAL
@@ -15,7 +15,7 @@ $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "TAXAS";
 $tpl_titulo->SUBTITULO = "CADASTRO";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "taxas.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "quiosques_taxas.png";
 $tpl_titulo->show();
 
 //RESUMO

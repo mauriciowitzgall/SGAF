@@ -7,7 +7,7 @@ if ($permissao_quiosque_versupervisores <> 1) {
     exit;
 }
 
-$tipopagina = "cooperativas";
+$tipopagina = "quiosques";
 include "includes.php";
 
 //Template de Título e Sub-título
@@ -15,7 +15,7 @@ $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "SUPERVISORES";
 $tpl_titulo->SUBTITULO = "LISTA DE SUPERVISORES DO QUIOSQUE";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "../pessoas2/supervisor.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "quiosque_supervisores.png";
 $tpl_titulo->show();
 
 $tpl = new Template("templates/listagem_2.html");

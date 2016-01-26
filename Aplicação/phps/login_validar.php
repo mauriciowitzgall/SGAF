@@ -46,7 +46,8 @@ SELECT
     pes_quiosqueusuario,
     pes_cidade,
     cid_estado,
-    est_pais
+    est_pais,
+    pes_caixaoperacaonumero
 FROM 
     pessoas
     left join cidades on (pes_cidade=cid_codigo)

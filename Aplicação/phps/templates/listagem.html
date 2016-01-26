@@ -1,4 +1,41 @@
 <script type="text/javascript" src="paginacao.js"></script>
+<style type="text/css">
+    .tab_filtro {
+        font-size: 10pt;
+        background-color: white;
+        color: black;
+    }
+
+    .tab {
+        font-size: 10pt;
+        background-color: transparent;
+        color: black;    
+        width: 100%; 
+        border-collapse: collapse;    
+        border: 1px gray solid;
+    }
+
+    .tab_cabecalho {
+        font-weight: bold;
+        text-align: center;
+        background-color: #E4E4E4;	
+        border: 1px gray solid;
+    }
+
+
+    .tab_linhas {    
+        border: 1px gray solid;
+    }
+    .tab_linhas:hover {
+        border: 1px gray solid;
+        background-color: #E0EEE0;
+    }
+
+    .tab_operacao {
+        background-color: #E4E4E4;
+    }
+</style>
+
 <body  onload="{FORM_ONLOAD}">
 <form action="{LINK_FILTRO}" method="post" name="formfiltro">
     <!-- BEGIN BLOCK_FILTRO -->
@@ -85,10 +122,15 @@
                 </a>
                 <!-- END BLOCK_LISTA_COLUNA_LINK_FIM -->                    
             </td> 
-
-
-
-            <!-- END BLOCK_LISTA_COLUNA -->                               
+            <!-- END BLOCK_LISTA_COLUNA -->  
+            
+            
+            <!-- BEGIN BLOCK_LISTA_COLUNA_ICONE2 -->
+            <td align="center" class="" width="{COLUNA2_TAMANHO}">                                
+                <img   width="{ICONE2_TAMANHO}" src="{ICONE2_ARQUIVO}" title="{OPERACAO2_NOME}"  alt="{OPERACAO2_NOME}" />
+            </td>            
+            <!-- END BLOCK_LISTA_COLUNA_ICONE2 -->  
+            
 
             <!-- BEGIN BLOCK_LISTA_COLUNA_ICONE -->
             <td align="center" class="" width="">                                
@@ -98,7 +140,7 @@
 
             <!-- BEGIN BLOCK_LISTA_COLUNA_OPERACAO_TODAS -->
             <!-- BEGIN BLOCK_LISTA_COLUNA_OPERACAO -->
-            <td align="center" class="fundo1" width="35px">                                
+            <td align="center" class="tab_operacao" width="35px">                                
                 <a href="{LINK}?codigo={CODIGO}&{LINK_COMPLEMENTO}" class="link1" 
                 <!-- BEGIN BLOCK_LISTA_COLUNA_OPERACAO_NOVAPAGINA -->
                 target="_blank"
@@ -110,7 +152,7 @@
             <!-- END BLOCK_LISTA_COLUNA_OPERACAO -->  
             
             <!-- BEGIN BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO -->
-            <td align="center" class="fundo1" width="35px">                                
+            <td align="center" class="tab_operacao" width="35px">                                
                 <img  width="18px" src="{ICONE_ARQUIVO}" title="{OPERACAO_NOME}"  alt="{OPERACAO_NOME}" />
             </td>
             <!-- END BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO -->            

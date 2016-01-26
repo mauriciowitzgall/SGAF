@@ -121,7 +121,7 @@ while($array=mysql_fetch_array($query))
 }
 if ($linhas=="0")
 {
-	?> <tr><td colspan="10" align="center" class="errado"> <?php echo "Nenhum resultado!" ?> </td></tr> <?php
+	?> <tr><td colspan="30" align="center" class="errado"> <?php echo "Nenhum resultado!" ?> </td></tr> <?php
 }
 ?>
 </tr>

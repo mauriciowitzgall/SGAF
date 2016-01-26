@@ -14,7 +14,7 @@
 
 
 .campopadrao {
-    -webkit-appearance: none;
+    //-webkit-appearance: none;
     background-image: none; /* remove the value that chrome dose not use */
     background-color: #333; /* set the value it does */
     border-radius: 3px;     /* make it look kinda like the background image */    
@@ -29,7 +29,7 @@
     border: 0px solid #888;
 }
 .campopadrao:required {    
-    
+    background-color: #FBEFEF;
 }
 .campopadrao:focus {        
     

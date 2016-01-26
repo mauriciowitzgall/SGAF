@@ -58,7 +58,7 @@ if ($linhas3 > 0) {
 
 
 //Verifica se o esta pessoa é caixa de algum quiosque
-$sql2 = "SELECT * FROM quiosques_caixas WHERE quicai_caixa=$codigo";
+$sql2 = "SELECT * FROM caixas_operadores WHERE caiope_operador=$codigo";
 $query2 = mysql_query($sql2);
 if (!$query2)
     die("Erro: 1" . mysql_error());
@@ -107,7 +107,7 @@ if ($linhas > 0) {
 }
 
 //Verifica se ele � ja participou de saidas como consumidor ou caixa
-$sql = "SELECT * FROM saidas WHERE sai_caixa=$codigo OR sai_consumidor=$codigo";
+$sql = "SELECT * FROM saidas JOIN caixas_operacoes on (sai_caixaoperacaonumero=caiopo_numero) WHERE caiopo_operador=$codigo OR sai_consumidor=$codigo";
 $query = mysql_query($sql);
 if (!$query) {
     die("Erro SQL: " . mysql_error());

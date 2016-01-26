@@ -1,10 +1,12 @@
 <?php
 
+
 include "controle/conexao.php";
 include "controle/conexao_tipo.php";
-require "login_verifica.php";
+include "funcoes.php";
 
 $fornecedor = $_POST["fornecedor"];
+$usuario_quiosque = $_POST["quiosque"];
 
 //Pegar data e hora inicial
 //O sistema sempre pega a data e hora do ultimo acerto, caso não tenha nenhum efetuado, pega-se a data e hora da primeira venda
@@ -68,4 +70,4 @@ $horaini = $dat[1];
 $horaini = explode(':', $horaini);
 $horaini = $horaini[0] . ":" . $horaini[1];
 echo "$dataini";
-?>
+?> 

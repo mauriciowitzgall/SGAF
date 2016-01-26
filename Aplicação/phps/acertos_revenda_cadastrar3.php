@@ -34,14 +34,15 @@ if (($codigo == "") || (!in_array($operacao, array('4', '5')))) { //ver e imprim
     exit;
 }
 
-$obj = new banco();
 $sql = "
     SELECT * 
     FROM fechamentos
     JOIN pessoas on (fch_supervisor=pes_codigo)
     WHERE fch_codigo=$codigo
 ";
-$query = $obj->query($sql);
+$query = mysql_query($sql);
+if (!$query)
+    die("Erro: " . mysql_error());
 $dados = mysql_fetch_array($query);
 $numero = $dados["fch_codigo"];
 $dat = explode(' ', $dados["fch_dataini"]);
@@ -76,15 +77,17 @@ $tpl->block("BLOCK_COLUNA");
 //Data inicial
 $tpl->COLUNA_ALINHAMENTO = "";
 $tpl->COLUNA_TAMANHO = "";
-$tpl->CAMPO_TIPO = "text";
+$tpl->CAMPO_TIPO = "date";
+//$tpl->CAMPO_TAMANHO = "8";
+$tpl->CAMPO_ESTILO="width:140px";
+$tpl->block("BLOCK_CAMPO_ESTILO");
+$tpl->CAMPO_VALOR = "$dataini";
 $tpl->CAMPO_DICA = "";
 $tpl->CAMPO_NOME = "dataini";
 $tpl->CAMPO_ID = "dataini";
 $tpl->CAMPO_AOCLICAR = "";
 $tpl->CAMPO_ONKEYUP = "";
 $tpl->CAMPO_ONBLUR = "";
-$tpl->CAMPO_VALOR = "$dataini";
-$tpl->CAMPO_TAMANHO = "8";
 //$tpl->block("BLOCK_CAMPO_OBRIGATORIO");
 $tpl->block("BLOCK_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_CAMPO_PADRAO");
@@ -94,7 +97,10 @@ $tpl->block("BLOCK_COLUNA");
 //Hora inicial
 $tpl->COLUNA_ALINHAMENTO = "";
 $tpl->COLUNA_TAMANHO = "";
-$tpl->CAMPO_TIPO = "";
+$tpl->CAMPO_TIPO = "time";
+//$tpl->CAMPO_TAMANHO = "6";
+$tpl->CAMPO_ESTILO="width:80px";
+$tpl->block("BLOCK_CAMPO_ESTILO");
 $tpl->CAMPO_DICA = "";
 $tpl->CAMPO_NOME = "horaini";
 $tpl->CAMPO_ID = "horaini";
@@ -102,7 +108,7 @@ $tpl->CAMPO_AOCLICAR = "";
 $tpl->CAMPO_ONKEYUP = "";
 $tpl->CAMPO_ONBLUR = "";
 $tpl->CAMPO_VALOR = "$horaini";
-$tpl->CAMPO_TAMANHO = "6";
+
 //$tpl->block("BLOCK_CAMPO_OBRIGATORIO");
 $tpl->block("BLOCK_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_CAMPO_PADRAO");
@@ -120,8 +126,11 @@ $tpl->block("BLOCK_COLUNA");
 //Data final
 $tpl->COLUNA_ALINHAMENTO = "";
 $tpl->COLUNA_TAMANHO = "";
-$tpl->CAMPO_TIPO = "text";
-$tpl->CAMPO_VALOR = converte_data($datafim);
+$tpl->CAMPO_TIPO = "date";
+//$tpl->CAMPO_TAMANHO = "8";
+$tpl->CAMPO_ESTILO="width:140px";
+$tpl->block("BLOCK_CAMPO_ESTILO");
+$tpl->CAMPO_VALOR = $datafim;
 $tpl->block("BLOCK_CAMPO_OBRIGATORIO");
 $tpl->CAMPO_DICA = "";
 $tpl->CAMPO_NOME = "datafim";
@@ -129,7 +138,6 @@ $tpl->CAMPO_ID = "datafim";
 $tpl->CAMPO_AOCLICAR = "";
 $tpl->CAMPO_ONKEYUP = "";
 $tpl->CAMPO_ONBLUR = "";
-$tpl->CAMPO_TAMANHO = "8";
 $tpl->block("BLOCK_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_CAMPO_PADRAO");
 $tpl->block("BLOCK_CAMPO");
@@ -138,7 +146,10 @@ $tpl->block("BLOCK_COLUNA");
 //Hora final
 $tpl->COLUNA_ALINHAMENTO = "";
 $tpl->COLUNA_TAMANHO = "";
-$tpl->CAMPO_TIPO = "text";
+$tpl->CAMPO_TIPO = "time";
+//$tpl->CAMPO_TAMANHO = "8";
+$tpl->CAMPO_ESTILO="width:80px";
+$tpl->block("BLOCK_CAMPO_ESTILO");
 $tpl->CAMPO_VALOR = converte_hora($horafim);
 $tpl->CAMPO_DICA = "";
 $tpl->CAMPO_NOME = "horafim";
@@ -146,7 +157,6 @@ $tpl->CAMPO_ID = "horafim";
 $tpl->CAMPO_AOCLICAR = "";
 $tpl->CAMPO_ONKEYUP = "";
 $tpl->CAMPO_ONBLUR = "";
-$tpl->CAMPO_TAMANHO = "8";
 $tpl->block("BLOCK_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_CAMPO_PADRAO");
 $tpl->block("BLOCK_CAMPO");
@@ -295,7 +305,9 @@ if ($passo == 2) {
     JOIN produtos_tipo ON (protip_codigo=pro_tipocontagem)
     WHERE saipro_fechado=$codigo
     ";
-    $query = $obj->query($sql);
+    $query = mysql_query($sql);
+    if (!$query)
+        die("Erro: " . mysql_error());
     $dados = mysql_fetch_array($query);
     $venda_total = $dados[0];
     $custo_total = $dados[1];
@@ -327,7 +339,9 @@ if ($passo == 2) {
     JOIN saidas on (sai_codigo=saipro_saida)
     WHERE saipro_fechado=$codigo      
     ";
-    $query3 = $obj->query($sql3);
+    $query3 = mysql_query($sql3);
+    if (!$query3)
+        die("Erro: " . mysql_error());
     $dados3 = mysql_fetch_array($query3);
     $qtdvendas = $dados3[0];
     //Calcula a QTD de Produtos
@@ -338,7 +352,9 @@ if ($passo == 2) {
     JOIN saidas on (sai_codigo=saipro_saida)
     WHERE saipro_fechado=$codigo
     ";
-    $query3 = $obj->query($sql3);
+    $query3 = mysql_query($sql3);
+    if (!$query3)
+        die("Erro: " . mysql_error());
     $dados3 = mysql_fetch_array($query3);
     $qtdprodutos = $dados3[0];
     //Calcula a QTD DE LOTES
@@ -349,7 +365,9 @@ if ($passo == 2) {
     JOIN saidas on (sai_codigo=saipro_saida)
 WHERE saipro_fechado=$codigo        
     ";
-    $query3 = $obj->query($sql3);
+    $query3 = mysql_query($sql3);
+    if (!$query3)
+        die("Erro: " . mysql_error());
     $dados3 = mysql_fetch_array($query3);
     $qtdlotes = $dados3[0];
     $tpl2->COLUNA_TAMANHO = "";
@@ -430,7 +448,9 @@ WHERE saipro_fechado=$codigo
     JOIN taxas on (fchtax_taxa=tax_codigo)
     WHERE fchtax_fechamento=$codigo 
     ";
-    $query = $obj->query($sql);
+    $query = mysql_query($sql);
+    if (!$query)
+        die("Erro: " . mysql_error());
     $taxas = 0;
     $saldo_total = 0;
     while ($dados = mysql_fetch_assoc($query)) {
@@ -542,7 +562,9 @@ WHERE saipro_fechado=$codigo
         WHERE saipro_fechado=$codigo
         GROUP BY saipro_produto
         ";
-        $query = $obj->query($sql);
+        $query = mysql_query($sql);
+        if (!$query)
+            die("Erro: " . mysql_error());
         while ($dados = mysql_fetch_assoc($query)) {
             $produto = $dados['pro_codigo'];
             $produto_nome = $dados['pro_nome'];
@@ -706,7 +728,9 @@ WHERE saipro_fechado=$codigo
         WHERE saipro_fechado=$codigo
         GROUP BY pes_codigo
         ";
-        $query = $obj->query($sql);
+        $query = mysql_query($sql);
+        if (!$query)
+            die("Erro: " . mysql_error());
         while ($dados = mysql_fetch_assoc($query)) {
             $tpl2->COLUNA_TAMANHO = "";
             $tpl2->COLUNA_ALINHAMENTO = "";

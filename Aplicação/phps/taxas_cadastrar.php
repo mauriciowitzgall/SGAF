@@ -20,7 +20,7 @@ $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "TAXAS";
 $tpl_titulo->SUBTITULO = "CADASTRO";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "taxas.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "quiosques_taxas.png";
 $tpl_titulo->show();
 
 
@@ -97,9 +97,9 @@ $tpl->TEXTO_NOME = "Observação";
 //$tpl->_ID="";
 //$tpl->TEXTO_CLASSE="";
 $tpl->TEXTO_VALOR = "
-    Aqui é apenas o cadastro da taxa, para incluir uma taxa em um ponto de venda vá a tela de 'Quiosques'! <br>
+    Aqui é apenas o cadastro da taxa, para incluir uma taxa em um quiosque vá a tela de 'Quiosques'! <br>
     Os supervisores podem cadastrar, editar e excluir apenas taxas referentes ao quiosque que supervisionam!<br>
-    Os presidentes podem cadastrar, editar e excluir taxas para todos os pontos de venda da cooperativa/grupo!
+    Os presidentes podem cadastrar, editar e excluir taxas para todos os quiosques da cooperativa/grupo!
 ";
 $tpl->block("BLOCK_TEXTO");
 $tpl->block("BLOCK_CONTEUDO");

@@ -7,7 +7,7 @@ if ($permissao_quiosque_definirsupervisores <> 1) {
     exit;
 }
 
-$tipopagina = "cooperativas";
+$tipopagina = "quiosques";
 include "includes.php";
 
 
@@ -16,7 +16,7 @@ $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "SUPERVISORES";
 $tpl_titulo->SUBTITULO = "CADASTRO DE SUPERVISORES DO QUIOSQUE";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "../pessoas2/supervisor.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "quiosque_supervisores.png";
 $tpl_titulo->show();
 
 //Pega todos os dados da tabela (Necessário caso seja uma edição)
@@ -68,7 +68,7 @@ $tpl1->block("BLOCK_ITEM");
 
 
 //supervisor
-$tpl1->TITULO = "supervisor";
+$tpl1->TITULO = "Supervisor";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->SELECT_NOME = "supervisor";
 $tpl1->CAMPO_DICA = "";
@@ -85,6 +85,7 @@ FROM
 WHERE
     mespestip_tipo=3 and
     pes_cooperativa=$coo
+    and pes_codigo not in (SELECT quisup_supervisor FROM quiosques_supervisores WHERE quisup_quiosque=$quiosque)    
 ORDER BY
     pes_nome";
 $query = mysql_query($sql);

@@ -99,48 +99,6 @@ $tpl_rel->block("BLOCK_LINHA");
 
 
 
-//Caixas
-$tpl_rel->COLUNA_ALINHAMENTO = "right";
-$tpl_rel->COLUNA_TAMANHO = "200px";
-$tpl_rel->COLUNA_ROWSPAN = "";
-$tpl_rel->TITULO = "Caixa";
-$tpl_rel->block("BLOCK_TITULO");
-$tpl_rel->block("BLOCK_CONTEUDO");
-$tpl_rel->block("BLOCK_COLUNA");
-$tpl_rel->COLUNA_ALINHAMENTO = "left";
-$tpl_rel->COLUNA_TAMANHO = "";
-$tpl_rel->COLUNA_ROWSPAN = "";
-$tpl_rel->SELECT_NOME = "caixa";
-$tpl_rel->SELECT_TAMANHO = "";
-$tpl_rel->SELECT_CLASSE = " campo_tamanho_6 ";
-$tpl_rel->block("BLOCK_SELECT_PADRAO");
-$sql_filtro = "";
-if (($usuario_grupo == 1) || ($usuario_grupo == 2)) {
-    
-} else {
-    $sql_filtro.=" and sai_quiosque=$usuario_quiosque ";
-}
-$sql2 = "
-    SELECT DISTINCT pes_codigo,pes_nome
-    FROM pessoas
-    JOIN saidas on (pes_codigo=sai_caixa)
-    WHERE pes_cooperativa=$usuario_cooperativa
-    $sql_filtro
-    ORDER BY pes_nome
-";
-$query2 = mysql_query($sql2);
-if (!$query2)
-    die("Erro4:" . mysql_error());
-$tpl_rel->block("BLOCK_OPTION_TODOS");
-while ($dados2 = mysql_fetch_assoc($query2)) {
-    $tpl_rel->OPTION_VALOR = $dados2["pes_codigo"];
-    $tpl_rel->OPTION_TEXTO = $dados2["pes_nome"];
-    $tpl_rel->block("BLOCK_OPTION");
-}
-$tpl_rel->block("BLOCK_SELECT");
-$tpl_rel->block("BLOCK_CONTEUDO");
-$tpl_rel->block("BLOCK_COLUNA");
-$tpl_rel->block("BLOCK_LINHA");
 
 
 //Consumidor

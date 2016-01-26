@@ -1,7 +1,7 @@
 <?php 
    
    $hostname = "localhost";
-   $db = "sgaf3";
+   $db = "sgaf_online";
    $user = "root";
    $pass = "";
    

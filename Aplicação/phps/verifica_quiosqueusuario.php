@@ -47,6 +47,6 @@ if (mysql_num_rows($query) > 0) {
         echo "<option value='$codigo'>$nome</option>";
     }
 } else {
-    echo "<option value=''>N�o h� registros</option>";
+    echo "<option value=''>Não há registros</option>";
 }
 ?>

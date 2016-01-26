@@ -7,8 +7,9 @@ if ($permissao_taxas_ver <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
-$tipopagina = "cooperativas";
+$tipopagina = "quiosques";
 include "includes.php";
+
 
 
 //TÍTULO GERAL DA PAGINA
@@ -16,7 +17,7 @@ $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "TAXAS  ";
 $tpl_titulo->SUBTITULO = "PEQUISA/LISTAGEM";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "taxas.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "quiosques_taxas.png";
 $tpl_titulo->show();
 
 
@@ -30,6 +31,9 @@ $tpl_filtro->block("BLOCK_FORM");
 
 $filtro_codigo = $_POST["filtro_codigo"];
 $filtro_nometaxa = $_POST["filtro_nometaxa"];
+$filtro_quiosque = $_POST["filtro_quiosque"];
+
+
 
 //Filtro Código da Taxa
 $tpl_filtro->CAMPO_TITULO = "Código";
@@ -65,19 +69,29 @@ $tpl_filtro->SELECT_NOME = "filtro_quiosque";
 $tpl_filtro->SELECT_ID = "";
 $tpl_filtro->SELECT_TAMANHO = "";
 $tpl_filtro->block("BLOCK_SELECT_FILTRO");
+//$tpl_filtro->block("BLOCK_OPTION_PADRAO_SELECIONADO");
 $tpl_filtro->block("BLOCK_OPTION_PADRAO");
+$tpl_filtro->OPTION_VALOR = "Glupo";
+$tpl_filtro->OPTION_TEXTO = "Glupo";
+if ($filtro_quiosque=='Grupo')
+    $tpl_filtro->block("BLOCK_OPTION_SELECIONADO"); 
+$tpl_filtro->block("BLOCK_OPTION");
+
 $sql = "
-    SELECT DISTINCT qui_nome
+    SELECT DISTINCT qui_codigo,qui_nome
     FROM quiosques 
-    JOIN taxas on (tax_quiosque=qui_codigo)    
+    JOIN taxas on (tax_quiosque=qui_codigo)   
+    WHERE tax_cooperativa = $usuario_cooperativa
     ORDER BY qui_nome
 ";
+
 if (!$query = mysql_query($sql))
     die("Erro SQL 0: " . mysql_error());
 while ($dados = mysql_fetch_assoc($query)) {
-    $codigo = $dados["qui_codigo"];
-    if ($codigo == $filtro_quiosque)
-        $tpl_filtro->block("BLOCK_OPTION_SELECIONADO");
+    $codigo = $dados["qui_codigo"];    
+    if ($codigo == $filtro_quiosque) {
+        $tpl_filtro->block("BLOCK_OPTION_SELECIONADO"); 
+    }
     $tpl_filtro->OPTION_VALOR = $dados["qui_codigo"];
     $tpl_filtro->OPTION_TEXTO = $dados["qui_nome"];
     $tpl_filtro->block("BLOCK_OPTION");
@@ -164,11 +178,15 @@ $tpl2->block("BLOCK_CABECALHO_LINHA");
 $tpl2->block("BLOCK_CABECALHO");
 $sql_filtro = "";
 if (!empty($filtro_codigo))
-    $sql_filtro = " and tax_codigo=$filtro_codigo ";
+    $sql_filtro = " $sql_filtro.and tax_codigo=$filtro_codigo ";
 if (!empty($filtro_nometaxa))
-    $sql_filtro = " and tax_nome like '%$filtro_nometaxa%'";
-if (($usuario_grupo != 1) && ($usuario_grupo != 2))
-    $sql_filtro = $sql_filtro . " and (tax_quiosque=$usuario_quiosque OR tax_quiosque is NULL)";
+    $sql_filtro = $sql_filtro." and tax_nome like '%$filtro_nometaxa%' ";
+
+if (($filtro_quiosque <> "") && ($filtro_quiosque <>'Global'))
+    $sql_filtro = $sql_filtro." and tax_quiosque = $filtro_quiosque ";
+if ($filtro_quiosque == 'Global') 
+    $sql_filtro = $sql_filtro." and tax_quiosque = 0";
+
 
 $sql = "
 SELECT 
@@ -303,7 +321,7 @@ while ($dados = mysql_fetch_assoc($query)) {
         $tpl2->COLUNA_TAMANHO = "";
         $tpl2->COLUNA_ALINHAMENTO = "";
         if ($quiosque_nome == "")
-            $quiosque_nome = "Todos";
+            $quiosque_nome = "Grupo";
         $tpl2->TEXTO = "$quiosque_nome";
         $tpl2->block("BLOCK_TEXTO");
         $tpl2->block("BLOCK_CONTEUDO");
@@ -321,8 +339,6 @@ while ($dados = mysql_fetch_assoc($query)) {
         $tpl2->block("BLOCK_OPERACAO_EDITAR_HABILITADO");
         $tpl2->block("BLOCK_OPERACAO_EDITAR_TITULOPADRAO");
     } else {
-        $tpl2->CONTEUDO_LINK_ARQUIVO = "";
-        $tpl2->block("BLOCK_CONTEUDO_LINK");
         $tpl2->block("BLOCK_OPERACAO_EDITAR_DESABILITADO");
         $tpl2->ICONES_TITULO = "Apenas os supervisores podem excluir taxas específicas, e presidentes ou administradores porem excluir/editar taxas globais (da cooperativa)";
         $tpl2->block("BLOCK_OPERACAO_EDITAR_TITULO");
@@ -345,7 +361,6 @@ while ($dados = mysql_fetch_assoc($query)) {
         $tpl2->block("BLOCK_OPERACAO_EXCLUIR_TITULOPADRAO");
     } else {
         $tpl2->CONTEUDO_LINK_ARQUIVO = "";
-        $tpl2->block("BLOCK_CONTEUDO_LINK");
         $tpl2->block("BLOCK_OPERACAO_EXCLUIR_DESABILITADO");
         $tpl2->ICONES_TITULO = "Apenas os supervisores podem excluir taxas específicas, e presidentes ou administradores porem excluir/editar taxas globais (da cooperativa)";
         $tpl2->block("BLOCK_OPERACAO_EXCLUIR_TITULO");

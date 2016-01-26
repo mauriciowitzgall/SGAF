@@ -17,11 +17,12 @@ if ($tipo2 != "")
     $tipo = $tipo2;
 else
     $tipo = $_POST['tipo'];
-
+echo "($tipo)($tipo2)";
 $marca = $_POST['marca'];
 $recipiente = $_POST['recipiente'];
 $volume = $_POST['volume'];
 $composicao = $_POST['composicao'];
+$industrializado = $_POST['industrializado'];
 
 $categoria = $_POST['categoria'];
 $descricao = $_POST['descricao'];
@@ -73,8 +74,8 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         $tpl_notificacao->show();
     } else {
         $idunico=  uniqid();
-        $sql = "INSERT INTO produtos (pro_nome,pro_tipocontagem,pro_categoria,pro_descricao,pro_datacriacao,pro_horacriacao,pro_cooperativa,pro_volume,pro_marca,pro_recipiente,pro_composicao,pro_codigounico,pro_idunico)
-	VALUES ('$nome','$tipo','$categoria','$descricao','$data','$hora',$usuario_cooperativa,'$volume','$marca','$recipiente','$composicao','$codigounico','$idunico');";
+        $sql = "INSERT INTO produtos (pro_nome,pro_tipocontagem,pro_categoria,pro_descricao,pro_datacriacao,pro_horacriacao,pro_cooperativa,pro_volume,pro_marca,pro_recipiente,pro_composicao,pro_codigounico,pro_idunico,pro_industrializado)
+	VALUES ('$nome','$tipo','$categoria','$descricao','$data','$hora',$usuario_cooperativa,'$volume','$marca','$recipiente','$composicao','$codigounico','$idunico','$industrializado');";
         $query = mysql_query($sql);
         if (!$query)
             die("Erro22: " . mysql_error());

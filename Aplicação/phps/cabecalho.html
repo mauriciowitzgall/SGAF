@@ -14,31 +14,77 @@
             </a>
         </td>
         <td align="center"  width="" class="cabecalhocentro">
+             <!-- BEGIN BLOCK_NOME_QUIOSQUE_COOPERATIVA -->
             <label class="fonte7">{QUIOSQUE}</label><br>
             <label class="fonte6">{COOPERATIVA}</label>
+            <!-- END BLOCK_NOME_QUIOSQUE_COOPERATIVA -->
         </td>
-        
-        <td align="right"  width="170px" valign="middle">           
+        <!-- BEGIN BLOCK_NOME_CAIXA -->
+        <td align="right" width="250px">
+            <label class="fonte2">Caixa:</label><br>
+            <label class="fonte9">{CAIXAUSUARIO}</label>
+            <!-- BEGIN BLOCK_DESASSOCIAR_CAIXA -->
+            <a href="caixas_trocar.php?operacao=desassociar" class="link">
+                <img src="../imagens/icones/geral/caixa_desassociar.png" width="15px" alt="Desassociar Caixa" title="Desassociar Caixa">
+            </a>
+            <!-- END BLOCK_DESASSOCIAR_CAIXA -->
+        </td>    
+        <!-- END BLOCK_NOME_CAIXA -->
+        <td align="right"  width="190px" valign="middle">           
             <label class="fonte1">{USUARIO_NOME}</label><br>
             <label class="fonte2">{USUARIO_GRUPO}</label><br>
+            
             <!-- BEGIN BLOCK_CONFIGURACOES -->
-            <a href="configuracoes.php" class="link">
-                <img src="../imagens/icones/geral/configuracoes.png" width="25px" alt="Configurações" title="Configurações">
+            <a href="cooperativas.php" class="link">
+                <img src="../imagens/icones/geral/configuracoes2.png" width="25px" alt="Configurações" title="Configurações">
             </a>
             <!-- END BLOCK_CONFIGURACOES -->
-            <!-- BEGIN BLOCK_MEUPERFIL -->            
             
+            <!-- BEGIN BLOCK_MEUPERFIL -->            
             <a href="pessoas_cadastrar.php?codigo={CODIGO_USUARIO}&operacao=editar" class="link">
                 <img src="../imagens/icones/geral/user.png" width="25px" alt="Meu Perfil" title="Meu Perfil">
             </a>
             <!-- END BLOCK_MEUPERFIL -->
-        </td>
-        <td align="center"  width="70px" class="" align="left">
-            <a href="login_sair.php" class="link">                
-                <img src="../imagens/icones/geral/sair.png" width="40px" alt="SAIR" title="Sair do Sistema"><br>
-                <span class="sair">SAIR</span>
-                
+            
+            <!-- BEGIN BLOCK_VENDAS -->            
+            <a href="saidas.php" class="link">
+                <img src="../imagens/icones/geral/saidas.png" width="25px" alt="Vendas" title="Vendas">
+            </a>
+            <!-- END BLOCK_VENDAS -->
+            
+            <!-- BEGIN BLOCK_CAIXAS_ABRIR -->            
+            <a href="caixas.php" class="link">
+                <img src="../imagens/icones/geral/caixas_abrir.png" width="25px" alt="Abrir Caixa" title="Abrir Caixa">
+            </a>
+            <!-- END BLOCK_CAIXAS_ABRIR -->
+            
+            <!-- BEGIN BLOCK_CAIXAS_ENCERRAR -->            
+            <a href="caixas_operacoes_encerrar.php?codigo={ENCERRARCAIXA}" class="link">
+                <img src="../imagens/icones/geral/caixas_encerrar.png" width="25px" alt="Encerrar Caixa" title="Encerrar Caixa">
+            </a>
+            <!-- END BLOCK_CAIXAS_ENCERRAR -->
+ 
+            <!-- BEGIN BLOCK_TROCA_QUIOSQUE -->            
+            <a href="troca_unidade.php?cooperativa={COOPERATIVA_COD}&quiosque={QUIOSQUE_COD}" class="link">
+                <img src="../imagens/icones/geral/quiosques_trocar.png" width="25px" alt="Troca Unidade" title="Troca Unidade">
+            </a>
+            <!-- END BLOCK_TROCA_QUIOSQUE -->           
+            
+            <!-- BEGIN BLOCK_SUPORTE -->
+            <a href="contato.php" class="link">
+                <img src="../imagens/icones/geral/contato.png" width="25px" alt="Suporte" title="Suporte">
+            </a>
+            <!-- END BLOCK_SUPORTE -->
+            
+             <a href="login_sair.php" class="link">                
+                <img src="../imagens/icones/geral/sair.png" width="25px" alt="SAIR" title="Sair do Sistema"><br>
+                <!-- <span class="sair">SAIR</span> -->
             </a>
         </td>
+
+        <td align="center"  width="8px" class="" align="left">
+ 
+        </td>     
+      
     </tr>
 </table>

@@ -42,6 +42,7 @@ if ($passo == 1) {
         $fornecedor = $_POST["fornecedor"];
         $tipopessoa = $_POST["tipopessoa"];
         $datade = $_POST["datade2"];
+        echo "($datade)";
         $dataate = $_POST["dataate"];
     }
 }
@@ -148,7 +149,7 @@ $tpl1->block("BLOCK_TITULO");
 $tpl1->SELECT_NOME = "fornecedor";
 $tpl1->CAMPO_DICA = "";
 $tpl1->SELECT_ID = "fornecedor";
-$tpl1->SELECT_ONCHANGE = "popula_acertos_dataminmax(this.value)";
+$tpl1->SELECT_ONCHANGE = "popula_acertos_dataminmax(this.value,$usuario_quiosque)";
 $tpl1->block("BLOCK_SELECT_ONCHANGE");
 $tpl1->SELECT_TAMANHO = "";
 $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
@@ -480,7 +481,7 @@ if ($passo == 2) {
             $valtaxtot = $valtaxtot + $valtax;
             $tpl5->block("BLOCK_LISTA");
         }
-        //Rodap� da lisagem
+        //Rodap� da listagem
         $tpl5->LISTA_CLASSE = "tabelarodape1";
         $tpl5->block("BLOCK_LISTA_CLASSE");
         $tpl5->LISTA_COLUNA_ALINHAMENTO = "left";

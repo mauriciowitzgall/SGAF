@@ -8,7 +8,6 @@ include "cabecalho1.php";
 $quiosque = $_REQUEST["quiosque"];
 $datade = $_REQUEST["datade"];
 $dataate = $_REQUEST["dataate"];
-$caixa = $_REQUEST["caixa"];
 $consumidor = $_REQUEST["consumidor"];
 $metpag = $_REQUEST["metpag"];
 $caderninho = $_REQUEST["caderninho"];
@@ -86,40 +85,7 @@ $tpl_campos->block("BLOCK_LINHA");
 
 
 
-//caixa
-$tpl_campos->COLUNA_ALINHAMENTO = "right";
-$tpl_campos->COLUNA_TAMANHO = "200px";
-$tpl_campos->TITULO = "Caixa";
-$tpl_campos->block("BLOCK_TITULO");
-$tpl_campos->block("BLOCK_CONTEUDO");
-$tpl_campos->block("BLOCK_COLUNA");
-$tpl_campos->COLUNA_ALINHAMENTO = "left";
-$tpl_campos->COLUNA_TAMANHO = "600px";
-$tpl_campos->CAMPO_TIPO = "text";
-$tpl_campos->CAMPO_NOME = "caixa";
-$tpl_campos->CAMPO_TAMANHO = "";
-if ($caixa != "") {
-    $sql = "
-        SELECT pes_nome 
-        FROM pessoas
-        WHERE pes_codigo=$caixa
-    ";
-    $query = mysql_query($sql);
-    if (!$query)
-        die("Erro 8:" . mysql_error());
-    $dados = mysql_fetch_array($query);
-    $nome = $dados[0];
-} else {
-    $nome = "Todos";
-}
-$tpl_campos->CAMPO_VALOR = "$nome";
-$tpl_campos->CAMPO_QTDCARACTERES = "";
-$tpl_campos->block("BLOCK_CAMPO_DESABILITADO");
-$tpl_campos->block("BLOCK_CAMPO_PADRAO");
-$tpl_campos->block("BLOCK_CAMPO");
-$tpl_campos->block("BLOCK_CONTEUDO");
-$tpl_campos->block("BLOCK_COLUNA");
-$tpl_campos->block("BLOCK_LINHA");
+
 
 
 //Consumidor
@@ -341,8 +307,7 @@ $tpl_lista->block("BLOCK_CORPO");
 $sql_filtro = "";
 if ($quiosque != "")
     $sql_filtro = $sql_filtro . " and sai_quiosque=$quiosque ";
-if ($caixa != "")
-    $sql_filtro = $sql_filtro . " and sai_caixa=$caixa ";
+
 if ($consumidor != "")
     $sql_filtro = $sql_filtro . " and sai_consumidor=$consumidor ";
 if ($metpag != "")

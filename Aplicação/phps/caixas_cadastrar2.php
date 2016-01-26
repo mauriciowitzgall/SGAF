@@ -1,117 +1,119 @@
-
 <?php
 
-//Verifica se o usu�rio tem permiss�o para acessar este conte�do
+//Verifica se o usuário tem permissão para acessar este conteúdo
 require "login_verifica.php";
-if ($permissao_quiosque_definircaixas <> 1) {
+if ($permissao_caixas_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
 
-$tipopagina = "cooperativas";
+$tipopagina = "caixas";
 include "includes.php";
 
-$quiosque = $_POST['quiosque'];
-$caixa = $_POST['caixa'];
+
 $operacao = $_POST['operacao'];
-$datafuncao = desconverte_data($_POST['datafuncao']);
+$codigo = $_POST['codigo']; //Para edicão
+$nome = $_POST['nome'];
+$local = $_POST['local'];
+$datahoraatual=date("Y-m-d H:i:s");
 
 
-//Template de Título e Sub-título
+//TÍTULO PRINCIPAL
 $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "CAIXAS";
-$tpl_titulo->SUBTITULO = "CADASTRO DE CAIXAS DO QUIOSQUE";
+$tpl_titulo->SUBTITULO = "CADASTRO";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "../pessoas2/caixa.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "caixas.png";
 $tpl_titulo->show();
 
-//Estrutura da notifica��o
+
+//OPERAÇÕES
+//Estrutura da notificação
 $tpl_notificacao = new Template("templates/notificacao.html");
 $tpl_notificacao->ICONES = $icones;
-$tpl_notificacao->DESTINO = "caixas.php?quiosque=$quiosque";
+$tpl_notificacao->DESTINO = "caixas.php";
 
 
-//Se a opera��o for cadastro ent�o
+//Se a operação for cadastro então
 if ($operacao == 'cadastrar') {
-    //Verifica se o caixa j� est� na lista de caixas do quiosque
-    $sql = "SELECT * FROM quiosques_caixas WHERE quicai_caixa=$caixa and quicai_quiosque=$quiosque";
+    //Verifica se já existe um caixa com mesmo nome    
+    $sql = "SELECT cai_nome FROM caixas WHERE cai_nome='$nome'";
     $query = mysql_query($sql);
-    if (!$query)
-        die("Erro de SQL:" . mysql_error());
-    //$dados=  mysql_fetch_assoc($query);
-    $linhas = mysql_num_rows($query);
-    if ($linhas > 0) {
-        $tpl_notificacao->MOTIVO_COMPLEMENTO = "Este caixa já está na lista!";
+    if (mysql_num_rows($query) > 0) {
         $tpl_notificacao->block("BLOCK_ERRO");
-        $tpl_notificacao->block("BLOCK_NAOEDITADO");
-        $tpl_notificacao->block("BLOCK_MOTIVO_FALTADADOS");
+        $tpl_notificacao->block("BLOCK_NAOCADASTRADO");
+        $tpl_notificacao->block("BLOCK_MOTIVO_JAEXISTE");
         $tpl_notificacao->block("BLOCK_BOTAO_VOLTAR");
         $tpl_notificacao->show();
         exit;
     } else {
         //Insere novo registro
-        $sql = "
+        $sql2 = "
         INSERT INTO 
-            quiosques_caixas (
-                quicai_quiosque,
-                quicai_caixa,
-                quicai_datafuncao
+            caixas (
+                cai_nome,
+                cai_local,
+                cai_quiosque,
+                cai_situacao,
+                cai_datahoracadastro,
+                cai_status
             )
         VALUES (
-            '$quiosque',
-            '$caixa',
-            '$datafuncao'
+            '$nome',
+            '$local',
+            '$usuario_quiosque',
+            '2',
+            '$datahoraatual',
+            '1'    
         )";
-        $query = mysql_query($sql);
-        if (!$query)
-            die("Erro de SQL:" . mysql_error());
-        //Verifica se esse caixa já possui um usuário no sistema
-        $sql2 = "SELECT pes_possuiacesso FROM pessoas WHERE pes_codigo=$caixa";
         $query2 = mysql_query($sql2);
         if (!$query2)
             die("Erro de SQL:" . mysql_error());
-        $dados2 = mysql_fetch_array($query2);
-        $possiacesso = $dados2[0];
-        if ($possiacesso == 0) {
-            echo "<br>";
-            $tpl_notificacao->block("BLOCK_ATENCAO");
-            $tpl_notificacao->LINK = "pessoas_cadastrar.php?codigo=$caixa&operacao=editar";
-            $tpl_notificacao->MOTIVO = "Este caixa ainda não possui acesso ao sistema!";
-            $tpl_notificacao->block("BLOCK_MOTIVO");
-            $tpl_notificacao->PERGUNTA = "Deseja definir uma senha de acesso para ele agora mesmo?";
-            $tpl_notificacao->block("BLOCK_PERGUNTA");
-            $tpl_notificacao->NAO_LINK = "caixas.php?quiosque=$quiosque";
-            $tpl_notificacao->block("BLOCK_BOTAO_NAO_LINK");
-            $tpl_notificacao->block("BLOCK_BOTAO_SIMNAO");
+        
+        $tpl_notificacao->MOTIVO_COMPLEMENTO = "";
+        $tpl_notificacao->block("BLOCK_CONFIRMAR");
+        $tpl_notificacao->block("BLOCK_CADASTRADO");
+        $tpl_notificacao->block("BLOCK_BOTAO");
+        $tpl_notificacao->show();
+    }
+}
+
+//Se a operação for edição então
+if ($operacao == 'editar') {
+    //Verifica se já existe registro com o mesmo nome
+    $sql = "SELECT cai_nome FROM caixas WHERE cai_codigo='$codigo'";
+    $query = mysql_query($sql);
+    $dados = mysql_fetch_assoc($query);
+    $nome_banco = $dados["tax_nome"];
+    echo "(strtolower($nome) != strtolower($nome_banco))";
+    if (strtolower($nome) != strtolower($nome_banco)) {
+        $sql2 = "SELECT cai_nome FROM caixas WHERE cai_nome='$nome'";
+        $query2 = mysql_query($sql2);
+        if (mysql_num_rows($query2) > 0) {
+            $tpl_notificacao->block("BLOCK_ERRO");
+            $tpl_notificacao->block("BLOCK_NAOCADASTRADO");
+            $tpl_notificacao->block("BLOCK_MOTIVO_JAEXISTE");
+            $tpl_notificacao->block("BLOCK_BOTAO_VOLTAR");
             $tpl_notificacao->show();
-        } else {
-            $tpl_notificacao->MOTIVO_COMPLEMENTO = "";
-            $tpl_notificacao->block("BLOCK_CONFIRMAR");
-            $tpl_notificacao->block("BLOCK_CADASTRADO");
-            $tpl_notificacao->block("BLOCK_BOTAO");
-            $tpl_notificacao->show();
+            exit;
         }
     }
-} else { //Se for uma edi��o
+
     $sql = "
     UPDATE
-        quiosques_caixas
+        caixas
     SET            
-        quicai_datafuncao='$datafuncao'
+        cai_nome='$nome',
+        cai_local='$local'
     WHERE
-        quicai_quiosque=$quiosque and
-        quicai_caixa=$caixa
+        cai_codigo='$codigo'
     ";
     if (!mysql_query($sql))
         die("Erro: " . mysql_error());
-    $tpl_notificacao->MOTIVO_COMPLEMENTO = "";
     $tpl_notificacao->block("BLOCK_CONFIRMAR");
     $tpl_notificacao->block("BLOCK_EDITADO");
     $tpl_notificacao->block("BLOCK_BOTAO");
     $tpl_notificacao->show();
 }
-
-
-include "rodape.php";
 ?>
 

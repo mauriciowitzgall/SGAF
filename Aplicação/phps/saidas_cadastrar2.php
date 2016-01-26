@@ -11,8 +11,15 @@ $tipopagina = "saidas";
 include "includes.php";
 //include "funcoes.php";
 
+//Verifica se o usuário é um caixa e não tem caixa aberto, se sim não pode acessar as vendas
+if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
+    header("Location: permissoes_semacesso.php");
+    exit;
+}
+
 $saida = $_POST["saida"];
 $passo = $_POST["passo"];
+$tiposai = $_REQUEST["tiposai"];
 $descper = number_format($_POST["descper"],2,'.','');
 $descval = number_format(dinheiro_para_numero($_POST["descval"]),2,'.','');
 $total = dinheiro_para_numero($_POST["total2"]);
@@ -50,7 +57,7 @@ if (($dinheiro <= $total) && ($passo == 2)) {
 
     echo "
         <script language='javaScript'>
-            window.location.href='saidas_cadastrar3.php?troco_devolvido=0&passo=2&saida=$saida&total2=$total&descper2=$descper&descval2=$descval&dinheiro2=$dinheiro&troco2=$troco&troco_devolvido=$troco_devolvido&valbru2=$valbru&areceber2=$areceber&metodopag2=$metodopag'
+            window.location.href='saidas_cadastrar3.php?troco_devolvido=0&passo=2&saida=$saida&total2=$total&descper2=$descper&descval2=$descval&dinheiro2=$dinheiro&troco2=$troco&troco_devolvido=$troco_devolvido&valbru2=$valbru&areceber2=$areceber&metodopag2=$metodopag&tiposai=$tiposai'
         </script>";   
 }
 
@@ -107,7 +114,7 @@ while ($dados = mysql_fetch_array($query)) {
 
 switch ($passo) {
     case '1':
-        $tpl->LINK = "saidas_cadastrar2.php";
+        $tpl->LINK = "saidas_cadastrar2.php?tiposai=$tiposai";
         $tpl->DESCPER_VALOR = "0,00";
         $tpl->DESCPER2_VALOR = "0";
         $tpl->DESCVAL_VALOR = "R$ 0,00";
@@ -119,7 +126,7 @@ switch ($passo) {
         $passo = 2;
         break;
     case '2':
-        $tpl->LINK = "saidas_cadastrar3.php";
+        $tpl->LINK = "saidas_cadastrar3.php?tiposai=$tiposai";
         $tpl->block("BLOCK_PASSO2");
         $tpl->block("BLOCK_OCULTOS2");
 

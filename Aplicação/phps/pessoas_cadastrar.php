@@ -120,6 +120,9 @@ if ($usuario_codigo != $codigo) {
 $tipopagina = "pessoas";
 include "includes.php";
 
+
+
+
 //Verifica se alguma cooperativa cadastrada, se não tiver então o root deve cadastrar uma antes de cadastrar um administrador
 $sql = "SELECT coo_codigo FROM cooperativas";
 $query = mysql_query($sql);
@@ -352,7 +355,6 @@ else
     $cod = $codigo;
 $tpl1->CAMPO_ONBLUR = "valida_cpf(this.value); verifica_cpf_cadastro(this.value,1,$cod,$oper_num);";
 $tpl1->CAMPO_ONCLICK = "this.select();";
-$tpl1->block("BLOCK_CAMPO_ONBLUR");
 $tpl1->CAMPO_TAMANHO = "14";
 $tpl1->CAMPO_VALOR = $cpf;
 $tpl1->CAMPO_QTD_CARACTERES = 14;
@@ -394,7 +396,6 @@ else
     $cod = $codigo;
 $tpl1->CAMPO_ONBLUR = "valida_cnpj(this.value); verifica_cnpj_cadastro(this.value,$cod,$oper_num);";
 $tpl1->CAMPO_ONCLICK = "this.select();";
-$tpl1->block("BLOCK_CAMPO_ONBLUR");
 $tpl1->CAMPO_TAMANHO = "14";
 $tpl1->CAMPO_VALOR = $cnpj;
 $tpl1->CAMPO_QTD_CARACTERES = 18;
@@ -881,7 +882,7 @@ if ($usuario_codigo != $codigo) {
             $sql2 = "SELECT * FROM cooperativas WHERE coo_presidente=$codigo";
             $query2 = mysql_query($sql2);
             if (!$query2)
-                die("Erro: 1" . mysql_error());
+                die("Erro: 10" . mysql_error());
             $total2 = mysql_num_rows($query2);
             if ($total2 > 0) {
                 $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
@@ -919,7 +920,7 @@ if ($usuario_codigo != $codigo) {
             $sql2 = "SELECT * FROM quiosques_supervisores WHERE quisup_supervisor=$codigo";
             $query2 = mysql_query($sql2);
             if (!$query2)
-                die("Erro: 1" . mysql_error());
+                die("Erro: 11" . mysql_error());
             $total2 = mysql_num_rows($query2);
             if ($total2 > 0) {
                 $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
@@ -951,13 +952,13 @@ if ($usuario_codigo != $codigo) {
         $tpl1->LABEL_NOME = "Caixa";
         if ($tipo_caixa == 1)
             $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
-        //Se for edi��o de pessoa
+        //Se for edição de pessoa
         if ($operacao == "editar") {
-            //Verifica se a pessoa em quest�o � supervisor de algum quiosque, se sim ent�o desabilitar esse check
-            $sql2 = "SELECT * FROM quiosques_caixas WHERE quicai_caixa=$codigo";
+            //Verifica se a pessoa em questão é operador de caixa de algum quiosque, se sim então desabilitar esse check
+            $sql2 = "SELECT * FROM caixas_operadores WHERE caiope_operador=$codigo";
             $query2 = mysql_query($sql2);
             if (!$query2)
-                die("Erro: 1" . mysql_error());
+                die("Erro: 12" . mysql_error());
             $total2 = mysql_num_rows($query2);
             if ($total2 > 0) {
                 $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
@@ -1061,75 +1062,76 @@ $tpl1->block("BLOCK_ITEM");
 
 
 
-//Tipo de negociação
-if ($operacao == 'cadastrar')
-    $tpl1->LINHA_CLASSE = "some";
-else
-    $tpl1->LINHA_CLASSE = "";
-$tpl1->block("BLOCK_LINHA_CLASSE");
-$tpl1->LINHA_ID = "tr_tiponegociacao";
-$tpl1->block("BLOCK_LINHA_ID");
-$tpl1->TITULO = "Tipo de negociação";
-$tpl1->block("BLOCK_TITULO");
-if (($operacao == "editar") || ($operacao == "ver")) {
-    $sql = "SELECT * FROM fornecedores_tiponegociacao WHERE fortipneg_pessoa=$codigo";
-    $query = mysql_query($sql);
-    if (!$query)
-        die("Erro: 8" . mysql_error());
-    $tipo_consignacao = 0;
-    $tipo_revenda = 0;
-    while ($dados = mysql_fetch_assoc($query)) {
-        $tipo = $dados["fortipneg_tiponegociacao"];
-        if ($tipo == 1)
-            $tipo_consignacao = 1;
-        if ($tipo == 2)
-            $tipo_revenda = 1;
+if (($usuario_grupo==1)||($usuario_grupo==2)||($usuario_grupo==3)) {
+    //Tipo de negociação
+    if ($operacao == 'cadastrar')
+        $tpl1->LINHA_CLASSE = "some";
+    else
+        $tpl1->LINHA_CLASSE = "";
+    $tpl1->block("BLOCK_LINHA_CLASSE");
+    $tpl1->LINHA_ID = "tr_tiponegociacao";
+    $tpl1->block("BLOCK_LINHA_ID");
+    $tpl1->TITULO = "Tipo de negociação";
+    $tpl1->block("BLOCK_TITULO");
+    if (($operacao == "editar") || ($operacao == "ver")) {
+        $sql = "SELECT * FROM fornecedores_tiponegociacao WHERE fortipneg_pessoa=$codigo";
+        $query = mysql_query($sql);
+        if (!$query)
+            die("Erro: 8" . mysql_error());
+        $tipo_consignacao = 0;
+        $tipo_revenda = 0;
+        while ($dados = mysql_fetch_assoc($query)) {
+            $tipo = $dados["fortipneg_tiponegociacao"];
+            if ($tipo == 1)
+                $tipo_consignacao = 1;
+            if ($tipo == 2)
+                $tipo_revenda = 1;
+        }
     }
-}
-if ($usuario_quiosque == "0")
-    $sql11 = "SELECT tipneg_codigo FROM tipo_negociacao";
-else
-    $sql11 = "SELECT quitipneg_tipo FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$usuario_quiosque";
-$query11 = mysql_query($sql11);
-if (!$query11)
-    die("Erro: " . mysql_error());
-while ($dados11 = mysql_fetch_array($query11)) {
-    $tipon = $dados11[0];
-    if ($tipon == 1)
-        $quiosque_consignacao = 1;
-    IF ($tipon == 2)
-        $quiosque_revenda = 1;
-}
-
-if ($quiosque_consignacao == 1) {
-    $tpl1->CHECKBOX_NOME = "box2[1]";
-    $tpl1->CHECKBOX_VALOR = "1";
-    $tpl1->LABEL_NOME = "Consignação";
-    if ($tipo_consignacao == 1) {
-        $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+    if ($usuario_quiosque == "0")
+        $sql11 = "SELECT tipneg_codigo FROM tipo_negociacao";
+    else
+        $sql11 = "SELECT quitipneg_tipo FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$usuario_quiosque";
+    $query11 = mysql_query($sql11);
+    if (!$query11)
+        die("Erro: " . mysql_error());
+    while ($dados11 = mysql_fetch_array($query11)) {
+        $tipon = $dados11[0];
+        if ($tipon == 1)
+            $quiosque_consignacao = 1;
+        IF ($tipon == 2)
+            $quiosque_revenda = 1;
     }
-    if ($operacao == 'ver')
-        $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-    $tpl1->CHECKBOX_SPAN_ID = "";
-    $tpl1->block("BLOCK_CHECKBOX");
-}
-
-//Tipo Revenda
-if ($quiosque_revenda == 1) {
-    $tpl1->CHECKBOX_NOME = "box2[2]";
-    $tpl1->CHECKBOX_VALOR = "2";
-    $tpl1->LABEL_NOME = "Revenda";
-    if ($tipo_revenda == 1) {
-        $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+    if ($quiosque_consignacao == 1) {
+        $tpl1->CHECKBOX_NOME = "box2[1]";
+        $tpl1->CHECKBOX_VALOR = "1";
+        $tpl1->LABEL_NOME = "Consignação";
+        if ($tipo_consignacao == 1) {
+            $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+        }
+        if ($operacao == 'ver')
+            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+        $tpl1->CHECKBOX_SPAN_ID = "";
+        $tpl1->block("BLOCK_CHECKBOX");
     }
-    if ($operacao == 'ver')
-        $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-    $tpl1->CHECKBOX_SPAN_ID = "";
-    $tpl1->block("BLOCK_CHECKBOX");
-}
 
-$tpl1->block("BLOCK_CONTEUDO");
-$tpl1->block("BLOCK_ITEM");
+    //Tipo Revenda
+    if ($quiosque_revenda == 1) {
+        $tpl1->CHECKBOX_NOME = "box2[2]";
+        $tpl1->CHECKBOX_VALOR = "2";
+        $tpl1->LABEL_NOME = "Revenda";
+        if ($tipo_revenda == 1) {
+            $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+        }
+        if ($operacao == 'ver')
+            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+        $tpl1->CHECKBOX_SPAN_ID = "";
+        $tpl1->block("BLOCK_CHECKBOX");
+    }
+
+    $tpl1->block("BLOCK_CONTEUDO");
+    $tpl1->block("BLOCK_ITEM");
+}
 
 //Observação
 $tpl1->TITULO = "Observação";
@@ -1157,7 +1159,7 @@ if ($operacao == "editar") {
 
 
         //Verifica se o esta pessoa é caixa de algum quiosque
-        $sql2 = "SELECT qui_nome FROM quiosques JOIN quiosques_caixas on (quicai_quiosque=qui_codigo)  WHERE quicai_caixa=$codigo";
+        $sql2 = "SELECT cai_quiosque FROM caixas JOIN caixas_operadores on (cai_codigo=caiope_caixa)  WHERE caiope_operador=$codigo";
         $query2 = mysql_query($sql2);
         if (!$query2)
             die("Erro: 1" . mysql_error());
@@ -1362,7 +1364,7 @@ if ($operacao == "editar") {
 
                 //Verifica se o esta pessoa é caixa de algum quiosque
                 if ($grupo_codigo == 4) {
-                    $sql2 = "SELECT qui_nome FROM quiosques JOIN quiosques_caixas on (quicai_quiosque=qui_codigo)  WHERE quicai_caixa=$codigo";
+                    $sql2 = "SELECT cai_quiosque FROM caixas JOIN caixas_operadores on (cai_codigo=caiope_caixa)  WHERE caiope_operador=$codigo";
                     $query2 = mysql_query($sql2);
                     if (!$query2)
                         die("Erro: 1" . mysql_error());
@@ -1420,9 +1422,10 @@ if ($operacao == "editar") {
                 $sql = "
             SELECT qui_codigo,qui_nome 
             FROM quiosques 
-            join quiosques_caixas on (quicai_quiosque=qui_codigo)
+            join caixas on (qui_codigo=cai_quiosque)
+            join caixas_operadores on (caiope_caixa=cai_codigo)
             WHERE qui_cooperativa=$cooperativa
-            AND quicai_caixa=$codigo
+            AND caiope_operador=$codigo
         ";
             } else IF ($usuario_grupo == 5) {
                 $sql = "

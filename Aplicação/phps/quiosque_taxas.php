@@ -7,7 +7,7 @@ if ($permissao_quiosque_vertaxas <> 1) {
     exit;
 }
 
-$tipopagina = "cooperativas";
+$tipopagina = "quiosques";
 include "includes.php";
 include "controller/classes.php";
 
@@ -28,9 +28,14 @@ $tpl->FORM_NOME = "form1";
 //$tpl->FORM_LINK = "";
 //$tpl->block("BLOCK_FORM");
 //Filtro Quiosque Desabilitado
-$obj = new banco();
-$dados = $obj->dados("select qui_nome from quiosques where qui_codigo=$quiosque");
-$quiosque_nome = $dados["qui_nome"];
+
+$sql = "select qui_nome from quiosques where qui_codigo=$quiosque";
+$query = mysql_query($sql);
+if (!$query)
+    die("Erro1: " . mysql_error());
+$array = mysql_fetch_assoc($query); 
+$quiosque_nome=$array["qui_nome"];
+
 $tpl->COLUNA_ALINHAMENTO = "right";
 $tpl->COLUNA_TAMANHO = "100px";
 $tpl->TITULO = "Quiosque";
@@ -90,7 +95,9 @@ $tpl4->show();
 
 //Pega os tipos de negociação do quiosque
 $sql11 = "SELECT quitipneg_tipo FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$quiosque";
-$query11 = $obj->query($sql11);
+$query11 = mysql_query($sql11);
+if (!$query11)
+    die("Erro1: " . mysql_error()); 
 $quiosque2_consignacao=0;
 $quiosque2_revenda=0;
 while ($dados11 = mysql_fetch_array($query11)) {
@@ -100,8 +107,6 @@ while ($dados11 = mysql_fetch_array($query11)) {
     IF ($tipon == 2)
         $quiosque2_revenda = 1;
 }
-
-
 
 if ($quiosque2_consignacao == 1) {
 
@@ -153,7 +158,6 @@ if ($quiosque2_consignacao == 1) {
     $tpl2->block("BLOCK_CABECALHO_LINHA");
     $tpl2->block("BLOCK_CABECALHO");
 
-    $obj = new banco();
     $sql = "
     SELECT *
     FROM quiosques_taxas
@@ -162,7 +166,9 @@ if ($quiosque2_consignacao == 1) {
     AND tax_tiponegociacao=1
     ORDER BY tax_quiosque
 ";
-    $query = $obj->query($sql);
+    $query = mysql_query($sql);
+    if (!$query)
+        die("Erro1: " . mysql_error());
     $taxa_percentual_acumulado = 0;
     if (mysql_num_rows($query) == 0) {
         $tpl2->LINHA_NADA_COLSPAN = "11";
@@ -380,7 +386,6 @@ if ($quiosque2_revenda == 1) {
     $tpl2->block("BLOCK_CABECALHO_LINHA");
     $tpl2->block("BLOCK_CABECALHO");
 
-    $obj = new banco();
     $sql = "
     SELECT *
     FROM quiosques_taxas
@@ -389,7 +394,9 @@ if ($quiosque2_revenda == 1) {
     AND tax_tiponegociacao=2
     ORDER BY tax_quiosque
 ";
-    $query = $obj->query($sql);
+    $query = mysql_query($sql);
+    if (!$query)
+        die("Erro1: " . mysql_error());
     $taxa_percentual_acumulado = 0;
 
     if (mysql_num_rows($query) == 0) {

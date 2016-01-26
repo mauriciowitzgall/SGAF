@@ -6,7 +6,7 @@ if ($permissao_taxas_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
-$tipopagina = "cooperativas";
+$tipopagina = "quiosques";
 include "includes.php";
 
 $operacao = $_POST['operacao'];
@@ -27,7 +27,7 @@ if ($operacao == 'cadastrar')
 else
     $tpl_titulo->SUBTITULO = "EDIÇÃO";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "taxas.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "quiosques_taxas.png";
 $tpl_titulo->show();
 
 

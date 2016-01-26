@@ -2,7 +2,7 @@
 
 require "login_verifica.php";
 $saida = $_GET["codigo"];
-$tiposaida = $_GET["tiposaida"];
+$tiposaida = $_REQUEST["tiposaida"];
 if ($tiposaida == 1) {
     if ($permissao_saidas_cadastrar <> 1) {
         header("Location: permissoes_semacesso.php");
@@ -35,7 +35,11 @@ if ($saida != "") {
 $tipopagina = "saidas";
 include "includes.php";
 
-
+//Verifica se o usuário é um caixa e não tem caixa aberto, se sim não pode acessar as vendas
+if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
+    header("Location: permissoes_semacesso.php");
+    exit;
+}
 
 //CONTROLE DA OPERAÇÃO
 $dataatual = date("Y/m/d");
@@ -106,6 +110,25 @@ if ($retirar_produto == '1') {
 //(� necess�rio por que se o usu�rio abrir uma nova janela na tela saidas.php o sistema exclui
 //as saidas incompletas e vazias do usu�rio logado e portanto pode excluir a saida que est� 
 //em andamento e ainda n�o incluiu nenhum produto)
+if ($produto != "") {
+    $sql7 = "SELECT sai_codigo FROM saidas WHERE sai_codigo=$saida";
+    $query7 = mysql_query($sql7);
+    if (!$query7)
+        die("Erro de SQL 55: " . mysql_error());
+    $linhas7 = mysql_num_rows($query7);
+    if ($linhas7 == 0) {
+        $tpl = new Template("templates/notificacao.html");
+        $tpl->ICONES = $icones;
+        $tpl->MOTIVO_COMPLEMENTO = "<b>Quando realizar uma venda não abra várias janelas ou abas em seu navegador! Não entre no sistema com o mesmo usuário em mais de um computador ao mesmo tempo</b>
+            Por motivos de segurança esta venda foi cancelada, você deve iniciá-la novamente! Contato um administrador para saber mais!";
+        $tpl->block("BLOCK_ATENCAO");
+        $tpl->DESTINO = "saidas.php";
+        $tpl->block("BLOCK_BOTAO");
+        $tpl->show();
+        exit;
+    }
+}
+//Só permite que seja efetuado alguma venda se algum caixa estiver aberto
 if ($produto != "") {
     $sql7 = "SELECT sai_codigo FROM saidas WHERE sai_codigo=$saida";
     $query7 = mysql_query($sql7);
@@ -341,14 +364,15 @@ if ($retirar_produto == '1') { //Se o usu�rio clicou no excluir produto da lis
 
 
 //Inserir saida principal com o status incompleto. Esse processo � feito uma unica vez, antes de come�ar 
-//a inser��o dos produtos dentro dessa saida
+//a inserção dos produtos dentro dessa saida
 if (($saida == 0) && ($passo == 2)) {
     $datahoracadastro=$dataatual." ".$horaatual;
+    
     $sql_saida = "
     INSERT INTO
-        saidas (sai_quiosque, sai_caixa, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro)
+        saidas (sai_quiosque, sai_caixaoperacaonumero, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro,sai_caixaoperadorresponsavel)
     VALUES
-        ('$usuario_quiosque','$usuario_codigo','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2,'$datahoracadastro')        
+        ('$usuario_quiosque','$usuario_caixa_operacao','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2,'$datahoracadastro','$usuario_codigo')        
     ";
     $query_saida = mysql_query($sql_saida);
     if (!$query_saida)
@@ -700,7 +724,7 @@ if ($passo == 2) {
     $tpl1->TOTAL_GERAL = "R$ " . number_format($total_geral, 2, ',', '.');
     $tpl1->block("BLOCK_LISTAGEM");
     if ($tiposaida == 1) {
-        $tpl1->FORM_LINK = "saidas_cadastrar2.php";
+        $tpl1->FORM_LINK = "saidas_cadastrar2.php?tiposai=$tiposaida";
         $tpl1->block("BLOCK_SALVAR_VENDA");
     } else if ($tiposaida == 3) {
         $tpl1->FORM_LINK = "saidas_cadastrar3.php?tiposai=3";

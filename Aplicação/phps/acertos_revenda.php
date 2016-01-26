@@ -299,7 +299,7 @@ while ($dados = mysql_fetch_assoc($query)) {
 
     $tpl2->COLUNA_TAMANHO = "";
     $tpl2->COLUNA_ALINHAMENTO = "";
-    $tpl2->TEXTO = converte_hora($horaini);
+    $tpl2->TEXTO = $horaini;
     $tpl2->block("BLOCK_TEXTO");
     $tpl2->block("BLOCK_CONTEUDO");
     $tpl2->block("BLOCK_COLUNA");
@@ -313,7 +313,7 @@ while ($dados = mysql_fetch_assoc($query)) {
 
     $tpl2->COLUNA_TAMANHO = "";
     $tpl2->COLUNA_ALINHAMENTO = "";
-    $tpl2->TEXTO = converte_hora($horafim);
+    $tpl2->TEXTO = $horafim;
     $tpl2->block("BLOCK_TEXTO");
     $tpl2->block("BLOCK_CONTEUDO");
     $tpl2->block("BLOCK_COLUNA");

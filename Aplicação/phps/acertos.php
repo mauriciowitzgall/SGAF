@@ -293,6 +293,8 @@ while ($dados = mysql_fetch_assoc($query)) {
         die("Erro: " . mysql_error());
     $dados2 = mysql_fetch_assoc($query2);
     $fornecedor_nome = $dados2["pes_nome"];
+    
+   
     $tpl->LISTA_COLUNA_ALINHAMENTO = "";
     $tpl->LISTA_COLUNA_VALOR = $fornecedor_nome;
     $tpl->block("BLOCK_LISTA_COLUNA");
@@ -354,9 +356,22 @@ while ($dados = mysql_fetch_assoc($query)) {
     }
     //excluir
     if ($permissao_acertos_excluir == 1) {
-        $tpl->LINK = "acertos_deletar.php";
-        $tpl->LINK_COMPLEMENTO = "operacao=excluir&fornecedor=$fornecedor";
-        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR");
+        //verifica se este item da lista é o ultimo acerto para poder mostrar o botão excluir habilitado
+        $sql3="select max(ace_codigo) from acertos where ace_fornecedor=$fornecedor";
+        $query3 = mysql_query($sql3);
+        if (!$query3)
+            die("Erro: " . mysql_error());
+        $dados3 = mysql_fetch_array($query3);
+        $ultimo_acerto = $dados3[0];
+        
+        if ($ultimo_acerto==$codigo) {
+            $tpl->LINK = "acertos_deletar.php";
+            $tpl->LINK_COMPLEMENTO = "operacao=excluir&fornecedor=$fornecedor";
+            $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR");
+        }
+        else {
+            $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR_DESABILITADO");
+        }
     }
 
 

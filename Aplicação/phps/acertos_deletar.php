@@ -77,7 +77,7 @@ if ($dados[0]==$acerto) {
     $tpl6->block("BLOCK_ATENCAO");
     $tpl6->block("BLOCK_NAOAPAGADO"); 
     $tpl6->DESTINO = "acertos.php";
-    $tpl6->MOTIVO = "Você não pode excluir este acerto enquanto houverem acertos posteriores a este! Apenas � permitido excluir o ultimo acerto gerado. O motivo disso se d� por v�rios motivos, entre eles o fato de que o 'Valor Pendente' de um acerto influencía no c�lculo do outro.";
+    $tpl6->MOTIVO = "Você não pode excluir este acerto enquanto houverem acertos posteriores a este! Apenas é permitido excluir o ultimo acerto gerado. O motivo disso se dá por vários motivos, entre eles o fato de que o 'Valor Pendente' de um acerto influencía no cálculo do outro.";
     $tpl6->block("BLOCK_MOTIVO");
     $tpl6->block("BLOCK_BOTAO");
        

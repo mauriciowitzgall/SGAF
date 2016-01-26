@@ -7,7 +7,7 @@ if ($permissao_cooperativa_ver <> 1) {
     exit;
 }
 
-$tipopagina = "cooperativas";
+$tipopagina = "cooperativa";
 include "includes.php";
 
 //Template de Título e Sub-título
@@ -46,21 +46,45 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 //Filtro Fim
 $tpl->block("BLOCK_FILTRO");
 
+
+
 //Listagem Inicio
-//Cabe�alho
+//Cabeçalho
 $tpl->CABECALHO_COLUNA_TAMANHO = "150px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "ABREVIAÇÃO";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-$tpl->CABECALHO_COLUNA_TAMANHO = "450px";
+
+$tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
-$tpl->CABECALHO_COLUNA_NOME = "NOME COMPLETO";
+$tpl->CABECALHO_COLUNA_NOME = "QTD. QUIOSQUES ";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-$tpl->CABECALHO_COLUNA_TAMANHO = "250px";
+
+$tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
-$tpl->CABECALHO_COLUNA_NOME = "PRESIDENTE";
+$tpl->CABECALHO_COLUNA_NOME = "QTD. PESSOAS ";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
+$tpl->CABECALHO_COLUNA_TAMANHO = "";
+$tpl->CABECALHO_COLUNA_COLSPAN = "";
+$tpl->CABECALHO_COLUNA_NOME = "QTD. PRODUTOS ";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
+$tpl->CABECALHO_COLUNA_TAMANHO = "";
+$tpl->CABECALHO_COLUNA_COLSPAN = "";
+$tpl->CABECALHO_COLUNA_NOME = "QTD. ENTRADAS ";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
+$tpl->CABECALHO_COLUNA_TAMANHO = "";
+$tpl->CABECALHO_COLUNA_COLSPAN = "";
+$tpl->CABECALHO_COLUNA_NOME = "QTD. SAIDAS ";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
+$tpl->CABECALHO_COLUNA_TAMANHO = "150px";
+$tpl->CABECALHO_COLUNA_COLSPAN = "2";
+$tpl->CABECALHO_COLUNA_NOME = "DATA ULT. INT.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "100px";
@@ -112,32 +136,141 @@ while ($dados = mysql_fetch_array($query)) {
     $presidente = $dados["coo_presidente"];
     $tpl->LISTA_LINHA_CLASSE = "";
 
-    //Coluna Abrevia��o
+    //Coluna Abreviação
     $tpl->LISTA_COLUNA_VALOR = $abreviacao;
     $tpl->block("BLOCK_LISTA_COLUNA");
 
-    //Coluna Cooperativa Nome Completo
-    $tpl->LISTA_COLUNA_VALOR = $nome;
+    
+
+    //Coluna Quantidade de quiosques
+    $sql2="select count(qui_codigo) from quiosques where qui_cooperativa=$codigo";
+    $query2 = mysql_query($sql2);
+    if (!$query2)
+        die("Erro: " . mysql_error());
+    $dados2 = mysql_fetch_array($query2);    
+    $qtdquiosques=$dados2[0];
+    $tpl->LISTA_COLUNA_VALOR = $qtdquiosques;
+    $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
     $tpl->block("BLOCK_LISTA_COLUNA");
 
+    //Coluna Quantidade de pessoas
+    $sql2="select count(pes_codigo) from pessoas where pes_cooperativa=$codigo";
+    $query2 = mysql_query($sql2);
+    if (!$query2)
+        die("Erro: " . mysql_error());
+    $dados2 = mysql_fetch_array($query2); 
+    $qtdpessoas=$dados2[0];
+    $tpl->LISTA_COLUNA_VALOR = $qtdpessoas;
+    $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
+    $tpl->block("BLOCK_LISTA_COLUNA");
+    
 
-    //Coluna Presidente
-    $tpl->COLUNA_LINK = "pessoas_cadastrar.php?codigo=$presidente&operacao=ver";
-    $tpl->block("BLOCK_LISTA_COLUNA_LINK");
-    if ($presidente != '') {
-
-        $sql2 = "SELECT * FROM pessoas WHERE pes_codigo=$presidente ORDER BY pes_nome";
-        $query2 = mysql_query($sql2);
-        if (!$query2)
-            die("Erro: " . mysql_error());
-        $dados2 = mysql_fetch_array($query2);
-        $tpl->LISTA_COLUNA_VALOR = $dados2["pes_nome"];
-    }
-    $tpl->block("BLOCK_LISTA_COLUNA_LINK_FIM");
+    //Coluna Quantidade de produtos
+    $sql2="select count(pro_codigo) from produtos where pro_cooperativa=$codigo";
+    $query2 = mysql_query($sql2);
+    if (!$query2)
+        die("Erro: " . mysql_error());
+    $dados2 = mysql_fetch_array($query2); 
+    $qtdprodutos=$dados2[0];
+    $tpl->LISTA_COLUNA_VALOR = $qtdprodutos;
+    $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
     $tpl->block("BLOCK_LISTA_COLUNA");
 
+    //Coluna Quantidade de Entradas
+    $sql2="
+    select count(ent_codigo) from entradas 
+    join quiosques on ent_quiosque=qui_codigo
+    where qui_cooperativa=$codigo     
+    ";
+    $query2 = mysql_query($sql2);
+    if (!$query2)
+        die("Erro: " . mysql_error());
+    $dados2 = mysql_fetch_array($query2); 
+    $qtdentradas=$dados2[0];
+    $tpl->LISTA_COLUNA_VALOR = $qtdentradas;
+    $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
+    $tpl->block("BLOCK_LISTA_COLUNA");
 
-    //Coluna Opera�ões
+    
+    //Coluna Quantidade de Saidas
+    $sql2="
+    select count(sai_codigo) from saidas 
+    join quiosques on sai_quiosque=qui_codigo
+    where qui_cooperativa=$codigo     
+    ";
+    $query2 = mysql_query($sql2);
+    if (!$query2)
+        die("Erro: " . mysql_error());
+    $dados2 = mysql_fetch_array($query2); 
+    $qtdsaidas=$dados2[0];
+    $tpl->LISTA_COLUNA_VALOR = "$qtdsaidas";
+    $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
+    $tpl->block("BLOCK_LISTA_COLUNA");
+  
+    
+    //Data Ultima interação
+    $sql2="
+    SELECT max(dt) FROM (
+
+    SELECT max(concat(ace_data,' ',ace_hora)) as dt
+    FROM acertos
+    join quiosques on ace_quiosque=qui_codigo
+    WHERE qui_cooperativa=$codigo
+
+    UNION
+
+    SELECT max(concat(ent_datacadastro,' ',ent_horacadastro)) as dt
+    FROM entradas
+    join quiosques on ent_quiosque=qui_codigo
+    WHERE qui_cooperativa=$codigo
+
+    UNION
+
+    SELECT max(concat(fch_datacadastro,' ',fch_horacadastro)) as dt
+    FROM fechamentos
+    join quiosques on fch_quiosque=qui_codigo
+    WHERE qui_cooperativa=$codigo
+
+    UNION
+
+    SELECT max(concat(sai_datacadastro,' ',sai_horacadastro)) as dt
+    FROM saidas
+    join quiosques on sai_quiosque=qui_codigo
+    WHERE qui_cooperativa=$codigo
+
+    UNION
+
+    SELECT max(concat(pes_datacadastro,' ',pes_horacadastro)) as dt
+    FROM pessoas
+    WHERE pes_cooperativa=$codigo
+
+    UNION
+
+    SELECT max(concat(pro_datacriacao,' ',pro_horacriacao)) as dt
+    FROM produtos
+    WHERE pro_cooperativa=$codigo
+
+    ) interacoes  
+    ";
+    $query2 = mysql_query($sql2);
+    if (!$query2)
+        die("Erro: " . mysql_error());
+    $dados2 = mysql_fetch_array($query2); 
+    $dataultimainteracao=$dados2[0]; 
+    $dataultimainteracao_convertido = converte_datahora($dataultimainteracao);
+    $datahora=  explode(" ",$dataultimainteracao_convertido);
+    $data = $datahora[0];
+    $hora = $datahora[1];
+    $tpl->LISTA_COLUNA_ALINHAMENTO="right";
+    $tpl->LISTA_COLUNA_VALOR = $data;
+    $tpl->block("BLOCK_LISTA_COLUNA");
+    $tpl->LISTA_COLUNA_ALINHAMENTO="left";
+    $tpl->LISTA_COLUNA_VALOR = $hora;
+    $tpl->block("BLOCK_LISTA_COLUNA");
+    
+
+    
+    //Coluna Operações
     $tpl->CODIGO = $codigo;
     //editar  
     IF ($permissao_cooperativa_editar == 1) {
@@ -155,7 +288,7 @@ while ($dados = mysql_fetch_array($query)) {
     //excluir
     IF ($permissao_cooperativa_excluir == 1) {
         $tpl->OPERACAO_NOME = "Excluir";
-        $tpl->LINK = "cooperativas_deletar.php";
+        $tpl->LINK = "cooperativas_deletar.php?codigo=$codigo&passo=1";
         $tpl->LINK_COMPLEMENTO = "operacao=excluir";
         $tpl->ICONE_ARQUIVO = $icones . "excluir.png";
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
@@ -172,7 +305,7 @@ while ($dados = mysql_fetch_array($query)) {
 $tpl->LINK_CADASTRO = "cooperativas_cadastrar.php?operacao=cadastrar";
 $tpl->CADASTRAR_NOME = "CADASTRAR";
 if (mysql_num_rows($query) == 0) {
-    $tpl->LISTANADA = "4";
+    $tpl->LISTANADA = "30";
     $tpl->block("BLOCK_LISTA_NADA");
 }
 

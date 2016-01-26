@@ -7,7 +7,7 @@ if ($permissao_taxas_aplicar <> 1) {
     exit;
 }
 
-$tipopagina = "cooperativas";
+$tipopagina = "quiosques";
 include "includes.php";
 include "controller/classes.php";
 
@@ -33,7 +33,7 @@ if ($linhas == 0) {
     echo "<br><br>";
     $tpl = new Template("templates/notificacao.html");
     $tpl->ICONES = $icones;
-    $tpl->MOTIVO_COMPLEMENTO = "Para vincular uma taxa a um ponto de venda é necessário ter cadastrado alguma taxa! <b>Você não possui nenhuma taxa cadastrada!</b><br>Clique no botão abaixo para ir para a tela que cadastra taxas!";
+    $tpl->MOTIVO_COMPLEMENTO = "Para vincular uma taxa a um quiosque é necessário ter cadastrado alguma taxa! <b>Você não possui nenhuma taxa cadastrada!</b><br>Clique no botão abaixo para ir para a tela que cadastra taxas!";
     $tpl->block("BLOCK_ATENCAO");
     $tpl->DESTINO = "taxas_cadastrar.php?operacao=cadastrar";
     $tpl->block("BLOCK_BOTAO");
@@ -228,6 +228,10 @@ $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
 $tpl1->CAMPOOCULTO_VALOR = $taxavalor;
 $tpl1->CAMPOOCULTO_NOME = "percent";
+$tpl1->block("BLOCK_CAMPOSOCULTOS");
+
+$tpl1->CAMPOOCULTO_VALOR = $taxa;
+$tpl1->CAMPOOCULTO_NOME = "taxa";
 $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
 $tpl1->CAMPOOCULTO_VALOR = $operacao;

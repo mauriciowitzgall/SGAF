@@ -9,6 +9,12 @@ if ($permissao_saidas_cadastrar <> 1) {
 $tipopagina = "saidas";
 include "includes.php";
 
+//Verifica se o usuário é um caixa e não tem caixa aberto, se sim não pode acessar as vendas
+if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
+    header("Location: permissoes_semacesso.php");
+    exit;
+}
+
 $tiposai = $_REQUEST["tiposai"];
 $passo = $_REQUEST["passo"];
 $saida = $_REQUEST["saida"];
@@ -141,8 +147,18 @@ WHERE
 if (!mysql_query($sql))
     die("Erro: " . mysql_error());
 
+//botão continuar
 $tpl_notificacao->block("BLOCK_CONFIRMAR");
 $tpl_notificacao->block("BLOCK_CADASTRADO");
 $tpl_notificacao->block("BLOCK_BOTAO");
+
+//botão cadastrar mais
+$tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar.php?tiposaida=$tiposai";
+//$tpl->block("BLOCK_BOTAOGERAL_NOVAJANELA");
+$tpl_notificacao->BOTAOGERAL_TIPO="button";
+$tpl_notificacao->BOTAOGERAL_NOME="REALIZAR NOVA SAIDA";
+$tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
+$tpl_notificacao->block("BLOCK_BOTAOGERAL");
+
 $tpl_notificacao->show();
 ?>

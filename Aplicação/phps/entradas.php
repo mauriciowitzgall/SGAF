@@ -176,7 +176,6 @@ $sql = "
                 <td width="">QTD. PROD.</td>            
                 <td width="">ITENS</td>            
                 <td width="">TOTAL</td>            
-                <td width="">SIT.</td>            
                 <?php 
                 $oper=0;
                 $oper_tamanho=0;
@@ -316,38 +315,6 @@ $sql = "
                             ?></b>
                     </td>
 
-                   
-                    
-                    <!-- COLUNA SITUACAO -->    
-                    <td align="center">                     
-                        <?php
-                        if ($status == 2) {
-                            if ($usuario_codigo == $supervisor) {
-                                $imagem = "star_empty.png";
-                                $titulo = "Incompleta";
-                            } else {
-                                $dataatual = date("Y-m-d");
-                                $horaatual = date("H:i:s");
-                                $tempo1 = $data . "_" . $hora;
-                                $tempo2 = $dataatual . "_" . $horaatual;
-                                $total_segundos = diferenca_entre_datahora($tempo1, $tempo2);
-                                if ($total_segundos > 5400) {
-                                    $imagem = "star_empty.png";
-                                    $titulo = "Incompleta";                                    
-                                } else {
-                                    $imagem = "star_half_full.png";
-                                    $titulo = "Esta entrada está em andamento por outro usuário! Este usuário tem 01:30 (uma hora e meia) para finalizá-la caso contrário ela passará a ser 'Incompleta' e você poderá finalizá-la!";
-                                    $editar_ocultar = 1;
-                                    $editar_ocultar_motivo = "Esta entrada está em andamento por outro usuário! Este usuário tem 01:30 (uma hora e meia) para finalizá-la caso contrário ela passará a ser 'Incompleta' e você poderá finalizá-la!";
-                                }
-                            }
-                        } else {
-                            $imagem = "star_full.png";
-                            $titulo = "Completo";
-                        }
-                        ?>    
-                        <img width="15px" src="<?php echo $icones . $imagem; ?>" title="<?php echo $titulo; ?>" alt="<?php echo $titulo; ?>"/>
-                    </td>
 
                 <!-- COLUNA VER -->                
                 <?php if ($permissao_entradas_ver == 1) { ?>

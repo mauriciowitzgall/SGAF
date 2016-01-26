@@ -51,9 +51,7 @@
                 onkeyup="{CAMPO_ONKEYUP}"
                 onkeydown="{CAMPO_ONKEYDOWN}"
                 onkeypress="{CAMPO_ONKEYPRESS}"
-                <!-- BEGIN BLOCK_CAMPO_ONBLUR -->
                 onblur="{CAMPO_ONBLUR}"
-                <!-- END BLOCK_CAMPO_ONBLUR -->
                 onclick="{CAMPO_ONCLICK}" 
                 placeholder="{CAMPO_DICA}" 
                 
@@ -97,6 +95,11 @@
                 <!-- BEGIN BLOCK_CAMPO_SOMENTELEITURA -->
                 readonly
                 <!-- END BLOCK_CAMPO_SOMENTELEITURA -->
+                
+                <!-- BEGIN BLOCK_CAMPO_ESTILO -->
+                style="{CAMPO_ESTILO}"                 
+                <!-- END BLOCK_CAMPO_ESTILO -->
+                
             >           
             <!-- END BLOCK_CAMPO --> 
             
@@ -187,6 +190,9 @@
                 <!-- BEGIN BLOCK_TEXTAREA_DESABILITADO -->
                 disabled 
                 <!-- END BLOCK_TEXTAREA_DESABILITADO -->                
+                <!-- BEGIN BLOCK_TEXTAREA_OBRIGATORIO -->
+                required 
+                <!-- END BLOCK_TEXTAREA_OBRIGATORIO -->                
             >{TEXTAREA_TEXTO}</textarea>                       
             <!-- END BLOCK_TEXTAREA --> 
             

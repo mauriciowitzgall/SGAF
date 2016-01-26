@@ -221,7 +221,9 @@
                 pes_email_senha,
                 pes_usarperguntasecreta,
                 pes_perguntasecreta,
-                pes_respostasecreta
+                pes_respostasecreta,
+                pes_tipopessoa,
+                pes_id
                 )
                 VALUES (
                 '$nome',
@@ -246,7 +248,9 @@
                 '$email_senha',
                 '$check_perguntasecreta',
                 '$pergunta',
-                '$resposta'
+                '$resposta',
+                '1',
+                '1'
 
                 )";
             if (!mysql_query($sql))

@@ -100,8 +100,9 @@ $tpl_filtro->block("BLOCK_SELECT_FILTRO");
 $tpl_filtro->block("BLOCK_OPTION_PADRAO");
 $sql = "
     SELECT DISTINCT pes_codigo,pes_nome 
-    FROM pessoas
-    JOIN saidas on (sai_caixa=pes_codigo)    
+    FROM saidas
+    JOIN caixas_operacoes on (sai_caixaoperacaonumero=caiopo_numero)
+    JOIN pessoas on (caiopo_operador=pes_codigo)
     WHERE sai_tipo=3
     ORDER BY pes_nome 
 ";
@@ -256,7 +257,8 @@ $sql = "
     SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,saimot_nome,pes_nome,sai_totalbruto,sai_descricao,sai_status,pes_codigo
     FROM saidas
     JOIN saidas_motivo on (sai_saidajustificada=saimot_codigo)
-    JOIN pessoas on (sai_caixa=pes_codigo)
+    left join caixas_operacoes on (sai_caixaoperacaonumero=caiopo_numero)
+    left JOIN pessoas on (caiopo_operador=pes_codigo)
     left JOIN saidas_produtos on (saipro_saida=sai_codigo)
     left JOIN entradas on (ent_codigo=saipro_lote)
     WHERE sai_tipo=3

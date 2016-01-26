@@ -8,7 +8,7 @@ if ($permissao_quiosque_ver <> 1) {
 }
 
 
-$tipopagina = "cooperativas";
+$tipopagina = "quiosques";
 include "includes.php";
 
 //Template de Título e Sub-título
@@ -132,14 +132,14 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "CIDADE";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-$tpl->CABECALHO_COLUNA_TAMANHO = "100px";
-$tpl->CABECALHO_COLUNA_COLSPAN = "2";
-$tpl->CABECALHO_COLUNA_NOME = "SUPERV.";
+$tpl->CABECALHO_COLUNA_TAMANHO = "25px";
+$tpl->CABECALHO_COLUNA_COLSPAN = "";
+$tpl->CABECALHO_COLUNA_NOME = "DATA ULT. INT.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "100px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "2";
-$tpl->CABECALHO_COLUNA_NOME = "CAIXA";
+$tpl->CABECALHO_COLUNA_NOME = "SUPERV.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 
@@ -176,6 +176,29 @@ if ($permissao_quiosque_definircooperativa == 0) {
     $sql_filtro = $sql_filtro . " and qui_cooperativa = $usuario_cooperativa ";
 }
 
+
+//Verifica quais são os quiosques o usuário logado pode visualizar
+
+$sqlpodever="SELECT DISTINCT qui_codigo from quiosques
+join quiosques_supervisores on quisup_quiosque=qui_codigo
+WHERE quisup_supervisor = $usuario_codigo";
+$query = mysql_query($sqlpodever);
+if (!$query)
+    die("Erro: " . mysql_error());
+$count=1;
+while ($dados = mysql_fetch_assoc($query)) {
+    if($count==1)
+        $quiosquespodever=$dados["qui_codigo"];
+    else
+        $quiosquespodever=$quiosquespodever.",".$dados["qui_codigo"];   
+    $count++;
+}
+if (($usuario_grupo==1)|| ($usuario_grupo==2)) {
+}
+else {
+    $sql_filtro = $sql_filtro . "and qui_codigo in ($quiosquespodever)";
+}
+
 //Inicio das tuplas
 $sql = "
 SELECT
@@ -185,7 +208,8 @@ FROM
     JOIN cidades on (qui_cidade=cid_codigo)
     JOIN cooperativas on (qui_cooperativa=coo_codigo)
 WHERE
-    1 and qui_cooperativa= $usuario_cooperativa $sql_filtro 
+    1 and qui_cooperativa= $usuario_cooperativa 
+    $sql_filtro 
 ORDER BY
     qui_nome";
 
@@ -239,6 +263,43 @@ while ($dados = mysql_fetch_assoc($query)) {
 
     $tpl->IMAGEM_PASTA = $icones;
 
+    //Data Última Interação
+    $sql2=" 
+    SELECT max(dt) FROM (
+    
+    SELECT max(concat(ace_data,' ',ace_hora)) as dt
+    FROM acertos
+    WHERE ace_quiosque=$codigo
+
+    UNION
+
+    SELECT max(concat(ent_datacadastro,' ',ent_horacadastro)) as dt
+    FROM entradas
+    WHERE ent_quiosque=$codigo
+
+    UNION
+
+    SELECT max(concat(fch_datacadastro,' ',fch_horacadastro)) as dt
+    FROM fechamentos
+    WHERE fch_quiosque=$codigo
+
+    UNION
+
+    SELECT max(concat(sai_datacadastro,' ',sai_horacadastro)) as dt
+    FROM saidas
+    WHERE sai_quiosque=$codigo
+
+    ) interacoes
+    ";
+    $query2 = mysql_query($sql2);
+    if (!$query2)
+        die("Erro: " . mysql_error());
+    $dados2=  mysql_fetch_array($query2);
+    $dataultimainteracao=$dados2[0];
+    $tpl->LISTA_COLUNA2_ALINHAMENTO = "left";
+    $tpl->LISTA_COLUNA_VALOR = converte_datahora($dataultimainteracao);
+    $tpl->block("BLOCK_LISTA_COLUNA");  
+    
     //Coluna Supervisores
     $tpl->LISTA_COLUNA2_ALINHAMENTO = "right";
     $tpl->LISTA_COLUNA2_ALINHAMENTO2 = "left";
@@ -255,24 +316,6 @@ while ($dados = mysql_fetch_assoc($query)) {
         $tpl->DESABILITADO = "_desabilitado";
     }
     $tpl->LISTA_COLUNA2_VALOR = "($supervisores)";
-    $tpl->block("BLOCK_LISTA_COLUNA2");
-
-    //Coluna caixas
-    $tpl->LISTA_COLUNA2_ALINHAMENTO = "right";
-    $tpl->LISTA_COLUNA2_ALINHAMENTO2 = "left";
-    $sqltot = "SELECT * FROM quiosques_caixas WHERE quicai_quiosque=$codigo";
-    $querytot = mysql_query($sqltot);
-    if (!$querytot)
-        die("Erro: " . mysql_error());
-    $caixas = mysql_num_rows($querytot);
-    if ($permissao_quiosque_vercaixas == 1) {
-        $tpl->LISTA_COLUNA2_LINK = "caixas.php?quiosque=$codigo";
-        $tpl->DESABILITADO = "";
-    } else {
-        $tpl->LISTA_COLUNA2_LINK = "#";
-        $tpl->DESABILITADO = "_desabilitado";
-    }
-    $tpl->LISTA_COLUNA2_VALOR = "($caixas)";
     $tpl->block("BLOCK_LISTA_COLUNA2");
 
 
@@ -327,7 +370,11 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl->IMAGEM_ALINHAMENTO="center";
     $tpl->block("BLOCK_LISTA_COLUNA_ICONES");
 
+    
 
+    
+    
+    
     //Coluna Operações    
     $tpl->ICONE_ARQUIVO = $icones;
     $tpl->CODIGO = $codigo;
@@ -337,8 +384,9 @@ while ($dados = mysql_fetch_assoc($query)) {
         $tpl->LINK_COMPLEMENTO = "operacao=ver";
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DETALHES");
     }
-    //editar
+    
 
+    //editar
     if ((($permissao_quiosque_editar == 1) && ($codigo == $usuario_quiosque)) || (($usuario_grupo == 1) && ($usuario_cooperativa == $quiosque_coop))) {
         $tpl->LINK = "quiosques_cadastrar.php";
         $tpl->LINK_COMPLEMENTO = "operacao=editar";
@@ -351,7 +399,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     //deletar
     if ((($permissao_quiosque_excluir == 1) && ($codigo == $usuario_quiosque)) || ($usuario_grupo == 1)) {
         $tpl->LINK = "quiosques_deletar.php";
-        $tpl->LINK_COMPLEMENTO = "operacao=excluir";
+        $tpl->LINK_COMPLEMENTO = "operacao=excluir&passo=1";
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR");
     } else {
         $tpl->LINK = "";

@@ -10,9 +10,9 @@ $quiosque = $_POST["quiosque"];
 $produto = $_POST["produto"];
 //echo "coo: $cooperativa qui:$quiosque pro:$produto";
 $datade = $_POST["datade"];
-$datade_sembarras = desconverte_data($_POST["datade"]);
 $dataate = $_POST["dataate"];
-$dataate_sembarras = desconverte_data($_POST["dataate"]);
+$datade_combarra = converte_data($datade);
+$dataate_combarra = converte_data($dataate);
 $ordenacao = $_POST["ordenacao"];
 if ($ordenacao == "Nome de produto")
     $ordenacao = " pro_nome ";
@@ -137,7 +137,7 @@ $tpl_campos->block("BLOCK_COLUNA");
 $tpl_campos->COLUNA_ALINHAMENTO = "left";
 $tpl_campos->CAMPO_TIPO = "text";
 $tpl_campos->CAMPO_NOME = "datade";
-$tpl_campos->CAMPO_VALOR = "$datade";
+$tpl_campos->CAMPO_VALOR = "$datade_combarra";
 $tpl_campos->block("BLOCK_CAMPO_DESABILITADO");
 $tpl_campos->block("BLOCK_CAMPO_PADRAO");
 $tpl_campos->block("BLOCK_CAMPO");
@@ -150,7 +150,7 @@ $tpl_campos->block("BLOCK_CONTEUDO");
 $tpl_campos->COLUNA_ALINHAMENTO = "left";
 $tpl_campos->CAMPO_TIPO = "text";
 $tpl_campos->CAMPO_NOME = "dataate";
-$tpl_campos->CAMPO_VALOR = "$dataate";
+$tpl_campos->CAMPO_VALOR = "$dataate_combarra";
 $tpl_campos->block("BLOCK_CAMPO_DESABILITADO");
 $tpl_campos->block("BLOCK_CAMPO_PADRAO");
 $tpl_campos->block("BLOCK_CAMPO");
@@ -238,7 +238,7 @@ join cooperativas on (qui_cooperativa=coo_codigo)
 join produtos on (saipro_produto=pro_codigo)
 $sql_filtro_from
 WHERE sai_tipo=1
-and sai_datacadastro between '$datade_sembarras' and '$dataate_sembarras'
+and sai_datacadastro between '$datade' and '$dataate'
 $sql_filtro
 GROUP BY saipro_produto
 ORDER BY $ordenacao    

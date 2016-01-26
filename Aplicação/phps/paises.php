@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usuï¿½rio tem permissï¿½o para acessar este conteï¿½do
 require "login_verifica.php";
 if ($permissao_paises_ver <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -34,7 +34,7 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 $tpl->block("BLOCK_FILTRO");
 
 
-//Lista cabeçalho
+//Lista cabeï¿½alho
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "PAIS";
@@ -47,7 +47,7 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "2";
-$tpl->CABECALHO_COLUNA_NOME = "OPERAÇÕES";
+$tpl->CABECALHO_COLUNA_NOME = "OPERAï¿½ï¿½ES";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Lista linhas
@@ -58,15 +58,15 @@ if ($filtro_nome <> "") {
 }
 
 $sql = "SELECT * FROM paises WHERE 1 $sql_filtro ORDER BY pai_nome";
-//Paginação
+//Paginaï¿½ï¿½o
 $query = mysql_query($sql);
 if (!$query)
-    die("Erro SQL Principal Paginação:" . mysql_error());
+    die("Erro SQL Principal Paginaï¿½ï¿½o:" . mysql_error());
 $linhas = mysql_num_rows($query);
 $por_pagina = $usuario_paginacao;
 $paginaatual = $_POST["paginaatual"];
 $paginas = ceil($linhas / $por_pagina);
-//Se é a primeira vez que acessa a pagina então começar na pagina 1
+//Se ï¿½ a primeira vez que acessa a pagina entï¿½o comeï¿½ar na pagina 1
 if (($paginaatual == "") || ($paginas < $paginaatual) || ($paginaatual <= 0)) {
     $paginaatual = 1;
 }
@@ -94,7 +94,7 @@ while ($dados = mysql_fetch_array($query)) {
     $tpl->LISTA_COLUNA_VALOR = $sigla;
     $tpl->block("BLOCK_LISTA_COLUNA");
 
-    //Coluna OperaçÃµes
+    //Coluna Operaï¿½Ãµes
     $tpl->CODIGO = $codigo;
 
     //editar  
@@ -105,7 +105,7 @@ while ($dados = mysql_fetch_array($query)) {
         $tpl->ICONE_ARQUIVO = $icones . "editar.png";
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");        
     } else {  
-        $tpl->OPERACAO_NOME = "VocÃª não tem permissão para editar paises! Contate um administrador!";
+        $tpl->OPERACAO_NOME = "VocÃª nï¿½o tem permissï¿½o para editar paises! Contate um administrador!";
         $tpl->ICONE_ARQUIVO = $icones . "editar_desabilitado.png";            
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");        
     }       
@@ -120,7 +120,7 @@ while ($dados = mysql_fetch_array($query)) {
         $tpl->ICONE_ARQUIVO = $icones . "excluir.png";
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");        
     } else {  
-        $tpl->OPERACAO_NOME = "VocÃª não tem permissão para excluir paises! Contate um administrador!";
+        $tpl->OPERACAO_NOME = "VocÃª nï¿½o tem permissï¿½o para excluir paises! Contate um administrador!";
         $tpl->ICONE_ARQUIVO = $icones . "excluir_desabilitado.png";            
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");        
     }       
@@ -130,7 +130,7 @@ while ($dados = mysql_fetch_array($query)) {
     $tpl->block("BLOCK_LISTA");
 } 
 if (mysql_num_rows($query)==0) {
-    $tpl->LISTANADA=4;
+    $tpl->LISTANADA=30;
     $tpl->block("BLOCK_LISTA_NADA");
 }
 

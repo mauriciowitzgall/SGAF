@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usuï¿½rio tem permissï¿½o para acessar este conteï¿½do
 require "login_verifica.php";
 if ($permissao_estados_ver <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -64,7 +64,7 @@ $filtro_pais_sql = "";
 if ($filtropais <> "") {
     $filtro_pais_sql = "and est_pais = '$filtropais'";
 }
-//Concatena o sql principal com os filtros se necessário    
+//Concatena o sql principal com os filtros se necessï¿½rio    
 $sql = "
 SELECT 
     *
@@ -76,15 +76,15 @@ WHERE
 ORDER BY
     est_nome
 ";
-//Paginação
+//Paginaï¿½ï¿½o
 $query = mysql_query($sql);
 if (!$query)
-    die("Erro SQL Principal Paginação:" . mysql_error());
+    die("Erro SQL Principal PaginaÃ§Ã£o:" . mysql_error());
 $linhas = mysql_num_rows($query);
 $por_pagina = $usuario_paginacao;
 $paginaatual = $_POST["paginaatual"];
 $paginas = ceil($linhas / $por_pagina);
-//Se é a primeira vez que acessa a pagina então começar na pagina 1
+//Se ï¿½ a primeira vez que acessa a pagina entï¿½o comeï¿½ar na pagina 1
 if (($paginaatual == "") || ($paginas < $paginaatual) || ($paginaatual <= 0)) {
     $paginaatual = 1;
 }

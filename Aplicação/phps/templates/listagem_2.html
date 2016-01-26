@@ -195,9 +195,6 @@
                     </a>                    
                     <!-- END BLOCK_LISTA_COLUNA_ICONE -->
                 </td> 
-                
-                
-                
                 <!-- END BLOCK_LISTA_COLUNA -->                               
 
 
@@ -214,7 +211,12 @@
                  
                 
                 <!-- BEGIN BLOCK_LISTA_COLUNA_ICONES -->
-                <td  align="{IMAGEM_ALINHAMENTO}" class="" width="100px" style="">                               
+                <!-- BEGIN BLOCK_LISTA_COLUNA_ICONES_TEXTO -->
+                <td  align="{ICONES_TEXTO_ALINHAMENTO}" class="{ICONES_TEXTO_CLASSE}" width="{ICONES_TEXTO_TAMANHOCAMPO}" style="{ICONES_TEXTO_ESTILO}">
+                    {ICONES_TEXTO_VALOR}
+                </td>
+                <!-- END BLOCK_LISTA_COLUNA_ICONES_TEXTO -->
+                <td  align="{IMAGEM_ALINHAMENTO}" class="" width="" style="">                               
                     <!-- BEGIN BLOCK_LISTA_COLUNA_IMAGEM -->
                     <a href="{LINK}" class="link">
                         <img   width="{IMAGEM_TAMANHO}" src="{IMAGEM_PASTA}{IMAGEM_NOMEARQUIVO}" title="{IMAGEM_TITULO}"  alt="{IMAGEM_TITULO}" />
@@ -225,7 +227,7 @@
 
 
                 <!-- BEGIN BLOCK_LISTA_COLUNA_OPERACAO -->
-                <td align="center" class="fundo1">                
+                <td align="center" class="fundo1 {COLUNA_CLASSE} ">                
                     <a href="{LINK}?codigo={CODIGO}{LINK_COMPLEMENTO}" class="link1">
                         <img width="15px" src="{ICONE_ARQUIVO}" title="{OPERACAO_NOME}"  alt="{OPERACAO_NOME}" />
                     </a>
@@ -294,7 +296,7 @@
 
         <!-- BEGIN BLOCK_LISTA_NADA -->
         <tr>
-            <td colspan="10" align="center" class="errado"> Nenhum resultado!</td>
+            <td colspan="30" align="center" class="errado"> Nenhum resultado!</td>
         </tr>
         <!-- END BLOCK_LISTA_NADA -->          
     </table>
@@ -312,7 +314,7 @@
             <input disabled size="5" type="text" name="paginas" class="campopadrao" value="{PAGINAS}">
         </td>
         <td align="left">
-            <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Pr�xima" alt="Pr�xima" />
+            <input onclick="paginacao_avancar()"  type="image" width="25px"   src="{PASTA_ICONES}direita.png"  title="Próxima" alt="Próxima" />
         </td>
     </tr>
     </table>

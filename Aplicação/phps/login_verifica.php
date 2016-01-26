@@ -32,10 +32,15 @@ $usuario_pais = $_SESSION["usuario_pais"];
 
 
 
-if (!isset($_SESSION["usuario_cpf"]) || !isset($_SESSION["usuario_nome"]) || !isset($_SESSION["usuario_grupo"])) {
+if (!isset($_SESSION["usuario_cpf"]) 
+|| !isset($_SESSION["usuario_nome"]) 
+|| !isset($_SESSION["usuario_grupo"])
+||(!isset($_SESSION["usuario_cooperativa"]))
+) {
     //Sem sessão! Sair do sistema!";
     echo "Não é possível criar sessão!";
-    header("Location: ../index.html");
+    //header("Location: ../index.html");
+    exit;
 } else {
     //Sessão verificada e confirmada
     $sql = "SELECT * FROM grupo_permissoes WHERE gruper_codigo=$usuario_grupo";
@@ -147,6 +152,15 @@ if (!isset($_SESSION["usuario_cpf"]) || !isset($_SESSION["usuario_nome"]) || !is
     $permissao_quiosque_vervendedores = $dados["gruper_quiosque_vervendedores"];
     $permissao_quiosque_vercaixas = $dados["gruper_quiosque_vercaixas"];
     $permissao_quiosque_vertaxas = $dados["gruper_quiosque_vertaxas"];
+    $permissao_caixas_ver = $dados["gruper_caixas_ver"];
+    $permissao_caixas_cadastrar = $dados["gruper_caixas_cadastrar"];
+    $permissao_caixas_editar = $dados["gruper_caixas_editar"];
+    $permissao_caixas_excluir = $dados["gruper_caixas_excluir"];
+    $permissao_caixas_operadores_gerir = $dados["gruper_caixas_operadores_gerir"];
+    $permissao_caixas_operacoes_ver = $dados["gruper_caixas_operacoes_ver"];
+    $permissao_caixas_operacoes_abrir = $dados["gruper_caixas_operacoes_abrir"];
+    $permissao_caixas_operacoes_encerrar = $dados["gruper_caixas_operacoes_encerrar"];
+    $permissao_caixas_trocar = $dados["gruper_caixas_trocar"];
 }
 
 //Verifica os tipos de negociação do quiosque

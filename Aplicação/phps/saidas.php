@@ -1,9 +1,8 @@
 <?php
 
 //Verifica se o usu�rio tem permiss�o para acessar este conte�do
-
 require "login_verifica.php";
-if ($permissao_saidas_ver <> 1) {
+if (($permissao_saidas_ver <> 1)) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
@@ -11,6 +10,13 @@ if ($permissao_saidas_ver <> 1) {
 
 $tipopagina = "saidas";
 include "includes.php";
+
+//Verifica se o usuário é um caixa e não tem caixa aberto, se sim não pode acessar as vendas
+if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
+    header("Location: permissoes_semacesso.php");
+    exit;
+}
+
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "SAÍDAS";
@@ -21,14 +27,16 @@ $tpl_titulo->show();
 
 $tpl = new Template("templates/listagem.html");
 
+
+
 //Filtro Inicio
 $filtro_numero = $_POST["filtro_numero"];
 $filtro_produto = $_POST["filtro_produto"];
 $filtro_consumidor = $_POST["filtro_consumidor"];
 $filtro_fornecedor = $_POST["filtro_fornecedor"];
-$filtro_caixa = $_POST["filtro_caixa"];
 $filtro_tipo = $_POST["filtro_tipo"];
 $filtro_lote = $_POST["filtro_lote"];
+$filtro_caixaoperacao = $_REQUEST["filtro_caixaoperacao"];
 $tpl->LINK_FILTRO = "saidas.php";
 $tpl->FORM_ONLOAD = "valida_filtro_saidas_numero()";
 
@@ -127,6 +135,17 @@ $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_ESPACO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
+//Filtro Nº Operação Caixa
+$tpl->CAMPO_TITULO = "Nº Caixa Oper.";
+$tpl->CAMPO_TAMANHO = "15";
+$tpl->CAMPO_NOME = "filtro_caixaoperacao";
+$tpl->CAMPO_VALOR = $filtro_caixaoperacao;
+$tpl->CAMPO_QTD_CARACTERES = "";
+$tpl->CAMPO_ONKEYUP = "";
+$tpl->block("BLOCK_FILTRO_CAMPO");
+$tpl->block("BLOCK_FILTRO_ESPACO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
 
 //Filtro fim
 $tpl->block("BLOCK_FILTRO");
@@ -150,12 +169,6 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "CONSUMIDOR";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-if ($usuario_grupo != 4) {
-    $tpl->CABECALHO_COLUNA_TAMANHO = "";
-    $tpl->CABECALHO_COLUNA_COLSPAN = "";
-    $tpl->CABECALHO_COLUNA_NOME = "CAIXA";
-    $tpl->block("BLOCK_LISTA_CABECALHO");
-}
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "50px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
@@ -182,15 +195,16 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "DESC.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-$tpl->CABECALHO_COLUNA_TAMANHO = "40 px";
-$tpl->CABECALHO_COLUNA_COLSPAN = "";
-$tpl->CABECALHO_COLUNA_NOME = "MET. PAG.";
+$tpl->CABECALHO_COLUNA_TAMANHO = "";
+$tpl->CABECALHO_COLUNA_COLSPAN = "3";
+$tpl->CABECALHO_COLUNA_NOME = "CAIXA";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-$tpl->CABECALHO_COLUNA_TAMANHO = "";
+$tpl->CABECALHO_COLUNA_TAMANHO = "40 px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
-$tpl->CABECALHO_COLUNA_NOME = "SIT.";
+$tpl->CABECALHO_COLUNA_NOME = "PAG.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
+
 
 $oper = 0;
 $oper_tamanho = 0;
@@ -225,29 +239,36 @@ if ($filtro_fornecedor <> "")
     $sql_filtro_fornecedor = " and ent_fornecedor = $filtro_fornecedor ";
 if ($filtro_tipo <> "")
     $sql_filtro_tipo = " and sai_tipo = $filtro_tipo ";
-$sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_fornecedor;
-if ($usuario_grupo == 4) {
-    $sql_filtro = $sql_filtro . " and sai_caixa=$usuario_codigo";
-}
+if ($usuario_caixa_operacao <> "")
+    $sql_filtro_caixa = " and sai_caixaoperacaonumero = $usuario_caixa_operacao ";
+if ($filtro_caixaoperacao <> "")
+    $filtro_caixaoperacao = " and sai_caixaoperacaonumero = $filtro_caixaoperacao ";
+
+$sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_fornecedor . " " . $filtro_caixaoperacao." ";
+
+
 
 
 
 //SQL Principal das linhas
 $sql = "
-SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_caixa,sai_metpag,sai_areceber
+SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,sai_caixaoperadorresponsavel,pes_codigo
 FROM saidas 
 JOIN saidas_tipo on (sai_tipo=saitip_codigo) 
 left join saidas_produtos on (saipro_saida=sai_codigo)
 LEFT JOIN produtos on (saipro_produto=pro_codigo)
 left join entradas on (saipro_lote=ent_codigo)
+left join caixas_operacoes on (sai_caixaoperacaonumero=caiopo_numero)
+left join caixas on (caiopo_caixa=cai_codigo)
+left join pessoas on (pes_codigo=caiopo_operador)
 WHERE sai_quiosque=$usuario_quiosque and
 sai_tipo=1 $sql_filtro 
 ORDER BY sai_status DESC, sai_codigo DESC
 ";
-//Pagina��o
+//Paginação
 $query = mysql_query($sql);
 if (!$query)
-    die("Erro SQL Principal Pagina��o:" . mysql_error());
+    die("Erro SQL Principal Paginação:" . mysql_error());
 $linhas = mysql_num_rows($query);
 $por_pagina = $usuario_paginacao;
 $paginaatual = $_POST["paginaatual"];
@@ -269,11 +290,11 @@ $sql = $sql . " LIMIT $comeco,$por_pagina ";
 
 $query = mysql_query($sql);
 if (!$query)
-    die("Erro: " . mysql_error());
+    die("Erro 55: " . mysql_error());
 $linhas = mysql_num_rows($query);
 if ($linhas == 0) {
     $listanada = 9;
-    $tpl->LISTANADA = $listanada + $oper;
+    $tpl->LISTANADA = 30;
     $tpl->block("BLOCK_LISTA_NADA");
 } else {
     while ($dados = mysql_fetch_array($query)) {
@@ -282,18 +303,22 @@ if ($linhas == 0) {
         $data = $dados["sai_datacadastro"];
         $hora = $dados["sai_horacadastro"];
         $consumidor = $dados["sai_consumidor"];
-        $caixa = $dados["sai_caixa"];
         $tipo = $dados["sai_tipo"];
         $valorliquido = $dados["sai_totalliquido"];
         $valorbruto = $dados["sai_totalbruto"];
         $status = $dados["sai_status"];
         $metodopag = $dados["sai_metpag"];
         $areceber = $dados["sai_areceber"];
+        $caixa = $dados["cai_codigo"];
+        $caixanome = $dados["cai_nome"];
+        $caixaoperador = $dados["pes_codigo"];
+        $caixaoperadornome = $dados["pes_nome"];
+        $caixaoperadorresponsavel = $dados["sai_caixaoperadorresponsavel"];
 
 
         //Cor de fundo da linha
         if ($status == 2) {
-            if ($usuario_codigo == $caixa) {
+            if ($usuario_codigo == $operadorcaixa) {
                 $tpl->LISTA_LINHA_CLASSE = "tabelalinhafundovermelho negrito";
             } else {
                 $dataatual = date("Y-m-d");
@@ -339,27 +364,14 @@ if ($linhas == 0) {
             $sql2 = "SELECT pes_nome FROM pessoas WHERE pes_codigo=$consumidor";
             $query2 = mysql_query($sql2);
             if (!$query2)
-                die("Erro: " . mysql_error());
+                die("Erro 56: " . mysql_error());
             while ($dados2 = mysql_fetch_assoc($query2)) {
                 $tpl->LISTA_COLUNA_VALOR = $dados2["pes_nome"];
             }
         }
         $tpl->block("BLOCK_LISTA_COLUNA");
 
-        if ($usuario_grupo != 4) {
-            //Coluna Caixa
-            $tpl->LISTA_COLUNA_ALINHAMENTO = "";
-            $tpl->LISTA_COLUNA_CLASSE = "";
-            $sql2 = "SELECT pes_nome FROM pessoas WHERE pes_codigo=$caixa";
-            $query2 = mysql_query($sql2);
-            if (!$query2)
-                die("Erro: " . mysql_error());
-            while ($dados2 = mysql_fetch_assoc($query2)) {
-                $tpl->LISTA_COLUNA_VALOR = $dados2["pes_nome"];
-            }
-            $tpl->block("BLOCK_LISTA_COLUNA");
-        }
-
+        
         //Coluna Quantidade Produtos
         $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
         $tpl->LISTA_COLUNA_CLASSE = "";
@@ -400,63 +412,58 @@ if ($linhas == 0) {
         $tpl->LISTA_COLUNA_VALOR = "R$ " . number_format(abs($desconto), 2, ',', '.');
         $tpl->block("BLOCK_LISTA_COLUNA");
 
+        
+        //Coluna Caixa
+        $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
+        $tpl->LISTA_COLUNA_CLASSE = "";
+        $tpl->LISTA_COLUNA_VALOR = $caixanome;
+        $tpl->block("BLOCK_LISTA_COLUNA");
+        $tpl->LISTA_COLUNA_ALINHAMENTO = "left";
+        $tpl->LISTA_COLUNA_CLASSE = "";
+        $tpl->LISTA_COLUNA_VALOR = $caixaoperadornome;
+        $tpl->block("BLOCK_LISTA_COLUNA");
+        if ($caixaoperadorresponsavel==$caixaoperador) {
+            $tpl->ICONE2_TAMANHO = "10px";
+            $tpl->ICONE2_ARQUIVO = $icones2 . "supervisor2.png";
+            $tpl->OPERACAO2_NOME = "";
+            $tpl->block("BLOCK_LISTA_COLUNA_ICONE2");            
+        } else {
+            $tpl->ICONE2_TAMANHO = "10px";
+            $tpl->ICONE2_ARQUIVO = $icones2 . "supervisor.png";
+            $tpl->OPERACAO2_NOME = "Venda Supervisionada";
+            $tpl->block("BLOCK_LISTA_COLUNA_ICONE2");
+            
+        }
+        
+        
+        
         //Metodo de pagamento
         if ($metodopag == 1) {
-            $tpl->ICONE_ARQUIVO = $icones . "dinheiro2.png";
+            $tpl->ICONE_ARQUIVO = $icones . "dinheiro5.png";
             $tpl->OPERACAO_NOME = "Dinheiro";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
         } else if ($metodopag == 2) {
-            $tpl->ICONE_ARQUIVO = $icones . "credit_card2.png";
+            $tpl->ICONE_ARQUIVO = $icones . "credit_card.png";
             $tpl->OPERACAO_NOME = "Cartão Crédito";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
         } else if ($metodopag == 3) {
             $tpl->OPERACAO_NOME = "Cartão Débito";
             $tpl->ICONE_ARQUIVO = $icones . "credit_card.png";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+        } else if ($areceber == 1) {
+            $tpl->OPERACAO_NOME = "Caderninho (A Receber)";
+            $tpl->ICONE_ARQUIVO = $icones . "caderninho3.png";
+            $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+        } else if ($metodopag==4){
+            $tpl->OPERACAO_NOME = "Cheque";
+            $tpl->ICONE_ARQUIVO = $icones . "cheque2.png";
+            $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
         } else {
-            if ($areceber == 1) {
-                $tpl->OPERACAO_NOME = "Caderninho (A Receber)";
-                $tpl->ICONE_ARQUIVO = $icones . "caderninho5.png";
-                $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
-            } else {
-                $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
-                $tpl->LISTA_COLUNA_CLASSE = "";
-                $tpl->LISTA_COLUNA_VALOR = "";
-                $tpl->block("BLOCK_LISTA_COLUNA");
-            }
+            $tpl->OPERACAO_NOME = "Desconhecido";
+            $tpl->ICONE_ARQUIVO = $icones . "nada.png";
+            $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
         }
-
-
-
-
-
-
-        //Situação
-        if ($status == 2) {
-            if ($usuario_codigo == $caixa) {
-                $tpl->ICONE_ARQUIVO = $icones . "star_empty.png";
-                $tpl->OPERACAO_NOME = "Incompleta";
-            } else {
-                $dataatual = date("Y-m-d");
-                $horaatual = date("H:i:s");
-                $tempo1 = $data . "_" . $hora;
-                $tempo2 = $dataatual . "_" . $horaatual;
-                $total_segundos = diferenca_entre_datahora($tempo1, $tempo2);
-                if ($total_segundos > 5400) {
-                    $tpl->ICONE_ARQUIVO = $icones . "star_empty.png";
-                    $tpl->OPERACAO_NOME = "Incompleta";
-                } else {
-                    $tpl->ICONE_ARQUIVO = $icones . "star_half_full.png";
-                    $tpl->OPERACAO_NOME = "Esta venda está em andamento por outro caixa!";
-                    $editar_ocultar = 1;
-                    $editar_ocultar_motivo = "";
-                }
-            }
-        } else {
-            $tpl->ICONE_ARQUIVO = $icones . "star_full.png";
-            $tpl->OPERACAO_NOME = "Concluída";
-        }
-        $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+        ;
 
         //Coluna Operações    
         $tpl->CODIGO = $numero;
@@ -499,10 +506,10 @@ if ($linhas == 0) {
                 $tpl->ICONE_ARQUIVO = $icones . "editar_desabilitado.png";
                 $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");
             } else {
-                //Se for um caixa deve permitir a edição de apenas a ultima venda realizada por ele sob algumas condições
+                //Se for um operador de caixa deve permitir a edição de apenas a ultima venda realizada por ele sob algumas condições
                 if ($usuario_grupo == 4) {
                     //Verifica qual foi a ultima venda realizada por este caixa
-                    $sql_ven = "SELECT max(sai_codigo) FROM saidas WHERE sai_caixa=$usuario_codigo";
+                    $sql_ven = "SELECT max(sai_codigo) FROM saidas JOIN caixas_operacoes on sai_caixaoperacaonumero=caiopo_numero WHERE caiopo_operador=$usuario_codigo";
                     $query_ven = mysql_query($sql_ven);
                     if (!$query_ven)
                         die("Erro de SQL Caixa Ultima Venda:" . mysql_error());
@@ -564,8 +571,9 @@ if ($tipopagina == "saidas") {
             $sql8 = "
                 SELECT sai_codigo 
                 FROM saidas
+                JOIN caixas_operacoes on sai_caixaoperacaonumero=caiopo_numero
                 WHERE sai_tipo=1 
-                and sai_caixa=$usuario_codigo
+                and caiopo_operador=$usuario_codigo
                 and sai_status=2
             ";
             $query8 = mysql_query($sql8);
@@ -586,6 +594,15 @@ if ($tipopagina == "saidas") {
                 $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1";
                 $tpl->block("BLOCK_RODAPE_BOTOES");
             }
+        } else if ($usuario_caixa=="") {
+            $tpl->CADASTRAR_NOME = "REALIZAR VENDA";
+            $dica="Para realizar vendas é necessário definir um caixa aberto padrão!";
+            $tpl->TITULO="$dica";
+            $tpl->block("BLOCK_RODAPE_BOTOES_DESABILITADOS");
+            $tpl->DICA_NOME = "REALIZAR VENDA";
+            /*$tpl->DICA = "$dica";
+            $tpl->DICA_ARQUIVO = $icones . "atencao.png";
+            $tpl->block("BLOCK_RODAPE_BOTOES_DICA");*/
         } else {
             $tpl->CADASTRAR_NOME = "REALIZAR VENDA";
             $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1";

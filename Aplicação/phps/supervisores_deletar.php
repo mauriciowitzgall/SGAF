@@ -1,12 +1,12 @@
 <?php
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usuï¿½rio tem permissï¿½o para acessar este conteï¿½do
 require "login_verifica.php";
 if ($permissao_quiosque_definirsupervisores <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
 
-$tipopagina = "cooperativas";
+$tipopagina = "quiosques";
 include "includes.php";
 
 //Template de TÃ­tulo e Sub-tÃ­tulo
@@ -14,14 +14,14 @@ $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "SUPERVISORES";
 $tpl_titulo->SUBTITULO = "DELETAR/APAGAR";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "../pessoas2/supervisor.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "quiosque_supervisores.png";
 $tpl_titulo->show();
 
-//Inicio da exclusão de entradas
+//Inicio da exclusï¿½o de entradas
 $quiosque = $_GET["quiosque"];
 $supervisor = $_GET["supervisor"];
 
-//Limpa o grupo de permissÃµes do usuário da pessoa
+//Limpa o grupo de permissÃµes do usuï¿½rio da pessoa
 $sql = "
 UPDATE
     pessoas
@@ -33,7 +33,7 @@ WHERE
 if (!mysql_query($sql))
     die("Erro: " . mysql_error());
 
-//Excluir a pessoa da função de supervisor
+//Excluir a pessoa da funï¿½ï¿½o de supervisor
 $sql2 = "DELETE FROM quiosques_supervisores WHERE quisup_supervisor='$supervisor' and quisup_quiosque=$quiosque";
 $query2 = mysql_query($sql2);
 if (!$query2) {

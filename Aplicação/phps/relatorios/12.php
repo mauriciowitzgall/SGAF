@@ -116,7 +116,6 @@ if (($usuario_grupo != 1) && ($usuario_grupo != 2)) {
     $query2 = mysql_query($sql2);
     if (!$query2)
         die("Erro2:" . mysql_error());
-    $tpl_rel->block("BLOCK_OPTION_TODOS");
     while ($dados2 = mysql_fetch_assoc($query2)) {
         $tpl_rel->OPTION_VALOR = $dados2["pro_codigo"];
         $tpl_rel->OPTION_TEXTO = $dados2["pro_nome"];
@@ -141,10 +140,10 @@ $tpl_rel->block("BLOCK_COLUNA");
 $tpl_rel->COLUNA_ALINHAMENTO = "left";
 $tpl_rel->COLUNA_TAMANHO = "";
 $tpl_rel->COLUNA_ROWSPAN = "";
-$tpl_rel->CAMPO_TIPO = "text";
+$tpl_rel->CAMPO_TIPO = "date";
 $tpl_rel->CAMPO_NOME = "datade";
 $tpl_rel->CAMPO_ID = "data_1";
-$tpl_rel->CAMPO_TAMANHO = "8";
+$tpl_rel->CAMPO_TAMANHO = "11";
 $tpl_rel->CAMPO_VALOR = "";
 $tpl_rel->CAMPO_QTDCARACTERES = "8";
 $tpl_rel->block("BLOCK_CAMPO_AUTOSELECIONAR");
@@ -164,11 +163,11 @@ $tpl_rel->block("BLOCK_CONTEUDO");
 $tpl_rel->COLUNA_ALINHAMENTO = "left";
 $tpl_rel->COLUNA_TAMANHO = "";
 $tpl_rel->COLUNA_ROWSPAN = "";
-$tpl_rel->CAMPO_TIPO = "text";
+$tpl_rel->CAMPO_TIPO = "date";
 $tpl_rel->CAMPO_NOME = "dataate";
 $tpl_rel->CAMPO_ID = "data_2";
-$tpl_rel->CAMPO_TAMANHO = "8";
-$dataatual = date("d/m/Y");
+$tpl_rel->CAMPO_TAMANHO = "11";
+$dataatual = date("Y-m-d");
 $tpl_rel->CAMPO_VALOR = "$dataatual";
 $tpl_rel->CAMPO_QTDCARACTERES = "8";
 $tpl_rel->block("BLOCK_CAMPO_AUTOSELECIONAR");

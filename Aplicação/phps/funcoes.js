@@ -837,7 +837,7 @@ function metodopagamento(valor) {
     }
 }
 
-function quiosque_taxas_popula_taxa (valor) {
+function quiosque_taxas_popula_taxa(valor) {
     //alert(valor);
     $.post("quiosque_taxas_popula_taxa.php", {
         tiponegociacao: valor,
@@ -857,18 +857,45 @@ function quiosque_taxas_popula_taxa (valor) {
     
     
 }
-function popula_acertos_dataminmax(valor) {
-    $.post("acertos_popula_dataminmax.php", {
-        fornecedor: valor
-    }, function(valor2) {        
-        //alert(valor2);
-        if (valor2=='0000-00-00') {
-            alert("Este fornecedor não possui vendas a ser acertado!");        
-             $("tr[id=periodo]").hide();
-        } else {            
+function popula_acertos_dataminmax(valor,valorqui) {
+    
+    if (valor=='')
+        $("tr[id=periodo]").hide();
+    else
+        $.post("acertos_popula_dataminmax.php", {
+            fornecedor: valor,
+            quiosque: valorqui
+        }, function(valor2) {  
+            //alert(valor2);
             $("tr[id=periodo]").show();
-            $("input[name=datade]").val(valor2);
-            $("input[name=datade2]").val(valor2);
-        }
-    });     
+            var dataini= new Date(valor2).toISOString().substr(0, 10).replace('T', ' ');
+            //dataini= dataini.getFullYear()+"-"+(dataini.getMonth()+1)+"-"+dataini.getDate();
+            //alert(dataini);            
+            $("input[name=datade]").val(dataini);
+            $("input[name=datade2]").val(dataini);
+            }
+        );     
+}
+function produto_industrializado(valor) {
+    if (valor==1) { //se for industrializado mostra
+        $("tr[id=id_marca]").show();
+        $("tr[id=id_codigounico]").show();
+    }
+    else {
+        $("tr[id=id_marca]").hide(); 
+        $("tr[id=id_codigounico]").hide();   
+        
+    } 
+}
+function tipo_contagem(valor) {
+    //alert(valor);
+    if (valor==2) { //se for industrializado mostra
+        $("tr[id=id_recipiente]").show();
+        $("tr[id=id_volume]").show();
+    }
+    else {
+        $("tr[id=id_volume]").hide(); 
+        $("tr[id=id_recipiente]").hide();   
+        
+    } 
 }

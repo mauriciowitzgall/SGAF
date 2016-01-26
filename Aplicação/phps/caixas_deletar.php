@@ -1,53 +1,64 @@
 <?php
-//Verifica se o usu�rio tem permiss�o para acessar este conte�do
+
+//Verifica se o usuário tem permissão para acessar este conteúdo
 require "login_verifica.php";
-if ($permissao_quiosque_definircaixas <> 1) {
+if ($permissao_caixas_excluir <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
 
-$tipopagina = "cooperativas";
+$tipopagina = "caixas";
 include "includes.php";
 
-//Template de Título e Sub-título
+//TÍTULO PRINCIPAL
 $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "CAIXAS";
-$tpl_titulo->SUBTITULO = "DELETAR/APAGAR";
+$tpl_titulo->SUBTITULO = "CADASTRO";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "../pessoas2/caixa.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "caixas.png";
 $tpl_titulo->show();
 
-//Inicio da exclus�o de entradas
-$quiosque = $_GET["quiosque"];
-$caixa = $_GET["caixa"];
+//RESUMO
+//Na exclusão de taxas deve-se verifica se teve algum acerto que utilizou a taxa em quest�o. Tamb�m n�o � permitido
+//excluir taxas que estão vínculadas a algum quiosque
 
-//Limpa o grupo de permissões do usu�rio da pessoa
-$sql = "
-UPDATE
-    pessoas
-SET
-    pes_grupopermissoes=''           
-WHERE
-    pes_codigo = '$caixa'
-";
-if (!mysql_query($sql))
-    die("Erro: " . mysql_error());
 
-//Excluir a pessoa da fun��o de caixa
-$sql2 = "DELETE FROM quiosques_caixas WHERE quicai_caixa='$caixa' and quicai_quiosque=$quiosque";
-$query2 = mysql_query($sql2);
-if (!$query2) {
-    die("Erro SQL: " . mysql_error());
+$tpl6 = new Template("templates/notificacao.html");
+$tpl6->ICONES = $icones;
+
+$codigo = $_GET["codigo"];
+
+//Verifica se o caixa está aberto. Se sim impedir a exclusão
+$sql = "SELECT cai_situacao FROM caixas WHERE cai_codigo=$codigo";
+$query = mysql_query($sql);
+if (!$query)  die("Erro SQL1" . mysql_error());
+$dados=  mysql_fetch_assoc($query);
+$situacao=$dados["cai_situacao"];
+echo "($situacao)";
+if ($situacao==1) {
+    $tpl6->block("BLOCK_ERRO");
+    $tpl6->block("BLOCK_NAOAPAGADO");
+    //$tpl6->block("BLOCK_MOTIVO_EMUSO");
+    $tpl6->MOTIVO = "";    
+    $tpl6->MOTIVO_COMPLEMENTO = "O Caixa está aberto, feche-o primeiro antes de excluir o caixa";
+    $tpl6->block("BLOCK_MOTIVO");
+    $tpl6->block("BLOCK_BOTAO_VOLTAR");
+    $tpl6->show();
+    exit;
 }
 
-$tpl_notificacao = new Template("templates/notificacao.html");
-$tpl_notificacao->ICONES = $icones;
-$tpl_notificacao->MOTIVO_COMPLEMENTO = "";
-$tpl_notificacao->DESTINO = "caixas.php?quiosque=$quiosque";
-$tpl_notificacao->block("BLOCK_CONFIRMAR");
-$tpl_notificacao->block("BLOCK_APAGADO");
-$tpl_notificacao->block("BLOCK_BOTAO");
-$tpl_notificacao->show();
+//Deleta o caixa. Na realidade apenas desativa
+$sql3 = "UPDATE caixas SET cai_status=0 WHERE cai_codigo=$codigo";
+$query3 = mysql_query($sql3);
+if (!$query3)
+    die("Erro SQL desativar caixa:" . mysql_error());
+$tpl6->block("BLOCK_CONFIRMAR");
+$tpl6->block("BLOCK_APAGADO");
+$tpl6->DESTINO = "caixas.php";
+$tpl6->block("BLOCK_BOTAO");
 
+
+
+$tpl6->show();
 include "rodape.php";
 ?>

@@ -8,7 +8,7 @@ if ($permissao_quiosque_definirvendedores <> 1) {
     exit;
 }
 
-$tipopagina = "cooperativas";
+$tipopagina = "quiosques";
 include "includes.php";
 
 $quiosque = $_POST['quiosque'];

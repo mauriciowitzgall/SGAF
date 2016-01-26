@@ -8,11 +8,11 @@ if ($permissao_taxas_aplicar <> 1) {
     exit;
 }
 
-$tipopagina = "cooperativas";
+$tipopagina = "quiosques";
 include "includes.php";
 
 $taxa = $_POST['taxa'];
-$quiosque = $_POST['quiosque'];
+$quiosque = $_POST['quiosque2'];
 $operacao = $_POST['operacao'];
 $taxavalor = dinheirosemcrifrao_para_numero($_POST['taxavalor']);
 
@@ -22,7 +22,7 @@ $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "TAXAS";
 $tpl_titulo->SUBTITULO = "CADASTRO/EDIÇÃO DE TAXAS DO QUIOSQUE";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "taxas.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "quiosques_taxas.png";
 $tpl_titulo->show();
 
 //Estrutura da notificação
@@ -31,8 +31,8 @@ $tpl_notificacao->ICONES = $icones;
 $tpl_notificacao->DESTINO = "quiosque_taxas.php?quiosque=$quiosque";
 
 
-//Se a operação for cadastro então
-if ($operacao=='cadastrar') {
+//Se a operação for CADASTRO então
+if ($operacao==1) {
     //Verifica se a taxa já está na lista de taxas do quiosque
     $sql = "SELECT * FROM quiosques_taxas WHERE quitax_taxa=$taxa and quitax_quiosque=$quiosque";
     $query = mysql_query($sql);

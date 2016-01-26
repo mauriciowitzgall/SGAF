@@ -1,12 +1,12 @@
 <?php
-//Verifica se o usu·rio tem permiss„o para acessar este conte˙do
+//Verifica se o usuÔøΩrio tem permissÔøΩo para acessar este conteÔøΩdo
 require "login_verifica.php";
 if ($permissao_taxas_aplicar <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
 
-$tipopagina = "cooperativas";
+$tipopagina = "quiosques";
 include "includes.php";
 
 //T√çTULO PRINCIPAL
@@ -14,11 +14,11 @@ $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "TAXAS";
 $tpl_titulo->SUBTITULO = "DELETAR/APAGAR";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "taxas.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "quiosques_taxas.png";
 $tpl_titulo->show();
 
-//Inicio da exclus„o de entradas
-$quiosque = $_GET["quiosque"];
+//Inicio da exclus√£o de entradas
+$quiosque = $_GET["qui"];
 $taxa = $_GET["taxa"];
 
 
