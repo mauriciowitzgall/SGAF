@@ -217,31 +217,43 @@ if ($usuario_grupo==2) {
         }
 
         // Quiosque
+        //caixa_operadores
         $sql3 = "DELETE FROM caixas_operadores WHERE caiope_caixa in (SELECT cai_codigo FROM caixas WHERE cai_quiosque=$codigo) ";
         $query3 = mysql_query($sql3);
         if (!$query3) {
             die("Erro SQL: " . mysql_error());
         }
+        //caixa_operacoes
+        $sql3 = "DELETE FROM caixas_operacoes WHERE caiopo_caixa in (SELECT cai_codigo FROM caixas WHERE cai_quiosque=$codigo) ";
+        $query3 = mysql_query($sql3);
+        if (!$query3) {
+            die("Erro SQL 33: " . mysql_error());
+        }
+        //caixas
         $sql3 = "DELETE FROM caixas WHERE cai_quiosque=$codigo";
         $query3 = mysql_query($sql3);
         if (!$query3) {
             die("Erro SQL: " . mysql_error());
         }
+        //quiosuqes_supervisores
         $sql3 = "DELETE FROM quiosques_supervisores WHERE quisup_quiosque=$codigo";
         $query3 = mysql_query($sql3);
         if (!$query3) {
             die("Erro SQL: " . mysql_error());
         }
+        //quiosques_taxas
         $sql3 = "DELETE FROM quiosques_taxas WHERE quitax_quiosque=$codigo";
         $query3 = mysql_query($sql3);
         if (!$query3) {
             die("Erro SQL: " . mysql_error());
         }
+        //quiosques_tiponegociacao
         $sql3 = "DELETE FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$codigo";
         $query3 = mysql_query($sql3);
         if (!$query3) {
             die("Erro SQL: " . mysql_error());
         }
+        //quiosques
         $sql3 = "DELETE FROM quiosques WHERE qui_codigo = $codigo"; 
         $query3 = mysql_query($sql3);
         if (!$query3) {
@@ -250,29 +262,27 @@ if ($usuario_grupo==2) {
         
         //Zera grupo de permissoes todos usuários que estao vinculados ao quiosque deletado que não sejam adminsitradores ou presidentes
         //DEVE VIR ANTES DO SQL QUE ZERA QUIOSQUE
-        echo $sql3 = "UPDATE pessoas set  pes_grupopermissoes=0 WHERE pes_quiosqueusuario=$codigo and pes_grupopermissoes not in (1,2)"; 
+        $sql3 = "UPDATE pessoas set  pes_grupopermissoes=0 WHERE pes_quiosqueusuario=$codigo and pes_grupopermissoes not in (1,2)"; 
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL: " . mysql_error());
         
         
         //Zera quiosque de todos usuários que estao vinculados ao quiosque deletado
         //DEVE VIR DEPOIS DO SQL QUE ZERA GRUPOPERMISSOES
-        echo $sql3 = "UPDATE pessoas set pes_quiosqueusuario=0 WHERE pes_quiosqueusuario=$codigo"; 
+        $sql3 = "UPDATE pessoas set pes_quiosqueusuario=0 WHERE pes_quiosqueusuario=$codigo"; 
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL: " . mysql_error());
         
-        
-        
          
-        $tpl6 = new Template("templates/notificacao.html");
         $tpl_notificacao = new Template("templates/notificacao.html");
         $tpl_notificacao->DESTINO = "quiosques.php";
         $tpl_notificacao->ICONES = $icones;
         if ($usuario_quiosque==$codigo) {
             $tpl_notificacao->MOTIVO_COMPLEMENTO = "<br>E necessário sair e entrar novamente do sistema, pois você está logado com um quiosuqe que não existe mais!<br>";
-            $tpl_notificacao->DESTINO = "login_sair.php";   
+            $tpl_notificacao->DESTINO = "login_sair.php"; 
+            session_start();
+            session_destroy();
         } else {
             $tpl_notificacao->DESTINO = "quiosques.php";
         }
-        
         $tpl_notificacao->block("BLOCK_CONFIRMAR");
         $tpl_notificacao->block("BLOCK_APAGADO");
         $tpl_notificacao->block("BLOCK_BOTAO");

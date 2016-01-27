@@ -39,7 +39,7 @@ if (!isset($_SESSION["usuario_cpf"])
 ) {
     //Sem sessão! Sair do sistema!";
     echo "Não é possível criar sessão!";
-    //header("Location: ../index.html");
+    header("Location: ../index.html");
     exit;
 } else {
     //Sessão verificada e confirmada

@@ -42,20 +42,19 @@ if ($usuario_grupo==1) {
         $tpl6->show();
     } else if ($passo==2) { //Pode deletar o quiosque e suas referencias
         
-        // Pessoas
+        // Pessoas Derivações
         $sql3 = "DELETE FROM fornecedores_tiponegociacao WHERE fortipneg_pessoa in (SELECT pes_codigo FROM pessoas WHERE pes_cooperativa=$codigo and (pes_grupopermissoes != 1 OR pes_grupopermissoes is null))";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL1: " . mysql_error());
         $sql3 = "DELETE FROM mestre_pessoas_tipo WHERE mespestip_pessoa in (SELECT pes_codigo FROM pessoas WHERE pes_cooperativa=$codigo and (pes_grupopermissoes != 1 OR pes_grupopermissoes is null))";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL2: " . mysql_error());
+
         
-        $sql3 = "DELETE FROM pessoas WHERE pes_cooperativa=$codigo and (pes_grupopermissoes != 1 OR pes_grupopermissoes is null)";
-        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL3: " . mysql_error());
-        
-        // Produtos
-        $sql3 = "DELETE FROM produtos WHERE pro_cooperativa=$codigo";
-        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL4: " . mysql_error());
+        // Categorias de produtos
         $sql3 = "DELETE FROM produtos_categorias WHERE cat_cooperativa=$codigo";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL5: " . mysql_error());
+        // Tipo de negociação do produto
+        $sql3 = "DELETE FROM mestre_produtos_tipo WHERE mesprotip_produto in (SELECT pro_codigo FROM produtos WHERE pro_cooperativa=$codigo)";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL51: " . mysql_error());
 
 
         // Entradas
@@ -77,40 +76,55 @@ if ($usuario_grupo==1) {
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL11: " . mysql_error());
         
         // Acertos
+        //acertos taxas
         $sql3 = "DELETE FROM acertos_taxas WHERE acetax_acerto in (SELECT ace_codigo FROM acertos join quiosques on ace_quiosque=qui_codigo WHERE qui_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL12: " . mysql_error());
+        //acerots
         $sql3 = "DELETE FROM acertos WHERE ace_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL13: " . mysql_error());
-        // Fechamentos
+        // fechamentos_taxas
         $sql3 = "DELETE FROM fechamentos_taxas WHERE fchtax_fechamento in (SELECT fch_codigo FROM fechamentos join quiosques on fch_quiosque=qui_codigo WHERE  qui_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL14: " . mysql_error());
+        //fechamentos
         $sql3 = "DELETE FROM fechamentos WHERE fch_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL15: " . mysql_error());
         
-        // Quiosque
-        $sql3 = "DELETE FROM caixas_operadores WHERE caiope_caixa in (SELECT cai_quiosque FROM caixas WHERE cai_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo))";
+        //caixa_operadores
+        $sql3 = "DELETE FROM caixas_operadores WHERE caiope_caixa in (SELECT cai_codigo FROM caixas WHERE cai_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo))";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL23: " . mysql_error());
-        $sql3 = "DELETE FROM caixas WHERE cai_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo)";
-        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL16: " . mysql_error());
+        //caixa_operacoes
+        $sql3 = "DELETE FROM caixas_operacoes WHERE caiopo_caixa in (SELECT cai_codigo FROM caixas WHERE cai_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo))";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL31: " . mysql_error());
+        //supervisores
         $sql3 = "DELETE FROM quiosques_supervisores WHERE quisup_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL17: " . mysql_error());
+        //taxas
         $sql3 = "DELETE FROM quiosques_taxas WHERE quitax_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL18: " . mysql_error());
+        //tipo de negociacao
         $sql3 = "DELETE FROM quiosques_tiponegociacao WHERE quitipneg_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL19: " . mysql_error());
-        $sql3 = "DELETE FROM quiosques WHERE qui_cooperativa=$codigo";
+        
 
         // Taxas
         $sql3 = "DELETE FROM taxas WHERE tax_cooperativa=$codigo";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL20: " . mysql_error());
-        // Quiosques
-        $sql3 = "DELETE FROM quiosques WHERE qui_cooperativa=$codigo";
-        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL21: " . mysql_error());
         // Cooperativa
         $sql3 = "DELETE FROM cooperativas WHERE coo_codigo=$codigo";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL22: " . mysql_error());
+        //Produtos
+        $sql3 = "DELETE FROM produtos WHERE pro_cooperativa=$codigo";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL4: " . mysql_error());
+        //Caixas
+        $sql3 = "DELETE FROM caixas WHERE cai_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo)";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL16: " . mysql_error()); 
+        //Pessoas
+        $sql3 = "DELETE FROM pessoas WHERE pes_cooperativa=$codigo and (pes_grupopermissoes != 1 OR pes_grupopermissoes is null)";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL3: " . mysql_error());
+        // Quiosques
+        $sql3 = "DELETE FROM quiosques WHERE qui_cooperativa=$codigo";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL21: " . mysql_error());
         
-         
         $tpl6 = new Template("templates/notificacao.html");
         $tpl_notificacao = new Template("templates/notificacao.html");
         $tpl_notificacao->DESTINO = "cooperativas.php";
