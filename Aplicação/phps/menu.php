@@ -2,8 +2,9 @@
 
 $tpl_menu = new Template("menu.html");
 
+//O menu não é apresentado quando o usuário é um operador de caixa ou o adminsitrador não tem nenhum cooperativa definida (acontece quando ele deleta a cooperativa que ele estava logado)
 if ($usuario_grupo<>4) {
-
+    
     //Menu Principal
     //Dados principais
     $tpl_menu->TABELA_TAMANHO = "100%";
@@ -11,18 +12,18 @@ if ($usuario_grupo<>4) {
     $tpl_menu->IMAGEM_TAMANHO = "40px";
     $tpl_menu->IMAGEM_PASTA = $icones;
     $tpl_menu->IMAGEM_ALTURA2 = 1.25;
-    $tpl_menu->TD_LARGURA = "";
     $tpl_menu->TD_ALTURA = "72px";
     $tpl_menu->TD_LARGURA = "100px";
     $tpl_menu->TD_ALINHAMENTO_VERTICAL = "bottom";
 
     //Menu Padrão (para uso de supervisores etc.)
-    if (($tipopagina<>"admin")&&($tipopagina<>"trocaunidade")&&($tipopagina<>"locais")&&($tipopagina<>"cooperativa")) {
+    if (($tipopagina<>"admin")&&($tipopagina<>"trocaunidade")&&($tipopagina<>"locais")&&($tipopagina<>"cooperativa")&&($usuario_cooperativa!=0)) {
 
         //Celula em branco na esquerda para que as demais celular fiquem alinhadas a direita
         $tpl_menu->TD_LARGURA = "";
         $tpl_menu->block("BLOCK_MENU_ITEM");
 
+        $tpl_menu->TD_LARGURA = "100px";
 
         //Quiosques
         $tpl_menu->IMAGEM_TITULO = "Quiosques";
@@ -146,7 +147,6 @@ if ($usuario_grupo<>4) {
         $tpl_menu->TABELA_ALINHAMENTO = "right";
         $tpl_menu->TD_ALTURA = "52px";
         $tpl_menu->TD_LARGURA = "110px";
-
         $tpl_menu->IMAGEM_TAMANHO = "25px";
         $tpl_menu->TD_ALINHAMENTO_VERTICAL = "bottom";
         $tpl_menu->IMAGEM_PASTA = $icones;
