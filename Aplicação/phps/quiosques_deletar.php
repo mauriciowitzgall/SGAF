@@ -21,6 +21,13 @@ $codigo = $_GET["codigo"];
 $operacao = $_GET["operacao"];
 $passo = $_GET["passo"];
 
+$sql5="SELECT qui_cooperativa from quiosques where qui_codigo=$codigo";
+$query5 = mysql_query($sql5);
+if (!$query5) die("Erro SQL 5: " . mysql_error());
+$dados5=  mysql_fetch_assoc($query5);
+$cooperativa=$dados5["qui_cooperativa"];
+
+
 
 
 if ($usuario_grupo==2) {
@@ -149,6 +156,11 @@ if ($usuario_grupo==2) {
         $tpl6->show();
     } else if ($passo==2) { //Pode deletar o quiosque e suas referencias
         
+        //Verifica se há outros quiosques vinculados a esta cooperatvia, se não, entao sugere exclusão da cooperativa
+        $sql4="SELECT * from quiosques WHERE qui_cooperativa=$cooperativa";
+        if (!$query4=mysql_query($sql4)) die("Erro SQL 4: " . mysql_error());
+        $linhas4=  mysql_num_rows($query4);
+        
         //Entradas
         $sql3 = "DELETE FROM entradas_produtos WHERE entpro_entrada in (SELECT ent_codigo FROM entradas WHERE ent_quiosque=$codigo)";
         $query3 = mysql_query($sql3);
@@ -271,18 +283,50 @@ if ($usuario_grupo==2) {
         $sql3 = "UPDATE pessoas set pes_quiosqueusuario=0 WHERE pes_quiosqueusuario=$codigo"; 
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL: " . mysql_error());
         
-         
-        $tpl_notificacao = new Template("templates/notificacao.html");
-        $tpl_notificacao->DESTINO = "quiosques.php";
-        $tpl_notificacao->ICONES = $icones;
-        if ($usuario_quiosque==$codigo) {
-            $tpl_notificacao->MOTIVO_COMPLEMENTO = "<br>E necessário sair e entrar novamente do sistema, pois você está logado com um quiosuqe que não existe mais!<br>";
-            $tpl_notificacao->DESTINO = "login_sair.php"; 
-            session_start();
-            session_destroy();
+        //Se houver apenas um quiosque na cooperativa então perguntar se quer excluir a cooperativa
+        if ($linhas4==1) {
+            
+            $tpl6 = new Template("templates/notificacao.html");
+            $tpl6->ICONES = $icones;
+            $tpl6->block("BLOCK_ATENCAO");
+            //$tpl6->block("BLOCK_CADASTRADO");    
+            $tpl6->MOTIVO = "Este é o único quiosque cadastrado nesta cooperativa. <br>Excluindo apenas o quiosque a cooperativa ficará vazia, porém as pessoas e produtos utilizados pelos quiosques serão mantidos";
+            $tpl6->LINK = "cooperativas_deletar.php?codigo=$cooperativa&passo=1&operacao=excluir";
+            $tpl6->block("BLOCK_MOTIVO");
+            $tpl6->PERGUNTA = "Deseja excluir também cooperativa deste quiosque?";
+            $tpl6->block("BLOCK_PERGUNTA");
+            $tpl6->NAO_LINK = "quiosques_deletar.php?passo=3&codigo=$codigo";
+            $tpl6->LINK_TARGET = "";
+            $tpl6->block("BLOCK_BOTAO_NAO_LINK");
+            $tpl6->block("BLOCK_BOTAO_SIMNAO");
+            $tpl6->show();   
+            
         } else {
+
+            $tpl_notificacao = new Template("templates/notificacao.html");
             $tpl_notificacao->DESTINO = "quiosques.php";
+            $tpl_notificacao->ICONES = $icones;
+            if ($usuario_quiosque==$codigo) {
+                $tpl_notificacao->MOTIVO_COMPLEMENTO = "<br>E necessário sair e entrar novamente do sistema, pois você está logado com um quiosuqe que não existe mais!<br>";
+                $tpl_notificacao->DESTINO = "login_sair.php"; 
+                session_start();
+                session_destroy();
+            } else {
+                $tpl_notificacao->DESTINO = "quiosques.php";
+            }
+            $tpl_notificacao->block("BLOCK_CONFIRMAR");
+            $tpl_notificacao->block("BLOCK_APAGADO");
+            $tpl_notificacao->block("BLOCK_BOTAO");
+            $tpl_notificacao->show();
         }
+    } else if ($passo==3) {
+        
+        $tpl_notificacao = new Template("templates/notificacao.html");
+        $tpl_notificacao->ICONES = $icones;
+        $tpl_notificacao->MOTIVO_COMPLEMENTO = "<br>E necessário sair e entrar novamente do sistema, pois você está logado com um quiosuqe que não existe mais!<br>";
+        $tpl_notificacao->DESTINO = "login_sair.php"; 
+        session_start();
+        session_destroy();
         $tpl_notificacao->block("BLOCK_CONFIRMAR");
         $tpl_notificacao->block("BLOCK_APAGADO");
         $tpl_notificacao->block("BLOCK_BOTAO");
