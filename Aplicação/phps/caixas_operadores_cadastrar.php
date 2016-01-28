@@ -20,7 +20,7 @@ $tpl_titulo->NOME_ARQUIVO_ICONE = "../pessoas2/caixa.png";
 $tpl_titulo->show();
 
 //Pega todos os dados da tabela (Necessário caso seja uma edição)
-$caixa = $_GET['codigo'];
+$caixa = $_GET['caixa'];
 $operador = $_GET['operador'];
 $operacao = $_GET['operacao'];
 $dataatual= date ("Y-m-d");
@@ -51,7 +51,7 @@ $tpl1->TITULO = "Caixa";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
 $tpl1->CAMPO_QTD_CARACTERES = "";
-$tpl1->CAMPO_NOME = "$caixa";
+$tpl1->CAMPO_NOME = "caixa";
 $tpl1->CAMPO_DICA = "";
 $tpl1->CAMPO_ID = "";
 $tpl1->CAMPO_TAMANHO = "";

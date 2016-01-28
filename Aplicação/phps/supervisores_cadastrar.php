@@ -32,16 +32,19 @@ $array = mysql_fetch_assoc($query);
 $coo=$array["qui_cooperativa"];
 $quiosque_nome=$array["qui_nome"];
 
-if ($supervisor != "") {
-    
-    $sql = "SELECT * FROM quiosques_supervisores WHERE quisup_supervisor='$supervisor'";
+//Se for cadastro então a data da função deverá apresentar a data atual 
+if ($operacao=="cadastrar") {
+    $datafuncao=date("Y-m-d");
+}
+else if ($operacao=="editar") {
+    $sql = "SELECT * FROM quiosques_supervisores WHERE quisup_supervisor='$supervisor' and quisup_quiosque=$quiosque";
     $query = mysql_query($sql);
     if (!$query)
         die("Erro2:" . mysql_error());
     $array = mysql_fetch_assoc($query); 
-    $datafuncao=  converte_data($array['quisup_datafuncao']);
+    $datafuncao=  $array['quisup_datafuncao'];
 }
-
+    
 //Estrutura dos campos de cadastro
 $tpl1 = new Template("templates/cadastro_edicao_detalhes_2.html");
 $tpl1->LINK_DESTINO = "supervisores_cadastrar2.php";
@@ -64,9 +67,6 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
-
-
-
 //supervisor
 $tpl1->TITULO = "Supervisor";
 $tpl1->block("BLOCK_TITULO");
@@ -76,6 +76,9 @@ $tpl1->SELECT_ID = "supervisor";
 $tpl1->SELECT_TAMANHO = "";
 $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
 $tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
+if ($operacao=="editar") {
+    $sql_filtro = " OR pes_codigo = $supervisor ";
+}
 $sql = "
 SELECT DISTINCT
     pes_codigo,pes_nome
@@ -85,7 +88,8 @@ FROM
 WHERE
     mespestip_tipo=3 and
     pes_cooperativa=$coo
-    and pes_codigo not in (SELECT quisup_supervisor FROM quiosques_supervisores WHERE quisup_quiosque=$quiosque)    
+    and pes_codigo not in (SELECT quisup_supervisor FROM quiosques_supervisores WHERE quisup_quiosque=$quiosque) 
+    $sql_filtro
 ORDER BY
     pes_nome";
 $query = mysql_query($sql);
@@ -106,11 +110,11 @@ $tpl1->block("BLOCK_ITEM");
 //Data função
 $tpl1->TITULO = "Data Função";
 $tpl1->block("BLOCK_TITULO");
-$tpl1->CAMPO_TIPO = "text";
+$tpl1->CAMPO_TIPO = "date";
 $tpl1->CAMPO_QTD_CARACTERES = "";
 $tpl1->CAMPO_NOME = "datafuncao";
 $tpl1->CAMPO_DICA = "";
-$tpl1->CAMPO_ID = "calendario";
+$tpl1->CAMPO_ID = "";
 $tpl1->CAMPO_TAMANHO = "8";
 $tpl1->CAMPO_VALOR = $datafuncao;
 $tpl1->CAMPO_QTD_CARACTERES = 70;

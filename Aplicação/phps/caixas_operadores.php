@@ -36,9 +36,9 @@ $tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
+//Botão cadastrar/incluir operador
 IF ($permissao_caixas_operadores_gerir == 1) {
-
-    $tpl->LINK = "caixas_operadores_cadastrar.php?codigo=$caixa&operacao=cadastrar";
+    $tpl->LINK = "caixas_operadores_cadastrar.php?caixa=$caixa&operacao=cadastrar";
     $tpl->BOTAO_NOME = "INCLUIR OPERADOR";
     $tpl->block("BLOCK_RODAPE_BOTAO_MODELO");
 }
@@ -158,7 +158,7 @@ while ($dados = mysql_fetch_assoc($query)) {
 
     if ($permissao_caixas_operadores_gerir == 1) {
         //editar
-        $tpl->CODIGO = $operador;
+        $tpl->CODIGO = "";
         $tpl->LINK = "caixas_operadores_cadastrar.php";
         $tpl->LINK_COMPLEMENTO = "operador=$operador&caixa=$caixa&operacao=editar";
 

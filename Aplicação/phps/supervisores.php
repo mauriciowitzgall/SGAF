@@ -77,7 +77,7 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
-$tpl->CABECALHO_COLUNA_NOME = "DATA DE ADMISSÃO";
+$tpl->CABECALHO_COLUNA_NOME = "DATA FUNÇÃO";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 if ($permissao_quiosque_definirsupervisores == 1) {

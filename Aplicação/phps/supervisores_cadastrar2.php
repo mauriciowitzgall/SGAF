@@ -14,7 +14,7 @@ include "includes.php";
 $quiosque = $_POST['quiosque'];
 $supervisor = $_REQUEST['supervisor'];
 $operacao = $_POST['operacao'];
-$datafuncao = desconverte_data($_POST['datafuncao']);
+$datafuncao = $_POST['datafuncao'];
 
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
