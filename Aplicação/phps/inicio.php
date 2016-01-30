@@ -25,6 +25,12 @@ if (($usuario_grupo == 1)&&($usuario_cooperativa==0)&&($usuario_quiosque==0)) {
 }
 
 
+if ($usuario_grupo==7) {
+    header("Location: pessoas.php");
+    exit;
+}
+
+
 
 if (($usuario_grupo != 7) && ($usuario_grupo != 1) && ($usuario_grupo != 2)) {
     if (($usuario_quiosque == 0)||($usuario_grupo==0)) {

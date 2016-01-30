@@ -252,7 +252,7 @@ $sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_fil
 
 //SQL Principal das linhas
 $sql = "
-SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,sai_caixaoperadorresponsavel,pes_codigo
+SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo
 FROM saidas 
 JOIN saidas_tipo on (sai_tipo=saitip_codigo) 
 left join saidas_produtos on (saipro_saida=sai_codigo)
