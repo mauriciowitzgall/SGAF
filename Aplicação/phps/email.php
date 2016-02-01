@@ -23,7 +23,6 @@ function smtpmailer($para, $de, $de_senha, $de_nome, $assunto, $corpo) {
     $mail->WordWrap = 50;               // set word wrap
     $mail->Priority = 1; 
     $mail->IsHTML(true);  
-    $mail->Send();
     $mail->CharSet = "UTF-8";
     $mail->MsgHTML($corpo);
     if (!$mail->Send()) {

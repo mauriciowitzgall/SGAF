@@ -186,7 +186,27 @@ ADD COLUMN `cai_status` INT(1) NOT NULL DEFAULT 1 AFTER `cai_datahoracadastro`;
 ALTER TABLE `sgaf`.`caixas` 
 ADD COLUMN `cai_status` INT(1) NOT NULL DEFAULT 1 AFTER `cai_datahoracadastro`;
 
+ALTER TABLE `sgaf`.`caixas_operacoes` 
+DROP FOREIGN KEY `caiopo_operador`;
+
+ALTER TABLE `sgaf`.`caixas_operadores` 
+DROP FOREIGN KEY `operador`;
+
+ALTER TABLE `sgaf`.`pessoas` 
+CHANGE COLUMN `pes_codigo` `pes_codigo` INT(11) NOT NULL DEFAULT 2 ;
+
+ALTER TABLE `sgaf`.`caixas` 
+DROP FOREIGN KEY `situacao`,
+DROP FOREIGN KEY `quiosque`;
+
+ALTER TABLE `sgaf`.`quiosques` 
+CHANGE COLUMN `qui_codigo` `qui_codigo` INT(11) NOT NULL AUTO_INCREMENT ;
+
+
 
 # Versão 3.1.1
+
+
+
 
 # nenhuma alteração de banco

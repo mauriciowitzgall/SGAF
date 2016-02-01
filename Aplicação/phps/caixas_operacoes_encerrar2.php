@@ -59,15 +59,7 @@ if ($situacao==2) {
     exit;
 } 
 
-//Verifica o valorfinal está zerado
-if ($valorfinal=="0.00") {
-    $tpl_notificacao->block("BLOCK_ERRO");
-    //$tpl_notificacao->block("BLOCK_NAOCADASTRADO");
-    $tpl_notificacao->MOTIVO_COMPLEMENTO = "O valor final do Caixa está zerado!";
-    $tpl_notificacao->block("BLOCK_BOTAO_VOLTAR");
-    $tpl_notificacao->show();
-    exit;
-} 
+
 
 //Verifica se a senha do supervisor está correta
 if ($senha!=$senha_supervisor) {

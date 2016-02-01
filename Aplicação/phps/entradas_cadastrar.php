@@ -144,8 +144,12 @@ if ($linhas == 0) {
         $tpl->ICONES = $icones;
         $tpl->MOTIVO_COMPLEMENTO = "Para gerar uma entrada é necessário que se tenha produtos cadastrados. Seu ponto de venda ainda <b>não possui produtos cadastrados</b>.<br>Por favor, clique no botão abaixo para ir para a tela de cadastro de produtos!";
         $tpl->block("BLOCK_ATENCAO");
-        $tpl->DESTINO = "produtos_cadastrar.php?operacao=cadastrar";
-        $tpl->block("BLOCK_BOTAO");
+        $tpl->DESTINO = "";
+        $tpl->BOTAOGERAL_DESTINO = "produtos_cadastrar.php?operacao=cadastrar";
+        $tpl->BOTAOGERAL_TIPO="button";
+        $tpl->BOTAOGERAL_NOME="CADASTRAR PRODUTO";
+        $tpl->block("BLOCK_BOTAOGERAL_AUTOFOCO");
+        $tpl->block("BLOCK_BOTAOGERAL");
         $tpl->show();
         exit;
     }

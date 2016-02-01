@@ -239,7 +239,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
     
     //FLUXO
     if ($usuario_grupo<>4) {
-        if (($numero_ultimo=="")||($usuario_caixa_operacao<>"")) {
+        if (($numero_ultimo=="")) {
             $tpl->IMAGEM_ALINHAMENTO="center";
             $tpl->LINK="";
             $tpl->IMAGEM_TAMANHO="15px";

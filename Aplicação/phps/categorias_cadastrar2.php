@@ -1,5 +1,5 @@
 <?php
-//Verifica se o usu�rio tem permiss�o para acessar este conte�do
+//Verifica se o usuário tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_categorias_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -22,7 +22,7 @@ $hora=date ("h:i:s");
 	<td width="35px"><img width="50px" src="<?php echo $icones;?>produtos.png" alt="" ></td>
 	<td valign="bottom">
 		<label class="titulo" > CATEGORIAS </label><br />
-		<label class="subtitulo"> CADASTRO/EDIÇÃ>
+		<label class="subtitulo"> CADASTRO/EDIÇÃO
 	</td>
 </tr>
 </table>

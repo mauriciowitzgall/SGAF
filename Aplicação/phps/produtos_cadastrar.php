@@ -76,13 +76,16 @@ if (!$query)
     die("Erro: " . mysql_error());
 $linhas = mysql_num_rows($query);
 if ($linhas == 0) {
-    echo "<br>";
+    //echo "<br>";
     $tpl = new Template("templates/notificacao.html");
     $tpl->ICONES = $icones;
     $tpl->MOTIVO_COMPLEMENTO = "Você deve cadastrar uma categoria antes de cadastrar um produto! <br>Clique no botão abaixo para ir para tela de cadastro de categorias!";
     $tpl->block("BLOCK_ATENCAO");
-    $tpl->DESTINO = "categorias_cadastrar.php?operacao=cadastrar";
-    $tpl->block("BLOCK_BOTAO");
+    $tpl->BOTAOGERAL_DESTINO = "categorias_cadastrar.php?operacao=cadastrar";
+    $tpl->BOTAOGERAL_TIPO="button";
+    $tpl->BOTAOGERAL_NOME="CADASTRAR CATEGORIA";
+    $tpl->block("BLOCK_BOTAOGERAL_AUTOFOCO");
+    $tpl->block("BLOCK_BOTAOGERAL");
     $tpl->show();
     exit;
 }

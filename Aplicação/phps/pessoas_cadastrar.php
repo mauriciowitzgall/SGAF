@@ -316,6 +316,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
+
 //Nome 
 $tpl1->TITULO = "Nome";
 $tpl1->block("BLOCK_TITULO");
@@ -830,7 +831,7 @@ if (($operacao == "editar") || ($operacao == "ver")) {
     $sql = "SELECT * FROM mestre_pessoas_tipo WHERE mespestip_pessoa=$codigo";
     $query = mysql_query($sql);
     if (!$query)
-        die("Erro: 8" . mysql_error());
+        die("Erro: 81" . mysql_error());
     while ($dados = mysql_fetch_assoc($query)) {
         $tipo = $dados["mespestip_tipo"];
         if ($tipo == 1)
@@ -851,9 +852,8 @@ if (($operacao == "editar") || ($operacao == "ver")) {
 }
 //Se o usu�rio est� editando seu pr�prio cadastro ent�o ele n�o pode escolher o Tipo
 if ($usuario_codigo != $codigo) {
-
     //Tipo Administrador
-    if (($permissao_pessoas_cadastrar_administradores == 1) || (($permissao_pessoas_ver_administradores == 1) && ($operacao = 'ver'))) {
+    if (($permissao_pessoas_cadastrar_administradores == 1) || (($permissao_pessoas_ver_administradores == 1) && ($operacao == 'ver'))) {
         $tpl1->CHECKBOX_NOME = "box[0]";
         $tpl1->CAMPO_ID = "admin";
         $tpl1->CHECKBOX_VALOR = "1";
@@ -868,7 +868,7 @@ if ($usuario_codigo != $codigo) {
     }
 
     //Tipo Presidente
-    if (($permissao_pessoas_cadastrar_presidentes == 1) || (($permissao_pessoas_ver_presidentes == 1) && ($operacao = 'ver'))) {
+    if (($permissao_pessoas_cadastrar_presidentes == 1) || (($permissao_pessoas_ver_presidentes == 1) && ($operacao == 'ver'))) {
         $tpl1->CHECKBOX_NOME = "box[1]";
         $tpl1->CHECKBOX_ID = "presid";
         $tpl1->CHECKBOX_VALOR = "2";
@@ -907,7 +907,7 @@ if ($usuario_codigo != $codigo) {
     }
 
     //Tipo Supervisor
-    if (($permissao_pessoas_cadastrar_supervisores == 1) || (($permissao_pessoas_ver_supervisores == 1) && ($operacao = 'ver'))) {
+    if (($permissao_pessoas_cadastrar_supervisores == 1) || (($permissao_pessoas_ver_supervisores == 1) && ($operacao == 'ver'))) {
         $tpl1->CHECKBOX_NOME = "box[2]";
         $tpl1->CHECKBOX_ID = "super";
         $tpl1->CHECKBOX_VALOR = "3";
@@ -945,7 +945,7 @@ if ($usuario_codigo != $codigo) {
     }
 
     //Tipo caixa
-    if (($permissao_pessoas_cadastrar_caixas == 1) || (($permissao_pessoas_ver_caixas == 1) && ($operacao = 'ver'))) {
+    if (($permissao_pessoas_cadastrar_caixas == 1) || (($permissao_pessoas_ver_caixas == 1) && ($operacao == 'ver'))) {
         $tpl1->CHECKBOX_NOME = "box[3]";
         $tpl1->CHECKBOX_ID = "vend";
         $tpl1->CHECKBOX_VALOR = "4";
@@ -984,7 +984,7 @@ if ($usuario_codigo != $codigo) {
 
     //Tipo Fornecedor
 
-    if (($permissao_pessoas_cadastrar_fornecedores == 1) || (($permissao_pessoas_ver_fornecedores == 1) && ($operacao = 'ver'))) {
+    if (($permissao_pessoas_cadastrar_fornecedores == 1) || (($permissao_pessoas_ver_fornecedores == 1) && ($operacao == 'ver'))) {
         $tpl1->CHECKBOX_NOME = "box[4]";
         $tpl1->CHECKBOX_ID = "fornec";
         $tpl1->CHECKBOX_VALOR = "5";
@@ -1001,7 +1001,7 @@ if ($usuario_codigo != $codigo) {
     }
 
     //Tipo Consumidor
-    if (($permissao_pessoas_cadastrar_consumidores == 1) || (($permissao_pessoas_ver_consumidores == 1) && ($operacao = 'ver'))) {
+    if (($permissao_pessoas_cadastrar_consumidores == 1) || (($permissao_pessoas_ver_consumidores == 1) && ($operacao == 'ver'))) {
         $tpl1->CHECKBOX_NOME = "box[5]";
         $tpl1->CHECKBOX_ID = "consum";
         $tpl1->CHECKBOX_VALOR = "6";
@@ -1019,6 +1019,8 @@ if ($usuario_codigo != $codigo) {
     $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
 }
+
+
 
 //Cooperativa
 $tpl1->TITULO = "Cooperativa";
@@ -1077,7 +1079,7 @@ if (($usuario_grupo==1)||($usuario_grupo==2)||($usuario_grupo==3)) {
         $sql = "SELECT * FROM fornecedores_tiponegociacao WHERE fortipneg_pessoa=$codigo";
         $query = mysql_query($sql);
         if (!$query)
-            die("Erro: 8" . mysql_error());
+            die("Erro: 82" . mysql_error());
         $tipo_consignacao = 0;
         $tipo_revenda = 0;
         while ($dados = mysql_fetch_assoc($query)) {
@@ -1440,7 +1442,7 @@ if ($operacao == "editar") {
 
             $query = mysql_query($sql);
             if (!$query)
-                die("Erro: 8" . mysql_error());
+                die("Erro: 83" . mysql_error());
 
             while ($dados = mysql_fetch_assoc($query)) {
                 if ($quiosqueusuario == $dados['qui_codigo'])

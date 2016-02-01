@@ -17,7 +17,7 @@ if ($tipo2 != "")
     $tipo = $tipo2;
 else
     $tipo = $_POST['tipo'];
-echo "($tipo)($tipo2)";
+
 $marca = $_POST['marca'];
 $recipiente = $_POST['recipiente'];
 $volume = $_POST['volume'];
