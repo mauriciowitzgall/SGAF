@@ -22,8 +22,7 @@ $codigo = $_GET["codigo"];
 $operacao = $_GET["operacao"];
 $passo = $_GET["passo"];
 
-
-if ($usuario_grupo==1) {
+if (($usuario_grupo==1)||(($usuario_grupo==7))) {
     if ($passo==1) { //Pergunta se quer deletar mesmo
   
         $tpl6 = new Template("templates/notificacao.html");
@@ -149,6 +148,8 @@ if ($usuario_grupo==1) {
         $tpl_notificacao->show();
     }
                  
+} else {
+    echo "Você não tem permissão para excluir cooperativas!";
 } 
 
 

@@ -3,7 +3,7 @@
    $hostname = "localhost";
    $db = "sgaf";
    $user = "root";
-   $pass = " ";
+   $pass = "";
    
    $link = mysql_connect($hostname, $user, $pass);
    if (!$link) {

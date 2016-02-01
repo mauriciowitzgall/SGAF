@@ -48,7 +48,7 @@ $tpl8->block("BLOCK_NOME_QUIOSQUE_COOPERATIVA");
 
 
 //Configurações
-if ($usuario_grupo==1) {
+if (($usuario_grupo==1)||($usuario_grupo==7)) {
     $tpl8->block("BLOCK_CONFIGURACOES");
 }
 

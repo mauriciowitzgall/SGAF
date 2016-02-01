@@ -353,6 +353,20 @@ if ($usuario_grupo<>4) {
             $tpl_menu->block("BLOCK_MENU_ITEM");
         }
 
+        //Pessoas (para o usuario root cadastrar adminsitradores)
+        if ($usuario_grupo==7) {
+            $tpl_menu->IMAGEM_TITULO = "Pessoas";
+            $tpl_menu->TITULO = "Pessoas";
+            $tpl_menu->TD_LARGURA = "110px";
+            if ($permissao_cidades_ver == 1) {
+                //$tpl_menu->IMAGEM_PASTA = $icones2;
+                $tpl_menu->IMAGEM_ARQUIVO = "pessoas.png";
+                $tpl_menu->LINK = "pessoas.php";
+                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                $tpl_menu->block("BLOCK_MENU_ITEM");
+            }
+        }
+
         $tpl_menu->block("BLOCK_MENU");
 
         //Sub-menu dos administradores

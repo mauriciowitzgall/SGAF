@@ -1,8 +1,10 @@
--- MySQL dump 10.13  Distrib 5.7.9, for osx10.9 (x86_64)
+CREATE DATABASE  IF NOT EXISTS `sgaf` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `sgaf`;
+-- MySQL dump 10.13  Distrib 5.6.19, for osx10.7 (i386)
 --
--- Host: localhost    Database: sgaf3.1
+-- Host: 127.0.0.1    Database: sgaf
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.9-MariaDB
+-- Server version	5.6.24
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -40,7 +42,7 @@ CREATE TABLE `acertos` (
   `ace_datafim` date NOT NULL,
   PRIMARY KEY (`ace_codigo`),
   KEY `ace_quiosque` (`ace_quiosque`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +99,7 @@ CREATE TABLE `caixas` (
   KEY `quiosque_idx` (`cai_quiosque`),
   CONSTRAINT `quiosque` FOREIGN KEY (`cai_quiosque`) REFERENCES `quiosques` (`qui_codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `situacao` FOREIGN KEY (`cai_situacao`) REFERENCES `caixas_situacao` (`caisit_codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,13 +130,12 @@ CREATE TABLE `caixas_operacoes` (
   `caiopo_saldovendas` float DEFAULT NULL,
   `caiopo_diferenca` float DEFAULT NULL,
   `caiopo_valorfinal` float DEFAULT NULL,
-  `caiopo_supervisor` int(11) DEFAULT NULL,
   PRIMARY KEY (`caiopo_numero`),
   KEY `caiopo_caixa_idx` (`caiopo_caixa`),
   KEY `caiopo_operador_idx` (`caiopo_operador`),
   CONSTRAINT `caiopo_caixa` FOREIGN KEY (`caiopo_caixa`) REFERENCES `caixas` (`cai_codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `caiopo_operador` FOREIGN KEY (`caiopo_operador`) REFERENCES `pessoas` (`pes_codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -237,7 +238,7 @@ CREATE TABLE `cooperativas` (
   `coo_presidente` int(11) DEFAULT NULL,
   PRIMARY KEY (`coo_codigo`),
   KEY `coo_presidente` (`coo_presidente`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -275,7 +276,7 @@ CREATE TABLE `entradas` (
   KEY `ent_quiosque` (`ent_quiosque`),
   KEY `ent_status` (`ent_status`),
   KEY `ent_tiponegociacao` (`ent_tiponegociacao`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -619,7 +620,7 @@ CREATE TABLE `grupo_permissoes` (
 
 LOCK TABLES `grupo_permissoes` WRITE;
 /*!40000 ALTER TABLE `grupo_permissoes` DISABLE KEYS */;
-INSERT INTO `grupo_permissoes` VALUES (1,'Administrador',1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),(2,'Presidente',0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,1,0,0,1,1,1,1,1,1,0,1,1,1,1,0,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,0,0,1,0,1,0,0,1,1,0,0,0,1,0,0,0,0,0,0,1,1,1,1,1,1,0,1,1,1,1,0,0,0,1,0,1,0,0,0),(3,'Supervisor',0,0,0,0,1,0,1,0,0,1,1,1,1,0,0,1,0,0,0,1,1,1,1,1,0,1,1,1,1,0,1,0,0,0,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),(4,'Caixa',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0),(5,'Fornecedor',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),(7,'Root',1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+INSERT INTO `grupo_permissoes` VALUES (1,'Administrador',1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),(2,'Presidente',0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,1,0,0,1,1,1,1,1,1,0,1,1,1,1,0,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,0,0,1,0,1,0,0,1,1,0,0,0,1,0,0,0,0,0,0,1,1,1,1,1,1,0,1,1,1,1,0,0,0,1,0,1,0,0,0),(3,'Supervisor',0,0,0,0,1,0,1,0,0,1,1,1,1,0,0,1,0,0,0,1,1,1,1,1,0,1,1,1,1,0,1,0,0,0,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),(4,'Caixa',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,1,1,1,0),(5,'Fornecedor',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),(7,'Root',1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 /*!40000 ALTER TABLE `grupo_permissoes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -766,6 +767,7 @@ CREATE TABLE `pessoas` (
   `pes_categoria` mediumint(9) DEFAULT NULL,
   `pes_tipopessoa` int(11) DEFAULT NULL,
   `pes_pessoacontato` varchar(70) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `pes_caixausuario` int(11) DEFAULT NULL,
   `pes_caixaoperacaonumero` int(11) DEFAULT NULL,
   PRIMARY KEY (`pes_codigo`),
   KEY `usu_cidade` (`pes_cidade`),
@@ -781,7 +783,7 @@ CREATE TABLE `pessoas` (
 
 LOCK TABLES `pessoas` WRITE;
 /*!40000 ALTER TABLE `pessoas` DISABLE KEYS */;
-INSERT INTO `pessoas` VALUES (1,1,'Usuário Root',0,'','','','','','','','','','','2012-03-27','06:50:12','2012-03-27','06:51:08','Usuário padrão do sistema, não pode ser excluído nunca.','',0,1,'4b0daceccf8aef63c93aca5d5b228d31',7,0,'99999999999',NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL);
+INSERT INTO `pessoas` VALUES (1,1,'Usuário Root',0,'','','','','','','','','','','2012-03-27','06:50:12','2012-03-27','06:51:08','Usuário padrão do sistema, não pode ser excluído nunca.','',0,1,'4b0daceccf8aef63c93aca5d5b228d31',7,0,'99999999999',NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `pessoas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -888,7 +890,7 @@ CREATE TABLE `produtos` (
   KEY `pro_categoria` (`pro_categoria`),
   KEY `pro_tipocontagem` (`pro_tipocontagem`),
   KEY `pro_quiosque` (`pro_cooperativa`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -914,7 +916,7 @@ CREATE TABLE `produtos_categorias` (
   `cat_obs` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`cat_codigo`),
   KEY `cat_quiosque` (`cat_cooperativa`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1237,7 +1239,6 @@ CREATE TABLE `saidas` (
   `sai_areceber` tinyint(1) NOT NULL,
   `sai_metpag` tinyint(4) NOT NULL,
   `sai_caixaoperacaonumero` int(11) DEFAULT NULL,
-  `sai_caixaoperadorresponsavel` int(11) DEFAULT NULL,
   PRIMARY KEY (`sai_codigo`),
   KEY `sai_quiosque` (`sai_quiosque`),
   KEY `sai_cliente` (`sai_consumidor`),
@@ -1245,7 +1246,7 @@ CREATE TABLE `saidas` (
   KEY `sai_justificativa` (`sai_saidajustificada`),
   KEY `sai_status` (`sai_status`),
   KEY `sai_metpag` (`sai_metpag`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1380,7 +1381,7 @@ CREATE TABLE `taxas` (
   PRIMARY KEY (`tax_codigo`),
   KEY `tax_cooperativa` (`tax_cooperativa`,`tax_quiosque`),
   KEY `tax_tiponegociacao` (`tax_tiponegociacao`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1425,4 +1426,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-01-26 20:21:38
+-- Dump completed on 2016-02-01 15:03:54
