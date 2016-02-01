@@ -54,3 +54,16 @@ Erros corrigidos:
 - Corrigido problema de campos com hora e data que estavam sem máscara ou sendo gravados nulos
 - Corrigido erros e melhorado tela de inclusão de taxas aos quiosques
 
+3.1.1
+
+Erros corrigidos:
+- Correção nas rotinas de exclusão de quiosque e cooperativas, Não estava excluindo corretamente.
+- Corrigido problema de máscaras de CPF e CNPJ que não estava aparecendo nos campos
+- Corrigido problema de máscara da data nas tela de inclusão de operador de caixa, e a tela de inclusão de supervisores
+- Corrigido erro que impedia ver as saídas, após atualização de versão da 3.0 para 3.1
+- Usuários Root ao logar vai para tela de pessoas e não tem mais acesso ao menu. Ele poderá apenas cadastrar administradores.
+- Aprimorado regras de funcionamento do menu para usuários administradores
+
+Melhorias: 
+- Os usuários administradores ao excluir o ultimo quiosque de uma cooperativa o sistema sugere a exclusão da cooperativa também.
+

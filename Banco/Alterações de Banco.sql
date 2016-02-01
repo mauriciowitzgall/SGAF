@@ -189,4 +189,4 @@ ADD COLUMN `cai_status` INT(1) NOT NULL DEFAULT 1 AFTER `cai_datahoracadastro`;
 
 # Versão 3.1.1
 
-# ... 
+# nenhuma alteração de banco
