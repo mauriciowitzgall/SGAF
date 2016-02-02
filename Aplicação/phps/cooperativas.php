@@ -87,6 +87,11 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "2";
 $tpl->CABECALHO_COLUNA_NOME = "DATA ULT. INT.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
+$tpl->CABECALHO_COLUNA_TAMANHO = "";
+$tpl->CABECALHO_COLUNA_COLSPAN = "2";
+$tpl->CABECALHO_COLUNA_NOME = "GESTORES";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
 $tpl->CABECALHO_COLUNA_TAMANHO = "100px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "2";
 $tpl->CABECALHO_COLUNA_NOME = "OPERAÇÕES";
@@ -140,7 +145,24 @@ while ($dados = mysql_fetch_array($query)) {
     $tpl->LISTA_COLUNA_VALOR = $abreviacao;
     $tpl->block("BLOCK_LISTA_COLUNA");
 
-    
+    //Coluna Gestores
+    $tpl->LISTA_COLUNA2_ALINHAMENTO = "right";
+    $tpl->LISTA_COLUNA2_ALINHAMENTO2 = "left";
+    $tpl->IMAGEM_PASTA=$icones;
+    $sqltot = "SELECT * FROM quiosques_gestores WHERE quiges_quiosque=$codigo";
+    $querytot = mysql_query($sqltot);
+    if (!$querytot)
+        die("Erro: " . mysql_error());
+    $gestores = mysql_num_rows($querytot);
+    if ($permissao_quiosque_gestor_ver == 1) {
+        $tpl->LISTA_COLUNA2_LINK = "quiosques_gestores.php?quiosque=$codigo";
+        $tpl->DESABILITADO = "";
+    } else {
+        $tpl->LISTA_COLUNA2_LINK = "#";
+        $tpl->DESABILITADO = "_desabilitado";
+    }
+    $tpl->LISTA_COLUNA2_VALOR = "($gestores)";
+    $tpl->block("BLOCK_LISTA_COLUNA2");    
 
     //Coluna Quantidade de quiosques
     $sql2="select count(qui_codigo) from quiosques where qui_cooperativa=$codigo";

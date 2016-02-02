@@ -202,6 +202,34 @@ DROP FOREIGN KEY `quiosque`;
 ALTER TABLE `sgaf`.`quiosques` 
 CHANGE COLUMN `qui_codigo` `qui_codigo` INT(11) NOT NULL AUTO_INCREMENT ;
 
+ALTER TABLE `sgaf`.`pessoas` 
+ADD COLUMN `pes_usuarioquecadastrou` INT(11) NOT NULL AFTER `pes_caixaoperacaonumero`,
+ADD COLUMN `pes_quiosquequecadastrou` INT(11) NOT NULL AFTER `pes_usuarioquecadastrou`,
+ADD INDEX `pes_usuarioquecadastrou` (`pes_usuarioquecadastrou` ASC),
+ADD INDEX `pes_quiosquequecadastrou` (`pes_quiosquequecadastrou` ASC);
+
+ALTER TABLE `sgaf`.`produtos` 
+ADD COLUMN `pro_usuarioquecadastrou` INT(11) NOT NULL AFTER `pro_industrializado`,
+ADD COLUMN `pro_quiosquequecadastrou` INT(11) NOT NULL AFTER `pro_usuarioquecadastrou`,
+ADD INDEX `pro_usuarioquecadastrou` (`pro_usuarioquecadastrou` ASC),
+ADD INDEX `pro_quiosquequecadastrou` (`pro_quiosquequecadastrou` ASC);
+
+CREATE TABLE `sgaf`.`quiosques_gestores` (
+  `quiges_quiosque` INT(11) NOT NULL,
+  `quiges_gestor` INT(11) NOT NULL,
+  PRIMARY KEY (`quiges_quiosque`, `quiges_gestor`),
+  INDEX `quiges_quiosque` (`quiges_quiosque` ASC),
+  INDEX `quiges_gestor` (`quiges_gestor` ASC));
+
+ALTER TABLE `sgaf`.`grupo_permissoes` 
+ADD COLUMN `gruper_quiosques_gestores_ver` TINYINT(1) NOT NULL AFTER `gruper_caixas_trocar`,
+ADD COLUMN `gruper_quiosques_gestores_cadastrar` TINYINT(1) NOT NULL AFTER `gruper_quiosques_gestores_ver`,
+ADD COLUMN `gruper_quiosques_gestores_editar` TINYINT(1) NOT NULL AFTER `gruper_quiosques_gestores_cadastrar`,
+ADD COLUMN `gruper_quiosques_gestores_excluir` TINYINT(1) NOT NULL AFTER `gruper_quiosques_gestores_editar`;
+
+UPDATE `sgaf`.`grupo_permissoes` SET `gruper_quiosques_gestores_ver`='1', `gruper_quiosques_gestores_cadastrar`='1', `gruper_quiosques_gestores_editar`='1', `gruper_quiosques_gestores_excluir`='1' WHERE `gruper_codigo`='1';
+UPDATE `sgaf`.`grupo_permissoes` SET `gruper_quiosques_gestores_ver`='1', `gruper_quiosques_gestores_cadastrar`='1', `gruper_quiosques_gestores_editar`='1', `gruper_quiosques_gestores_excluir`='1' WHERE `gruper_codigo`='2';
+UPDATE `sgaf`.`grupo_permissoes` SET `gruper_quiosques_gestores_ver`='1' WHERE `gruper_codigo`='3';
 
 
 # Versão 3.1.1

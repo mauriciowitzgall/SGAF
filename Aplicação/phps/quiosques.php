@@ -124,11 +124,6 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
-$tpl->CABECALHO_COLUNA_NOME = "COOPERATIVA";
-$tpl->block("BLOCK_LISTA_CABECALHO");
-
-$tpl->CABECALHO_COLUNA_TAMANHO = "";
-$tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "CIDADE";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
@@ -139,7 +134,7 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "100px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "2";
-$tpl->CABECALHO_COLUNA_NOME = "SUPERV.";
+$tpl->CABECALHO_COLUNA_NOME = "SUPERVISORES";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 
@@ -251,11 +246,6 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl->LISTA_COLUNA_VALOR = $nome;
     $tpl->block("BLOCK_LISTA_COLUNA");
 
-    //Coluna Cooperativa
-    $tpl->LISTA_COLUNA2_ALINHAMENTO = "left";
-    $tpl->LISTA_COLUNA_VALOR = $cooperativa_nome;
-    $tpl->block("BLOCK_LISTA_COLUNA");
-
     //Coluna Cidade
     $tpl->LISTA_COLUNA2_ALINHAMENTO = "left";
     $tpl->LISTA_COLUNA_VALOR = $cidade_nome;
@@ -299,6 +289,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl->LISTA_COLUNA2_ALINHAMENTO = "left";
     $tpl->LISTA_COLUNA_VALOR = converte_datahora($dataultimainteracao);
     $tpl->block("BLOCK_LISTA_COLUNA");  
+    
     
     //Coluna Supervisores
     $tpl->LISTA_COLUNA2_ALINHAMENTO = "right";

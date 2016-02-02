@@ -13,7 +13,7 @@ include "controle/conexao.php";
 //include "controle/conexao_tipo.php";
 //Variaveis globais
 $icones = "../imagens/icones/geral/";
-$icones2 = "../imagens/icones/pessoas2/";
+$icones2 = "../imagens/icones/pessoas/";
 $usuario_paginacao = 15;
 
 // Verifica se existe os dados da sessão de login
@@ -152,6 +152,10 @@ if (!isset($_SESSION["usuario_cpf"])
     $permissao_quiosque_vervendedores = $dados["gruper_quiosque_vervendedores"];
     $permissao_quiosque_vercaixas = $dados["gruper_quiosque_vercaixas"];
     $permissao_quiosque_vertaxas = $dados["gruper_quiosque_vertaxas"];
+    $permissao_quiosque_gestor_ver = $dados["gruper_quiosques_gestores_ver"];
+    $permissao_quiosque_gestor_cadastrar = $dados["gruper_quiosques_gestores_cadastrar"];
+    $permissao_quiosque_gestor_editar = $dados["gruper_quiosques_gestores_editar"];
+    $permissao_quiosque_gestor_excluir = $dados["gruper_quiosques_gestores_excluir"];
     $permissao_caixas_ver = $dados["gruper_caixas_ver"];
     $permissao_caixas_cadastrar = $dados["gruper_caixas_cadastrar"];
     $permissao_caixas_editar = $dados["gruper_caixas_editar"];
