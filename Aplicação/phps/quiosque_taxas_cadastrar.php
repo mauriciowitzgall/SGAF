@@ -45,6 +45,7 @@ if ($linhas == 0) {
 $taxa = $_GET['taxa'];
 $quiosque = $_GET['qui'];
 $operacao = $_GET['ope'];
+$tipo = $_GET['tipo'];
 
 //Pega os tipos de negociação do quiosque
 $obj = new banco();
@@ -59,7 +60,6 @@ while ($dados11 = mysql_fetch_array($query11)) {
     IF ($tipon == 2)
         $quiosque2_revenda = 1;
 }
-
 
 $sql = "SELECT qui_cooperativa,qui_nome FROM quiosques WHERE qui_codigo=$quiosque";
 $query = mysql_query($sql);
@@ -109,27 +109,14 @@ $tpl1->SELECT_ID = "tiponegociacao";
 $tpl1->SELECT_TAMANHO = "";
 $tpl1->SELECT_ESTILO = "width:150px;";
 $tpl1->block("BLOCK_SELECT_ESTILO");
-$tpl1->SELECT_ONCHANGE = "quiosque_taxas_popula_taxa(this.value);";
+$tpl1->SELECT_ONCHANGE = "";
 $tpl1->block("BLOCK_SELECT_ONCHANGE");
 $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
-$tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
-if ($operacao!=1)
-    $tpl1->block("BLOCK_SELECT_DESABILITADO");
-if (($quiosque2_consignacao == 1) && ($quiosque2_revenda == 1))
-    $filtro_tipos.="1,2";
-if (($quiosque2_consignacao == 1) && ($quiosque2_revenda == 0))
-    $filtro_tipos.="1";
-if (($quiosque2_consignacao == 0) && ($quiosque2_revenda == 1))
-    $filtro_tipos.="2";
-if ($usuario_grupo == 3)
-    $sql_filtro.= " AND tax_quiosque=$usuario_quiosque";
+//$tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
 $sql = "
 SELECT DISTINCT tipneg_codigo,tipneg_nome
 FROM tipo_negociacao
-JOIN taxas on (tax_tiponegociacao=tipneg_codigo)
-WHERE tax_cooperativa=$usuario_cooperativa
-AND tax_tiponegociacao IN ($filtro_tipos)
-$sql_filtro
+WHERE tipneg_codigo=$tipo
 ORDER BY tipneg_nome";
 $query = mysql_query($sql);
 if (!$query)
@@ -137,9 +124,7 @@ if (!$query)
 while ($dados = mysql_fetch_assoc($query)) {
     $tpl1->OPTION_VALOR = $dados["tipneg_codigo"];
     $tpl1->OPTION_NOME = $dados["tipneg_nome"];
-    if ($tiponegociacao == $dados["tipneg_codigo"]) {
-        $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-    }
+    $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
     $tpl1->block("BLOCK_SELECT_OPTION");
 }
 $tpl1->block("BLOCK_SELECT");
@@ -156,29 +141,24 @@ $tpl1->SELECT_TAMANHO = "";
 $tpl1->SELECT_ESTILO = "width:150px;";
 $tpl1->block("BLOCK_SELECT_ESTILO");
 $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
-//$tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
-if ($operacao!=1)
-    $tpl1->block("BLOCK_SELECT_DESABILITADO");
-if ($operacao == 2) {
-    $sql = "
-    SELECT DISTINCT tax_codigo,tax_nome
-    FROM taxas
-    WHERE tax_cooperativa=$usuario_cooperativa
-    AND tax_quiosque IN (0,$quiosque)    
-    AND tax_tiponegociacao=$tiponegociacao
-    ORDER BY tax_nome";
-    $query = mysql_query($sql);
-    if (!$query)
-        die("Erro: 5" . mysql_error());
-    while ($dados = mysql_fetch_assoc($query)) {
-        $tpl1->OPTION_VALOR = $dados["tax_codigo"];
-        $tpl1->OPTION_NOME = $dados["tax_nome"];
-        if ($taxa == $dados["tax_codigo"]) {
-            $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-        }
-        $tpl1->block("BLOCK_SELECT_OPTION");
-    }
+$tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
+$sql = "
+    SELECT *      
+    FROM taxas 
+    WHERE tax_tiponegociacao=$tipo
+    AND tax_cooperativa=$usuario_cooperativa
+    AND (tax_quiosque = 0  OR tax_quiosque=$quiosque)
+    AND tax_codigo not in (SELECT quitax_taxa FROM quiosques_taxas WHERE quitax_taxa=tax_codigo AND quitax_quiosque=$quiosque)    
+    ORDER BY tax_nome
+";
+$query = mysql_query($sql);
+if (!$query)    die("Erro: 5" . mysql_error());
+while ($dados = mysql_fetch_assoc($query)) {
+    $tpl1->OPTION_VALOR = $dados["tax_codigo"];
+    $tpl1->OPTION_NOME = $dados["tax_nome"];
+    $tpl1->block("BLOCK_SELECT_OPTION");
 }
+
 $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
@@ -228,10 +208,6 @@ $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
 $tpl1->CAMPOOCULTO_VALOR = $taxavalor;
 $tpl1->CAMPOOCULTO_NOME = "percent";
-$tpl1->block("BLOCK_CAMPOSOCULTOS");
-
-$tpl1->CAMPOOCULTO_VALOR = $taxa;
-$tpl1->CAMPOOCULTO_NOME = "taxa";
 $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
 $tpl1->CAMPOOCULTO_VALOR = $operacao;

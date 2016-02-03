@@ -69,30 +69,6 @@ $tpl->block("BLOCK_LINHA");
 $tpl->show();
 echo "<br>";
 
-//Botão Cadastrar
-$tpl4 = new Template("templates/botoes1.html");
-$tpl4->COLUNA_TAMANHO = "1000px";
-$tpl4->COLUNA_ALINHAMENTO = "right";
-$tpl4->BOTAO_TIPO = "BUTTON";
-$tpl4->BOTAO_VALOR = "INCLUIR TAXA";
-$tpl4->BOTAOPADRAO_CLASSE = "botaopadraocadastrar";
-if (($usuario_grupo == 1) || ($usuario_grupo == 2) || ($usuario_grupo == 3)) {
-    $tpl4->COLUNA_LINK_ARQUIVO = "quiosque_taxas_cadastrar.php?ope=1&qui=$quiosque";
-    $tpl4->COLUNA_LINK_TARGET = "";
-    $tpl4->block("BLOCK_COLUNA_LINK");
-} else {
-    $tpl4->block("BLOCK_BOTAO_DESABILITADO");
-}
-
-$tpl4->block("BLOCK_BOTAO_PADRAO");
-$tpl4->block("BLOCK_BOTAOPADRAO_AUTOFOCO");
-$tpl4->block("BLOCK_BOTAO");
-$tpl4->block("BLOCK_COLUNA");
-$tpl4->block("BLOCK_LINHA");
-$tpl4->block("BLOCK_BOTOES");
-$tpl4->block("BLOCK_LINHAHORIZONTAL_EMBAIXO");
-$tpl4->show();
-
 //Pega os tipos de negociação do quiosque
 $sql11 = "SELECT quitipneg_tipo FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$quiosque";
 $query11 = mysql_query($sql11);
@@ -134,6 +110,30 @@ if ($quiosque2_consignacao == 1) {
     $tpl->show();
 
 
+    //Botão Cadastrar
+    $tpl4 = new Template("templates/botoes1.html");
+    $tpl4->COLUNA_TAMANHO = "1000px";
+    $tpl4->COLUNA_ALINHAMENTO = "right";
+    $tpl4->BOTAO_TIPO = "BUTTON";
+    $tpl4->BOTAO_VALOR = "INCLUIR TAXA CONSIGNAÇÃO";
+    $tpl4->BOTAOPADRAO_CLASSE = "botaopadraocadastrar";
+    if (($permissao_taxas_aplicar==1)&&($quiosque==$usuario_quiosque)) {
+        $tpl4->COLUNA_LINK_ARQUIVO = "quiosque_taxas_cadastrar.php?ope=1&qui=$quiosque&tipo=1";
+        $tpl4->COLUNA_LINK_TARGET = "";
+        $tpl4->block("BLOCK_COLUNA_LINK");
+    } else {
+        $tpl4->block("BLOCK_BOTAO_DESABILITADO");
+    }
+    $tpl4->block("BLOCK_BOTAO_PADRAO");
+    $tpl4->block("BLOCK_BOTAOPADRAO_AUTOFOCO");
+    $tpl4->block("BLOCK_BOTAO");
+    $tpl4->block("BLOCK_COLUNA");
+    $tpl4->block("BLOCK_LINHA");
+    $tpl4->block("BLOCK_BOTOES");
+    $tpl4->block("BLOCK_LINHAHORIZONTAL_EMBAIXO");
+    $tpl4->show();    
+    
+
 //Lista Consinação
     $tpl2 = new Template("templates/lista2.html");
     $tpl2->block("BLOCK_TABELA_CHEIA");
@@ -150,7 +150,7 @@ if ($quiosque2_consignacao == 1) {
     $tpl2->CABECALHO_COLUNA_TAMANHO = "";
     $tpl2->CABECALHO_COLUNA_NOME = "% DESCONTADO";
     $tpl2->block("BLOCK_CABECALHO_COLUNA");
-    $tpl2->CABECALHO_COLUNA_COLSPAN = "2";
+    $tpl2->CABECALHO_COLUNA_COLSPAN = "";
     $tpl2->CABECALHO_COLUNA_TAMANHO = "";
     $tpl2->CABECALHO_COLUNA_NOME = "OPERAÇÕES";
     $tpl2->block("BLOCK_CABECALHO_COLUNA");
@@ -237,32 +237,12 @@ if ($quiosque2_consignacao == 1) {
 
             //Operações
             $tpl2->ICONES_CAMINHO = $icones;
-            //Operação Editar
-            $tpl2->COLUNA_TAMANHO = "35px";
-            $tpl2->COLUNA_ALINHAMENTO = "center";
-            $tpl2->ICONES_CAMINHO = $icones;
-            if ((($taxa_quiosque == 0) && (($usuario_grupo == 1) || ($usuario_grupo == 2))) || ($taxa_quiosque != 0)) {
-                $tpl2->block("BLOCK_OPERACAO_EDITAR_HABILITADO");
-                $tpl2->CONTEUDO_LINK_ARQUIVO = "quiosque_taxas_cadastrar.php?qui=$quiosque&taxa=$taxa_codigo&ope=2";
-                $tpl2->block("BLOCK_CONTEUDO_LINK");
-                $tpl2->block("BLOCK_OPERACAO_EDITAR_TITULOPADRAO");
-            } else {
-                //$tpl2->CONTEUDO_LINK_ARQUIVO = "";
-                //$tpl2->block("BLOCK_CONTEUDO_LINK");     
-                $tpl2->ICONES_TITULO = "Somente um presidente ou administrador pode editar essa taxa!";
-                $tpl2->block("BLOCK_OPERACAO_EDITAR_DESABILITADO");
-                $tpl2->block("BLOCK_OPERACAO_EDITAR_TITULO");
-            }
-            $tpl2->block("BLOCK_OPERACAO_EDITAR");
-            $tpl2->block("BLOCK_OPERACAO");
-            $tpl2->block("BLOCK_CONTEUDO");
-            $tpl2->block("BLOCK_COLUNA_OPERACAO");
-            $tpl2->block("BLOCK_COLUNA");
+
             //Operação Excluir  
             $tpl2->COLUNA_TAMANHO = "35px";
             $tpl2->COLUNA_ALINHAMENTO = "center";
             $tpl2->ICONES_CAMINHO = $icones;
-            if ((($taxa_quiosque == 0) && (($usuario_grupo == 1) || ($usuario_grupo == 2))) || ($taxa_quiosque != 0)) {
+            if ($permissao_taxas_aplicar==1) {
                 $tpl2->block("BLOCK_OPERACAO_EXCLUIR_HABILITADO");
                 $tpl2->CONTEUDO_LINK_ARQUIVO = "quiosque_taxas_deletar.php?qui=$quiosque&taxa=$taxa_codigo";
                 $tpl2->block("BLOCK_CONTEUDO_LINK");
@@ -270,7 +250,7 @@ if ($quiosque2_consignacao == 1) {
             } else {
                 //$tpl2->CONTEUDO_LINK_ARQUIVO = "";
                 //$tpl2->block("BLOCK_CONTEUDO_LINK");     
-                $tpl2->ICONES_TITULO = "Somente um presidente ou administrador pode excluir essa taxa!";
+                $tpl2->ICONES_TITULO = "Somente um gestor ou administrador pode excluir essa taxa!";
                 $tpl2->block("BLOCK_OPERACAO_EXCLUIR_DESABILITADO");
                 $tpl2->block("BLOCK_OPERACAO_EXCLUIR_TITULO");
             }
@@ -288,7 +268,7 @@ if ($quiosque2_consignacao == 1) {
     }
 
     $tpl2->block("BLOCK_CORPO");
-//Rodapé
+    //Rodapé
     $tpl2->RODAPE_COLUNA_ALINHAMENTO = "";
     $tpl2->RODAPE_COLUNA_COLSPAN = "";
     $tpl2->RODAPE_COLUNA_TAMANHO = "";
@@ -304,7 +284,7 @@ if ($quiosque2_consignacao == 1) {
     $tpl2->RODAPE_COLUNA_TAMANHO = "";
     $tpl2->RODAPE_COLUNA_NOME = "";
     $tpl2->block("BLOCK_RODAPE_COLUNA");
-//Tipo de taxa
+    //Tipo de taxa
     $tpl2->RODAPE_COLUNA_TAMANHO = "50px";
     $tpl2->RODAPE_COLUNA_ALINHAMENTO = "center";
     $tpl2->ICONE_RODAPE_TAMANHO = "18px";
@@ -340,7 +320,7 @@ if ($quiosque2_consignacao == 1) {
 if ($quiosque2_revenda == 1) {
 
 
-//Título REVENDAS
+    //Título REVENDAS
     $tpl = new Template("templates/tituloemlinha_2.html");
     $tpl->block("BLOCK_TITULO");
     $tpl->LISTA_TITULO = "REVENDAS";
@@ -348,7 +328,7 @@ if ($quiosque2_revenda == 1) {
     $tpl->show();
 
 
-//Texto descritivo Dados
+    //Texto descritivo Dados
     $tpl = new Template("templates/cadastro1.html");
     $tpl->FORM_NOME = "form1";
     $tpl->COLUNA_COLSPAN = "2";
@@ -362,8 +342,31 @@ if ($quiosque2_revenda == 1) {
     $tpl->block("BLOCK_LINHA");
     $tpl->show();
 
+    
+    //Botão Cadastrar
+    $tpl4 = new Template("templates/botoes1.html");
+    $tpl4->COLUNA_TAMANHO = "1000px";
+    $tpl4->COLUNA_ALINHAMENTO = "right";
+    $tpl4->BOTAO_TIPO = "BUTTON";
+    $tpl4->BOTAO_VALOR = "INCLUIR TAXA REVENDA";
+    $tpl4->BOTAOPADRAO_CLASSE = "botaopadraocadastrar";
+    if ($permissao_taxas_aplicar==1) {
+        $tpl4->COLUNA_LINK_ARQUIVO = "quiosque_taxas_cadastrar.php?ope=1&qui=$quiosque&tipo=2";
+        $tpl4->COLUNA_LINK_TARGET = "";
+        $tpl4->block("BLOCK_COLUNA_LINK");
+    } else {
+        $tpl4->block("BLOCK_BOTAO_DESABILITADO");
+    }
+    $tpl4->block("BLOCK_BOTAO_PADRAO");
+    $tpl4->block("BLOCK_BOTAOPADRAO_AUTOFOCO");
+    $tpl4->block("BLOCK_BOTAO");
+    $tpl4->block("BLOCK_COLUNA");
+    $tpl4->block("BLOCK_LINHA");
+    $tpl4->block("BLOCK_BOTOES");
+    $tpl4->block("BLOCK_LINHAHORIZONTAL_EMBAIXO");
+    $tpl4->show();    
 
-//Lista Revendas
+    //Lista Revendas
     $tpl2 = new Template("templates/lista2.html");
     $tpl2->block("BLOCK_TABELA_CHEIA");
 
@@ -379,7 +382,7 @@ if ($quiosque2_revenda == 1) {
     $tpl2->CABECALHO_COLUNA_TAMANHO = "";
     $tpl2->CABECALHO_COLUNA_NOME = "% DESCONTADO";
     $tpl2->block("BLOCK_CABECALHO_COLUNA");
-    $tpl2->CABECALHO_COLUNA_COLSPAN = "2";
+    $tpl2->CABECALHO_COLUNA_COLSPAN = "";
     $tpl2->CABECALHO_COLUNA_TAMANHO = "";
     $tpl2->CABECALHO_COLUNA_NOME = "OPERAÇÕES";
     $tpl2->block("BLOCK_CABECALHO_COLUNA");
@@ -466,32 +469,12 @@ if ($quiosque2_revenda == 1) {
 
             //Operações
             $tpl2->ICONES_CAMINHO = $icones;
-            //Operação Editar
-            $tpl2->COLUNA_TAMANHO = "35px";
-            $tpl2->COLUNA_ALINHAMENTO = "center";
-            $tpl2->ICONES_CAMINHO = $icones;
-            if ((($taxa_quiosque == 0) && (($usuario_grupo == 1) || ($usuario_grupo == 2))) || ($taxa_quiosque != 0)) {
-                $tpl2->block("BLOCK_OPERACAO_EDITAR_HABILITADO");
-                $tpl2->CONTEUDO_LINK_ARQUIVO = "quiosque_taxas_cadastrar.php?qui=$quiosque&taxa=$taxa_codigo&ope=2";
-                $tpl2->block("BLOCK_CONTEUDO_LINK");
-                $tpl2->block("BLOCK_OPERACAO_EDITAR_TITULOPADRAO");
-            } else {
-                //$tpl2->CONTEUDO_LINK_ARQUIVO = "";
-                //$tpl2->block("BLOCK_CONTEUDO_LINK");     
-                $tpl2->ICONES_TITULO = "Somente um presidente ou administrador pode editar essa taxa!";
-                $tpl2->block("BLOCK_OPERACAO_EDITAR_DESABILITADO");
-                $tpl2->block("BLOCK_OPERACAO_EDITAR_TITULO");
-            }
-            $tpl2->block("BLOCK_OPERACAO_EDITAR");
-            $tpl2->block("BLOCK_OPERACAO");
-            $tpl2->block("BLOCK_CONTEUDO");
-            $tpl2->block("BLOCK_COLUNA_OPERACAO");
-            $tpl2->block("BLOCK_COLUNA");
+            
             //Operação Excluir  
             $tpl2->COLUNA_TAMANHO = "35px";
             $tpl2->COLUNA_ALINHAMENTO = "center";
             $tpl2->ICONES_CAMINHO = $icones;
-            if ((($taxa_quiosque == 0) && (($usuario_grupo == 1) || ($usuario_grupo == 2))) || ($taxa_quiosque != 0)) {
+            if ($permissao_taxas_aplicar==1) {
                 $tpl2->block("BLOCK_OPERACAO_EXCLUIR_HABILITADO");
                 $tpl2->CONTEUDO_LINK_ARQUIVO = "quiosque_taxas_deletar.php?qui=$quiosque&taxa=$taxa_codigo";
                 $tpl2->block("BLOCK_CONTEUDO_LINK");
@@ -499,7 +482,7 @@ if ($quiosque2_revenda == 1) {
             } else {
                 //$tpl2->CONTEUDO_LINK_ARQUIVO = "";
                 //$tpl2->block("BLOCK_CONTEUDO_LINK");     
-                $tpl2->ICONES_TITULO = "Somente um presidente ou administrador pode excluir essa taxa!";
+                $tpl2->ICONES_TITULO = "Somente um gestor ou administrador pode excluir essa taxa!";
                 $tpl2->block("BLOCK_OPERACAO_EXCLUIR_DESABILITADO");
                 $tpl2->block("BLOCK_OPERACAO_EXCLUIR_TITULO");
             }

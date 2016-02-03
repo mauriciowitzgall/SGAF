@@ -288,11 +288,11 @@ while ($dados = mysql_fetch_assoc($query)) {
                 die("Erro SQL" . mysql_error());
             $linhas3 = mysql_num_rows($query3);
             if ($linhas3 > 0)
-                $tpl2->ICONE_NOMEARQUIVO = "presidente.png";
+                $tpl2->ICONE_NOMEARQUIVO = "gestor.png";
             else
-                $tpl2->ICONE_NOMEARQUIVO = "presidente2.png";
-            $tpl2->ICONE_DICA = "Presidente";
-            $tpl2->ICONE_NOMEALTERNATIVO = "Presidente";
+                $tpl2->ICONE_NOMEARQUIVO = "gestor2.png";
+            $tpl2->ICONE_DICA = "Gestor";
+            $tpl2->ICONE_NOMEALTERNATIVO = "Gestor";
         } else if ($tipo == 3) {
             $sql3 = "
                 SELECT *

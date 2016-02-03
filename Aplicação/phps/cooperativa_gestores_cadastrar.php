@@ -2,7 +2,7 @@
 
 //Verifica se o usuário tem permissão para acessar este conteúdo
 require "login_verifica.php";
-if ($permissao_quiosque_definirsupervisores <> 1) {
+if ($permissao_cooperativa_gestores_gerir <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
@@ -13,52 +13,30 @@ include "includes.php";
 
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
-$tpl_titulo->TITULO = "SUPERVISORES";
-$tpl_titulo->SUBTITULO = "CADASTRO DE SUPERVISORES DO QUIOSQUE";
+$tpl_titulo->TITULO = "GESTORES";
+$tpl_titulo->SUBTITULO = "LISTA DE GESTORES DA COOPERATIVA";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "quiosque_supervisores.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "cooperativa_gestores.png";
 $tpl_titulo->show();
 
-//Pega todos os dados da tabela (Necessário caso seja uma edição)
-$supervisor = $_GET['codigo'];
-$quiosque = $_GET['quiosque'];
+$gestor = $_GET['codigo'];
 $operacao = $_GET['operacao'];
-
-$sql = "SELECT qui_cooperativa,qui_nome FROM quiosques WHERE qui_codigo=$quiosque";
-$query = mysql_query($sql);
-if (!$query)
-    die("Erro1: " . mysql_error());
-$array = mysql_fetch_assoc($query); 
-$coo=$array["qui_cooperativa"];
-$quiosque_nome=$array["qui_nome"];
-
-//Se for cadastro então a data da função deverá apresentar a data atual 
-if ($operacao=="cadastrar") {
-    $datafuncao=date("Y-m-d");
-}
-else if ($operacao=="editar") {
-    $sql = "SELECT * FROM quiosques_supervisores WHERE quisup_supervisor='$supervisor' and quisup_quiosque=$quiosque";
-    $query = mysql_query($sql);
-    if (!$query)
-        die("Erro2:" . mysql_error());
-    $array = mysql_fetch_assoc($query); 
-    $datafuncao=  $array['quisup_datafuncao'];
-}
+$cooperativa=$usuario_cooperativa;
     
 //Estrutura dos campos de cadastro
 $tpl1 = new Template("templates/cadastro_edicao_detalhes_2.html");
-$tpl1->LINK_DESTINO = "supervisores_cadastrar2.php";
+$tpl1->LINK_DESTINO = "cooperativa_gestores_cadastrar2.php";
 
-//Quiosque
-$tpl1->TITULO = "Quiosque";
+//Cooperativa
+$tpl1->TITULO = "Cooperativa";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
 $tpl1->CAMPO_QTD_CARACTERES = "";
-$tpl1->CAMPO_NOME = "quiosque";
+$tpl1->CAMPO_NOME = "cooperativa";
 $tpl1->CAMPO_DICA = "";
 $tpl1->CAMPO_ID = "";
 $tpl1->CAMPO_TAMANHO = "";
-$tpl1->CAMPO_VALOR = "$quiosque_nome";
+$tpl1->CAMPO_VALOR = "$usuario_cooperativaabreviacao";
 $tpl1->CAMPO_QTD_CARACTERES = "";
 $tpl1->block("BLOCK_CAMPO_NORMAL");
 $tpl1->block("BLOCK_CAMPO_DESABILITADO");
@@ -67,17 +45,17 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
-//supervisor
-$tpl1->TITULO = "Supervisor";
+//Gestor
+$tpl1->TITULO = "Gestor";
 $tpl1->block("BLOCK_TITULO");
-$tpl1->SELECT_NOME = "supervisor";
+$tpl1->SELECT_NOME = "gestor";
 $tpl1->CAMPO_DICA = "";
-$tpl1->SELECT_ID = "supervisor";
+$tpl1->SELECT_ID = "gestor";
 $tpl1->SELECT_TAMANHO = "";
 $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
 $tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
 if ($operacao=="editar") {
-    $sql_filtro = " OR pes_codigo = $supervisor ";
+    $sql_filtro = " OR pes_codigo = $gestor ";
 }
 $sql = "
 SELECT DISTINCT
@@ -86,9 +64,9 @@ FROM
     pessoas
     join mestre_pessoas_tipo on (mespestip_pessoa=pes_codigo)
 WHERE
-    mespestip_tipo=3 and
-    pes_cooperativa=$coo
-    and pes_codigo not in (SELECT quisup_supervisor FROM quiosques_supervisores WHERE quisup_quiosque=$quiosque) 
+    mespestip_tipo=2
+    and pes_cooperativa=$cooperativa
+    and pes_codigo not in (SELECT cooges_gestor FROM cooperativa_gestores WHERE cooges_cooperativa=$cooperativa) 
     $sql_filtro
 ORDER BY
     pes_nome";
@@ -98,7 +76,7 @@ if (!$query)
 while ($dados = mysql_fetch_assoc($query)) {
     $tpl1->OPTION_VALOR = $dados["pes_codigo"];
     $tpl1->OPTION_NOME = $dados["pes_nome"];
-    if ($supervisor == $dados["pes_codigo"]) {
+    if ($gestor == $dados["pes_codigo"]) {
         $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
     }
     $tpl1->block("BLOCK_SELECT_OPTION");
@@ -107,39 +85,18 @@ $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
-//Data função
-$tpl1->TITULO = "Data Função";
-$tpl1->block("BLOCK_TITULO");
-$tpl1->CAMPO_TIPO = "date";
-$tpl1->CAMPO_QTD_CARACTERES = "";
-$tpl1->CAMPO_NOME = "datafuncao";
-$tpl1->CAMPO_DICA = "";
-$tpl1->CAMPO_ID = "";
-$tpl1->CAMPO_TAMANHO = "8";
-$tpl1->CAMPO_VALOR = $datafuncao;
-$tpl1->CAMPO_QTD_CARACTERES = 70;
-$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
-$tpl1->block("BLOCK_CAMPO_NORMAL");
-$tpl1->block("BLOCK_CAMPO");
-$tpl1->block("BLOCK_CONTEUDO");
-$tpl1->block("BLOCK_ITEM");
-
-$tpl1->CAMPOOCULTO_VALOR=$quiosque;
-$tpl1->CAMPOOCULTO_NOME="quiosque";
-$tpl1->block("BLOCK_CAMPOSOCULTOS");
-
 $tpl1->CAMPOOCULTO_VALOR=$operacao;
 $tpl1->CAMPOOCULTO_NOME="operacao";
 $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
 //BOTOES
 if (($operacao == "editar") || ($operacao == "cadastrar")) {
-    //Bot�o Salvar
+    //Botão Salvar
     $tpl1->block("BLOCK_BOTAO_SALVAR");
 
     //Botão Cancelar
     if ($codigo != $usuario_codigo) {
-        $tpl1->BOTAO_LINK = "supervisores.php?quiosque=$quiosque";
+        $tpl1->BOTAO_LINK = "cooperativa_gestores.php";
         $tpl1->block("BLOCK_BOTAO_CANCELAR");
     }
     

@@ -20,9 +20,6 @@ $tpl_titulo->show();
 $codigo = $_POST["codigo"];
 $nome = $_POST["nome"];
 $abreviacao = $_POST["abreviacao"];
-$presidente = $_POST["presidente"];
-if ($presidente=='')
-    $presidente = 'NULL';
 $erro = 0;
 
 
@@ -62,9 +59,9 @@ if ($erro == 0) {
         //Inserir registro
         $sql = "
         INSERT INTO
-            cooperativas (coo_nomecompleto,coo_abreviacao,coo_presidente)
+            cooperativas (coo_nomecompleto,coo_abreviacao)
         VALUES 
-            ('$nome','$abreviacao',$presidente );
+            ('$nome','$abreviacao');
         ";
         if (!mysql_query($sql))
             die("Erro: " . mysql_error());
@@ -75,43 +72,13 @@ if ($erro == 0) {
         $tpl_notificacao->show();
     } else { //Caso a operação seja EDIÇÃO
         
-        //Limpa o grupo de permissões do usuário da pessoa que era o antigo presidente
-        $sql1="SELECT coo_presidente FROM cooperativas WHERE coo_codigo=$codigo";
-        if (!mysql_query($sql1))
-            die("Erro: " . mysql_error());
-        $dados1=  mysql_fetch_assoc($query);
-        $presidenteantigo=$dados1['coo_presidente'];
-        $sql = "
-        UPDATE
-            pessoas
-        SET
-            pes_grupopermissoes=''           
-        WHERE
-            pes_codigo = '$presidenteantigo'
-        ";
-        if (!mysql_query($sql))
-            die("Erro: " . mysql_error());
-
-        //Limpa o grupo de permissões do usuário da pessoa que era o antigo presidente
-        $sql = "
-        UPDATE
-            pessoas
-        SET
-            pes_grupopermissoes=''           
-        WHERE
-            pes_codigo = '$presidente'
-        ";
-        if (!mysql_query($sql))
-            die("Erro: " . mysql_error());          
-        
-        //Atualiza os dados da cooperativa, setando o novo presidente
+        //Atualiza os dados da cooperativa
         $sql = "
         UPDATE
             cooperativas
         SET
             coo_nomecompleto='$nome',
-            coo_abreviacao='$abreviacao',
-            coo_presidente='$presidente'
+            coo_abreviacao='$abreviacao'
         WHERE
             coo_codigo = '$codigo'
         ";
@@ -120,7 +87,6 @@ if ($erro == 0) {
         $tpl_notificacao->MOTIVO_COMPLEMENTO = "";
         $tpl_notificacao->block("BLOCK_ATENCAO");
         $tpl_notificacao->block("BLOCK_EDITADO");
-        $tpl_notificacao->MOTIVO_COMPLEMENTO = "É extremamente necessário revisar o grupo de permissões do novo e do antigo presidente! Para sua segurança o sistema desativou o grupo de permissoes destas pessoas!";
         $tpl_notificacao->block("BLOCK_BOTAO");
         $tpl_notificacao->show();
     }

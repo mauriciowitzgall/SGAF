@@ -175,6 +175,16 @@ if ($usuario_grupo<>4) {
                 $tpl_menu->block("BLOCK_MENU_ITEM");
             }
 
+            //Taxas
+            if ($permissao_cooperativa_gestores_ver == 1) {
+                $tpl_menu->IMAGEM_TITULO = "Gestores";
+                $tpl_menu->TITULO = "Gestores";
+                $tpl_menu->IMAGEM_ARQUIVO = "cooperativa_gestores.png";
+                $tpl_menu->LINK = "cooperativa_gestores.php";
+                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                $tpl_menu->block("BLOCK_MENU_ITEM");
+            }
+
         }
 
 

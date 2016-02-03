@@ -46,7 +46,7 @@ if (($usuario_grupo != 7) && ($usuario_grupo != 1) && ($usuario_grupo != 2)) {
             $tpl = new Template("templates/notificacao.html");
             $tpl->ICONES = $icones;
             $tpl->MOTIVO_COMPLEMENTO = "Houveram alterações no perfil de seu usuario!<br>
-            Isto normalmente acontece quando algum superior seu te adiciona ou remove dos seguinte cargos: presidente, supervisor, caixa ou fornecedor.<br>
+            Isto normalmente acontece quando algum superior seu te adiciona ou remove dos seguinte cargos: gestor, supervisor, caixa ou fornecedor.<br>
             Ou então quam um quiosque que você está vinculado foi excluído<br>
             Clique em continuar para alterar seu grupo de permissões e quiosque!<br>
             Se mesmo assim não obter sucesso, favor contatar seu adminsitrador!";

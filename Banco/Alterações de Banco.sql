@@ -231,6 +231,38 @@ UPDATE `sgaf`.`grupo_permissoes` SET `gruper_quiosques_gestores_ver`='1', `grupe
 UPDATE `sgaf`.`grupo_permissoes` SET `gruper_quiosques_gestores_ver`='1', `gruper_quiosques_gestores_cadastrar`='1', `gruper_quiosques_gestores_editar`='1', `gruper_quiosques_gestores_excluir`='1' WHERE `gruper_codigo`='2';
 UPDATE `sgaf`.`grupo_permissoes` SET `gruper_quiosques_gestores_ver`='1' WHERE `gruper_codigo`='3';
 
+ALTER TABLE `sgaf`.`grupo_permissoes` 
+DROP COLUMN `gruper_quiosques_gestores_excluir`,
+DROP COLUMN `gruper_quiosques_gestores_editar`,
+CHANGE COLUMN `gruper_quiosques_gestores_ver` `gruper_cooperativa_gestores_ver` TINYINT(1) NOT NULL ,
+CHANGE COLUMN `gruper_quiosques_gestores_cadastrar` `gruper_cooperativa_gestores_gerir` TINYINT(1) NOT NULL ;
+
+ALTER TABLE `sgaf`.`quiosques_gestores` 
+CHANGE COLUMN `quiges_quiosque` `cooges_quiosque` INT(11) NOT NULL ,
+CHANGE COLUMN `quiges_gestor` `cooges_gestor` INT(11) NOT NULL ,
+DROP INDEX `quiges_quiosque` ,
+ADD INDEX `cooges_quiosque` (`cooges_quiosque` ASC),
+DROP INDEX `quiges_gestor` ,
+ADD INDEX `cooges_gestor` (`cooges_gestor` ASC), RENAME TO  `sgaf`.`cooperativa_gestores` ;
+
+ALTER TABLE `sgaf`.`cooperativa_gestores` 
+CHANGE COLUMN `cooges_quiosque` `cooges_cooperativa` INT(11) NOT NULL ;
+
+ALTER TABLE `sgaf`.`grupo_permissoes` 
+CHANGE COLUMN `gruper_pessoas_cadastrar_presidentes` `gruper_pessoas_cadastrar_gestores` TINYINT(1) NOT NULL ,
+CHANGE COLUMN `gruper_pessoas_ver_presidentes` `gruper_pessoas_ver_gestores` TINYINT(1) NOT NULL ,
+CHANGE COLUMN `gruper_pessoas_definir_grupo_presidentes` `gruper_pessoas_definir_grupo_gestores` TINYINT(1) NOT NULL ;
+
+UPDATE `sgaf`.`grupo_permissoes` SET `gruper_pessoas_cadastrar_gestores`='1', `gruper_pessoas_definir_grupo_gestores`='1' WHERE `gruper_codigo`='2';
+
+UPDATE `sgaf`.`grupo_permissoes` SET `gruper_nome`='Gestor', `gruper_pessoas_ver_gestores`='1' WHERE `gruper_codigo`='2';
+
+UPDATE `sgaf`.`grupo_permissoes` SET `gruper_taxas_aplicar`='0' WHERE `gruper_codigo`='2';
+
+
+
+
+
 
 # Versão 3.1.1
 

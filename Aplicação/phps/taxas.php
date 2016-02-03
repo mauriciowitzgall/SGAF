@@ -71,8 +71,8 @@ $tpl_filtro->SELECT_TAMANHO = "";
 $tpl_filtro->block("BLOCK_SELECT_FILTRO");
 //$tpl_filtro->block("BLOCK_OPTION_PADRAO_SELECIONADO");
 $tpl_filtro->block("BLOCK_OPTION_PADRAO");
-$tpl_filtro->OPTION_VALOR = "Glupo";
-$tpl_filtro->OPTION_TEXTO = "Glupo";
+$tpl_filtro->OPTION_VALOR = "Grupo";
+$tpl_filtro->OPTION_TEXTO = "Grupo";
 if ($filtro_quiosque=='Grupo')
     $tpl_filtro->block("BLOCK_OPTION_SELECIONADO"); 
 $tpl_filtro->block("BLOCK_OPTION");
@@ -187,23 +187,19 @@ if (($filtro_quiosque <> "") && ($filtro_quiosque <>'Global'))
 if ($filtro_quiosque == 'Global') 
     $sql_filtro = $sql_filtro." and tax_quiosque = 0";
 
-
+if (($usuario_quiosque!=0)) { //Gestores e Administradores veem tudo, os supervisores veem apenas as globais+taxas do seu quiosque
+    $sql_filtro_quiosque.= " and (tax_quiosque=0 OR tax_quiosque=$usuario_quiosque) ";
+}
 $sql = "
 SELECT 
-    tax_codigo,
-    tax_nome,
-    tax_descricao,
-    tax_quiosque,
-    tax_cooperativa,
-    tax_tiponegociacao,
-    tipneg_nome,
-    qui_nome
+    *
 FROM 
     taxas 
     join tipo_negociacao on (tax_tiponegociacao=tipneg_codigo)
     left join quiosques on (tax_quiosque = qui_codigo)
 WHERE 
     tax_cooperativa=$usuario_cooperativa
+    $sql_filtro_quiosque
     $sql_filtro 
 ORDER BY 
     qui_nome,tax_tiponegociacao,tax_nome
@@ -340,7 +336,7 @@ while ($dados = mysql_fetch_assoc($query)) {
         $tpl2->block("BLOCK_OPERACAO_EDITAR_TITULOPADRAO");
     } else {
         $tpl2->block("BLOCK_OPERACAO_EDITAR_DESABILITADO");
-        $tpl2->ICONES_TITULO = "Apenas os supervisores podem excluir taxas específicas, e presidentes ou administradores porem excluir/editar taxas globais (da cooperativa)";
+        $tpl2->ICONES_TITULO = "Apenas os supervisores podem excluir taxas específicas, e gestores ou administradores porem excluir/editar taxas globais (da cooperativa)";
         $tpl2->block("BLOCK_OPERACAO_EDITAR_TITULO");
     }
     $tpl2->block("BLOCK_OPERACAO_EDITAR");
@@ -362,7 +358,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     } else {
         $tpl2->CONTEUDO_LINK_ARQUIVO = "";
         $tpl2->block("BLOCK_OPERACAO_EXCLUIR_DESABILITADO");
-        $tpl2->ICONES_TITULO = "Apenas os supervisores podem excluir taxas específicas, e presidentes ou administradores porem excluir/editar taxas globais (da cooperativa)";
+        $tpl2->ICONES_TITULO = "Apenas os supervisores podem excluir taxas específicas, e gestores ou administradores porem excluir/editar taxas globais (da cooperativa)";
         $tpl2->block("BLOCK_OPERACAO_EXCLUIR_TITULO");
     }
     $tpl2->block("BLOCK_OPERACAO_EXCLUIR");

@@ -138,31 +138,11 @@ while ($dados = mysql_fetch_array($query)) {
     $codigo = $dados["coo_codigo"];
     $nome = $dados["coo_nomecompleto"];
     $abreviacao = $dados["coo_abreviacao"];
-    $presidente = $dados["coo_presidente"];
     $tpl->LISTA_LINHA_CLASSE = "";
 
     //Coluna Abreviação
     $tpl->LISTA_COLUNA_VALOR = $abreviacao;
     $tpl->block("BLOCK_LISTA_COLUNA");
-
-    //Coluna Gestores
-    $tpl->LISTA_COLUNA2_ALINHAMENTO = "right";
-    $tpl->LISTA_COLUNA2_ALINHAMENTO2 = "left";
-    $tpl->IMAGEM_PASTA=$icones;
-    $sqltot = "SELECT * FROM quiosques_gestores WHERE quiges_quiosque=$codigo";
-    $querytot = mysql_query($sqltot);
-    if (!$querytot)
-        die("Erro: " . mysql_error());
-    $gestores = mysql_num_rows($querytot);
-    if ($permissao_quiosque_gestor_ver == 1) {
-        $tpl->LISTA_COLUNA2_LINK = "quiosques_gestores.php?quiosque=$codigo";
-        $tpl->DESABILITADO = "";
-    } else {
-        $tpl->LISTA_COLUNA2_LINK = "#";
-        $tpl->DESABILITADO = "_desabilitado";
-    }
-    $tpl->LISTA_COLUNA2_VALOR = "($gestores)";
-    $tpl->block("BLOCK_LISTA_COLUNA2");    
 
     //Coluna Quantidade de quiosques
     $sql2="select count(qui_codigo) from quiosques where qui_cooperativa=$codigo";
@@ -290,7 +270,25 @@ while ($dados = mysql_fetch_array($query)) {
     $tpl->LISTA_COLUNA_VALOR = $hora;
     $tpl->block("BLOCK_LISTA_COLUNA");
     
-
+    //Coluna Gestores
+    $tpl->LISTA_COLUNA2_ALINHAMENTO = "right";
+    $tpl->LISTA_COLUNA2_ALINHAMENTO2 = "left";
+    $tpl->IMAGEM_PASTA=$icones;
+    $sqltot = "SELECT * FROM cooperativa_gestores WHERE cooges_cooperativa=$codigo";
+    $querytot = mysql_query($sqltot);
+    if (!$querytot)
+        die("Erro: " . mysql_error());
+    $gestores = mysql_num_rows($querytot);
+    if ($permissao_cooperativa_gestores_gerir == 1) {
+        $tpl->LISTA_COLUNA2_LINK = "cooperativa_gestores.php";
+        $tpl->DESABILITADO = "";
+    } else {
+        $tpl->LISTA_COLUNA2_LINK = "#";
+        $tpl->DESABILITADO = "_desabilitado";
+    }
+    $tpl->LISTA_COLUNA2_VALOR = "($gestores)";
+    $tpl->block("BLOCK_LISTA_COLUNA2");
+    
     
     //Coluna Operações
     $tpl->CODIGO = $codigo;

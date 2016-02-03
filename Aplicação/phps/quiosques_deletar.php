@@ -272,7 +272,7 @@ if ($usuario_grupo==2) {
             die("Erro SQL: " . mysql_error());
         }
         
-        //Zera grupo de permissoes todos usuários que estao vinculados ao quiosque deletado que não sejam adminsitradores ou presidentes
+        //Zera grupo de permissoes todos usuários que estao vinculados ao quiosque deletado que não sejam adminsitradores ou gestores
         //DEVE VIR ANTES DO SQL QUE ZERA QUIOSQUE
         $sql3 = "UPDATE pessoas set  pes_grupopermissoes=0 WHERE pes_quiosqueusuario=$codigo and pes_grupopermissoes not in (1,2)"; 
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL: " . mysql_error());

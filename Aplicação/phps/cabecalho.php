@@ -85,7 +85,7 @@ if ($usuario_grupo==4) {
 $sql="select distinct qui_codigo
 from quiosques 
 join quiosques_supervisores on quisup_quiosque=qui_codigo
-where quisup_supervisor=402
+where quisup_supervisor=$usuario_codigo
 UNION
 select distinct cai_quiosque
 from caixas_operadores

@@ -26,14 +26,14 @@ $tpl_notificacao->DESTINO = "pessoas.php";
 $tpl_notificacao->ICONES = $icones;
 
 
-//Verifica se ele � presidente
-$sql = "SELECT * FROM cooperativas WHERE coo_presidente=$codigo";
+//Verifica se ele é gestor
+$sql = "SELECT * FROM cooperativa_gestores WHERE cooges_gestor=$codigo";
 $query = mysql_query($sql);
 if (!$query)
     die("Erro SQL: " . mysql_error());
 $linhas = mysql_num_rows($query);
 if ($linhas > 0) {
-    $tpl_notificacao->MOTIVO_COMPLEMENTO = "Esta pessoa está atribuida como presidente/gerente de sua cooperativa. Se deseja realmente excluí-la deve-se retirá-la do cardo de presidente na tela de 'Cadastro/Edição de Cooperativas'";
+    $tpl_notificacao->MOTIVO_COMPLEMENTO = "Esta pessoa está atribuida como gestor/gerente de sua cooperativa. Se deseja realmente excluí-la deve-se retirá-la do cardo de gestor na tela de 'Cadastro/Edição de Cooperativas'";
     $tpl_notificacao->block("BLOCK_ERRO");
     $tpl_notificacao->block("BLOCK_NAOAPAGADO");
     $tpl_notificacao->block("BLOCK_BOTAO_VOLTAR");

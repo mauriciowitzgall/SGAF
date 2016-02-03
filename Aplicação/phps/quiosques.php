@@ -172,26 +172,8 @@ if ($permissao_quiosque_definircooperativa == 0) {
 }
 
 
-//Verifica quais são os quiosques o usuário logado pode visualizar
-
-$sqlpodever="SELECT DISTINCT qui_codigo from quiosques
-join quiosques_supervisores on quisup_quiosque=qui_codigo
-WHERE quisup_supervisor = $usuario_codigo";
-$query = mysql_query($sqlpodever);
-if (!$query)
-    die("Erro: " . mysql_error());
-$count=1;
-while ($dados = mysql_fetch_assoc($query)) {
-    if($count==1)
-        $quiosquespodever=$dados["qui_codigo"];
-    else
-        $quiosquespodever=$quiosquespodever.",".$dados["qui_codigo"];   
-    $count++;
-}
-if (($usuario_grupo==1)|| ($usuario_grupo==2)) {
-}
-else {
-    $sql_filtro = $sql_filtro . "and qui_codigo in ($quiosquespodever)";
+if (($usuario_grupo!=1)&&($usuario_grupo!=2)) {
+    $sql_filtro = $sql_filtro . "and qui_codigo in ($usuario_quiosque)";
 }
 
 //Inicio das tuplas
@@ -203,7 +185,7 @@ FROM
     JOIN cidades on (qui_cidade=cid_codigo)
     JOIN cooperativas on (qui_cooperativa=coo_codigo)
 WHERE
-    1 and qui_cooperativa= $usuario_cooperativa 
+    qui_cooperativa= $usuario_cooperativa 
     $sql_filtro 
 ORDER BY
     qui_nome";

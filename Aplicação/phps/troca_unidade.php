@@ -104,9 +104,9 @@ while ($dados = mysql_fetch_assoc($query)) {
         }
     }
 
-    //Verifica se o esta pessoa é presidente
+    //Verifica se o esta pessoa é gestor
     if ($grupo_codigo == 2) {
-        $sql6 = "SELECT * FROM cooperativas WHERE coo_presidente=$usuario_codigo";
+        $sql6 = "SELECT * FROM cooperativa_gestores WHERE cooges_gestor=$usuario_codigo";
         $query6 = mysql_query($sql6);
         if (!$query6)
             die("Erro: 0" . mysql_error());

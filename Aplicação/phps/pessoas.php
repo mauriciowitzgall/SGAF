@@ -72,7 +72,7 @@ ORDER BY
         $tpl->OPTION_NOME = $dados["pestip_nome"];
         $tipo = $dados["pestip_codigo"];
         if ((($tipo == 1) && ($permissao_pessoas_ver_administradores == 1)) ||
-                (($tipo == 2) && ($permissao_pessoas_ver_presidentes == 1)) ||
+                (($tipo == 2) && ($permissao_pessoas_ver_gestores == 1)) ||
                 (($tipo == 3) && ($permissao_pessoas_ver_supervisores == 1)) ||
                 (($tipo == 4) && ($permissao_pessoas_ver_caixas == 1)) ||
                 (($tipo == 5) && ($permissao_pessoas_ver_fornecedores == 1)) ||
@@ -222,7 +222,7 @@ if ($permissao_pessoas_ver_administradores == 0) {
         $sql_filtro2 = $sql_filtro2 . " or mespestip_tipo=1";
     $filtro2 = 1;
 }
-if ($permissao_pessoas_ver_presidentes == 0) {
+if ($permissao_pessoas_ver_gestores == 0) {
     $cont++;
     if ($cont == 1)
         $sql_filtro2 = $sql_filtro2 . " mespestip_tipo=2";
@@ -261,7 +261,7 @@ if ($filtro2 == 1) {
     $sql_filtro = $sql_filtro . " and pes_codigo not in (SELECT mespestip_pessoa FROM mestre_pessoas_tipo WHERE $sql_filtro2 )";
 }
 
-//Se o usu�rio for o Root ent�o s� mostrar os administradores
+//Se o usuário for o Root então só mostrar os administradores
 if ($usuario_grupo == 7) {
     $sql_filtro = " and mespestip_tipo=1";
 }
@@ -352,7 +352,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     if (!$query)
         die("Erro de SQL Tipo de Pessoa: " . mysql_error());
     $tipo_administrador = 0;
-    $tipo_presidente = 0;
+    $tipo_gestor = 0;
     $tipo_supervisor = 0;
     $tipo_caixa = 0;
     $tipo_fornecedor = 0;
@@ -364,7 +364,7 @@ while ($dados = mysql_fetch_assoc($query)) {
             $tipo_administrador = 1;
         }
         if ($tipo == 2) {
-            $tipo_presidente = 1;
+            $tipo_gestor = 1;
         }
         if ($tipo == 3) {
             $tipo_supervisor = 1;
@@ -402,18 +402,18 @@ while ($dados = mysql_fetch_assoc($query)) {
         }
 
 
-        //Presidente
-        $tpl->IMAGEM_TITULO = "Presidente";
-        if ($tipo_presidente == 1) {
+        //Gestor
+        $tpl->IMAGEM_TITULO = "Gestor";
+        if ($tipo_gestor == 1) {
             $tpl->LINK = "#";
             $tpl->IMAGEM_PASTA = "$icones2";
-            $tpl->IMAGEM_NOMEARQUIVO = "presidente.png";
+            $tpl->IMAGEM_NOMEARQUIVO = "gestor.png";
             $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
         } else {
             $tpl->LINK = "#";
             $tpl->IMAGEM_TAMANHO = $icone_tamanho;
             $tpl->IMAGEM_PASTA = "$icones2";
-            $tpl->IMAGEM_NOMEARQUIVO = "presidente2.png";
+            $tpl->IMAGEM_NOMEARQUIVO = "gestor2.png";
 
             $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
         }

@@ -28,7 +28,6 @@ if (!$query)
 while ($dados = mysql_fetch_assoc($query)) {
     $nome = $dados["coo_nomecompleto"];
     $abreviacao = $dados["coo_abreviacao"];
-    $presidente = $dados["coo_presidente"];
 }
 
 //Estrutura dos campos de cadastro
@@ -68,32 +67,6 @@ $tpl1->block("BLOCK_TITULO");
 $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
-
-if ($presidente!="") {
-
-    //Presidente
-    $tpl1->TITULO = "Presidente";
-    $tpl1->block("BLOCK_TITULO");
-    $tpl1->SELECT_NOME = "presidente";
-    $tpl1->SELECT_TAMANHO = "";
-    $tpl1->block("BLOCK_SELECT_NORMAL");
-    $tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
-    $sql = "SELECT * FROM pessoas JOIN mestre_pessoas_tipo on (mespestip_pessoa=pes_codigo) WHERE mespestip_tipo=2 and pes_cooperativa=$codigo ORDER BY pes_nome";
-    $query = mysql_query($sql);
-    if (!$query)
-        die("Erro: " . mysql_error());
-    while ($dados = mysql_fetch_assoc($query)) {
-        $tpl1->OPTION_VALOR = $dados["pes_codigo"];
-        $tpl1->OPTION_NOME = $dados["pes_nome"];
-        if ($presidente == $dados["pes_codigo"]) {
-            $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-        }
-        $tpl1->block("BLOCK_SELECT_OPTION");
-    }
-    $tpl1->block("BLOCK_SELECT");
-    $tpl1->block("BLOCK_CONTEUDO");
-    $tpl1->block("BLOCK_ITEM");
-}
 
 
 //BOTOES

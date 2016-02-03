@@ -99,7 +99,7 @@ $tpl->TEXTO_NOME = "Observação";
 $tpl->TEXTO_VALOR = "
     Aqui é apenas o cadastro da taxa, para incluir uma taxa em um quiosque vá a tela de 'Quiosques'! <br>
     Os supervisores podem cadastrar, editar e excluir apenas taxas referentes ao quiosque que supervisionam!<br>
-    Os presidentes podem cadastrar, editar e excluir taxas para todos os quiosques da cooperativa/grupo!
+    Os gestores podem cadastrar, editar e excluir taxas para todos os quiosques da cooperativa/grupo!
 ";
 $tpl->block("BLOCK_TEXTO");
 $tpl->block("BLOCK_CONTEUDO");
@@ -196,7 +196,7 @@ if (($usuario_grupo == 2) || ($usuario_grupo == 1)) {
         SELECT * 
         FROM tipo_negociacao
         JOIN quiosques_tiponegociacao ON ( quitipneg_tipo = tipneg_codigo ) 
-        WHERE quitipneg_quiosque =1
+        WHERE quitipneg_quiosque =$usuario_quiosque
         ORDER BY tipneg_nome
     ";
 }

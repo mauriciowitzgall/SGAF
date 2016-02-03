@@ -12,14 +12,14 @@ if (!$query8)
     die("Erro 40:" . mysql_error());
 $linhas8 = mysql_num_rows($query8);
 
-//Verifica se o usu�rio � presidente de alguma cooperativa
-$sql5 = "SELECT coo_codigo FROM cooperativas WHERE coo_presidente=$pessoa";
+//Verifica se o usuário é gestor de alguma cooperativa
+$sql5 = "SELECT coo_codigo FROM cooperativa_gestores WHERE cooges_gestor=$pessoa";
 $query5 = mysql_query($sql5);
 if (!$query5)
     die("Erro 40:" . mysql_error());
 $linhas5 = mysql_num_rows($query5);
 
-//Se o usu�rio logado for presidente ou administrador mostrar apenas a opção 'todas' para quiosques
+//Se o usuário logado for gestor ou administrador mostrar apenas a opção 'todas' para quiosques
 if ($linhas5 > 0) {
     echo "<option value=''>Todos</option>";
     exit;

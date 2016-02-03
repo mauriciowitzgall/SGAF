@@ -17,7 +17,7 @@
             $("tr[id=tr_cpf]").attr("required", true);
             $("tr[id=tr_cpf]").show(); 
             $("span[id=span_administrador]").show(); 
-            $("span[id=span_presidente]").show(); 
+            $("span[id=span_gestor]").show(); 
             $("span[id=span_supervisor]").show(); 
             $("span[id=span_caixa]").show();             
         } else if (valor==2) { //Pessoa Jurídica
@@ -33,7 +33,7 @@
             $("tr[id=tr_cpf]").attr("required", false);
             $("tr[id=tr_cpf]").hide(); 
             $("span[id=span_administrador]").hide(); 
-            $("span[id=span_presidente]").hide(); 
+            $("span[id=span_gestor]").hide(); 
             $("span[id=span_supervisor]").hide(); 
             $("span[id=span_caixa]").hide(); 
         } else {
@@ -90,7 +90,7 @@ if ($usuario_codigo != $codigo) {
                 header("Location: permissoes_semacesso.php");
                 exit;
             }
-            if (($tipo == 2) && ($permissao_pessoas_ver_presidentes == 0)) {
+            if (($tipo == 2) && ($permissao_pessoas_ver_gestores == 0)) {
                 header("Location: permissoes_semacesso.php");
                 exit;
             }
@@ -822,7 +822,7 @@ $tpl1->block("BLOCK_ITEM");
 //Tipo
 $tpl1->TITULO = "Tipo";
 $tipo_administrador = 0;
-$tipo_presidente = 0;
+$tipo_gestor = 0;
 $tipo_supervisor = 0;
 $tipo_caixa = 0;
 $tipo_fornecedor = 0;
@@ -837,7 +837,7 @@ if (($operacao == "editar") || ($operacao == "ver")) {
         if ($tipo == 1)
             $tipo_administrador = 1;
         if ($tipo == 2)
-            $tipo_presidente = 1;
+            $tipo_gestor = 1;
         if ($tipo == 3)
             $tipo_supervisor = 1;
         if ($tipo == 4)
@@ -867,19 +867,19 @@ if ($usuario_codigo != $codigo) {
         $tpl1->block("BLOCK_CHECKBOX");
     }
 
-    //Tipo Presidente
-    if (($permissao_pessoas_cadastrar_presidentes == 1) || (($permissao_pessoas_ver_presidentes == 1) && ($operacao == 'ver'))) {
+    //Tipo Gestor
+    if (($permissao_pessoas_cadastrar_gestores == 1) || (($permissao_pessoas_ver_gestores == 1) && ($operacao == 'ver'))) {
         $tpl1->CHECKBOX_NOME = "box[1]";
         $tpl1->CHECKBOX_ID = "presid";
         $tpl1->CHECKBOX_VALOR = "2";
-        $tpl1->LABEL_NOME = "Presidente";
-        if ($tipo_presidente == 1) {
+        $tpl1->LABEL_NOME = "Gestor";
+        if ($tipo_gestor == 1) {
             $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
         }
-        //Se for edi��o de pessoa
+        //Se for edição de pessoa
         if ($operacao == "editar") {
-            //Verifica se a pessoa em quest�o � presidente de alguma cooperativa, se sim ent�o desabilitar esse check
-            $sql2 = "SELECT * FROM cooperativas WHERE coo_presidente=$codigo";
+            //Verifica se a pessoa em questão é gestor de alguma cooperativa, se sim então desabilitar esse check
+            $sql2 = "SELECT * FROM cooperativa_gestores WHERE cooges_gestor=$codigo";
             $query2 = mysql_query($sql2);
             if (!$query2)
                 die("Erro: 10" . mysql_error());
@@ -887,7 +887,7 @@ if ($usuario_codigo != $codigo) {
             if ($total2 > 0) {
                 $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
                 $tpl1->CHECKBOX_ICONE_ARQUIVO = "../imagens/icones/geral/info.png";
-                $tpl1->CHECKBOX_ICONE_MENSAGEM = "Você não pode desmarcar esta opção porque esta pessoa atualmente é presidente de alguma cooperativa. Contate os administradores para saber mais!";
+                $tpl1->CHECKBOX_ICONE_MENSAGEM = "Você não pode desmarcar esta opção porque esta pessoa atualmente é gestor de alguma cooperativa. Contate os administradores para saber mais!";
                 $tpl1->block("BLOCK_CHECKBOX_ICONE");
                 //Chama o campo oculto caso o checkbox fique desabilitado
                 $tpl1->CAMPOOCULTO_NOME = "box[1]";
@@ -902,7 +902,7 @@ if ($usuario_codigo != $codigo) {
         } else {
             $tpl1->CHECKBOX_SPAN_CLASSE = "";
         }
-        $tpl1->CHECKBOX_SPAN_ID = "span_presidente";
+        $tpl1->CHECKBOX_SPAN_ID = "span_gestor";
         $tpl1->block("BLOCK_CHECKBOX");
     }
 
@@ -1152,7 +1152,7 @@ $tpl1->block("BLOCK_ITEM");
 if ($operacao == "editar") {
     if (($permissao_pessoas_criarusuarios == 1) || ($codigo == $usuario_codigo)) {
 
-        //Verifica se o esta pessoa � administradora
+        //Verifica se o esta pessoa é administradora
         $sql = "SELECT * FROM mestre_pessoas_tipo WHERE mespestip_pessoa=$codigo and mespestip_tipo=1";
         $query = mysql_query($sql);
         if (!$query)
@@ -1174,15 +1174,16 @@ if ($operacao == "editar") {
             die("Erro: 2" . mysql_error());
         $linhas3 = mysql_num_rows($query3);
 
-        //Verifica se o esta pessoa � fornecedor de algum quiosque
+        //Verifica se o esta pessoa é fornecedor de algum quiosque
         $sql4 = "SELECT DISTINCT qui_nome FROM quiosques join entradas on (ent_quiosque=qui_codigo) WHERE ent_fornecedor=$codigo";
         $query4 = mysql_query($sql4);
         if (!$query4)
             die("Erro: 3" . mysql_error());
         $linhas4 = mysql_num_rows($query4);
 
-        //Verifica se o esta pessoa � administradora
-        $sql6 = "SELECT * FROM cooperativas WHERE coo_presidente=$codigo";
+
+        //Verifica se o esta pessoa é gestor da cooperativa
+        $sql6 = "SELECT * FROM cooperativa_gestores WHERE cooges_gestor=$codigo";
         $query6 = mysql_query($sql6);
         if (!$query6)
             die("Erro: 0" . mysql_error());
@@ -1210,7 +1211,7 @@ if ($operacao == "editar") {
         if ($linhas5 == 0) {
             $tpl1->block("BLOCK_SELECT_DESABILITADO");
             $tpl1->COMPLEMENTO_ICONE_ARQUIVO = "../imagens/icones/geral/info.png";
-            $tpl1->COMPLEMENTO_ICONE_MENSAGEM = "Esta pessoa não pode ter acesso ao sistema porque ela não é presidente, supervisora, caixa ou fornecedora de algum quiosque de sua cooperativa. Para ser considerado um fornecedor, não basta apenas marcar o tipo 'Fornecedor' nesta tela, é necessário ter pelo menos uma entrada! Para ser Supervisor ou caixa de um quiosque, esta pessoa deve ser vinculadas a um quiosque na tela de 'Quiosques'! E para ser um presidente contatar um administrador! :)";
+            $tpl1->COMPLEMENTO_ICONE_MENSAGEM = "Esta pessoa não pode ter acesso ao sistema porque ela não é gestor, supervisora, caixa ou fornecedora de algum quiosque de sua cooperativa. Para ser considerado um fornecedor, não basta apenas marcar o tipo 'Fornecedor' nesta tela, é necessário ter pelo menos uma entrada! Para ser Supervisor ou caixa de um quiosque, esta pessoa deve ser vinculadas a um quiosque na tela de 'Quiosques'! E para ser um gestor contatar um administrador! :)";
             $tpl1->block("BLOCK_COMPLEMENTO_ICONE");
             $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
         }
@@ -1336,9 +1337,9 @@ if ($operacao == "editar") {
                     }
                 }
 
-                //Verifica se o esta pessoa é presidente
+                //Verifica se o esta pessoa é gestor
                 if ($grupo_codigo == 2) {
-                    $sql6 = "SELECT * FROM cooperativas WHERE coo_presidente=$codigo";
+                    $sql6 = "SELECT * FROM cooperativa_gestores WHERE cooges_gestor=$codigo";
                     $query6 = mysql_query($sql6);
                     if (!$query6)
                         die("Erro: 0" . mysql_error());

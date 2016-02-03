@@ -2,7 +2,7 @@
 
 //Verifica se o usuário tem permissáo para acessar este conteúdo
 require "login_verifica.php";
-if ($permissao_quiosque_gestor_ver <> 1) {
+if ($permissao_cooperativa_gestores_ver <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
@@ -15,31 +15,20 @@ $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "GESTORES";
 $tpl_titulo->SUBTITULO = "LISTA DE GESTORES DA COOPERATIVA";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "quiosques_gestores.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "cooperativa_gestores.png";
 $tpl_titulo->show();
 
 $tpl = new Template("templates/listagem_2.html");
 $tpl->ICONE_ARQUIVO = $icones;
-$quiosque = $_GET['quiosque'];
 
 
-//Campo Quiosque no Topo
-$tpl->CAMPO_TITULO = "Quiosque";
-$sql = "SELECT qui_nome FROM quiosques WHERE qui_codigo=$quiosque";
-$query = mysql_query($sql);
-if (!$query)
-    die("Erro1: " . mysql_error());
-$dados = mysql_fetch_assoc($query);
-$tpl->CAMPO_VALOR = $dados['qui_nome'];
-$tpl->CAMPO_TAMANHO = "";
-$tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
-$tpl->block("BLOCK_FILTRO_CAMPO");
-$tpl->block("BLOCK_FILTRO_COLUNA");
+$cooperativa = $usuario_cooperativa;
 
-IF ($permissao_quiosque_definirsupervisores == 1) {
 
-    $tpl->LINK = "supervisores_cadastrar.php?quiosque=$quiosque&operacao=cadastrar";
-    $tpl->BOTAO_NOME = "INCLUIR SUPERVISOR";
+IF ($permissao_cooperativa_gestores_gerir == 1) {
+
+    $tpl->LINK = "cooperativa_gestores_cadastrar.php?operacao=cadastrar";
+    $tpl->BOTAO_NOME = "INCLUIR GESTOR";
     $tpl->block("BLOCK_RODAPE_BOTAO_MODELO");
 }
 
@@ -75,13 +64,8 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "E-MAIL";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-$tpl->CABECALHO_COLUNA_TAMANHO = "";
-$tpl->CABECALHO_COLUNA_COLSPAN = "";
-$tpl->CABECALHO_COLUNA_NOME = "DATA FUNÇÃO";
-$tpl->block("BLOCK_LISTA_CABECALHO");
-
-if ($permissao_quiosque_definirsupervisores == 1) {
-    $tpl->CABECALHO_COLUNA_COLSPAN = "2";
+if ($permissao_cooperativa_gestores_gerir==1) {
+    $tpl->CABECALHO_COLUNA_COLSPAN = "1";
     $tpl->CABECALHO_COLUNA_TAMANHO = "";
     $tpl->CABECALHO_COLUNA_NOME = "OPERAÇÕES";
     $tpl->block("BLOCK_LISTA_CABECALHO");
@@ -92,10 +76,10 @@ $sql = "
  SELECT DISTINCT
     *
 FROM
-    quiosques_supervisores
-    JOIN pessoas on (quisup_supervisor=pes_codigo)
+    cooperativa_gestores
+    JOIN pessoas on (cooges_gestor=pes_codigo)
 WHERE    
-    quisup_quiosque=$quiosque
+    cooges_cooperativa=$cooperativa
 ORDER BY
     pes_nome";
 
@@ -123,7 +107,7 @@ $query = mysql_query($sql);
 if (!$query)
     die("Erro: " . mysql_error());
 while ($dados = mysql_fetch_assoc($query)) {
-    $supervisor = $dados["quisup_supervisor"];
+    $gestor = $dados["cooges_gestor"];
 
     //Coluna ID
     $tpl->LISTA_COLUNA_VALOR = $dados["pes_id"];
@@ -145,24 +129,11 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl->LISTA_COLUNA_VALOR = $dados["pes_email"];
     $tpl->block("BLOCK_LISTA_COLUNA");
 
-    //Coluna Data de Admissão
-    if ($dados['quisup_datafuncao'] == "0000-00-00")
-        $tpl->LISTA_COLUNA_VALOR = "";
-    else
-        $tpl->LISTA_COLUNA_VALOR = converte_data($dados['quisup_datafuncao']);
-    $tpl->block("BLOCK_LISTA_COLUNA");
-
-    if ($permissao_quiosque_definirsupervisores == 1) {
-        //editar
-        $tpl->CODIGO = $supervisor;
-        $tpl->LINK = "supervisores_cadastrar.php";
-        $tpl->LINK_COMPLEMENTO = "supervisor=$supervisor&quiosque=$quiosque&operacao=editar";
-
-        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EDITAR");
+    if ($permissao_cooperativa_gestores_gerir == 1) {
 
         //excluir
-        $tpl->LINK = "supervisores_deletar.php";
-        $tpl->LINK_COMPLEMENTO = "supervisor=$supervisor&quiosque=$quiosque&operacao=excluir";
+        $tpl->LINK = "cooperativa_gestores_deletar.php";
+        $tpl->LINK_COMPLEMENTO = "gestor=$gestor&operacao=excluir";
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR");
     }
     $tpl->block("BLOCK_LISTA");
