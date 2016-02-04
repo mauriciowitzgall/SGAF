@@ -12,12 +12,9 @@ include "includes.php";
 $codigo = $_GET['codigo'];
 $nome = ucwords(strtolower($_POST['nome']));
 $nome2 = ucwords(strtolower($_POST['nome2']));
-$tipo2 = $_POST['tipo2'];
-if ($tipo2 != "")
-    $tipo = $tipo2;
-else
-    $tipo = $_POST['tipo'];
 
+
+$tipo = $_POST['tipo'];
 $marca = $_POST['marca'];
 $recipiente = $_POST['recipiente'];
 $volume = $_POST['volume'];

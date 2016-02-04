@@ -54,7 +54,7 @@ window.onload = function(){
         $("tr[id=id_codigounico]").show(); 
     }
     tipocon=$("select[name=tipo]").val();
-    if (tipocon==0) {
+    if (tipocon==2) {
         $("tr[id=id_volume]").hide(); 
         $("tr[id=id_recipiente]").hide(); 
     } else {
@@ -163,7 +163,6 @@ if ($linhas == 0) {
                <?php if ($linhas8>0) {?>
                <img src="../imagens/icones/geral/info.png" width="12px" title="Não é possível editar o tipo de contagem porque este produto possui entradas" alt="Informação">            
                <?php } ?>
-               <input type="hidden" name="tipo2" value="<?php echo $tipo; ?>"> 
            </td>
        </tr>
         

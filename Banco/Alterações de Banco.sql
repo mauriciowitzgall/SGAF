@@ -260,6 +260,8 @@ UPDATE `sgaf`.`grupo_permissoes` SET `gruper_nome`='Gestor', `gruper_pessoas_ver
 UPDATE `sgaf`.`grupo_permissoes` SET `gruper_taxas_aplicar`='0' WHERE `gruper_codigo`='2';
 
 
+INSERT INTO `sgaf`.`produtos_recipientes` (`prorec_nome`) VALUES ('Barril');
+INSERT INTO `sgaf`.`produtos_recipientes` (`prorec_nome`) VALUES ('Litrão');
 
 
 

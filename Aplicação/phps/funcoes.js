@@ -320,8 +320,11 @@ function popula_produtos_pelamarca(valor) {
         });
     } else {
         $.post("entradas_popula_produtos_pelamarca.php", {
-            marca: valor
+            marca: valor,
+            tiponegociacao: $("input[name=tiponegociacao2]").val()
+
         }, function(valor2) {
+            alert(valor2);
             $("select[name=produto]").html(valor2);
         });
     }
