@@ -324,7 +324,7 @@ function popula_produtos_pelamarca(valor) {
             tiponegociacao: $("input[name=tiponegociacao2]").val()
 
         }, function(valor2) {
-            alert(valor2);
+            //alert(valor2);
             $("select[name=produto]").html(valor2);
         });
     }

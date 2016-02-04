@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usuário tem permissão para acessar este conteúdo
+//Verifica se o usuï¿½rio tem permissï¿½o para acessar este conteï¿½do
 require "login_verifica.php";
 if ($permissao_relatorios_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -15,30 +15,30 @@ $relatorionome = $_POST['relatorionome'];
 $descricao = $_POST['descricao'];
 $box = $_POST['box'];
 $data = date("Y-m-d");
-$hora = date("h:i:s");
+$hora = date("H:i:s");
 
 //TÃTULO PRINCIPAL
 $tpl_titulo = new Template("templates/titulos.html");
-$tpl_titulo->TITULO = "RELATÓRIOS";
+$tpl_titulo->TITULO = "RELATï¿½RIOS";
 if ($operacao == 'cadastrar')
     $tpl_titulo->SUBTITULO = "CADASTRO";
 else
-    $tpl_titulo->SUBTITULO = "EDIÇÃO";
+    $tpl_titulo->SUBTITULO = "EDIï¿½ï¿½O";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "relatorios.png";
 $tpl_titulo->show();
 
 
 
-//OPERAÇÕES
-//Estrutura da notificação
+//OPERAï¿½ï¿½ES
+//Estrutura da notificaï¿½ï¿½o
 $tpl_notificacao = new Template("templates/notificacao.html");
 $tpl_notificacao->ICONES = $icones;
 $tpl_notificacao->DESTINO = "relatorios.php";
 
-//Se a operação for cadastro então
+//Se a operaï¿½ï¿½o for cadastro entï¿½o
 if ($operacao == 'cadastrar') {
-    //Verifica se já existe um relatorio com mesmo nome    
+    //Verifica se jï¿½ existe um relatorio com mesmo nome    
     $sql = "SELECT rel_nome FROM relatorios WHERE rel_nome='$relatorionome'";
     $query = mysql_query($sql);
     if (mysql_num_rows($query) > 0) {
@@ -87,9 +87,9 @@ if ($operacao == 'cadastrar') {
     }
 }
 
-//Se a operação for edição então
+//Se a operaï¿½ï¿½o for ediï¿½ï¿½o entï¿½o
 if ($operacao == 'editar') {
-    //Verifica se já existe registro com o mesmo nome
+    //Verifica se jï¿½ existe registro com o mesmo nome
     $sql = "SELECT rel_nome FROM relatorios WHERE rel_codigo='$codigo'";
     $query = mysql_query($sql);
     $dados = mysql_fetch_assoc($query);
@@ -127,7 +127,7 @@ if ($operacao == 'editar') {
     if (!mysql_query($sqldel))
         die("Erro9: " . mysql_error());
 
-    //Aqui é feito a nova inserção dos novos relacionamentos                
+    //Aqui ï¿½ feito a nova inserï¿½ï¿½o dos novos relacionamentos                
     foreach ($box as $box) {
         $sql2 = "
             INSERT INTO  relatorios_permissao 

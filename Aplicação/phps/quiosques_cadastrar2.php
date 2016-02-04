@@ -30,9 +30,9 @@ $fone2 = $_POST['fone2'];
 $email = $_POST['email'];
 $obs = $_POST['obs'];
 $datacadastro = date("Y-m-d");
-$horacadastro = date("h:i:s");
+$horacadastro = date("H:i:s");
 $dataedicao = date("Y-m-d");
-$horaedicao = date("h:i:s");
+$horaedicao = date("H:i:s");
 $paginadestino = "quiosques.php";
 $tiponegociacao = $_POST["box"];
 if ($permissao_quiosque_definircooperativa == 1) {

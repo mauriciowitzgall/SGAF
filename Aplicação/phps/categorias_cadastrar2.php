@@ -14,7 +14,7 @@ $nome = $_POST['nome'];
 $obs=$_POST['obs'];
 $erro=0;
 $data=date("Y/m/d"); 
-$hora=date ("h:i:s"); 
+$hora=date ("H:i:s"); 
 ?>
 
 <table summary="" class="tabela1" border="0">

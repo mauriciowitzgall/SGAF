@@ -260,7 +260,7 @@ if ($query) {
     } else {
         $tpl->SELECT_DESABILITADO = " disabled ";
     }
-    //Caso a opera��o seja VER ent�o desabilitar o select e trocar a classe
+    //Caso a operação seja VER ent�o desabilitar o select e trocar a classe
     if ($operacao == 3) {
         $tpl->SELECT_DESABILITADO = " disabled ";
     }
@@ -348,11 +348,13 @@ if ($passo != "") {
 
 
 
-    //Options do Select dos PRODUTOS
+    //PRODUTOS
     $sql = "
-        SELECT pro_codigo,pro_nome 
+        SELECT pro_codigo,pro_nome,prorec_nome,pro_volume,pro_marca,protip_sigla
         FROM produtos 
         JOIN mestre_produtos_tipo ON (mesprotip_produto=pro_codigo)
+        join produtos_tipo on pro_tipocontagem=protip_codigo
+        left JOIN produtos_recipientes on (prorec_codigo=pro_recipiente)
         WHERE pro_cooperativa='$usuario_cooperativa' 
         AND mesprotip_tipo=$tiponegociacao
         ORDER BY pro_nome
@@ -362,8 +364,8 @@ if ($passo != "") {
         while ($dados = mysql_fetch_array($query)) {
             $tpl->SELECT2_OBRIGATORIO = " required ";
             $tpl->SELECT2_DESABILITADO = "";
-            $tpl->OPTION2_VALOR = $dados[0];
-            $tpl->OPTION2_TEXTO = $dados[1];
+            $tpl->OPTION2_VALOR = "$dados[0]";
+            $tpl->OPTION2_TEXTO = "$dados[1] $dados[4] $dados[2] $dados[3] ($dados[5])";
             if (($produto == $dados[0]) && ($produtomanter == 'on'))
                 $tpl->OPTION2_SELECIONADO = " selected ";
             else

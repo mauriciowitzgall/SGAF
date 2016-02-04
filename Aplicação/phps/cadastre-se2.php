@@ -22,7 +22,7 @@
         require("templates/Template.class.php");
 
         $dataatual = date("Y-m-d");
-        $horaatual = date("h:i:s");
+        $horaatual = date("H:i:s");
 
         $nome = ucwords(strtolower($_POST['nome']));
         $bairro = ucwords(strtolower($_POST['bairro']));

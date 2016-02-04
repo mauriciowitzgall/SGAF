@@ -26,7 +26,7 @@ $descricao = $_POST['descricao'];
 $tiponegociacao = $_POST['box'];
 $codigounico = $_POST['codigounico'];
 $data = date("Y/m/d");
-$hora = date("h:i:s");
+$hora = date("H:i:s");
 
 
 //Template de Título e Sub-título
