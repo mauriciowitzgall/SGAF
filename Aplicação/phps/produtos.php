@@ -30,6 +30,8 @@ $filtrocodigo = $_POST['filtrocodigo'];
 $filtronome = $_POST['filtronome'];
 $filtrocategoria = $_POST['filtrocategoria'];
 $filtromarca = $_POST['filtromarca'];
+$filtroproprio = $_POST['filtroproprio'];
+if ($filtroproprio=="") $filtroproprio=1;
 ?>
 <form action="produtos.php" name="form1" method="post">
     <table summary="" class="tabelafiltro" border="0">
@@ -54,6 +56,13 @@ $filtromarca = $_POST['filtromarca'];
                         echo" selected ";
                     }
                     ?>><?php echo "$dados_categoria[1]"; ?></option><?php } ?>
+                </select>
+            </td>
+            <td width="15px"></td>
+            <td><b>&nbsp;Próprio:</b><br>
+                <select name="filtroproprio" class="campopadrao" >
+                    <option value="1" <?php if (($filtroproprio=="")||($filtroproprio==1)) echo " selected "?>>Sim</option>
+                    <option value="0" <?php if ($filtroproprio==0) echo " selected "?>>Todos</option>
                 </select>
             </td>
         </tr>
@@ -89,7 +98,7 @@ $filtromarca = $_POST['filtromarca'];
         $sql_filtro = $sql_filtro . " and pro_categoria = $filtrocategoria";
     if ($filtromarca != "")
         $sql_filtro = $sql_filtro . " and pro_marca like '%$filtromarca%'";
-
+    if ($filtroproprio==1) $sql_filtro.=" and pro_quiosquequecadastrou=$usuario_quiosque ";
 
     $sql = "
 SELECT *
@@ -100,7 +109,7 @@ $sql_filtro
 ORDER BY pro_nome
 ";
 
-//Pagina��o
+//Paginação
     $query = mysql_query($sql);
     if (!$query)
         die("Erro SQL Principal Paginação:" . mysql_error());
@@ -134,7 +143,7 @@ ORDER BY pro_nome
             <td width="" align="center">CATEGORIA</td>	
             <td width="10px" align="center">TIP. NEG.</td>	
             <?php
-            $oper = 0;
+            $oper = 1;
             $oper_tamanho = 0;
             if ($permissao_produtos_editar == 1) {
                 $oper = $oper + 1;
@@ -163,6 +172,8 @@ ORDER BY pro_nome
             $marca = $array['pro_marca'];
             $data = converte_data($array['pro_datacriacao']);
             $hora = converte_hora($array['pro_horacriacao']);
+            $usuarioquecadastrou=$array['pro_usuarioquecadastrou'];
+            $quiosquequecadastrou=$array['pro_quiosquequecadastrou'];
             ?>
 
             <tr class="lin">
@@ -219,7 +230,25 @@ ORDER BY pro_nome
                 </td>
 
 
-
+                    <td align="center" class="fundo1" width="35px">
+                        <img   width="15px" src="
+                        <?php 
+                        if (($quiosquequecadastrou==$usuario_quiosque)) { 
+                            echo "$icones\atencao2.png ";
+                            $motivo="Atenção";
+                        } else  if ($quiosquequecadastrou==0) { 
+                            $motivo="Produto registrado pelos gestores da cooperativa!";
+                        } else {
+                            echo "$icones\atencao.png"; 
+                            $sql3="SELECT qui_nome FROM quiosques WHERE qui_codigo=$quiosquequecadastrou";
+                            if (!$query3=mysql_query($sql3)) die("Erro SQL3:" . mysql_error());
+                            $dados3=  mysql_fetch_assoc($query3);
+                            $quiosquequecadastrou_nome=$dados3["qui_nome"];
+                            $motivo="Produto registrado pelo quiosque: $quiosquequecadastrou_nome";
+                            
+                        }?>" 
+                        title="<?php echo $motivo; ?>" alt="Atenção"/> </a>
+                    </td>
                 <?php if ($permissao_produtos_ver == 1) { ?>
                     <td align="center" class="fundo1" width="35px">
                         <a href="produtos_cadastrar.php?codigo=<?php echo"$codigo"; ?>&ver=1" class="link1"><img   width="15px" src="<?php echo $icones; ?>detalhes.png" title="Detalhes" alt="Detalhes"/> </a>

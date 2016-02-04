@@ -29,6 +29,9 @@ $filtro_nome = $_POST["filtro_nome"];
 $filtro_tipo = $_POST["filtro_tipo"];
 $filtro_tipopessoa = $_POST["filtro_tipopessoa"];
 $filtro_possuiacesso = $_POST["filtro_possuiacesso"];
+$filtro_proprio = $_POST["filtro_proprio"];
+if ($filtro_proprio=="") $filtro_proprio=1;
+
 $tpl->LINK_FILTRO = "pessoas.php";
 
 //Filtro ID
@@ -129,6 +132,23 @@ if ($permissao_pessoas_criarusuarios == 1) {
     $tpl->block("BLOCK_FILTRO_SELECT");
     $tpl->block("BLOCK_FILTRO_COLUNA");
 }
+//Filtro Próprio
+$tpl->SELECT_TITULO = "Próprio";
+$tpl->SELECT_NOME = "filtro_proprio";
+$tpl->SELECT_TAMANHO = "";
+$tpl->OPTION_VALOR = "1";
+$tpl->OPTION_NOME = "Sim";
+if ($filtro_proprio == "1")
+    $tpl->block("BLOCK_FILTRO_SELECT_OPTION_SELECIONADO");
+$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+$tpl->OPTION_VALOR = "0";
+$tpl->OPTION_NOME = "Todos";
+if ($filtro_proprio == '0')
+    $tpl->block("BLOCK_FILTRO_SELECT_OPTION_SELECIONADO");
+$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+$tpl->block("BLOCK_FILTRO_SELECT");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
 
 
 if ($usuario_grupo != 5) {
@@ -191,7 +211,7 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "TIPO NEG.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-$tpl->CABECALHO_COLUNA_COLSPAN = "3";
+$tpl->CABECALHO_COLUNA_COLSPAN = "4";
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_NOME = "OPERAÇÕES";
 $tpl->block("BLOCK_LISTA_CABECALHO");
@@ -266,11 +286,13 @@ if ($usuario_grupo == 7) {
     $sql_filtro = " and mespestip_tipo=1";
 }
 
+if ($filtro_proprio==1) $sql_filtro.=" and pes_quiosquequecadastrou=$usuario_quiosque ";
+
 
 //Inicio das tuplas
 $sql = "
 SELECT DISTINCT
-    pes_codigo,pes_nome,cid_nome,pes_fone1,pes_fone2,pes_possuiacesso,pes_id,pestippes_nome,pestippes_codigo
+    pes_codigo,pes_nome,cid_nome,pes_fone1,pes_fone2,pes_possuiacesso,pes_id,pestippes_nome,pestippes_codigo,pes_quiosquequecadastrou,pes_usuarioquecadastrou
 FROM
     pessoas    
     JOIN cidades on (pes_cidade=cid_codigo)    
@@ -282,7 +304,7 @@ ORDER BY
     pes_nome
 ";
 
-//Pagina��o
+//Paginação
 $query = mysql_query($sql);
 if (!$query)
     die("Erro SQL Principal Paginação:" . mysql_error());
@@ -310,7 +332,16 @@ while ($dados = mysql_fetch_assoc($query)) {
     $codigo = $dados["pes_codigo"];
     $cont++;
     $tipopessoa = $dados["pestippes_codigo"];
+    $quiosquequecadastrou=$dados["pes_quiosquequecadastrou"];
+    $usuarioquecadastrou=$dados["pes_usuarioquecadastrou"];
 
+    $sql3="SELECT qui_nome FROM quiosques WHERE qui_codigo=$quiosquequecadastrou";
+    if (!$query3=mysql_query($sql3)) die("Erro SQL3:" . mysql_error());
+    $dados3=  mysql_fetch_assoc($query3);
+    $quiosquequecadastrou_nome=$dados3["qui_nome"];
+    $motivo="Produto registrado pelo quiosque: $quiosquequecadastrou_nome";
+    
+    
     //Coluna ID
     $tpl->LISTA_COLUNA_VALOR = $dados["pes_id"];
     $tpl->block("BLOCK_LISTA_COLUNA");
@@ -526,10 +557,25 @@ while ($dados = mysql_fetch_assoc($query)) {
 
 
 
-
-    //Coluna Opera�ões    
-    $tpl->ICONE_ARQUIVO = $icones;
-    $tpl->CODIGO = $codigo;
+    //Atenção
+    
+    $tpl->ICONE_ARQUIVO="$icones";
+    $tpl->COLUNA_CLASSE="tab_operacao";
+    if ($usuario_quiosque==$quiosquequecadastrou) {
+        $tpl->ICONE_NOME="atencao2.png";
+        $tpl->OPERACAO_TITULO="";
+        $tpl->OPERACAO_NOME="Atenção";
+    } else if ($quiosquequecadastrou==0){
+         $tpl->ICONE_NOME="atencao.png";
+        $tpl->OPERACAO_TITULO="Esta pessoa foi cadastrada pelos gestores da cooperativa";
+        $tpl->OPERACAO_NOME="Atenção";       
+    } else {
+        $tpl->ICONE_NOME="atencao.png";
+        $tpl->OPERACAO_TITULO="Esta pessoa foi cadastrada pelo quiosque: $quiosquequecadastrou_nome";
+        $tpl->OPERACAO_NOME="Atenção";
+    }
+    $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
+    
     //detalhes
     if ($permissao_pessoas_ver == 1) {
         $tpl->LINK = "pessoas_cadastrar.php";

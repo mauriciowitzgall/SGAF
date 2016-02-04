@@ -112,11 +112,14 @@ $tpl->block("BLOCK_LISTA_COLUNA_ICONES");
 
 
 //Outra operação
+$tpl->COLUNA_CLASSE="";
 $tpl->LINK="";
 $tpl->CODIGO="";
 $tpl->LINK_COMPLEMENTO="";
 $tpl->ICONE_ARQUIVO="";
+$tpl->OPERACAO_TITULO="";
 $tpl->OPERACAO_NOME="";
+$tpl->ICONE_NOME="";
 $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
 
 //Imprimir
