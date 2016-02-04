@@ -871,7 +871,7 @@ function produto_industrializado(valor) {
 }
 function tipo_contagem(valor) {
     //alert(valor);
-    if (valor==2) { //se for industrializado mostra
+    if (valor==1) {
         $("tr[id=id_recipiente]").show();
         $("tr[id=id_volume]").show();
     }

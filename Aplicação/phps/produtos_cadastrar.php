@@ -54,7 +54,7 @@ window.onload = function(){
         $("tr[id=id_codigounico]").show(); 
     }
     tipocon=$("select[name=tipo]").val();
-    if (tipocon==1) {
+    if (tipocon==0) {
         $("tr[id=id_volume]").hide(); 
         $("tr[id=id_recipiente]").hide(); 
     } else {
