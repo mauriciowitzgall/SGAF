@@ -31,6 +31,16 @@ while ($array = mysql_fetch_array($query)) {
     $codigounico = $array['pro_codigounico'];
     $industrializado = $array['pro_industrializado'];
 }
+
+$sql2="SELECT quitipneg_tipo FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$usuario_quiosque";
+if (!$query2 = mysql_query($sql2)) die("Erro SQL2: ".mysql_error());
+$tiponegquicon=0;
+$tiponegquirev=0;
+while ($dados2 = mysql_fetch_array($query2)) {
+    if ($dados2["quitipneg_tipo"]==1) $tiponegquicon=1;
+    if ($dados2["quitipneg_tipo"]==2) $tiponegquirev=1;
+}
+
 ?>
 <script type="text/javascript" src="js/capitular.js"></script>
 <script type="text/javascript">
@@ -247,16 +257,20 @@ if ($linhas == 0) {
                 $desabilitado = " disabled ";
             ?>
             <td align="left" width="" class="">            
+                <?php if ($tiponegquicon==1) { ?>
                 <span class="" id="">
-                    <input type="checkbox" value="1" name="box[1]" <?php echo $consignacao_marcado;
-            echo $desabilitado; ?>><label>Consignação</label>
+                    <input type="checkbox" value="1" name="box[1]" <?php echo $consignacao_marcado; echo $desabilitado; ?>>
+                    <label>Consignação</label>
                     <br>
                 </span>
+                <?php } 
+                if ($tiponegquirev==1) { ?>
                 <span class="" id="">
-                    <input type="checkbox" value="2" name="box[2]" <?php echo $revenda_marcado;
-            echo $desabilitado; ?>><label>Revenda</label>
+                    <input type="checkbox" value="2" name="box[2]" <?php echo $revenda_marcado; echo $desabilitado; ?>>
+                    <label>Revenda</label>
                     <br>
                 </span>
+                <?php } ?>
             </td>        
         </tr>
 
