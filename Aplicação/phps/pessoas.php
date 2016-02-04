@@ -555,10 +555,9 @@ while ($dados = mysql_fetch_assoc($query)) {
     }
     $tpl->block("BLOCK_LISTA_COLUNA_ICONES");
 
-
+    $tpl->CODIGO="$codigo";
 
     //Atenção
-    
     $tpl->ICONE_ARQUIVO="$icones";
     $tpl->COLUNA_CLASSE="tab_operacao";
     if ($usuario_quiosque==$quiosquequecadastrou) {

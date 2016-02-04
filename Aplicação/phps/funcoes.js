@@ -214,6 +214,7 @@ function calcula_valor_unitario() {
     desconto = desconto.replace(",", ".");
     var venda = $("input[name=valuni]").val();
     venda = venda.replace("R$ ", "");
+    venda = venda.replace(".", "");
     venda = venda.replace(",", ".");
     var custo = 0;
     custo = venda * (100 - desconto) / 100;
@@ -243,6 +244,7 @@ function calcula_valor_venda() {
     percent2 = percent2.replace(",", ".");
     var custo = $("input[name=valunicusto]").val();
     custo = custo.replace("R$ ", "");
+    custo = custo.replace(".", "");
     custo = custo.replace(",", ".");
     custo = parseFloat(custo);
     var venda = 0;
@@ -796,8 +798,8 @@ function popula_tipopessoa(valor) {
 }
 function popula_fornecedores2(valor) {
     $.post("entradas_popula_fornecedores2.php", {
-        tipopessoa: valor
-
+        tipopessoa: valor,
+        tiponegociacao: $("select[name=tiponegociacao]").val()
     }, function(valor2) {
         //alert(valor2);
         $("select[name=fornecedor]").html(valor2);

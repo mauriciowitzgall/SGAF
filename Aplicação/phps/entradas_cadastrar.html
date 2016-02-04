@@ -210,7 +210,7 @@ function mascara_percent() {
         <tr>
             <td align="right" width="200px"><b>Tipo de Pessoa: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
-                <select autofocus="" name="tipopessoa" class="campopadrao campo_tamanho_6" {SELECT_TIPOPESSOA_OBRIGATORIO} {SELECT_TIPOPESSOA_DESABILITADO} onchange="popula_fornecedores(this.value);">
+                <select autofocus="" name="tipopessoa" class="campopadrao campo_tamanho_6" {SELECT_TIPOPESSOA_OBRIGATORIO} {SELECT_TIPOPESSOA_DESABILITADO} onchange="popula_fornecedores2(this.value);">
                     <!-- BEGIN BLOCK_OPTIONPADRAO -->
                     <option value="">Todos</option>	
                     <!-- END BLOCK_OPTIONPADRAO -->
@@ -302,7 +302,7 @@ function mascara_percent() {
         <tr>
             <td align="right"><b>Valor Unitário Custo: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
-                <input type="text" size="8" required  name="valunicusto" class="campopadrao campo_tamanho_3 campo_qtd" autocomplete="off" onclick="this.select()" onkeyup="" onblur="calcula_valor_percent();">&nbsp;
+                <input type="text" size="8" style="width: 100px;" required  name="valunicusto" class="campopadrao campo_tamanho_3 campo_qtd" autocomplete="off" onclick="this.select()" onkeyup="" onblur="calcula_valor_percent();">&nbsp;
                 <!-- <span name="qtdtipcon" class="dicacampo" autocomplete="off" ></span> -->
                 <input id="percent2" name="percent2" type="text" value="" class="campopadrao campo_tamanho_2  campo_qtd" size="5" onblur="calcula_valor_venda();" onkeyup="mascara_percent();" onclick="this.select()" >
                 <span name="" class="dicacampo" autocomplete="off" >%</span>            
@@ -312,7 +312,7 @@ function mascara_percent() {
         <tr>
             <td align="right"><b>Valor Unitário Venda: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
-                <input type="text" size="8" required  name="valuni" class="campopadrao campo_tamanho_3  campo_qtd" autocomplete="off" onclick="this.select()" onkeyup="verifica_incluir();" onblur="calcula_valor_percent();">&nbsp;
+                <input type="text" size="10" style="width: 100px;" required  name="valuni" class="campopadrao campo_tamanho_3  campo_qtd" autocomplete="off" onclick="this.select()" onkeyup="verifica_incluir();" onblur="calcula_valor_percent();">&nbsp;
                 <!-- <span name="qtdtipcon" class="dicacampo" autocomplete="off" ></span> -->
                 <!--  BEGIN BLOCK_PERCENT -->
                 <input id="percent" name="percent" type="text" value="" class="campopadrao campo_tamanho_2  campo_qtd" size="5" onblur="calcula_valor_unitario();" onkeyup="mascara_percent();"  onclick="this.select()" >
