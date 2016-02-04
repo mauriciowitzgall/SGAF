@@ -1,6 +1,6 @@
 <?php
 
-//Verifica se o usu�rio tem permiss�o para acessar este conte�do
+//Verifica se o usuário tem permissão para acessar este conteúdo
 require "login_verifica.php";
 if ($permissao_estoque_qtdide_definir <> 1) {
     header("Location: permissoes_semacesso.php");
@@ -29,8 +29,10 @@ $tpl_filtro->block("BLOCK_FORM");
 
 $filtro_codigoproduto = $_POST["filtro_codigoproduto"];
 $filtro_nomeproduto = $_POST["filtro_nomeproduto"];
+$filtro_proprio = $_POST["filtro_proprio"];
+if ($filtro_proprio=="") $filtro_proprio=1;
 
-//Filtro C�digo do produto
+//Filtro Código do produto
 $tpl_filtro->CAMPO_TITULO = "Produto";
 $tpl_filtro->block("BLOCK_CAMPO_TITULO");
 $tpl_filtro->CAMPO_TIPO = "text";
@@ -54,6 +56,24 @@ $tpl_filtro->block("BLOCK_CAMPO");
 $tpl_filtro->block("BLOCK_ESPACO");
 $tpl_filtro->block("BLOCK_COLUNA");
 
+//Filtro Próprio
+$tpl_filtro->CAMPO_TITULO = "Próprio";
+$tpl_filtro->block("BLOCK_CAMPO_TITULO");
+$tpl_filtro->SELECT_NOME = "filtro_proprio";
+$tpl_filtro->SELECT_ID = "";
+$tpl_filtro->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl_filtro->block("BLOCK_SELECT_FILTRO");
+$tpl_filtro->OPTION_VALOR = "1";
+if ($filtro_proprio==1) $tpl_filtro->block("BLOCK_OPTION_SELECIONADO");
+$tpl_filtro->OPTION_TEXTO = "Sim";
+$tpl_filtro->block("BLOCK_OPTION");
+$tpl_filtro->OPTION_VALOR = "0";
+if ($filtro_proprio==0)  $tpl_filtro->block("BLOCK_OPTION_SELECIONADO");
+$tpl_filtro->OPTION_TEXTO = "Todos";
+$tpl_filtro->block("BLOCK_OPTION");
+$tpl_filtro->block("BLOCK_SELECT");
+$tpl_filtro->block("BLOCK_ESPACO");
+$tpl_filtro->block("BLOCK_COLUNA");
 $tpl_filtro->block("BLOCK_LINHA");
 $tpl_filtro->block("BLOCK_FILTRO_CAMPOS");
 $tpl_filtro->block("BLOCK_QUEBRA");
@@ -61,7 +81,7 @@ $tpl_filtro->show();
 
 $tpl4 = new Template("templates/botoes1.html");
 
-//Bot�o Pesquisar
+//Botão Pesquisar
 $tpl4->COLUNA_TAMANHO = "";
 $tpl4->COLUNA_ALINHAMENTO = "";
 $tpl4->block("BLOCK_BOTAOPADRAO_SUBMIT");
@@ -69,7 +89,7 @@ $tpl4->block("BLOCK_BOTAOPADRAO_PESQUISAR");
 $tpl4->block("BLOCK_BOTAOPADRAO");
 $tpl4->block("BLOCK_COLUNA");
 
-//Bot�o Limpar filtro
+//Botão Limpar filtro
 $tpl4->COLUNA_LINK_ARQUIVO = "estoque_qtdideal.php";
 $tpl4->COLUNA_LINK_TARGET = "";
 $tpl4->COLUNA_TAMANHO = "";
@@ -115,7 +135,10 @@ $tpl2->block("BLOCK_CABECALHO");
   if (!empty($filtro_nomeproduto))
   $sql_filtro = " and pro_nome like '%$filtro_nomeproduto%'";
  
+  if ($filtro_proprio==1) 
+      $sql_filtro = $sql_filtro . " and pro_quiosquequecadastrou=$usuario_quiosque ";
 
+  
 $sql = "
 SELECT
     pro_codigo, 
@@ -140,7 +163,9 @@ SELECT
         WHERE qtdide_quiosque =$usuario_quiosque
         AND qtdide_produto = pro_codigo 
     ) *100 as saldo,
-    protip_sigla
+    protip_sigla,
+    pro_quiosquequecadastrou
+   
 FROM produtos, quantidade_ideal, produtos_tipo
 WHERE qtdide_quiosque =$usuario_quiosque
 AND qtdide_produto = pro_codigo
@@ -163,7 +188,8 @@ SELECT
         WHERE etq_produto = pro_codigo
         and etq_quiosque=$usuario_quiosque
     ) AS qtd,
-    protip_sigla
+    protip_sigla,
+    pro_quiosquequecadastrou
 FROM produtos
 join produtos_tipo on (pro_tipocontagem=protip_codigo)
 WHERE pro_cooperativa =$usuario_cooperativa
