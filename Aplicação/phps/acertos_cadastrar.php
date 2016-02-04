@@ -116,7 +116,7 @@ $tpl1->SELECT_NOME = "tipopessoa";
 $tpl1->CAMPO_DICA = "";
 $tpl1->SELECT_ID = "tipopessoa";
 $tpl1->SELECT_TAMANHO = "";
-$tpl1->SELECT_ONCHANGE = "popula_fornecedores2(this.value);";
+$tpl1->SELECT_ONCHANGE = "acerto_popula_fornecedores(this.value);";
 $tpl1->block("BLOCK_SELECT_ONCHANGE");
 //$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
 $tpl1->block("BLOCK_SELECT_NORMAL");

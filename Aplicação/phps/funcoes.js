@@ -808,6 +808,15 @@ function popula_fornecedores2(valor) {
         $("select[name=fornecedor]").html(valor2);
     });
 }
+function acerto_popula_fornecedores(valor) {
+    $.post("acerto_popula_fornecedores.php", {
+        tipopessoa: valor,
+        tiponegociacao: 1
+    }, function(valor2) {
+        //alert(valor2);
+        $("select[name=fornecedor]").html(valor2);
+    });
+}
 
 function popula_quiosque_tiponegociacao(valor) {
     $.post("taxas_popula_tiponegociacao.php", {

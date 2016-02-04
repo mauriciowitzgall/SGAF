@@ -61,7 +61,7 @@ $tpl->block("BLOCK_QUEBRA");
 $sql="SELECT max(fch_codigo) FROM fechamentos";
 $query = mysql_query($sql);
 if (!$query)
-    die("Erro: " . mysql_error());
+    die("Erro1: " . mysql_error());
 $dados=  mysql_fetch_array($query);
 $ultimo = $dados[0];
 
@@ -69,7 +69,7 @@ if ($ultimo > 0) {
     $sql2="SELECT fch_datafim FROM fechamentos WHERE fch_codigo=$ultimo";
     $query2 = mysql_query($sql2);
     if (!$query2)
-        die("Erro: " . mysql_error());
+        die("Erro2: " . mysql_error());
     $dados2 = mysql_fetch_array($query2);
     $dataini_datetime = $dados2[0];
 }   
@@ -86,15 +86,26 @@ else {
 
     $query2 = mysql_query($sql2);
     if (!$query2)
-        die("Erro: " . mysql_error());
+        die("Erro3: " . mysql_error());
     $dados2 = mysql_fetch_array($query2);
-    
     $primeirasaida = $dados2[0];    
 
+    if ($primeirasaida=="") {
+        $tpl11 = new Template("templates/notificacao.html");
+        $tpl11->ICONES = $icones;
+        $tpl11->block("BLOCK_ATENCAO");
+        $tpl11->MOTIVO = "Não há produtos de revendas vendidos.<br> Portanto não é possível realizar fechamento!";
+        $tpl11->block("BLOCK_MOTIVO");
+        $tpl11->DESTINO = "acertos_revenda.php";
+        $tpl11->block("BLOCK_BOTAO");
+        $tpl11->show();
+        exit;
+    }
+    
     $sql3 = "SELECT sai_datacadastro,sai_horacadastro FROM saidas WHERE sai_codigo=$primeirasaida ";
       $query3 = mysql_query($sql3);
     if (!$query3)
-        die("Erro: " . mysql_error());
+        die("Erro4: " . mysql_error());
     $dados3 = mysql_fetch_assoc($query3);
     $dataini_datetime = $dados3['sai_datacadastro'] . " " . $dados3['sai_horacadastro'];
 
@@ -322,7 +333,7 @@ if ($passo == 2) {
 
     $query = mysql_query($sql);
     if (!$query)
-        die("Erro: " . mysql_error());
+        die("Erro5: " . mysql_error());
     $linhas = mysql_num_rows($query);
     if ($linhas == 0) {
         $tpl11 = new Template("templates/notificacao.html");
@@ -390,7 +401,7 @@ if ($passo == 2) {
     ";
     $query = mysql_query($sql);
     if (!$query)
-        die("Erro: " . mysql_error());
+        die("Erro6: " . mysql_error());
     $dados = mysql_fetch_array($query);
     $venda_total = $dados[0];
     $custo_total = $dados[1];
@@ -429,7 +440,7 @@ if ($passo == 2) {
     ";
     $query3 = mysql_query($sql3);
     if (!$query3)
-        die("Erro: " . mysql_error());
+        die("Erro7: " . mysql_error());
     $dados3 = mysql_fetch_array($query3);
     $qtdvendas = $dados3[0];
     //Calcula a QTD de Produtos
@@ -447,7 +458,7 @@ if ($passo == 2) {
     ";
     $query3 = mysql_query($sql3);
     if (!$query3)
-        die("Erro: " . mysql_error());
+        die("Erro8: " . mysql_error());
     $dados3 = mysql_fetch_array($query3);
     $qtdprodutos = $dados3[0];
     //Calcula a QTD DE LOTES
@@ -465,7 +476,7 @@ if ($passo == 2) {
     ";
     $query3 = mysql_query($sql3);
     if (!$query3)
-        die("Erro: " . mysql_error());
+        die("Erro9: " . mysql_error());
     $dados3 = mysql_fetch_array($query3);
     $qtdlotes = $dados3[0];
     $tpl2->COLUNA_TAMANHO = "";
@@ -550,7 +561,7 @@ if ($passo == 2) {
     ";
     $query = mysql_query($sql);
     if (!$query)
-        die("Erro: " . mysql_error());
+        die("Erro10: " . mysql_error());
     $taxas = 0;
     $saldo_total = 0;
     while ($dados = mysql_fetch_assoc($query)) {
@@ -669,7 +680,7 @@ if ($passo == 2) {
         ";
         $query = mysql_query($sql);
         if (!$query)
-            die("Erro: " . mysql_error());
+            die("Erro11: " . mysql_error());
         while ($dados = mysql_fetch_assoc($query)) {
             $produto = $dados['pro_codigo'];
             $produto_nome = $dados['pro_nome'];
@@ -840,7 +851,7 @@ if ($passo == 2) {
         ";
         $query = mysql_query($sql);
         if (!$query)
-            die("Erro: " . mysql_error());
+            die("Erro12: " . mysql_error());
         while ($dados = mysql_fetch_assoc($query)) {
             $tpl2->COLUNA_TAMANHO = "";
             $tpl2->COLUNA_ALINHAMENTO = "";
