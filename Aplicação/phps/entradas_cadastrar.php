@@ -534,14 +534,14 @@ if ($passo != "") {
     $tpl->block("BLOCK_HR");
 
 
-
-
     //Lista de produtos
     $tpl->ENTRADA = $entrada;
     IF ($tiponegociacao == 2) {
         $tpl->block("BLOCK_CUSTO_CABECALHO");
         //$tpl->block("BLOCK_LUCRO_CABECALHO");
     }
+    
+    $tpl->block("BLOCK_VENDA_VALUNI_CABECALHO");
     $tpl->block("BLOCK_VENDA_CABECALHO");
 
     $query5 = mysql_query($sql5);
@@ -564,7 +564,8 @@ if ($passo != "") {
                 else
                     $tpl->ENTRADAS_QTD = number_format($dados[2], 0, ',', '.');
                 $tpl->ENTRADAS_VALORUNI = "R$ " . number_format($dados[4], 2, ',', '.');
-                //$tpl->ENTRADAS_VALOR_TOTAL = "R$ " . number_format($dados[2] * $dados[4], 2, ',', '.');
+                $tpl->block("BLOCK_VENDA_VALUNI");
+                $tpl->ENTRADAS_VENDA_TOTAL = "R$ " . number_format(($dados[2] * $dados[4]), 2, ',', '.');
                 if ($tiponegociacao == 2) {
                     $tpl->ENTRADAS_VALORUNI_CUSTO = "R$ " . number_format($dados[9], 2, ',', '.');
                     $tpl->ENTRADAS_VALOR_TOTAL_CUSTO = "R$ " . number_format($dados[2] * $dados[9], 2, ',', '.');

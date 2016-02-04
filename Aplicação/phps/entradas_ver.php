@@ -165,7 +165,7 @@ while ($dados = mysql_fetch_array($query)) {
         $tpl->block("BLOCK_CUSTO");
     } else if ($tiponegociacao == 1) {
         $totalvenda = $dados[4] * $dados[2];
-        $tpl->ENTRADAS_VALORUNI = "R$ " . number_format($totalvenda, 2, ',', '.');
+        $tpl->ENTRADAS_VALORUNI = "R$ " . number_format($dados[4], 2, ',', '.');
         $tpl->block("BLOCK_VENDA_VALUNI");
     }
 
