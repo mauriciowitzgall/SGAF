@@ -253,7 +253,7 @@ $sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_fil
 
 //SQL Principal das linhas
 $sql = "
-SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo
+SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo,sai_usuarioquecadastrou,caiopo_operador, (SELECT pes_nome FROM pessoas p WHERE p.pes_codigo=sai_usuarioquecadastrou) as usuarioquecadastrou_nome
 FROM saidas 
 JOIN saidas_tipo on (sai_tipo=saitip_codigo) 
 left join saidas_produtos on (saipro_saida=sai_codigo)
@@ -313,9 +313,10 @@ if ($linhas == 0) {
         $caixa = $dados["cai_codigo"];
         $caixanome = $dados["cai_nome"];
         $caixaoperador = $dados["pes_codigo"];
+        $usuarioquecadastrou=$dados["sai_usuarioquecadastrou"];
+        $usuarioquecadastrou_nome=$dados["usuarioquecadastrou_nome"];
         $caixaoperadornome = $dados["pes_nome"];
-        $caixaoperadorresponsavel = $dados["sai_caixaoperadorresponsavel"];
-
+        $caixaoperadorresponsavel = $dados["caiopo_operador"];
 
         //Cor de fundo da linha
         if ($status == 2) {
@@ -423,7 +424,8 @@ if ($linhas == 0) {
         $tpl->LISTA_COLUNA_CLASSE = "";
         $tpl->LISTA_COLUNA_VALOR = $caixaoperadornome;
         $tpl->block("BLOCK_LISTA_COLUNA");
-        if ($caixaoperadorresponsavel==$caixaoperador) {
+        
+        if ($caixaoperadorresponsavel==$usuarioquecadastrou) {
             $tpl->ICONE2_TAMANHO = "10px";
             $tpl->ICONE2_ARQUIVO = $icones2 . "supervisor2.png";
             $tpl->OPERACAO2_NOME = "";
@@ -431,7 +433,7 @@ if ($linhas == 0) {
         } else {
             $tpl->ICONE2_TAMANHO = "10px";
             $tpl->ICONE2_ARQUIVO = $icones2 . "supervisor.png";
-            $tpl->OPERACAO2_NOME = "Venda Supervisionada";
+            $tpl->OPERACAO2_NOME = "Venda efetuada por: $usuarioquecadastrou_nome";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE2");
             
         }

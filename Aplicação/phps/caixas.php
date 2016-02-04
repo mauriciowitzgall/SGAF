@@ -267,7 +267,8 @@ while ($dados=  mysql_fetch_assoc($query)) {
         $tpl->CODIGO="$codigo";
         $tpl->LINK_COMPLEMENTO="";
         $tpl->COLUNA_CLASSE="tab_operacao";
-        $tpl->ICONE_ARQUIVO="$icones/caixas_abrir.png";
+        $tpl->ICONE_NOME="caixas_abrir.png";
+        $tpl->ICONE_ARQUIVO="$icones";
         $tpl->OPERACAO_NOME="Abrir Caixa";
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
     } else {
@@ -275,7 +276,8 @@ while ($dados=  mysql_fetch_assoc($query)) {
         $tpl->CODIGO="";
         $tpl->LINK_COMPLEMENTO="";
         $tpl->COLUNA_CLASSE="tab_operacao";
-        $tpl->ICONE_ARQUIVO="$icones/caixas_abrir2.png";
+        $tpl->ICONE_NOME="caixas_abrir2.png";
+        $tpl->ICONE_ARQUIVO="$icones";
         $tpl->OPERACAO_NOME="Abrir Caixa";
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");      
     }
@@ -285,7 +287,8 @@ while ($dados=  mysql_fetch_assoc($query)) {
         $tpl->COLUNA_CLASSE="tab_operacao";
         $tpl->CODIGO="$numero_ultimo";
         $tpl->LINK_COMPLEMENTO="";
-        $tpl->ICONE_ARQUIVO="$icones/caixas_encerrar.png";
+        $tpl->ICONE_NOME="caixas_encerrar.png";
+        $tpl->ICONE_ARQUIVO="$icones";
         $tpl->OPERACAO_NOME="Encerrar Caixa";
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
         
@@ -294,7 +297,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
         $tpl->COLUNA_CLASSE="tab_operacao";
         $tpl->CODIGO="";
         $tpl->LINK_COMPLEMENTO="";
-        $tpl->ICONE_ARQUIVO="$icones/caixas_encerrar2.png";
+        $tpl->ICONE_NOME="caixas_encerrar2.png";
         $tpl->OPERACAO_NOME="Encerrar Caixa";
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");       
     }

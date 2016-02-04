@@ -264,6 +264,8 @@ INSERT INTO `sgaf`.`produtos_recipientes` (`prorec_nome`) VALUES ('Barril');
 INSERT INTO `sgaf`.`produtos_recipientes` (`prorec_nome`) VALUES ('Litrão');
 
 
+ALTER TABLE `sgaf`.`saidas` 
+ADD COLUMN `sai_usuarioquecadastrou` INT(11) NULL AFTER `sai_caixaoperacaonumero`;
 
 
 # Versão 3.1.1
