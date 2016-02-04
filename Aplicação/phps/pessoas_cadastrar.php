@@ -225,6 +225,7 @@ $tpl1->CAMPO_NOME = "id";
 $tpl1->CAMPO_DICA = "";
 $tpl1->CAMPO_ID = "id";
 $tpl1->CAMPO_TAMANHO = "10";
+$tpl1->CAMPO_ONBLUR="";
 if ($id == "") {
     $sql2 = "SELECT MAX(pes_id) as id FROM pessoas";
     $query2 = mysql_query($sql2);
@@ -246,6 +247,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 //Tipo de pessoa
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Tipo Pessoa";
 $tpl1->block("BLOCK_TITULO");
 if (($operacao == 'ver') || ($operacao == 'editar')) {
@@ -280,6 +282,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 //Categoria
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Categoria";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->SELECT_NOME = "categoria";
@@ -318,6 +321,7 @@ $tpl1->block("BLOCK_ITEM");
 
 
 //Nome 
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Nome";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_QTD_CARACTERES = "";
@@ -424,6 +428,7 @@ $tpl1->block("BLOCK_LINHA_ID");
 $tpl1->block("BLOCK_ITEM");
 
 //Pais
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Pais";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->SELECT_NOME = "pais";
@@ -462,6 +467,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 //Estado
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Estado";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->SELECT_NOME = "estado";
@@ -508,6 +514,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 //Cidade
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Cidade";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->SELECT_NOME = "cidade";
@@ -546,6 +553,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 //Vila
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Vila";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
@@ -566,6 +574,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 //Bairro
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Bairro";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
@@ -585,7 +594,8 @@ $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
-//Endereç�o
+//Endereço
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Endereço";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
@@ -619,7 +629,8 @@ $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
-//Complemento do Endere�o
+//Complemento do Endereço
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Complemento";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
@@ -639,7 +650,8 @@ $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
-//Referência do Endere�o
+//Referência do Endereço
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Referência";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
@@ -660,6 +672,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 //CEP
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "CEP";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
@@ -679,6 +692,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 //Telefone 01
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Telefone 01";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
@@ -715,6 +729,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 //Telefone 02
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Telefone 02";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
@@ -751,6 +766,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 //Pessoa para contato
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Pessoa para contato";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
@@ -780,6 +796,7 @@ $tpl1->block("BLOCK_ITEM");
 
 
 //E-mail
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "E-mail";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "email";
@@ -800,6 +817,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 //Chat
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Chat";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
@@ -820,6 +838,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 //Tipo
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Tipo";
 $tipo_administrador = 0;
 $tipo_gestor = 0;
@@ -850,7 +869,7 @@ if (($operacao == "editar") || ($operacao == "ver")) {
 } else {
     $tipo_consumidor = 1;
 }
-//Se o usu�rio est� editando seu pr�prio cadastro ent�o ele n�o pode escolher o Tipo
+//Se o usuário está editando seu próprio cadastro então ele não pode escolher o Tipo
 if ($usuario_codigo != $codigo) {
     //Tipo Administrador
     if (($permissao_pessoas_cadastrar_administradores == 1) || (($permissao_pessoas_ver_administradores == 1) && ($operacao == 'ver'))) {
@@ -1023,6 +1042,7 @@ if ($usuario_codigo != $codigo) {
 
 
 //Cooperativa
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Cooperativa";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->SELECT_NOME = "cooperativa";
@@ -1136,6 +1156,7 @@ if (($usuario_grupo==1)||($usuario_grupo==2)||($usuario_grupo==3)) {
 }
 
 //Observação
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Observação";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->TEXTAREA_TAMANHO = "65";
@@ -1193,6 +1214,7 @@ if ($operacao == "editar") {
 
 
         //Possui Acesso?
+        $tpl1->CAMPO_ONBLUR="";
         $tpl1->TITULO = "Possui Acesso?";
         $sql = "SELECT pes_possuiacesso FROM pessoas WHERE pes_codigo=$codigo";
         $query = mysql_query($sql);
@@ -1398,6 +1420,7 @@ if ($operacao == "editar") {
             $tpl1->block("BLOCK_ITEM");
 
             //Quiosque do Usuário
+            $tpl1->CAMPO_ONBLUR="";
             $tpl1->TITULO = "Quiosque do Usuário";
             $tpl1->TITULO_ID = "span_quiosqueusuario";
             $tpl1->block("BLOCK_TITULO_ID");

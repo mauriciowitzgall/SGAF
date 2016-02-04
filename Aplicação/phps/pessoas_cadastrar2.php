@@ -320,8 +320,9 @@ if ($operacao == "cadastrar") {
             pes_cnpj,
             pes_fone1ramal,
             pes_fone2ramal,
-            pes_pessoacontato
-
+            pes_pessoacontato,
+            pes_usuarioquecadastrou,
+            pes_quiosquequecadastrou
         )
     VALUES (
         '$id',
@@ -349,7 +350,9 @@ if ($operacao == "cadastrar") {
         '$cnpj',
         '$ramal1',
         '$ramal2',
-        '$pessoacontato'            
+        '$pessoacontato',
+        '$usuario_codigo',
+        '$usuario_quiosque'
     )";
     if (!mysql_query($sql))
         die("Erro6: " . mysql_error());
