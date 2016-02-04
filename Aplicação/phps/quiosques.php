@@ -60,6 +60,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     }
     $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
 }
+$tpl->block("BLOCK_SELECT_OPTIONPADRAO");
 $tpl->block("BLOCK_FILTRO_SELECT");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
@@ -87,6 +88,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     }
     $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
 }
+$tpl->block("BLOCK_SELECT_OPTIONPADRAO");
 $tpl->block("BLOCK_FILTRO_SELECT");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 

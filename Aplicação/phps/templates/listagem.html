@@ -53,7 +53,9 @@
             <!-- BEGIN BLOCK_FILTRO_SELECT -->
             <td><b>&nbsp;{SELECT_TITULO}:</b><br>
                 <select name="{SELECT_NOME}" class="campopadrao" {SELECT_OBRIGATORIO}>
+                    <!-- BEGIN BLOCK_FILTRO_SELECT_OPTIONPADRAO -->
                         <option value="">Todos</option> 
+                    <!-- END BLOCK_FILTRO_SELECT_OPTIONPADRAO -->
                     <!-- BEGIN BLOCK_FILTRO_SELECT_OPTION -->
                     <option value="{SELECT_OPTION_CODIGO}" {SELECT_OPTION_SELECIONADO} >{SELECT_OPTION_NOME}</option>
                     <!-- END BLOCK_FILTRO_SELECT_OPTION -->

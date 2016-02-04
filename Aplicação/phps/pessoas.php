@@ -87,6 +87,7 @@ ORDER BY
             $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
         }
     }
+    $tpl->block("BLOCK_SELECT_OPTIONPADRAO");
     $tpl->block("BLOCK_FILTRO_SELECT");
     $tpl->block("BLOCK_FILTRO_COLUNA");
 }
@@ -109,6 +110,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     }
     $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
 }
+$tpl->block("BLOCK_SELECT_OPTIONPADRAO");
 $tpl->block("BLOCK_FILTRO_SELECT");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
@@ -128,6 +130,7 @@ if ($permissao_pessoas_criarusuarios == 1) {
     $tpl->OPTION_NOME = "Não Usuários";
     if ($filtro_possuiacesso == '0')
         $tpl->block("BLOCK_FILTRO_SELECT_OPTION_SELECIONADO");
+    $tpl->block("BLOCK_SELECT_OPTIONPADRAO");
     $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
     $tpl->block("BLOCK_FILTRO_SELECT");
     $tpl->block("BLOCK_FILTRO_COLUNA");

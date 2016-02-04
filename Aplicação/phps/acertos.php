@@ -72,6 +72,7 @@ WHERE
         }
         $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
     }
+    $tpl->block("BLOCK_SELECT_OPTIONPADRAO");
     $tpl->block("BLOCK_FILTRO_SELECT");
     $tpl->block("BLOCK_FILTRO_COLUNA");
 
@@ -101,6 +102,7 @@ ORDER BY
         }
         $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
     }
+    $tpl->block("BLOCK_SELECT_OPTIONPADRAO");
     $tpl->block("BLOCK_FILTRO_SELECT");
     $tpl->block("BLOCK_FILTRO_COLUNA");
 }
