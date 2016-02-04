@@ -10,14 +10,14 @@
         </td>            
         <td align="left" width="">
             <!-- BEGIN BLOCK_CAMPO --> 
-            <input type="{CAMPO_TIPO}" name="{CAMPO_NOME}" id="{CAMPO_NOME}" size="{CAMPO_TAMANHO}" onkeypress="{CAMPO_ONKEYPRESS}"  onkeyup="{CAMPO_ONKEYUP}" onkeydown="{CAMPO_ONKEYDOWN}" onblur ="{CAMPO_ONFOCUS}" class="campo1" value="{CAMPO_VALOR}" maxlength="{CAMPO_QTD_CARACTERES}" autocomplete="off" onclick="this.select()" {CAMPO_DESABILITADO} {CAMPO_OBRIGATORIO} {CAMPO_FOCO} >                                                  
+            <input type="{CAMPO_TIPO}" name="{CAMPO_NOME}" id="{CAMPO_NOME}" size="{CAMPO_TAMANHO}" onkeypress="{CAMPO_ONKEYPRESS}"  onkeyup="{CAMPO_ONKEYUP}" onkeydown="{CAMPO_ONKEYDOWN}" onblur ="{CAMPO_ONFOCUS}" class="campopadrao" value="{CAMPO_VALOR}" maxlength="{CAMPO_QTD_CARACTERES}" autocomplete="off" onclick="this.select()" {CAMPO_DESABILITADO} {CAMPO_OBRIGATORIO} {CAMPO_FOCO} >                                                  
                    <!-- BEGIN BLOCK_SPAN --> 
                    <span name="{SPAN_NOME}" id="{SPAN_NOME}" class="fonte1">{SPAN_VALOR}</span>       
             <!-- END BLOCK_SPAN --> 
             <!-- END BLOCK_CAMPO --> 
 
             <!-- BEGIN BLOCK_SELECT --> 
-            <select name="{SELECT_NOME}" class="campo1" style="width:200px"  {SELECT_DESABILITADO} {SELECT_OBRIGATORIO} {SELECT_FOCO}>           
+            <select name="{SELECT_NOME}" class="campopadrao" style="width:200px"  {SELECT_DESABILITADO} {SELECT_OBRIGATORIO} {SELECT_FOCO}>           
                     <!-- BEGIN BLOCK_SELECT_OPTION --> 
                     <option value="{OPTION_VALOR}"{OPTION_SELECIONADO}>{OPTION_NOME}</option> 
                 <!-- END BLOCK_SELECT_OPTION --> 
@@ -100,7 +100,7 @@
         <td align="left" width="">                
             <input type="text" name="descper" id="descper" size="3" class="campo2" value="{DESCPER_VALOR}" onkeyup="desconto(this)" onfocus="desconto(this)" onclick="this.select()" onkeypress="" autocomplete="off" {DESCPER_DESABILITADO}>%
                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="text" name="descval" id="descval" size="15" placeholder="R$ " class="campo1" value="{DESCVAL_VALOR}"  onkeyup="desconto2(this)"  onclick="this.select()" onfocus="" {DESCVAL_DESABILITADO}>
+                   <input type="text" name="descval" id="descval" size="15" placeholder="R$ " class="campopadrao" value="{DESCVAL_VALOR}"  onkeyup="desconto2(this)"  onclick="this.select()" onfocus="" {DESCVAL_DESABILITADO}>
         </td>             
     </tr>
     <tr class="linha_lista_cinza">  
@@ -116,7 +116,7 @@
             <b>Dinheiro:</b>                            
         </td>            
         <td align="left" width="">                
-            <input type="text" name="dinheiro" id="dinheiro" size="15" class="campo1" value="{DINHEIRO_VALOR}" onkeyup="mascara_dinheiro()" onkeypress="" placeholder="R$" autofocus {DINHEIRO_DESABILITADO}>                                                                 
+            <input type="text" name="dinheiro" id="dinheiro" size="15" class="campopadrao" value="{DINHEIRO_VALOR}" onkeyup="mascara_dinheiro()" onkeypress="" placeholder="R$" autofocus {DINHEIRO_DESABILITADO}>                                                                 
         </td>  
     </tr>       
     
@@ -125,7 +125,7 @@
             <b>Troco:</b>                            
         </td>            
         <td align="left" width="">                
-            <input type="text" name="troco" id="troco" size="15" class="campo1" value="{TROCO_VALOR}" disabled>                                                                 
+            <input type="text" name="troco" id="troco" size="15" class="campopadrao" value="{TROCO_VALOR}" disabled>                                                                 
         </td>  
     </tr>       
     <tr>  
@@ -133,7 +133,7 @@
             <b>Troco Devolvido:</b>                            
         </td>            
         <td align="left" width="">                
-            <input type="text" name="troco_devolvido" id="troco_devolvido" size="15" class="campo1" value="{TROCO_DEVOLVIDO_VALOR}" {TROCO_DEVOLVIDO_DESABILIDADO}>                                                                 
+            <input type="text" name="troco_devolvido" id="troco_devolvido" size="15" class="campopadrao" value="{TROCO_DEVOLVIDO_VALOR}" {TROCO_DEVOLVIDO_DESABILIDADO}>                                                                 
         </td>  
     </tr>       
     <tr>  
@@ -141,7 +141,7 @@
             <b>Desconto For�ado:</b>                            
         </td>            
         <td align="left" width="">                
-            <input type="text" name="desc_forcado" id="desc_forcado" size="15" class="campo1" value="{DESCONTO_FORCADO_VALOR}" {DESCONTO_FORCADO_DESABILIDADO}>                                                                 
+            <input type="text" name="desc_forcado" id="desc_forcado" size="15" class="campopadrao" value="{DESCONTO_FORCADO_VALOR}" {DESCONTO_FORCADO_DESABILIDADO}>                                                                 
         </td>  
     </tr>       
     <tr>  
@@ -149,7 +149,7 @@
             <b>Acr�scimo For�ado</b>                            
         </td>            
         <td align="left" width="">                
-            <input type="text" name="acre_forcado" id="acre_forcado" size="15" class="campo1" value="{ACRESCIMO_FORCADO_VALOR}" {DESCONTO_FORCADO_DESABILIDADO}>                                                                 
+            <input type="text" name="acre_forcado" id="acre_forcado" size="15" class="campopadrao" value="{ACRESCIMO_FORCADO_VALOR}" {DESCONTO_FORCADO_DESABILIDADO}>                                                                 
         </td>  
     </tr>           
 </table>
