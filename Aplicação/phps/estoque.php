@@ -22,6 +22,9 @@ $filtro_categoria = $_POST["filtrocategoria"];
 if (!empty($filtro_categoria)) {
     $sql_filtro= $sql_filtro." and pro_categoria=$filtro_categoria";
 }
+if ($usuario_grupo==5) {
+    $sql_filtro= $sql_filtro." and etq_fornecedor=$usuario_codigo ";
+}
 
 $filtro_tiponegociacao = $_POST["filtrotiponegociacao"];
 if (!empty($filtro_tiponegociacao)) {
@@ -128,7 +131,7 @@ ORDER BY
     pro_nome
 ";
 
-//Pagina��o
+//Paginacão
 $query = mysql_query($sql);
 if (!$query)
     die("Erro SQL Principal Paginação:" . mysql_error());

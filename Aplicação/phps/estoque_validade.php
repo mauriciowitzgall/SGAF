@@ -15,22 +15,18 @@ $tpl->ICONES_CAMINHO = "$icones";
 
 $filtro_produto = $_POST["filtroproduto"];
 $filtro_produto_nome = $_POST["filtroprodutonome"];
-if (!empty($filtro_produto_nome)) {
+if (!empty($filtro_produto_nome)) 
     $sql_filtro= $sql_filtro." and pro_nome like '%$filtro_produto_nome%'";
 $filtro_fornecedor = $_POST["filtrofornecedor"];
 if (($usuario_grupo == 5) && ($filtro_fornecedor != $usuario_codigo)) {
     $filtro_fornecedor = $usuario_codigo;
 }
 
-if ($usuario_grupo != 5) {
-
 //Filtro produto
 $tpl->PRODUTO_NOME="$filtro_produto_nome";    
-    
-    
-    
-}
+
 //Filtro fornecedor
+if ($usuario_grupo!=5) {
     $sql1 = "
     SELECT DISTINCT
         pes_nome,pes_codigo
@@ -41,7 +37,7 @@ $tpl->PRODUTO_NOME="$filtro_produto_nome";
         etq_quiosque=$usuario_quiosque
     ORDER BY 
         pes_nome
-";
+    ";
     $query1 = mysql_query($sql1);
     if (!$query1) {
         DIE("Erro SQL:" . mysql_error());
@@ -55,9 +51,11 @@ $tpl->PRODUTO_NOME="$filtro_produto_nome";
         } else {
             $tpl->FORNECEDOR_SELECIONADO = " ";
         }
-        $tpl->block("BLOCK_FILTRO_FORNECEDOR");
+        $tpl->block("BLOCK_FILTRO_FORNECEDOR_OPTION");
     }
+    $tpl->block("BLOCK_FILTRO_FORNECEDOR");
 }
+
 
 $tpl->block("BLOCK_FILTRO");
 

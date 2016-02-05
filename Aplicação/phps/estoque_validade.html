@@ -18,15 +18,17 @@
         <td><b>&nbsp;Produtos:</b><br>
             <input type="text" size="35" name="filtroprodutonome" value="{PRODUTO_NOME}" class="campopadrao">
         </td>
+            <!-- BEGIN BLOCK_FILTRO_FORNECEDOR  -->
             <td width="15px"></td>           
             <td><b>&nbsp;Fornecedor:</b><br>
                 <select name="filtrofornecedor" class="campopadrao">
                     <option value="">Todos</option> 
-                    <!-- BEGIN BLOCK_FILTRO_FORNECEDOR  -->
+                    <!-- BEGIN BLOCK_FILTRO_FORNECEDOR_OPTION  -->
                     <option value="{FORNECEDOR_CODIGO}" {FORNECEDOR_SELECIONADO} >{FORNECEDOR_NOME}</option>
-                    <!-- END BLOCK_FILTRO_FORNECEDOR -->
+                    <!-- END BLOCK_FILTRO_FORNECEDOR_OPTION -->
                 </select>
             </td>
+            <!-- END BLOCK_FILTRO_FORNECEDOR  -->
             <td width="15px"></td>          
         </tr>      
     </table>
