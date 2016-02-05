@@ -34,7 +34,6 @@ $query = mysql_query($sql);
 if (!$query)  die("Erro SQL1" . mysql_error());
 $dados=  mysql_fetch_assoc($query);
 $situacao=$dados["cai_situacao"];
-echo "($situacao)";
 if ($situacao==1) {
     $tpl6->block("BLOCK_ERRO");
     $tpl6->block("BLOCK_NAOAPAGADO");

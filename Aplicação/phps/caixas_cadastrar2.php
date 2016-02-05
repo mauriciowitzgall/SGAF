@@ -37,7 +37,7 @@ $tpl_notificacao->DESTINO = "caixas.php";
 //Se a operação for cadastro então
 if ($operacao == 'cadastrar') {
     //Verifica se já existe um caixa com mesmo nome    
-    $sql = "SELECT cai_nome FROM caixas WHERE cai_nome='$nome'";
+    $sql = "SELECT cai_nome FROM caixas WHERE cai_nome='$nome' and cai_quiosque=$usuario_quiosque";
     $query = mysql_query($sql);
     if (mysql_num_rows($query) > 0) {
         $tpl_notificacao->block("BLOCK_ERRO");
