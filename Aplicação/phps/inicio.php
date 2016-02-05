@@ -1,7 +1,6 @@
  <?php
 require "login_verifica.php";
-//Executar limpeza de vendas incompletas
-//include "saidas_elimina_incompletas.php";
+
 
 include "includes.php";
 
@@ -11,25 +10,20 @@ if ($usuario_grupo == 4) {
     }
     else
         header("Location: saidas.php");
-
     exit;
 }
 if ($usuario_grupo == 5) {
     header("Location: estoque_porfornecedor_produto.php?fornecedor=$usuario_codigo");
-    exit;
 }
 
 if (($usuario_grupo == 1)&&($usuario_cooperativa==0)&&($usuario_quiosque==0)) {
     header("Location: troca_unidade.php");
-    exit;
 }
 
 
 if ($usuario_grupo==7) {
     header("Location: pessoas.php");
-    exit;
 }
-
 
 
 if (($usuario_grupo != 7) && ($usuario_grupo != 1) && ($usuario_grupo != 2)) {

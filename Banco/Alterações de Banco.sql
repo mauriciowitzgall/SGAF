@@ -269,6 +269,8 @@ ADD COLUMN `sai_usuarioquecadastrou` INT(11) NULL AFTER `sai_caixaoperacaonumero
 
 INSERT INTO `sgaf`.`produtos_recipientes` (`prorec_nome`) VALUES ('Garrafa');
 
+UPDATE `sgaf`.`grupo_permissoes` SET `gruper_produtos_ver`='0' WHERE `gruper_codigo`='5';
+
 
 # Versão 3.1.1
 

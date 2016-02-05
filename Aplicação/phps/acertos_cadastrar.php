@@ -11,6 +11,21 @@ if ($permissao_acertos_cadastrar <> 1) {
         if ($permissao_acertos_ver == 1) {
             if ($operacao == 'simular') {
                 $fornecedor = $usuario_codigo;
+                //Verifica qual é a data do ultimo acerto para setar como data inicial. Senão tiver então pega data da primeria entrada
+                $sql5="SELECT MAX(ace_data) as acedatade FROM acertos WHERE ace_fornecedor=$usuario_codigo and ace_quiosque=$usuario_quiosque";
+                if (!$query5=  mysql_query($sql5)) die ("Erro5: ".mysql_error);
+                $dados5=  mysql_fetch_array($query5);
+                $result=$dados5[0];
+                if (($result!="")) { //Se houverem acertos pega a data do ultimo acerto do fornecedor
+                    $datade=$result;
+                } else { //Senão tiver então pega data da primeria entrada
+                    $sql6="SELECT MIN(ent_datacadastro) as entdatade FROM entradas WHERE ent_fornecedor=$usuario_codigo and ent_quiosque=$usuario_quiosque";
+                    if (!$query6=  mysql_query($sql6)) die ("Erro6: ".mysql_error);
+                    $dados6=  mysql_fetch_array($query6);
+                    $datade=$dados6[0];
+                }
+                //A data final da simulação é a data do dia
+                $dataate = date("Y-m-d");
                 $passo = 2;
             } else {
                 header("Location: permissoes_semacesso.php");
@@ -46,7 +61,6 @@ if ($passo == 1) {
     }
 }
 
-
 //--------------------TEMPLATE TÍTULO PRINCIPAL--------------------
 $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "ACERTOS DE CONSIGNAÇÕES";
@@ -65,46 +79,48 @@ if ($linhas == 0) {
     echo "<br><br>";
     $tpl = new Template("templates/notificacao.html");
     $tpl->ICONES = $icones;
-    $tpl->MOTIVO_COMPLEMENTO = "Para que você faça acertos com os fornecedores, é necessário que existam vendas. <b>Você não efetuou nenhuma venda até agora!</b> <br>Clique no botão abaixo para ir para a tela de cadastro de saídas, que é onde você realiza vendas!";
     $tpl->block("BLOCK_ATENCAO");
-    $tpl->DESTINO = "saidas_cadastrar.php?operacao=cadastrar";
-    $tpl->block("BLOCK_BOTAO");
+    if ($usuario_grupo==5) {
+        $tpl->MOTIVO_COMPLEMENTO = "Não há o que simular, até o momento o quiosque não efetuou vendas suas de seus produtos!";
+        $tpl->block("BLOCK_BOTAO_VOLTAR");       
+    } else {
+        $tpl->MOTIVO_COMPLEMENTO = "Para que você faça acertos com os fornecedores, é necessário que existam vendas. <b>Você não efetuou nenhuma venda até agora!</b> <br>Clique no botão abaixo para ir para a tela de cadastro de saídas, que é onde você realiza vendas!";
+        $tpl->DESTINO = "saidas_cadastrar.php?operacao=cadastrar";
+        $tpl->block("BLOCK_BOTAO");
+    }
     $tpl->show();
     exit;
-} else {
-    if ($passa != 1) {
-
-
-        //Verifica se há produtos no estoque
-        $sql = "SELECT * FROM quiosques_taxas WHERE quitax_quiosque=$usuario_quiosque";
-        $query = mysql_query($sql);
-        if (!$query)
-            die("Erro: " . mysql_error());
-        $linhas = mysql_num_rows($query);
-        if ($linhas == 0) {
-            echo "<br><br>";
-            $tpl = new Template("templates/notificacao.html");
-            $tpl->ICONES = $icones;
-            //$tpl->MOTIVO_COMPLEMENTO = "";
-            $tpl->block("BLOCK_ATENCAO");
-            //$tpl->DESTINO = "saidas_cadastrar.php?operacao=cadastrar";
-            //$tpl->block("BLOCK_BOTAO");
-            $tpl->LINK = "acertos_cadastrar.php?passa=1";
-            $tpl->MOTIVO = "Seu quiosque não possui taxas vinculadas! Se continuar, este acerto não efetuará nenhum desconto sobre o valor de venda!";
-            $tpl->block("BLOCK_MOTIVO");
-            $tpl->PERGUNTA = "Escolha 'Sim' para continuar, ou 'Não' para vincular uma taxa ao quiosque!";
-            $tpl->block("BLOCK_PERGUNTA");
-            $tpl->NAO_LINK = "quiosque_taxas_cadastrar.php?quiosque=$usuario_quiosque&operacao=cadastrar";
-            $tpl->block("BLOCK_BOTAO_NAO_LINK");
-            $tpl->block("BLOCK_BOTAO_SIMNAO");
-            $tpl->show();
-            exit;
-        }
+} else if ($passa != 1) {
+    //Verifica se há taxas vinculadas
+    $sql = "SELECT * FROM quiosques_taxas WHERE quitax_quiosque=$usuario_quiosque";
+    $query = mysql_query($sql);
+    if (!$query)
+        die("Erro: " . mysql_error());
+    $linhas = mysql_num_rows($query);
+    if ($linhas == 0) {
+        echo "<br><br>";
+        $tpl = new Template("templates/notificacao.html");
+        $tpl->ICONES = $icones;
+        //$tpl->MOTIVO_COMPLEMENTO = "";
+        $tpl->block("BLOCK_ATENCAO");
+        //$tpl->DESTINO = "saidas_cadastrar.php?operacao=cadastrar";
+        //$tpl->block("BLOCK_BOTAO");
+        $tpl->LINK = "acertos_cadastrar.php?passa=1";
+        $tpl->MOTIVO = "Seu quiosque não possui taxas vinculadas! Se continuar, este acerto não efetuará nenhum desconto sobre o valor de venda!";
+        $tpl->block("BLOCK_MOTIVO");
+        $tpl->PERGUNTA = "Escolha 'Sim' para continuar, ou 'Não' para vincular uma taxa ao quiosque!";
+        $tpl->block("BLOCK_PERGUNTA");
+        $tpl->NAO_LINK = "quiosque_taxas_cadastrar.php?quiosque=$usuario_quiosque&operacao=cadastrar";
+        $tpl->block("BLOCK_BOTAO_NAO_LINK");
+        $tpl->block("BLOCK_BOTAO_SIMNAO");
+        $tpl->show();
+        exit;
     }
 }
 
 
-//--------------------TEMPLATE FORNECEDOR E BOT�O --------------------
+
+//--------------------TEMPLATE FORNECEDOR E BOTÃO --------------------
 $tpl1 = new Template("templates/cadastro_edicao_detalhes_2.html");
 $tpl1->LINK_DESTINO = "acertos_cadastrar.php";
 
@@ -139,6 +155,7 @@ if (($passo > 1) || ($operacao == 'ver'))
 $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
+
 
 
 
@@ -232,6 +249,7 @@ $tpl1->block("BLOCK_ITEM");
 
 
 
+
 //CAMPOS OCULTOS
 $tpl1->CAMPOOCULTO_NOME = "passo";
 $tpl1->CAMPOOCULTO_VALOR = "2";
@@ -254,7 +272,7 @@ $tpl1->CAMPOOCULTO_VALOR = "$datade";
 $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
 
-//Bot�o Continuar
+//Botão Continuar
 if ($passo == 1) {
     $tpl1->BOTAO_TIPO = "submit";
     $tpl1->BOTAO_VALOR = "CONTINUAR";
@@ -262,16 +280,15 @@ if ($passo == 1) {
     $tpl1->block("BLOCK_BOTAO1_SEMLINK");
     $tpl1->block("BLOCK_BOTAO1");
 }
-//echo "Opera��o: $operacao <br>Passo: $passo <br>Codigo: $codigo <br>Fornecedor=$fornecedor";
+//echo "Operação: $operacao <br>Passo: $passo <br>Codigo: $codigo <br>Fornecedor=$fornecedor";
 $tpl1->show();
-
 
 
 
 if ($passo == 2) {
 
 
-    //Verifica se h� produtos vendidos a serem acertados
+    //Verifica se há produtos vendidos a serem acertados
     $sql = "
             SELECT pro_nome, round(sum(saipro_quantidade),2) as qtd, protip_sigla, avg(saipro_valorunitario) as valuni, round(sum(saipro_valortotal),2) as total
         FROM 
