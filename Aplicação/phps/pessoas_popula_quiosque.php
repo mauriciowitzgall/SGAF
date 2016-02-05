@@ -31,7 +31,7 @@ if ($grupo_permissao == "") {
         ";        
      } else IF ($grupo_permissao==5){
         $sql = "
-            SELECT qui_codigo,qui_nome 
+            SELECT DISTINCT qui_codigo,qui_nome 
             FROM entradas 
             join quiosques on (ent_quiosque=qui_codigo)
             WHERE qui_cooperativa=$cooperativa

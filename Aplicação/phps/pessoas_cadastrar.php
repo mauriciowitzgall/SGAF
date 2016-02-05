@@ -402,6 +402,8 @@ else
 $tpl1->CAMPO_ONBLUR = "valida_cnpj(this.value); verifica_cnpj_cadastro(this.value,$cod,$oper_num);";
 $tpl1->CAMPO_ONCLICK = "this.select();";
 $tpl1->CAMPO_TAMANHO = "14";
+$tpl1->CAMPO_ESTILO = "width: 180px";
+$tpl1->block("BLOCK_CAMPO_ESTILO");
 $tpl1->CAMPO_VALOR = $cnpj;
 $tpl1->CAMPO_QTD_CARACTERES = 18;
 $tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
