@@ -26,16 +26,6 @@ if ($usuario_grupo==5) {
     $sql_filtro= $sql_filtro." and etq_fornecedor=$usuario_codigo ";
 }
 
-$filtro_tiponegociacao = $_POST["filtrotiponegociacao"];
-if (!empty($filtro_tiponegociacao)) {
-    $sql_filtro= $sql_filtro." and etq_produto not in (
-        SELECT mesprotip_produto 
-        FROM  mestre_produtos_tipo
-        JOIN produtos on (etq_produto=pro_codigo)
-        WHERE mesprotip_tipo=$filtro_tiponegociacao
-    )"; 
-   
-}
 
 //Filtro produto
 $tpl->PRODUTO_NOME = $filtro_produto_nome;
@@ -71,33 +61,6 @@ while ($dados_categoria = mysql_fetch_array($query_categoria)) {
 }
 
 
-//Filtro tiponegociacao
-$sql6 = "
-    SELECT DISTINCT tipneg_codigo,tipneg_nome
-    FROM tipo_negociacao    
-    JOIN mestre_produtos_tipo on (mesprotip_tipo=tipneg_codigo)
-    join produtos on (mesprotip_produto=pro_codigo)
-    join estoque on (etq_produto=pro_codigo)
-    WHERE etq_quiosque=$usuario_quiosque     
-";
-$query6 = mysql_query($sql6);
-if (!$query6) {
-    DIE("Erro2 SQL:" . mysql_error());
-}
-while ($dados6 = mysql_fetch_array($query6)) {    
-    $tpl->TIPONEGOCIACAO_CODIGO = $dados6[0];    
-    $tpl->TIPONEGOCIACAO_NOME = $dados6[1];
-    if ($dados6[0] == $filtro_tiponegociacao) {
-        $tpl->TIPONEGOCIACAO_SELECIONADA = " selected ";
-    } else {
-        $tpl->TIPONEGOCIACAO_SELECIONADA = " ";
-    }    
-    $tpl->block("BLOCK_FILTRO_TIPONEGOCIACAO");
-}
-
-
-
-
 
 $tpl->block("BLOCK_FILTRO");
 
@@ -114,7 +77,8 @@ SELECT DISTINCT
     protip_codigo,
     pro_cooperativa,
     sum(etq_quantidade*etq_valorunitario) as valortot,    
-    round(avg(etq_valorunitario),2) as valunimedia
+    round(avg(etq_valorunitario),2) as valunimedia,
+    etq_produto
 FROM
     estoque
     join produtos on (pro_codigo=etq_produto)
