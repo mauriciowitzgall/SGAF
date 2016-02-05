@@ -4,7 +4,7 @@
 $tpl = new Template("../templates/cabecalho1.html");
 $codigo = $_POST["codigo"];
 $tpl->NUMERO = $codigo;
-$data = date("d/M/Y");
+$data = date("d/m/y");
 $hora = date("H:i");
 $tpl->DATA = "$data";
 $tpl->HORA = "$hora";

@@ -7,9 +7,9 @@ include "cabecalho1.php";
 //Pega os campo de filtro
 $fornecedor = $_POST["fornecedor"];
 $datade = $_POST["datade"];
-$datade_sembarras = desconverte_data($_POST["datade"]);
+$datade_sembarras = $_POST["datade"];
 $dataate = $_POST["dataate"];
-$dataate_sembarras = desconverte_data($_POST["dataate"]);
+$dataate_sembarras = $_POST["dataate"];
 $acertados = $_POST["acertados"];
 $ordenacao = $_POST["ordenacao"];
 if ($ordenacao == "Fornecedor")
@@ -65,20 +65,20 @@ $tpl_campos->block("BLOCK_COLUNA");
 $tpl_campos->COLUNA_ALINHAMENTO = "left";
 $tpl_campos->CAMPO_TIPO = "text";
 $tpl_campos->CAMPO_NOME = "datade";
-$tpl_campos->CAMPO_VALOR = "$datade";
+$tpl_campos->CAMPO_VALOR = converte_data($datade);
 $tpl_campos->block("BLOCK_CAMPO_DESABILITADO");
 $tpl_campos->block("BLOCK_CAMPO_PADRAO");
 $tpl_campos->block("BLOCK_CAMPO");
 $tpl_campos->TEXTO_NOME = "";
 $tpl_campos->TEXTO_ID = "";
 $tpl_campos->TEXTO_CLASSE = "";
-$tpl_campos->TEXTO_VALOR = " até ";
+$tpl_campos->TEXTO_VALOR = " atÃ© ";
 $tpl_campos->block("BLOCK_TEXTO");
 $tpl_campos->block("BLOCK_CONTEUDO");
 $tpl_campos->COLUNA_ALINHAMENTO = "left";
 $tpl_campos->CAMPO_TIPO = "text";
 $tpl_campos->CAMPO_NOME = "dataate";
-$tpl_campos->CAMPO_VALOR = "$dataate";
+$tpl_campos->CAMPO_VALOR = converte_data($dataate);
 $tpl_campos->block("BLOCK_CAMPO_DESABILITADO");
 $tpl_campos->block("BLOCK_CAMPO_PADRAO");
 $tpl_campos->block("BLOCK_CAMPO");
@@ -110,7 +110,7 @@ $tpl_campos->block("BLOCK_CONTEUDO");
 $tpl_campos->block("BLOCK_COLUNA");
 $tpl_campos->block("BLOCK_LINHA");
 
-//Ordenação
+//Ordenaï¿½ï¿½o
 if ($usuario_grupo != 5) {
     $tpl_campos->COLUNA_ALINHAMENTO = "right";
     $tpl_campos->COLUNA_TAMANHO = "200px";
@@ -143,7 +143,7 @@ $tpl_campos->show();
 $tpl_lista = new Template("../templates/lista2.html");
 $tpl_lista->block("BLOCK_TABELA_CHEIA");
 
-//Cabeçalho
+//Cabeï¿½alho
 $tpl_lista->TEXTO = "ID";
 $tpl_lista->COLUNA_ALINHAMENTO = "center";
 $tpl_lista->COLUNA_TAMANHO = "";
@@ -362,7 +362,7 @@ if (mysql_num_rows($query) == 0) {
 
 
 
-//Rodapé
+//Rodapï¿½
     $tpl_lista->COLUNA_COLSPAN = "2";
     $tpl_lista->TEXTO = "";
     $tpl_lista->COLUNA_ALINHAMENTO = "";
@@ -370,7 +370,7 @@ if (mysql_num_rows($query) == 0) {
     $tpl_lista->block("BLOCK_TEXTO");
     $tpl_lista->block("BLOCK_CONTEUDO");
     $tpl_lista->block("BLOCK_COLUNA");
-//Rodapé Bruto Total
+//Rodapï¿½ Bruto Total
     $tpl_lista->COLUNA_COLSPAN = "";
     $tpl_lista->TEXTO = "R$ " . number_format($bruto_total, 2, ',', '.');
     $tpl_lista->COLUNA_ALINHAMENTO = "right";
@@ -380,7 +380,7 @@ if (mysql_num_rows($query) == 0) {
     $tpl_lista->block("BLOCK_COLUNA");
     $query_taxas = mysql_query($sql_taxas);
     $taxa_valor_total = 0;
-//Rodapé Taxas Total
+//Rodapï¿½ Taxas Total
     while ($dados_taxas = mysql_fetch_array($query_taxas)) {
         $taxa_percentual = $dados_taxas[2];
         $taxas_valor = $bruto_total * $taxa_percentual / 100;
@@ -393,7 +393,7 @@ if (mysql_num_rows($query) == 0) {
         $tpl_lista->block("BLOCK_CONTEUDO");
         $tpl_lista->block("BLOCK_COLUNA");
     }
-//Rodapé Valor Liquido Total
+//Rodapï¿½ Valor Liquido Total
     $liquido_total = $bruto_total - $taxas_valor_total;
     $tpl_lista->COLUNA_COLSPAN = "";
     $tpl_lista->TEXTO = "R$ " . number_format($liquido_total, 2, ',', '.');
@@ -402,7 +402,7 @@ if (mysql_num_rows($query) == 0) {
     $tpl_lista->block("BLOCK_TEXTO");
     $tpl_lista->block("BLOCK_CONTEUDO");
     $tpl_lista->block("BLOCK_COLUNA");
-//Rodapé % Total
+//Rodapï¿½ % Total
     $tpl_lista->COLUNA_COLSPAN = "";
     $tpl_lista->TEXTO = number_format($percentual_total, 2, ',', '.') . "%";
     $tpl_lista->COLUNA_ALINHAMENTO = "right";
