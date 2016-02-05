@@ -42,7 +42,6 @@ if ($passo == 1) {
         $fornecedor = $_POST["fornecedor"];
         $tipopessoa = $_POST["tipopessoa"];
         $datade = $_POST["datade2"];
-        echo "($datade)";
         $dataate = $_POST["dataate"];
     }
 }

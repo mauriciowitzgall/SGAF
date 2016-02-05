@@ -552,12 +552,11 @@ if ($passo == 2) {
     $tpl2->block("BLOCK_CABECALHO_LINHA");
     $tpl2->block("BLOCK_CABECALHO");
     $sql = "
-    SELECT tax_nome, quitax_valor
-    FROM quiosques_taxas
-    JOIN taxas on (quitax_taxa=tax_codigo)
-    WHERE tax_cooperativa=$usuario_cooperativa
-    AND tax_quiosque in (0,$usuario_quiosque)
-    AND tax_tiponegociacao=2
+        SELECT quitax_taxa, quitax_valor,tax_nome
+        FROM quiosques_taxas 
+        JOIN taxas on (quitax_taxa=tax_codigo) 
+        WHERE quitax_quiosque in ($usuario_quiosque) 
+        and tax_tiponegociacao = 2
     ";
     $query = mysql_query($sql);
     if (!$query)
@@ -792,7 +791,7 @@ if ($passo == 2) {
         $tpl2->block("BLOCK_COLUNA");
         $tpl2->COLUNA_TAMANHO = "";
         $tpl2->COLUNA_ALINHAMENTO = "left";
-        $tpl2->TEXTO = "100 %";
+        $tpl2->TEXTO = "";
         $tpl2->block("BLOCK_TEXTO");
         $tpl2->block("BLOCK_CONTEUDO");
         $tpl2->block("BLOCK_COLUNA");
@@ -927,7 +926,7 @@ if ($passo == 2) {
         $tpl2->block("BLOCK_COLUNA");
         $tpl2->COLUNA_TAMANHO = "";
         $tpl2->COLUNA_ALINHAMENTO = "";
-        $saldo = "100 %";
+        $saldo = "";
         $tpl2->TEXTO = $saldo;
         $tpl2->block("BLOCK_TEXTO");
         $tpl2->block("BLOCK_CONTEUDO");

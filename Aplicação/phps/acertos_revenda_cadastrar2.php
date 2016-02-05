@@ -111,21 +111,20 @@ VALUES (
 ";
 $query = mysql_query($sql);
 if (!$query)
-    die("Erro: " . mysql_error());
+    die("Erro Principal: " . mysql_error());
 $ultimo = mysql_insert_id();
 
 echo "<br><br>";
 
 
 //Inserir as taxas do acerto
-//Verifica quais taxas que o quiosque tem para o acerto em quest�o
+//Verifica quais taxas que o quiosque tem para o acerto em questào
 $sql2 = "
-    SELECT quitax_taxa, quitax_valor
-    FROM quiosques_taxas
-    JOIN taxas on (quitax_taxa=tax_codigo)
-    WHERE tax_cooperativa=$usuario_cooperativa
-    AND tax_quiosque in (0,$usuario_quiosque)
-    AND tax_tiponegociacao=2
+SELECT quitax_taxa, quitax_valor 
+FROM quiosques_taxas 
+JOIN taxas on (quitax_taxa=tax_codigo) 
+WHERE quitax_quiosque in ($usuario_quiosque) 
+and tax_tiponegociacao = 2
 ";
 $query2 = mysql_query($sql2);
 if (!$query2)
@@ -149,7 +148,7 @@ while ($dados2 = mysql_fetch_assoc($query2)) {
     )";
     $query5 = mysql_query($sql5);
     if (!$query5)
-        die("Erro: " . mysql_error());
+        die("Erro taxas: " . mysql_error());
 }
 
 
