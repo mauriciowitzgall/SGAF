@@ -21,10 +21,7 @@ $tpl_titulo->NOME_ARQUIVO_ICONE = "quiosques_taxas.png";
 $tpl_titulo->show();
 
 //Verifica se há taxas cadastradas
-if (($usuario_grupo == 1) || ($usuario_grupo == 2))
-    $sql = "SELECT tax_codigo FROM taxas WHERE tax_cooperativa=$usuario_cooperativa";
-else
-    $sql = "SELECT tax_codigo FROM taxas WHERE tax_quiosque=$usuario_quiosque";
+$sql = "SELECT tax_codigo FROM taxas WHERE (tax_cooperativa=$usuario_cooperativa AND tax_quiosque=0) OR (tax_quiosque=$usuario_quiosque)";
 $query = mysql_query($sql);
 if (!$query)
     die("Erro: " . mysql_error());
@@ -167,6 +164,8 @@ $tpl1->block("BLOCK_ITEM");
 $tpl1->TITULO = "Porcentagem";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
+$tpl1->CAMPO_ESTILO = "width:50px;";
+$tpl1->block("BLOCK_CAMPO_ESTILO");
 $tpl1->CAMPO_QTD_CARACTERES = "6";
 $tpl1->CAMPO_NOME = "taxavalor";
 $tpl1->CAMPO_DICA = "";
