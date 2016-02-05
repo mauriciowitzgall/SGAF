@@ -1,6 +1,7 @@
 <?php
 
-include "controle/conexao.php";
+require "login_verifica.php";
+
 
 $cooperativa = $_POST["cooperativa"];
 $pessoa = $_POST["pessoa"];
@@ -13,7 +14,7 @@ if (!$query8)
 $linhas8 = mysql_num_rows($query8);
 
 //Verifica se o usuário é gestor de alguma cooperativa
-$sql5 = "SELECT coo_codigo FROM cooperativa_gestores WHERE cooges_gestor=$pessoa";
+$sql5 = "SELECT cooges_gestor FROM cooperativa_gestores WHERE cooges_gestor=$pessoa";
 $query5 = mysql_query($sql5);
 if (!$query5)
     die("Erro 40:" . mysql_error());
