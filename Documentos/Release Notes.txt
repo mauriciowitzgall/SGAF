@@ -63,7 +63,35 @@ Erros corrigidos:
 - Corrigido erro que impedia ver as saídas, após atualização de versão da 3.0 para 3.1
 - Usuários Root ao logar vai para tela de pessoas e não tem mais acesso ao menu. Ele poderá apenas cadastrar administradores.
 - Aprimorado regras de funcionamento do menu para usuários administradores
+- Substituido o papel de presidente por gestor. Sendo assim foi criado telas para vinculação de gestores
+- Corrigido erros que geravam mal funcionamento das taxas
+- No cadastro de produto as opções de tipo de negociação  não estavam obedecendo os parametros do quiosque
+- Durante o registro de uma entrada ao selecionar alguns campos o sistema não populava corretamente os demais, foi feito várias correções.
+- Padronizado e melhorado o visual de alguns campos, assim como aumentado o tamanho.
+- Corrigido erro de mostrar e ocultar os campos de "Volume" e "Recipiente" conforme o item selecionado "Tipo de contagem". Estava invertido
+- Inserido filtro novo "Próprio" na tela de estoque quantidade ideal
+- Corrigido problemas com o ícone "Venda supervisionada" que não estava acendendo corretamente
+- Corrigido problema de gravação de hora que não estava no formato 24h em várias rotinas
+- Na tela de entrada, foi inserido a marca, recipiente, volume e tipo de contagem no texto contido dentro do campo produto.
+- Corrigido problema de acentuação no registro de entradas, o retorno vinha com caracteres especiais
+- Corrigido erros que impediam abrir o cadastro de acertos de consignação
+- Em fechamentos foi adicionado um nova notificação que avisa que para fazer fechamentos é necessário ter algum venda de produto do tipo revenda
+- Ao realizar um fechamento, apareciam mais de uma vez a mesma taxa para ser descontada.
+- Ao incluir uma taxa em um quiosque, o sistema não estava considerando as taxas da cooperativa e então não permitia que o usuário incluísse sem que se quer cadastra-se uma taxa. Agora o supervisor consegue incluir uma taxa no quiosque desde que tenha pelo meno uma taxa global cadastrada pelos gestores ou então que tenha uma taxa cadastrada para o quiosque
+- No relatório 12 os campos de data estavam zerando toda fez que saia do campo. Foi alterado o formato do campo para que fique igual a todos restante do sistema
+- Alterado o formato da data nos cabeçalhos do relatórios
+- Quando o fornecedor acessava o sistema a simulação de acertos estava com erro. Foi corrigido.
+- Retirado do fornecedor o acesso a produtos
+- Corrigido erro de definição de quiosque a um fornecedor no cadastro de pessoas após definir uma senha de acesso
+- Retirado tipo de contagem da visualização de estoque por produto
+- Na tela de trocar de unidade, ao selecionar outra cooperativa o sistema não populava corretamente o campo quiosque, foi corrigido.
 
 Melhorias: 
 - Os usuários administradores ao excluir o ultimo quiosque de uma cooperativa o sistema sugere a exclusão da cooperativa também.
+- Alterado tela de produtos e pessoas incrementado a possibilidade de filtrar apenas registros efetuados pelo próprio quiosque. Sendo assim não irá aparecer produtos ou pessoas registrado por outros quiosque da cooperativa. Foi incrementado também um filtro para poder escolher o que deseja ver.
+- O tratamento que verifica se já existe um caixa com mesmo nome agora considera o quiosque
+- Fornecedor ao usar o sistema agora pode ver estoque por validade
+- Criado regra que sugere criação de um novo caixa quando o usuário não tem vendas registradas e nenhum caixa aberto
+- Quando um usuário administrador logo no sistema, se não tem cooperativa registrada o sistema agora sugere a criação da mesma
 
+Commit: 92c2179
