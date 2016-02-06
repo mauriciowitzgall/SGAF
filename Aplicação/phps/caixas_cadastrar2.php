@@ -69,13 +69,22 @@ if ($operacao == 'cadastrar') {
         $query2 = mysql_query($sql2);
         if (!$query2)
             die("Erro de SQL:" . mysql_error());
+        $ultimo=  mysql_insert_id();
         
-        $tpl_notificacao->MOTIVO_COMPLEMENTO = "";
-        $tpl_notificacao->block("BLOCK_CONFIRMAR");
         $tpl_notificacao->block("BLOCK_CADASTRADO");
-        $tpl_notificacao->block("BLOCK_BOTAO");
+        $tpl_notificacao->block("BLOCK_CONFIRMAR");
+        
+        //Se o usuário cadastrou o primeiro caixa então sugerir/orientar a abrir o caixa
+        $tpl_notificacao->MOTIVO_COMPLEMENTO="Para efetuar vendas é necessário que você abra o caixa.";
+        $tpl_notificacao->PERGUNTA="Gostaria de abrir o caixa criado?";
+        $tpl_notificacao->block("BLOCK_PERGUNTA");
+        $tpl_notificacao->LINK="caixas_operacoes_abrir.php?codigo=$ultimo"; //Sim
+        $tpl_notificacao->NAO_LINK="caixas.php"; //Não
+        $tpl_notificacao->block("BLOCK_BOTAO_NAO_LINK");
+        $tpl_notificacao->block("BLOCK_BOTAO_SIMNAO");
         $tpl_notificacao->show();
     }
+
 }
 
 //Se a operação for edição então

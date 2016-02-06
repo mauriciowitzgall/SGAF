@@ -25,8 +25,33 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "saidas.png";
 $tpl_titulo->show();
 
-$tpl = new Template("templates/listagem.html");
 
+//Se não tiver nehuma saida registra e nenhum caixa criado então sugerir criar caixa e abri-lo
+$sql = "SELECT * FROM saidas WHERE sai_quiosque=$usuario_quiosque";
+$query = mysql_query($sql);
+if (!$query)    die("Erro: " . mysql_error());
+$linhas_saidas = mysql_num_rows($query);
+$sql = "SELECT * FROM caixas WHERE cai_quiosque=$usuario_quiosque and cai_status=1";
+$query = mysql_query($sql);
+if (!$query)    die("Erro: " . mysql_error());
+$linhas_caixa = mysql_num_rows($query);
+$linhas=$linhas_caixa+$linhas_saidas;
+echo "($linhas=$linhas_caixa+$linhas_saidas;)";
+if ($linhas == 0) {
+    echo "<br><br>";
+    $tpl = new Template("templates/notificacao.html");
+    $tpl->ICONES = $icones;
+    $tpl->MOTIVO_COMPLEMENTO = "Para poder realizar vendas é necessário que você tenha um caixa aberto.</b>Clique abaixo para registrar um novo caixa e após abri-lo!";
+    $tpl->block("BLOCK_ATENCAO");
+    $tpl->DESTINO = "caixas_cadastrar.php?operacao=cadastrar";
+    $tpl->block("BLOCK_BOTAO");
+    $tpl->show();
+    exit;
+}
+
+
+
+$tpl = new Template("templates/listagem.html");
 
 
 //Filtro Inicio
