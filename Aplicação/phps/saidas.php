@@ -36,7 +36,6 @@ $query = mysql_query($sql);
 if (!$query)    die("Erro: " . mysql_error());
 $linhas_caixa = mysql_num_rows($query);
 $linhas=$linhas_caixa+$linhas_saidas;
-echo "($linhas=$linhas_caixa+$linhas_saidas;)";
 if ($linhas == 0) {
     echo "<br><br>";
     $tpl = new Template("templates/notificacao.html");
