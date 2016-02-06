@@ -31,6 +31,22 @@ $tpl1->JS_CAMINHO = "troca_unidade.js";
 $tpl1->block("BLOCK_JS");
 
 
+//Se não houver nenhum cooperativa cadastrada, então sugerir a criação de uma
+$sql = "SELECT * FROM cooperativas";
+if (!$query=mysql_query($sql))    die("Erro: " . mysql_error());
+$linhas = mysql_num_rows($query);
+if ($linhas == 0) {
+    echo "<br><br>";
+    $tpl = new Template("templates/notificacao.html");
+    $tpl->ICONES = $icones;
+    $tpl->MOTIVO_COMPLEMENTO = "Não há cooperativas cadastradas. Clique em continuar para cadastrar uma!";
+    $tpl->block("BLOCK_ATENCAO");
+    $tpl->DESTINO = "cooperativas_cadastrar.php?operacao=cadastrar";
+    $tpl->block("BLOCK_BOTAO");
+    $tpl->show();
+    exit;
+}
+
 //Cooperativa
 $tpl1->TITULO = "Cooperativa";
 $tpl1->block("BLOCK_TITULO");

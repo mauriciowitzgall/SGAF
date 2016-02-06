@@ -55,6 +55,7 @@ if (($usuario_grupo==1)||(($usuario_grupo==7))) {
         $sql3 = "DELETE FROM mestre_produtos_tipo WHERE mesprotip_produto in (SELECT pro_codigo FROM produtos WHERE pro_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL51: " . mysql_error());
 
+        
 
         // Entradas
         $sql3 = "DELETE FROM entradas_produtos WHERE entpro_entrada in (SELECT DISTINCT ent_codigo FROM entradas JOIN quiosques on ent_quiosque=qui_codigo WHERE qui_cooperativa=$codigo)";
@@ -108,7 +109,10 @@ if (($usuario_grupo==1)||(($usuario_grupo==7))) {
         // Taxas
         $sql3 = "DELETE FROM taxas WHERE tax_cooperativa=$codigo";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL20: " . mysql_error());
-        // Cooperativa
+        //Cooperativa Gestores
+        $sql3 = "DELETE FROM cooperativa_gestores WHERE cooges_cooperativa=$codigo";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL32: " . mysql_error());
+        //Cooperativa
         $sql3 = "DELETE FROM cooperativas WHERE coo_codigo=$codigo";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL22: " . mysql_error());
         //Produtos
