@@ -155,7 +155,7 @@ while ($dados = mysql_fetch_array($query)) {
     $tpl->ENTRADAS_HORA = converte_hora($dados[8]);
     $tpl->SIGLA = $dados["protip_sigla"];
     $tipocontagem = $dados["protip_codigo"];
-    if ($tipocontagem == 2)
+    if (($tipocontagem == 2)||($tipocontagem==3))
         $tpl->ENTRADAS_QTD = number_format($dados[2], 3, ',', '.');
     else
         $tpl->ENTRADAS_QTD = number_format($dados[2], 0, '', '.');

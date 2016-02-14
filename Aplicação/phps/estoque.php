@@ -142,7 +142,7 @@ if ($linhas != "") {
         $tpl->PRODUTO_CODIGO = $dados['pro_codigo'];
         $tpl->MEDIA = "R$ ".number_format($dados['valunimedia'],2,',','.');
         $tipocontagem=$dados['protip_codigo'];
-        if ($tipocontagem==2)
+        if (($tipocontagem==2)||($tipocontagem==3))
             $tpl->QUANTIDADE = number_format($dados['qtd'], 3, ',', '.');
         else
             $tpl->QUANTIDADE = number_format($dados['qtd'], 0, '', '.');

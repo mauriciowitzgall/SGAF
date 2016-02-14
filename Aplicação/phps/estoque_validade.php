@@ -125,7 +125,7 @@ if ($linhas != "") {
         $tpl->FORNECEDOR_ID = $dados['pes_id'];
         $tpl->LOTE = $dados['etq_lote'];
         $tipocontagem=$dados['protip_codigo'];
-        if ($tipocontagem==2)
+        if (($tipocontagem==2)||($tipocontagem==3))
             $tpl->QTD = number_format($dados['etq_quantidade'], 3, ',', '.');
         else
             $tpl->QTD = number_format($dados['etq_quantidade'], 0, '', '.');

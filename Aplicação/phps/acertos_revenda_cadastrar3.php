@@ -590,7 +590,7 @@ WHERE saipro_fechado=$codigo
             $tpl2->block("BLOCK_COLUNA");
             $tpl2->COLUNA_TAMANHO = "";
             $tpl2->COLUNA_ALINHAMENTO = "right";
-            if ($tipocontagem == 2)
+            if (($tipocontagem == 2)||($tipocontagem==3))
                 $tpl2->TEXTO = number_format($qtd, 3, ',', '.');
             else
                 $tpl2->TEXTO = number_format($qtd, 0, '', '.');

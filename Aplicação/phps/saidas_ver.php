@@ -285,7 +285,7 @@ while ($dados2 = mysql_fetch_assoc($query2)) {
     $tpl2->LISTA_COLUNA_TAMANHO = "100px";
     $tpl2->LISTA_COLUNA_CLASSE = "";
     $tipocontagem = $dados2["protip_codigo"];
-    if ($tipocontagem == 2)
+    if (($tipocontagem == 2)||($tipocontagem==3))
         $tpl2->LISTA_COLUNA_VALOR = number_format($dados2['saipro_quantidade'], 3, ',', '.');
     else
         $tpl2->LISTA_COLUNA_VALOR = number_format($dados2['saipro_quantidade'], 0, '', '.');

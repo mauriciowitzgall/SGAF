@@ -388,7 +388,7 @@ if ($passo == 2) {
             $tpl2->LISTA_COLUNA_ALINHAMENTO = "right";
             $tpl2->LISTA_COLUNA_CLASSE = "";
             $tipocontagem = $dados["protip_codigo"];
-            if ($tipocontagem == 2)
+            if (($tipocontagem == 2)||($tipocontagem == 3))
                 $tpl2->LISTA_COLUNA_VALOR = number_format($dados["qtd"], 3, ',', '.');
             else
                 $tpl2->LISTA_COLUNA_VALOR = number_format($dados["qtd"], 0, '', '.');

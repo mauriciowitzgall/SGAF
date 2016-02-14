@@ -89,7 +89,7 @@ function produto_selecionado() {
             } else {
                 document.forms["form1"].qtd.disabled = false;
                 $("span[name=qtdnoestoque]").text("(" + etqatu + " no estoque)");
-                if (valor == 2) { //Se o tipo de contagem for 'kg'
+                if ((valor == 2)||(valor==3)) { //Se o tipo de contagem for 'kg' ou 'lt'
                     $("input[name=qtd]").val("");
                     document.forms["form1"].botao_incluir.disabled = true;
                 } else { //Se o tipo de contagem for diferente de 'kg'
@@ -127,7 +127,7 @@ function pesoqtd() {
     $.post("saidas_verifica_tipocontagem.php", {
         produto: $("select[name=produto]").val()
     }, function(valor) {
-        if (valor == 2) {
+        if ((valor == 2)||(valor==3)) {
             $('#qtd').priceFormat({
                 prefix: '',
                 centsLimit: 3,

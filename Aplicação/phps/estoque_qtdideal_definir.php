@@ -1,3 +1,5 @@
+<script src="estoque_qtdideal_definir.js" type="text/javascript"></script>
+
 <?php
 
 //Verifica se o usu�rio tem permiss�o para acessar este conte�do
@@ -10,6 +12,14 @@ if ($permissao_estoque_qtdide_definir <> 1) {
 $tipopagina = "estoque";
 include "includes.php";
 
+$produto=$_GET["codigo"];
+
+$sql="SELECT * FROM quantidade_ideal WHERE qtdide_quiosque=$usuario_quiosque and qtdide_produto=$produto";
+if (!$query = mysql_query($sql))   die("Erro carregar dados do produto para edição:" . mysql_error());
+$dados = mysql_fetch_assoc($query);
+$qtdide=$dados["qtdide_quantidade"];
+
+
 //TÍTULO PRINCIPAL
 $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "ESTOQUE";
@@ -18,10 +28,8 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "estoque.png";
 $tpl_titulo->show();
 
-$produto = $_GET["codigo"];
-if (!$qtdide = $_GET["qtdide"])
-    $qtdide="0,00";
-//FORMUL�RIO
+
+//FORMULARIO
 $tpl = new Template("templates/cadastro1.html");
 $tpl->FORM_NOME = "";
 $tpl->FORM_TARGET = "";
@@ -40,8 +48,9 @@ $tpl->COLUNA_TAMANHO = "";
 $tpl->CAMPO_TIPO = "text";
 $tpl->CAMPO_NOME = "produto";
 $tpl->CAMPO_ID = "produto";
+$tpl->CAMPO_ONKEYUP = "";
 $sql = "
-SELECT pro_nome,protip_sigla
+SELECT pro_nome,protip_sigla,pro_tipocontagem
 FROM produtos 
 join produtos_tipo on (pro_tipocontagem=protip_codigo)
 WHERE pro_codigo=$produto";
@@ -51,6 +60,7 @@ if (!$query)
 $dados = mysql_fetch_array($query);
 $produto_nome = $dados[0];
 $sigla = $dados[1];
+$tipocontagem = $dados[2];
 $tpl->CAMPO_VALOR = "$produto_nome";
 $tpl->CAMPO_TAMANHO = "30";
 $tpl->block("BLOCK_CAMPO_DESABILITADO");
@@ -71,10 +81,13 @@ $tpl->COLUNA_ALINHAMENTO = "";
 $tpl->COLUNA_TAMANHO = "";
 $tpl->CAMPO_TIPO = "text";
 $tpl->CAMPO_NOME = "qtdide";
-$tpl->CAMPO_ID = "qtd";
-$tpl->CAMPO_ONKEYUP = "";
-$tpl->CAMPO_VALOR = number_format($qtdide,2,',','.');
-$tpl->CAMPO_TAMANHO = "8";
+$tpl->CAMPO_ID = "qtdide";
+$tpl->CAMPO_ONKEYUP = "marcara_qtdide()";
+if (($tipocontagem==2)||($tipocontagem==3))
+    $tpl->CAMPO_VALOR = number_format($qtdide,3,',','.');            
+else
+    $tpl->CAMPO_VALOR = number_format($qtdide,0,'','.'); 
+$tpl->CAMPO_TAMANHO = "12";
 $tpl->block("BLOCK_CAMPO_OBRIGATORIO");
 $tpl->block("BLOCK_CAMPO_PADRAO");
 $tpl->block("BLOCK_CAMPO_AUTOFOCO");
@@ -89,9 +102,24 @@ $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_COLUNA");
 $tpl->block("BLOCK_LINHA");
 
-//Campo C�digo
+//Campo Código
 $tpl->CAMPOOCULTO_NOME = "produto";
 $tpl->CAMPOOCULTO_VALOR = "$produto";
+$tpl->block("BLOCK_CAMPOOCULTO");
+
+
+//Quantidade Ideal oculto
+$tpl->CAMPOOCULTO_NOME = "qtdide2";
+if (($tipocontagem==2)||($tipocontagem==3))
+    $tpl->CAMPOOCULTO_VALOR = number_format($qtdide,3,',','.');            
+else
+    $tpl->CAMPOOCULTO_VALOR = number_format($qtdide,0,'','.'); 
+$tpl->block("BLOCK_CAMPOOCULTO");
+
+
+// Tipo de contagem Oculto
+$tpl->CAMPOOCULTO_NOME = "tipocontagem";
+$tpl->CAMPOOCULTO_VALOR = "$tipocontagem";
 $tpl->block("BLOCK_CAMPOOCULTO");
 
 $tpl->show();

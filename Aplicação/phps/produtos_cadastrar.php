@@ -45,6 +45,7 @@ while ($dados2 = mysql_fetch_array($query2)) {
 <script type="text/javascript" src="js/capitular.js"></script>
 <script type="text/javascript">
 window.onload = function(){
+    //industrializado
     ind=$("select[name=industrializado]").val();
     if (ind==0) {
         $("tr[id=id_marca]").hide(); 
@@ -53,8 +54,10 @@ window.onload = function(){
         $("tr[id=id_marca]").show(); 
         $("tr[id=id_codigounico]").show(); 
     }
+    
+    //tipo de contagem    
     tipocon=$("select[name=tipo]").val();
-    if (tipocon==2) {
+    if ((tipocon==2)||(tipocon==3)) {
         $("tr[id=id_volume]").hide(); 
         $("tr[id=id_recipiente]").hide(); 
     } else {
@@ -166,7 +169,7 @@ if ($linhas == 0) {
            </td>
        </tr>
         
-        <tr id="id_volume">
+       <tr id="id_volume">
             <td align="right" width="200px"><b>Volume: <label class="obrigatorio"></label></b></td>
             <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="volume"  size="15" class="campopadrao"  value="<?php echo "$volume"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo">Ex: 150g ou 200ml</span></td>
         </tr>

@@ -57,7 +57,7 @@ while ($dados= mysql_fetch_assoc($query)) {
     $valor_total_qtd=$valor_total_qtd+$dados["etq_quantidade"];
 }
 $tpl->VALOR_TOTAL = "R$ ".number_format($valor_total_geral,2,',','.');            
-if ($tipocontagem==2)
+if (($tipocontagem==2)||($tipocontagem==3))
     $tpl->QTD_TOTAL = number_format($valor_total_qtd,3,',','.');            
 else
     $tpl->QTD_TOTAL = number_format($valor_total_qtd,0,'','.');            
@@ -88,7 +88,7 @@ while ($dados = mysql_fetch_array($query)) {
     $tpl->LOTE = $dados['etq_lote'];
     $tpl->DATA = $dados['ent_datacadastro'];
     $tipocontagem=$dados['protip_codigo'];
-    if ($tipocontagem==2)
+    if (($tipocontagem==2)||($tipocontagem==3))
         $tpl->QUANTIDADE = number_format($dados['etq_quantidade'], 3, ',', '.');
     else
         $tpl->QUANTIDADE = number_format($dados['etq_quantidade'], 0, '', '.');

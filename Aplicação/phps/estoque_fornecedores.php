@@ -77,7 +77,7 @@ while ($dados=  mysql_fetch_array($query))
     $tpl->FORNECEDOR_ID=$dados['pes_id'];
     $tpl->FORNECEDOR=$dados['pes_nome'];
     $tipocontagem=$dados['protip_codigo'];
-    if ($tipocontagem==2)
+    if (($tipocontagem==2)||($tipocontagem==3))
         $tpl->QUANTIDADE= number_format($dados['qtd'],3,',','.');
     else 
         $tpl->QUANTIDADE= number_format($dados['qtd'],0,'','.');

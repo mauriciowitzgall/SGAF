@@ -4,4 +4,5 @@
 
 # Versão 3.1.2
 
-# ... nada até o momento
+
+INSERT INTO `coopaf`.`produtos_tipo` (`protip_codigo`, `protip_nome`, `protip_sigla`) VALUES ('3', 'Litro(s)', 'lt.');

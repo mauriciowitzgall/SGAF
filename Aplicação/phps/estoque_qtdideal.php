@@ -164,13 +164,13 @@ SELECT
         AND qtdide_produto = pro_codigo 
     ) *100 as saldo,
     protip_sigla,
-    pro_quiosquequecadastrou
-   
-FROM produtos, quantidade_ideal, produtos_tipo
+    pro_quiosquequecadastrou,
+    protip_codigo
+FROM produtos 
+JOIN quantidade_ideal on qtdide_produto = pro_codigo
+JOIN produtos_tipo on pro_tipocontagem=protip_codigo
 WHERE qtdide_quiosque =$usuario_quiosque
-AND qtdide_produto = pro_codigo
 AND pro_cooperativa =$usuario_cooperativa
-and pro_tipocontagem=protip_codigo
 $sql_filtro
 ORDER BY saldo
 ";
@@ -189,7 +189,8 @@ SELECT
         and etq_quiosque=$usuario_quiosque
     ) AS qtd,
     protip_sigla,
-    pro_quiosquequecadastrou
+    pro_quiosquequecadastrou,
+    protip_codigo
 FROM produtos
 join produtos_tipo on (pro_tipocontagem=protip_codigo)
 WHERE pro_cooperativa =$usuario_cooperativa
@@ -240,7 +241,7 @@ if ((mysql_num_rows($query) == 0) && (mysql_num_rows($query5) == 0)) {
                     $tpl2->LINHA_CLASSE = "tab_linhas_azul2";
                 } else if (($saldo>150)&&($saldo<=175)) {
                     $tpl2->LINHA_CLASSE = "tab_linhas_azul3";
-                } else if (($saldo>175)&&($saldo<=200)) {
+                } else if (($saldo>175)) {
                     $tpl2->LINHA_CLASSE = "tab_linhas_azul4";
                 } else {
                     $tpl2->LINHA_CLASSE = "tab_linhas";
@@ -268,7 +269,7 @@ if ((mysql_num_rows($query) == 0) && (mysql_num_rows($query5) == 0)) {
             //Quantidade   
             $tpl2->COLUNA_TAMANHO = "";
             $tpl2->COLUNA_ALINHAMENTO = "right";
-            if ($tipocontagem==2)
+            if (($tipocontagem==2)||($tipocontagem==3))
                 $tpl2->TEXTO = number_format($qtd, 3, ',', '.');
             else 
                 $tpl2->TEXTO = number_format($qtd, 0, '', '.');
@@ -285,7 +286,11 @@ if ((mysql_num_rows($query) == 0) && (mysql_num_rows($query5) == 0)) {
             //Quantidade Ideal           
             $tpl2->COLUNA_TAMANHO = "";
             $tpl2->COLUNA_ALINHAMENTO = "right";
-            $tpl2->TEXTO = number_format($qtdide, 2, ',', '.');
+            if (($tipocontagem==2)||($tipocontagem==3))
+                $tpl2->TEXTO = number_format($qtdide, 3, ',', '.');
+            else 
+                $tpl2->TEXTO = number_format($qtdide, 0, '', '.');
+            //echo "($tipocontagem)";
             $tpl2->block("BLOCK_TEXTO");
             $tpl2->block("BLOCK_CONTEUDO");
             $tpl2->block("BLOCK_COLUNA");
