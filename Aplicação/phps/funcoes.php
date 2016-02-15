@@ -9,6 +9,16 @@ function converte_data($data) {
     return $data;
 }
 
+//Converte data do formato Y-m-d para d/m/Y
+function converte_dinheirotela_para_dinheirodb($data) {
+    if ($data != "") {
+        $texto = explode(" ", $data);
+        $texto = $texto[2];
+        return $texto[2] . "/" . $texto[1] . "/" . $texto[0];
+    }
+    return $data;
+}
+
 //Converte data do formato d/m/Y para Y-m-d
 function desconverte_data($data) {
     if ($data != "") {

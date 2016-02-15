@@ -21,7 +21,7 @@ $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "OPERADORES DE CAIXA";
 $tpl_titulo->SUBTITULO = "CADASTRO OPERADORES DE CAIXA";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "../pessoas2/caixa.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "caixa_operadores.png";
 $tpl_titulo->show();
 
 //Estrutura da notificação

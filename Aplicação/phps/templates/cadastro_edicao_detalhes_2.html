@@ -40,6 +40,13 @@
         </td>            
         <td align="left" width="" class="fundo1">            
             <!-- BEGIN BLOCK_CONTEUDO -->  
+            
+            <!-- BEGIN BLOCK_LINK -->  
+            <a href="{LINK}" class="link" target="{LINK_TARGET}" name="{LINK_NOME}" id="{LINK_ID}">
+            <!-- END BLOCK_LINK -->  
+            
+            
+            
             <!-- BEGIN BLOCK_CAMPO --> 
             <input
                 type="{CAMPO_TIPO}" 
@@ -214,7 +221,9 @@
             
             <!-- BEGIN BLOCK_TEXTO -->
             <span class="" id="{TEXTO_ID}">{TEXTO}</span>
-            <!-- END BLOCK_TEXTO -->              
+            <!-- END BLOCK_TEXTO -->  
+            
+            </a>
             <!-- END BLOCK_CONTEUDO -->  
         </td>        
     </tr>
@@ -277,6 +286,13 @@
     <input type="button" value="VOLTAR" name="voltar" class="botaopadrao">
     </a> 
     <!-- END BLOCK_BOTAO_VOLTAR -->
+
+
+    <!-- BEGIN BLOCK_BOTAO_FECHAR -->
+    <a href="javascript:window.close()" class="link">
+    <input type="button" value="FECHAR" name="fechar" class="botaopadrao">
+    </a> 
+    <!-- END BLOCK_BOTAO_FECHAR -->
 <br>
 <!-- END BLOCK_BOTOES -->
 

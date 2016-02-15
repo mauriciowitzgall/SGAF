@@ -168,3 +168,34 @@
     font-style: italic;    
     font-weight: bold;
 }
+
+.tab_linhas_amarelo {
+        background: lemonchiffon;
+}
+.tab_linhas_vermelho {
+    background: #FFE4E1;
+}
+.tab_linhas_vermelho1 {
+    background: #F5A9A9;
+}
+.tab_linhas_vermelho2 {
+    background: #F6CECE;
+}
+.tab_linhas_vermelho3 {
+    background: #F8E0E0;
+}
+.tab_linhas_vermelho4 {
+    background: #FBEFEF;
+}
+.tab_linhas_azul1 {
+    background: #EFF8FB;
+}
+.tab_linhas_azul2 {
+    background: #E0F2F7;
+}
+.tab_linhas_azul3 {
+    background: #CEECF5;
+}    
+.tab_linhas_azul4 {
+    background: #A9E2F3;
+}  

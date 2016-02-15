@@ -94,7 +94,7 @@ if ($operacao == 'editar') {
     $query = mysql_query($sql);
     $dados = mysql_fetch_assoc($query);
     $nome_banco = $dados["tax_nome"];
-    echo "(strtolower($nome) != strtolower($nome_banco))";
+
     if (strtolower($nome) != strtolower($nome_banco)) {
         $sql2 = "SELECT cai_nome FROM caixas WHERE cai_nome='$nome'";
         $query2 = mysql_query($sql2);

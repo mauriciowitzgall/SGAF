@@ -10,12 +10,23 @@ if ($permissao_caixas_operacoes_abrir <> 1) {
 $tipopagina = "caixas";
 include "includes.php";
 
+//print_r($_REQUEST);
+
+$totalbruto=$_POST["totalbruto2"];
+$totalliquido=$_POST["totalliquido2"];
+$totalliquidosemcartao=$_POST["totalliquidosemcartao2"];
+$totalliquidocartao=$_POST["totalliquidocartao2"];
+$entradastotal=$_POST["entradastotal2"];
+$saidastotal=$_POST["saidastotal2"];
+$saldo_entradassaidas=$_POST["saldo_entradassaidas2"];
+$totaldescontovendas=$_POST["totaldescontovendas2"];
+
 $totalvendido=$_POST["totalvendido2"];
+$valorfinal=$_POST["valorfinal"];
 $totalsaldotroco=$_POST["totalsaldotroco2"];
 $valoresperado=$_POST["valoresperado2"];
 $diferenca=$_POST["diferenca2"];
 $saldovendas=$totalvendido+$totalsaldotroco;
-$valorfinal=$_POST["valorfinal"];
 $valorfinal=  dinheiro_para_numero($valorfinal);
 $operacao=$_POST["operacao2"];
 $numero=$_POST["numero"];
@@ -77,7 +88,17 @@ caiopo_totalvendas='$totalvendido',
 caiopo_totaltroco='$totalsaldotroco',
 caiopo_saldovendas='$saldovendas',
 caiopo_valorfinal='$valorfinal',
-caiopo_diferenca='$diferenca'
+caiopo_diferenca='$diferenca',
+caiopo_totalbruto='$totalbruto',
+caiopo_liquido='$totalliquido',
+caiopo_liquidosemcartao='$totalliquidosemcartao',
+caiopo_liquidocartao='$totalliquidocartao',
+caiopo_entradastotal='$entradastotal',
+caiopo_saidastotal='$saidastotal',
+caiopo_saldoentradassaidas='$saldo_entradassaidas',
+caiopo_totaldescontovendas='$totaldescontovendas',
+caiopo_valoresperado='$valoresperado',
+caiopo_supervisor='$supervisor'
 WHERE caiopo_numero=$numero    
 ";
 if (!$query=mysql_query($sql)) die("Erro SQL Atualiza Caixa Operações: " . mysql_error());

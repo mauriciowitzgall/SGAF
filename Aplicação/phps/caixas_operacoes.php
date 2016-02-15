@@ -119,6 +119,12 @@ $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="DIFERENÇA";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
+//Entrada e Saída 
+$tpl->CABECALHO_COLUNA_TAMANHO="";
+$tpl->CABECALHO_COLUNA_COLSPAN="2";
+$tpl->CABECALHO_COLUNA_NOME="FLUXO";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
 
 //Vendas
 $tpl->CABECALHO_COLUNA_TAMANHO="30px";
@@ -126,17 +132,19 @@ $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="VENDAS";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
+
 //Situação
 $tpl->CABECALHO_COLUNA_TAMANHO="30px";
 $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="SIT.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
+
 //Operacoes
 if ($usuario_grupo<>4) {
     $tpl->CABECALHO_COLUNA_TAMANHO="";
     $tpl->CABECALHO_COLUNA_COLSPAN="1";
-    $tpl->CABECALHO_COLUNA_NOME="OPERAÇÕES";
+    $tpl->CABECALHO_COLUNA_NOME="OPER.";
     $tpl->block("BLOCK_LISTA_CABECALHO");
 }  
 
@@ -173,7 +181,12 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $saldovendas= $dados["caiopo_saldovendas"];
     $diferenca= $dados["caiopo_diferenca"];
     $valorfinal= $dados["caiopo_valorfinal"];
+    if ($valorfinal=="") $situacao_operacao=1; else $situacao_operacao=2;
     
+    if ($cont==0) $tpl->TR_CLASSE = "tab_linhas_vermelho negrito";
+    else $tpl->TR_CLASSE = "";
+
+
     //Nº
     $tpl->LISTA_COLUNA_ALINHAMENTO="";
     $tpl->LISTA_COLUNA_CLASSE="";
@@ -226,37 +239,6 @@ while ($dados=  mysql_fetch_assoc($query)) {
         $tpl->LISTA_COLUNA_VALOR=  "R$ " . number_format($valorfinal, 2, ',', '.');
     $tpl->block("BLOCK_LISTA_COLUNA");
     
-    /*
-    //Total Vendas
-    $tpl->LISTA_COLUNA_ALINHAMENTO="";
-    $tpl->LISTA_COLUNA_CLASSE="";
-    $tpl->LISTA_COLUNA_TAMANHO="";
-    if ($situacao==1)
-        $tpl->LISTA_COLUNA_VALOR=  "";
-    else 
-        $tpl->LISTA_COLUNA_VALOR=  "R$ " . number_format($totalvendas, 2, ',', '.');
-    $tpl->block("BLOCK_LISTA_COLUNA");
-    
-    //Saldo Troco
-    $tpl->LISTA_COLUNA_ALINHAMENTO="";
-    $tpl->LISTA_COLUNA_CLASSE="";
-    $tpl->LISTA_COLUNA_TAMANHO="";
-    if ($situacao==1)
-        $tpl->LISTA_COLUNA_VALOR=  "";
-    else 
-        $tpl->LISTA_COLUNA_VALOR=  "R$ " . number_format($totaltroco, 2, ',', '.');
-    $tpl->block("BLOCK_LISTA_COLUNA");
-    
-    //Saldo Vendas
-    $tpl->LISTA_COLUNA_ALINHAMENTO="";
-    $tpl->LISTA_COLUNA_CLASSE="";
-    $tpl->LISTA_COLUNA_TAMANHO="";
-    if (($situacao==1)&&($cont==0))
-        $tpl->LISTA_COLUNA_VALOR=  "";
-    else 
-        $tpl->LISTA_COLUNA_VALOR=  "R$ " . number_format($saldovendas, 2, ',', '.');
-    $tpl->block("BLOCK_LISTA_COLUNA");
-    */
     
     //Diferença
     $tpl->LISTA_COLUNA_ALINHAMENTO="";
@@ -275,9 +257,21 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $tpl->block("BLOCK_LISTA_COLUNA");
     
     
-    //Ver Saidas
+    //Entradas e Saidas de caixa
+    $sql2="SELECT * FROM caixas_entradassaidas WHERE caientsai_numerooperacao=$numero";
+    if (!$query2=mysql_query($sql2)) die("Erro SQL: ".mysql_error());
+    $qtd_entsai = $dados2 = mysql_num_rows($query2);
+    $tpl->LISTA_COLUNA2_ALINHAMENTO="right";
+    $tpl->LISTA_COLUNA2_VALOR="($qtd_entsai)";
+    $tpl->LISTA_COLUNA2_ALINHAMENTO2="left"; 
+    $tpl->LISTA_COLUNA2_LINK="caixas_entradassaidas.php?caixaoperacao=$numero";
+    $tpl->IMAGEM_PASTA="$icones";
+    $tpl->block("BLOCK_LISTA_COLUNA2"); 
+    
+        
+    //Vendas
     $tpl->IMAGEM_ALINHAMENTO="center";
-    $tpl->LINK="saidas.php?filtro_caixaoperacao=$numero";
+    $tpl->LINK="saidas.php?filtro_caixaoperacao=$numero&caixa=$caixa";
     $tpl->IMAGEM_TAMANHO="15px";
     $tpl->IMAGEM_PASTA="$icones";
     $tpl->IMAGEM_NOMEARQUIVO="saidas_caixaoperacao.png";
@@ -285,28 +279,23 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
     $tpl->block("BLOCK_LISTA_COLUNA_ICONES"); 
     
-    //Situação
-    $sql2="SELECT caisit_nome FROM caixas_situacao WHERE caisit_codigo=$situacao";
-    if (!$query2=mysql_query($sql2)) die("Erro SQL: ".mysql_error());
-    $dados2 = mysql_fetch_assoc($query2);
-    $situacao_nome=$dados2["caisit_nome"];
+    //Situacao
     $tpl->IMAGEM_ALINHAMENTO="center";
     $tpl->LINK="";
     $tpl->IMAGEM_TAMANHO="15px";
     $tpl->IMAGEM_PASTA="$icones";
     if ($cont==0) {
-        if ($situacao==1)
-            $tpl->IMAGEM_NOMEARQUIVO="bandeira2_verde.png";
-        else 
-            $tpl->IMAGEM_NOMEARQUIVO="bandeira2_vermelha.png";
+        $tpl->IMAGEM_NOMEARQUIVO="caixa_aberto3.png";
+        $tpl->IMAGEM_TITULO="Aberto";
     } else {
-        $tpl->IMAGEM_NOMEARQUIVO="bandeira2_vermelha.png";
+        $tpl->IMAGEM_NOMEARQUIVO="caixa_fechado3.png";
+        $tpl->IMAGEM_TITULO="Encerrado";
     }
-        
-    $tpl->IMAGEM_TITULO="Aberto";
     $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
     $tpl->block("BLOCK_LISTA_COLUNA_ICONES"); 
+
     
+   
     
     //Detalhes
     if ($usuario_grupo<>4) {
@@ -318,6 +307,48 @@ while ($dados=  mysql_fetch_assoc($query)) {
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DETALHES");
 
     }
+    /*
+    //Entrada 
+    if (($situacao_operacao==1)) {
+        $tpl->LINK="caixas_entradassaidas_cadastrar.php";
+        $tpl->CODIGO="";
+        $tpl->LINK_COMPLEMENTO="operacao=cadastrar&caixaoperacao=$numero&tipooperacao=1";
+        $tpl->COLUNA_CLASSE="tab_operacao";
+        $tpl->ICONE_NOME="caixa_entrada3.png";
+        $tpl->ICONE_ARQUIVO="$icones";
+        $tpl->OPERACAO_NOME="Gerar Entrada";
+        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
+    } else {
+        $tpl->LINK="";
+        $tpl->CODIGO="";
+        $tpl->LINK_COMPLEMENTO="";
+        $tpl->COLUNA_CLASSE="tab_operacao";
+        $tpl->ICONE_NOME="caixa_entrada4.png";
+        $tpl->ICONE_ARQUIVO="$icones";
+        $tpl->OPERACAO_NOME="Gerar Entrada";
+        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");      
+    }
+    //Saída 
+    if (($situacao_operacao==1)) {
+        $tpl->LINK="caixas_entradassaidas_cadastrar.php";
+        $tpl->CODIGO="";
+        $tpl->LINK_COMPLEMENTO="operacao=cadastrar&caixaoperacao=$numero&tipooperacao=2";
+        $tpl->COLUNA_CLASSE="tab_operacao";
+        $tpl->ICONE_NOME="caixa_saida3.png";
+        $tpl->ICONE_ARQUIVO="$icones";
+        $tpl->OPERACAO_NOME="Gerar Saída";
+        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
+    } else {
+        $tpl->LINK="";
+        $tpl->CODIGO="";
+        $tpl->LINK_COMPLEMENTO="";
+        $tpl->COLUNA_CLASSE="tab_operacao";
+        $tpl->ICONE_NOME="caixa_saida4.png";
+        $tpl->ICONE_ARQUIVO="$icones";
+        $tpl->OPERACAO_NOME="Gerar Saída";
+        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");      
+    }*/
+    
     $tpl->block("BLOCK_LISTA"); 
     $cont++;
 }

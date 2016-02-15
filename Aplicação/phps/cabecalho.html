@@ -52,17 +52,23 @@
             </a>
             <!-- END BLOCK_VENDAS -->
             
-            <!-- BEGIN BLOCK_CAIXAS_ABRIR -->            
+            <!-- BEGIN BLOCK_CAIXA_ABRIR -->            
             <a href="caixas.php" class="link">
                 <img src="../imagens/icones/geral/caixas_abrir.png" width="25px" alt="Abrir Caixa" title="Abrir Caixa">
             </a>
-            <!-- END BLOCK_CAIXAS_ABRIR -->
+            <!-- END BLOCK_CAIXA_ABRIR -->
             
-            <!-- BEGIN BLOCK_CAIXAS_ENCERRAR -->            
+            <!-- BEGIN BLOCK_CAIXA_FLUXO -->            
+            <a href="caixas_entradassaidas.php?caixaoperacao={NUMEROOPERACAO}" class="link">
+                <img src="../imagens/icones/geral/caixa_entradasaida.png" width="25px" alt="FLuxo de Caixa" title="Fluxo de Caixa">
+            </a>
+            <!-- END BLOCK_CAIXA_FLUXO -->
+            
+            <!-- BEGIN BLOCK_CAIXA_ENCERRAR -->            
             <a href="caixas_operacoes_encerrar.php?codigo={ENCERRARCAIXA}" class="link">
                 <img src="../imagens/icones/geral/caixas_encerrar.png" width="25px" alt="Encerrar Caixa" title="Encerrar Caixa">
             </a>
-            <!-- END BLOCK_CAIXAS_ENCERRAR -->
+            <!-- END BLOCK_CAIXA_ENCERRAR -->
  
             <!-- BEGIN BLOCK_TROCA_QUIOSQUE -->            
             <a href="troca_unidade.php?cooperativa={COOPERATIVA_COD}&quiosque={QUIOSQUE_COD}" class="link">

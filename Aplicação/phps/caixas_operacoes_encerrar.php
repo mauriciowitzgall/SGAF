@@ -35,22 +35,84 @@ $dataabertura=$datahora2[0];
 $horaabertura=$datahora2[1];
 $valorinicial=$dados["caiopo_valorinicial"];
 
-//Verifica quando que foi vendido pelo caixa em questão
+//Verifica produtos vendidos pelo caixa em questão
 $sql="
 SELECT ROUND(sum(sai_totalcomdesconto),2) as totalvendido,
 ROUND(sum((sai_totalliquido-sai_totalcomdesconto)),2) as totalsaldotroco ,
+ROUND(sum(sai_totalbruto),2) as totalbruto ,
+ROUND(sum((sai_totalcomdesconto-sai_totalbruto)),2) as totaldescontovendas ,
 ROUND(sum(sai_totalliquido),2) as totalliquido
 FROM saidas 
 WHERE sai_caixaoperacaonumero=$numero
+and sai_areceber = 0
 ";
 if (!$query=mysql_query($sql)) die("Erro SQL 2: " . mysql_error());
 $dados = mysql_fetch_assoc($query);
 $totalvendido=$dados["totalvendido"];
 $totalsaldotroco=$dados["totalsaldotroco"];
 $totalliquido=$dados["totalliquido"];
+$totaldescontovendas=$dados["totaldescontovendas"];
+$totalbruto=$dados["totalbruto"];
 
-//Calcular valor esperado
-$valoresperado=$valorinicial+$totalliquido;
+//Total a receber
+$sql="
+SELECT ROUND(sum(sai_totalliquido),2) as totalliquido
+FROM saidas 
+WHERE sai_caixaoperacaonumero=$numero
+AND sai_areceber=1
+";
+if (!$query=mysql_query($sql)) die("Erro SQL 2: " . mysql_error());
+$dados = mysql_fetch_assoc($query);
+$totaareceber=$dados["totalliquido"];
+
+//Total liquido no Cartão
+$sql="
+SELECT ROUND(sum(sai_totalliquido),2) as totalliquido
+FROM saidas 
+WHERE sai_caixaoperacaonumero=$numero
+AND sai_metpag in (2,3)
+AND sai_areceber=0
+";
+if (!$query=mysql_query($sql)) die("Erro SQL 2: " . mysql_error());
+$dados = mysql_fetch_assoc($query);
+$totalliquidocartao=$dados["totalliquido"];
+
+//Total liquido sem cartão
+$sql="
+SELECT ROUND(sum(sai_totalliquido),2) as totalliquido
+FROM saidas 
+WHERE sai_caixaoperacaonumero=$numero
+AND sai_metpag not in (2,3)
+AND sai_areceber=0
+";
+if (!$query=mysql_query($sql)) die("Erro SQL 2: " . mysql_error());
+$dados = mysql_fetch_assoc($query);
+$totalliquidosemcartao=$dados["totalliquido"];
+
+//Total Entrada
+$sql="
+SELECT ROUND(sum(caientsai_valor),2) as entradatotal
+FROM caixas_entradassaidas 
+WHERE caientsai_numerooperacao=$numero
+AND caientsai_tipo=1
+";
+if (!$query=mysql_query($sql)) die("Erro SQL 2: " . mysql_error());
+$dados = mysql_fetch_assoc($query);
+$entradatotal=$dados["entradatotal"];
+
+//Total Saida
+$sql="
+SELECT ROUND(sum(caientsai_valor),2) as saidatotal
+FROM caixas_entradassaidas 
+WHERE caientsai_numerooperacao=$numero
+AND caientsai_tipo=2
+";
+if (!$query=mysql_query($sql)) die("Erro SQL 2: " . mysql_error());
+$dados = mysql_fetch_assoc($query);
+$saidatotal=$dados["saidatotal"];
+
+$saldo_entradassaidas=$entradatotal-$saidatotal;
+$valoresperado=$valorinicial+$totalliquido+$saldo_entradassaidas;
 
 
 //TÍTULO PRINCIPAL
@@ -140,12 +202,36 @@ $tpl->block("BLOCK_CAMPO");
 $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
 
-//Total Vendido
-$tpl->TITULO="Total Vendido";
+//Vendas Título
+$tpl->TEXTO_ID="";
+$tpl->TEXTO="<br> ";
+$tpl->block("BLOCK_TEXTO");
+$tpl->TEXTO_ID="";
+$tpl->TEXTO="<b>Vendas</b>";
+$tpl->block("BLOCK_TEXTO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_ITEM");
+
+//Total Bruto
+$tpl->TITULO="Total Bruto Vendido Recebido";
 $tpl->block("BLOCK_TITULO");
 $tpl->CAMPO_TIPO="text";
-$tpl->CAMPO_NOME="totalvendido";
-$tpl->CAMPO_VALOR=  "R$ ".number_format($totalvendido,2,",",".");
+$tpl->CAMPO_NOME="totalbruto";
+$tpl->CAMPO_VALOR=  "R$ ".number_format($totalbruto,2,",",".");
+$tpl->CAMPO_TAMANHO="";
+$tpl->CAMPO_QTD_CARACTERES="";
+$tpl->block("BLOCK_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl->block("BLOCK_CAMPO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_ITEM");
+
+//Total Vendido Desconto
+$tpl->TITULO="Total Desc. nas Vendas Recebidas";
+$tpl->block("BLOCK_TITULO");
+$tpl->CAMPO_TIPO="text";
+$tpl->CAMPO_NOME="totaldescontovendas";
+$tpl->CAMPO_VALOR=  "R$ ".number_format($totaldescontovendas,2,",",".");
 $tpl->CAMPO_TAMANHO="";
 $tpl->CAMPO_QTD_CARACTERES="";
 $tpl->block("BLOCK_CAMPO_DESABILITADO");
@@ -155,7 +241,7 @@ $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
 
 //Total Saldo Troco
-$tpl->TITULO="Total Saldo Troco";
+$tpl->TITULO="Total Saldo Troco das Vendas";
 $tpl->block("BLOCK_TITULO");
 $tpl->CAMPO_TIPO="text";
 $tpl->CAMPO_NOME="totalsaldotroco";
@@ -167,6 +253,114 @@ $tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
 $tpl->block("BLOCK_CAMPO");
 $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
+
+
+//Total Liquido Vendido
+$tpl->TITULO="Total Liquido Vendido";
+$tpl->block("BLOCK_TITULO");
+$tpl->CAMPO_TIPO="text";
+$tpl->CAMPO_NOME="totalliquido";
+$tpl->CAMPO_VALOR=  "R$ ".number_format($totalliquido,2,",",".");
+$tpl->CAMPO_TAMANHO="";
+$tpl->CAMPO_QTD_CARACTERES="";
+$tpl->block("BLOCK_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl->block("BLOCK_CAMPO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_ITEM");
+
+//Total liquido sem cartão
+$tpl->TITULO="Total Liquido Sem Cartão ";
+$tpl->block("BLOCK_TITULO");
+$tpl->CAMPO_TIPO="text";
+$tpl->CAMPO_NOME="totalliquidosemcartao";
+$tpl->CAMPO_VALOR=  "R$ ".number_format($totalliquidosemcartao,2,",",".");
+$tpl->CAMPO_TAMANHO="";
+$tpl->CAMPO_QTD_CARACTERES="";
+$tpl->block("BLOCK_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl->block("BLOCK_CAMPO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_ITEM");
+
+//Total liquido no cartão
+$tpl->TITULO="Total Liquido No Cartão ";
+$tpl->block("BLOCK_TITULO");
+$tpl->CAMPO_TIPO="text";
+$tpl->CAMPO_NOME="totalliquidocartao";
+$tpl->CAMPO_VALOR=  "R$ ".number_format($totalliquidocartao,2,",",".");
+$tpl->CAMPO_TAMANHO="";
+$tpl->CAMPO_QTD_CARACTERES="";
+$tpl->block("BLOCK_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl->block("BLOCK_CAMPO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_ITEM");
+
+
+//Entradas e Saídas Título
+$tpl->TEXTO_ID="";
+$tpl->TEXTO="<br> ";
+$tpl->block("BLOCK_TEXTO");
+$tpl->TEXTO_ID="";
+$tpl->TEXTO="<b>Fluxo de caixa</b>";
+$tpl->block("BLOCK_TEXTO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_ITEM");
+
+
+//Total Entradas
+$tpl->TITULO="Total Entradas";
+$tpl->block("BLOCK_TITULO");
+$tpl->CAMPO_TIPO="text";
+$tpl->CAMPO_NOME="totalentradas";
+$tpl->CAMPO_VALOR=  "R$ ".number_format($entradatotal,2,",",".");
+$tpl->CAMPO_TAMANHO="";
+$tpl->CAMPO_QTD_CARACTERES="";
+$tpl->block("BLOCK_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl->block("BLOCK_CAMPO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_ITEM");
+
+//Total Saidas
+$tpl->TITULO="Total Saídas";
+$tpl->block("BLOCK_TITULO");
+$tpl->CAMPO_TIPO="text";
+$tpl->CAMPO_NOME="totalsaidas";
+$tpl->CAMPO_VALOR=  "R$ ".number_format($saidatotal,2,",",".");
+$tpl->CAMPO_TAMANHO="";
+$tpl->CAMPO_QTD_CARACTERES="";
+$tpl->block("BLOCK_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl->block("BLOCK_CAMPO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_ITEM");
+
+//Saldo Entradas/Saídas
+$tpl->TITULO="Saldo Entradas/Saídas";
+$tpl->block("BLOCK_TITULO");
+$tpl->CAMPO_TIPO="text";
+$tpl->CAMPO_NOME="saldoentradassaidas";
+$tpl->CAMPO_VALOR=  "R$ ".number_format($saldo_entradassaidas,2,",",".");
+$tpl->CAMPO_TAMANHO="";
+$tpl->CAMPO_QTD_CARACTERES="";
+$tpl->block("BLOCK_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl->block("BLOCK_CAMPO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_ITEM");
+
+//Entradas e Saídas Título
+$tpl->TEXTO_ID="";
+$tpl->TEXTO="<br> ";
+$tpl->block("BLOCK_TEXTO");
+$tpl->TEXTO_ID="";
+$tpl->TEXTO="<b></b>";
+$tpl->block("BLOCK_TEXTO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_ITEM");
+
 
 //Total Esperado
 $tpl->TITULO="Total Esperado";
@@ -262,14 +456,50 @@ $tpl->block("BLOCK_CAMPOSOCULTOS");
 
 
 
-//Total Vendido
-$tpl->CAMPOOCULTO_VALOR="$totalvendido";
-$tpl->CAMPOOCULTO_NOME="totalvendido2";
+//Total Bruto Vendido
+$tpl->CAMPOOCULTO_VALOR="$totalbruto";
+$tpl->CAMPOOCULTO_NOME="totalbruto2";
+$tpl->block("BLOCK_CAMPOSOCULTOS");
+
+//Total Desconto nas Vendas
+$tpl->CAMPOOCULTO_VALOR="$totaldescontovendas";
+$tpl->CAMPOOCULTO_NOME="totaldescontovendas2";
 $tpl->block("BLOCK_CAMPOSOCULTOS");
 
 //Total Saldo Troco
 $tpl->CAMPOOCULTO_VALOR="$totalsaldotroco";
 $tpl->CAMPOOCULTO_NOME="totalsaldotroco2";
+$tpl->block("BLOCK_CAMPOSOCULTOS");
+
+//Total Liquido Vendido
+$tpl->CAMPOOCULTO_VALOR="$totalliquido";
+$tpl->CAMPOOCULTO_NOME="totalliquido2";
+$tpl->block("BLOCK_CAMPOSOCULTOS");
+
+//Total Liquido Vendido sem cartão
+$tpl->CAMPOOCULTO_VALOR="$totalliquidosemcartao";
+$tpl->CAMPOOCULTO_NOME="totalliquidosemcartao2";
+$tpl->block("BLOCK_CAMPOSOCULTOS");
+
+//Total Liquido Vendido com cartão
+$tpl->CAMPOOCULTO_VALOR="$totalliquidocartao";
+$tpl->CAMPOOCULTO_NOME="totalliquidocartao2";
+$tpl->block("BLOCK_CAMPOSOCULTOS");
+
+//Total Entradas
+$tpl->CAMPOOCULTO_VALOR="$entradatotal";
+$tpl->CAMPOOCULTO_NOME="entradastotal2";
+$tpl->block("BLOCK_CAMPOSOCULTOS");
+
+
+//Valor Saídas
+$tpl->CAMPOOCULTO_VALOR="$saidatotal";
+$tpl->CAMPOOCULTO_NOME="saidastotal2";
+$tpl->block("BLOCK_CAMPOSOCULTOS");
+
+//Saldo Entradas Saídas
+$tpl->CAMPOOCULTO_VALOR="$saldo_entradassaidas";
+$tpl->CAMPOOCULTO_NOME="saldo_entradassaidas2";
 $tpl->block("BLOCK_CAMPOSOCULTOS");
 
 //Valor Esperado

@@ -69,7 +69,7 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 if ($usuario_grupo<>4) {
     $tpl->CABECALHO_COLUNA_TAMANHO="";
     $tpl->CABECALHO_COLUNA_COLSPAN="";
-    $tpl->CABECALHO_COLUNA_NOME="FLUXO";
+    $tpl->CABECALHO_COLUNA_NOME="OPER.";
     $tpl->block("BLOCK_LISTA_CABECALHO");
 }
 
@@ -131,6 +131,10 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $dados2=mysql_fetch_array($query2);
     $numero_ultimo=$dados2[0];
     
+    //if ($situacao==1) $tpl->TR_CLASSE="tab_linhas_amarelo";
+    //else $tpl->TR_CLASSE="tab_linhas_amarelo";
+
+    
     //Nome
     $tpl->LISTA_COLUNA_ALINHAMENTO="";
     $tpl->LISTA_COLUNA_CLASSE="";
@@ -160,7 +164,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
         $tpl->block("BLOCK_LISTA_COLUNA2");
     }
     
-        //Alterar Caixa Padrão
+    //Alterar Caixa Padrão
     if ($permissao_caixas_trocar==1) {
         if ($codigo==$usuario_caixa) {
            $tpl->IMAGEM_ALINHAMENTO="center";
@@ -177,7 +181,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
                 $tpl->LINK="caixas_trocar.php?codigo=$codigo&numero=$numero_ultimo";
                 $tpl->IMAGEM_TAMANHO="15px";
                 $tpl->IMAGEM_PASTA="$icones";
-                $tpl->IMAGEM_NOMEARQUIVO="caixa_trocar.png";
+                $tpl->IMAGEM_NOMEARQUIVO="caixa_associar.png";
                 $tpl->IMAGEM_TITULO="Alterar Caixa Padrão";
                 $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
                 $tpl->block("BLOCK_LISTA_COLUNA_ICONES");         
@@ -186,7 +190,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
                 $tpl->LINK="";
                 $tpl->IMAGEM_TAMANHO="15px";
                 $tpl->IMAGEM_PASTA="$icones";
-                $tpl->IMAGEM_NOMEARQUIVO="caixa_trocar2.png";
+                $tpl->IMAGEM_NOMEARQUIVO="caixa_associar2.png";
                 $tpl->IMAGEM_TITULO="Alterar Caixa Padrão";
                 $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
                 $tpl->block("BLOCK_LISTA_COLUNA_ICONES");               
@@ -202,6 +206,8 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $tpl->LISTA_COLUNA_CLASSE="";
     $tpl->LISTA_COLUNA_TAMANHO="50px";
     $tpl->ICONES_TEXTO_ALINHAMENTO="right";
+    $tpl->ICONES_TEXTO_CLASSE="";
+    $nuncaoperado="";
     if ($numero_ultimo != "") {
         $sql3="SELECT * FROM caixas_operacoes JOIN caixas on cai_codigo=caiopo_caixa JOIN pessoas on caiopo_operador=pes_codigo WHERE caiopo_numero=$numero_ultimo";
         if (!$query3=mysql_query($sql3)) die("Erro SQL 21: " . mysql_error());
@@ -215,26 +221,41 @@ while ($dados=  mysql_fetch_assoc($query)) {
                 $tpl->ICONES_TEXTO_VALOR="$operador_atual_nome";
     } else {
         $situacao_atual="2";
+        $nuncaoperado=1;
         $tpl->ICONES_TEXTO_ALINHAMENTO="right";
         $tpl->ICONES_TEXTO_TAMANHOCAMPO="";
         $tpl->ICONES_TEXTO_VALOR="Nunca Operado";
     }
     $tpl->block("BLOCK_LISTA_COLUNA_ICONES_TEXTO");
-    $sql2="SELECT  caisit_nome FROM caixas_situacao WHERE caisit_codigo=$situacao";
-    if (!$query2=mysql_query($sql2)) die("Erro SQL: ".mysql_error());
-    $dados2 = mysql_fetch_assoc($query2);
-    $situacao_nome=$dados2["caisit_nome"];
-    $tpl->IMAGEM_ALINHAMENTO="left";
+    
+    $tpl->IMAGEM_ALINHAMENTO="center";
     $tpl->LINK="";
     $tpl->IMAGEM_TAMANHO="15px";
     $tpl->IMAGEM_PASTA="$icones";
-    if ($situacao==1)
-        $tpl->IMAGEM_NOMEARQUIVO="bandeira2_verde.png";
-    else 
-        $tpl->IMAGEM_NOMEARQUIVO="bandeira2_vermelha.png";
-    $tpl->IMAGEM_TITULO="Aberto";
+    if ($situacao==1) {
+        $tpl->IMAGEM_NOMEARQUIVO="caixa_aberto3.png";
+        $tpl->IMAGEM_TITULO="Aberto";
+    } else {
+        $tpl->IMAGEM_NOMEARQUIVO="caixa_fechado3.png";
+        $tpl->IMAGEM_TITULO="Fechado";
+    }
     $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
-    $tpl->block("BLOCK_LISTA_COLUNA_ICONES");
+    $tpl->block("BLOCK_LISTA_COLUNA_ICONES");  
+    
+    /*$sql2="SELECT  caisit_nome,caisit_codigo FROM caixas_situacao WHERE caisit_codigo=$situacao";
+    if (!$query2=mysql_query($sql2)) die("Erro SQL: ".mysql_error());
+    $dados2 = mysql_fetch_assoc($query2);
+    $situacao_nome=$dados2["caisit_nome"];
+    $tpl->ICONES_TEXTO_ALINHAMENTO="left";
+    $tpl->ICONES_TEXTO_TAMANHOCAMPO="";
+    if ($dados2["caisit_codigo"]==1) {
+        $tpl->ICONES_TEXTO_CLASSE="tabelalinhaazul";
+    } else {
+        $tpl->ICONES_TEXTO_CLASSE="tabelalinhavermelha";
+    }
+    if ($nuncaoperado==1) $tpl->ICONES_TEXTO_VALOR="";
+    else $tpl->ICONES_TEXTO_VALOR="$situacao_nome";
+    $tpl->block("BLOCK_LISTA_COLUNA_ICONES_TEXTO");*/
     
     
     //FLUXO

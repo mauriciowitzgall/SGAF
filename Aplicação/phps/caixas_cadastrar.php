@@ -12,15 +12,18 @@ include "includes.php";
 
 $operacao=$_GET["operacao"];
 $codigo=$_GET["codigo"];
-if ($operacao=="ver")
 //Pega os dados para popular os campos com os dados atuais do caixa
-$sql="SELECT * FROM caixas WHERE cai_codigo=$codigo";
-if (!$query= mysql_query($sql)) die("ERRO SQL: ".mysql_error ());
-while($dados=  mysql_fetch_assoc($query)) {
-    $nome=$dados["cai_nome"];
-    $local=$dados["cai_local"];
+if (($operacao=="editar")||($operacao=="ver")) {
+    $sql="SELECT * FROM caixas WHERE cai_codigo=$codigo";
+    if (!$query= mysql_query($sql)) die("ERRO SQL: ".mysql_error ());
+    while($dados=  mysql_fetch_assoc($query)) {
+        $nome=$dados["cai_nome"];
+        $local=$dados["cai_local"];
+    }
+} else {
+    $nome="";
+    $local="";
 }
-
 
 
 //TÍTULO PRINCIPAL
@@ -41,7 +44,6 @@ $tpl->TITULO="Nome";
 $tpl->block("BLOCK_TITULO");
 $tpl->CAMPO_TIPO="text";
 $tpl->CAMPO_NOME="nome";
-
 $tpl->CAMPO_VALOR="$nome";
 $tpl->CAMPO_TAMANHO="";
 $tpl->CAMPO_QTD_CARACTERES="";
@@ -90,14 +92,15 @@ $tpl->block("BLOCK_CAMPOSOCULTOS");
 if ($operacao=="ver") {
     $tpl->block("BLOCK_BOTAO_VOLTAR");
 
-} if ($operacao=="cadastrar") {
+} else if (($operacao=="cadastrar")||($operacao=="editar")) {
+    
     //Botão Salvar
     $tpl->block("BLOCK_BOTAO_SALVAR");
 
     //Botão Cancelar
     $tpl->BOTAO_LINK="caixas.php";
     $tpl->block("BLOCK_BOTAO_CANCELAR");
-}
+} 
 
 $tpl->block("BLOCK_BOTOES");
 

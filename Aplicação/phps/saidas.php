@@ -54,7 +54,7 @@ $tpl = new Template("templates/listagem.html");
 
 
 //Filtro Inicio
-$filtro_numero = $_POST["filtro_numero"];
+$filtro_numero = $_REQUEST["filtro_numero"];
 $filtro_produto = $_POST["filtro_produto"];
 $filtro_consumidor = $_POST["filtro_consumidor"];
 $filtro_fornecedor = $_POST["filtro_fornecedor"];

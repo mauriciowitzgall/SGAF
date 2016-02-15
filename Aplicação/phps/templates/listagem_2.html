@@ -110,6 +110,7 @@
                         type="button" 
                         value="{BOTAO_NOME}" 
                         class="botaopadrao botaopadraocadastrar" 
+                        title="{BOTAO_TITULO}"
                         <!-- BEGIN BLOCK_AUTOFOCO -->
                         autofocus="1" 
                         <!-- END BLOCK_AUTOFOCO -->
@@ -182,7 +183,7 @@
         </thead>      
          <!-- BEGIN BLOCK_LISTA -->
         <tbody>
-            <tr class="tab_linhas">
+            <tr class="tab_linhas {TR_CLASSE}">
 
                 <!-- BEGIN BLOCK_LISTA_COLUNA -->
                 <td 
@@ -229,7 +230,7 @@
 
 
                 <!-- BEGIN BLOCK_LISTA_COLUNA_OPERACAO -->
-                <td align="center" class="fundo1 {COLUNA_CLASSE} ">                
+                <td align="center" class="fundo1 {COLUNA_CLASSE} " width="35px">                
                     <a href="{LINK}?codigo={CODIGO}{LINK_COMPLEMENTO}" class="link1">
                         <img width="15px" src="{ICONE_ARQUIVO}/{ICONE_NOME}" title="{OPERACAO_TITULO}"  alt="{OPERACAO_NOME}" />
                     </a>

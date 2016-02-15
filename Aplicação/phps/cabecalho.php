@@ -65,17 +65,19 @@ if ($usuario_grupo == 0) {
 //Caixa Abrir Encerrar e Vendas
 if ($usuario_grupo==4) {
     if ($usuario_caixa_operacao=="") {
-        $tpl8->block("BLOCK_CAIXAS_ABRIR");
+        $tpl8->block("BLOCK_CAIXA_ABRIR");
     }
     else {
         $tpl8->ENCERRARCAIXA="$usuario_caixa_operacao";
-        $tpl8->block("BLOCK_CAIXAS_ENCERRAR");
+        $tpl8->block("BLOCK_CAIXA_ENCERRAR");
         $tpl8->block("BLOCK_VENDAS");
+        $tpl8->NUMEROOPERACAO="$usuario_caixa_operacao";
+        $tpl8->block("BLOCK_CAIXA_FLUXO");
     }
     
 }
 
-//Desmarca Caixa Padrão
+
 
 
 

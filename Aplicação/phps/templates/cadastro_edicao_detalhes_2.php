@@ -7,9 +7,6 @@ $tpl->JS_CAMINHO="";
 $tpl->block("BLOCK_JS");
 
 //--------------------------------
-//Formulário
-$tpl->LINK_DESTINO="";
-$tpl->LINK_TARGET="";
 
 //Linha
 $tpl->LINK_DESTINO=""; //Destino do formulário
