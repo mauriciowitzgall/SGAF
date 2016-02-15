@@ -25,7 +25,7 @@ if ($lote == 0) {
     $dados = mysql_fetch_array($query);
     $qtdnoestoque = $dados["etq_quantidade"];
     $contagem = $dados["protip_codigo"];
-    if ($contagem==2) 
+    if (($contagem==2)||($contagem==3)) 
         echo $qtdnoestoque = number_format($qtdnoestoque, 3, ',', '.');
     else 
         echo $qtdnoestoque = number_format($qtdnoestoque, 0, '', '.');
