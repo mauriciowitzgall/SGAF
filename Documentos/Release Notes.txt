@@ -95,3 +95,23 @@ Melhorias:
 - Quando um usuário administrador logo no sistema, se não tem cooperativa registrada o sistema agora sugere a criação da mesma
 
 Commit: 92c2179
+
+3.2
+
+- Criado novo tipo de contagem "Por Litro"
+
+Commit: 4058b5a
+
+3.3
+
+- Criado fluxo de caixa (entradas e saídas de dinheiro além da venda)
+- Ao gerar uma venda quando selecionava o lote do produto o campo que mostrar o estoque atual não estava mostrando casa decimais para tipo de contagem por litro
+
+Commit: aa89c456
+
+3.4
+
+- Criado porções para os produtos
+- Ao realizar vendas é possível selecionar uma porção
+
+Commit: 98474cf
