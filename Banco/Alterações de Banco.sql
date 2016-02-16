@@ -51,4 +51,14 @@ ADD COLUMN `caiopo_valoresperado` FLOAT NULL AFTER `caiopo_totaldescontovendas`;
 ALTER TABLE `sgaf`.`caixas_operacoes` 
 ADD COLUMN `caiopo_supervisor` INT(11) NULL AFTER `caiopo_valoresperado`;
 
+CREATE TABLE `sgaf`.`produtos_porcoes` (
+  `propor_codigo` INT NOT NULL AUTO_INCREMENT,
+  `propor_produto` BIGINT(20) NOT NULL,
+  `propor_quantidade` FLOAT NOT NULL,
+  `propor_usuarioquecadastrou` INT(11) NOT NULL,
+  `propor_quiosquequecadastrou` INT(11) NOT NULL,
+  `propor_datacadastro` DATETIME NOT NULL,
+  PRIMARY KEY (`propor_codigo`));
 
+ALTER TABLE `sgaf`.`produtos_porcoes` 
+ADD COLUMN `propor_nome` VARCHAR(45) NOT NULL AFTER `propor_produto`;

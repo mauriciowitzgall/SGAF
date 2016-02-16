@@ -134,12 +134,13 @@ ORDER BY pro_nome
     <table border="1" class="tabela1" cellpadding="4" width="100%">
         <tr valign="middle" class="tabelacabecalho1">
             <td width="30px">COD.</td>
-            <td width="" colspan="2">DATA</td>
+            <!-- <td width="" colspan="2">DATA</td> -->
             <td width="100px">NOME</td>
             <td colspan="" align="center">MARCA</td>
             <td colspan="" align="center">REC.</td>
             <td colspan="" align="center">VOL.</td>
             <td width="10px" colspan="" align="center">TIPO</td>
+            <td width="10px" align="center" colspan="2">PORÇÕES</td>	
             <td width="" align="center">CATEGORIA</td>	
             <td width="10px" align="center">TIP. NEG.</td>	
             <?php
@@ -174,13 +175,21 @@ ORDER BY pro_nome
             $hora = converte_hora($array['pro_horacriacao']);
             $usuarioquecadastrou=$array['pro_usuarioquecadastrou'];
             $quiosquequecadastrou=$array['pro_quiosquequecadastrou'];
+            
+            $sql9="SELECT count(propor_codigo) as qtdporcoes FROM produtos_porcoes WHERE propor_produto=$codigo";
+            if (!$query9=  mysql_query($sql9)) die ("Erro SQL 2:".  mysql_error());
+            $dados9=  mysql_fetch_assoc($query9);
+            $qtdporcoes=$dados9["qtdporcoes"];
+            if ($qtdporcoes=="") $qtdporcoes=0;
+            
             ?>
 
             <tr class="lin">
                 <td align="right"><?php echo "$codigo"; ?></td>
+                <!-- 
                 <td align="right"><?php echo "$data"; ?></td>
                 <td align="left"><?php echo "$hora"; ?></td>
-
+                -->
 
                 <td><?php echo "$nome"; ?></td>
                 <td><?php echo "$marca"; ?></td>
@@ -193,7 +202,12 @@ ORDER BY pro_nome
                 $nometipo = $array2['protip_nome'];
                 $siglatipo = $array2['protip_sigla'];               
                 ?>
-                <td width="35px"><?php echo " $siglatipo"; ?>
+                <td width="35px"><?php echo " $siglatipo"; ?> </td>            
+                <td width="" align="right"><b><?php echo "($qtdporcoes)"; ?> </b></td>            
+                <td width="" align="left">
+                    <a href="produtos_porcoes.php?produto=<?php echo "$codigo"; ?>">
+                    <img width="18px" src="../imagens/icones/geral/procurar.png" title="Produrar" alt="Procurar">
+                    </a>
                 </td>            
                 <td><?php
                 $sql3 = "SELECT * FROM produtos_categorias WHERE cat_codigo=$categoria";
@@ -235,7 +249,7 @@ ORDER BY pro_nome
                         <?php 
                         if (($quiosquequecadastrou==$usuario_quiosque)) { 
                             echo "$icones\atencao2.png ";
-                            $motivo="Atenção";
+                            $motivo="";
                         } else  if ($quiosquequecadastrou==0) { 
                             $motivo="Produto registrado pelos gestores da cooperativa!";
                         } else {
