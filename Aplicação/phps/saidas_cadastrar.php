@@ -197,7 +197,7 @@ if ($linhas == 0) {
 }
 
 
-//Inicio do formul�rio de saidas
+//Inicio do formulário de saidas
 $tpl1 = new Template("saidas_cadastrar.html");
 $tpl1->LINK_DESTINO = "saidas_cadastrar.php?tiposaida=$tiposaida";
 $tpl1->LINK_ATUAL = "saidas_cadastrar.php?tiposaida=$tiposaida";
@@ -206,9 +206,11 @@ $tpl1->ICONES_CAMINHO = $icones;
 $tpl1->JS_CAMINHO = "saidas_cadastrar.js";
 $tpl1->block("BLOCK_JS");
 
+$tpl1->TR_ID="";
+
 
 //Se for para deletar uma produto da lista
-if ($retirar_produto == '1') { //Se o usu�rio clicou no excluir produto da lista
+if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da lista
     //Antes de atualizar o estoque e remover item das saidas verificar se o item da saida que est� querendo deletar j� n�o foi deletado
     //(isso acontece quando o usu�rio pressiona F5 depois de clicar no bot�o remover item)        
     $sql_f5 = "
@@ -574,7 +576,48 @@ if ($passo == 2) {
     $tpl1->block("BLOCK_SELECT");
     $tpl1->block("BLOCK_ITEM");
 
+    //Porção
+    $tpl1->TR_ID="linha_porcoes";
+    $tpl1->TITULO = "Porção";
+    $tpl1->ASTERISCO = "";
+    $tpl1->block("BLOCK_TITULO");
+    $tpl1->SELECT_NOME = "porcao";
+    $tpl1->SELECT_OBRIGATORIO = "  ";
+    $tpl1->SELECT_FOCO = "  ";
+    $tpl1->SELECT_DESABILITADO = "  ";
+    $tpl1->SELECT_AOTROCAR = "";
+    $tpl1->SPAN2_NOME = "porcao_qtd_label";
+    $tpl1->SPAN2_VALOR = "";
+    $tpl1->block("BLOCK_SPAN2");
+    $tpl1->block("BLOCK_SELECT");
+    $tpl1->block("BLOCK_ITEM");
+    //oculto
+    $tpl1->CAMPOOCULTO_NOME = "porcao_oculto";
+    $tpl1->CAMPOOCULTO_VALOR = "";
+    $tpl1->block("BLOCK_CAMPOSOCULTOS");
+
+    //Porção Quantidade
+    $tpl1->TR_ID="linha_porcoes_qtd";
+    $tpl1->CAMPO_QTD_CARACTERES = "9";
+    $tpl1->TITULO = "Porção Quantidade";
+    $tpl1->block("BLOCK_TITULO");
+    $tpl1->ASTERISCO = "";
+    $tpl1->CAMPO_TIPO = "text";
+    $tpl1->CAMPO_NOME = "porcao_qtd";
+    $tpl1->CAMPO_TAMANHO = "9";
+    $tpl1->CAMPO_VALOR = "";
+    $tpl1->CAMPO_FOCO = "";
+    $tpl1->CAMPO_DESABILITADO = "";
+    $tpl1->CAMPO_ONKEYPRESS = "";
+    $tpl1->CAMPO_ONKEYUP = "porcoesqtd_popula_qtd(); saidas_qtd();";
+    $tpl1->CAMPO_ONKEYDOWN = "";
+    $tpl1->CAMPO_ONFOCUS = "";
+    $tpl1->CAMPO_OBRIGATORIO = " ";
+    $tpl1->block("BLOCK_CAMPO");
+    $tpl1->block("BLOCK_ITEM");
+
     //Quantidade
+    $tpl1->TR_ID="";
     $tpl1->CAMPO_QTD_CARACTERES = "9";
     $tpl1->TITULO = "Quantidade";
     $tpl1->block("BLOCK_TITULO");
@@ -603,7 +646,7 @@ if ($passo == 2) {
     $tpl1->block("BLOCK_CAMPO");
     $tpl1->block("BLOCK_ITEM");
 
-    //Valor Unit�rio
+    //Valor Unitário
     $tpl1->CAMPO_QTD_CARACTERES = "";
     $tpl1->TITULO = "Valor Unitário";
     $tpl1->ASTERISCO = "";
