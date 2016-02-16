@@ -147,7 +147,7 @@ function produto_selecionado() {
             } else {
                 document.forms["form1"].qtd.disabled = false;
                 porcao2=$("select[name=porcao]").val();
-                if (porcao2!="") document.forms["form1"].porcao_qtd.disabled = false;
+                if ((porcao2!="")&&(porcao2!= null)&&(porcao2!== undefined)&&(porcao2!= 0)) document.forms["form1"].porcao_qtd.disabled = false;
                 else document.forms["form1"].porcao_qtd.disabled = true;
                 $("span[name=qtdnoestoque]").text("(" + etqatu + " no estoque)");
                 if ((valor == 2)||(valor==3)) { //Se o tipo de contagem for 'kg' ou 'lt'
