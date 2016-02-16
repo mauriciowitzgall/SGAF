@@ -51,8 +51,14 @@ if (($usuario_grupo==1)||(($usuario_grupo==7))) {
         // Categorias de produtos
         $sql3 = "DELETE FROM produtos_categorias WHERE cat_cooperativa=$codigo";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL5: " . mysql_error());
+        
         // Tipo de negociação do produto
         $sql3 = "DELETE FROM mestre_produtos_tipo WHERE mesprotip_produto in (SELECT pro_codigo FROM produtos WHERE pro_cooperativa=$codigo)";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL51: " . mysql_error());
+
+        
+        // Porções
+        $sql3 = "DELETE FROM produtos_porcoes WHERE propor_produto in (SELECT pro_codigo FROM produtos WHERE pro_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL51: " . mysql_error());
 
         
@@ -89,6 +95,16 @@ if (($usuario_grupo==1)||(($usuario_grupo==7))) {
         $sql3 = "DELETE FROM fechamentos WHERE fch_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL15: " . mysql_error());
         
+        //caixa_entradassaidas
+        $sql3 = "
+            DELETE FROM caixas_entradassaidas  WHERE caientsai_numerooperacao in ( 
+                SELECT caiopo_numero FROM caixas_operacoes WHERE caiopo_caixa in ( 
+                    SELECT cai_codigo FROM caixas WHERE cai_quiosque in ( 
+                        SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo
+                    )
+                )
+        )";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL66: " . mysql_error());
         //caixa_operadores
         $sql3 = "DELETE FROM caixas_operadores WHERE caiope_caixa in (SELECT cai_codigo FROM caixas WHERE cai_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo))";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL23: " . mysql_error());

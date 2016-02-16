@@ -228,7 +228,12 @@ if ($usuario_grupo==2) {
             die("Erro SQL: " . mysql_error());
         }
 
-        // Quiosque
+        //caixa_entradassaidas
+        $sql3 = "DELETE FROM caixas_entradassaidas WHERE caientsai_numerooperacao in ( SELECT caiopo_numero FROM caixas_operacoes WHERE caiopo_caixa in (SELECT cai_codigo FROM caixas WHERE cai_quiosque=$codigo))";
+        $query3 = mysql_query($sql3);
+        if (!$query3) {
+            die("Erro SQL 33: " . mysql_error());
+        }
         //caixa_operadores
         $sql3 = "DELETE FROM caixas_operadores WHERE caiope_caixa in (SELECT cai_codigo FROM caixas WHERE cai_quiosque=$codigo) ";
         $query3 = mysql_query($sql3);
