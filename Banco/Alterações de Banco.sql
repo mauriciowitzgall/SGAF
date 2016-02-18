@@ -62,3 +62,12 @@ CREATE TABLE `sgaf`.`produtos_porcoes` (
 
 ALTER TABLE `sgaf`.`produtos_porcoes` 
 ADD COLUMN `propor_nome` VARCHAR(45) NOT NULL AFTER `propor_produto`;
+
+ALTER TABLE `sgaf`.`produtos_porcoes` 
+DROP COLUMN `propor_quantidade_custo`,
+ADD COLUMN `propor_valuniref` FLOAT NULL AFTER `propor_datacadastro`;
+
+
+ALTER TABLE `sgaf`.`saidas_produtos` 
+ADD COLUMN `saipro_porcao` INT NULL AFTER `saipro_fechado`,
+ADD COLUMN `saipro_porcao_quantidade` FLOAT NULL AFTER `saipro_porcao`;

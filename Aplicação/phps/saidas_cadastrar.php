@@ -1,5 +1,5 @@
 <?php
-
+//Verifica se o usuário pode acessar a tela
 require "login_verifica.php";
 $saida = $_GET["codigo"];
 $tiposaida = $_REQUEST["tiposaida"];
@@ -19,8 +19,9 @@ if ($permissao_saidas_cadastrar <> 1) {
     exit;
 }
 
+
+//Verifica se algum produto desta Saída já foi acertado, se sim não permitir que continue
 if ($saida != "") {
-//Verifica se algum produto desta Sa�da j� foi acertado
     $sql22 = "SELECT saipro_acertado FROM `saidas_produtos` WHERE saipro_saida=$saida and saipro_acertado !=0";
     $query22 = mysql_query($sql22);
     if (!$query22)
@@ -44,10 +45,10 @@ if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
 //CONTROLE DA OPERAÇÃO
 $dataatual = date("Y/m/d");
 $horaatual = date("H:i:s");
-$operacao = $_GET["operacao"]; //Opera��o 1=Cadastras 2=Editar 3=Ver
+$operacao = $_GET["operacao"]; //Operação 1=Cadastrar 2=Editar 3=Ver
 
 $retirar_produto = $_GET["retirar_produto"];
-//Se for elimina��o de um produto ja da lista ent�o pegar por get
+//Se for eliminação de um produto ja da lista então pegar por get
 if ($retirar_produto == '1') {
     $consumidor = $_GET["consumidor"];
     $tiposaida = $_GET["tiposaida"];
@@ -57,8 +58,8 @@ if ($retirar_produto == '1') {
     $lote = $_GET["lote"];
     $qtd = $_GET["qtd"];
     $produto = $_GET["produto"];
-} else { //Se n�o pegar por post
-    if ($operacao == 2) {
+} else { 
+    if ($operacao == 2) { // Se for edição pega os dados principais da venda para popular campos
         $saida = $_GET["codigo"];
         $passo = "2";
         $sql = "SELECT * FROM saidas WHERE sai_codigo=$saida";
@@ -71,7 +72,7 @@ if ($retirar_produto == '1') {
             $motivo = $dados["sai_saidajustificada"];
             $descricao = $dados["sai_descricao"];
         }
-    } else {
+    } else { //Caso seja uma venda nova, cadastro
         $saida = $_POST["saida"];
         $passo = $_POST["passo"];
         $consumidor = $_POST["consumidor"];
@@ -79,6 +80,8 @@ if ($retirar_produto == '1') {
         $motivo = $_POST["motivo"];
         $descricao = $_POST["descricao"];
         $saipro = "";
+        $porcao = $_POST["porcao"];
+        if ($porcao=="") $porcao=0;
         $lote = $_POST["lote"];
         $lote2 = $_POST["lote2"];
         $produto = $_POST["produto"];
@@ -89,22 +92,46 @@ if ($retirar_produto == '1') {
         if ($lote2 != "") {
             $lote = $lote2;
         }
-        $valuni = $_POST["valuni"];
-        $valuni = explode(" ", $valuni);
-        $valuni = $valuni[1];
-        $valuni = str_replace(',', '.', $valuni);
-        $valtot = $_POST["valtot"];
-        $valtot = explode(" ", $valtot);
-        $valtot = $valtot[1];
-        $valtot = str_replace('.', '', $valtot);
-        $valtot = str_replace(',', '.', $valtot);
-        $qtd = $_POST["qtd"];
+
+        
+        //Quantidade de porcoes
+        $porcao_qtd = $_POST["porcao_qtd"];
+        if ($porcao_qtd=="") $porcao_qtd=0;
+        
+        //Pega valor unitário padrão do produto para incremento ou retirada de estoque
+        $valunietq = $_POST["valuni2"];
+        $valunietq = explode(" ", $valunietq);
+        $valunietq = $valunietq[1];
+        $valunietq = str_replace('.', '', $valunietq);
+        $valunietq = str_replace(',', '.', $valunietq);
+        
+        //Pega o valor unitário que que deverá ser usado na saida. 
+        //É necessário isto porque quando usa-se porcão o valor unitário pode ser diferente do valor unitário padrão do produto
+        $valunisai = $_POST["valuni3"];
+        $valunisai = explode(" ", $valunisai);
+        $valunisai = $valunisai[1];
+        $valunisai = str_replace('.', '', $valunisai);
+        $valunisai = str_replace(',', '.', $valunisai);
+        
+        //Pega o valor total a ser gravado na saída (no estoque não tem valor total)
+        $valtotsai = $_POST["valtot"];
+        $valtotsai = explode(" ", $valtotsai);
+        $valtotsai = $valtotsai[1];
+        $valtotsai = str_replace('.', '', $valtotsai);
+        $valtotsai = str_replace(',', '.', $valtotsai);
+        
+        //Pega quantidade para ser retirada ou incrementada no estoque
+        if ($porcao==0) $qtd = $_POST["qtd"];
+        else $qtd = $_POST["qtd2"];
         $qtd = str_replace('.', '', $qtd);
         $qtd = str_replace(',', '.', $qtd);
         $qtdnoestoque = $_POST["qtdnoestoque"];
+        
+
     }
 }
 
+//echo "valunietq:$valunietq valunisai:$valunisai valtotsai:$valtotsai";
 
 //Verifica se a saida existe
 //(� necess�rio por que se o usu�rio abrir uma nova janela na tela saidas.php o sistema exclui
@@ -261,8 +288,8 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
             if (!$query_repor) {
                 die("Erro de SQL2:" . mysql_error());
             }
-        } else { //O produto n�o existe mais no estoque, vamos inserir
-            //Pegar os demais dados necess�rios para inserir no estoque
+        } else { //O produto não existe mais no estoque, vamos inserir
+            //Pegar os demais dados necessários para inserir no estoque
             $sql = "SELECT * FROM `entradas_produtos` join entradas on (entpro_entrada=ent_codigo) WHERE entpro_entrada=$lote";
             $query = mysql_query($sql);
             if (!$query) {
@@ -283,21 +310,21 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
         }
 
 
-        //Elimina o protudo da Sa�da
-        $sql_del = "DELETE FROM saidas_produtos WHERE saipro_saida=$saida and saipro_codigo=$saipro";
+        //Elimina o protudo da Saída
+         $sql_del = "DELETE FROM saidas_produtos WHERE saipro_saida=$saida and saipro_codigo=$saipro";
         $query_del = mysql_query($sql_del);
         if (!$query_del) {
             die("Erro de SQL5:" . mysql_error());
         }
 
         //Atualiza o status para incompleto
-        $sql_status = "UPDATE saidas SET sai_status=2 WHERE sai_codigo=$saida";
+         $sql_status = "UPDATE saidas SET sai_status=2 WHERE sai_codigo=$saida";
         $query_status = mysql_query($sql_status);
         if (!$query_status)
             die("Erro de SQL Status: " . mysql_error());
     }
 } else {
-    //Independente se for cadastrou ou edi��o, s� inserir produto na saida se vier os dados do produto e lote etc. dos campos
+    //Independente se for cadastrou ou edição, só inserir produto na saida se vier os dados do produto e lote etc. dos campos
     if (($saida != "") && ($produto != "") && ($lote != "")) {
 
         //Verifica a quantida atual do estoque
@@ -318,11 +345,13 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
         //(Isso acontece quando o usu�rio inclui um produto na lista e pressiona F5)
         if ($qtdfinal >= 0) {
             //Inserindo os produtos na Sa�da
-            $sql_saida_produto = "
-            INSERT INTO
-                saidas_produtos (saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal)
-            VALUES
-                ('$saida','$produto','$lote','$qtd','$valuni',$valuni*$qtd)        
+             $sql_saida_produto = "
+            INSERT INTO saidas_produtos (
+                saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade
+            )
+            VALUES (
+                '$saida','$produto','$lote','$qtd','$valunisai',$valtotsai,$porcao,$porcao_qtd
+            )        
             ";
             $query_saida_produto = mysql_query($sql_saida_produto);
             if (!$query_saida_produto) {
@@ -330,14 +359,14 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
             }
 
             //Atualiza o status para incompleto
-            $sql_status = "UPDATE saidas SET sai_status=2 WHERE sai_codigo=$saida";
+             $sql_status = "UPDATE saidas SET sai_status=2 WHERE sai_codigo=$saida";
             $query_status = mysql_query($sql_status);
             if (!$query_status)
                 die("Erro de SQL Status: " . mysql_error());
 
 
             //Retirando do estoque           
-            $sql_retirar = "
+             $sql_retirar = "
             UPDATE
                 estoque 
             SET 
@@ -354,7 +383,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
 
             //Se a quantidade do etoque zerou ent�o eliminar o produto do estoque
             if ($qtdfinal == "0") {
-                $sql = "DELETE FROM estoque WHERE etq_quiosque=$usuario_quiosque and etq_produto=$produto and etq_lote=$lote";
+                 $sql = "DELETE FROM estoque WHERE etq_quiosque=$usuario_quiosque and etq_produto=$produto and etq_lote=$lote";
                 $query = mysql_query($sql);
                 if (!$query) {
                     die("Erro de SQL9:" . mysql_error());
@@ -595,6 +624,9 @@ if ($passo == 2) {
     $tpl1->CAMPOOCULTO_NOME = "porcao_oculto";
     $tpl1->CAMPOOCULTO_VALOR = "";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
+    $tpl1->CAMPOOCULTO_NOME = "porcao_oculto_custo";
+    $tpl1->CAMPOOCULTO_VALOR = "";
+    $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
     //Porção Quantidade
     $tpl1->TR_ID="linha_porcoes_qtd";
@@ -609,7 +641,7 @@ if ($passo == 2) {
     $tpl1->CAMPO_FOCO = "";
     $tpl1->CAMPO_DESABILITADO = "";
     $tpl1->CAMPO_ONKEYPRESS = "";
-    $tpl1->CAMPO_ONKEYUP = "porcoesqtd_popula_qtd(); saidas_qtd();";
+    $tpl1->CAMPO_ONKEYUP = "porcoesqtd(); saidas_qtd();";
     $tpl1->CAMPO_ONKEYDOWN = "";
     $tpl1->CAMPO_ONFOCUS = "";
     $tpl1->CAMPO_OBRIGATORIO = " ";
@@ -645,6 +677,9 @@ if ($passo == 2) {
     $tpl1->block("BLOCK_SPAN");
     $tpl1->block("BLOCK_CAMPO");
     $tpl1->block("BLOCK_ITEM");
+    $tpl1->CAMPOOCULTO_NOME = "qtd2";
+    $tpl1->CAMPOOCULTO_VALOR = "";
+    $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
     //Valor Unitário
     $tpl1->CAMPO_QTD_CARACTERES = "";
@@ -664,8 +699,12 @@ if ($passo == 2) {
     $tpl1->block("BLOCK_TITULO");
     $tpl1->block("BLOCK_CAMPO");
     $tpl1->block("BLOCK_ITEM");
-    //Como o campo est� desabilitado � necess�rio criar um campo oculto. Este � populado via javascript
-    $tpl1->CAMPOOCULTO_NOME = "valuni";
+    //usado para receber o valor unitário padrão do produto
+    $tpl1->CAMPOOCULTO_NOME = "valuni2";
+    $tpl1->CAMPOOCULTO_VALOR = "";
+    $tpl1->block("BLOCK_CAMPOSOCULTOS");
+    //Usado para receber o valor unitário considerando a escolha da porção
+    $tpl1->CAMPOOCULTO_NOME = "valuni3";
     $tpl1->CAMPOOCULTO_VALOR = "";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
@@ -689,11 +728,14 @@ if ($passo == 2) {
     $tpl1->block("BLOCK_CAMPO");
     $tpl1->block("BLOCK_ITEM");
 
-    //Como o campo est� desabilitado � necess�rio criar um campo oculto. Este � populado via javascript
+    //Como o campo está desabilitado é necessário criar um campo oculto. Este é populado via javascript
     $tpl1->CAMPOOCULTO_NOME = "valtot";
     $tpl1->CAMPOOCULTO_VALOR = "";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
+    $tpl1->CAMPOOCULTO_NOME = "qtd_custo";
+    $tpl1->CAMPOOCULTO_VALOR = "";
+    $tpl1->block("BLOCK_CAMPOSOCULTOS");
     $tpl1->CAMPOOCULTO_NOME = "qtdnoestoque";
     $tpl1->CAMPOOCULTO_VALOR = "";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
@@ -725,12 +767,14 @@ if ($passo == 2) {
     $tpl1->LISTA_GET_PASSO = $passo;
     $sql_lista = "
     SELECT 
-        pro_nome, pes_nome, saipro_lote, saipro_quantidade, saipro_valorunitario, saipro_valortotal,saipro_codigo,pro_codigo,saipro_codigo
+        pro_nome, pes_nome, saipro_lote, saipro_quantidade, saipro_valorunitario, saipro_valortotal,saipro_codigo,pro_codigo,saipro_codigo,saipro_porcao,saipro_porcao_quantidade,propor_nome,protip_sigla,pro_tipocontagem
     FROM 
         saidas_produtos
         JOIN produtos ON (saipro_produto=pro_codigo)    
         JOIN entradas ON (saipro_lote=ent_codigo)
         JOIN pessoas ON (ent_fornecedor=pes_codigo)
+        JOIN produtos_tipo ON (pro_tipocontagem=protip_codigo)
+        LEFT JOIN produtos_porcoes ON (saipro_porcao=propor_codigo)
     WHERE
         saipro_saida=$saida
     ORDER BY
@@ -741,11 +785,13 @@ if ($passo == 2) {
         die("Erro: " . mysql_error());
     $linhas_lista = mysql_num_rows($query_lista);
     if ($linhas_lista == 0) {
+        $tpl1->block("BLOCK_LISTA_PORCAO_CABECALHO");
         $tpl1->block("BLOCK_LISTA_NADA");
         $tpl1->SALVAR_DESABILIDADO = " disabled ";
     } else {
         $num = 0;
         $total_geral = 0;
+        $tpl1->block("BLOCK_LISTA_PORCAO_CABECALHO");
         while ($dados_lista = mysql_fetch_array($query_lista)) {
             $num++;
             $tpl1->LISTA_GET_SAIPRO = $dados_lista["saipro_codigo"];
@@ -754,7 +800,18 @@ if ($passo == 2) {
             $tpl1->LISTA_PRODUTO_COD = $dados_lista["pro_codigo"];
             $tpl1->LISTA_FORNECEDOR = $dados_lista["pes_nome"];
             $tpl1->LISTA_LOTE = $dados_lista["saipro_lote"];
-            $tpl1->LISTA_QTD = number_format($dados_lista["saipro_quantidade"], 3, ',', '.');
+            $tipocontagem=$dados_lista["pro_tipocontagem"];
+            if (($tipocontagem==2)||($tipocontagem==3)) {
+                $tpl1->LISTA_QTD = number_format($dados_lista["saipro_quantidade"], 3, ',', '.');
+            } else {
+                $tpl1->LISTA_QTD = number_format($dados_lista["saipro_quantidade"], 0, '', '.');
+            }
+            $tpl1->LISTA_TIPOCONTAGEM = $dados_lista["protip_sigla"];
+            $tpl1->LISTA_PORCAO_NOME = $dados_lista["propor_nome"];
+            $qtdporcao=$dados_lista["saipro_porcao_quantidade"];
+            if ($qtdporcao==0) $qtdporcao="";
+            $tpl1->LISTA_PORCAO_QTD = $qtdporcao;
+            $tpl1->block("BLOCK_LISTA_PORCAO_LINHA");
             $tpl1->LISTA_VALUNI = "R$ " . number_format($dados_lista["saipro_valorunitario"], 2, ',', '.');
             $tpl1->LISTA_VALTOT = "R$ " . number_format($dados_lista["saipro_valortotal"], 2, ',', '.');
 

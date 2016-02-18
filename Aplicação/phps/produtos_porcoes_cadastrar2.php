@@ -29,8 +29,9 @@ $produto = $_POST['produto2'];
 $quantidade = $_POST['porcao_quantidade'];
 $quantidade = str_replace('.', '', $quantidade);
 $quantidade = str_replace(',', '.', $quantidade);
+$valuniref = $_POST['porcao_valuniref'];
+$valuniref=  dinheiro_para_numero($valuniref);
 $datahoraatual=date("Y-m-d H:i:s");
-
 
 
 //OPERAÇÕES
@@ -50,6 +51,7 @@ if ($operacao == 'cadastrar') {
                 propor_produto,
                 propor_nome,
                 propor_quantidade,
+                propor_valuniref,
                 propor_usuarioquecadastrou,
                 propor_quiosquequecadastrou,
                 propor_datacadastro
@@ -58,6 +60,7 @@ if ($operacao == 'cadastrar') {
             '$produto',
             '$nome',
             '$quantidade',
+            '$valuniref',
             '$usuario_codigo',
             '$usuario_quiosque',
             '$datahoraatual'    
@@ -82,7 +85,8 @@ if ($operacao == 'editar') {
         produtos_porcoes
     SET            
         propor_nome='$nome',
-        propor_quantidade='$quantidade'
+        propor_quantidade='$quantidade',
+        propor_valuniref='$valuniref'
     WHERE
         propor_codigo='$numero'
     ";

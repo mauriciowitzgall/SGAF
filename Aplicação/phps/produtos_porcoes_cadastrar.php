@@ -50,7 +50,6 @@ if (($operacao=="editar")||($operacao=="ver")) {
 }
 
 
-
 //echo "($tipocontagem-$porcao_quantidade)";
 //Estrutura dos campos de cadastro
 $tpl1 = new Template("templates/cadastro_edicao_detalhes_2.html");
@@ -94,7 +93,7 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 //Porção Quantidade
-$tpl1->TITULO = "Quantidade";
+$tpl1->TITULO = "Quantidade Ref. Estoque";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
 $tpl1->CAMPO_QTD_CARACTERES = "";
@@ -103,6 +102,10 @@ $tpl1->CAMPO_DICA = "";
 $tpl1->CAMPO_ID = "";
 $tpl1->CAMPO_VALOR = "$porcao_quantidade";
 $tpl1->CAMPO_ESTILO="width:100px";
+$tpl1->CAMPO_ONKEYUP="";
+$tpl1->CAMPO_ONKEYDOWN="";
+$tpl1->CAMPO_ONKEYPRESS="";
+$tpl1->CAMPO_ONBLUR="";
 $tpl1->block("BLOCK_CAMPO_ESTILO");
 $tpl1->block("BLOCK_CAMPO_NORMAL");
 $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
@@ -112,6 +115,24 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->TEXTO_ID="tipocontagem";
 $tpl1->TEXTO="$tipocontagem_sigla";
 $tpl1->block("BLOCK_TEXTO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//Porção Valor Unitário Referencial
+$tpl1->TITULO = "Valor Unitário Referencial";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->CAMPO_TIPO = "text";
+$tpl1->CAMPO_QTD_CARACTERES = "";
+$tpl1->CAMPO_NOME = "porcao_valuniref";
+$tpl1->CAMPO_DICA = "";
+$tpl1->CAMPO_ID = "";
+$tpl1->CAMPO_VALOR = "$porcao_valuniref";
+$tpl1->CAMPO_ESTILO="width:100px";
+$tpl1->block("BLOCK_CAMPO_ESTILO");
+$tpl1->block("BLOCK_CAMPO_NORMAL");
+$tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+if ($operacao=="ver") $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 

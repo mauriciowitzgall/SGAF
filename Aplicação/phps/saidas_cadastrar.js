@@ -24,8 +24,10 @@ $(window).load(function() {
         //Zerar campos
         $("input[name=etiqueta]").val("");
         $("input[name=qtd]").val("");
+        $("input[name=qtd2]").val("");
         $("select[name=lote]").html("");
         $("input[name=valuni]").val("");
+        $("input[name=valuni3]").val("");
         $("input[name=valtot]").val("");
         $("span[name=qtdnoestoque]").text("");
         $("select[name=porcao]").html("");
@@ -44,13 +46,7 @@ $(window).load(function() {
         document.forms["form1"].porcao_qtd.disabled = true;
         document.forms["form1"].botao_incluir.disabled = true;
         
-        //Popula porcoes
-        $.post("saidas_popula_porcoes.php", {
-            produto: $("select[name=produto]").val()
-        }, function(valor) {
-            //alert(valor);
-            $("select[name=porcao]").html(valor);
-        }); 
+        
         
         //Define máscara para campo quantidade de porções
         $("input[name=porcao_qtd]").val("").priceFormat({
@@ -63,6 +59,8 @@ $(window).load(function() {
 
     //Ao selecionar o fornecedor
     $("select[name=fornecedor]").change(function() {
+        
+        
         //Popula o Lote
         $("select[name=lote]").html('<option>Aguarde, carregando...</option>');
         $.post("saidas_popula_lote.php", {
@@ -74,10 +72,13 @@ $(window).load(function() {
         
         //Zerar campos
         $("input[name=valuni]").val("");
+        $("input[name=valuni3]").val("");
         $("input[name=valtot]").val("");
         $("span[name=qtdnoestoque]").text("");
         $("input[name=qtd]").val("");
+        $("input[name=qtd2]").val("");
         $("input[name=porcao_qtd]").val("");
+        $("select[name=porcao]").html("");
         
         //Habilita botão e campo quantidade
         document.forms["form1"].qtd.disabled = true;
@@ -87,18 +88,76 @@ $(window).load(function() {
 
     //Ao selecionar o lote
     $("select[name=lote]").change(function() {
+        
+        $("input[name=porcao_qtd]").val("");
+        
         produto_selecionado();
+        
+        //Popula porcoes
+        $.post("saidas_popula_porcoes.php", {
+            produto: $("select[name=produto]").val()
+        }, function(valor) {
+            //alert(valor);
+            $("select[name=porcao]").html(valor);
+        }); 
 
     });
     
     //Ao selecionar porcoes
     $("select[name=porcao]").change(function() {
+        
+        $("input[name=qtd]").val("");
+        $("input[name=qtd2]").val("");
+        $("input[name=porcao_qtd]").val("");
+        $("input[name=valtot]").val("");
+
+        //Popula a quantidade da porção (campo oculto)
         $.post("saidas_popula_porcoesqtdoculto.php", {
             porcao: $("select[name=porcao]").val()
-        }, function(valor) {
+        }, function(valor1) {
             //alert(valor);
-            $("input[name=porcao_oculto]").val(valor);
+            $("input[name=porcao_oculto]").val(valor1);
+            
+            //Popula o valor unitário referencial caso tenha
+            
+            porcao=$("select[name=porcao]").val();
+            if (porcao=="") {
+                porcao=0;
+                $("input[name=porcao_qtd]").val("");
+                document.forms["form1"].qtd.disabled = false;
+
+            }
+            $.post("saidas_popula_valuniref.php", {
+                porcao: porcao
+            }, function(valor2) {
+                //alert(valor2);
+                if (valor2==0) {
+                    valuni=$("input[name=valuni2]").val();
+                    valuni2=valuni.split(" ");
+                    valuni=valuni2[1];
+                    valuni=valuni.replace(".","");
+                    valuni=valuni.replace(",",".");
+                } else {
+                    valuni=valor2;
+                }
+                
+                $("input[name=valuni]").val(valuni).priceFormat({
+                    prefix: 'R$ ',
+                    centsLimit: 2,
+                    centsSeparator: ',',
+                    thousandsSeparator: '.'
+                });   
+                $("input[name=valuni3]").val(valuni).priceFormat({
+                    prefix: 'R$ ',
+                    centsLimit: 2,
+                    centsSeparator: ',',
+                    thousandsSeparator: '.'
+                });   
+                
+            });      
         });
+        
+        
         
         porcao2=$("select[name=porcao]").val();
         if (porcao2=="") {
@@ -106,23 +165,31 @@ $(window).load(function() {
         } else {
             lote2=$("select[name=lote]").val();
             //alert("Lote2="+lote2);
-            if ((lote2!="")&&(lote2!= null)&&(lote2!== undefined)&&(lote2!= 0))             
+            if ((lote2!="")&&(lote2!= null)&&(lote2!== undefined)&&(lote2!= 0)) {
+                document.forms["form1"].qtd.disabled = true;
                 document.forms["form1"].porcao_qtd.disabled = false;
-            else 
+            }             
+            else {
+                document.forms["form1"].qtd.disabled = false;
                 document.forms["form1"].porcao_qtd.disabled = true;
+            } 
         }
+        
+       
 
         
     });
 });
 
 function produto_selecionado() {
-    //Popula valor unitário
+    //Popula valor unitário padrão
     $.post("saidas_valorunitario.php", {
         lote: $("select[name=lote]").val(),
         produto: $("select[name=produto]").val()
     }, function(valor) {
         $("input[name=valuni]").val(valor);
+        $("input[name=valuni2]").val(valor);
+        $("input[name=valuni3]").val(valor);
     });
     $("input[name=valtot]").val("");
 
@@ -141,6 +208,7 @@ function produto_selecionado() {
             if (etqatu == "") {
                 $("span[name=qtdnoestoque]").text("");
                 $("input[name=qtd]").val("");
+                $("input[name=qtd2]").val("");
                 document.forms["form1"].botao_incluir.disabled = true;
                 document.forms["form1"].qtd.disabled = true;
                 document.forms["form1"].porcao_qtd.disabled = true;
@@ -152,15 +220,22 @@ function produto_selecionado() {
                 $("span[name=qtdnoestoque]").text("(" + etqatu + " no estoque)");
                 if ((valor == 2)||(valor==3)) { //Se o tipo de contagem for 'kg' ou 'lt'
                     $("input[name=qtd]").val("");
+                    $("input[name=qtd2]").val("");
                     document.forms["form1"].botao_incluir.disabled = true;
-                } else { //Se o tipo de contagem for diferente de 'kg'
+                } else { //Se o tipo de contagem for por unidade
                     if (estoqueatual >= 1) {
                         $("input[name=qtd]").val("1");
+                        $("input[name=qtd2]").val("1");
+                        tot=$("input[name=valuni2]").val();
+                        $("input[name=valtot]").val(tot);
+                        document.forms["form1"].botao_incluir.disabled = false;
+
                         //Etiqueta validada e campos preenchidos, joga o foco para a quantidade
                         document.forms["form1"].elements["qtd"].focus();
                         document.forms["form1"].elements["qtd"].select();
                     } else {
                         $("input[name=qtd]").val(etqatu);
+                        $("input[name=qtd2]").val(etqatu);
                     }
                     calcula_totais();
                     document.forms["form1"].botao_incluir.disabled = false;
@@ -171,17 +246,6 @@ function produto_selecionado() {
     });
 }
 
-function calcula_totais() {
-
-    //Popula valor total
-    $.post("saidas_valortotal.php", {
-        lote: $("select[name=lote]").val(),
-        qtd: $("input[name=qtd]").val(),
-        produto: $("select[name=produto]").val()
-    }, function(valor) {
-        $("input[name=valtot]").val("R$ " + valor);
-    });
-}
 
 function pesoqtd() {
     //Atribui mascara
@@ -195,9 +259,21 @@ function pesoqtd() {
                 centsSeparator: ',',
                 thousandsSeparator: '.'
             });
+            $('#qtd2').priceFormat({
+                prefix: '',
+                centsLimit: 3,
+                centsSeparator: ',',
+                thousandsSeparator: '.'
+            });
             //alert("peso");
         } else {
             $('#qtd').priceFormat({
+                prefix: '',
+                centsLimit: 0,
+                centsSeparator: '',
+                thousandsSeparator: '.'
+            });
+            $('#qtd2').priceFormat({
                 prefix: '',
                 centsLimit: 0,
                 centsSeparator: '',
@@ -215,10 +291,8 @@ function saidas_qtd() {
         lote: $("select[name=lote]").val(),
         produto: $("select[name=produto]").val()
     }, function(valor) {
-        //alert(valor);
         //Verifica se a quantidade digitada é maior que a do estoque
         var qtddigitada = $("input[name=qtd]").val();
-        //alert("fff"+qtddigitada+"fff");
         if (valor != "") {
             if (qtddigitada != "") {
                 qtddigitada = qtddigitada.replace(".", "");
@@ -226,12 +300,7 @@ function saidas_qtd() {
                 qtddigitada = parseFloat(qtddigitada);
             }
             var qtdestoque = valor;
-            //alert("c"+qtddigitada+"s");      
-            //qtdestoque=qtdestoque2.replace(".","");
-            //qtdestoque=qtdestoque.replace(",",".");
             qtdestoque = parseFloat(qtdestoque);
-            //alert(qtddigitada + ">" + qtdestoque);                        
-            //alert(parseFloat(qtddigitada)+">"+parseFloat(qtdestoque));
             if (qtddigitada > qtdestoque) {
                 document.forms["form1"].botao_incluir.disabled = true;
                 alert("A quantidade digitada é maior que a quantidade disponível no estoque! A quantidade atual deste produto no estoque está descrito ao lado do campo!");
@@ -239,26 +308,35 @@ function saidas_qtd() {
                 $("input[name=porcao_qtd]").val("");
                 $("input[name=qtd]").val("");
                 $("input[name=valtot]").val("");
-
-
             } else {
                 //Calcula o total
-                $.post("saidas_valortotal.php", {
-                    lote: $("select[name=lote]").val(),
-                    qtd: $("input[name=qtd]").val(),
-                    produto: $("select[name=produto]").val()
-                }, function(valor) {
-                    //alert (qtddigitada);                   
-                    if (qtddigitada == 0) {
-                        document.forms["form1"].botao_incluir.disabled = true;
-                        $("input[name=valtot]").val("");
-                        //alert("desabilitar");
-                    } else {
-                        $("input[name=valtot]").val("R$ " + valor);
-                        document.forms["form1"].botao_incluir.disabled = false;
-                        //alert("habilitar");
-                    }
-                });
+                if (qtddigitada == 0) {
+                    $("input[name=valtot]").val("");
+                    document.forms["form1"].botao_incluir.disabled = true;
+                    //alert("desabilitar");
+                } else {
+                    valuni=$("input[name=valuni]").val();
+                    valuni2=valuni.split(" ");
+                    valuni=valuni2[1];
+                    valuni=valuni.replace(".","");
+                    valuni=valuni.replace(",",".");
+                    qtd_porcao=$("input[name=porcao_qtd]").val();
+                    if (qtd_porcao=="") qtd=$("input[name=qtd]").val();
+                    else qtd=qtd_porcao;
+                    qtd=qtd.replace(".","");
+                    qtd=qtd.replace(",",".");
+                    valtot=valuni*qtd;
+                    valtot=valtot.toFixed(2);
+                    //alert(valuni+"*"+qtd+"="+valtot);
+                    $("input[name=valtot]").val(valtot).priceFormat({
+                        prefix: 'R$ ',
+                        centsLimit: 2,
+                        centsSeparator: ',',
+                        thousandsSeparator: '.'
+                    });
+                    document.forms["form1"].botao_incluir.disabled = false;
+                    //alert("habilitar");
+                }
             }
             //alert("ddd"+qtddigitada+"ddd");            
         }
@@ -277,7 +355,7 @@ function valida_etiqueta(campo) {
             campo.value = campo.value.substring(0, i);
         }
     }
-    //Conta quantos caracteres foram digitados no c�digo da etiqueta
+    //Conta quantos caracteres foram digitados no código da etiqueta
     qtd_caracteres = document.forms["form1"].etiqueta.value.length;
     //Se a etiqueta n�o tem nada digitado ent�o habilita-se o produto para escolhe-lo manualmente
     if (qtd_caracteres == 0) {
@@ -290,6 +368,7 @@ function valida_etiqueta(campo) {
         $("select[name=porcao]").html("");
         $("select[name=fornecedor]").html("");
         $("input[name=valuni]").val("");
+        $("input[name=valuni3]").val("");
         $("input[name=valtot]").val("");
         $("span[name=tipocontagem]").text("");
         $("span[name=qtdnoestoque]").text("");
@@ -313,7 +392,9 @@ function valida_etiqueta(campo) {
         document.forms["form1"].qtd.disabled = true;
         document.forms["form1"].porcao_qtd.disabled = true;
         $("input[name=qtd]").val("");
+        $("input[name=qtd2]").val("");
         $("input[name=valuni]").val("");
+        $("input[name=valuni3]").val("");
         $("input[name=valtot]").val("");
         $("input[name=fornecedor]").val("");
         $("span[name=tipocontagem]").text("");
@@ -411,6 +492,7 @@ function valida_etiqueta2(campo) {
         $("select[name=porcao]").html("");
         $("select[name=fornecedor]").html("");
         $("input[name=valuni]").val("");
+        $("input[name=valuni3]").val("");
         $("input[name=valtot]").val("");
         $("span[name=tipocontagem]").text("");
         $("span[name=qtdnoestoque]").text("");
@@ -434,7 +516,9 @@ function valida_etiqueta2(campo) {
         document.forms["form1"].qtd.disabled = true;
         document.forms["form1"].porcao_qtd.disabled = true;
         $("input[name=qtd]").val("");
+        $("input[name=qtd2]").val("");
         $("input[name=valuni]").val("");
+        $("input[name=valuni3]").val("");
         $("input[name=valtot]").val("");
         $("input[name=fornecedor]").val("");
         $("span[name=tipocontagem]").text("");
@@ -526,13 +610,16 @@ function popula_lote_oculto(valor) {
 }
 
 
-function porcoesqtd_popula_qtd() {
+function porcoesqtd() {
     
     tipocontagem=3; //ATENCAO ALTERAR
-     var qtdref=$("input[name=porcao_oculto]").val();
-     qtd=$("input[name=porcao_qtd]").val();
-     var quantidade=qtdref*qtd;
-     //alert(quantidade+"="+qtdref+"+"+qtd);
+    qtd=$("input[name=porcao_qtd]").val();
+    qtd=parseInt(qtd);
+   
+    //Calcula quantidade que será descontado do estoque
+    porcao_oculto=$("input[name=porcao_oculto]").val();
+    quantidade=porcao_oculto*qtd;
+    
     if ((tipocontagem == 2)||(tipocontagem==3)) {
         quantidade=quantidade.toFixed(3);
         $("input[name=qtd]").val(quantidade).priceFormat({
@@ -541,6 +628,13 @@ function porcoesqtd_popula_qtd() {
             centsSeparator: ',',
             thousandsSeparator: '.'
         });
+        $("input[name=qtd2]").val(quantidade).priceFormat({
+            prefix: '',
+            centsLimit: 3,
+            centsSeparator: ',',
+            thousandsSeparator: '.'
+        });
+
         //alert("peso");
     } else {
         quantidade=quantidade.toFixed(0);
@@ -550,7 +644,35 @@ function porcoesqtd_popula_qtd() {
             centsSeparator: '',
             thousandsSeparator: '.'
         });
+        $("input[name=qtd2]").val(quantidade).priceFormat({
+            prefix: '',
+            centsLimit: 0,
+            centsSeparator: '',
+            thousandsSeparator: '.'
+        });
+
         //alert("unidade");
     }
+    
+    //calcula total da porcao
+    valuni=$("input[name=valuni]").val();
+    valuni2=valuni.split(" ");
+    valuni=valuni2[1];
+    valuni=valuni.replace(".","");
+    valuni=valuni.replace(",",".");
+    valtot=valuni*qtd;
+    valtot=valtot.toFixed(2);
+    //alert(valuni+"*"+qtd+"="+valtot);
+    $("input[name=valtot]").val(valtot).priceFormat({
+        prefix: 'R$ ',
+        centsLimit: 2,
+        centsSeparator: ',',
+        thousandsSeparator: '.'
+    });
+    document.forms["form1"].qtd.disabled = true;
+    document.forms["form1"].botao_incluir.disabled = false;
+    
+    
+    //
 
 }

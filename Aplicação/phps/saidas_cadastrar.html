@@ -83,7 +83,11 @@
         <td width="" colspan="">PRODUTO</td>
         <td width="" colspan="">FORNECEDOR</td>
         <td width="" colspan="">LOTE</td>
-        <td width="" colspan="">QUANTIDADE</td>
+        <td width="" colspan="2">QUANTIDADE</td>
+        <!--  BEGIN BLOCK_LISTA_PORCAO_CABECALHO -->
+        <td align="left">PORÇÃO</td>
+        <td align="left">QTD. PORÇÃO</td>        
+        <!--  END BLOCK_LISTA_PORCAO_CABECALHO -->
         <td width="" colspan="">VALOR UNIT.</td>
         <td width="" colspan="">VALOR TOT..</td>
         <td width="35px" colspan="">OPERAÇÃO.</td>
@@ -95,6 +99,11 @@
         <td>{LISTA_FORNECEDOR}</td>
         <td>{LISTA_LOTE}</td>
         <td align="right">{LISTA_QTD}</td>
+        <td align="left">{LISTA_TIPOCONTAGEM}</td>
+        <!--  BEGIN BLOCK_LISTA_PORCAO_LINHA -->
+        <td align="left">{LISTA_PORCAO_NOME}</td>
+        <td align="left">{LISTA_PORCAO_QTD}</td>
+        <!--  END BLOCK_LISTA_PORCAO_LINHA -->
         <td align="right">{LISTA_VALUNI}</td>
         <td align="right">{LISTA_VALTOT}</td>
         <!--  BEGIN BLOCK_LISTA_EXCLUIR -->
@@ -115,6 +124,9 @@
     <!-- END BLOCK_LISTA_NADA -->          
     <tr valign="middle" class="tabelacabecalho1">                   
         <td width="" colspan=""> </td>     
+        <td width="" colspan=""> </td>
+        <td width="" colspan=""> </td>
+        <td width="" colspan=""> </td>
         <td width="" colspan=""> </td>
         <td width="" colspan=""> </td>
         <td width="" colspan=""> </td>

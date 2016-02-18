@@ -73,6 +73,12 @@ $tpl->CABECALHO_COLUNA_COLSPAN="2";
 $tpl->CABECALHO_COLUNA_NOME="QUANTIDADE";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
+//Valor Unitário Referencial
+$tpl->CABECALHO_COLUNA_TAMANHO="";
+$tpl->CABECALHO_COLUNA_COLSPAN="";
+$tpl->CABECALHO_COLUNA_NOME="VALOR UNITÁRIO REFERENCIAL";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
 
 //Operacoes
 $tpl->CABECALHO_COLUNA_TAMANHO="";
@@ -115,6 +121,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $numero= $dados["propor_codigo"];
     $nome= $dados["propor_nome"];
     $quantidade= $dados["propor_quantidade"];
+    $valuniref= $dados["propor_valuniref"];
     $usuarioquecadastrou= $dados["propor_usuarioquecadastrou"];
     $datacadastro= $dados["propor_datacadastro"];
     $tipocontagem= $dados["pro_tipocontagem"];
@@ -149,6 +156,14 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $tpl->LISTA_COLUNA_TAMANHO="";
     $tpl->LISTA_COLUNA_VALOR=  "$tipocontagem_sigla";
     $tpl->block("BLOCK_LISTA_COLUNA");
+    
+    //Tupla Valor unitário referencial
+    $tpl->LISTA_COLUNA_ALINHAMENTO="right";
+    $tpl->LISTA_COLUNA_CLASSE="";
+    $tpl->LISTA_COLUNA_TAMANHO="";
+    $tpl->LISTA_COLUNA_VALOR= "R$ ". number_format($valuniref,2,',','.');
+    $tpl->block("BLOCK_LISTA_COLUNA");
+
 
     //Detalhes
     $tpl->LINK="produtos_porcoes_cadastrar.php";
