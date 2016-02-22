@@ -5,7 +5,7 @@
 # Versão 3.1.2
 
 
-INSERT INTO `coopaf`.`produtos_tipo` (`protip_codigo`, `protip_nome`, `protip_sigla`) VALUES ('3', 'Litro(s)', 'lt.');
+INSERT INTO `sgaf`.`produtos_tipo` (`protip_codigo`, `protip_nome`, `protip_sigla`) VALUES ('3', 'Litro(s)', 'lt.');
 
 CREATE TABLE `sgaf`.`caixas_tipo` (
   `caitip_codigo` INT NOT NULL,
