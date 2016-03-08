@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<script type="text/javascript" src="index.js"></script>
 
 <html>
     <head>
@@ -46,6 +47,22 @@
                         $("input[name=cpf]").hide();
                     }
                 }
+                
+                
+                window.onload = function(){
+
+                //Pega a versão do banco e atualiza na tela
+                $.post("phps/pegaversao.php", {
+                        
+                    }, function(valor) {
+                        //alert(valor);
+                        $("span[id=versao]").text(valor); 
+                    });
+                
+}
+
+
+                
             </script>
             <style>
                 .aparece {display: block;}
@@ -90,7 +107,7 @@
                         </tr>       
                         <tr>
                             <td  class="titulo2">
-                                <span class="fonte1">Versão SGAF 3.4</span>
+                                <span class="fonte1" id="versao"></span>
                             </td>
                         </tr>       
                     </table><br><br>
