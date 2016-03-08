@@ -115,3 +115,9 @@ Commit: aa89c456
 - Ao realizar vendas é possível selecionar uma porção
 
 Commit: 98474cf
+
+
+3.4.1
+
+- Criado estrutura de configuracoes no banco. Incluso a versão do sistema. Tela de login alterada para pegar versão do banco
+- Foi criado um campo de valor unitário nas porções. Agora ao realizar vendas de porções é possível trabalhar com esse novo valor unitário para calcular o valor total de venda (não mais baseado apenas no valor unitário do produto da entrada)
