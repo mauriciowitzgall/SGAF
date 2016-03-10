@@ -4,9 +4,9 @@ include "controle/conexao.php";
 include "funcoes.php";
 
 
-$produto = $_POST[produto];
-$fornecedor = $_POST[fornecedor];
-$entrada = $_POST[entrada];
+$produto = $_POST["produto"];
+$fornecedor = $_POST["fornecedor"];
+$entrada = $_POST["entrada"];
 
 //Se n�o tiver nenhum produto selecionado ent�o deixar o campo em branco e n�o fazer nada
 if (($produto == "") || ($fornecedor == "")) {

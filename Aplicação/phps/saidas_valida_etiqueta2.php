@@ -1,7 +1,7 @@
 <?php
 
 include "controle/conexao.php";
-$produto = $_POST[etiqueta2];
+$produto = $_POST["etiqueta2"];
 
 //Verifica se o produto e o lote existem no banco
 //Produto

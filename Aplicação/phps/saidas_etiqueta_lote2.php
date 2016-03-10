@@ -2,13 +2,13 @@
 
 include "controle/conexao.php";
 include "controle/conexao_tipo.php";
-$etiqueta = $_POST[etiqueta];
+$etiqueta = $_POST["etiqueta"];
 $produto = substr($etiqueta, 0, 6);
 $lote = substr($etiqueta, 6, 14);
 $lote = ltrim($lote, "0");
 echo "<option value='$lote'>$lote</option>";
 
-$codigounico = $_POST[etiqueta2];
+$codigounico = $_POST["etiqueta2"];
 $sql = "SELECT pro_codigo FROM produtos WHERE pro_codigounico=$codigounico";
 $query = mysql_query($sql);
 if (!$query)

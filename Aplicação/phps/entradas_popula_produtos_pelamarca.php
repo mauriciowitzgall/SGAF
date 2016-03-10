@@ -2,7 +2,7 @@
 require "login_verifica.php";
 
 
-$marca = trim($_POST[marca]);
+$marca = trim($_POST["marca"]);
 $tiponegociacao = $_POST["tiponegociacao"];
 
 $sql = "

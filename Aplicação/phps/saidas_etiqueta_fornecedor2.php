@@ -3,7 +3,7 @@
 include "controle/conexao.php";
 include "controle/conexao_tipo.php";
 
-$codigounico = $_POST[etiqueta2];
+$codigounico = $_POST["etiqueta2"];
 $sql = "SELECT pro_codigo FROM produtos WHERE pro_codigounico=$codigounico";
 $query = mysql_query($sql);
 if (!$query)

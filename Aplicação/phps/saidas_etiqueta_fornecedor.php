@@ -1,11 +1,11 @@
 <?php
 include "controle/conexao.php";
 include "controle/conexao_tipo.php";
-$etiqueta = $_POST[etiqueta];
+$etiqueta = $_POST["etiqueta"];
 
-//Divide o código da etiqueta em 2 pedaços
-$produto = substr($etiqueta, 0, 6); //Os 6 primeiros digitos são referente ao produto
-$lote = substr($etiqueta, 6, 14); //Os 8 demais digitos são referente ao lote
+//Divide o cï¿½digo da etiqueta em 2 pedaï¿½os
+$produto = substr($etiqueta, 0, 6); //Os 6 primeiros digitos sï¿½o referente ao produto
+$lote = substr($etiqueta, 6, 14); //Os 8 demais digitos sï¿½o referente ao lote
 
 $sql = "
     SELECT pes_codigo,pes_nome 

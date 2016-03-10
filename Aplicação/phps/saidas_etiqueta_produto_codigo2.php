@@ -1,6 +1,6 @@
 <?php
 include "controle/conexao.php";
-$codigounico = $_POST[etiqueta2];
+$codigounico = $_POST["etiqueta2"];
 $codigounico=ltrim($codigounico,"0");
 $sql = "SELECT pro_codigo FROM produtos WHERE pro_codigounico=$codigounico";
 $query = mysql_query($sql);

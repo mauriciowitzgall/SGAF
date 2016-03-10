@@ -2,7 +2,7 @@
 
 include "controle/conexao.php";
 
-$lote = $_POST[lote];
+$lote = $_POST["lote"];
 
 $sql = "
 SELECT
