@@ -79,5 +79,8 @@ ADD COLUMN `saipro_porcao_quantidade` FLOAT NULL AFTER `saipro_porcao`;
 ALTER TABLE `sgaf`.`pessoas` 
 CHANGE COLUMN `pes_cidade` `pes_cidade` MEDIUMINT(11) NULL ;
 
+ALTER TABLE `sgaf`.`pessoas` 
+ADD COLUMN `pes_datanascimento` DATE NULL AFTER `pes_quiosquequecadastrou`;
+
 
 

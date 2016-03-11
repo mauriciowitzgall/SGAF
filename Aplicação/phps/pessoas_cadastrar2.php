@@ -60,6 +60,7 @@ $ramal2 = $_POST['fone2ramal'];
 $tiponegociacao = $_POST['box2'];
 $pessoacontato = $_POST['pessoacontato'];
 $categoria = $_POST['categoria'];
+$datanasc = $_POST['datanasc'];
 
 
 //Template de Título e Sub-título
@@ -324,7 +325,8 @@ if ($operacao == "cadastrar") {
             pes_fone2ramal,
             pes_pessoacontato,
             pes_usuarioquecadastrou,
-            pes_quiosquequecadastrou
+            pes_quiosquequecadastrou,
+            pes_datanascimento
         )
     VALUES (
         '$id',
@@ -354,7 +356,8 @@ if ($operacao == "cadastrar") {
         '$ramal2',
         '$pessoacontato',
         '$usuario_codigo',
-        '$usuario_quiosque'
+        '$usuario_quiosque',
+        '$datanasc'
     )";
     if (!mysql_query($sql))
         die("Erro6: " . mysql_error());
@@ -432,7 +435,8 @@ if ($operacao == "cadastrar") {
         pes_cnpj='$cnpj',
         pes_fone1ramal='$ramal1',
         pes_fone2ramal='$ramal2',
-        pes_pessoacontato='$pessoacontato'
+        pes_pessoacontato='$pessoacontato',
+        pes_datanascimento='$datanasc'
     WHERE 
         pes_codigo = '$codigo'
     ";

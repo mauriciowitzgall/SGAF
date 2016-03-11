@@ -137,6 +137,7 @@ if (($operacao == "editar") || ($operacao == 'ver')) {
         $tipopessoa = $array['pes_tipopessoa'];
         $pessoacontato = $array['pes_pessoacontato'];
         $categoria = $array['pes_categoria'];
+        $datanasc = $array['pes_datanascimento'];
 
         if (($cidade!=0)&&($cidade!="")) {
             $sql = "SELECT * FROM cidades join estados on (cid_estado=est_codigo) WHERE cid_codigo='$cidade'";
@@ -381,6 +382,33 @@ $tpl1->block("BLOCK_LINHA_CLASSE");
 $tpl1->LINHA_ID = "tr_cnpj";
 $tpl1->block("BLOCK_LINHA_ID");
 $tpl1->block("BLOCK_ITEM");
+
+
+//Data Nascimento
+$tpl1->TITULO = "Data Nasc.";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->CAMPO_QTD_CARACTERES = "";
+$tpl1->CAMPO_TIPO = "date";
+$tpl1->CAMPO_NOME = "datanasc";
+$tpl1->CAMPO_DICA = "";
+$tpl1->CAMPO_ID = "datanasc";
+$tpl1->CAMPO_TAMANHO = "10";
+//$tpl1->CAMPO_ESTILO = "width:150px;";
+//$tpl1->block("BLOCK_CAMPO_ESTILO");
+$tpl1->CAMPO_ONBLUR="";
+$tpl1->CAMPO_VALOR = $datanasc;
+$tpl1->CAMPO_QTD_CARACTERES = 10;
+$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+$tpl1->block("BLOCK_CAMPO_NORMAL");
+$tpl1->block("BLOCK_CAMPO_FOCO");
+//$tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+IF ($operacao == 'ver')
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
 
 //Pais
 $tpl1->CAMPO_ONBLUR="";
