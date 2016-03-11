@@ -41,6 +41,8 @@ if (($operacao=="editar")||($operacao=="ver")) {
     if (!$query = mysql_query($sql))  die("Erro1: " . mysql_error());
     $array = mysql_fetch_assoc($query); 
     $porcao_nome=$array["propor_nome"];
+    $porcao_valuniref=$array["propor_valuniref"];
+    $porcao_valuniref= number_format($porcao_valuniref,2,'.',',');
     $porcao_quantidade=$array["propor_quantidade"];
     if (($tipocontagem==2)||($tipocontagem==3)) {
         $porcao_quantidade= number_format($porcao_quantidade,3,'.','');
@@ -139,6 +141,11 @@ $tpl1->block("BLOCK_ITEM");
 //OCULTO Quantidade
 $tpl1->CAMPOOCULTO_VALOR=$porcao_quantidade;
 $tpl1->CAMPOOCULTO_NOME="porcao_quantidade2";
+$tpl1->block("BLOCK_CAMPOSOCULTOS");
+
+//OCULTO Valor Unitário Referencial
+$tpl1->CAMPOOCULTO_VALOR=$porcao_valuniref;
+$tpl1->CAMPOOCULTO_NOME="porcao_valuniref2";
 $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
 //OCULTO Tipo de contagem

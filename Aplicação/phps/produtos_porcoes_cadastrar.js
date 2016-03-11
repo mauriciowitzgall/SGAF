@@ -1,6 +1,7 @@
 window.onload = function(){
     
     quantidade=$("input[name=porcao_quantidade2]").val();
+    valuniref=$("input[name=porcao_valuniref2]").val();
     
     tipocontagem=$("input[name=tipocontagem2]").val();
     if ((tipocontagem==2)||(tipocontagem==3)) {
@@ -22,7 +23,7 @@ window.onload = function(){
     }
 
 
-    $("input[name=porcao_valuniref]").val("R$ 0,00").priceFormat({
+    $("input[name=porcao_valuniref]").val(valuniref).priceFormat({
         prefix: 'R$ ',
         centsSeparator: ',',
         centsLimit: 2,
