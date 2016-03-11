@@ -168,7 +168,7 @@ $tpl1->LINK_DESTINO = "pessoas_cadastrar2.php";
 $tpl1->JS_CAMINHO = "pessoas_cadastrar.js";
 $tpl1->block("BLOCK_JS");
 
-$tpl1->ONLOAD = "verifica_usuario($tipopessoa);";
+
 
 //ID
 $tpl1->TITULO = "ID";
@@ -207,7 +207,7 @@ $tpl1->block("BLOCK_TITULO");
 if (($operacao == 'ver') || ($operacao == 'editar')) {
     $tpl1->SELECT_NOME = "tipopessoa2";
     $tpl1->SELECT_ID = "tipopessoa2";
-    $tpl1->block("BLOCK_SELECT_DESABILITADO");
+    //$tpl1->block("BLOCK_SELECT_DESABILITADO");
     $tpl1->CAMPOOCULTO_NOME = "tipopessoa";
     $tpl1->CAMPOOCULTO_VALOR = "$tipopessoa";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
@@ -406,6 +406,13 @@ IF ($operacao == 'ver')
     $tpl1->block("BLOCK_CAMPO_DESABILITADO");
 $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
+$tpl1->LINHA_ID = "tr_datanasc";
+if ($tipopessoa == 2) 
+    $tpl1->LINHA_CLASSE = "some";
+else
+    $tpl1->LINHA_CLASSE = "";
+$tpl1->block("BLOCK_LINHA_CLASSE");
+$tpl1->block("BLOCK_LINHA_ID");
 $tpl1->block("BLOCK_ITEM");
 
 
@@ -855,174 +862,172 @@ if (($operacao == "editar") || ($operacao == "ver")) {
 } else {
     $tipo_consumidor = 1;
 }
-//Se o usuário está editando seu próprio cadastro então ele não pode escolher o Tipo
-if ($usuario_codigo != $codigo) {
-    //Tipo Administrador
-    if (($permissao_pessoas_cadastrar_administradores == 1) || (($permissao_pessoas_ver_administradores == 1) && ($operacao == 'ver'))) {
-        $tpl1->CHECKBOX_NOME = "box[0]";
-        $tpl1->CAMPO_ID = "admin";
-        $tpl1->CHECKBOX_VALOR = "1";
-        $tpl1->LABEL_NOME = "Administrador";
-        if ($tipo_administrador == 1)
-            $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
-        if ($operacao == 'ver')
-            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-        $tpl1->CHECKBOX_SPAN_CLASSE = "";
-        $tpl1->CHECKBOX_SPAN_ID = "span_administrador";
-        $tpl1->block("BLOCK_CHECKBOX");
-    }
-
-    //Tipo Gestor
-    if (($permissao_pessoas_cadastrar_gestores == 1) || (($permissao_pessoas_ver_gestores == 1) && ($operacao == 'ver'))) {
-        $tpl1->CHECKBOX_NOME = "box[1]";
-        $tpl1->CHECKBOX_ID = "presid";
-        $tpl1->CHECKBOX_VALOR = "2";
-        $tpl1->LABEL_NOME = "Gestor";
-        if ($tipo_gestor == 1) {
-            $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
-        }
-        //Se for edição de pessoa
-        if ($operacao == "editar") {
-            //Verifica se a pessoa em questão é gestor de alguma cooperativa, se sim então desabilitar esse check
-            $sql2 = "SELECT * FROM cooperativa_gestores WHERE cooges_gestor=$codigo";
-            $query2 = mysql_query($sql2);
-            if (!$query2)
-                die("Erro: 10" . mysql_error());
-            $total2 = mysql_num_rows($query2);
-            if ($total2 > 0) {
-                $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-                $tpl1->CHECKBOX_ICONE_ARQUIVO = "../imagens/icones/geral/info.png";
-                $tpl1->CHECKBOX_ICONE_MENSAGEM = "Você não pode desmarcar esta opção porque esta pessoa atualmente é gestor de alguma cooperativa. Contate os administradores para saber mais!";
-                $tpl1->block("BLOCK_CHECKBOX_ICONE");
-                //Chama o campo oculto caso o checkbox fique desabilitado
-                $tpl1->CAMPOOCULTO_NOME = "box[1]";
-                $tpl1->CAMPOOCULTO_VALOR = "2";
-                $tpl1->block("BLOCK_CAMPOSOCULTOS");
-            }
-        }
-        if ($operacao == 'ver')
-            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-        if ($tipopessoa == 2) {
-            $tpl1->CHECKBOX_SPAN_CLASSE = "some";
-        } else {
-            $tpl1->CHECKBOX_SPAN_CLASSE = "";
-        }
-        $tpl1->CHECKBOX_SPAN_ID = "span_gestor";
-        $tpl1->block("BLOCK_CHECKBOX");
-    }
-
-    //Tipo Supervisor
-    if (($permissao_pessoas_cadastrar_supervisores == 1) || (($permissao_pessoas_ver_supervisores == 1) && ($operacao == 'ver'))) {
-        $tpl1->CHECKBOX_NOME = "box[2]";
-        $tpl1->CHECKBOX_ID = "super";
-        $tpl1->CHECKBOX_VALOR = "3";
-        $tpl1->LABEL_NOME = "Supervisor";
-        if ($tipo_supervisor == 1)
-            $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
-        //Se for edi��o de pessoa
-        if ($operacao == "editar") {
-            //Verifica se a pessoa em quest�o � supervisor de algum quiosque, se sim ent�o desabilitar esse check
-            $sql2 = "SELECT * FROM quiosques_supervisores WHERE quisup_supervisor=$codigo";
-            $query2 = mysql_query($sql2);
-            if (!$query2)
-                die("Erro: 11" . mysql_error());
-            $total2 = mysql_num_rows($query2);
-            if ($total2 > 0) {
-                $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-                $tpl1->CHECKBOX_ICONE_ARQUIVO = "../imagens/icones/geral/info.png";
-                $tpl1->CHECKBOX_ICONE_MENSAGEM = "Você não pode desmarcar esta opção porque esta pessoa atualmente é supervisora de algum quiosque. ";
-                $tpl1->block("BLOCK_CHECKBOX_ICONE");
-                //Chama o campo oculto caso o checkbox fique desabilitado
-                $tpl1->CAMPOOCULTO_NOME = "box[2]";
-                $tpl1->CAMPOOCULTO_VALOR = "3";
-                $tpl1->block("BLOCK_CAMPOSOCULTOS");
-            }
-        }
-        if ($operacao == 'ver')
-            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-        if ($tipopessoa == 2) {
-            $tpl1->CHECKBOX_SPAN_CLASSE = "some";
-        } else {
-            $tpl1->CHECKBOX_SPAN_CLASSE = "";
-        }
-        $tpl1->CHECKBOX_SPAN_ID = "span_supervisor";
-        $tpl1->block("BLOCK_CHECKBOX");
-    }
-
-    //Tipo caixa
-    if (($permissao_pessoas_cadastrar_caixas == 1) || (($permissao_pessoas_ver_caixas == 1) && ($operacao == 'ver'))) {
-        $tpl1->CHECKBOX_NOME = "box[3]";
-        $tpl1->CHECKBOX_ID = "vend";
-        $tpl1->CHECKBOX_VALOR = "4";
-        $tpl1->LABEL_NOME = "Caixa";
-        if ($tipo_caixa == 1)
-            $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
-        //Se for edição de pessoa
-        if ($operacao == "editar") {
-            //Verifica se a pessoa em questão é operador de caixa de algum quiosque, se sim então desabilitar esse check
-            $sql2 = "SELECT * FROM caixas_operadores WHERE caiope_operador=$codigo";
-            $query2 = mysql_query($sql2);
-            if (!$query2)
-                die("Erro: 12" . mysql_error());
-            $total2 = mysql_num_rows($query2);
-            if ($total2 > 0) {
-                $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-                $tpl1->CHECKBOX_ICONE_ARQUIVO = "../imagens/icones/geral/info.png";
-                $tpl1->CHECKBOX_ICONE_MENSAGEM = "Você não pode desmarcar esta opção porque esta pessoa atualmente é caixa de algum quiosque";
-                $tpl1->block("BLOCK_CHECKBOX_ICONE");
-                //Chama o campo oculto caso o checkbox fique desabilitado
-                $tpl1->CAMPOOCULTO_NOME = "box[3]";
-                $tpl1->CAMPOOCULTO_VALOR = "4";
-                $tpl1->block("BLOCK_CAMPOSOCULTOS");
-            }
-        }
-        if ($operacao == 'ver')
-            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-        if ($tipopessoa == 2) {
-            $tpl1->CHECKBOX_SPAN_CLASSE = "some";
-        } else {
-            $tpl1->CHECKBOX_SPAN_CLASSE = "";
-        }
-        $tpl1->CHECKBOX_SPAN_ID = "span_caixa";
-        $tpl1->block("BLOCK_CHECKBOX");
-    }
-
-    //Tipo Fornecedor
-    if (($permissao_pessoas_cadastrar_fornecedores == 1) || (($permissao_pessoas_ver_fornecedores == 1) && ($operacao == 'ver'))) {
-        $tpl1->CHECKBOX_NOME = "box[4]";
-        $tpl1->CHECKBOX_ID = "fornec";
-        $tpl1->CHECKBOX_VALOR = "5";
-        $tpl1->LABEL_NOME = "Fornecedor";
-        if ($tipo_fornecedor == 1)
-            $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
-        if ($operacao == 'ver')
-            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-        $tpl1->CHECKBOX_ONCLICK = "aparece_tiponegociacao();";
-        $tpl1->block("BLOCK_CHECKBOX_ONCLICK");
-        $tpl1->CHECKBOX_SPAN_CLASSE = "";
-        $tpl1->CHECKBOX_SPAN_ID = "span_fornecedor";
-        $tpl1->block("BLOCK_CHECKBOX");
-    }
-
-    //Tipo Consumidor
-    if (($permissao_pessoas_cadastrar_consumidores == 1) || (($permissao_pessoas_ver_consumidores == 1) && ($operacao == 'ver'))) {
-        $tpl1->CHECKBOX_NOME = "box[5]";
-        $tpl1->CHECKBOX_ID = "consum";
-        $tpl1->CHECKBOX_VALOR = "6";
-        $tpl1->LABEL_NOME = "Consumidor";
-        if ($tipo_consumidor == 1)
-            $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
-        if ($operacao == 'ver')
-            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-        $tpl1->CHECKBOX_SPAN_CLASSE = "";
-        $tpl1->CHECKBOX_SPAN_ID = "span_consumidor";
-        $tpl1->block("BLOCK_CHECKBOX");
-    }
-
-    $tpl1->block("BLOCK_TITULO");
-    $tpl1->block("BLOCK_CONTEUDO");
-    $tpl1->block("BLOCK_ITEM");
+//Tipo Administrador
+if (($permissao_pessoas_cadastrar_administradores == 1) || (($permissao_pessoas_ver_administradores == 1) && ($operacao == 'ver'))) {
+    $tpl1->CHECKBOX_NOME = "box[0]";
+    $tpl1->CAMPO_ID = "admin";
+    $tpl1->CHECKBOX_VALOR = "1";
+    $tpl1->LABEL_NOME = "Administrador";
+    if ($tipo_administrador == 1)
+        $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+    if ($operacao == 'ver')
+        $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+    $tpl1->CHECKBOX_SPAN_CLASSE = "";
+    $tpl1->CHECKBOX_SPAN_ID = "span_administrador";
+    $tpl1->block("BLOCK_CHECKBOX");
 }
+
+//Tipo Gestor
+if (($permissao_pessoas_cadastrar_gestores == 1) || (($permissao_pessoas_ver_gestores == 1) && ($operacao == 'ver'))) {
+    $tpl1->CHECKBOX_NOME = "box[1]";
+    $tpl1->CHECKBOX_ID = "presid";
+    $tpl1->CHECKBOX_VALOR = "2";
+    $tpl1->LABEL_NOME = "Gestor";
+    if ($tipo_gestor == 1) {
+        $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+    }
+    //Se for edição de pessoa
+    if ($operacao == "editar") {
+        //Verifica se a pessoa em questão é gestor de alguma cooperativa, se sim então desabilitar esse check
+        $sql2 = "SELECT * FROM cooperativa_gestores WHERE cooges_gestor=$codigo";
+        $query2 = mysql_query($sql2);
+        if (!$query2)
+            die("Erro: 10" . mysql_error());
+        $total2 = mysql_num_rows($query2);
+        if ($total2 > 0) {
+            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+            $tpl1->CHECKBOX_ICONE_ARQUIVO = "../imagens/icones/geral/info.png";
+            $tpl1->CHECKBOX_ICONE_MENSAGEM = "Você não pode desmarcar esta opção porque esta pessoa atualmente é gestor de alguma cooperativa. Contate os administradores para saber mais!";
+            $tpl1->block("BLOCK_CHECKBOX_ICONE");
+            //Chama o campo oculto caso o checkbox fique desabilitado
+            $tpl1->CAMPOOCULTO_NOME = "box[1]";
+            $tpl1->CAMPOOCULTO_VALOR = "2";
+            $tpl1->block("BLOCK_CAMPOSOCULTOS");
+        }
+    }
+    if ($operacao == 'ver')
+        $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+    if ($tipopessoa == 2) {
+        $tpl1->CHECKBOX_SPAN_CLASSE = "some";
+    } else {
+        $tpl1->CHECKBOX_SPAN_CLASSE = "";
+    }
+    $tpl1->CHECKBOX_SPAN_ID = "span_gestor";
+    $tpl1->block("BLOCK_CHECKBOX");
+}
+
+//Tipo Supervisor
+if (($permissao_pessoas_cadastrar_supervisores == 1) || (($permissao_pessoas_ver_supervisores == 1) && ($operacao == 'ver'))) {
+    $tpl1->CHECKBOX_NOME = "box[2]";
+    $tpl1->CHECKBOX_ID = "super";
+    $tpl1->CHECKBOX_VALOR = "3";
+    $tpl1->LABEL_NOME = "Supervisor";
+    if ($tipo_supervisor == 1)
+        $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+    //Se for edi��o de pessoa
+    if ($operacao == "editar") {
+        //Verifica se a pessoa em quest�o � supervisor de algum quiosque, se sim ent�o desabilitar esse check
+        $sql2 = "SELECT * FROM quiosques_supervisores WHERE quisup_supervisor=$codigo";
+        $query2 = mysql_query($sql2);
+        if (!$query2)
+            die("Erro: 11" . mysql_error());
+        $total2 = mysql_num_rows($query2);
+        if ($total2 > 0) {
+            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+            $tpl1->CHECKBOX_ICONE_ARQUIVO = "../imagens/icones/geral/info.png";
+            $tpl1->CHECKBOX_ICONE_MENSAGEM = "Você não pode desmarcar esta opção porque esta pessoa atualmente é supervisora de algum quiosque. ";
+            $tpl1->block("BLOCK_CHECKBOX_ICONE");
+            //Chama o campo oculto caso o checkbox fique desabilitado
+            $tpl1->CAMPOOCULTO_NOME = "box[2]";
+            $tpl1->CAMPOOCULTO_VALOR = "3";
+            $tpl1->block("BLOCK_CAMPOSOCULTOS");
+        }
+    }
+    if ($operacao == 'ver')
+        $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+    if ($tipopessoa == 2) {
+        $tpl1->CHECKBOX_SPAN_CLASSE = "some";
+    } else {
+        $tpl1->CHECKBOX_SPAN_CLASSE = "";
+    }
+    $tpl1->CHECKBOX_SPAN_ID = "span_supervisor";
+    $tpl1->block("BLOCK_CHECKBOX");
+}
+
+//Tipo caixa
+if (($permissao_pessoas_cadastrar_caixas == 1) || (($permissao_pessoas_ver_caixas == 1) && ($operacao == 'ver'))) {
+    $tpl1->CHECKBOX_NOME = "box[3]";
+    $tpl1->CHECKBOX_ID = "vend";
+    $tpl1->CHECKBOX_VALOR = "4";
+    $tpl1->LABEL_NOME = "Caixa";
+    if ($tipo_caixa == 1)
+        $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+    //Se for edição de pessoa
+    if ($operacao == "editar") {
+        //Verifica se a pessoa em questão é operador de caixa de algum quiosque, se sim então desabilitar esse check
+        $sql2 = "SELECT * FROM caixas_operadores WHERE caiope_operador=$codigo";
+        $query2 = mysql_query($sql2);
+        if (!$query2)
+            die("Erro: 12" . mysql_error());
+        $total2 = mysql_num_rows($query2);
+        if ($total2 > 0) {
+            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+            $tpl1->CHECKBOX_ICONE_ARQUIVO = "../imagens/icones/geral/info.png";
+            $tpl1->CHECKBOX_ICONE_MENSAGEM = "Você não pode desmarcar esta opção porque esta pessoa atualmente é caixa de algum quiosque";
+            $tpl1->block("BLOCK_CHECKBOX_ICONE");
+            //Chama o campo oculto caso o checkbox fique desabilitado
+            $tpl1->CAMPOOCULTO_NOME = "box[3]";
+            $tpl1->CAMPOOCULTO_VALOR = "4";
+            $tpl1->block("BLOCK_CAMPOSOCULTOS");
+        }
+    }
+    if ($operacao == 'ver')
+        $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+    if ($tipopessoa == 2) {
+        $tpl1->CHECKBOX_SPAN_CLASSE = "some";
+    } else {
+        $tpl1->CHECKBOX_SPAN_CLASSE = "";
+    }
+    $tpl1->CHECKBOX_SPAN_ID = "span_caixa";
+    $tpl1->block("BLOCK_CHECKBOX");
+}
+
+//Tipo Fornecedor
+if (($permissao_pessoas_cadastrar_fornecedores == 1) || (($permissao_pessoas_ver_fornecedores == 1) && ($operacao == 'ver'))) {
+    $tpl1->CHECKBOX_NOME = "box[4]";
+    $tpl1->CHECKBOX_ID = "fornec";
+    $tpl1->CHECKBOX_VALOR = "5";
+    $tpl1->LABEL_NOME = "Fornecedor";
+    if ($tipo_fornecedor == 1)
+        $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+    if ($operacao == 'ver')
+        $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+    $tpl1->CHECKBOX_ONCLICK = "aparece_tiponegociacao();";
+    $tpl1->block("BLOCK_CHECKBOX_ONCLICK");
+    $tpl1->CHECKBOX_SPAN_CLASSE = "";
+    $tpl1->CHECKBOX_SPAN_ID = "span_fornecedor";
+    $tpl1->block("BLOCK_CHECKBOX");
+}
+
+//Tipo Consumidor
+if (($permissao_pessoas_cadastrar_consumidores == 1) || (($permissao_pessoas_ver_consumidores == 1) && ($operacao == 'ver'))) {
+    $tpl1->CHECKBOX_NOME = "box[5]";
+    $tpl1->CHECKBOX_ID = "consum";
+    $tpl1->CHECKBOX_VALOR = "6";
+    $tpl1->LABEL_NOME = "Consumidor";
+    if ($tipo_consumidor == 1)
+        $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+    if ($operacao == 'ver')
+        $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+    $tpl1->CHECKBOX_SPAN_CLASSE = "";
+    $tpl1->CHECKBOX_SPAN_ID = "span_consumidor";
+    $tpl1->block("BLOCK_CHECKBOX");
+}
+
+$tpl1->block("BLOCK_TITULO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
 
 
 

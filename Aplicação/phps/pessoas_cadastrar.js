@@ -44,7 +44,7 @@ function pessoas_popula_quiosque (valor) {
 function tipo_pessoa(valor) {
     if (valor==1) { //Pessoa Física
         $("tr[id=tr_categoria]").hide(); 
-        $("select[name=categoria]").attr("required", false);            
+        $("select[name=categoria]").attr("required", false);  
         $("tr[id=tr_cnpj]").hide();            
         $("tr[id=tr_cnpj]").attr("required", false);
         $("tr[id=tr_pessoacontato]").hide(); 
@@ -52,6 +52,7 @@ function tipo_pessoa(valor) {
         $("input[id=telefone2ramal]").hide(); 
         $("tr[id=tr_cpf]").attr("required", true);
         $("tr[id=tr_cpf]").show(); 
+        $("tr[id=tr_datanasc]").show(); 
         $("span[id=span_administrador]").show(); 
         $("span[id=span_gestor]").show(); 
         $("span[id=span_supervisor]").show(); 
@@ -68,6 +69,7 @@ function tipo_pessoa(valor) {
         $("input[id=telefone2ramal]").show(); 
         $("tr[id=tr_cpf]").attr("required", false);
         $("tr[id=tr_cpf]").hide(); 
+        $("tr[id=tr_datanasc]").hide(); 
         $("span[id=span_administrador]").hide(); 
         $("span[id=span_gestor]").hide(); 
         $("span[id=span_supervisor]").hide(); 

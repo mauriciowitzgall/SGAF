@@ -21,7 +21,7 @@ include "includes.php";
 $id = $_POST['id'];
 $cpf = $_POST['cpf'];
 $cpf = limpa_cpf($cpf);
-$tipopessoa = $_POST['tipopessoa'];
+$tipopessoa = $_POST['tipopessoa2'];
 if ($tipopessoa == 1)
     $nome = ucwords(strtolower($_POST['nome']));
 else
@@ -228,6 +228,8 @@ if ($operacao == "cadastrar") {
         }
     }
 }
+
+/*
 //ECHO "FAZER UMA VERIFICA��O QUE VERIFICA SE O ID DIGITADO J� EST� SENDO USADO POR OUTRA PESSOA, SE SIM ENT�O TRATAR DA MESMA FORMA QUE EST� SENDO TRATADO O NOME DE PESSOA DUPLICADO!";
 //Verifica se existe uma pessoa com o mesmo nome cadastrada
 //Se for um cadastro ent�o n�o pode ter nenhum registro com o mesmo nome
@@ -271,6 +273,7 @@ if ($operacao == "cadastrar") {
         }
     }
 }
+*/
 
 
 //Verifica se foi selecionado pelo menos um tipo de negociacao
