@@ -27,6 +27,7 @@ if ($tipopessoa == 1)
 else
     $nome = $_POST['nome'];
 $cidade = $_POST['cidade'];
+if ($cidade="") $cidade=0;
 $vila = ucwords(strtolower($_POST['vila']));
 $bairro = ucwords(strtolower($_POST['bairro']));
 $endereco = ucwords(strtolower($_POST['endereco']));
@@ -166,7 +167,7 @@ if ($operacao == "editar") {
     }
 }
 
-//Se o usu�rio est� editando seu pr�prio cadastro ent�o n�o � alterado/considerado o Tipo
+//Se o usuário está editando seu próprio cadastro então n�o � alterado/considerado o Tipo
 if ($codigo != $usuario_codigo) {
     //Verifica se foi selecionado pelo meno um campos de tipo de pessoa
     if (empty($tipo)) {
@@ -270,23 +271,24 @@ if ($operacao == "cadastrar") {
     }
 }
 
+
 //Verifica se foi selecionado pelo menos um tipo de negociacao
-/* foreach ($tipo as $tipo) {    
-  if ($tipo == 5) {
-  if (empty($tiponegociacao)) {
-  $tpl_notificacao = new Template("templates/notificacao.html");
-  $tpl_notificacao->ICONES = $icones;
-  $tpl_notificacao->MOTIVO_COMPLEMENTO = "É necessário selecionar pelo menos um tipo de negociação!";
-  //$tpl_notificacao->DESTINO = "produtos.php";
-  $tpl_notificacao->block("BLOCK_ERRO");
-  $tpl_notificacao->block("BLOCK_NAOEDITADO");
-  //$tpl_notificacao->block("BLOCK_MOTIVO_JAEXISTE");
-  $tpl_notificacao->block("BLOCK_BOTAO_VOLTAR");
-  $tpl_notificacao->show();
-  exit;
-  }
-  }
-  } */
+foreach ($tipo as $tipo2) {
+    if ($tipo2 == 5) {
+        if (empty($tiponegociacao)) {
+            $tpl_notificacao = new Template("templates/notificacao.html");
+            $tpl_notificacao->ICONES = $icones;
+            $tpl_notificacao->MOTIVO_COMPLEMENTO = "É necessário selecionar pelo menos um tipo de negociação!";
+            //$tpl_notificacao->DESTINO = "produtos.php";
+            $tpl_notificacao->block("BLOCK_ERRO");
+            $tpl_notificacao->block("BLOCK_NAOEDITADO");
+            //$tpl_notificacao->block("BLOCK_MOTIVO_JAEXISTE");
+            $tpl_notificacao->block("BLOCK_BOTAO_VOLTAR");
+            $tpl_notificacao->show();
+            exit;
+        }
+    }
+}
 
 
 
@@ -360,17 +362,18 @@ if ($operacao == "cadastrar") {
     //Cria o vinculo do tipo com a pessoa
     $ultimo = mysql_insert_id();
     $pessoa = $ultimo;
+    
     foreach ($tipo as $tipo) {
         $sql2 = "
-    INSERT INTO 
-        mestre_pessoas_tipo (
-            mespestip_pessoa,
-            mespestip_tipo
-        ) 
-    VALUES (
-        '$pessoa',
-        '$tipo'
-    )";
+        INSERT INTO 
+            mestre_pessoas_tipo (
+                mespestip_pessoa,
+                mespestip_tipo
+            ) 
+        VALUES (
+            '$pessoa',
+            '$tipo'
+        )";
         if (!mysql_query($sql2))
             die("Erro7: " . mysql_error());
     }
@@ -449,9 +452,8 @@ if ($operacao == "cadastrar") {
         if (!mysql_query($sqldel))
             die("Erro9: " . mysql_error());
 
-        //Aqui � feito a nova inser��o dos novos relacionamentos                
+        //Aqui é feito a nova inserssão dos novos relacionamentos                
         foreach ($tipo as $tipo) {
-
             $sql2 = "
             INSERT INTO 
                 mestre_pessoas_tipo (

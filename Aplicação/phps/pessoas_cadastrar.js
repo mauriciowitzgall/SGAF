@@ -37,3 +37,63 @@ function pessoas_popula_quiosque (valor) {
         $("select[name=quiosqueusuario]").html(valor2);
     });    
 }
+
+
+
+
+function tipo_pessoa(valor) {
+    if (valor==1) { //Pessoa Física
+        $("tr[id=tr_categoria]").hide(); 
+        $("select[name=categoria]").attr("required", false);            
+        $("tr[id=tr_cnpj]").hide();            
+        $("tr[id=tr_cnpj]").attr("required", false);
+        $("tr[id=tr_pessoacontato]").hide(); 
+        $("input[id=telefone1ramal]").hide(); 
+        $("input[id=telefone2ramal]").hide(); 
+        $("tr[id=tr_cpf]").attr("required", true);
+        $("tr[id=tr_cpf]").show(); 
+        $("span[id=span_administrador]").show(); 
+        $("span[id=span_gestor]").show(); 
+        $("span[id=span_supervisor]").show(); 
+        $("span[id=span_caixa]").show();             
+    } else if (valor==2) { //Pessoa Jurídica
+        //alert('2');
+        $("tr[id=tr_categoria]").show(); 
+        $("select[name=categoria]").attr("required", true);            
+        $("tr[id=tr_cnpj]").show();            
+        //$("input[name=cnpj]").attr("required", true);
+        //$("input[name=cnpj]").required = true;
+        $("tr[id=tr_pessoacontato]").show(); 
+        $("input[id=telefone1ramal]").show(); 
+        $("input[id=telefone2ramal]").show(); 
+        $("tr[id=tr_cpf]").attr("required", false);
+        $("tr[id=tr_cpf]").hide(); 
+        $("span[id=span_administrador]").hide(); 
+        $("span[id=span_gestor]").hide(); 
+        $("span[id=span_supervisor]").hide(); 
+        $("span[id=span_caixa]").hide(); 
+    } else {
+        alert("Erro de envio de parametros para a função");
+    }       
+}
+
+function aparece_tiponegociacao() {
+    //alert("opa");
+    var fornec= $("input[id=fornec]").val();
+    //alert(fornec);
+    if (document.form1.fornec.checked == true) {
+        $("tr[id=tr_tiponegociacao]").show();
+    }
+    else
+        $("tr[id=tr_tiponegociacao]").hide();       
+}
+
+$(document).ready(function() {
+
+        aparece_tiponegociacao();
+
+        //Ao entrar pela primeira vez na pagina já verificar se o usuário tem acesso ao sistema ou não
+        verifica_usuario (); 
+
+
+});

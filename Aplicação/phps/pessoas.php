@@ -298,8 +298,8 @@ SELECT DISTINCT
     pes_codigo,pes_nome,cid_nome,pes_fone1,pes_fone2,pes_possuiacesso,pes_id,pestippes_nome,pestippes_codigo,pes_quiosquequecadastrou,pes_usuarioquecadastrou
 FROM
     pessoas    
-    JOIN cidades on (pes_cidade=cid_codigo)    
-    JOIN mestre_pessoas_tipo on (mespestip_pessoa=pes_codigo)    
+    left JOIN cidades on (pes_cidade=cid_codigo)    
+    left JOIN mestre_pessoas_tipo on (mespestip_pessoa=pes_codigo)    
     left join pessoas_tipopessoa on (pes_tipopessoa=pestippes_codigo)
 WHERE
     1 $sql_filtro 

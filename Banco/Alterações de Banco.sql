@@ -71,3 +71,13 @@ ADD COLUMN `propor_valuniref` FLOAT NULL AFTER `propor_datacadastro`;
 ALTER TABLE `sgaf`.`saidas_produtos` 
 ADD COLUMN `saipro_porcao` INT NULL AFTER `saipro_fechado`,
 ADD COLUMN `saipro_porcao_quantidade` FLOAT NULL AFTER `saipro_porcao`;
+
+-- Fim da versão 3.4.1
+
+-- Inicio versão 3.4.2
+
+ALTER TABLE `sgaf`.`pessoas` 
+CHANGE COLUMN `pes_cidade` `pes_cidade` MEDIUMINT(11) NULL ;
+
+
+

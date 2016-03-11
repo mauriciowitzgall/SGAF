@@ -21,14 +21,10 @@ $raiz = $_SERVER["DOCUMENT_ROOT"] ."/".$pastasistema;
         <script language="JavaScript" src="funcoes.js"></script>        
         <script type="text/javascript" src="js/jquery-1.3.2.js"></script>
         <script src="js/jquery.maskedinput-1.1.4.pack.js" type="text/javascript"></script>
-        <script src="mascaras.js" type="text/javascript"></script>
-        <script type="text/javascript" src="forcadasenha.js"></script>         
-        <script src="js/jquery.pstrength-min.1.2.js" type="text/javascript"></script>
-
+        <script src="mascaras.js" type="text/javascript"></script>       
         <link href="js/_style/jquery.click-calendario-1.0.css" rel="stylesheet" type="text/css"/>
         <script type="text/javascript" src="js/_scripts/jquery.click-calendario-1.0-min.js"></script>		
         <script type="text/javascript" src="js/_scripts/exemplo-calendario.js"></script>        
-        <script type="text/javascript" src="pessoas.js"></script> 
         <script type="text/javascript" src="js/jquery.price_format.1.5.js"></script>
         <script type="text/javascript" src="login_atualizarsessao.js"></script>
         <script type="text/javascript" src="controle/google_analytics.js"></script>

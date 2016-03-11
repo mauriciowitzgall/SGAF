@@ -1,56 +1,4 @@
-<script type="text/javascript">
-    $(document).ready(function() {
-        //Ao entrar pela primeira vez na pagina j� verificar se o usu�rio tem acesso ao sistema ou n�o
-        verifica_usuario ();      
 
-    });
-    
-    function tipo_pessoa(valor) {
-        if (valor==1) { //Pessoa Física
-            $("tr[id=tr_categoria]").hide(); 
-            $("select[name=categoria]").attr("required", false);            
-            $("tr[id=tr_cnpj]").hide();            
-            $("tr[id=tr_cnpj]").attr("required", false);
-            $("tr[id=tr_pessoacontato]").hide(); 
-            $("input[id=telefone1ramal]").hide(); 
-            $("input[id=telefone2ramal]").hide(); 
-            $("tr[id=tr_cpf]").attr("required", true);
-            $("tr[id=tr_cpf]").show(); 
-            $("span[id=span_administrador]").show(); 
-            $("span[id=span_gestor]").show(); 
-            $("span[id=span_supervisor]").show(); 
-            $("span[id=span_caixa]").show();             
-        } else if (valor==2) { //Pessoa Jurídica
-            //alert('2');
-            $("tr[id=tr_categoria]").show(); 
-            $("select[name=categoria]").attr("required", true);            
-            $("tr[id=tr_cnpj]").show();            
-            //$("input[name=cnpj]").attr("required", true);
-            //$("input[name=cnpj]").required = true;
-            $("tr[id=tr_pessoacontato]").show(); 
-            $("input[id=telefone1ramal]").show(); 
-            $("input[id=telefone2ramal]").show(); 
-            $("tr[id=tr_cpf]").attr("required", false);
-            $("tr[id=tr_cpf]").hide(); 
-            $("span[id=span_administrador]").hide(); 
-            $("span[id=span_gestor]").hide(); 
-            $("span[id=span_supervisor]").hide(); 
-            $("span[id=span_caixa]").hide(); 
-        } else {
-            alert("Erro de envio de parametros para a função");
-        }       
-    }
-    
-    function aparece_tiponegociacao() {
-        //alert("opa");
-        var fornec= $("input[id=fornec]").val();
-        if (document.form1.fornec.checked == true) {
-            $("tr[id=tr_tiponegociacao]").show();
-        }
-        else
-            $("tr[id=tr_tiponegociacao]").hide();       
-    }
-</script>
 <style>
     .aparece {display: block;}
     .some {display: none;}
@@ -155,7 +103,7 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "pessoas.png";
 $tpl_titulo->show();
 
-//Pega todos os dados da tabela (Necess�rio caso seja uma edi��o ou visuliza��o de detalhes)
+//Pega todos os dados da tabela (Necessário caso seja uma edição ou visulizaçãoo de detalhes)
 if (($operacao == "editar") || ($operacao == 'ver')) {
     $sql = "SELECT * FROM pessoas WHERE pes_codigo='$codigo'";
     $query = mysql_query($sql);
@@ -190,14 +138,19 @@ if (($operacao == "editar") || ($operacao == 'ver')) {
         $pessoacontato = $array['pes_pessoacontato'];
         $categoria = $array['pes_categoria'];
 
-        $sql = "SELECT * FROM cidades join estados on (cid_estado=est_codigo) WHERE cid_codigo='$cidade'";
-        $query = mysql_query($sql);
+        if (($cidade!=0)&&($cidade!="")) {
+            $sql = "SELECT * FROM cidades join estados on (cid_estado=est_codigo) WHERE cid_codigo='$cidade'";
+            $query = mysql_query($sql);
 
-        if (!$query)
-            die("Erro: " . mysql_error());
-        while ($dados = mysql_fetch_array($query)) {
-            $estado = $dados["cid_estado"];
-            $pais = $dados["est_pais"];
+            if (!$query)
+                die("Erro: " . mysql_error());
+            while ($dados = mysql_fetch_array($query)) {
+                $estado = $dados["cid_estado"];
+                $pais = $dados["est_pais"];
+            }
+        } else {
+            $estado=23;
+            $pais=1;
         }
     }
 } else { //é um cadastro novo
@@ -214,7 +167,7 @@ $tpl1->LINK_DESTINO = "pessoas_cadastrar2.php";
 $tpl1->JS_CAMINHO = "pessoas_cadastrar.js";
 $tpl1->block("BLOCK_JS");
 
-$tpl1->ONLOAD = "verifica_usuario($tipopessoa)";
+$tpl1->ONLOAD = "verifica_usuario($tipopessoa);";
 
 //ID
 $tpl1->TITULO = "ID";
@@ -439,7 +392,8 @@ $tpl1->SELECT_ID = "pais";
 $tpl1->SELECT_TAMANHO = "";
 $tpl1->SELECT_ONCHANGE = "popula_estados();";
 $tpl1->block("BLOCK_SELECT_ONCHANGE");
-$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+//$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
 $sql = "
 SELECT DISTINCT
@@ -477,7 +431,8 @@ $tpl1->SELECT_ID = "estado";
 $tpl1->SELECT_TAMANHO = "";
 $tpl1->SELECT_ONCHANGE = "popula_cidades();";
 $tpl1->block("BLOCK_SELECT_ONCHANGE");
-$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+//$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
 $tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
 //Se a operação for editar então mostrar os options, e o option em questão selecionado
 if (($operacao == "editar") || ($operacao == "ver") || ($pais != "")) {
@@ -485,7 +440,7 @@ if (($operacao == "editar") || ($operacao == "ver") || ($pais != "")) {
         est_codigo,est_nome,est_sigla
     FROM
         estados
-        join paises on (est_pais=pai_codigo)
+        left join paises on (est_pais=pai_codigo)
         join cidades on (cid_estado=est_codigo)
     WHERE
         est_pais=$pais
@@ -522,16 +477,17 @@ $tpl1->block("BLOCK_TITULO");
 $tpl1->SELECT_NOME = "cidade";
 $tpl1->SELECT_ID = "cidade";
 $tpl1->SELECT_TAMANHO = "";
-$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+//$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
-//Se a opera��o for editar ent�o mostrar os options, e o option em quest�o selecionado
+//Se a operação for editar então mostrar os options, e o option em questão selecionado
 if (($operacao == "editar") || ($operacao == "ver") || ($estado != "")) {
     $sql = "  SELECT DISTINCT
         cid_codigo,cid_nome
     FROM
         cidades 
-        join estados on (cid_estado=est_codigo)
-        join paises on (est_pais=pai_codigo)
+        left join estados on (cid_estado=est_codigo)
+        left join paises on (est_pais=pai_codigo)
     WHERE
         cid_estado=$estado
     ORDER BY
@@ -1004,7 +960,6 @@ if ($usuario_codigo != $codigo) {
     }
 
     //Tipo Fornecedor
-
     if (($permissao_pessoas_cadastrar_fornecedores == 1) || (($permissao_pessoas_ver_fornecedores == 1) && ($operacao == 'ver'))) {
         $tpl1->CHECKBOX_NOME = "box[4]";
         $tpl1->CHECKBOX_ID = "fornec";
@@ -1085,9 +1040,8 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
-
+//Tipo de negociação
 if (($usuario_grupo==1)||($usuario_grupo==2)||($usuario_grupo==3)) {
-    //Tipo de negociação
     if ($operacao == 'cadastrar')
         $tpl1->LINHA_CLASSE = "some";
     else
@@ -1112,6 +1066,7 @@ if (($usuario_grupo==1)||($usuario_grupo==2)||($usuario_grupo==3)) {
                 $tipo_revenda = 1;
         }
     }
+    //Se cadastrar a pessoa sem ter um quiosque definido (pessoa da cooperativa)
     if ($usuario_quiosque == "0")
         $sql11 = "SELECT tipneg_codigo FROM tipo_negociacao";
     else
@@ -1119,13 +1074,16 @@ if (($usuario_grupo==1)||($usuario_grupo==2)||($usuario_grupo==3)) {
     $query11 = mysql_query($sql11);
     if (!$query11)
         die("Erro: " . mysql_error());
+    
     while ($dados11 = mysql_fetch_array($query11)) {
+        
         $tipon = $dados11[0];
         if ($tipon == 1)
             $quiosque_consignacao = 1;
         IF ($tipon == 2)
             $quiosque_revenda = 1;
     }
+    //Consignação
     if ($quiosque_consignacao == 1) {
         $tpl1->CHECKBOX_NOME = "box2[1]";
         $tpl1->CHECKBOX_VALOR = "1";
@@ -1133,18 +1091,25 @@ if (($usuario_grupo==1)||($usuario_grupo==2)||($usuario_grupo==3)) {
         if ($tipo_consignacao == 1) {
             $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
         }
+        //Se tiver apenas um tipo de negociação, então já seleciona.
+        if (($quiosque_consignacao==1)&&($quiosque_revenda==0)) {
+            $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+        }
         if ($operacao == 'ver')
             $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
         $tpl1->CHECKBOX_SPAN_ID = "";
         $tpl1->block("BLOCK_CHECKBOX");
     }
-
-    //Tipo Revenda
+    //Revenda
     if ($quiosque_revenda == 1) {
         $tpl1->CHECKBOX_NOME = "box2[2]";
         $tpl1->CHECKBOX_VALOR = "2";
         $tpl1->LABEL_NOME = "Revenda";
         if ($tipo_revenda == 1) {
+            $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+        }
+        //Se tiver apenas um tipo de negociação, então já seleciona.
+        if (($quiosque_consignacao==0)&&($quiosque_revenda==1)) {
             $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
         }
         if ($operacao == 'ver')
@@ -1156,6 +1121,7 @@ if (($usuario_grupo==1)||($usuario_grupo==2)||($usuario_grupo==3)) {
     $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
 }
+
 
 //Observação
 $tpl1->CAMPO_ONBLUR="";
