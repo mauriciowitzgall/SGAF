@@ -32,7 +32,7 @@ while($array = mysql_fetch_array($query))
 <hr align="left" class="linhacurta" >
 <br />
 
-<form action="categorias_cadastrar2.php?codigo=<?php echo"$codigo";?>" method="post" name="form1">
+<form action="categorias_cadastrar2.php?codigo=<?php echo"$codigo";?>&modal=<?php echo $modal;?>" method="post" name="form1">
 <table summary="" border="0" class="tabela1" cellpadding="4">
 <tr>
 	<td align="right" width="200px"><b>Nome: <label class="obrigatorio">*</label></b></td>
@@ -54,8 +54,15 @@ if ($linkanterior=="") { $link_destino="categorias.php"; } else {
     $link_destino=$linkanterior;
 }
 
-if ($ver==1){ ?><a href="<?php echo $link_destino; ?>" class="link">&nbsp;<input type="button" value="VOLTAR" class="botao fonte3"></a> <?php }
-else { ?><input type="hidden" name="link" value="<?php echo $linkanterior; ?>"><input type="submit" value="SALVAR" name="submit1" class="botao fonte3"> <a href="produtos.php" class="link">&nbsp;<input type="button" value="CANCELAR" class="botao fonte3"></a> <?php } ?>
+if ($ver==1){ ?>
+<a href="<?php echo $link_destino; ?>" class="link">&nbsp;
+    <input type="button" value="VOLTAR" class="botao fonte3">
+</a> <?php }
+else { ?> <input type="hidden" name="link" value="<?php echo $linkanterior; ?>">
+<input type="submit" value="SALVAR" name="submit1" class="botao fonte3"> 
+<a href="<?php if ($modal!=1) echo "produtos.php"; else echo "#"; ?>" class="link" onclick="<?php if ($modal==1) echo "javascript:window.close(0);";;?>" >&nbsp;
+    <input type="button" value="CANCELAR" class="botao fonte3">
+</a> <?php } ?>
 <input type="hidden" name="nome2" value="<?php echo "$nome"; ?>">
 
 

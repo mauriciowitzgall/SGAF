@@ -55,7 +55,9 @@ else //Caso seja uma altera��o de um registro fazer isso
 		$sqlerro=mysql_error();
 	}	
 }
+
 $paginadestino="categorias.php";
+
 ?>
 
 <table summary="" border="1" class="tabela1" cellpadding="4" align="center">
@@ -69,8 +71,13 @@ $paginadestino="categorias.php";
 	</td>
 <tr>
    <td colspan="2" align="center" >
-   	<?php if ($erro==0) { ?><a class="link" href="<?php echo "$paginadestino"; ?>"><input type="button" value="CONTINUAR" autofocus class="botao fonte3"></a> <?php } 
-		else { ?> <button class="botao fonte3" onclick=javascript:window.history.back()>VOLTAR</button> <?php } ?>
+   	<?php 
+        if ($modal==1) {
+            ?><input type="button" value="CONTINUAR" autofocus class="botao fonte3" onclick="javascript:window.close()"><?php
+        } else {
+            if ($erro==0) { ?><a class="link" href="<?php echo "$paginadestino"; ?>"><input type="button" value="CONTINUAR" autofocus class="botao fonte3"></a> <?php } 
+            else { ?> <button class="botao fonte3" onclick=javascript:window.history.back()>VOLTAR</button> <?php } 
+        }?>
    </td>
 </tr>
 </table>

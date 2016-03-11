@@ -10,6 +10,7 @@ error_reporting(E_ERROR | E_PARSE);
 //Pasta a partir da raiz, onde ficará os arquivos do sistema
 $pastasistema = 'sgaf'; 
 $raiz = $_SERVER["DOCUMENT_ROOT"] ."/".$pastasistema;
+$modal=$_GET["modal"];
 ?>
 <html>
     <head>
@@ -37,8 +38,10 @@ $raiz = $_SERVER["DOCUMENT_ROOT"] ."/".$pastasistema;
             //include "controle/conexao_tipo.php";
             require_once "funcoes.php";
             //include "conexao_tipo.php";
-            include "cabecalho.php";
-            include "menu.php";
+            if ($modal!=1) {
+                include "cabecalho.php";
+                include "menu.php";
+            }
             include "js/mascaras.php";
             ?>
             <div class="corpo">

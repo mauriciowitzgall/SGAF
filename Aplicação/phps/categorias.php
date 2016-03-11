@@ -6,6 +6,7 @@ if ($permissao_categorias_ver <> 1) {
     exit;
 }
 
+$modal=$_GET["modal"];
 ?>
 <?php include "includes.php"; ?>
 <script type="text/javascript" src="paginacao.js"></script>
@@ -20,7 +21,7 @@ if ($permissao_categorias_ver <> 1) {
 </table>
 <hr align="left" class="linhacurta" >
 
-<?php //filtro e ordena��o
+<?php //filtro e ordenação
 $filtronome=$_POST['filtronome'];
 $filtroobs=$_POST['filtroobs'];
 ?>

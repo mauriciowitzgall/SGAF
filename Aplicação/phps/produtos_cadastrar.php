@@ -44,7 +44,17 @@ while ($dados2 = mysql_fetch_array($query2)) {
 ?>
 <script type="text/javascript" src="js/capitular.js"></script>
 <script type="text/javascript">
-window.onload = function(){
+
+function atualiza_categorias () {
+    $.post("produtos_cadastrar_atualiza_categorias.php",{
+        cooperativa:<?php echo $usuario_cooperativa; ?>
+    },function(valor2){
+        //alert(valor2);
+        $("select[name=categoria]").html(valor2);
+    });    
+}
+    
+    window.onload = function(){
     //industrializado
     ind=$("select[name=industrializado]").val();
     if (ind==0) {
@@ -65,6 +75,10 @@ window.onload = function(){
         $("tr[id=id_recipiente]").show(); 
         
     }
+    
+    
+    
+    
 }
 
 </script>
@@ -199,7 +213,7 @@ if ($linhas == 0) {
        
         <tr>
             <td align="right" width="200px"><b>Categoria: <label class="obrigatorio"></label></b></td>
-            <td align="left" width="">
+            <td align="left" valign="bottom">
                 <select name="categoria" class="campopadrao" required="required" <?php if ($ver == 1) echo" disabled "; ?> >
                     <option value="">Selecione</option>		
                     <?php
@@ -214,6 +228,11 @@ if ($linhas == 0) {
                         }
                     ?>
                 </select>
+                <a href="categorias_cadastrar.php?modal=1" target="_blank" class="link">
+                    <img id="atualizar_categoria" src="../imagens/icones/geral/add.png" width="12px">
+                </a>
+                <a class="link" href="#"><img id="atualizar_categoria" src="../imagens/icones/geral/atualizar.png" width="12px" onclick="atualiza_categorias()"></a>
+                
             </td>
         </tr>
         <tr>
