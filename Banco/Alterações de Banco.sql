@@ -82,5 +82,6 @@ CHANGE COLUMN `pes_cidade` `pes_cidade` MEDIUMINT(11) NULL ;
 ALTER TABLE `sgaf`.`pessoas` 
 ADD COLUMN `pes_datanascimento` DATE NULL AFTER `pes_quiosquequecadastrou`;
 
+UPDATE `sgaf`.`grupo_permissoes` SET `gruper_quiosque_definirsupervisores`='1' WHERE `gruper_codigo`='3';
 
 
