@@ -228,10 +228,10 @@ if ($linhas == 0) {
                         }
                     ?>
                 </select>
+                <a class="link" href="#"><img id="atualizar_categoria" src="../imagens/icones/geral/atualizar.png" width="12px" onclick="atualiza_categorias()"></a>
                 <a href="categorias_cadastrar.php?modal=1" target="_blank" class="link">
                     <img id="atualizar_categoria" src="../imagens/icones/geral/add.png" width="12px">
                 </a>
-                <a class="link" href="#"><img id="atualizar_categoria" src="../imagens/icones/geral/atualizar.png" width="12px" onclick="atualiza_categorias()"></a>
                 
             </td>
         </tr>
@@ -274,6 +274,17 @@ if ($linhas == 0) {
                         $revenda_marcado = "checked";
                 }
             }
+            //Se o quiosque tem apenas um tipo de negociação então este deve vir marcado por padrão
+            if (($tiponegquicon==1)&&($tiponegquirev==0)) {
+                $consignacao_marcado=" checked ";
+                $revenda_marcado="  ";
+            }
+            if (($tiponegquicon==0)&&($tiponegquirev==1)) {
+                $consignacao_marcado="  ";
+                $revenda_marcado=" checked ";
+            }
+            
+            
             if ($ver == 1)
                 $desabilitado = " disabled ";
             ?>
