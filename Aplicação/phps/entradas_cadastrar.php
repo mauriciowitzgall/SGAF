@@ -187,13 +187,21 @@ if ($query) {
     if ($operacao == 3) {
         $tpl->SELECT_DESABILITADO = " disabled ";
     }
+    $linhas=  mysql_num_rows($query);
     while ($dados = mysql_fetch_array($query)) {
         $tpl->OPTION_VALOR = $dados[0];
         $tpl->OPTION_TEXTO = "$dados[1]";
-        if ($dados[0] == $tiponegociacao) {
-            $tpl->OPTION_SELECIONADO = " SELECTED ";
+        //Quando for novo cadastro de entrada, se o quiosque tiver apenas 1 tipo de negociação então já deixa selecionado
+        if ($operacao=="1") {
+            if ($linhas==1)  $tpl->OPTION_SELECIONADO = " SELECTED ";
+            else $tpl->OPTION_SELECIONADO = "  ";
         } else {
-            $tpl->OPTION_SELECIONADO = "";
+            //se for edição seleciona o que está no banco
+            if ($dados[0] == $tiponegociacao) {
+                $tpl->OPTION_SELECIONADO = " SELECTED ";
+            } else {
+                $tpl->OPTION_SELECIONADO = "";
+            }
         }
         $tpl->block("BLOCK_OPTIONS_TIPONEGOCIACAO");
     }

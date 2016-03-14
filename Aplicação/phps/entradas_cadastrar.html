@@ -1,12 +1,17 @@
+
 <script type="text/javascript">
     window.onload = function() {
         var manter = $("input[name=produtomanter]").val();
         if (manter = 'on') {
             valida_produto();
-            document.forms["form1"].qtd.focus();
+            if (document.forms["form1"].qtd)
+                document.forms["form1"].qtd.focus();
         }
         desabilita_campos();
-        verifica_incluir()
+        verifica_incluir();
+
+        tipneg= $("select[name=tiponegociacao]").val();
+        popula_tipopessoa(tipneg);
     };
 
 function mascara_percent() {
@@ -27,7 +32,7 @@ function mascara_percent() {
 }
 
     function valida_produto() {
-        verifica_incluir()
+        verifica_incluir();
         $("input[name=valuni]").val("").priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
         $("input[name=valuni]").disabled = true;
         $("input[name=valunicusto]").val("").priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
@@ -41,7 +46,6 @@ function mascara_percent() {
         $("input[name=local]").val("");        
         $("span[name=tipocontagem]").html("");
         $("span[name=qtdtipcon]").html("");
-
         $.post("entradas_valorunitario2.php", {
             produto: $("select[name=produto]").val(),
             fornecedor: $("select[name=fornecedor]").val(),
@@ -97,7 +101,6 @@ function mascara_percent() {
 
             }
         });
-
         $.post("entradas_tipcon.php", {produto: $("select[name=produto]").val()}, function(valor) {
             $("span[name=tipocontagem]").html(valor);
         });
@@ -115,14 +118,16 @@ function mascara_percent() {
     function desabilita_campos() {
         //alert("entrou");
         var produto = $("select[name=produto]").val();
-        if (produto != '') {
-            document.forms["form1"].qtd.disabled = false;
-            document.forms["form1"].valuni.disabled = false;
-            document.forms["form1"].validade.disabled = false;
-            document.forms["form1"].local.disabled = false;
-            document.forms["form1"].valunicusto.disabled = false;
-            document.forms["form1"].percent.disabled = false;
-            document.forms["form1"].percent2.disabled = false;
+        if (produto != '') { 
+            if (document.forms["form1"].qtd) { //se os campos existirem
+                document.forms["form1"].qtd.disabled = false;
+                document.forms["form1"].valuni.disabled = false;
+                document.forms["form1"].validade.disabled = false;
+                document.forms["form1"].local.disabled = false;
+                document.forms["form1"].valunicusto.disabled = false;
+                document.forms["form1"].percent.disabled = false;
+                document.forms["form1"].percent2.disabled = false;
+        }
             //alert("Habilita");
         }
         else {
@@ -148,7 +153,9 @@ function mascara_percent() {
             document.forms["form1"].incluir.disabled = true;
             //alert('desabilita');
         } else {
-            document.forms["form1"].incluir.disabled = false;
+            if (document.forms["form1"].incluir) {
+                document.forms["form1"].incluir.disabled();
+            }
             //alert('habilita');
         }
 
@@ -511,10 +518,6 @@ function mascara_percent() {
 
     <!--  END BLOCK_PASSO3 -->
 
-    <script type="text/javascript">
-    {
-        IRPARA
-    }
-    </script>
+
 </form>
 
