@@ -1,5 +1,6 @@
 function verifica_usuario (tipopessoa) {
     var acesso = $("select[name=possuiacesso]").val();            
+    //alert(tipopessoa+"/"+acesso);
     if (acesso==0) {
         document.form1.cpf.required=false;
         document.form1.cnpj.required=false;
@@ -12,17 +13,17 @@ function verifica_usuario (tipopessoa) {
 //        }
     } else if (acesso==1) {
         //alert(tipopessoa);
-        if (tipopessoa==1)
+        if (tipopessoa==1) {
             document.form1.cpf.required=true;
-        else 
+            document.form1.cnpj.required=false;
+        } else {
+            document.form1.cpf.required=false;
             document.form1.cnpj.required=true;
-        document.form1.senha.disabled=false;
-        document.form1.senha2.disabled=false;
-//        if (document.form1.senhaatual=true) {
-//            document.form1.senhaatual.disabled=false;
-//        }
-        document.form1.grupopermissoes.disabled=false;
-        document.form1.quiosqueusuario.disabled=false;
+            document.form1.senha.disabled=false;
+            document.form1.senha2.disabled=false;
+            document.form1.grupopermissoes.disabled=false;
+            document.form1.quiosqueusuario.disabled=false;
+        } 
     } else {
         //alert("Erro grave de Javascript! Verifique a funcao verifica_usuario no arquivo pessoas_cadastrar.js");
     }
@@ -94,8 +95,8 @@ $(document).ready(function() {
 
         aparece_tiponegociacao();
 
-        //Ao entrar pela primeira vez na pagina já verificar se o usuário tem acesso ao sistema ou não
-        verifica_usuario (); 
+        tippes = $("select[name=tipopessoa2]").val();            
+        verifica_usuario (tippes); 
 
 
 });

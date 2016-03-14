@@ -85,3 +85,8 @@ ADD COLUMN `pes_datanascimento` DATE NULL AFTER `pes_quiosquequecadastrou`;
 UPDATE `sgaf`.`grupo_permissoes` SET `gruper_quiosque_definirsupervisores`='1' WHERE `gruper_codigo`='3';
 
 INSERT INTO `sgaf`.`pessoas_categoria` (`pescat_codigo`, `pescat_nome`) VALUES ('7', 'Fábrica');
+
+
+UPDATE `agape`.`pessoas_tipo` SET `pestip_nome`='Gestor' WHERE `pestip_codigo`='2';
+
+UPDATE `agape`.`grupo_permissoes` SET `gruper_pessoas_cadastrar_gestores`='1', `gruper_pessoas_cadastrar_supervisores`='1', `gruper_pessoas_ver_gestores`='1', `gruper_pessoas_definir_grupo_gestores`='0' WHERE `gruper_codigo`='3';

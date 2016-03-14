@@ -53,6 +53,8 @@ if (empty($tiponegociacao)) {
 
 
 if ($codigo == "") { //caso seja um cadastro novo fazer isso
+    
+    /*
     //Verifica se tem produtos com o mesmo nome
     $sql = "SELECT * FROM produtos WHERE pro_nome='$nome' and pro_cooperativa=$usuario_cooperativa";
     $query = mysql_query($sql);
@@ -69,40 +71,43 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         $tpl_notificacao->block("BLOCK_MOTIVO_JAEXISTE");
         $tpl_notificacao->block("BLOCK_BOTAO_VOLTAR");
         $tpl_notificacao->show();
-    } else {
-        $idunico=  uniqid();
-        $sql = "INSERT INTO produtos (pro_nome,pro_tipocontagem,pro_categoria,pro_descricao,pro_datacriacao,pro_horacriacao,pro_cooperativa,pro_volume,pro_marca,pro_recipiente,pro_composicao,pro_codigounico,pro_idunico,pro_industrializado,pro_usuarioquecadastrou,pro_quiosquequecadastrou)
-	VALUES ('$nome','$tipo','$categoria','$descricao','$data','$hora',$usuario_cooperativa,'$volume','$marca','$recipiente','$composicao','$codigounico','$idunico','$industrializado','$usuario_codigo','$usuario_quiosque');";
-        $query = mysql_query($sql);
-        if (!$query)
-            die("Erro22: " . mysql_error());
-        $ultimo = mysql_insert_id();
-        $produto = $ultimo;
-        foreach ($tiponegociacao as $tiponegociacao) {
-            $sql2 = "
-                INSERT INTO 
-                    mestre_produtos_tipo (
-                        mesprotip_produto,
-                        mesprotip_tipo                       
-                    ) 
-                VALUES (
-                    '$produto',
-                    '$tiponegociacao'
-                )";
-            if (!mysql_query($sql2))
-                die("Erro7: " . mysql_error());
-        }
-
-
-        $tpl_notificacao = new Template("templates/notificacao.html");
-        $tpl_notificacao->ICONES = $icones;
-        $tpl_notificacao->MOTIVO_COMPLEMENTO = "";
-        $tpl_notificacao->DESTINO = "produtos.php";
-        $tpl_notificacao->block("BLOCK_CONFIRMAR");
-        $tpl_notificacao->block("BLOCK_CADASTRADO");
-        $tpl_notificacao->block("BLOCK_BOTAO");
-        $tpl_notificacao->show();
+        exit;
+    } 
+    */
+    
+    $idunico=  uniqid();
+    $sql = "INSERT INTO produtos (pro_nome,pro_tipocontagem,pro_categoria,pro_descricao,pro_datacriacao,pro_horacriacao,pro_cooperativa,pro_volume,pro_marca,pro_recipiente,pro_composicao,pro_codigounico,pro_idunico,pro_industrializado,pro_usuarioquecadastrou,pro_quiosquequecadastrou)
+    VALUES ('$nome','$tipo','$categoria','$descricao','$data','$hora',$usuario_cooperativa,'$volume','$marca','$recipiente','$composicao','$codigounico','$idunico','$industrializado','$usuario_codigo','$usuario_quiosque');";
+    $query = mysql_query($sql);
+    if (!$query)
+        die("Erro22: " . mysql_error());
+    $ultimo = mysql_insert_id();
+    $produto = $ultimo;
+    foreach ($tiponegociacao as $tiponegociacao) {
+        $sql2 = "
+            INSERT INTO 
+                mestre_produtos_tipo (
+                    mesprotip_produto,
+                    mesprotip_tipo                       
+                ) 
+            VALUES (
+                '$produto',
+                '$tiponegociacao'
+            )";
+        if (!mysql_query($sql2))
+            die("Erro7: " . mysql_error());
     }
+
+
+    $tpl_notificacao = new Template("templates/notificacao.html");
+    $tpl_notificacao->ICONES = $icones;
+    $tpl_notificacao->MOTIVO_COMPLEMENTO = "";
+    $tpl_notificacao->DESTINO = "produtos.php";
+    $tpl_notificacao->block("BLOCK_CONFIRMAR");
+    $tpl_notificacao->block("BLOCK_CADASTRADO");
+    $tpl_notificacao->block("BLOCK_BOTAO");
+    $tpl_notificacao->show();
+    
 } else { //Caso seja uma altera��o de um registro fazer isso
     //Verifica se j� existe registros com o mesmo nome    
     $sql = "SELECT * FROM produtos WHERE pro_nome='$nome' and pro_cooperativa=$usuario_cooperativa";
