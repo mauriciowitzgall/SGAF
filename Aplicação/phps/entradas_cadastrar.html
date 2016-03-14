@@ -31,135 +31,203 @@ function mascara_percent() {
     
 }
 
-    function valida_produto() {
-        verifica_incluir();
-        $("input[name=valuni]").val("").priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
-        $("input[name=valuni]").disabled = true;
-        $("input[name=valunicusto]").val("").priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
-        $("input[name=valunicusto]").disabled = true;
-        $("input[name=percent]").disabled = true;
-        $("input[name=percent2]").disabled = true;
-        $("input[name=qtd]").val("");
-        $("input[name=qtd]").disabled = true;
-        $("input[name=validade]").val("");
-        $("input[name=validade]").disabled = true;
-        $("input[name=local]").val("");        
-        $("span[name=tipocontagem]").html("");
-        $("span[name=qtdtipcon]").html("");
-        $.post("entradas_valorunitario2.php", {
-            produto: $("select[name=produto]").val(),
-            fornecedor: $("select[name=fornecedor]").val(),
-            entrada: $("input[name=entrada2]").val()
-        }, function(valor) {
-            //alert(valor);
-            if (valor == "naoestanalista") {
-                document.forms["form1"].valuni.disabled = false;
-                document.forms["form1"].validade.disabled = false;
-                //Se o campo está oculto dá pau no javascript a partir o ponto que o sistema não consegue localizar o campo                
-                document.forms["form1"].valunicusto.disabled = false;
-                desabilita_campos();
-                //alert('n�o esta na lista');
-                $.post("entradas_valorunitario.php", {
-                    produto: $("select[name=produto]").val(),
-                    fornecedor: $("select[name=fornecedor]").val()
-                }, function(valor2) {
-                    var quebra = valor2.split("|");
-                    
-                    var valuni = quebra[0];
-                    var valunicusto = quebra[2];
-                    $("input[name=valuni]").val(valuni).priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
-                    $("input[name=valuni2]").val(valuni).priceFormat({prefix: '', centsSeparator: ',', thousandsSeparator: '.'});
-                    $("input[name=validade]").val("");
-                    $("input[name=validade2]").val("");
-                    $("input[name=valunicusto]").val(valunicusto).priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
-                    $("input[name=valunicusto2]").val(valunicusto).priceFormat({prefix: '', centsSeparator: ',', thousandsSeparator: '.'});
-                });
-
-            } else {
-                //alert(valor);
-                var quebra = valor.split("|");
+function valida_produto() {
+    verifica_incluir();
+    $("input[name=valuni]").val("").priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
+    $("input[name=valuni]").disabled = true;
+    $("input[name=valunicusto]").val("").priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
+    $("input[name=valunicusto]").disabled = true;
+    $("input[name=percent]").disabled = true;
+    $("input[name=percent2]").disabled = true;
+    $("input[name=qtd]").val("");
+    $("input[name=qtd]").disabled = true;
+    $("input[name=validade]").val("");
+    $("input[name=validade]").disabled = true;
+    $("input[name=validade_item]").disabled = true;
+    $("input[name=local]").val("");        
+    $("span[name=tipocontagem]").html("");
+    $("span[name=qtdtipcon]").html("");
+    valunicusto=0;
+    $.post("entradas_valorunitario2.php", {
+        produto: $("select[name=produto]").val(),
+        fornecedor: $("select[name=fornecedor]").val(),
+        entrada: $("input[name=entrada2]").val()
+    }, function(valor) {
+        //alert(valor);
+        if (valor == "naoestanalista") {
+            document.forms["form1"].valuni.disabled = false;
+            document.forms["form1"].validade.disabled = false;
+            document.forms["form1"].validade_item.disabled = false;
+            //Se o campo está oculto dá pau no javascript a partir o ponto que o sistema não consegue localizar o campo                
+            document.forms["form1"].valunicusto.disabled = false;
+            desabilita_campos();
+            //alert('n�o esta na lista');
+            $.post("entradas_valorunitario.php", {
+                produto: $("select[name=produto]").val(),
+                fornecedor: $("select[name=fornecedor]").val()
+            }, function(valor2) {
+                //alert(valor2);
+                var quebra = valor2.split("|");
                 var valuni = quebra[0];
-                var validade = quebra[1];
-                //alert(validade);
-                if (validade == '0000-00-00') {
-                    validade = "";
-                }
                 var valunicusto = quebra[2];
+                if (!valunicusto) valunicusto=0
                 $("input[name=valuni]").val(valuni).priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
                 $("input[name=valuni2]").val(valuni).priceFormat({prefix: '', centsSeparator: ',', thousandsSeparator: '.'});
-                $("input[name=validade]").val(validade);
-                $("input[name=validade2]").val(validade);
+                $("input[name=validade]").val("");
+                $("input[name=validade2]").val("");
                 $("input[name=valunicusto]").val(valunicusto).priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
                 $("input[name=valunicusto2]").val(valunicusto).priceFormat({prefix: '', centsSeparator: ',', thousandsSeparator: '.'});
+            });
 
-                document.forms["form1"].valuni.disabled = true;
-                document.forms["form1"].valunicusto.disabled = true;
-                document.forms["form1"].percent.disabled = true;
-                document.forms["form1"].percent2.disabled = true;                
-                document.forms["form1"].validade.disabled = true;
-                //alert('esta na lista');
-
+        } else {
+            //alert(valor);
+            var quebra = valor.split("|");
+            var valuni = quebra[0];
+            var validade = quebra[1];
+            //alert(validade);
+            if (validade == '0000-00-00') {
+                validade = "";
             }
-        });
-        $.post("entradas_tipcon.php", {produto: $("select[name=produto]").val()}, function(valor) {
-            $("span[name=tipocontagem]").html(valor);
-        });
+            var valunicusto = quebra[2];
+            if (!valunicusto) valunicusto=0
+            $("input[name=valuni]").val(valuni).priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
+            $("input[name=valuni2]").val(valuni).priceFormat({prefix: '', centsSeparator: ',', thousandsSeparator: '.'});
+            $("input[name=validade]").val(validade);
+            $("input[name=validade2]").val(validade);
+            $("input[name=valunicusto]").val(valunicusto).priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
+            $("input[name=valunicusto2]").val(valunicusto).priceFormat({prefix: '', centsSeparator: ',', thousandsSeparator: '.'});
 
-
-        $.post("entradas_qtdtipcon.php", {produto: $("select[name=produto]").val()}, function(valor) {
-            $("span[name=qtdtipcon]").html(valor);
-        });
-
-        $("input[name=qtd]").val("");
-
-        desabilita_campos();
-    }
-
-    function desabilita_campos() {
-        //alert("entrou");
-        var produto = $("select[name=produto]").val();
-        if (produto != '') { 
-            if (document.forms["form1"].qtd) { //se os campos existirem
-                document.forms["form1"].qtd.disabled = false;
-                document.forms["form1"].valuni.disabled = false;
-                document.forms["form1"].validade.disabled = false;
-                document.forms["form1"].local.disabled = false;
-                document.forms["form1"].valunicusto.disabled = false;
-                document.forms["form1"].percent.disabled = false;
-                document.forms["form1"].percent2.disabled = false;
-        }
-            //alert("Habilita");
-        }
-        else {
-            document.forms["form1"].qtd.disabled = true;
             document.forms["form1"].valuni.disabled = true;
-            document.forms["form1"].validade.disabled = true;
-            document.forms["form1"].validade.value = "";
-            document.forms["form1"].local.disabled = true;
             document.forms["form1"].valunicusto.disabled = true;
             document.forms["form1"].percent.disabled = true;
-            document.forms["form1"].percent2.disabled = true;
-            //alert("desabilitar");            
+            document.forms["form1"].percent2.disabled = true;                
+            document.forms["form1"].validade.disabled = true;
+            document.forms["form1"].validade_item.disabled = true;
+            //alert('esta na lista');
+
         }
+    });
+    $.post("entradas_tipcon.php", {produto: $("select[name=produto]").val()}, function(valor) {
+        $("span[name=tipocontagem]").html(valor);
+    });
+
+
+    $.post("entradas_qtdtipcon.php", {produto: $("select[name=produto]").val()}, function(valor) {
+        $("span[name=qtdtipcon]").html(valor);
+    });
+
+    $("input[name=qtd]").val("");
+
+    desabilita_campos();
+}
+
+function desabilita_campos() {
+    //alert("entrou");
+    var produto = $("select[name=produto]").val();
+    if (produto != '') { 
+        if (document.forms["form1"].qtd) { //se os campos existirem
+            document.forms["form1"].qtd.disabled = false;
+            document.forms["form1"].valuni.disabled = false;
+            document.forms["form1"].validade.disabled = false;
+            document.forms["form1"].validade_item.disabled = false;
+            document.forms["form1"].local.disabled = false;
+            document.forms["form1"].valunicusto.disabled = false;
+            document.forms["form1"].percent.disabled = false;
+            document.forms["form1"].percent2.disabled = false;
+    }
+        //alert("Habilita");
+    }
+    else {
+        document.forms["form1"].qtd.disabled = true;
+        document.forms["form1"].valuni.disabled = true;
+        document.forms["form1"].validade.disabled = true;
+        document.forms["form1"].validade_item.disabled = true;
+        document.forms["form1"].validade.value = "";
+        document.forms["form1"].local.disabled = true;
+        document.forms["form1"].valunicusto.disabled = true;
+        document.forms["form1"].percent.disabled = true;
+        document.forms["form1"].percent2.disabled = true;
+        //alert("desabilitar");            
+    }
+}
+
+function verifica_incluir() {
+    var valoruni = $("input[name=valuni]").val();
+    var quant = $("input[name=qtd]").val();
+    //alert (quant);
+    //alert (valoruni);
+
+    if ((valoruni == "") || (valoruni == 'R$ 0,00') || (valoruni == 'R$ 0,0') || (quant == '0') || (quant == '') || (quant == '0,00')) {
+        document.forms["form1"].incluir.disabled = true;
+        //alert('desabilita');
+    } else {
+        if (document.forms["form1"].incluir) {
+            document.forms["form1"].incluir.disabled = false;
+
+        }
+        //alert('habilita');
     }
 
-    function verifica_incluir() {
-        var valoruni = $("input[name=valuni]").val();
-        var quant = $("input[name=qtd]").val();
-        //alert (quant);
-        //alert (valoruni);
+}
 
-        if ((valoruni == "") || (valoruni == 'R$ 0,00') || (valoruni == 'R$ 0,0') || (quant == '0') || (quant == '') || (quant == '0,00')) {
-            document.forms["form1"].incluir.disabled = true;
-            //alert('desabilita');
+function popula_validade (dias) {
+    
+    if (dias==0) {
+        $("input[name=validade]").val("");
+        $("input[name=validade]").disabled= true;
+        $("input[name=validade_item]").disabled= true;
+
+    } else if (dias==-1) {
+        $("input[name=validade]").disabled= false;
+        $("input[name=validade_item]").disabled= false;
+        $("input[name=validade_item]").required= true;
+    } else {
+        $("input[name=validade]").disabled= true;
+        $("input[name=validade_item]").disabled= true;
+        var data = new Date(),
+        horas = dias*24;
+        data.setHours(data.getHours() + horas);
+        //var dia=data.getDate();
+        //var mes=data.getMonth();
+        var dia=('0'+(data.getDate())).slice(-2);
+        var mes=('0'+(data.getMonth()+1)).slice(-2);
+        var ano=data.getFullYear();
+        data = ano + '-' + mes + '-' + dia;
+        //alert(data);
+        $("input[name=validade]").val(data);
+    }
+}
+
+function mascara_pesoqtd() {
+    $.post("entradas_qtdtipcon.php", {
+        produto: $("select[name=produto]").val()
+    }, function(valor) {
+        $("span[name=qtdtipconcod]").html(valor);
+        //alert (valor);
+        if (valor == "<b>por un.</b>") {
+            $('#qtd').priceFormat({
+                prefix: '',
+                centsSeparator: '',
+                centsLimit: 0,
+                thousandsSeparator: '.'
+            });
+        //alert("qtd");
         } else {
-            if (document.forms["form1"].incluir) {
-                document.forms["form1"].incluir.disabled();
-            }
-            //alert('habilita');
+            $('#qtd').priceFormat({
+                prefix: '',
+                centsSeparator: ',',
+                centsLimit: 3,
+                thousandsSeparator: '.'
+            });
+        //alert("peso");
         }
+    });
+    verifica_incluir();
+}
 
-    }
+function limpa_item_validade (){
+    select_selecionar("validade_item","-1");
+}
 
 
 </script>
@@ -330,7 +398,25 @@ function mascara_percent() {
         <tr>
             <td align="right"><b>Validade: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
-                <input type="date" size="" maxlength="" max="{VALIDADE_MAX}" min="{VALIDADE_MIN}" name="validade" id="validade" class="campopadrao campo_tamanho_5"  onclick="" onblur="calcula_saldovalidade(this.value);" disabled="true">
+                <select class="campopadrao" name="validade_item" id="validade_item"  onchange="popula_validade(this.value);">
+                    <option value="0" >Sem validade</option>
+                    <option value="1">1 dia</option>
+                    <option value="2">2 dias</option>
+                    <option value="3">3 dias</option>
+                    <option value="5">5 dias</option>
+                    <option value="7">7 dias</option>
+                    <option value="10">10 dias</option>
+                    <option value="15">15 dias</option>
+                    <option value="20">20 dias</option>
+                    <option value="30">30 dias</option>
+                    <option value="45">45 dias</option>
+                    <option value="60">60 dias</option>
+                    <option value="90">90 dias</option>
+                    <option value="180" >180 dias</option>
+                    <option value="360">360 dias</option>
+                    <option value="-1">Pré-definida</option>
+                </select>
+                <input type="date" size="" maxlength="" max="{VALIDADE_MAX}" min="{VALIDADE_MIN}" name="validade" id="validade" class="campopadrao campo_tamanho_5"  onclick="" onblur="calcula_saldovalidade(this.value); limpa_item_validade();" disabled="true">
                 <span name="saldovalidade" id="saldovalidade" class="dicacampo" ></span>
             </td>
         </tr>

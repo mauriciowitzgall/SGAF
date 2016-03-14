@@ -331,32 +331,8 @@ function popula_produtos_pelamarca(valor) {
 }
 
 
-function mascara_pesoqtd() {
-    $.post("entradas_qtdtipcon.php", {
-        produto: $("select[name=produto]").val()
-    }, function(valor) {
-        $("span[name=qtdtipconcod]").html(valor);
-        //alert (valor);
-        if (valor == "<b>por un.</b>") {
-            $('#qtd').priceFormat({
-                prefix: '',
-                centsSeparator: '',
-                centsLimit: 0,
-                thousandsSeparator: '.'
-            });
-        //alert("qtd");
-        } else {
-            $('#qtd').priceFormat({
-                prefix: '',
-                centsSeparator: ',',
-                centsLimit: 3,
-                thousandsSeparator: '.'
-            });
-        //alert("peso");
-        }
-    });
-    verifica_incluir();
-}
+
+
 function mascara_quantidade_ideal() {
     $('#qtdide').priceFormat({
         prefix: '',
@@ -892,4 +868,14 @@ function tipo_contagem(valor) {
         $("tr[id=id_recipiente]").hide();   
         
     } 
+}
+
+function select_selecionar(select,option){
+    var c = document.getElementById(select), i=0;
+    for (; i<c.options.length; i++) {	
+        if (c.options[i].value == option) {
+                c.options[i].selected = true;
+                break;
+        }
+    }
 }
