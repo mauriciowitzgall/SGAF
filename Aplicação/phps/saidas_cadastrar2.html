@@ -18,7 +18,7 @@ $(document).ready(function() {
                 <b>Valor Total:</b>                            
             </td>            
             <td align="left" width="" class="fundo1">                
-                <input type="text" name="valbru" size="15" class="campopadrao" value="{VALBRU_VALOR}" disabled="disabeld" >                                                                 
+                <input type="text" name="valbru" id="valbru" size="15" class="campopadrao" value="{VALBRU_VALOR}" disabled="disabeld" >                                                                 
             </td>  
         </tr>
         <tr>  
@@ -26,7 +26,7 @@ $(document).ready(function() {
                 <b>Desconto:</b>                            
             </td>            
             <td align="left" width="" class="fundo1">                
-                <input type="text" name="descper" id="descper" size="4" class="campopadrao" value="{DESCPER_VALOR}" onkeyup="desconto(this)" onfocus="desconto(this)" onclick="this.select()" onkeypress="" autocomplete="off" {DESCPER_DESABILITADO}>%
+                <input type="text" name="descper" id="descper" size="8" class="campopadrao" value="{DESCPER_VALOR}" onkeyup="desconto(this.value)" onfocus="" onclick="this.select()" onkeypress="" autocomplete="off" {DESCPER_DESABILITADO}>%
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="text" name="descval" id="descval" size="15" placeholder="" class="campopadrao" value="{DESCVAL_VALOR}"  onkeyup="desconto2(this)"  onclick="this.select()" onfocus="" {DESCVAL_DESABILITADO}>
             </td>             
@@ -36,7 +36,7 @@ $(document).ready(function() {
                 <b>Total:</b>                            
             </td>            
             <td align="left" width="" class="fundo1">                
-                <input type="text" name="total" size="15" class="campopadrao negrito" value="{TOTAL_VALOR}" disabled>                                                                 
+                <input type="text" name="total" id="total"s ize="15" class="campopadrao negrito" value="{TOTAL_VALOR}" disabled>                                                                 
             </td>  
         </tr>        
         <tr class="">  
