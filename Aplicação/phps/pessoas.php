@@ -187,22 +187,12 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "TIPO PESSOA";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-$tpl->CABECALHO_COLUNA_TAMANHO = "";
-$tpl->CABECALHO_COLUNA_COLSPAN = "";
-$tpl->CABECALHO_COLUNA_NOME = "CIDADE";
-$tpl->block("BLOCK_LISTA_CABECALHO");
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "TELEFONE 01";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-if ($permissao_pessoas_criarusuarios == 1) {
-    $tpl->CABECALHO_COLUNA_TAMANHO = "80PX";
-    $tpl->CABECALHO_COLUNA_COLSPAN = "";
-    $tpl->CABECALHO_COLUNA_NOME = "POSSUI ACESSO";
-    $tpl->block("BLOCK_LISTA_CABECALHO");
-}
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
@@ -357,25 +347,10 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl->LISTA_COLUNA_VALOR = $dados["pestippes_nome"];
     $tpl->block("BLOCK_LISTA_COLUNA");
 
-    //Coluna Cidade
-    $tpl->LISTA_COLUNA_VALOR = $dados["cid_nome"];
-    $tpl->block("BLOCK_LISTA_COLUNA");
 
     //Coluna Fone1 
     $tpl->LISTA_COLUNA_VALOR = $dados["pes_fone1"];
     $tpl->block("BLOCK_LISTA_COLUNA");
-
-    //Coluna Possui acesso
-    if ($permissao_pessoas_criarusuarios == 1) {
-        //Coluna Acesso
-        if ($dados["pes_possuiacesso"] == 1) {
-            $acesso = 'Sim';
-        } else {
-            $acesso = 'Não';
-        }
-        $tpl->LISTA_COLUNA_VALOR = $acesso;
-        $tpl->block("BLOCK_LISTA_COLUNA");
-    }
 
 
 
