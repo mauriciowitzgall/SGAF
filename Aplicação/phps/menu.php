@@ -203,7 +203,7 @@ if ($usuario_grupo<>4) {
             //Categorias
             if ($permissao_categorias_ver == 1) {
                 $tpl_menu->LINK = "categorias.php";
-                $tpl_menu->IMAGEM_ARQUIVO = "produtos.png";
+                $tpl_menu->IMAGEM_ARQUIVO = "categorias.png";
                 $tpl_menu->IMAGEM_TITULO = "Categorias";
                 $tpl_menu->TITULO = "Categorias";
                 $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
@@ -281,8 +281,8 @@ if ($usuario_grupo<>4) {
             if ($permissao_saidas_cadastrar_devolucao == 1) {
                 $tpl_menu->LINK = "saidas_devolucao.php";
                 $tpl_menu->IMAGEM_ARQUIVO = "saidas.png";
-                $tpl_menu->IMAGEM_TITULO = "Devolução";
-                $tpl_menu->TITULO = "Devolução";
+                $tpl_menu->IMAGEM_TITULO = "Devolução/Ajuste";
+                $tpl_menu->TITULO = "Ajuste";
                 $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
                 $tpl_menu->block("BLOCK_MENU_ITEM");
             }
@@ -291,7 +291,7 @@ if ($usuario_grupo<>4) {
 
                 if ($permissao_saidas_cadastrar == 1) {
                     $tpl_menu->LINK = "saidas.php";
-                    $tpl_menu->IMAGEM_ARQUIVO = "saidas.png";
+                    $tpl_menu->IMAGEM_ARQUIVO = "vendas.png";
                     $tpl_menu->IMAGEM_TITULO = "Vendas";
                     $tpl_menu->TITULO = "Vendas";
                     $tpl_menu->block("BLOCK_MENU_ITEM_IMG");

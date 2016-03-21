@@ -90,3 +90,9 @@ INSERT INTO `sgaf`.`pessoas_categoria` (`pescat_codigo`, `pescat_nome`) VALUES (
 UPDATE `agape`.`pessoas_tipo` SET `pestip_nome`='Gestor' WHERE `pestip_codigo`='2';
 
 UPDATE `agape`.`grupo_permissoes` SET `gruper_pessoas_cadastrar_gestores`='1', `gruper_pessoas_cadastrar_supervisores`='1', `gruper_pessoas_ver_gestores`='1', `gruper_pessoas_definir_grupo_gestores`='0' WHERE `gruper_codigo`='3';
+
+
+ALTER TABLE `agape`.`produtos` 
+ADD COLUMN `pro_podesersubproduto` INT(1) NOT NULL DEFAULT 0 AFTER `pro_quiosquequecadastrou`;
+
+exportar tabela produtos_subprodutos

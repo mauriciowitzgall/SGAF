@@ -30,6 +30,8 @@ while ($array = mysql_fetch_array($query)) {
     $composicao = $array['pro_composicao'];
     $codigounico = $array['pro_codigounico'];
     $industrializado = $array['pro_industrializado'];
+    $subproduto=$array['pro_podesersubproduto'];
+    if ($subproduto=="") $subproduto=0;
 }
 
 $sql2="SELECT quitipneg_tipo FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$usuario_quiosque";
@@ -306,6 +308,16 @@ if ($linhas == 0) {
             </td>        
         </tr>
 
+        <tr>
+            <td align="right" width="200px"><b>Sub-produto: <label class="obrigatorio"></label></b></td>
+            <td align="left" valign="bottom">
+                <select name="subproduto" class="campopadrao" required="required" <?php if ($ver == 1) echo" disabled "; ?> >
+                    <option value="0" <?php if ($subproduto==0) echo "selected"; else echo ""; ?>>Não</option>		
+                    <option value="1" <?php if ($subproduto==1) echo "selected"; else echo ""; ?>>Sim</option>
+                </select>
+            </td>
+        </tr>        
+        
 
     </table>
 

@@ -139,10 +139,9 @@ ORDER BY pro_nome
             <td colspan="" align="center">MARCA</td>
             <td colspan="" align="center">REC.</td>
             <td colspan="" align="center">VOL.</td>
-            <td width="10px" colspan="" align="center">TIPO</td>
             <td width="10px" align="center" colspan="2">PORÇÕES</td>	
-            <td width="" align="center">CATEGORIA</td>	
-            <td width="10px" align="center">TIP. NEG.</td>	
+            <td width="10px" align="center" colspan="2">SUB-PRODUTOS</td>	
+            
             <?php
             $oper = 1;
             $oper_tamanho = 0;
@@ -195,88 +194,63 @@ ORDER BY pro_nome
                 <td><?php echo "$marca"; ?></td>
                 <td><?php echo "$recipiente"; ?></td>
                 <td><?php echo "$volume"; ?></td>
-                <?php
-                $sql2 = "SELECT * FROM produtos_tipo WHERE protip_codigo=$tipo";
-                $query2 = mysql_query($sql2);
-                $array2 = mysql_fetch_array($query2);
-                $nometipo = $array2['protip_nome'];
-                $siglatipo = $array2['protip_sigla'];               
-                ?>
-                <td width="35px"><?php echo " $siglatipo"; ?> </td>            
+               
                 <td width="" align="right"><b><?php echo "($qtdporcoes)"; ?> </b></td>            
                 <td width="" align="left">
                     <a href="produtos_porcoes.php?produto=<?php echo "$codigo"; ?>">
                     <img width="18px" src="../imagens/icones/geral/procurar.png" title="Produrar" alt="Procurar">
                     </a>
-                </td>            
-                <td><?php
-                $sql3 = "SELECT * FROM produtos_categorias WHERE cat_codigo=$categoria";
-                $query3 = mysql_query($sql3);
-                while ($array3 = mysql_fetch_array($query3)) {
-                    $nomecat = $array3 ['cat_nome'];
-                    echo "$nomecat";
-                }
+                </td>
+                
+                <?php
+                $sql2 = "SELECT count(*) as qtd FROM produtos_subproduto WHERE prosub_produto=$codigo";
+                $query2 = mysql_query($sql2);
+                $array2 = mysql_fetch_array($query2);
+                $qtdsubproduto=$array2["qtd"];
                 ?>
-                </td>
-                <td align="center" class="" width="100px" style="">                               
-                    <a href="#" class="link">
-                        <?php
-                        $sql2 = "SELECT * FROM mestre_produtos_tipo WHERE mesprotip_produto=$codigo";
-                        $query2 = mysql_query($sql2);
-                        if (!$query2)
-                            die("ERRO SQL:" . mysql_error());
-                        $consignacao_icone = "consignacao_desabilitado.png";
-                        $revenda_icone = "revenda_desabilitado.png";
-                        while ($dados2 = mysql_fetch_assoc($query2)) {
-                            $tipo = $dados2["mesprotip_tipo"];
-                            //echo "($tipo)";
-                            if ($tipo == 1)
-                                $consignacao_icone = "consignacao.png";
-                            if ($tipo == 2)
-                                $revenda_icone = "revenda.png";                                
-                        }
-                        ?>
-                        <img width="18px" src="../imagens/icones/geral/<?php echo $consignacao_icone; ?>" title="Consignação" alt="Consignação">
+                <td width="" align="right"><b><?php echo "($qtdsubproduto)"; ?> </b></td>            
+                <td width="" align="left">
+                    <a href="produtos_subprodutos.php?produto=<?php echo "$codigo"; ?>">
+                    <img width="18px" src="../imagens/icones/geral/procurar.png" title="Produrar" alt="Procurar">
                     </a>
-                    <a href="#" class="link">
-                        <img width="18px" src="../imagens/icones/geral/<?php echo $revenda_icone; ?>" title="Revenda" alt="Revenda">
-                    </a>
-                </td>
+                </td>            
+                
+              
 
 
-                    <td align="center" class="fundo1" width="35px">
-                        <img   width="15px" src="
-                        <?php 
-                        if (($quiosquequecadastrou==$usuario_quiosque)) { 
-                            echo "$icones\atencao2.png ";
-                            $motivo="";
-                        } else  if ($quiosquequecadastrou==0) { 
-                            $motivo="Produto registrado pelos gestores da cooperativa!";
-                        } else {
-                            echo "$icones\atencao.png"; 
-                            $sql3="SELECT qui_nome FROM quiosques WHERE qui_codigo=$quiosquequecadastrou";
-                            if (!$query3=mysql_query($sql3)) die("Erro SQL3:" . mysql_error());
-                            $dados3=  mysql_fetch_assoc($query3);
-                            $quiosquequecadastrou_nome=$dados3["qui_nome"];
-                            $motivo="Produto registrado pelo quiosque: $quiosquequecadastrou_nome";
-                            
-                        }?>" 
-                        title="<?php echo $motivo; ?>" alt="Atenção"/> </a>
-                    </td>
-                <?php if ($permissao_produtos_ver == 1) { ?>
-                    <td align="center" class="fundo1" width="35px">
-                        <a href="produtos_cadastrar.php?codigo=<?php echo"$codigo"; ?>&ver=1" class="link1"><img   width="15px" src="<?php echo $icones; ?>detalhes.png" title="Detalhes" alt="Detalhes"/> </a>
-                    </td>
-    <?php } ?>
-                <?php if ($permissao_produtos_editar == 1) { ?>                
-                    <td align="center" class="fundo1" width="35px">
-                        <a href="produtos_cadastrar.php?codigo=<?php echo"$codigo"; ?>" class="link1"><img   width="15px" src="<?php echo $icones; ?>editar.png" title="Editar"  alt="Editar" /></a> 
-                    </td>
-    <?php } ?>  
-                <?php if ($permissao_produtos_excluir == 1) { ?>                
-                    <td align="center" class="fundo1" width="35px"> 
-                        <a href="produtos_deletar.php?codigo=<?php echo"$codigo"; ?>" class="link1"><img  width="15px"  src="<?php echo $icones; ?>excluir.png"  title="Excluir" alt="Excluir" /></a> 
-                    </td>
+                <td align="center" class="fundo1" width="35px">
+                    <img   width="15px" src="
+                    <?php 
+                    if (($quiosquequecadastrou==$usuario_quiosque)) { 
+                        echo "$icones\atencao2.png ";
+                        $motivo="";
+                    } else  if ($quiosquequecadastrou==0) { 
+                        $motivo="Produto registrado pelos gestores da cooperativa!";
+                    } else {
+                        echo "$icones\atencao.png"; 
+                        $sql3="SELECT qui_nome FROM quiosques WHERE qui_codigo=$quiosquequecadastrou";
+                        if (!$query3=mysql_query($sql3)) die("Erro SQL3:" . mysql_error());
+                        $dados3=  mysql_fetch_assoc($query3);
+                        $quiosquequecadastrou_nome=$dados3["qui_nome"];
+                        $motivo="Produto registrado pelo quiosque: $quiosquequecadastrou_nome";
+
+                    }?>" 
+                    title="<?php echo $motivo; ?>" alt="Atenção"/> </a>
+                </td>
+            <?php if ($permissao_produtos_ver == 1) { ?>
+                <td align="center" class="fundo1" width="35px">
+                    <a href="produtos_cadastrar.php?codigo=<?php echo"$codigo"; ?>&ver=1" class="link1"><img   width="15px" src="<?php echo $icones; ?>detalhes.png" title="Detalhes" alt="Detalhes"/> </a>
+                </td>
+<?php } ?>
+            <?php if ($permissao_produtos_editar == 1) { ?>                
+                <td align="center" class="fundo1" width="35px">
+                    <a href="produtos_cadastrar.php?codigo=<?php echo"$codigo"; ?>" class="link1"><img   width="15px" src="<?php echo $icones; ?>editar.png" title="Editar"  alt="Editar" /></a> 
+                </td>
+<?php } ?>  
+            <?php if ($permissao_produtos_excluir == 1) { ?>                
+                <td align="center" class="fundo1" width="35px"> 
+                    <a href="produtos_deletar.php?codigo=<?php echo"$codigo"; ?>" class="link1"><img  width="15px"  src="<?php echo $icones; ?>excluir.png"  title="Excluir" alt="Excluir" /></a> 
+                </td>
                 <?php } ?> 
                 <?php
             }

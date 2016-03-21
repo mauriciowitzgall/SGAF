@@ -20,6 +20,7 @@ $recipiente = $_POST['recipiente'];
 $volume = $_POST['volume'];
 $composicao = $_POST['composicao'];
 $industrializado = $_POST['industrializado'];
+$subproduto = $_POST['subproduto'];
 
 $categoria = $_POST['categoria'];
 $descricao = $_POST['descricao'];
@@ -76,8 +77,8 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     */
     
     $idunico=  uniqid();
-    $sql = "INSERT INTO produtos (pro_nome,pro_tipocontagem,pro_categoria,pro_descricao,pro_datacriacao,pro_horacriacao,pro_cooperativa,pro_volume,pro_marca,pro_recipiente,pro_composicao,pro_codigounico,pro_idunico,pro_industrializado,pro_usuarioquecadastrou,pro_quiosquequecadastrou)
-    VALUES ('$nome','$tipo','$categoria','$descricao','$data','$hora',$usuario_cooperativa,'$volume','$marca','$recipiente','$composicao','$codigounico','$idunico','$industrializado','$usuario_codigo','$usuario_quiosque');";
+    $sql = "INSERT INTO produtos (pro_nome,pro_tipocontagem,pro_categoria,pro_descricao,pro_datacriacao,pro_horacriacao,pro_cooperativa,pro_volume,pro_marca,pro_recipiente,pro_composicao,pro_codigounico,pro_idunico,pro_industrializado,pro_usuarioquecadastrou,pro_quiosquequecadastrou,pro_podesersubproduto)
+    VALUES ('$nome','$tipo','$categoria','$descricao','$data','$hora',$usuario_cooperativa,'$volume','$marca','$recipiente','$composicao','$codigounico','$idunico','$industrializado','$usuario_codigo','$usuario_quiosque','$subproduto');";
     $query = mysql_query($sql);
     if (!$query)
         die("Erro22: " . mysql_error());
@@ -108,7 +109,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     $tpl_notificacao->block("BLOCK_BOTAO");
     $tpl_notificacao->show();
     
-} else { //Caso seja uma altera��o de um registro fazer isso
+} else { //Caso seja uma alteração de um registro fazer isso
     //Verifica se j� existe registros com o mesmo nome    
     $sql = "SELECT * FROM produtos WHERE pro_nome='$nome' and pro_cooperativa=$usuario_cooperativa";
     $query = mysql_query($sql);
@@ -142,7 +143,8 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
 	pro_marca='$marca',
 	pro_recipiente='$recipiente',
 	pro_composicao='$composicao',
-	pro_codigounico='$codigounico'
+	pro_codigounico='$codigounico',
+	pro_podesersubproduto='$subproduto'
 	WHERE pro_codigo = '$codigo'
     ";
         if (!mysql_query($sql))
