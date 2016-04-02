@@ -9,14 +9,89 @@ if ($permissao_entradas_cadastrar <> 1) {
 $tipopagina = "entradas";
 include "includes.php";
 
+
+//Pega todos os dados do formulário
 $cancelar = $_GET["cancelar"];
 $salvar = $_GET["salvar"];
 $entrada = $_GET["entrada"];
 $operacao = $_GET["operacao"];
 
+
+
+
+    //Avalia se é necessário realizar alguma retirada de subrprodutos do estoque
+    //Procura todos os lotes que tem no estoque dos subprodutos
+    $sql="
+        SELECT entpro_produto, prosub_subproduto, etq_lote, etq_quantidade
+        FROM entradas_produtos 
+        JOIN produtos_subproduto  on entpro_produto=prosub_produto
+        JOIN estoque on prosub_subproduto=etq_produto
+        WHERE entpro_entrada=$entrada
+    ";
+    if (!$query = mysql_query($sql)) die("Erro de SQL subproduto 1:" . mysql_error());
+    while ($dados=  mysql_fetch_assoc($query)) {
+        $produto=$dados["entpro_produto"];
+        $subproduto=$dados["prosub_subproduto"];
+        $lote=$dados["etq_lote"];
+        $qtdemestoque=$dados["etq_quantidade"];
+        
+        
+        $qtddigitada_nome="qtddigitada_".$produto."_"."$subproduto"."_"."$lote";
+        $qtddigitada=$_POST["$qtddigitada_nome"];
+        $qtddigitada = str_replace('.', '', $qtddigitada);
+        $qtddigitada = str_replace(',', '.', $qtddigitada);
+        if ($qtddigitada) { //Se a quantidade digitada for nula significa que ele não selecionou este lote.
+            
+            //Inserir na tabela de entradas_subprodutos o lotes selecionados
+            $sql2="
+                INSERT INTO entradas_subprodutos (
+                    entsub_entrada,
+                    entsub_produto,
+                    entsub_subproduto,
+                    entsub_lote,
+                    entsub_quantidade
+                ) VALUES (
+                    $entrada,
+                    $produto,
+                    $subproduto,
+                    $lote,
+                    $qtddigitada
+                )
+            ";
+            if (!$query2 = mysql_query($sql2)) die("Erro de SQL subproduto 23:" . mysql_error());
+
+            
+            //Retirar do estoque os subprodutos
+            $sql3="
+                UPDATE estoque 
+                SET etq_quantidade=etq_quantidade-$qtddigitada 
+                    WHERE etq_produto=$subproduto 
+                    AND etq_lote=$lote 
+                    AND etq_quiosque=$usuario_quiosque
+            ";
+            if (!$query3 = mysql_query($sql3)) die("Erro de SQL subproduto 23:" . mysql_error());
+            
+            //Verifica a quantida atual do estoque
+            $sql4 = "SELECT etq_quantidade FROM estoque WHERE etq_quiosque=$usuario_quiosque and etq_produto=$subproduto and etq_lote=$lote";
+            if (!$query4 = mysql_query($sql4)) { die("Erro de SQL7:" . mysql_error()); }
+            $dados4 = mysql_fetch_assoc($query4);
+            $qtdatual = $dados4["etq_quantidade"];
+            if ($qtdatual==0) { //Se a quantidade ficou zerada no estoque então pagar o item
+                $sql5="DELETE FROM estoque WHERE etq_quiosque=$usuario_quiosque and etq_produto=$subproduto and etq_lote=$lote";
+                if (!$query5 = mysql_query($sql5)) { die("Erro de SQL5:" . mysql_error()); }
+            }
+           
+        }
+        
+        
+    }
+
+
 $erro = 0;
 
 //print_r($_REQUEST);
+
+
 
 //Caso a operação seja SALVAR então apenas trocar o status da entrada para ATIVO
 //e inserir produtos no estoque
@@ -144,14 +219,18 @@ if ($salvar == 1) {
                 die("Erro de SQL 9:" . mysql_error());
         }
     }
+    
+    //aaa
+    
+    
 }
 
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
-$tpl_titulo->TITULO = "PESSOAS";
-$tpl_titulo->SUBTITULO = "CADASTRO/EDIÇÃO";
+$tpl_titulo->TITULO = "ENTRADAS";
+$tpl_titulo->SUBTITULO = "RETIRAR DO ESTOQUE";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "pessoas.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "entradas.png";
 $tpl_titulo->show();
 
 //Estrutura da notificação
