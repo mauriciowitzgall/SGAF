@@ -96,3 +96,5 @@ ALTER TABLE `agape`.`produtos`
 ADD COLUMN `pro_podesersubproduto` INT(1) NOT NULL DEFAULT 0 AFTER `pro_quiosquequecadastrou`;
 
 exportar tabela produtos_subprodutos
+
+exportar tabela entradas_subprodutos

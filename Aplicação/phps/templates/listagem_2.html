@@ -63,8 +63,16 @@
                     <!-- BEGIN BLOCK_FILTRO_CAMPO_DESABILITADO -->
                     disabled 
                     <!-- END BLOCK_FILTRO_CAMPO_DESABILITADO -->                    
+                    <!-- BEGIN BLOCK_FILTRO_CAMPO_ESTILO -->
+                    style="{CAMPO_ESTILO}" 
+                    <!-- END BLOCK_FILTRO_CAMPO_ESTILO -->                    
                     >
             </td>
+            <!-- BEGIN BLOCK_FILTRO_CAMPO_TEXTO -->
+            <td width="{CAMPO_TEXTO_TAMANHO}">{CAMPO_TEXTO_TEXTO}</td>  
+            <!-- END BLOCK_FILTRO_CAMPO_TEXTO -->
+            
+            
             <td width="15px"></td>               
             <!-- END BLOCK_FILTRO_CAMPO -->
             
@@ -182,7 +190,6 @@
         </tr>
         </thead>      
          <!-- BEGIN BLOCK_LISTA -->
-        <tbody>
             <tr class="tab_linhas {TR_CLASSE}">
 
                 <!-- BEGIN BLOCK_LISTA_COLUNA -->
@@ -190,11 +197,13 @@
                     align="{LISTA_COLUNA_ALINHAMENTO}" 
                     class="{LISTA_COLUNA_CLASSE}" 
                     width="{LISTA_COLUNA_TAMANHO}"
+                    colspan="{LISTA_COLUNA_COLSPAN}"
+                    rowspan="{LISTA_COLUNA_ROWSPAN}"
                  >
                     {LISTA_COLUNA_VALOR}
                     <!-- BEGIN BLOCK_LISTA_COLUNA_ICONE -->
                     <a href="{LINK}" class="link">
-                        <img   width="{IMAGEM_TAMANHO}" src="{IMAGEM_PASTA}{IMAGEM_NOMEARQUIVO}" title="{IMAGEM_TITULO}"  alt="{IMAGEM_TITULO}" />
+                        <img  name="{IMAGEM_NOME}" id="{IMAGEM_NOME}" width="{IMAGEM_TAMANHO}" src="{IMAGEM_PASTA}{IMAGEM_NOMEARQUIVO}" title="{IMAGEM_TITULO}"  alt="{IMAGEM_TITULO}" />
                     </a>                    
                     <!-- END BLOCK_LISTA_COLUNA_ICONE -->
                 </td> 
@@ -215,14 +224,26 @@
                 
                 <!-- BEGIN BLOCK_LISTA_COLUNA_ICONES -->
                 <!-- BEGIN BLOCK_LISTA_COLUNA_ICONES_TEXTO -->
-                <td  align="{ICONES_TEXTO_ALINHAMENTO}" class="{ICONES_TEXTO_CLASSE}" width="{ICONES_TEXTO_TAMANHOCAMPO}" style="{ICONES_TEXTO_ESTILO}">
+                <td  align="{ICONES_TEXTO_ALINHAMENTO}" 
+                    class="{ICONES_TEXTO_CLASSE}" 
+                    width="{ICONES_TEXTO_TAMANHOCAMPO}" 
+                    style="{ICONES_TEXTO_ESTILO}"
+                    colspan="{ICONES_TEXTO_COLSPAN}"
+                    rowspan="{ICONES_TEXTO_ROWSPAN}"
+                >
                     {ICONES_TEXTO_VALOR}
                 </td>
                 <!-- END BLOCK_LISTA_COLUNA_ICONES_TEXTO -->
-                <td  align="{IMAGEM_ALINHAMENTO}" class="" width="" style="">                               
+                <td  align="{IMAGEM_ALINHAMENTO}" 
+                    class="" 
+                    width="" 
+                    style=""
+                    colspan="{IMAGEM_COLSPAN}"
+                    rowspan="{IMAGEM_ROWSPAN}"
+                >                               
                     <!-- BEGIN BLOCK_LISTA_COLUNA_IMAGEM -->
                     <a href="{LINK}" class="link">
-                        <img   width="{IMAGEM_TAMANHO}" src="{IMAGEM_PASTA}{IMAGEM_NOMEARQUIVO}" title="{IMAGEM_TITULO}"  alt="{IMAGEM_TITULO}" />
+                        <img name="{IMAGEM_NOME}" id="{IMAGEM_NOME}" width="{IMAGEM_TAMANHO}" src="{IMAGEM_PASTA}{IMAGEM_NOMEARQUIVO}" title="{IMAGEM_TITULO}"  alt="{IMAGEM_TITULO}" />
                     </a>
                     <!-- END BLOCK_LISTA_COLUNA_IMAGEM -->
                 </td>
@@ -292,8 +313,17 @@
                 </td>
                 <!-- END BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR_DESABILITADO -->
 
+                
+                <!-- BEGIN BLOCK_LISTA_COLUNA_CAMPO -->
+                <td align="{COLUNA_ALINHAMENTO}" class="{COLUNA_CLASSE}" width="{COLUNA_TAMANHO}">  
+                    <input type="{CAMPO_TIPO}" name="{CAMPO_NOME}" id="{CAMPO_ID}" {CAMPO_DESABILITADO} {CAMPO_OBRIGATORIO}>
+                </td>
+                <!-- END BLOCK_LISTA_COLUNA_CAMPO -->
+                
+                
+                
             </tr>
-        </tbody>
+
         <!-- END BLOCK_LISTA -->
         
 
@@ -322,8 +352,14 @@
     </tr>
     </table>
     <!-- END BLOCK_PAGINACAO -->          
+
+    <!-- BEGIN BLOCK_CAMPOSOCULTOS -->
+    <input type="hidden" name="{CAMPOOCULTO_NOME}" id="{CAMPOOCULTO_NOME}" value="{CAMPOOCULTO_VALOR}">
+    <!-- END BLOCK_CAMPOSOCULTOS -->
+
     
-    </form>
+    
+
     
     
     

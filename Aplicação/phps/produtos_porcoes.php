@@ -50,8 +50,8 @@ IF ($permissao_produtos_cadastrar == 1) {
     $tpl->BOTAO_NOME = "CADASTRAR";
     $tpl->block("BLOCK_RODAPE_BOTAO_MODELO");
     $tpl->block("BLOCK_FILTRO_COLUNA");
-    $tpl->block("BLOCK_FILTRO");
 }
+$tpl->block("BLOCK_FILTRO");
 
 
 

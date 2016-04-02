@@ -118,7 +118,7 @@ while ($dados = mysql_fetch_array($query)) {
         if ($saldo == 0) {
             $tpl->VALIDADE_SALDO = "hoje";
         } else if ($saldo == 1) {
-            $tpl->VALIDADE_SALDO = "amanh�";
+            $tpl->VALIDADE_SALDO = "amanhã";
         } else if ($saldo < 0 ) {
             $tpl->VENCEU = "tabelalinhavermelha";
             $tpl->VALIDADE_SALDO = $saldo;
