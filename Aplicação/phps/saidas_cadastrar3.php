@@ -25,13 +25,12 @@ if (!$query_f = mysql_query($sql_f))
 $dados_f = mysql_fetch_array($query_f);
 $tipo = $dados_f["sai_tipo"];
 
-if ($tipo == 1) {
-    $valbru = $_REQUEST["valbru2"];
-    $valbru = number_format($valbru, 2);
-} else {
-    $valbru = dinheiro_para_numero($_REQUEST["valbru2"]);
-    $valbru = number_format($valbru, 2);
-}
+
+$valbru=$_REQUEST["valbru2"];
+$valbru = str_replace("R$ ","",$valbru);
+$valbru = str_replace(".","",$valbru);
+$valbru = str_replace(",",".",$valbru);
+
 
 
 $descper = $_REQUEST["descper2"];
