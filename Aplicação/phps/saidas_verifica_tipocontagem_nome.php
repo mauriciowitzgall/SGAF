@@ -1,7 +1,7 @@
 <?php
 
 include "controle/conexao.php";
-$produto = $_POST[produto];
+$produto = $_POST["produto"];
 if ($produto == "") {
     echo "";
 } else {

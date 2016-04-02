@@ -1,5 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `sgaf` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `sgaf`;
+
 -- MySQL dump 10.13  Distrib 5.6.19, for osx10.7 (i386)
 --
 -- Host: 127.0.0.1    Database: sgaf

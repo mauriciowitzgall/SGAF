@@ -1,9 +1,9 @@
 <?php
 
 include "controle/conexao.php";
-$produto = $_POST[produto];
-$lote = $_POST[lote];
-$qtd = $_POST[qtd];
+$produto = $_POST["produto"];
+$lote = $_POST["lote"];
+$qtd = $_POST["qtd"];
 
 $qtd = str_replace('.', '',$qtd);
 $qtd = str_replace(',', '.',$qtd);

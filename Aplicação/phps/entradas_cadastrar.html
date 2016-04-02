@@ -26,7 +26,7 @@ function mascara_percent() {
     
 }
 
-    function valida_produto() {
+    function valida_produto(prod) {
         verifica_incluir()
         $("input[name=valuni]").val("").priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
         $("input[name=valuni]").disabled = true;
@@ -98,7 +98,9 @@ function mascara_percent() {
             }
         });
 
-        $.post("entradas_tipcon.php", {produto: $("select[name=produto]").val()}, function(valor) {
+        $.post("entradas_tipcon.php", {
+            produto: prod
+        }, function(valor) {
             $("span[name=tipocontagem]").html(valor);
         });
 
@@ -285,7 +287,7 @@ function mascara_percent() {
         <tr>
             <td align="right" width="200px"><b>Produto: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
-                <select autofocus="2" name="produto" style="width: 250px" onchange=" valida_produto()"   id="{SELECT2_NOME}" class="campopadrao campo_tamanho_6" {SELECT2_OBRIGATORIO} {SELECT2_DESABILITADO} >
+                <select autofocus="2" name="produto" style="width: 250px" onchange=" valida_produto(this.value)"   id="{SELECT2_NOME}" class="campopadrao campo_tamanho_6" {SELECT2_OBRIGATORIO} {SELECT2_DESABILITADO} >
                     <option value="">Selecione</option>	
                     <!--  BEGIN BLOCK_OPTIONS_PRODUTO -->
                     <option value="{OPTION2_VALOR}" {OPTION2_SELECIONADO} >{OPTION2_TEXTO}</option>

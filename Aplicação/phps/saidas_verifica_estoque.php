@@ -1,8 +1,8 @@
 <?php
 
 include "controle/conexao.php";
-$produto = $_POST[produto];
-$lote = $_POST[lote];
+$produto = $_POST["produto"];
+$lote = $_POST["lote"];
 
 if ($lote == 0) {
     echo "";
