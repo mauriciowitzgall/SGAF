@@ -74,7 +74,7 @@ ADD COLUMN `saipro_porcao_quantidade` FLOAT NULL AFTER `saipro_porcao`;
 
 -- Fim da versão 3.4.1
 
--- Inicio versão 3.4.2
+-- Inicio versão 3.4.1+
 
 ALTER TABLE `sgaf`.`pessoas` 
 CHANGE COLUMN `pes_cidade` `pes_cidade` MEDIUMINT(11) NULL ;
@@ -98,3 +98,12 @@ ADD COLUMN `pro_podesersubproduto` INT(1) NOT NULL DEFAULT 0 AFTER `pro_quiosque
 exportar tabela produtos_subprodutos
 
 exportar tabela entradas_subprodutos
+
+ALTER TABLE `agape`.`entradas_produtos` 
+ADD COLUMN `entpro_retiradodoestoque` TINYINT(1) NOT NULL DEFAULT 0 AFTER `entpro_valtotcusto`;
+
+ALTER TABLE `agape`.`entradas_produtos` 
+ADD COLUMN `entpro_desejaretirarsubprodutos` TINYINT(1) NULL DEFAULT NULL AFTER `entpro_retiradodoestoquesubprodutos`;
+ALTER TABLE `agape`.`entradas_produtos` 
+CHANGE COLUMN `entpro_desejaretirarsubprodutos` `entpro_temsubprodutos` TINYINT(1) NOT NULL ;
+

@@ -3,14 +3,15 @@ window.onload = function(){
 }
 
 
-function habilitar_quantidade (valor,nomecomlote,tipocontagem,nomesemlote,produto,subproduto) {
-    nome1="qtddigitada_"+nomecomlote;
-    nome2="qtdaretirar_"+nomesemlote;
-    nome3="qtdselecionada_"+nomesemlote;
-    nome4="qtdemestoque_"+nomecomlote;
-    nome5="span_qtdselecionada_"+nomesemlote;
-    nome6="situacao_"+nomesemlote;
- 
+function habilitar_quantidade (valor,nomecomlote,tipocontagem,nomesemlote,produto,subproduto,item) {
+    nome1="qtddigitada_"+trim(nomecomlote);
+    nome2="qtdaretirar_"+trim(nomesemlote);
+    nome3="qtdselecionada_"+trim(nomesemlote);
+    nome4="qtdemestoque_"+trim(nomecomlote);
+    nome5="span_qtdselecionada_"+trim(nomesemlote);
+    nome6="situacao_"+trim(nomesemlote);
+    
+    //alert("("+nome2+")");
 
     if (valor == true) {
         
@@ -94,19 +95,19 @@ function habilitar_quantidade (valor,nomecomlote,tipocontagem,nomesemlote,produt
         document.forms["formfiltro"].elements[nome1].disabled = true;
     }
     
-    atualiza_icone_confirmar(produto,subproduto)
+    atualiza_icone_confirmar(produto,subproduto,item)
     
     
     
     
 }
 
-function calcula_qtd_selecionada (qtddigitada,nomecomlote,subproduto,subproduto_tipocontagem,produto) {
+function calcula_qtd_selecionada (qtddigitada,nomecomlote,subproduto,subproduto_tipocontagem,produto,item) {
     qtddigitada=qtddigitada.replace(".","");
     qtddigitada=qtddigitada.replace(",",".");
     qtddigitada=parseFloat(qtddigitada);
-    nome4="qtdemestoque_"+nomecomlote;
-    nome5="span_qtdselecionada_"+produto+"_"+subproduto;
+    nome4="qtdemestoque_"+trim(nomecomlote);
+    nome5="span_qtdselecionada_"+item+"_"+produto+"_"+subproduto;
 
     
     //verifica se a quantidade digitada é maior que a quantidade disponível em estoque
@@ -120,7 +121,7 @@ function calcula_qtd_selecionada (qtddigitada,nomecomlote,subproduto,subproduto_
             document.forms["formfiltro"].elements[nome1].value = "0";
     } else {
         //Verifica se a quantidade digitada é maior que a quantidade  a retirar
-        nome2="qtdaretirar_"+produto+"_"+subproduto;
+        nome2="qtdaretirar_"+item+"_"+produto+"_"+subproduto;
         qtdaretirar=document.forms["formfiltro"].elements[nome2].value;
         qtdaretirar=parseFloat(qtdaretirar);
 
@@ -149,12 +150,12 @@ function calcula_qtd_selecionada (qtddigitada,nomecomlote,subproduto,subproduto_
     }
     
     //Recalcula quantidade selecionada
-    recalcula_qtdselecionada(produto,subproduto,subproduto_tipocontagem);
+    recalcula_qtdselecionada(produto,subproduto,subproduto_tipocontagem,item);
     
     
 }    
     
-function recalcula_qtdselecionada (produto,subproduto,subproduto_tipocontagem){
+function recalcula_qtdselecionada (produto,subproduto,subproduto_tipocontagem,item){
     //Verifica quais são os lotes do produto e subproduto
     $.post("entradas_subproduto_verifica_lotes.php", {
         subproduto:subproduto
@@ -163,7 +164,7 @@ function recalcula_qtdselecionada (produto,subproduto,subproduto_tipocontagem){
         qtdselecionadatot=parseFloat(0);
         for (i=0;i<lotes.length;i++) {
             lotes[i]=parseInt(lotes[i]);
-            nome="qtddigitada_"+produto+"_"+subproduto+"_"+lotes[i];
+            nome="qtddigitada_"+item+"_"+produto+"_"+subproduto+"_"+lotes[i];
             qtdselecionada=document.forms["formfiltro"].elements[nome].value;
             qtdselecionada=qtdselecionada.replace(".","");
             qtdselecionada=qtdselecionada.replace(",",".");
@@ -172,7 +173,7 @@ function recalcula_qtdselecionada (produto,subproduto,subproduto_tipocontagem){
             qtdselecionadatot=qtdselecionadatot+qtdselecionada;
         }
         //Verifica se a quantidade total selecionada é menor que a quantidade necessária a retirar
-        nome2="qtdaretirar_"+produto+"_"+subproduto;
+        nome2="qtdaretirar_"+item+"_"+produto+"_"+subproduto;
         qtdaretirar=document.forms["formfiltro"].elements[nome2].value;
         qtdaretirar=parseFloat(qtdaretirar);
         if (qtdselecionadatot>qtdaretirar) {
@@ -180,8 +181,8 @@ function recalcula_qtdselecionada (produto,subproduto,subproduto_tipocontagem){
             qtdselecionadatot=0;
             for (i=0;i<lotes.length;i++) {
                 lotes[i]=parseInt(lotes[i]);
-                nome="qtddigitada_"+produto+"_"+subproduto+"_"+lotes[i];
-                nomebox="box_"+produto+"_"+subproduto+"_"+lotes[i];
+                nome="qtddigitada_"+item+"_"+produto+"_"+subproduto+"_"+lotes[i];
+                nomebox="box_"+item+"_"+produto+"_"+subproduto+"_"+lotes[i];
                 document.forms["formfiltro"].elements[nome].value = "";
                 document.forms["formfiltro"].elements[nome].disabled = true;
                 document.forms["formfiltro"].elements[nomebox].checked = false;
@@ -191,26 +192,30 @@ function recalcula_qtdselecionada (produto,subproduto,subproduto_tipocontagem){
         
             
         } 
-        nome2="span_qtdselecionada_"+produto+"_"+subproduto;
+        nome2="span_qtdselecionada_"+item+"_"+produto+"_"+subproduto;
         if ((subproduto_tipocontagem==2)||(subproduto_tipocontagem==3)) {
             qtdselecionadatot=qtdselecionadatot.toFixed(3);
         } 
         qtdselecionadatot2=qtdselecionadatot.toString();
         qtdselecionadatot2=qtdselecionadatot2.replace(".",",");
         $("span[id="+nome2+"]").text(qtdselecionadatot2);
-        nome3="qtdselecionada_"+produto+"_"+subproduto;
+        nome3="qtdselecionada_"+item+"_"+produto+"_"+subproduto;
         $("input[name="+nome3+"]").val(qtdselecionadatot);
         
+        //alert(item);
         
         //Atualiza Icone Confirmar
-        atualiza_icone_confirmar(produto,subproduto);
+        atualiza_icone_confirmar(produto,subproduto,item);
     });
 
 }
 
-function atualiza_icone_confirmar(produto,subproduto) {
-    nome2="qtdaretirar_"+produto+"_"+subproduto;
-    nome3="qtdselecionada_"+produto+"_"+subproduto;
+function atualiza_icone_confirmar(produto,subproduto,item) {
+    nome2="qtdaretirar_"+item+"_"+produto+"_"+subproduto;
+    nome3="qtdselecionada_"+item+"_"+produto+"_"+subproduto;
+    
+   
+    //alert(produto+"/"+subproduto+"/"+item);
     
     qtdselecionada=document.forms["formfiltro"].elements[nome3].value;
     qtdselecionada=parseFloat(qtdselecionada);
@@ -260,4 +265,8 @@ function atualiza_continuar() {
             document.forms["formfiltro"].elements["CONTINUAR"].disabled = true;
         }
     });
+}
+
+function trim(str) {
+    return str.replace(/^\s+|\s+$/g,"");
 }

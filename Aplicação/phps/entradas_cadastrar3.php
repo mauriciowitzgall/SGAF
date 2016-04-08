@@ -15,50 +15,87 @@ $cancelar = $_GET["cancelar"];
 $salvar = $_GET["salvar"];
 $entrada = $_GET["entrada"];
 $operacao = $_GET["operacao"];
+$retirar_subprodutos = $_GET["retirar_subprodutos"];
 
 
+//print_r($_REQUEST);
 
+//Avalia se é necessário realizar alguma retirada de subrprodutos do estoque
 
-    //Avalia se é necessário realizar alguma retirada de subrprodutos do estoque
+//Pega todos os itens da lista de produtos da entrada que possuem subprodutos. 
+$sql9="
+    SELECT DISTINCT entpro_numero
+    FROM  entradas_produtos
+    JOIN produtos_subproduto on prosub_produto=entpro_produto
+    WHERE entpro_retiradodoestoquesubprodutos=0 
+    and entpro_entrada=$entrada
+";
+if (!$query9 = mysql_query($sql9)) die("Erro de SQL subproduto 1:" . mysql_error());
+while ($dados9=  mysql_fetch_assoc($query9)) { //Para cada item da entrada gerar uma retirada de estoque
+    $item=$dados9["entpro_numero"];
+
     //Procura todos os lotes que tem no estoque dos subprodutos
     $sql="
         SELECT entpro_produto, prosub_subproduto, etq_lote, etq_quantidade
         FROM entradas_produtos 
         JOIN produtos_subproduto  on entpro_produto=prosub_produto
         JOIN estoque on prosub_subproduto=etq_produto
-        WHERE entpro_entrada=$entrada
+        WHERE entpro_entrada=$entrada and entpro_numero=$item and entpro_status=0
     ";
     if (!$query = mysql_query($sql)) die("Erro de SQL subproduto 1:" . mysql_error());
+
     while ($dados=  mysql_fetch_assoc($query)) {
         $produto=$dados["entpro_produto"];
         $subproduto=$dados["prosub_subproduto"];
         $lote=$dados["etq_lote"];
         $qtdemestoque=$dados["etq_quantidade"];
-        
-        
-        $qtddigitada_nome="qtddigitada_".$produto."_"."$subproduto"."_"."$lote";
+
+
+        $qtddigitada_nome="qtddigitada_"."$item"."_".$produto."_"."$subproduto"."_"."$lote";
         $qtddigitada=$_POST["$qtddigitada_nome"];
         $qtddigitada = str_replace('.', '', $qtddigitada);
         $qtddigitada = str_replace(',', '.', $qtddigitada);
-        if ($qtddigitada) { //Se a quantidade digitada for nula significa que ele não selecionou este lote.
+        if ($qtddigitada) { //Se a quantidade digitada tiver algum valor significa que o usuario selecionou um lote
             
+            
+            
+            //Verifica se já existe nas entradas_subprodutos o item que será inserido. Se sim é porque o usuário deu refresh na tela
+            $sql2v="
+                SELECT * 
+                FROM entradas_subprodutos 
+                WHERE entsub_entrada=$entrada
+                AND entsub_item=$item
+                AND entsub_produto=$produto
+                AND entsub_subproduto=$subproduto
+                AND entsub_lote=$lote
+            ";
+            if (!$query2v = mysql_query($sql2v)) die("Erro de SQL subproduto 21:" . mysql_error());
+            $linhas2v=mysql_num_rows($query2v);
+            if ($linhas2v > 0) {
+                echo "Você está tentando fazer uma retirada de um subproduto do estoque de um item que já foi retirado. Não atualize a tela do navegador, isso pode gerar muitas duplicações no sistema e consequentemente diferenças no estoque.";
+                exit;
+            }         
+
             //Inserir na tabela de entradas_subprodutos o lotes selecionados
             $sql2="
                 INSERT INTO entradas_subprodutos (
                     entsub_entrada,
+                    entsub_item,
                     entsub_produto,
                     entsub_subproduto,
                     entsub_lote,
                     entsub_quantidade
                 ) VALUES (
                     $entrada,
+                    $item,
                     $produto,
                     $subproduto,
                     $lote,
                     $qtddigitada
                 )
             ";
-            if (!$query2 = mysql_query($sql2)) die("Erro de SQL subproduto 23:" . mysql_error());
+            if (!$query2 = mysql_query($sql2)) die("Erro de SQL subproduto 24:" . mysql_error());
+            //echo "(inserido na entrada_subprodutos: $qtddigitada_nome) <br>";
 
             
             //Retirar do estoque os subprodutos
@@ -67,11 +104,10 @@ $operacao = $_GET["operacao"];
                 SET etq_quantidade=etq_quantidade-$qtddigitada 
                     WHERE etq_produto=$subproduto 
                     AND etq_lote=$lote 
-                    AND etq_quiosque=$usuario_quiosque
             ";
-            if (!$query3 = mysql_query($sql3)) die("Erro de SQL subproduto 23:" . mysql_error());
-            
-            //Verifica a quantida atual do estoque
+            if (!$query3 = mysql_query($sql3)) die("Erro de SQL subproduto 25:" . mysql_error());
+
+            //Verifica a quantida atual do estoque, se for zero exlui o item do estoque
             $sql4 = "SELECT etq_quantidade FROM estoque WHERE etq_quiosque=$usuario_quiosque and etq_produto=$subproduto and etq_lote=$lote";
             if (!$query4 = mysql_query($sql4)) { die("Erro de SQL7:" . mysql_error()); }
             $dados4 = mysql_fetch_assoc($query4);
@@ -80,14 +116,25 @@ $operacao = $_GET["operacao"];
                 $sql5="DELETE FROM estoque WHERE etq_quiosque=$usuario_quiosque and etq_produto=$subproduto and etq_lote=$lote";
                 if (!$query5 = mysql_query($sql5)) { die("Erro de SQL5:" . mysql_error()); }
             }
-           
+
         }
-        
-        
-    }
+    }  
+    //Atualiza item da entrada informando que já foi retirado do estoque os subprodutos
+    $sql33="
+        UPDATE entradas_produtos
+        SET entpro_retiradodoestoquesubprodutos=$retirar_subprodutos
+            WHERE entpro_entrada=$entrada
+            AND entpro_numero=$item
+    ";
+    if (!$query33 = mysql_query($sql33)) die("Erro de SQL subproduto 33:" . mysql_error());
+}
 
 
-$erro = 0;
+
+
+
+
+//$erro = 0;
 
 //print_r($_REQUEST);
 

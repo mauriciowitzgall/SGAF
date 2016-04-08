@@ -77,6 +77,7 @@ if (($validade2 != "") && ($validade == "")) {
 $local = strtoupper($_POST['local']);
 
 
+
 //Caso seja precionado o botão cancelar a entrada deve ser pego por GET
 $cancelar = $_GET["cancelar"];
 if ($cancelar == 1) {
@@ -405,12 +406,15 @@ if ($passo != "") {
                 entpro_numero,
                 protip_sigla,
                 entpro_valunicusto,
-                entpro_valtotcusto
+                entpro_valtotcusto,
+                entpro_temsubprodutos,
+                entpro_retiradodoestoquesubprodutos
 	FROM
 		entradas_produtos
 		join entradas on (ent_codigo=entpro_entrada) 
 		join produtos on (entpro_produto=pro_codigo) 
 		join produtos_tipo on (protip_codigo=pro_tipocontagem)
+                
 	WHERE
 		ent_codigo=$entrada
         ORDER BY 
@@ -418,33 +422,118 @@ if ($passo != "") {
 	";
     if ($passo == "3") {
 
-        //Verifica se ser� feita um exclus�o da lista ou inclus�o
+        //Verifica se será feita um exclusão da lista ou inclusào
         if ($cancelar == 1) {
 
-            //Devolver para o estoque
-            $sql2 = "
-                SELECT entpro_quantidade 
-                FROM entradas_produtos 
-                WHERE entpro_entrada=$entrada and entpro_numero=$item_numero";
-            $query2 = mysql_query($sql2);
-            if (!$query2)
-                die("Erro de SQL 12:" . mysql_error());
-            $dados2 = mysql_fetch_array($query2);
-            $qtd2 = $dados2[0];
-            $sql_retirar = "
-            UPDATE
-                estoque 
-            SET 
-                etq_quantidade=(etq_quantidade-'$qtd2')
-            WHERE
-                etq_quiosque=$usuario_quiosque and
-                etq_produto=$produto and
-                etq_lote=$entrada
-            ";
-            $query_retirar = mysql_query($sql_retirar);
-            if (!$query_retirar)
-                die("Erro de SQL 11:" . mysql_error());
+            //Retirar produto do estoque caso ele ja tenha sido incluso no estoque
+            $sql1="SELECT * FROM entradas_produtos WHERE entpro_entrada=$entrada and entpro_numero=$item_numero and entpro_status=1";
+            $query1 = mysql_query($sql1); if (!$query1)  die("Erro de SQL 12:" . mysql_error());
+            $dados1= mysql_fetch_assoc($query1);
+            $status1=$dados1["entpro_status"];
+            if ($status1==1) { //Somente se o item já foi incluso no estoque que se pode retirar do estoque
+                $sql2 = "
+                    SELECT entpro_quantidade 
+                    FROM entradas_produtos 
+                    WHERE entpro_entrada=$entrada 
+                    and entpro_numero=$item_numero
+                ";
+                $query2 = mysql_query($sql2);
+                if (!$query2)
+                    die("Erro de SQL 12:" . mysql_error());
+                $dados2 = mysql_fetch_array($query2);
+                $qtd2 = $dados2[0];
+                $sql_retirar = "
+                UPDATE
+                    estoque 
+                SET 
+                    etq_quantidade=(etq_quantidade-'$qtd2')
+                WHERE
+                    etq_quiosque=$usuario_quiosque and
+                    etq_produto=$produto and
+                    etq_lote=$entrada
+                ";
+                $query_retirar = mysql_query($sql_retirar);
+                if (!$query_retirar)
+                    die("Erro de SQL 11:" . mysql_error());
+                
+                //echo "Atualizado estoque, decrementado $entrada $produto , quantidade $qtd2";
+            }
 
+            //Devolver ao estoque os subprodutos caso seja um produto composto
+            $sql6="
+                SELECT * 
+                FROM entradas_subprodutos 
+                JOIN entradas_produtos on (entsub_item=entpro_numero and entsub_entrada=entpro_entrada) 
+                WHERE entsub_entrada=$entrada and entsub_item=$item_numero and entpro_retiradodoestoquesubprodutos=1
+            ";
+            $query6 = mysql_query($sql6);
+            if (!$query6)
+                die("Erro de SQL 6:" . mysql_error());
+            while ($dados6=  mysql_fetch_assoc($query6)) {
+                $produto3=$dados6["entsub_produto"];
+                $subproduto=$dados6["entsub_subproduto"];
+                $lote=$dados6["entsub_lote"];
+                $qtd3=$dados6["entsub_quantidade"];
+                $valuni3=$dados6["entpro_valunicusto"];
+                $validade3=$dados6["entpro_validade"];
+                
+                //Verifica se o lote a ser inserido no estoque existe. Se o lote não existe mais no estoque deve-se criar o registro
+                $sql8="
+                    SELECT * FROM estoque
+                    WHERE etq_quiosque=$usuario_quiosque 
+                    and etq_produto=$subproduto
+                    and etq_lote=$lote
+                ";
+                $query8 = mysql_query($sql8); if (!$query8) die("Erro de SQL 8:" . mysql_error());
+                $linhas8=  mysql_num_rows($query8);
+                if ($linhas8==0) { //inserir novamente no estoque o lote do subproduto
+                    $sql9="
+                        INSERT INTO 
+                        estoque (
+                            etq_quiosque,
+                            etq_produto,
+                            etq_fornecedor,
+                            etq_lote,
+                            etq_quantidade,
+                            etq_valorunitario,
+                            etq_validade
+                        )
+                        VALUES (
+                            '$usuario_quiosque',
+                            '$subproduto',
+                            '$fornecedor',
+                            '$lote',
+                            '$qtd3',
+                            '$valuni3',
+                            '$validade3'
+                        )
+                    ";
+                    $query9 = mysql_query($sql9); if (!$query9) die("Erro de SQL 9:" . mysql_error());
+                    //echo "Inserido novo registro no estoque $produto3 $subproduto $lote <br>";
+
+                    
+                } else { //atualizar lote do estoque incrementando a quantidade do subproduto
+                    
+                    
+                    $sql7="
+                        UPDATE estoque 
+                        SET etq_quantidade=(etq_quantidade+'$qtd3')
+                        WHERE etq_quiosque=$usuario_quiosque 
+                        and etq_produto=$subproduto
+                        and etq_lote=$lote
+                    ";
+                    $query7 = mysql_query($sql7); if (!$query7) die("Erro de SQL 7:" . mysql_error());
+                    //echo "Atualizado estoque $produto3 $subproduto $lote <br>";
+                }
+                
+            }
+            
+            //Excluir da tabela entradas_subprodutos o item removido
+            $sql10="DELETE FROM entradas_subprodutos WHERE entsub_entrada=$entrada AND entsub_item=$item_numero";
+            $query10 = mysql_query($sql10); if (!$query10) die("Erro de SQL 10:" . mysql_error());
+
+            
+            
             //Verifica se a quantidade do produto no estoque como o descremento ficou zero
             $sql3 = "
             SELECT 
@@ -499,7 +588,14 @@ if ($passo != "") {
 
             if ($operacao != 2) {
 
-                //Faz a inser��o do produto na entrada (inserir item de entrada)
+                //Verifica se o produto possui subprodutos
+                $sql11="SELECT * FROM produtos_subproduto WHERE prosub_produto=$produto";
+                if (!$query11 = mysql_query($sql11)) die("Erro de SQL 11: " . mysql_error());
+                $linhas11 =  mysql_num_rows($query11);
+                if ($linhas11>0) $temsubprodutos=1;
+                else $temsubprodutos=0;
+                
+                //Faz a inserção do produto na entrada (inserir item de entrada)
                 //$validade = desconverte_data($validade);
                 $total = number_format($valuni * $qtd, 2, '.', '');
                 $totalcusto = number_format($valunicusto * $qtd, 2, '.', '');
@@ -514,7 +610,8 @@ if ($passo != "") {
                         entpro_local,
                         entpro_valtot,
                         entpro_valunicusto,
-                        entpro_valtotcusto
+                        entpro_valtotcusto,
+                        entpro_temsubprodutos
                     )
                 VALUES (
                     '$entrada',
@@ -525,14 +622,15 @@ if ($passo != "") {
                     '$local',
                     '$total',
                     '$valunicusto',
-                    '$totalcusto'
+                    '$totalcusto',
+                    '$temsubprodutos'
                 )";
                 $query = mysql_query($sql);
                 if (!$query)
                     die("Erro de SQL 3: " . mysql_error());
 
                 //Troca o status da entrada para Incompleto.
-                //OBS: Quando � realizado alguma altera��o � necess�rio que seja clicado no salvar para atualizar o estoque
+                //OBS: Quando é realizado alguma alteração é necessário que seja clicado no salvar para atualizar o estoque
                 $sql_status = "UPDATE entradas SET ent_status=2 WHERE ent_codigo=$entrada";
                 $query_status = mysql_query($sql_status);
                 if (!$query_status)
@@ -590,6 +688,51 @@ if ($passo != "") {
                 $tpl->IMPRIMIR_LINK = "entradas_etiquetas.php?lote=$entrada&numero=$numero";
                 $tpl->IMPRIMIR = $icones . "etiquetas.png";
                 $tpl->ENTRADAS_VALIDADE= converte_data($dados[5]);
+                
+                //Subprodutos
+                $subprodutos_retirado_do_estoque=$dados["entpro_retiradodoestoquesubprodutos"];
+                $temsubprodutos2=$dados["entpro_temsubprodutos"];
+                
+                
+                
+                if ($temsubprodutos2==1) { //mostra icone
+                    $tpl->NOMEARQUIVO="subproduto.png";
+                    $tpl->TITULO="Este é um produto composto (possui sub-produtos)";
+                    
+                    if ($subprodutos_retirado_do_estoque==1) {
+                        $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="saidas.png";
+                        $tpl->SUBPRODUTOS_TITULO="Os subprodutos foram retirados do estoque";
+                        $tpl->SUBPRODUTOS_ALINHAMENTO="right";
+                        $tpl->SUBPRODUTOS_NOMEICONEARQUIVO_VER="procurar.png";
+                        $tpl->block("BLOCK_SUBPRODUTOS");
+                        $tpl->block("BLOCK_SUBPRODUTOS_VER");
+                        $tpl->SUBPRODUTOS_COLSPAN="";
+                    }
+                    else if ($subprodutos_retirado_do_estoque==2) {
+                        $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="saidas2.png";
+                        $tpl->SUBPRODUTOS_NOMEICONEARQUIVO_VER="procurar_desabilitado.png";
+                        $tpl->SUBPRODUTOS_TITULO="Optou-se por não realizar a retirada dos sub-produtos do estoque";
+                        $tpl->SUBPRODUTOS_COLSPAN="";
+                        $tpl->SUBPRODUTOS_ALINHAMENTO="right";
+                        $tpl->block("BLOCK_SUBPRODUTOS");
+                        $tpl->block("BLOCK_SUBPRODUTOS_VER");
+                    } else { //não foi deicido ainda o que ferá se vai tirar do estoque ou não
+                        $tpl->SUBPRODUTOS_COLSPAN="2";
+                        $tpl->SUBPRODUTOS_ALINHAMENTO="center";
+                        $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="atencao.png";
+                        $tpl->SUBPRODUTOS_TITULO="Ainda não decidiu-se se será realizado a retirada dos sub-produtos do estoque";
+                        $tpl->block("BLOCK_SUBPRODUTOS");
+
+                        
+                    }
+                } else { //não mostra icone
+                    $tpl->NOMEARQUIVO="subproduto2.png";
+                    $tpl->TITULO="Este é não é um produto composto.";
+                    $tpl->SUBPRODUTOS_COLSPAN="2";
+
+                }
+                $tpl->block("BLOCK_SUBPRODUTOS_TEM");
+                
                 
                 //Verifica se ja foi efetuado Saídas quaisquer para o lote/entrada em questão
                 $prod=$dados["pro_codigo"];

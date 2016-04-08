@@ -21,11 +21,13 @@ include "includes.php";
 $id = $_POST['id'];
 $cpf = $_POST['cpf'];
 $cpf = limpa_cpf($cpf);
-$tipopessoa = $_POST['tipopessoa2'];
+$tipopessoa = $_POST['tipopessoa']; 
 if ($tipopessoa == 1)
     $nome = ucwords(strtolower($_POST['nome']));
 else
     $nome = $_POST['nome'];
+
+
 $cidade = $_POST['cidade'];
 if ($cidade="") $cidade=0;
 $vila = ucwords(strtolower($_POST['vila']));

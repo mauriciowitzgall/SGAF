@@ -449,18 +449,19 @@ function limpa_item_validade (){
             <td width="100px" align="center" colspan="2">QUANTIDADE</td>	
             <!-- BEGIN BLOCK_CUSTO_CABECALHO -->
             <td width="" align="center">VALOR UNIT. CUSTO</td>          
-            <td width="" align="center">VALOR TOT. CUSTO</td> 
+            <!-- <td width="" align="center">VALOR TOT. CUSTO</td> -->
             <!-- END BLOCK_CUSTO_CABECALHO -->
             <!-- BEGIN BLOCK_VENDA_VALUNI_CABECALHO -->
             <td width="" align="center">VALOR UNIT. VENDA</td>          
             <!-- END BLOCK_VENDA_VALUNI_CABECALHO -->
             <!-- BEGIN BLOCK_VENDA_CABECALHO -->            
-            <td width="" align="center">VALOR TOT. VENDA</td>          
+             <!-- <td width="" align="center">VALOR TOT. VENDA</td>  -->        
             <!-- END BLOCK_VENDA_CABECALHO -->            
             <!-- BEGIN BLOCK_LUCRO_CABECALHO -->
             <td width="" align="center">LUCRO TOT. PREVISTO</td> 
             <!-- END BLOCK_LUCRO_CABECALHO -->
             <td width="" align="center">VALIDADE</td> 
+            <td width="" align="center" colspan="3">SUB-PRODUTOS</td> 
             <!--  BEGIN BLOCK_CABECALHO_OPERACAO -->
             <td width="70px" colspan="{OPER_COLSPAN}">OPER.</td>
             <!--  END BLOCK_CABECALHO_OPERACAO -->
@@ -475,15 +476,33 @@ function limpa_item_validade (){
             <td align="left">{SIGLA}</td>
             <!-- BEGIN BLOCK_CUSTO -->
             <td align="right">{ENTRADAS_VALORUNI_CUSTO}</td>
-            <td align="right">{ENTRADAS_VALOR_TOTAL_CUSTO}</td>
+             <!-- <td align="right">{ENTRADAS_VALOR_TOTAL_CUSTO}</td> -->
             <!-- END BLOCK_CUSTO -->
             <!-- BEGIN BLOCK_VENDA_VALUNI -->
             <td align="right">{ENTRADAS_VALORUNI}</td>    
             <!-- END BLOCK_VENDA_VALUNI -->
             <!-- BEGIN BLOCK_VENDA -->
-            <td align="right">{ENTRADAS_VENDA_TOTAL}</td>                        
+             <!-- <td align="right">{ENTRADAS_VENDA_TOTAL}</td> -->                    
             <!-- END BLOCK_VENDA -->
             <td align="right">{ENTRADAS_VALIDADE}</td>
+            <td align="right">
+                <!-- BEGIN BLOCK_SUBPRODUTOS_TEM -->
+                <img  width="15px"  src="../imagens/icones/geral/{NOMEARQUIVO}"  title="{TITULO}" alt="{TITULO}" />
+                <!-- END BLOCK_SUBPRODUTOS_TEM -->
+            </td>
+            <td align="{SUBPRODUTOS_ALINHAMENTO}" colspan="{SUBPRODUTOS_COLSPAN}">
+                <!-- BEGIN BLOCK_SUBPRODUTOS -->
+                <img  width="15px"  src="../imagens/icones/geral/{SUBPRODUTOS_NOMEICONEARQUIVO}"  title="{SUBPRODUTOS_TITULO}" alt="{SUBPRODUTOS_TITULO}" />
+                <!-- END BLOCK_SUBPRODUTOS -->
+            </td>
+                <!-- BEGIN BLOCK_SUBPRODUTOS_VER -->
+            <td align="left">
+                <a href="#" target="_blank" class="link1">
+                    <img  width="15px"  src="../imagens/icones/geral/{SUBPRODUTOS_NOMEICONEARQUIVO_VER}"  title="Ver Sub-produtos" alt="Ver" />
+                </a>
+            </td>
+                <!-- END BLOCK_SUBPRODUTOS_VER -->
+            
             <!-- BEGIN BLOCK_LUCRO -->
             <td align="right">{ENTRADAS_VALOR_LUCRO}</td>
             <!-- END BLOCK_LUCRO -->
@@ -523,17 +542,20 @@ function limpa_item_validade (){
             <td> </td>
             <!-- BEGIN BLOCK_CUSTO_RODAPE -->
             <td> </td>
-            <td align="right">{TOTAL_CUSTO}</td>
+             <!--  <td align="right">{TOTAL_CUSTO}</td> -->
             <!-- END BLOCK_CUSTO_RODAPE -->
             <!-- BEGIN BLOCK_VENDA_VALUNI_RODAPE -->
             <td> </td>            
             <!-- END BLOCK_VENDA_VALUNI_RODAPE -->
             <!-- BEGIN BLOCK_VENDA_RODAPE -->
-            <td align="right">{TOTAL_VENDA}</td>
+            <!--  <td align="right">{TOTAL_VENDA}</td> -->
             <!-- END BLOCK_VENDA_RODAPE -->
             <!-- BEGIN BLOCK_LUCRO_RODAPE -->
-            <td align="right">{TOTAL_LUCRO}</td>
+             <!-- <td align="right">{TOTAL_LUCRO}</td> -->
             <!-- END BLOCK_LUCRO_RODAPE -->
+            <td> </td>
+            <td> </td>
+            <td> </td>
             <td> </td>
             <td> </td>
             <!--  BEGIN BLOCK_LISTA_NADA_OPERACAO -->            
@@ -553,6 +575,7 @@ function limpa_item_validade (){
     <input type="hidden" name="valuni2" id="valuni2" value="">
     <input type="hidden" name="valunicusto2" id="valunicusto2" value="">
     <input type="hidden" name="validade2" id="validade2" value="">
+    <input type="hidden" name="temsubprodutos" id="temsubprodutos" value="">
 
     <!-- BEGIN BLOCK_BOTOES -->
     <table border="0">

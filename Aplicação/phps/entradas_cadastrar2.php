@@ -16,18 +16,19 @@ if ($entrada=="") { echo "Não foi recebido parametro de entrada!"; exit;  }
 $operacao = $_GET["operacao"];
 $passo = $_REQUEST["passo"];
 
-//Verifica se há algum produto que possuir produtos compostos dentro da entrada. 
-//Se houver deve-se realizar a retirar dos produtos compostos do estoque
+//Verifica se há algum produto composto dentro da entrada. 
+//se houver deve-se realizar a retirada dos subprodutos do estoque, mostrar tela para escolher os lotes e quantidade
+//se não tem então pode ir direto para o php que salva a entrada.
 $sql="
     SELECT entpro_produto
     FROM entradas_produtos
     JOIN produtos_subproduto on entpro_produto=prosub_produto 
-    WHERE entpro_entrada=$entrada 
+    WHERE entpro_entrada=$entrada and entpro_retiradodoestoquesubprodutos=0
 ";
 if (!$query=mysql_query($sql)) die("Erro SQL 11: " . mysql_error());
 $linhas=  mysql_num_rows($query);
 if ($linhas==0) {
-    echo "Os produtos da entrada não possuem sub-produtos";
+    echo "Os produtos da entrada não possuem sub-produtos a serem processados";
     header("Location: entradas_cadastrar3.php?salvar=1&entrada=$entrada&operacao=$operacao");
     exit;
 }
@@ -44,7 +45,7 @@ $tpl_titulo->show();
 
 //Veriifca se o usuário quer realizar retirar de estoque dos subprodutos
 
-if ($passo == 1) {
+if (($passo == 1)&&($linhas!=0)) {
     echo "<br><br>";
     $tpl = new Template("templates/notificacao.html");
     $tpl->ICONES = $icones;
@@ -53,13 +54,13 @@ if ($passo == 1) {
     //$tpl->DESTINO = "saidas_cadastrar.php?operacao=cadastrar";
     //$tpl->block("BLOCK_BOTAO");
     
-
+    
     $tpl->LINK = "entradas_cadastrar2.php?salvar=$salvar&entrada=$entrada&operacao=$operacao&passo=2";
-    $tpl->MOTIVO = "Nesta entrada há produtos compostos!";
+    $tpl->MOTIVO = "Nesta entrada há produtos compostos inseridos cujo seus sub-produtos ainda não foram retirados do estoque!";
     $tpl->block("BLOCK_MOTIVO");
     $tpl->PERGUNTA = "Deseja retirar os sub-produtos do estoque?";
     $tpl->block("BLOCK_PERGUNTA");
-    $tpl->NAO_LINK = "entradas_cadastrar3.php?salvar=$salvar&entrada=$entrada&operacao=$operacao";
+    $tpl->NAO_LINK = "entradas_cadastrar3.php?salvar=$salvar&entrada=$entrada&operacao=$operacao&retirar_subprodutos=2";
     $tpl->block("BLOCK_BOTAO_SIM_AUTOFOCO");
     $tpl->block("BLOCK_BOTAO_NAO_LINK");
     $tpl->block("BLOCK_BOTAO_SIMNAO");
@@ -72,26 +73,29 @@ if ($passo == 1) {
 
 //Mostra todos os produtos compostos que possuem sub-produtos a ser retirado do estoque
 $sql="
-    SELECT DISTINCT entpro_produto,entpro_quantidade
+    SELECT DISTINCT entpro_produto,entpro_quantidade,entpro_numero
     FROM entradas_produtos
     join produtos_subproduto on (entpro_produto=prosub_produto)
-    WHERE entpro_entrada=$entrada
+    WHERE entpro_entrada=$entrada and entpro_retiradodoestoquesubprodutos=0
 ";
 if (!$query=mysql_query($sql)) die("Erro SQL 12: " . mysql_error());
 while($dados=  mysql_fetch_assoc($query)) {
     $produto=$dados["entpro_produto"];
     $quantidade=$dados["entpro_quantidade"];
+    $numero=$dados["entpro_numero"];
     
+    //Verifica os tipos de contagem do produto
     $sql2 = "SELECT * FROM produtos JOIN produtos_tipo on (pro_tipocontagem=protip_codigo) WHERE pro_codigo=$produto";
     $query2 = mysql_query($sql2);
     if (!$query2)  die("Erro SQL 11: " . mysql_error());
     $dados2 = mysql_fetch_assoc($query2);
     $produto_tipocontagem=$dados2["protip_codigo"];
+    $produto_tipocontagem=$dados2["protip_codigo"];
     $produto_tipocontagem_sigla=$dados2["protip_sigla"];
     
     
     $tpl = new Template("templates/listagem_2.html");
-    $tpl->LINK_FILTRO = "entradas_cadastrar3.php?salvar=1&entrada=$entrada&operacao=$operacao";
+    $tpl->LINK_FILTRO = "entradas_cadastrar3.php?salvar=1&entrada=$entrada&operacao=$operacao&retirar_subprodutos=1";
 
     //OCULTO Entrada
     $tpl->CAMPOOCULTO_VALOR="$entrada";
@@ -99,7 +103,16 @@ while($dados=  mysql_fetch_assoc($query)) {
     $tpl->block("BLOCK_CAMPOSOCULTOS"); 
     
     
-    //Produto (cabeçalho PRODUTO)
+    //Item (cabeçalho)
+    $tpl->CAMPO_TITULO = "Item";
+    $tpl->CAMPO_NOME = "cabecalho_item";
+    $tpl->CAMPO_VALOR = $numero;
+    $tpl->CAMPO_TAMANHO = "9";
+    $tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
+    $tpl->block("BLOCK_FILTRO_CAMPO");
+    $tpl->block("BLOCK_FILTRO_COLUNA");
+    
+    //Produto (cabeçalho)
     $tpl->CAMPO_TITULO = "Produto";
     $produto_nome= $dados2['pro_nome'];
     $tpl->CAMPO_NOME = "cabecalho_produto";
@@ -183,6 +196,8 @@ while($dados=  mysql_fetch_assoc($query)) {
     $tpl->CABECALHO_COLUNA_NOME="QTD. ESTOQUE";
     $tpl->block("BLOCK_LISTA_CABECALHO");
         
+    
+    //Verifica quais são os subprodutos do produto composto do item de entrada
     $sql3="
         SELECT 
                 (SELECT pro_nome from produtos WHERE pro_codigo=ps.prosub_subproduto) as subproduto_nome,
@@ -302,7 +317,7 @@ while($dados=  mysql_fetch_assoc($query)) {
                 $qtdselecionada=number_format(0,3,",",".");
             else 
                 $qtdselecionada= number_format(0,0,"",".");
-            $nome="span_qtdselecionada_"."$produto"."_"."$subproduto_codigo";
+            $nome="span_qtdselecionada_"."$numero"."_"."$produto"."_"."$subproduto_codigo";
             $tpl->LISTA_COLUNA_VALOR="<span id='$nome'>$qtdselecionada</span>";
             $tpl->block("BLOCK_LISTA_COLUNA");
             $tpl->LISTA_COLUNA_ALINHAMENTO="left";
@@ -324,20 +339,20 @@ while($dados=  mysql_fetch_assoc($query)) {
             else 
                 $tpl->IMAGEM_NOMEARQUIVO="confirmar2.png";
             $tpl->IMAGEM_TITULO="";
-            $nome="situacao_"."$produto"."_"."$subproduto_codigo";
+            $nome="situacao_"."$numero"."_"."$produto"."_"."$subproduto_codigo";
             $tpl->IMAGEM_NOME="$nome";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
             $tpl->block("BLOCK_LISTA_COLUNA"); 
 
             //OCULTO Quantidade Selecionada
             $tpl->CAMPOOCULTO_VALOR="0";
-            $nome="qtdselecionada_"."$produto"."_"."$subproduto_codigo";
+            $nome="qtdselecionada_"."$numero"."_"."$produto"."_"."$subproduto_codigo";
             $tpl->CAMPOOCULTO_NOME="$nome";
             $tpl->block("BLOCK_CAMPOSOCULTOS"); 
 
             //OCULTO Quantidade Retirar
             $tpl->CAMPOOCULTO_VALOR="$qtd_aretirar";
-            $nome="qtdaretirar_"."$produto"."_"."$subproduto_codigo";
+            $nome="qtdaretirar_"."$numero"."_"."$produto"."_"."$subproduto_codigo";
             $tpl->CAMPOOCULTO_NOME="$nome";
             $tpl->block("BLOCK_CAMPOSOCULTOS"); 
         }
@@ -359,11 +374,11 @@ while($dados=  mysql_fetch_assoc($query)) {
             $tpl->LISTA_COLUNA_ROWSPAN="";
             $tpl->LISTA_COLUNA_CLASSE="";
             $tpl->LISTA_COLUNA_TAMANHO="20px";
-            $nome_limpo_semlote="$produto"."_"."$subproduto_codigo";
-            $nome_limpo="$produto"."_"."$subproduto_codigo"."_"."$lote";
-            $nome="box_"."$produto"."_"."$subproduto_codigo"."_"."$lote";
+            $nome_limpo_semlote="$numero"."_"."$produto"."_"."$subproduto_codigo ";
+            $nome_limpo="$numero"."_"."$produto"."_"."$subproduto_codigo"."_"."$lote";
+            $nome="box_"."$numero"."_"."$produto"."_"."$subproduto_codigo"."_"."$lote";
             $id=$nome;
-            $tpl->LISTA_COLUNA_VALOR= "<input type='checkbox' onclick='habilitar_quantidade(this.checked,`$nome_limpo`,$subproduto_tipocontagem,`$nome_limpo_semlote`,$produto,$subproduto_codigo)' name='$nome' id='$id'>";
+            $tpl->LISTA_COLUNA_VALOR= "<input type='checkbox' onclick='habilitar_quantidade(this.checked,`$nome_limpo`,$subproduto_tipocontagem,`$nome_limpo_semlote`,$produto,$subproduto_codigo,$numero)' name='$nome' id='$id'>";
             $tpl->block("BLOCK_LISTA_COLUNA");
             //Lote Validade Lote
             $tpl->LISTA_COLUNA_ALINHAMENTO="left";
@@ -382,9 +397,9 @@ while($dados=  mysql_fetch_assoc($query)) {
             $tpl->LISTA_COLUNA_ROWSPAN="";
             $tpl->LISTA_COLUNA_CLASSE="";
             $tpl->LISTA_COLUNA_TAMANHO="95px";
-            $nome="qtddigitada_"."$produto"."_"."$subproduto_codigo"."_"."$lote";
+            $nome="qtddigitada_"."$numero"."_"."$produto"."_"."$subproduto_codigo"."_"."$lote";
             $id=$nome;
-            $tpl->LISTA_COLUNA_VALOR= "<input type='text' name='$nome'id='$id' class='campopadrao' style='width:70px' onblur='calcula_qtd_selecionada(this.value,`$nome_limpo`,$subproduto_codigo,$subproduto_tipocontagem,$produto)' disabled> $subproduto_tipocontagem_sigla";
+            $tpl->LISTA_COLUNA_VALOR= "<input type='text' name='$nome'id='$id' class='campopadrao' style='width:70px' onblur='calcula_qtd_selecionada(this.value,`$nome_limpo`,$subproduto_codigo,$subproduto_tipocontagem,$produto,$numero)' disabled> $subproduto_tipocontagem_sigla";
             $tpl->block("BLOCK_LISTA_COLUNA");
 
             //Quantidade em Estoque
@@ -408,7 +423,7 @@ while($dados=  mysql_fetch_assoc($query)) {
 
             //OCULTO Quantidade Estoque
             $tpl->CAMPOOCULTO_VALOR="$qtd_emestoque";
-            $nome="qtdemestoque_"."$produto"."_"."$subproduto_codigo"."_"."$lote";
+            $nome="qtdemestoque_"."$numero"."_"."$produto"."_"."$subproduto_codigo"."_"."$lote";
             $tpl->CAMPOOCULTO_NOME="$nome";
             $tpl->block("BLOCK_CAMPOSOCULTOS"); 
             

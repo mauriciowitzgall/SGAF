@@ -205,12 +205,9 @@ $tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Tipo Pessoa";
 $tpl1->block("BLOCK_TITULO");
 if (($operacao == 'ver') || ($operacao == 'editar')) {
-    $tpl1->SELECT_NOME = "tipopessoa2";
-    $tpl1->SELECT_ID = "tipopessoa2";
-    //$tpl1->block("BLOCK_SELECT_DESABILITADO");
-    $tpl1->CAMPOOCULTO_NOME = "tipopessoa";
-    $tpl1->CAMPOOCULTO_VALOR = "$tipopessoa";
-    $tpl1->block("BLOCK_CAMPOSOCULTOS");
+    $tpl1->SELECT_NOME = "tipopessoa";
+    $tpl1->SELECT_ID = "tipopessoa";
+    
 } else {
     $tpl1->SELECT_NOME = "tipopessoa";
     $tpl1->SELECT_ID = "tipopessoa";
