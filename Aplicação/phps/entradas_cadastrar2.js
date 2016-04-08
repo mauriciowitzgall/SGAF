@@ -60,13 +60,10 @@ function habilitar_quantidade (valor,nomecomlote,tipocontagem,nomesemlote,produt
         if ((tipocontagem==2)||(tipocontagem==3)) {
             qtdselecionadanova=qtdselecionadanova.toFixed(3);
         }
-
+        qtdselecionadanova2=qtdselecionadanova.replace(".",",");
+        
         $("input[name="+nome3+"]").val(qtdselecionadanova);
-        if ((tipocontagem==2)||(tipocontagem==3)) {
-            $("span[id="+nome5+"]").text(qtdselecionadanova);
-        } else {
-            $("span[id="+nome5+"]").text(qtdselecionadanova);
-        }
+        $("span[id="+nome5+"]").text(qtdselecionadanova2);
         
         
     } else {
