@@ -95,7 +95,7 @@ $(document).ready(function() {
 
         aparece_tiponegociacao();
 
-        tippes = $("select[name=tipopessoa2]").val();            
+        tippes = $("select[name=tipopessoa]").val();    
         verifica_usuario (tippes); 
 
 
