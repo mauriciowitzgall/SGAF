@@ -121,3 +121,32 @@ Commit: 98474cf
 
 - Criado estrutura de configuracoes no banco. Incluso a versão do sistema. Tela de login alterada para pegar versão do banco
 - Foi criado um campo de valor unitário nas porções. Agora ao realizar vendas de porções é possível trabalhar com esse novo valor unitário para calcular o valor total de venda (não mais baseado apenas no valor unitário do produto da entrada)
+
+3.5
+
+- Corrigido vários erros internos
+- Retirado obrigatoriedade do campo cidade no cadastro de pessoas
+- Quando o quiosque tem apenas um tipo de negociação, por padrão ele vem selecionado
+- Agora é obrigatório a escolha de um tipo de negociação no cadastro de pessoa
+- Criado campo novo "Data de nascimento" na tela de cadastro de pessoas. Campo não é obrigatório.
+- Definido que supervisores por padrão podem definir/incluir outros supervisores no quiosque.
+- Retirado regra que valida se há outra pessoa com o mesmo nome. Agora o sistema permite.
+- Incluído nova categoria de pessoa jurídica "Fábrica"
+- Ao editar uma porção de um produto, agora o campo valor unitário referencial é poupado corretamente
+- Ao cadastrar um produto agora é possível cadastrar uma categoria sem sair da tela de cadastro do produto
+- Se o quiosque só tem um tipo de negociação então no cadastro de produtos o item já bem marcado por padrão
+- Corrigido erro que impedia a edição de uma pessoa física. O sistema não deixa continuar porque o campo cnpj estava oculto mas como obrigatório.
+- Parametrizado para que os supervisores possam ver gestores e gerir outros supervisores
+- Agora quando for fazer uma entradas, se está parametrizado para o quiosque ter apenas 1 tipo de negociação então este vem já selecionado ao dar entradas.
+- Criado Itens de validade, o usuário poderá selecionar um bloco de dias para auto preencher a validade automaticamente.
+- Criado novas regras entre os campos que dão desconto ao final da venda. Ao sair de um campo o sistema auto-calcula o outro (percentual e valor)
+- Retirado 2 colunas da listagem de pessoas (possui acesso, cidade)
+- Criado telas para adicionar sub-produtos a produtos
+- Criado um módulo novo para gerir produtos composto, ou seja, agora é possível das a entrada de produtos fabricaos e automaticamente o sistema tira do estoque as quantias respectivas dos subprodutos.
+- Corrigido problema que calculava errado o valor bruto da venda quando o valor passava de mil reais.
+- Criado cadastro de cliente durante realização de uma nova venda (com a utilização do CPF)
+- Se o cliente tem vendas incompletas o sistema notifica como sinal de alerta (cliente não pagou outras vendas)
+- Retirado ordenação por status nas saidas, agora é em linha de tempo, as incompletas não ficarão mais no topo
+- Criado campo ID (ficha/comanda) na tela de saídas
+- Incluso 2 novas opções de filtro na tela de saidas: por id (comanda) e por status (completas e incompletas)
+
