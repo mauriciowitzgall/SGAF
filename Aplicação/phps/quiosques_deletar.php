@@ -162,6 +162,11 @@ if ($usuario_grupo==2) {
         $linhas4=  mysql_num_rows($query4);
         
         //Entradas
+        $sql3 = "DELETE FROM entradas_subprodutos WHERE entsub_entrada in (SELECT ent_codigo FROM entradas WHERE ent_quiosque=$codigo)";
+        $query3 = mysql_query($sql3);
+        if (!$query3) {
+            die("Erro SQL: " . mysql_error());
+        }
         $sql3 = "DELETE FROM entradas_produtos WHERE entpro_entrada in (SELECT ent_codigo FROM entradas WHERE ent_quiosque=$codigo)";
         $query3 = mysql_query($sql3);
         if (!$query3) {

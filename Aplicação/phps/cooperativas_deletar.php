@@ -60,10 +60,16 @@ if (($usuario_grupo==1)||(($usuario_grupo==7))) {
         // Porções
         $sql3 = "DELETE FROM produtos_porcoes WHERE propor_produto in (SELECT pro_codigo FROM produtos WHERE pro_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL51: " . mysql_error());
+        
+        // Subprodutos
+        $sql3 = "DELETE FROM produtos_subproduto WHERE prosub_produto in (SELECT pro_codigo FROM produtos WHERE pro_cooperativa=$codigo)";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL51: " . mysql_error());
 
         
 
         // Entradas
+        $sql3 = "DELETE FROM entradas_subprodutos WHERE entsub_entrada in (SELECT DISTINCT ent_codigo FROM entradas JOIN quiosques on ent_quiosque=qui_codigo WHERE qui_cooperativa=$codigo)";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL6: " . mysql_error());
         $sql3 = "DELETE FROM entradas_produtos WHERE entpro_entrada in (SELECT DISTINCT ent_codigo FROM entradas JOIN quiosques on ent_quiosque=qui_codigo WHERE qui_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL6: " . mysql_error());
         $sql3 = "DELETE FROM entradas WHERE ent_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo)";
