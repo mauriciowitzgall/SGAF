@@ -288,7 +288,7 @@ left join caixas on (caiopo_caixa=cai_codigo)
 left join pessoas on (pes_codigo=caiopo_operador)
 WHERE sai_quiosque=$usuario_quiosque and
 sai_tipo=1 $sql_filtro 
-ORDER BY sai_status DESC, sai_codigo DESC
+ORDER BY sai_codigo DESC
 ";
 //Paginação
 $query = mysql_query($sql);

@@ -15,7 +15,21 @@
                 <b>{TITULO}:<label class="obrigatorio">{ASTERISCO}</label></b>
                 <!-- END BLOCK_TITULO -->             
             </td>            
-            <td align="left" width="">
+            <td align="left" width="" id="{TD_ID}">
+                
+                
+                <!-- BEGIN BLOCK_SELECT --> 
+                <select name="{SELECT_NOME}" class="campopadrao" style="{SELECT_CLASSE}"  {SELECT_DESABILITADO} {SELECT_OBRIGATORIO} {SELECT_FOCO} onchange="{SELECT_AOTROCAR}">           
+                <!-- BEGIN BLOCK_SELECT_OPTION --> 
+                <option value="{OPTION_VALOR}"{OPTION_SELECIONADO}>{OPTION_NOME}</option> 
+                <!-- END BLOCK_SELECT_OPTION --> 
+                </select>
+                <!-- BEGIN BLOCK_SPAN2 --> 
+                <span name="{SPAN2_NOME}" id="{SPAN2_NOME}" class="fonte1">{SPAN2_VALOR}</span>       
+                <!-- END BLOCK_SPAN2 --> 
+                <!-- END BLOCK_SELECT --> 
+                
+                
                 <!-- BEGIN BLOCK_CAMPO --> 
                 <input type="{CAMPO_TIPO}" 
                        name="{CAMPO_NOME}" 
@@ -24,12 +38,14 @@
                        onkeypress="{CAMPO_ONKEYPRESS}" 
                        onkeyup="{CAMPO_ONKEYUP}" 
                        onkeydown="{CAMPO_ONKEYDOWN}" 
-                       onblur ="{CAMPO_ONFOCUS}" 
-                       class="campopadrao" 
+                       onblur ="{CAMPO_ONBLUR}" 
+                       class="campopadrao"
+                       style="{CAMPO_ESTILO}";
                        value="{CAMPO_VALOR}" 
                        maxlength="{CAMPO_QTD_CARACTERES}" 
                        autocomplete="off" 
                        onclick="this.select()"
+                       onfocus="{CAMPO_ONFOCUS}"
                        {CAMPO_DESABILITADO} 
                        {CAMPO_OBRIGATORIO} 
                        {CAMPO_FOCO}
@@ -39,17 +55,15 @@
                 <!-- END BLOCK_SPAN --> 
                 <!-- END BLOCK_CAMPO --> 
 
-                <!-- BEGIN BLOCK_SELECT --> 
-                <select name="{SELECT_NOME}" class="campopadrao" style="width:200px"  {SELECT_DESABILITADO} {SELECT_OBRIGATORIO} {SELECT_FOCO} onchange="{SELECT_AOTROCAR}">           
-                <!-- BEGIN BLOCK_SELECT_OPTION --> 
-                <option value="{OPTION_VALOR}"{OPTION_SELECIONADO}>{OPTION_NOME}</option> 
-                <!-- END BLOCK_SELECT_OPTION --> 
+                <!-- BEGIN BLOCK_SELECT2 --> 
+                <select name="{SELECT2_NOME}" class="campopadrao" style="{SELECT2_CLASSE}"  {SELECT2_DESABILITADO} {SELECT2_OBRIGATORIO} {SELECT2_FOCO} onchange="{SELECT2_AOTROCAR}" id="{SELECT2_NOME}">           
+                <!-- BEGIN BLOCK_SELECT2_OPTION --> 
+                <option value="{OPTION2_VALOR}"{OPTION2_SELECIONADO}>{OPTION2_NOME}</option> 
+                <!-- END BLOCK_SELECT2_OPTION --> 
                 </select>
-                <!-- BEGIN BLOCK_SPAN2 --> 
-                <span name="{SPAN2_NOME}" id="{SPAN2_NOME}" class="fonte1">{SPAN2_VALOR}</span>       
-                <!-- END BLOCK_SPAN2 --> 
-                <!-- END BLOCK_SELECT --> 
-
+                <!-- END BLOCK_SELECT2 -->
+                
+                
                 <!-- BEGIN BLOCK_BOTAO1 -->  
                 <input <!-- BEGIN BLOCK_FOCO --> autofocus <!-- END BLOCK_FOCO --> type="{BOTAO_TIPO}" value="{BOTAO_VALOR}" name="{BOTAO_NOME}"  class="botao fonte3" {BOTAO_FOCO} {BOTAO_DESABILITADO}>
                 <!-- END BLOCK_BOTAO1 -->  

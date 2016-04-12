@@ -107,3 +107,9 @@ ADD COLUMN `entpro_desejaretirarsubprodutos` TINYINT(1) NULL DEFAULT NULL AFTER 
 ALTER TABLE `agape`.`entradas_produtos` 
 CHANGE COLUMN `entpro_desejaretirarsubprodutos` `entpro_temsubprodutos` TINYINT(1) NOT NULL ;
 
+ALTER TABLE `agape`.`saidas` 
+ADD COLUMN `sai_id` INT(11) NULL AFTER `sai_usuarioquecadastrou`;
+
+UPDATE `agape`.`grupo_permissoes` SET `gruper_pessoas_cadastrar_consumidores`='1' WHERE `gruper_codigo`='7';
+
+INSERT INTO `agape`.`status` (`sta_codigo`, `sta_nome`) VALUES ('3', 'Cancelado');

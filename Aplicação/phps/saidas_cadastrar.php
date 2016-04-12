@@ -51,6 +51,7 @@ $retirar_produto = $_GET["retirar_produto"];
 //Se for eliminação de um produto ja da lista então pegar por get
 if ($retirar_produto == '1') {
     $consumidor = $_GET["consumidor"];
+    $id = $_GET["id"];
     $tiposaida = $_GET["tiposaida"];
     $saida = $_GET["saida"];
     $saipro = $_GET["saipro"];
@@ -62,20 +63,48 @@ if ($retirar_produto == '1') {
     if ($operacao == 2) { // Se for edição pega os dados principais da venda para popular campos
         $saida = $_GET["codigo"];
         $passo = "2";
-        $sql = "SELECT * FROM saidas WHERE sai_codigo=$saida";
+        $sql = "
+            SELECT * 
+            FROM saidas 
+            left join pessoas on (sai_consumidor=pes_codigo)
+            WHERE sai_codigo=$saida
+        ";
         $query = mysql_query($sql);
         if (!$query)
             die("Erro de SQL11:" . mysql_error());
         while ($dados = mysql_fetch_assoc($query)) {
             $consumidor = $dados["sai_consumidor"];
+            $consumidor_cpf = $dados["pes_cpf"];
+            $consumidor_cnpj = $dados["pes_cnpj"];
+            $tipopessoa = $dados["pes_tipopessoa"];
+            
+            $id = $dados["sai_id"];
             $tiposaida = $dados["sai_tipo"];
             $motivo = $dados["sai_saidajustificada"];
             $descricao = $dados["sai_descricao"];
         }
     } else { //Caso seja uma venda nova, cadastro
+        $operacao=1;
         $saida = $_POST["saida"];
         $passo = $_POST["passo"];
         $consumidor = $_POST["consumidor"];
+        $cliente_nome = $_POST["cliente_nome"];
+        $tipopessoa = $_POST["tipopessoa"];
+        $consumidor_cpf=$_POST["cpf"];
+        $consumidor_cnpj=$_POST["cnpj"];
+
+        if (($consumidor!="")&&($consumidor!=0)) { //foi selecionado uma pessoa
+            $sql0="SELECT pes_cpf, pes_cnpj,pes_tipopessoa FROM pessoas WHERE pes_codigo=$consumidor";
+            if (!$query0 = mysql_query($sql0)) die("Erro 0: " . mysql_error());
+            $dados0=  mysql_fetch_assoc($query0);
+            $consumidor_cpf=$dados0["pes_cpf"];
+            $consumidor_cnpj=$dados0["pes_cnpj"];
+            $tipopessoa = $dados0["pes_tipopessoa"];
+        } 
+        if ($tipopessoa=="") { //Pro padrão a pessoa é fisica, cpf
+            $tipopessoa=1;
+        }
+        $id = $_POST["id"];
         $tiposaida = $_GET["tiposaida"];
         $motivo = $_POST["motivo"];
         $descricao = $_POST["descricao"];
@@ -399,77 +428,220 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
 if (($saida == 0) && ($passo == 2)) {
     $datahoracadastro=$dataatual." ".$horaatual;
     
+    //Se for cliente novo, cadastrar ele antes de cadastrar a saida
+    if ($cliente_nome!="") {
+        //echo "Cadastrar nova pessoa <b>$cliente_nome</b><br>";
+        
+        $sql3="SELECT max(pes_id) as ultimo_id FROM pessoas";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro de SQL2: " . mysql_error());
+        $dados3=  mysql_fetch_assoc($query3);
+        $id_ultimo=$dados3["ultimo_id"];
+        $id=$id_ultimo+1;
+        $consumidor_cpf2 =  str_replace(".", "", $consumidor_cpf);
+        $consumidor_cpf2 =  str_replace("-", "", $consumidor_cpf2);
+        $consumidor_cpf2 =  str_replace("_", "", $consumidor_cpf2);
+        $consumidor_cnpj2 =  str_replace(".", "", $consumidor_cnpj);
+        $consumidor_cnpj2 =  str_replace("/", "", $consumidor_cnpj2);
+        $consumidor_cnpj2 =  str_replace("-", "", $consumidor_cnpj2);
+        $consumidor_cnpj2 =  str_replace("_", "", $consumidor_cnpj2);
+        
+        $sql1 = "
+            INSERT INTO
+                pessoas (pes_id,pes_nome,pes_cnpj,pes_cpf,pes_tipopessoa,pes_cidade,pes_datacadastro,pes_horacadastro,pes_cooperativa,pes_possuiacesso,pes_categoria,pes_usuarioquecadastrou,pes_quiosquequecadastrou)
+            VALUES
+                ($id,'$cliente_nome','$consumidor_cnpj2','$consumidor_cpf2',$tipopessoa,0,'$dataatual','$horaatual',$usuario_cooperativa,0,0,$usuario_codigo,$usuario_quiosque)        
+        ";
+        $query1 = mysql_query($sql1); if (!$query1) die("Erro de SQL1: " . mysql_error());
+        $consumidor = mysql_insert_id();
+        $sql2="INSERT INTO mestre_pessoas_tipo (mespestip_pessoa,mespestip_tipo) VALUES ($consumidor,6)";
+        $query2 = mysql_query($sql2); if (!$query2) die("Erro de SQL2: " . mysql_error());
+
+    }
+    
+    
     $sql_saida = "
     INSERT INTO
-        saidas (sai_quiosque, sai_caixaoperacaonumero, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro,sai_usuarioquecadastrou)
+        saidas (sai_quiosque, sai_caixaoperacaonumero, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro,sai_usuarioquecadastrou, sai_id)
     VALUES
-        ('$usuario_quiosque','$usuario_caixa_operacao','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2,'$datahoracadastro',$usuario_codigo)        
+        ('$usuario_quiosque','$usuario_caixa_operacao','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2,'$datahoracadastro',$usuario_codigo, $id)        
     ";
     $query_saida = mysql_query($sql_saida);
     if (!$query_saida)
         die("Erro de SQL10: " . mysql_error());
     $saida = mysql_insert_id();
+    
+    $operacao=1;
+    
 }
 
 //Enviar ocultamento o numero da saida
 $tpl1->CAMPOOCULTO_NOME = "saida";
 $tpl1->CAMPOOCULTO_VALOR = $saida;
 $tpl1->block("BLOCK_CAMPOSOCULTOS");
+$tpl1->CAMPOOCULTO_NOME = "passo";
+$tpl1->CAMPOOCULTO_VALOR = $passo2;
+$tpl1->block("BLOCK_CAMPOSOCULTOS");
 
 
 if ($tiposaida == 1) {
 
-//Consumidor
+    //ID, Comanda, Ficha
+    $tpl1->CAMPO_QTD_CARACTERES = "8";
+    $tpl1->TITULO = "ID";
+    $tpl1->ASTERISCO = "";
+    $tpl1->block("BLOCK_TITULO");
+    $tpl1->CAMPO_TIPO = "number";
+    $tpl1->CAMPO_NOME = "id";
+    $tpl1->CAMPO_TAMANHO = "8";
+    $tpl1->CAMPO_ESTILO = "width:80px;";
+    $tpl1->CAMPO_FOCO = "  ";
+    $tpl1->CAMPO_VALOR = "$id";
+    $tpl1->CAMPO_DESABILITADO = "";
+    $tpl1->CAMPO_OBRIGATORIO = " required ";
+    $tpl1->CAMPO_ONKEYUP = "";
+    $tpl1->CAMPO_ONKEYDOWN = "";
+    $tpl1->CAMPO_ONFOCUS = "";
+    $tpl1->block("BLOCK_CAMPO");
+    $tpl1->block("BLOCK_ITEM");
+
+    //Consumidor Cliente
+    $tpl1->CAMPO_QTD_CARACTERES = "14";
     $tpl1->TITULO = "Consumidor";
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
-    $tpl1->SELECT_NOME = "consumidor";
+    
+    //Tipo Pessoa
+    $tpl1->SELECT_CLASSE = " width:80px; ";
+    $tpl1->SELECT_NOME = "tipopessoa";
     $tpl1->SELECT_DESABILITADO = "";
     $tpl1->SELECT_OBRIGATORIO = " required ";
-    $tpl1->SELECT_FOCO = "";
-    if ($passo != 1) {
+    if ($passo==2) {
         $tpl1->SELECT_DESABILITADO = " disabled ";
+    }
+    $tpl1->SELECT_AOTROCAR = " seleciona_tipo_pessoa(this.value)";
+    $tpl1->OPTION_VALOR = "1";
+    $tpl1->OPTION_NOME = "Física";
+    if ($tipopessoa==1)
+        $tpl1->OPTION_SELECIONADO = " selected ";
+    else 
+        $tpl1->OPTION_SELECIONADO = "  ";
+    $tpl1->block("BLOCK_SELECT_OPTION");
+    $tpl1->OPTION_VALOR = "2";
+    $tpl1->OPTION_NOME = "Juridica";
+    if ($tipopessoa==2)
+        $tpl1->OPTION_SELECIONADO = " selected ";
+    else 
+        $tpl1->OPTION_SELECIONADO = "  ";
+    $tpl1->block("BLOCK_SELECT_OPTION");
+    $tpl1->block("BLOCK_SELECT");
+    
+    //Documento CPF CNPJ
+    //CPF
+    $tpl1->CAMPO_TIPO = "text";
+    $tpl1->CAMPO_ESTILO = "width:120px;";
+    $tpl1->CAMPO_NOME = "cpf";
+    $tpl1->CAMPO_TAMANHO = "14";
+    $tpl1->CAMPO_QTD_CARACTERES = "70";
+    $tpl1->CAMPO_FOCO = " ";
+    $tpl1->CAMPO_VALOR = "$consumidor_cpf";
+    if ($passo==2) {
+        $tpl1->CAMPO_DESABILITADO = " disabled ";
+    }
+    $tpl1->CAMPO_OBRIGATORIO = "  ";
+    $tpl1->CAMPO_ONKEYPRESS = "";
+    $tpl1->CAMPO_ONKEYUP = "verifica_cpf(this.value)";
+    $tpl1->CAMPO_ONKEYDOWN = "";
+    $tpl1->CAMPO_ONBLUR = ""; 
+    $tpl1->CAMPO_ONFOCUS = "";
+    $tpl1->block("BLOCK_CAMPO");
+    //CNPJ
+    $tpl1->CAMPO_ESTILO = "width:155px;";
+    $tpl1->CAMPO_TIPO = "text";
+    $tpl1->CAMPO_NOME = "cnpj";
+    $tpl1->CAMPO_TAMANHO = "70";
+    $tpl1->CAMPO_FOCO = " ";
+    $tpl1->CAMPO_VALOR = "$consumidor_cnpj";
+    if ($passo==2) {
+        $tpl1->CAMPO_DESABILITADO = " disabled ";
+    } 
+    $tpl1->CAMPO_OBRIGATORIO = "  ";
+    $tpl1->CAMPO_ONKEYPRESS = "";
+    $tpl1->CAMPO_ONKEYUP = "verifica_cnpj(this.value)";
+    $tpl1->CAMPO_ONKEYDOWN = "";
+    $tpl1->CAMPO_ONBLUR = "";
+    $tpl1->CAMPO_ONFOCUS = "";
+    $tpl1->block("BLOCK_CAMPO");
+    
+    //Nome do cliente para cadastro
+    $tpl1->CAMPO_TIPO = "text";
+    $tpl1->CAMPO_NOME = "cliente_nome";
+    $tpl1->CAMPO_TAMANHO = "";
+    $tpl1->CAMPO_ESTILO = "width:180px;";
+    $tpl1->CAMPO_FOCO = " ";
+    $tpl1->CAMPO_VALOR = "$cliente_nome";
+    $tpl1->CAMPO_DESABILITADO = " disabled ";
+    $tpl1->CAMPO_OBRIGATORIO = " required ";
+    $tpl1->CAMPO_ONKEYUP = "";
+    $tpl1->CAMPO_ONKEYDOWN = "";
+    $tpl1->CAMPO_ONFOCUS = "";
+    $tpl1->block("BLOCK_CAMPO");
+    
+    //Selecionar Cliente
+    $tpl1->SELECT2_NOME = "consumidor";
+    $tpl1->SELECT2_DESABILITADO = "";
+    $tpl1->SELECT2_OBRIGATORIO = " required ";
+    $tpl1->SELECT2_FOCO = "";
+    if ($passo != 1) {
+        $tpl1->SELECT2_DESABILITADO = " disabled ";
     } else {
-        $tpl1->SELECT_DESABILITADO = " ";
+        $tpl1->SELECT2_DESABILITADO = " ";
+    }
+    if ($consumidor!=0) {
+        $sql_filtro.="and pes_tipopessoa=$tipopessoa";
     }
     $sql = "
-SELECT
-    *
-FROM
-    pessoas
-    join mestre_pessoas_tipo on (mespestip_pessoa=pes_codigo)
-    join pessoas_tipo on (mespestip_tipo=pestip_codigo)
-WHERE
-    mespestip_tipo=6 and
-    pes_cooperativa=$usuario_cooperativa
-ORDER BY
-    pes_nome
-";
+        SELECT
+            *
+        FROM
+            pessoas
+            join mestre_pessoas_tipo on (mespestip_pessoa=pes_codigo)
+            join pessoas_tipo on (mespestip_tipo=pestip_codigo)
+        WHERE
+            mespestip_tipo=6 and
+            pes_cooperativa=$usuario_cooperativa
+            $sql_filtro
+        ORDER BY
+            pes_nome
+    ";
     $query = mysql_query($sql);
     if (!$query)
-        die("Erro: " . mysql_error());
-    $tpl1->OPTION_VALOR = "0";
-    $tpl1->OPTION_NOME = "Clientes Geral";
-    $tpl1->OPTION_SELECIONADO = " selected ";
-    $tpl1->block("BLOCK_SELECT_OPTION");
+        die("Erro 8: " . mysql_error());
+    $tpl1->OPTION2_VALOR = "0";
+    $tpl1->OPTION2_NOME = "Clientes Geral";
+    $tpl1->OPTION2_SELECIONADO = " selected ";
+    $tpl1->block("BLOCK_SELECT2_OPTION");
     while ($dados = mysql_fetch_array($query)) {
-        $tpl1->OPTION_VALOR = $dados["pes_codigo"];
-        $tpl1->OPTION_NOME = $dados["pes_nome"];
+        $tpl1->OPTION2_VALOR = $dados["pes_codigo"];
+        $tpl1->OPTION2_NOME = $dados["pes_nome"];
         if ($consumidor == $dados["pes_codigo"]) {
-            $tpl1->OPTION_SELECIONADO = " selected ";
+            $tpl1->OPTION2_SELECIONADO = " selected ";
         } else {
-            $tpl1->OPTION_SELECIONADO = " ";
+            $tpl1->OPTION2_SELECIONADO = " ";
         }
-        $tpl1->block("BLOCK_SELECT_OPTION");
+        $tpl1->block("BLOCK_SELECT2_OPTION");
     }
-    $tpl1->block("BLOCK_SELECT");
+    $tpl1->block("BLOCK_SELECT2");
+    
+    
+    
     $tpl1->block("BLOCK_ITEM");
 }
 
-//Se o tipo de saida for Devolu��o
+
+//Se o tipo de saida for Devolução
 if ($tiposaida == 3) {
 
-//Motivo
+    //Motivo
     $tpl1->TITULO = "Motivo";
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
@@ -530,6 +702,41 @@ if ($tiposaida == 3) {
 
 
 if ($passo == 2) {
+    
+    //Verifica se o consumidor possui vendas incompleta
+    $sql4="SELECT * from saidas  WHERE sai_status=2 and sai_consumidor= $consumidor and sai_codigo not in ($saida)";
+    if (!$query4 = mysql_query($sql4)) die("Erro 4:" . mysql_error());
+    $linhas4 = mysql_num_rows($query4);
+    //print_r($_REQUEST);
+    
+    if (($linhas4>0)&&($operacao==1)) { 
+        $tpl = new Template("templates/notificacao.html");
+        $tpl->ICONES = $icones;
+        //$tpl->MOTIVO_COMPLEMENTO = "";
+        $tpl->block("BLOCK_ATENCAO");
+        $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=2&tiposaida=1";
+        $vendas_incompletas="<br> <i>";
+        while ($dados4=  mysql_fetch_assoc($query4)) {
+            $vendainc_codigo=$dados4["sai_codigo"];
+            $vendainc_data=  converte_data($dados4["sai_datacadastro"]);
+            $vendainc_hora=  converte_hora($dados4["sai_horacadastro"]);
+            $vendas_incompletas=$vendas_incompletas."Nº $vendainc_codigo, Data: $vendainc_data $vendainc_hora<br>";
+        }
+        $vendas_incompletas=$vendas_incompletas."</i><br>";
+        $tpl->MOTIVO = "
+            Este consumidor possui vendas incompletas!<br>
+            $vendas_incompletas
+        ";
+        $tpl->block("BLOCK_MOTIVO");
+        $tpl->PERGUNTA = "Deseja continuar assim mesmo?";
+        $tpl->block("BLOCK_PERGUNTA");
+        $tpl->NAO_LINK = "saidas.php";
+        $tpl->block("BLOCK_BOTAO_NAO_LINK");
+        $tpl->block("BLOCK_BOTAO_SIMNAO");
+        $tpl->show();
+        exit;
+    }
+    
 
     //Etiqueta
     $tpl1->CAMPO_QTD_CARACTERES = "14";
@@ -572,15 +779,18 @@ if ($passo == 2) {
     $tpl1->TITULO = "Produto";
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
-    $tpl1->SELECT_NOME = "produto";
+    $tpl1->SELECT_NOME = "produto";    
+    $tpl1->SELECT_AOTROCAR = " ";
     $tpl1->SELECT_OBRIGATORIO = " required ";
     $tpl1->SELECT_FOCO = "  ";
     $tpl1->SELECT_DESABILITADO = "  ";
+    $tpl1->SELECT_CLASSE = " width:200px; ";
     $tpl1->block("BLOCK_SELECT");
     $tpl1->block("BLOCK_ITEM");
 
     //Fornecedor
     $tpl1->TITULO = "Fornecedor";
+    $tpl1->SELECT_CLASSE = " width:210px; ";
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
     $tpl1->SELECT_NOME = "fornecedor";
@@ -592,6 +802,7 @@ if ($passo == 2) {
 
     //Lote
     $tpl1->TITULO = "Lote";
+    $tpl1->SELECT_CLASSE = " width:100px; ";
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
     $tpl1->SELECT_NOME = "lote";
@@ -610,6 +821,7 @@ if ($passo == 2) {
     $tpl1->TITULO = "Porção";
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
+    $tpl1->SELECT_CLASSE = " width:180px; ";
     $tpl1->SELECT_NOME = "porcao";
     $tpl1->SELECT_OBRIGATORIO = "  ";
     $tpl1->SELECT_FOCO = "  ";
@@ -848,7 +1060,7 @@ if ($passo == 2) {
     $tpl1->BOTAO_DESABILITADO = " disabled ";
     $tpl1->BOTAO_VALOR = "INCLUIR";
 } else {
-    $tpl1->block("BLOCK_FOCO");
+    //$tpl1->block("BLOCK_FOCO");
     $tpl1->BOTAO_VALOR = "CONTINUAR";
 }
 $tpl1->BOTAO_NOME = "botao_incluir";

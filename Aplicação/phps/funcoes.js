@@ -543,6 +543,7 @@ function valida_cnpj(cnpj) {
         return false;
 
     }
+    return true;
 
 //alert("CNPJ Valido!");
 

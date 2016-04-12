@@ -1,8 +1,18 @@
 
 $(window).load(function() {
 
-    //$("tr[id=linha_porcoes]").hide();
-    //$("tr[id=linha_porcoes_qtd]").hide();
+    document.forms["form1"].elements["id"].focus();
+    
+    $("input[id=cliente_nome]").hide();
+    tipopessoa=$("select[name=tipopessoa]").val();
+    if (tipopessoa==1) { //Se for novo registro, então o padrão é aparecer o cpf, pessoa fisica
+        $("input[id=cpf]").show();
+        $("input[id=cnpj]").hide();
+    } else if (passo=2) {
+        $("input[id=cnpj]").show();
+        $("input[id=cpf]").hide();
+    } 
+
 
     //Popular Produto    
     $.post("saidas_popula_produto.php", {}, function(valor) {
@@ -676,3 +686,129 @@ function porcoesqtd() {
     //
 
 }
+
+function seleciona_tipo_pessoa(valor) {
+    if (valor==1) {
+        $("input[id=cnpj]").hide();
+        $("input[id=cpf]").show();
+    } else if (valor==2){
+        $("input[id=cnpj]").show();
+        $("input[id=cpf]").hide();
+    } else {
+        alert("Erro de javascript: seleciona_tipo_pessoa");
+    }
+    //Popula consumidor conforme tipo de pessoa selecionado
+    $.post("saidas_popula_consumidor_tipopessoa.php", {
+        tipopessoa:valor
+        }, function(valor3) {
+            //alert(valor3);
+            $("select[name=consumidor]").html(valor3);
+    });
+}
+
+
+function verifica_cpf(valor) {
+
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("-", "");
+    valor = valor.replace(".", "");
+    valor = valor.replace(".", "");
+    valor = valor.replace(".", "");
+    if (valor.length == 11) {
+        if (valida_cpf(valor)) {
+            $.post("saidas_verifica_cpf.php", {
+                cpf: valor            
+            }, function(valor3) {
+                codigo_pessoa=valor3;
+                //alert(valor3);
+                if (valor3=="naocadastrado") {
+                    //alert("Cadastrar");
+                    $("select[name=consumidor]").hide();
+                    $("input[name=cliente_nome]").show();
+                    document.forms["form1"].cliente_nome.disabled = false;
+
+                } else {
+                    //alert("Selecionar");
+                    $("select[id=consumidor]").show();
+                    $("select[id=cliente_nome]").hide();
+                    document.forms["form1"].cliente_nome.disabled = true;
+                    select_selecionar("consumidor",codigo_pessoa);
+                }
+            });
+        }
+    } else {
+        $("select[id=consumidor]").show();
+        $("input[id=cliente_nome]").hide();
+        document.forms["form1"].cliente_nome.disabled = true;
+    }
+}
+
+
+function verifica_cnpj(valor) {
+    
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("_", "");
+    valor = valor.replace("-", "");
+    valor = valor.replace("-", "");
+    valor = valor.replace("-", "");
+    valor = valor.replace(".", "");
+    valor = valor.replace(".", "");
+    valor = valor.replace("/", "");
+    valor = valor.replace("-", "");
+    
+    if (valor.length == 14) {
+        //alert(valor);
+        if (valida_cnpj(valor)) {
+            //alert("valido");
+            $.post("saidas_verifica_cnpj.php", {
+                cnpj: valor            
+            }, function(valor3) {
+                codigo_pessoa=valor3;
+                //alert(valor3);
+                if (valor3=="naocadastrado") {
+                    //alert("Cadastrar");
+                    $("select[name=consumidor]").hide();
+                    $("input[name=cliente_nome]").show();
+                    document.forms["form1"].cliente_nome.disabled = false;
+                    document.getElementById("cliente_nome").focus(); 
+                    
+
+                } else {
+                    //alert("Selecionar");
+                    $("select[id=consumidor]").show();
+                    $("select[id=cliente_nome]").hide();
+                    document.forms["form1"].cliente_nome.disabled = true;
+                    select_selecionar("consumidor",codigo_pessoa);
+                }
+            });
+            
+        } else {
+            //alert("invalido");
+            
+        }
+    } else {
+        $("select[id=consumidor]").show();
+        $("input[id=cliente_nome]").hide();
+        document.forms["form1"].cliente_nome.disabled = true;
+    }
+}
+
