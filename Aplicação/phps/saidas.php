@@ -61,6 +61,8 @@ $filtro_fornecedor = $_POST["filtro_fornecedor"];
 $filtro_tipo = $_POST["filtro_tipo"];
 $filtro_lote = $_POST["filtro_lote"];
 $filtro_caixaoperacao = $_REQUEST["filtro_caixaoperacao"];
+$filtro_id = $_REQUEST["filtro_id"];
+$filtro_status = $_REQUEST["filtro_status"];
 $tpl->LINK_FILTRO = "saidas.php";
 $tpl->FORM_ONLOAD = "valida_filtro_saidas_numero()";
 
@@ -101,6 +103,8 @@ while ($dados = mysql_fetch_assoc($query)) {
         $tpl->SELECT_OPTION_SELECIONADO = " selected ";
     else
         $tpl->SELECT_OPTION_SELECIONADO = " ";
+    $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+    
 }
 $tpl->block("BLOCK_FILTRO_SELECT_OPTIONPADRAO");
 $tpl->block("BLOCK_FILTRO_SELECT");
@@ -110,7 +114,7 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 
 //Filtro Produto
 $tpl->CAMPO_TITULO = "Produto";
-$tpl->CAMPO_TAMANHO = "25";
+$tpl->CAMPO_TAMANHO = "20";
 $tpl->CAMPO_NOME = "filtro_produto";
 $tpl->CAMPO_VALOR = $filtro_produto;
 $tpl->CAMPO_QTD_CARACTERES = "";
@@ -151,7 +155,7 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 
 //Filtro Nº Lote
 $tpl->CAMPO_TITULO = "Nº Lote";
-$tpl->CAMPO_TAMANHO = "15";
+$tpl->CAMPO_TAMANHO = "10";
 $tpl->CAMPO_NOME = "filtro_lote";
 $tpl->CAMPO_VALOR = $filtro_lote;
 $tpl->CAMPO_QTD_CARACTERES = "";
@@ -162,7 +166,7 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 
 //Filtro Nº Operação Caixa
 $tpl->CAMPO_TITULO = "Nº Caixa Oper.";
-$tpl->CAMPO_TAMANHO = "15";
+$tpl->CAMPO_TAMANHO = "10";
 $tpl->CAMPO_NOME = "filtro_caixaoperacao";
 $tpl->CAMPO_VALOR = $filtro_caixaoperacao;
 $tpl->CAMPO_QTD_CARACTERES = "";
@@ -171,17 +175,61 @@ $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_ESPACO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
-
 //Filtro fim
 $tpl->block("BLOCK_FILTRO");
 
+//ID
+$tpl->CAMPO_TITULO = "ID (Comanda)";
+$tpl->CAMPO_TAMANHO = "10";
+$tpl->CAMPO_NOME = "filtro_id";
+$tpl->CAMPO_VALOR = $filtro_id;
+$tpl->CAMPO_QTD_CARACTERES = "";
+$tpl->CAMPO_ONKEYUP = "";
+$tpl->block("BLOCK_FILTRO_CAMPO");
+$tpl->block("BLOCK_FILTRO_ESPACO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
 
+//Filtro Status
+$tpl->SELECT_TITULO = "Status";
+$tpl->SELECT_NOME = "filtro_status";
+$tpl->SELECT_OBRIGATORIO = "";
+$tpl->block("BLOCK_FILTRO_SELECT_OPTIONPADRAO");
+if ($filtro_status=="") $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+else $tpl->SELECT_OPTION_SELECIONADO = "  ";
+
+$tpl->SELECT_OPTION_CODIGO = "1";
+$tpl->SELECT_OPTION_NOME = "Completas";
+if ($filtro_status == 1) $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+else $tpl->SELECT_OPTION_SELECIONADO = "  ";
+$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+$tpl->SELECT_OPTION_CODIGO = "2";
+$tpl->SELECT_OPTION_NOME = "Icompletas";
+if ($filtro_status == 2) $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+else $tpl->SELECT_OPTION_SELECIONADO = "  ";
+$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+$tpl->block("BLOCK_FILTRO_SELECT");
+$tpl->block("BLOCK_FILTRO_ESPACO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
+
+
+
+$tpl->block("BLOCK_FILTRO");
 
 //Inicio da tabela de listagem
-//Cabe�alho da lista
+
+//Cabeçalho da lista
+
+//Nº
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "Nº";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
+//Comanda ID
+$tpl->CABECALHO_COLUNA_TAMANHO = "";
+$tpl->CABECALHO_COLUNA_COLSPAN = "";
+$tpl->CABECALHO_COLUNA_NOME = "ID";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
@@ -267,9 +315,12 @@ if ($filtro_tipo <> "")
 if ($usuario_caixa_operacao <> "")
     $sql_filtro_caixa = " and sai_caixaoperacaonumero = $usuario_caixa_operacao ";
 if ($filtro_caixaoperacao <> "")
-    $filtro_caixaoperacao = " and sai_caixaoperacaonumero = $filtro_caixaoperacao ";
-
-$sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_fornecedor . " " . $filtro_caixaoperacao." ";
+    $sql_filtro_caixaoperacao = " and sai_caixaoperacaonumero = $filtro_caixaoperacao ";
+if ($filtro_id <> "")
+    $sql_filtro_id = " and sai_id = $filtro_id ";
+if ($filtro_status <> "")
+    $sql_filtro_status = " and sai_status = $filtro_status ";
+$sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_fornecedor . " " . $sql_filtro_caixaoperacao." ".$sql_filtro_id." ".$sql_filtro_status;
 
 
 
@@ -277,7 +328,7 @@ $sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_fil
 
 //SQL Principal das linhas
 $sql = "
-SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo,sai_usuarioquecadastrou,caiopo_operador, (SELECT pes_nome FROM pessoas p WHERE p.pes_codigo=sai_usuarioquecadastrou) as usuarioquecadastrou_nome
+SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo,sai_usuarioquecadastrou,caiopo_operador, (SELECT pes_nome FROM pessoas p WHERE p.pes_codigo=sai_usuarioquecadastrou) as usuarioquecadastrou_nome,sai_id
 FROM saidas 
 JOIN saidas_tipo on (sai_tipo=saitip_codigo) 
 left join saidas_produtos on (saipro_saida=sai_codigo)
@@ -341,6 +392,7 @@ if ($linhas == 0) {
         $usuarioquecadastrou_nome=$dados["usuarioquecadastrou_nome"];
         $caixaoperadornome = $dados["pes_nome"];
         $caixaoperadorresponsavel = $dados["caiopo_operador"];
+        $id = $dados["sai_id"];
 
         //Cor de fundo da linha
         if ($status == 2) {
@@ -366,6 +418,12 @@ if ($linhas == 0) {
         $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
         $tpl->LISTA_COLUNA_CLASSE = "";
         $tpl->LISTA_COLUNA_VALOR = $numero;
+        $tpl->block("BLOCK_LISTA_COLUNA");
+
+        //Coluna ID
+        $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
+        $tpl->LISTA_COLUNA_CLASSE = "";
+        $tpl->LISTA_COLUNA_VALOR = $id;
         $tpl->block("BLOCK_LISTA_COLUNA");
 
         //Coluna Data    
