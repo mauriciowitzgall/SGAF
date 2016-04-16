@@ -74,7 +74,7 @@ ADD COLUMN `saipro_porcao_quantidade` FLOAT NULL AFTER `saipro_porcao`;
 
 -- Fim da versão 3.4.1
 
--- Inicio versão 3.4.1+
+-- Inicio versão 3.5
 
 ALTER TABLE `pessoas` 
 CHANGE COLUMN `pes_cidade` `pes_cidade` MEDIUMINT(11) NULL ;
@@ -106,39 +106,28 @@ CREATE TABLE `produtos_subproduto` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `entradas_produtos` (
-  `entpro_entrada` bigint(20) NOT NULL,
-  `entpro_numero` smallint(4) NOT NULL AUTO_INCREMENT,
-  `entpro_produto` bigint(20) NOT NULL,
-  `entpro_quantidade` float NOT NULL,
-  `entpro_valorunitario` float NOT NULL,
-  `entpro_validade` date DEFAULT NULL,
-  `entpro_local` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `entpro_valtot` float NOT NULL,
-  `entpro_status` tinyint(1) NOT NULL,
-  `entpro_valunicusto` float DEFAULT NULL,
-  `entpro_valtotcusto` float DEFAULT NULL,
-  `entpro_retiradodoestoquesubprodutos` tinyint(1) NOT NULL DEFAULT '0',
-  `entpro_temsubprodutos` tinyint(1) NOT NULL,
-  PRIMARY KEY (`entpro_entrada`,`entpro_numero`),
-  KEY `entpro_entrada` (`entpro_entrada`),
-  KEY `entpro_produto` (`entpro_produto`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
-ALTER TABLE `entradas_produtos` 
-ADD COLUMN `entpro_retiradodoestoque` TINYINT(1) NOT NULL DEFAULT 0 AFTER `entpro_valtotcusto`;
-
-ALTER TABLE `entradas_produtos` 
-ADD COLUMN `entpro_desejaretirarsubprodutos` TINYINT(1) NULL DEFAULT NULL AFTER `entpro_retiradodoestoquesubprodutos`;
-ALTER TABLE `entradas_produtos` 
-CHANGE COLUMN `entpro_desejaretirarsubprodutos` `entpro_temsubprodutos` TINYINT(1) NOT NULL ;
+CREATE TABLE `entradas_subprodutos` (
+  `entsub_entrada` bigint(20) NOT NULL,
+  `entsub_item` int(11) NOT NULL,
+  `entsub_produto` bigint(20) NOT NULL,
+  `entsub_subproduto` bigint(20) NOT NULL,
+  `entsub_lote` bigint(20) NOT NULL,
+  `entsub_quantidade` float NOT NULL,
+  PRIMARY KEY (`entsub_entrada`,`entsub_produto`,`entsub_subproduto`,`entsub_lote`,`entsub_item`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `saidas` 
 ADD COLUMN `sai_id` INT(11) NULL AFTER `sai_usuarioquecadastrou`;
 
 UPDATE `grupo_permissoes` SET `gruper_pessoas_cadastrar_consumidores`='1' WHERE `gruper_codigo`='7';
 
-INSERT INTO `status` (`sta_codigo`, `sta_nome`) VALUES ('3', 'Cancelado');
+ALTER TABLE `entradas_produtos` 
+ADD COLUMN `entpro_retiradodoestoquesubprodutos` TINYINT(1) NOT NULL DEFAULT 0 AFTER `entpro_valtotcusto`;
 
-UPDATE `agape`.`configuracoes` SET `cnf_versao`='v3.5b' WHERE `cnf_codigo`='1';
+ALTER TABLE `entradas_produtos` 
+ADD COLUMN `entpro_temsubprodutos` TINYINT(1) NOT NULL DEFAULT 0 AFTER `entpro_retiradodoestoquesubprodutos`;
+
+UPDATE `configuracoes` SET `cnf_versao`='v3.5' WHERE `cnf_codigo`='1';
+
+
+-- FIM --

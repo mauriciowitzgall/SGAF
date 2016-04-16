@@ -1,6 +1,6 @@
 <?php 
 $hostname = "localhost";
-$db = "agape";
+$db = "agape_hml_35b";
 $user = "root";
 $pass = "";
 
