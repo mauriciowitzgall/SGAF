@@ -11,7 +11,7 @@
         verifica_incluir();
 
         tipneg= $("select[name=tiponegociacao]").val();
-        popula_tipopessoa(tipneg);
+        //popula_tipopessoa(tipneg);
     };
 
 function mascara_percent() {
@@ -124,6 +124,25 @@ function valida_produto() {
 function desabilita_campos() {
     //alert("entrou");
     var produto = $("select[name=produto]").val();
+    var produtocomposto = $("input[name=produtocomposto]").val();
+    //alert(produtocomposto);
+    
+    //Se tiver um produto composto na lista de itens, não pode mais selecionar um produto, pois só pode ter um produto composto por entrada
+    if (produtocomposto==1) {
+        document.forms["form1"].marca.disabled = true;
+        document.forms["form1"].produto.disabled = true;
+        document.forms["form1"].produtomanter.disabled = true;
+        $("input[name=produtomanter]").hide(); 
+        $("img[id=temprodutocompostoicone]").show(); 
+    } else {
+        document.forms["form1"].marca.disabled = false;
+        document.forms["form1"].produto.disabled = false;
+        document.forms["form1"].produtomanter.disabled = false;
+        $("input[name=produtomanter]").show(); 
+        $("img[id=temprodutocompostoicone]").hide(); 
+
+    }
+    
     if (produto != '') { 
         if (document.forms["form1"].qtd) { //se os campos existirem
             document.forms["form1"].qtd.disabled = false;
@@ -367,6 +386,8 @@ function limpa_item_validade (){
                     <!--  END BLOCK_OPTIONS_PRODUTO -->
                 </select>
                 <input type="checkbox" name="produtomanter" {PRODUTOMANTER_HABILITADO} class="css-checkbox" id="checkbox4"  title="Manter o produto selecionado">
+                <img  width="15px" name="temprodutocompostoicone" id="temprodutocompostoicone" src="../imagens/icones/geral/atencao.png"  title="Informação" alt="Informação" />
+                
             </td>
         </tr>
         <tr>
@@ -440,6 +461,9 @@ function limpa_item_validade (){
     <!--  BEGIN BLOCK_ENTER -->
     </br>
     <!--  END BLOCK_ENTER -->
+
+    <!-- Este campo oculto é necessário para desabilitar os selects  marca e produto quando o usuário ja tiver incluído um produto composto na lista, pois só pode ter um produto composto por entrada!   -->
+    <input type="hidden" name="produtocomposto" value="{PRODUTOCOMPOSTO}">
 
     <!--  BEGIN BLOCK_PASSO3 -->
     <table border="1" class="tabela1" cellpadding="4" width="100%">
@@ -577,7 +601,9 @@ function limpa_item_validade (){
     <input type="hidden" name="validade2" id="validade2" value="">
     <input type="hidden" name="temsubprodutos" id="temsubprodutos" value="">
 
+    
     <!-- BEGIN BLOCK_BOTOES -->
+    <input type="hidden" name="subproduto_incluso" id="subproduto_incluso" value="{SUBPRODUTO_INCLUSO}">
     <table border="0">
         <tr class="">
             <td width="100%" align="left">

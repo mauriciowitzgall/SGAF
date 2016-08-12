@@ -22,7 +22,7 @@ while($array = mysql_fetch_array($query))
 <script type="text/javascript" src="js/capitular.js"></script>
 <table summary="" class="tabela1" border="0">
 <tr>
-	<td width="35px"><img width="50px" src="<?php echo $icones;?>produtos.png" alt="" ></td>
+	<td width="35px"><img width="50px" src="<?php echo $icones;?>categorias.png" alt="" ></td>
 	<td valign="bottom">
 		<label class="titulo" > CATEGORIAS</label><br />
 		<label class="subtitulo"> CADASTRO/EDIÇÃO</label>

@@ -419,7 +419,11 @@ if ($passo != "") {
 		ent_codigo=$entrada
         ORDER BY 
                 entpro_numero DESC
-	";
+    ";
+    
+    
+    
+    
     if ($passo == "3") {
 
         //Verifica se será feita um exclusão da lista ou inclusào
@@ -641,7 +645,15 @@ if ($passo != "") {
     $tpl->block("BLOCK_ENTER");
     $tpl->block("BLOCK_HR");
 
+    
+    
+    $sql_temprocomp="SELECT DISTINCT entpro_entrada FROM entradas_produtos WHERE entpro_entrada=$entrada and entpro_temsubprodutos=1";
+    $query_temprocomp = mysql_query($sql_temprocomp); if (!$query_temprocomp)  die("Erro de SQL temprocomp:" . mysql_error());
+    $linhas_temprocomp= mysql_num_rows($query_temprocomp);
 
+    $tpl->PRODUTOCOMPOSTO="$linhas_temprocomp";
+    
+    
     //Lista de produtos
     $tpl->ENTRADA = $entrada;
     IF ($tiponegociacao == 2) {
@@ -667,7 +679,7 @@ if ($passo != "") {
                 $tpl->ENTRADAS_PRODUTO_NOME = $dados[0];
                 //$tpl->ENTRADAS_LOCAL = $dados[6];
                 $tpl->SIGLA = $dados["protip_sigla"];
-                if ($dados["protip_sigla"] == "kg.")
+                if (($dados["protip_sigla"] == "kg.")||($dados["protip_sigla"] == "lt."))
                     $tpl->ENTRADAS_QTD = number_format($dados[2], 3, ',', '.');
                 else
                     $tpl->ENTRADAS_QTD = number_format($dados[2], 0, ',', '.');

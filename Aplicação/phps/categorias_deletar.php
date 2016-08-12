@@ -13,10 +13,10 @@ $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "CATEGORIAS";
 $tpl_titulo->SUBTITULO = "DELETAR/APAGAR";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "locais.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "categorias.png";
 $tpl_titulo->show();
 
-//Inicio da exclusão de entradas
+//Inicio da exclusï¿½o de entradas
 $codigo = $_GET["codigo"];
 
 //Verifica se o item a ser excluido esta sendo referenciado em outras tabelas

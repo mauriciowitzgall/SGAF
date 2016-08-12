@@ -131,3 +131,9 @@ UPDATE `configuracoes` SET `cnf_versao`='v3.5' WHERE `cnf_codigo`='1';
 
 
 -- FIM --
+
+-- Inicio versão 3.6b
+
+INSERT INTO `agape_hml_35b`.`produtos_recipientes` (`prorec_codigo`, `prorec_nome`) VALUES ('15', 'Frasco');
+INSERT INTO `agape_hml_35b`.`produtos_recipientes` (`prorec_codigo`, `prorec_nome`) VALUES ('16', 'Vidrinho');
+INSERT INTO `agape_hml_35b`.`produtos_recipientes` (`prorec_codigo`, `prorec_nome`) VALUES ('17', 'Saquinho');

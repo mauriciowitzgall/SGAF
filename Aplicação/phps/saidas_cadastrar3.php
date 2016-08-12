@@ -27,9 +27,9 @@ $tipo = $dados_f["sai_tipo"];
 
 
 $valbru=$_REQUEST["valbru2"];
-$valbru = str_replace("R$ ","",$valbru);
-$valbru = str_replace(".","",$valbru);
-$valbru = str_replace(",",".",$valbru);
+//$valbru = str_replace("R$ ","",$valbru);
+//$valbru = str_replace(".","",$valbru);
+//$valbru = str_replace(",",".",$valbru);
 
 
 

@@ -709,7 +709,7 @@ if ($passo == 2) {
     $linhas4 = mysql_num_rows($query4);
     //print_r($_REQUEST);
     
-    if (($linhas4>0)&&($operacao==1)) { 
+    if (($linhas4>0)&&($operacao==1)&&($consumidor<>0)) { 
         $tpl = new Template("templates/notificacao.html");
         $tpl->ICONES = $icones;
         //$tpl->MOTIVO_COMPLEMENTO = "";

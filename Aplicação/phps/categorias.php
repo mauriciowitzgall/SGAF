@@ -12,7 +12,7 @@ $modal=$_GET["modal"];
 <script type="text/javascript" src="paginacao.js"></script>
 <table summary="" class="" border="0">
 <tr>
-	<td width="35px"><img width="50px" src="<?php echo $icones;?>produtos.png" alt="" ></td>
+	<td width="35px"><img width="50px" src="<?php echo $icones;?>categorias.png" alt="" ></td>
 	<td valign="bottom">
 		<label class="titulo" > CATEGORIAS</label><br />
 		<label class="subtitulo"> PESQUISA/LISTAGEM </label>
