@@ -268,11 +268,11 @@ if ($linhas == 0) {
                 if (!$query2)
                     die("ERRO SQL:" . mysql_error());
                 while ($dados2 = mysql_fetch_assoc($query2)) {
-                    $tipo = $dados2["mesprotip_tipo"];
+                    $tiponeg = $dados2["mesprotip_tipo"];
                     //echo "($tipo)";
-                    if ($tipo == 1)
+                    if ($tiponeg == 1)
                         $consignacao_marcado = "checked";
-                    if ($tipo == 2)
+                    if ($tiponeg == 2)
                         $revenda_marcado = "checked";
                 }
             }
