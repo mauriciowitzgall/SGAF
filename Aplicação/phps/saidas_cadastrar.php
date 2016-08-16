@@ -708,7 +708,7 @@ if ($passo == 2) {
     //Verifica se o consumidor possui vendas incompleta
     if ($consumidor!="") { // Se for uma devolução, então não realizar essa verificação
         
-        echo $sql4="SELECT * from saidas  WHERE sai_status=2 and sai_consumidor= $consumidor and sai_codigo not in ($saida)";
+        $sql4="SELECT * from saidas  WHERE sai_status=2 and sai_consumidor= $consumidor and sai_codigo not in ($saida)";
         if (!$query4 = mysql_query($sql4)) die("Erro 4:" . mysql_error());
         $linhas4 = mysql_num_rows($query4);
 
