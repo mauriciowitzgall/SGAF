@@ -458,6 +458,7 @@ if (($saida == 0) && ($passo == 2)) {
 
     }
     
+    if ($id=="") $id=0;
     
     $sql_saida = "
     INSERT INTO
@@ -703,40 +704,44 @@ if ($tiposaida == 3) {
 
 if ($passo == 2) {
     
+   
     //Verifica se o consumidor possui vendas incompleta
-    $sql4="SELECT * from saidas  WHERE sai_status=2 and sai_consumidor= $consumidor and sai_codigo not in ($saida)";
-    if (!$query4 = mysql_query($sql4)) die("Erro 4:" . mysql_error());
-    $linhas4 = mysql_num_rows($query4);
-    //print_r($_REQUEST);
-    
-    if (($linhas4>0)&&($operacao==1)&&($consumidor<>0)) { 
-        $tpl = new Template("templates/notificacao.html");
-        $tpl->ICONES = $icones;
-        //$tpl->MOTIVO_COMPLEMENTO = "";
-        $tpl->block("BLOCK_ATENCAO");
-        $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=2&tiposaida=1";
-        $vendas_incompletas="<br> <i>";
-        while ($dados4=  mysql_fetch_assoc($query4)) {
-            $vendainc_codigo=$dados4["sai_codigo"];
-            $vendainc_data=  converte_data($dados4["sai_datacadastro"]);
-            $vendainc_hora=  converte_hora($dados4["sai_horacadastro"]);
-            $vendas_incompletas=$vendas_incompletas."Nº $vendainc_codigo, Data: $vendainc_data $vendainc_hora<br>";
+    if ($consumidor!="") { // Se for uma devolução, então não realizar essa verificação
+        
+        echo $sql4="SELECT * from saidas  WHERE sai_status=2 and sai_consumidor= $consumidor and sai_codigo not in ($saida)";
+        if (!$query4 = mysql_query($sql4)) die("Erro 4:" . mysql_error());
+        $linhas4 = mysql_num_rows($query4);
+
+        //print_r($_REQUEST);
+
+        if (($linhas4>0)&&($operacao==1)&&($consumidor<>0)) { 
+            $tpl = new Template("templates/notificacao.html");
+            $tpl->ICONES = $icones;
+            //$tpl->MOTIVO_COMPLEMENTO = "";
+            $tpl->block("BLOCK_ATENCAO");
+            $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=2&tiposaida=1";
+            $vendas_incompletas="<br> <i>";
+            while ($dados4=  mysql_fetch_assoc($query4)) {
+                $vendainc_codigo=$dados4["sai_codigo"];
+                $vendainc_data=  converte_data($dados4["sai_datacadastro"]);
+                $vendainc_hora=  converte_hora($dados4["sai_horacadastro"]);
+                $vendas_incompletas=$vendas_incompletas."Nº $vendainc_codigo, Data: $vendainc_data $vendainc_hora<br>";
+            }
+            $vendas_incompletas=$vendas_incompletas."</i><br>";
+            $tpl->MOTIVO = "
+                Este consumidor possui vendas incompletas!<br>
+                $vendas_incompletas
+            ";
+            $tpl->block("BLOCK_MOTIVO");
+            $tpl->PERGUNTA = "Deseja continuar assim mesmo?";
+            $tpl->block("BLOCK_PERGUNTA");
+            $tpl->NAO_LINK = "saidas.php";
+            $tpl->block("BLOCK_BOTAO_NAO_LINK");
+            $tpl->block("BLOCK_BOTAO_SIMNAO");
+            $tpl->show();
+            exit;
         }
-        $vendas_incompletas=$vendas_incompletas."</i><br>";
-        $tpl->MOTIVO = "
-            Este consumidor possui vendas incompletas!<br>
-            $vendas_incompletas
-        ";
-        $tpl->block("BLOCK_MOTIVO");
-        $tpl->PERGUNTA = "Deseja continuar assim mesmo?";
-        $tpl->block("BLOCK_PERGUNTA");
-        $tpl->NAO_LINK = "saidas.php";
-        $tpl->block("BLOCK_BOTAO_NAO_LINK");
-        $tpl->block("BLOCK_BOTAO_SIMNAO");
-        $tpl->show();
-        exit;
     }
-    
 
     //Etiqueta
     $tpl1->CAMPO_QTD_CARACTERES = "14";

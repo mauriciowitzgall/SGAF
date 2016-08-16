@@ -1,7 +1,11 @@
 
 $(window).load(function() {
 
-    document.forms["form1"].elements["id"].focus();
+
+
+    if (document.forms["form1"].elements["id"]) {
+        document.forms["form1"].elements["id"].focus();
+    }
     
     $("input[id=cliente_nome]").hide();
     tipopessoa=$("select[name=tipopessoa]").val();
