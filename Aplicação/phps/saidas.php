@@ -63,6 +63,7 @@ $filtro_lote = $_POST["filtro_lote"];
 $filtro_caixaoperacao = $_REQUEST["filtro_caixaoperacao"];
 $filtro_id = $_REQUEST["filtro_id"];
 $filtro_status = $_REQUEST["filtro_status"];
+$filtro_areceber = $_REQUEST["filtro_areceber"];
 $tpl->LINK_FILTRO = "saidas.php";
 $tpl->FORM_ONLOAD = "valida_filtro_saidas_numero()";
 
@@ -212,6 +213,39 @@ $tpl->block("BLOCK_FILTRO_ESPACO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
 
+//Filtro A receber Caderninho
+$tpl->SELECT_TITULO = "À receber";
+$tpl->SELECT_NOME = "filtro_areceber";
+$tpl->SELECT_OBRIGATORIO = "";
+
+if ($filtro_areceber=="") {
+    $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+} else {
+    $tpl->SELECT_OPTION_SELECIONADO = "";
+}
+$tpl->block("BLOCK_FILTRO_SELECT_OPTIONPADRAO");
+
+$tpl->SELECT_OPTION_CODIGO = "1";
+$tpl->SELECT_OPTION_NOME = "Sim";
+if ($filtro_areceber == 1) {
+    $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+} else { 
+    $tpl->SELECT_OPTION_SELECIONADO = "";
+}
+$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+
+$tpl->SELECT_OPTION_CODIGO = "0";
+$tpl->SELECT_OPTION_NOME = "Não";
+if ($filtro_areceber == '0') {
+    $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+} else { 
+    $tpl->SELECT_OPTION_SELECIONADO = "";
+}
+$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+
+$tpl->block("BLOCK_FILTRO_SELECT");
+$tpl->block("BLOCK_FILTRO_ESPACO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
 
 
 $tpl->block("BLOCK_FILTRO");
@@ -242,18 +276,19 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "CONSUMIDOR";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-
+/*
 $tpl->CABECALHO_COLUNA_TAMANHO = "50px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "QTD. PROD.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
+*/
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "50px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "ITENS";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-$tpl->CABECALHO_COLUNA_TAMANHO = "";
+$tpl->CABECALHO_COLUNA_TAMANHO = "70px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "TOTAL";
 $tpl->block("BLOCK_LISTA_CABECALHO");
@@ -263,7 +298,7 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 //$tpl->CABECALHO_COLUNA_NOME = "TOTAL BRUTO";
 //$tpl->block("BLOCK_LISTA_CABECALHO");
 
-$tpl->CABECALHO_COLUNA_TAMANHO = "";
+$tpl->CABECALHO_COLUNA_TAMANHO = "70px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "DESC.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
@@ -320,10 +355,9 @@ if ($filtro_id <> "")
     $sql_filtro_id = " and sai_id = $filtro_id ";
 if ($filtro_status <> "")
     $sql_filtro_status = " and sai_status = $filtro_status ";
-$sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_fornecedor . " " . $sql_filtro_caixaoperacao." ".$sql_filtro_id." ".$sql_filtro_status;
-
-
-
+if ($filtro_areceber <> "")
+    $sql_filtro_areceber = " and sai_areceber = $filtro_areceber ";
+$sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_fornecedor . " " . $sql_filtro_caixaoperacao." ".$sql_filtro_id." ".$sql_filtro_status. " ".$sql_filtro_areceber;
 
 
 //SQL Principal das linhas
@@ -383,6 +417,7 @@ if ($linhas == 0) {
         $valorliquido = $dados["sai_totalliquido"];
         $valorbruto = $dados["sai_totalbruto"];
         $status = $dados["sai_status"];
+        $areceber = $dados["sai_areceber"];
         $metodopag = $dados["sai_metpag"];
         $areceber = $dados["sai_areceber"];
         $caixa = $dados["cai_codigo"];
@@ -455,7 +490,7 @@ if ($linhas == 0) {
         }
         $tpl->block("BLOCK_LISTA_COLUNA");
 
-        
+        /*
         //Coluna Quantidade Produtos
         $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
         $tpl->LISTA_COLUNA_CLASSE = "";
@@ -465,6 +500,7 @@ if ($linhas == 0) {
             die("Erro: " . mysql_error());
         $tpl->LISTA_COLUNA_VALOR = "(" . mysql_num_rows($query3) . ")";
         $tpl->block("BLOCK_LISTA_COLUNA");
+        */
 
         //Coluna Quantidade Itens
         $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
@@ -519,7 +555,6 @@ if ($linhas == 0) {
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE2");
             
         }
-        
         
         
         //Metodo de pagamento
