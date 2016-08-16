@@ -59,6 +59,7 @@ if ($retirar_produto == '1') {
     $lote = $_GET["lote"];
     $qtd = $_GET["qtd"];
     $produto = $_GET["produto"];
+    $tipopessoa = $_GET["tipopessoa"];
 } else { 
     if ($operacao == 2) { // Se for edição pega os dados principais da venda para popular campos
         $saida = $_GET["codigo"];
@@ -1031,6 +1032,7 @@ if ($passo == 2) {
             $tpl1->block("BLOCK_LISTA_PORCAO_LINHA");
             $tpl1->LISTA_VALUNI = "R$ " . number_format($dados_lista["saipro_valorunitario"], 2, ',', '.');
             $tpl1->LISTA_VALTOT = "R$ " . number_format($dados_lista["saipro_valortotal"], 2, ',', '.');
+            $tpl1->LISTA_TIPOPESSOA = $tipopessoa;
 
             $total = $dados_lista["saipro_valortotal"];
             $total_geral = $total_geral + $total;
