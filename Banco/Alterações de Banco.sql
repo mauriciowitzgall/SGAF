@@ -134,6 +134,12 @@ UPDATE `configuracoes` SET `cnf_versao`='v3.5' WHERE `cnf_codigo`='1';
 
 -- Inicio versão 3.6b
 
-INSERT INTO `agape_hml_35b`.`produtos_recipientes` (`prorec_codigo`, `prorec_nome`) VALUES ('15', 'Frasco');
-INSERT INTO `agape_hml_35b`.`produtos_recipientes` (`prorec_codigo`, `prorec_nome`) VALUES ('16', 'Vidrinho');
-INSERT INTO `agape_hml_35b`.`produtos_recipientes` (`prorec_codigo`, `prorec_nome`) VALUES ('17', 'Saquinho');
+INSERT INTO `produtos_recipientes` (`prorec_codigo`, `prorec_nome`) VALUES ('15', 'Frasco');
+INSERT INTO `produtos_recipientes` (`prorec_codigo`, `prorec_nome`) VALUES ('16', 'Vidrinho');
+INSERT INTO `produtos_recipientes` (`prorec_codigo`, `prorec_nome`) VALUES ('17', 'Saquinho');
+
+ALTER TABLE `produtos` 
+ADD COLUMN `pro_tamanho` VARCHAR(70) NULL DEFAULT NULL AFTER `pro_podesersubproduto`,
+ADD COLUMN `pro_cor` VARCHAR(70) NULL DEFAULT NULL AFTER `pro_tamanho`,
+ADD COLUMN `pro_referencia` VARCHAR(100) NULL DEFAULT NULL AFTER `pro_cor`;
+

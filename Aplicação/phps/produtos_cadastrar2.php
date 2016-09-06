@@ -21,7 +21,9 @@ $volume = $_POST['volume'];
 $composicao = $_POST['composicao'];
 $industrializado = $_POST['industrializado'];
 $subproduto = $_POST['subproduto'];
-
+$tamanho = $_POST['tamanho'];
+$cor = $_POST['cor'];
+$referencia = $_POST['referencia'];
 $categoria = $_POST['categoria'];
 $descricao = $_POST['descricao'];
 $tiponegociacao = $_POST['box'];
@@ -77,8 +79,8 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     */
     
     $idunico=  uniqid();
-    $sql = "INSERT INTO produtos (pro_nome,pro_tipocontagem,pro_categoria,pro_descricao,pro_datacriacao,pro_horacriacao,pro_cooperativa,pro_volume,pro_marca,pro_recipiente,pro_composicao,pro_codigounico,pro_idunico,pro_industrializado,pro_usuarioquecadastrou,pro_quiosquequecadastrou,pro_podesersubproduto)
-    VALUES ('$nome','$tipo','$categoria','$descricao','$data','$hora',$usuario_cooperativa,'$volume','$marca','$recipiente','$composicao','$codigounico','$idunico','$industrializado','$usuario_codigo','$usuario_quiosque','$subproduto');";
+    $sql = "INSERT INTO produtos (pro_nome,pro_tipocontagem,pro_categoria,pro_descricao,pro_datacriacao,pro_horacriacao,pro_cooperativa,pro_volume,pro_marca,pro_recipiente,pro_composicao,pro_codigounico,pro_idunico,pro_industrializado,pro_usuarioquecadastrou,pro_quiosquequecadastrou,pro_tamanho,pro_cor,pro_referencia,pro_podesersubproduto)
+    VALUES ('$nome','$tipo','$categoria','$descricao','$data','$hora',$usuario_cooperativa,'$volume','$marca','$recipiente','$composicao','$codigounico','$idunico','$industrializado','$usuario_codigo','$usuario_quiosque','$tamanho','$cor','$referencia','$subproduto');";
     $query = mysql_query($sql);
     if (!$query)
         die("Erro22: " . mysql_error());
@@ -144,6 +146,9 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
 	pro_recipiente='$recipiente',
 	pro_composicao='$composicao',
 	pro_codigounico='$codigounico',
+	pro_tamanho='$tamanho',
+	pro_cor='$cor',
+	pro_referencia='$referencia',
 	pro_podesersubproduto='$subproduto'
 	WHERE pro_codigo = '$codigo'
     ";

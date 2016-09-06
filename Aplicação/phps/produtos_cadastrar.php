@@ -31,6 +31,9 @@ while ($array = mysql_fetch_array($query)) {
     $codigounico = $array['pro_codigounico'];
     $industrializado = $array['pro_industrializado'];
     $subproduto=$array['pro_podesersubproduto'];
+    $tamanho=$array['pro_tamanho'];
+    $cor=$array['pro_cor'];
+    $referencia=$array['pro_referencia'];
     if ($subproduto=="") $subproduto=0;
 }
 
@@ -187,7 +190,7 @@ if ($linhas == 0) {
         
        <tr id="id_volume">
             <td align="right" width="200px"><b>Volume: <label class="obrigatorio"></label></b></td>
-            <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="volume"  size="15" class="campopadrao"  value="<?php echo "$volume"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo">Ex: 150g ou 200ml</span></td>
+            <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="volume"  size="15" class="campopadrao"  value="<?php echo "$volume"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"> Ex: 150g ou 200ml</span></td>
         </tr>
         <tr id="id_recipiente">
             <td align="right" width="200px"><b>Recipiente / Embalagem: <label class="obrigatorio"></label></b></td>
@@ -212,31 +215,19 @@ if ($linhas == 0) {
                 </select>
             </td>
         </tr>
-       
-        <tr>
-            <td align="right" width="200px"><b>Categoria: <label class="obrigatorio"></label></b></td>
-            <td align="left" valign="bottom">
-                <select name="categoria" class="campopadrao" required="required" <?php if ($ver == 1) echo" disabled "; ?> >
-                    <option value="">Selecione</option>		
-                    <?php
-                    $sql1 = "SELECT * FROM produtos_categorias WHERE cat_cooperativa=$usuario_cooperativa ORDER BY cat_nome";
-                    $query1 = mysql_query($sql1);
-                    while ($array1 = mysql_fetch_array($query1)) {
-                        ?><option value="<?php echo"$array1[0]"; ?>" <?php
-                    if ($array1[0] == $categoria) {
-                        echo "selected ";
-                    }
-                        ?> ><?php echo"$array1[1]"; ?></option><?php
-                        }
-                    ?>
-                </select>
-                <a class="link" href="#"><img id="atualizar_categoria" src="../imagens/icones/geral/atualizar.png" width="12px" onclick="atualiza_categorias()"></a>
-                <a href="categorias_cadastrar.php?modal=1" target="_blank" class="link">
-                    <img id="atualizar_categoria" src="../imagens/icones/geral/add.png" width="12px">
-                </a>
-                
-            </td>
+       <tr id="id_tamanho">
+            <td align="right" width="200px"><b>Tamanho: <label class="obrigatorio"></label></b></td>
+            <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="tamanho"  size="12" class="campopadrao"  value="<?php echo "$tamanho"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"> Ex: P, M, 44, 46, 10x20cm</span></td>
         </tr>
+       <tr id="id_cor">
+            <td align="right" width="200px"><b>Cor: <label class="obrigatorio"></label></b></td>
+            <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="cor"  size="18" class="campopadrao"  value="<?php echo "$cor"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"> Ex: Amarelo, Branco com listras pretas... (Use sempre cores no masculino!)</span></td>
+        </tr>
+       <tr id="id_referencia">
+            <td align="right" width="200px"><b>Referência: <label class="obrigatorio"></label></b></td>
+            <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="referencia"  size="35" class="campopadrao"  value="<?php echo "$referencia"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"> Qualquer coisa! Ex: o nome de uma empresa</span></td>
+        </tr>
+        
         <tr>
             <td align="right" width="200px"><b>Composição / Ingredientes:</b></td>
             <td align="left" width=""><textarea class="textarea1" cols="55" name="composicao" <?php if ($ver == 1) echo" disabled "; ?> ><?php echo "$composicao"; ?></textarea></td>
@@ -307,9 +298,32 @@ if ($linhas == 0) {
                 <?php } ?>
             </td>        
         </tr>
-
         <tr>
-            <td align="right" width="200px"><b>Sub-produto: <label class="obrigatorio"></label></b></td>
+            <td align="right" width="200px"><b>Categoria: <label class="obrigatorio"></label></b></td>
+            <td align="left" valign="bottom">
+                <select name="categoria" class="campopadrao" required="required" <?php if ($ver == 1) echo" disabled "; ?> >
+                    <option value="">Selecione</option>		
+                    <?php
+                    $sql1 = "SELECT * FROM produtos_categorias WHERE cat_cooperativa=$usuario_cooperativa ORDER BY cat_nome";
+                    $query1 = mysql_query($sql1);
+                    while ($array1 = mysql_fetch_array($query1)) {
+                        ?><option value="<?php echo"$array1[0]"; ?>" <?php
+                    if ($array1[0] == $categoria) {
+                        echo "selected ";
+                    }
+                        ?> ><?php echo"$array1[1]"; ?></option><?php
+                        }
+                    ?>
+                </select>
+                <a class="link" href="#"><img id="atualizar_categoria" src="../imagens/icones/geral/atualizar.png" width="12px" onclick="atualiza_categorias()"></a>
+                <a href="categorias_cadastrar.php?modal=1" target="_blank" class="link">
+                    <img id="atualizar_categoria" src="../imagens/icones/geral/add.png" width="12px">
+                </a>
+                
+            </td>
+        </tr>
+        <tr>
+            <td align="right" width="200px"><b>Sub-produto / Matéria-Prima: <label class="obrigatorio"></label></b></td>
             <td align="left" valign="bottom">
                 <select name="subproduto" class="campopadrao" required="required" <?php if ($ver == 1) echo" disabled "; ?> >
                     <option value="0" <?php if ($subproduto==0) echo "selected"; else echo ""; ?>>Não</option>		

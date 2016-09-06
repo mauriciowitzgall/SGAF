@@ -30,6 +30,10 @@ $filtrocodigo = $_POST['filtrocodigo'];
 $filtronome = $_POST['filtronome'];
 $filtrocategoria = $_POST['filtrocategoria'];
 $filtromarca = $_POST['filtromarca'];
+$filtrotamanho = $_POST['filtrotamanho'];
+$filtrocor = $_POST['filtrocor'];
+$filtroreferencia = $_POST['filtroreferencia'];
+$filtrodescricao = $_POST['filtrodescricao'];
 $filtroproprio = $_POST['filtroproprio'];
 if ($filtroproprio=="") $filtroproprio=1;
 ?>
@@ -37,12 +41,25 @@ if ($filtroproprio=="") $filtroproprio=1;
     <table summary="" class="tabelafiltro" border="0">
         <tr>
             <td><b>&nbsp;Código:</b><br>
-                <input size="25" type="number" name="filtrocodigo" class="campopadrao" value="<?php echo "$filtrocodigo"; ?>"></td>
+                <input size="10"  type="text" name="filtrocodigo" class="campopadrao" value="<?php echo "$filtrocodigo"; ?>"></td>
             <td width="15px"></td>
             <td><b>&nbsp;Nome:</b><br><input size="25" type="text" name="filtronome" class="campopadrao" value="<?php echo "$filtronome"; ?>"></td>
             <td width="15px"></td>
-            <td><b>&nbsp;Marca:</b><br><input size="15" type="text" name="filtromarca" class="campopadrao" value="<?php echo "$filtromarca"; ?>"></td>
+            <td><b>&nbsp;Marca:</b><br><input size="25" type="text" name="filtromarca" class="campopadrao" value="<?php echo "$filtromarca"; ?>"></td>
             <td width="15px"></td>
+            <td><b>&nbsp;Tamanho:</b><br><input size="12" type="text" name="filtrotamanho" class="campopadrao" value="<?php echo "$filtrotamanho"; ?>"></td>
+            <td width="15px"></td>
+            <td><b>&nbsp;Cor:</b><br><input size="18" type="text" name="filtrocor" class="campopadrao" value="<?php echo "$filtrocor"; ?>"></td>
+            <td width="15px"></td>
+            <td><b>&nbsp;Referência:</b><br><input size="30" type="text" name="filtroreferencia" class="campopadrao" value="<?php echo "$filtroreferencia"; ?>"></td>
+            <td width="15px"></td>
+        </tr>
+    </table><br>
+    <table summary="" class="tabelafiltro" border="0">
+        <tr>
+            <td><b>&nbsp;Descrição:</b><br><input size="30" type="text" name="filtrodescricao" class="campopadrao" value="<?php echo "$filtrodescricao"; ?>"></td>
+            <td width="15px"></td>
+            
             <td><b>&nbsp;Categoria:</b><br>
                 <select name="filtrocategoria" class="campopadrao" >
                     <option value="" >Todos</option> 
@@ -98,6 +115,14 @@ if ($filtroproprio=="") $filtroproprio=1;
         $sql_filtro = $sql_filtro . " and pro_categoria = $filtrocategoria";
     if ($filtromarca != "")
         $sql_filtro = $sql_filtro . " and pro_marca like '%$filtromarca%'";
+    if ($filtrotamanho != "")
+        $sql_filtro = $sql_filtro . " and pro_tamanho like '%$filtrotamanho%'";
+    if ($filtrocor != "")
+        $sql_filtro = $sql_filtro . " and pro_cor like '%$filtrocor%'";
+    if ($filtroreferencia != "")
+        $sql_filtro = $sql_filtro . " and pro_referencia like '%$filtroreferencia%'";
+    if ($filtrodescricao != "")
+        $sql_filtro = $sql_filtro . " and pro_descricao like '%$filtrodescricao%'";
     if ($filtroproprio==1) $sql_filtro.=" and pro_quiosquequecadastrou=$usuario_quiosque ";
 
     $sql = "
