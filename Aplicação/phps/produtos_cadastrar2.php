@@ -113,6 +113,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     
 } else { //Caso seja uma alteração de um registro fazer isso
     //Verifica se j� existe registros com o mesmo nome    
+    /*
     $sql = "SELECT * FROM produtos WHERE pro_nome='$nome' and pro_cooperativa=$usuario_cooperativa";
     $query = mysql_query($sql);
     if (!$query)
@@ -132,54 +133,56 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         $tpl_notificacao->block("BLOCK_MOTIVO_JAEXISTE");
         $tpl_notificacao->block("BLOCK_BOTAO_VOLTAR");
         $tpl_notificacao->show();
-    } else {
-        $sql = "UPDATE produtos SET 
-	pro_nome='$nome',
-	pro_tipocontagem='$tipo',
-	pro_categoria='$categoria',
-	pro_descricao='$descricao',
-	pro_dataedicao='$data',
-	pro_horaedicao='$hora',
-	pro_cooperativa='$usuario_cooperativa',
-	pro_volume='$volume',
-	pro_marca='$marca',
-	pro_recipiente='$recipiente',
-	pro_composicao='$composicao',
-	pro_codigounico='$codigounico',
-	pro_tamanho='$tamanho',
-	pro_cor='$cor',
-	pro_referencia='$referencia',
-	pro_podesersubproduto='$subproduto'
-	WHERE pro_codigo = '$codigo'
+    } else { 
+    
+    */
+    $sql = "UPDATE produtos SET 
+    pro_nome='$nome',
+    pro_tipocontagem='$tipo',
+    pro_categoria='$categoria',
+    pro_descricao='$descricao',
+    pro_dataedicao='$data',
+    pro_horaedicao='$hora',
+    pro_cooperativa='$usuario_cooperativa',
+    pro_volume='$volume',
+    pro_marca='$marca',
+    pro_recipiente='$recipiente',
+    pro_composicao='$composicao',
+    pro_codigounico='$codigounico',
+    pro_tamanho='$tamanho',
+    pro_cor='$cor',
+    pro_referencia='$referencia',
+    pro_podesersubproduto='$subproduto'
+    WHERE pro_codigo = '$codigo'
     ";
-        if (!mysql_query($sql))
-            die("Erro: " . mysql_error());
-//Deleta os tipos de negociação para depois incluir de novo no novo formato
-        $sqldel = " DELETE FROM mestre_produtos_tipo WHERE mesprotip_produto='$codigo'";
-        if (!mysql_query($sqldel))
-            die("Erro9: " . mysql_error());
-        foreach ($tiponegociacao as $tiponegociacao) {
-            $sql2 = "
-            INSERT INTO mestre_produtos_tipo (
-                mesprotip_produto,
-                mesprotip_tipo
-            ) VALUES (
-                '$codigo',
-                '$tiponegociacao'
-            )";
-            if (!mysql_query($sql2))
-                die("Erro78: " . mysql_error());
-        }
-
-        $tpl_notificacao = new Template("templates/notificacao.html");
-        $tpl_notificacao->ICONES = $icones;
-        $tpl_notificacao->MOTIVO_COMPLEMENTO = "";
-        $tpl_notificacao->DESTINO = "produtos.php";
-        $tpl_notificacao->block("BLOCK_CONFIRMAR");
-        $tpl_notificacao->block("BLOCK_EDITADO");
-        $tpl_notificacao->block("BLOCK_BOTAO");
-        $tpl_notificacao->show();
+    if (!mysql_query($sql))
+        die("Erro: " . mysql_error());
+    //Deleta os tipos de negociação para depois incluir de novo no novo formato
+    $sqldel = " DELETE FROM mestre_produtos_tipo WHERE mesprotip_produto='$codigo'";
+    if (!mysql_query($sqldel))
+        die("Erro9: " . mysql_error());
+    foreach ($tiponegociacao as $tiponegociacao) {
+        $sql2 = "
+        INSERT INTO mestre_produtos_tipo (
+            mesprotip_produto,
+            mesprotip_tipo
+        ) VALUES (
+            '$codigo',
+            '$tiponegociacao'
+        )";
+        if (!mysql_query($sql2))
+            die("Erro78: " . mysql_error());
     }
+
+    $tpl_notificacao = new Template("templates/notificacao.html");
+    $tpl_notificacao->ICONES = $icones;
+    $tpl_notificacao->MOTIVO_COMPLEMENTO = "";
+    $tpl_notificacao->DESTINO = "produtos.php";
+    $tpl_notificacao->block("BLOCK_CONFIRMAR");
+    $tpl_notificacao->block("BLOCK_EDITADO");
+    $tpl_notificacao->block("BLOCK_BOTAO");
+    $tpl_notificacao->show();
+    
 }
 $paginadestino = "produtos.php";
 
