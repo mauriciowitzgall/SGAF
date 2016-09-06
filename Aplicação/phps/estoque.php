@@ -18,6 +18,22 @@ $filtro_produto_nome = $_POST["filtroprodutonome"];
 if (!empty($filtro_produto_nome)) {
     $sql_filtro= $sql_filtro." and pro_nome like '%$filtro_produto_nome%'";
 }
+$filtro_produto_tamanho = $_POST["filtroprodutotamanho"];
+if (!empty($filtro_produto_tamanho)) {
+    $sql_filtro= $sql_filtro." and pro_tamanho like '%$filtro_produto_tamanho%'";
+}
+$filtro_produto_cor = $_POST["filtroprodutocor"];
+if (!empty($filtro_produto_cor)) {
+    $sql_filtro= $sql_filtro." and pro_cor like '%$filtro_produto_cor%'";
+}
+$filtro_produto_referencia = $_POST["filtroprodutoreferencia"];
+if (!empty($filtro_produto_referencia)) {
+    $sql_filtro= $sql_filtro." and pro_referencia like '%$filtro_produto_referencia%'";
+}
+$filtro_produto_descricao = $_POST["filtroprodutodescricao"];
+if (!empty($filtro_produto_descricao)) {
+    $sql_filtro= $sql_filtro." and pro_descricao like '%$filtro_produto_descricao%'";
+}
 $filtro_categoria = $_POST["filtrocategoria"];
 if (!empty($filtro_categoria)) {
     $sql_filtro= $sql_filtro." and pro_categoria=$filtro_categoria";
@@ -29,6 +45,10 @@ if ($usuario_grupo==5) {
 
 //Filtro produto
 $tpl->PRODUTO_NOME = $filtro_produto_nome;
+$tpl->PRODUTO_TAMANHO = $filtro_produto_tamanho;
+$tpl->PRODUTO_COR = $filtro_produto_cor;
+$tpl->PRODUTO_REFERENCIA = $filtro_produto_referencia;
+$tpl->PRODUTO_DESCRICAO = $filtro_produto_descricao;
 
 
 //Filtro categoria
