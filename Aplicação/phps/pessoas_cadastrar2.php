@@ -29,7 +29,7 @@ else
 
 
 $cidade = $_POST['cidade'];
-if ($cidade="") $cidade=0;
+if ($cidade=="") $cidade=0;
 $vila = ucwords(strtolower($_POST['vila']));
 $bairro = ucwords(strtolower($_POST['bairro']));
 $endereco = ucwords(strtolower($_POST['endereco']));
@@ -64,6 +64,7 @@ $pessoacontato = $_POST['pessoacontato'];
 $categoria = $_POST['categoria'];
 $datanasc = $_POST['datanasc'];
 
+print_r($_REQUEST);
 
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
@@ -300,7 +301,7 @@ foreach ($tipo as $tipo2) {
 
 //Insere no banco ou atualiza
 if ($operacao == "cadastrar") {
-    $sql = "
+    echo $sql = "
     INSERT INTO 
         pessoas (
             pes_id,

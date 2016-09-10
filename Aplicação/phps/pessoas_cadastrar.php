@@ -150,7 +150,7 @@ if (($operacao == "editar") || ($operacao == 'ver')) {
                 $pais = $dados["est_pais"];
             }
         } else {
-            $estado=23;
+            $estado=$estado_padrao;
             $pais=1;
         }
     }
@@ -485,9 +485,9 @@ if (($operacao == "editar") || ($operacao == "ver") || ($pais != "")) {
         $tpl1->OPTION_VALOR = $dados["est_codigo"];
         $tpl1->OPTION_NOME = $dados["est_sigla"];
         if ($estado == "") {
-            if ($usuario_estado == $dados["est_codigo"]) {
+            if ($estado_padrao == $dados["est_codigo"]) {
                 $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-                $estado = $usuario_estado;
+                $estado = $estado_padrao;
             }
         } else {
             if ($estado == $dados["est_codigo"])

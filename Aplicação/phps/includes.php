@@ -4,7 +4,8 @@
   
 include "acentuacao.html";
 require("templates/Template.class.php");
-    
+include "quiosque_configuracoes.php";
+
 error_reporting(E_ERROR | E_PARSE);
 
 //Pasta a partir da raiz, onde ficará os arquivos do sistema
