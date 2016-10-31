@@ -5758,3 +5758,5 @@ UPDATE `sgaf_labodega`.`estados` SET `est_sigla`='CE' WHERE `est_codigo`='06';
 -- Montar este SQL ************** 
 UPDATE "TODAS TABELAS QUE USAM CIDADE" SET cid_antiga = cid_nova
 
+
+

@@ -47,6 +47,10 @@ $dataatual = date("Y/m/d");
 $horaatual = date("H:i:s");
 $operacao = $_GET["operacao"]; //Operação 1=Cadastrar 2=Editar 3=Ver
 
+
+       
+
+
 $retirar_produto = $_GET["retirar_produto"];
 //Se for eliminação de um produto ja da lista então pegar por get
 if ($retirar_produto == '1') {
@@ -63,7 +67,6 @@ if ($retirar_produto == '1') {
 } else { 
     if ($operacao == 2) { // Se for edição pega os dados principais da venda para popular campos
         $saida = $_GET["codigo"];
-        $passo = "2";
         $sql = "
             SELECT * 
             FROM saidas 
@@ -78,12 +81,12 @@ if ($retirar_produto == '1') {
             $consumidor_cpf = $dados["pes_cpf"];
             $consumidor_cnpj = $dados["pes_cnpj"];
             $tipopessoa = $dados["pes_tipopessoa"];
-            
             $id = $dados["sai_id"];
             $tiposaida = $dados["sai_tipo"];
             $motivo = $dados["sai_saidajustificada"];
             $descricao = $dados["sai_descricao"];
         }
+        
     } else { //Caso seja uma venda nova, cadastro
         $operacao=1;
         $saida = $_POST["saida"];
@@ -105,62 +108,73 @@ if ($retirar_produto == '1') {
         if ($tipopessoa=="") { //Pro padrão a pessoa é fisica, cpf
             $tipopessoa=1;
         }
-        $id = $_POST["id"];
-        $tiposaida = $_GET["tiposaida"];
-        $motivo = $_POST["motivo"];
-        $descricao = $_POST["descricao"];
-        $saipro = "";
-        $porcao = $_POST["porcao"];
-        if ($porcao=="") $porcao=0;
-        $lote = $_POST["lote"];
-        $lote2 = $_POST["lote2"];
-        $produto = $_POST["produto"];
-        $produto2 = $_POST["produto2"];
-        if ($produto2 != "") {
-            $produto = $produto2;
-        }
-        if ($lote2 != "") {
-            $lote = $lote2;
-        }
-
         
-        //Quantidade de porcoes
-        $porcao_qtd = $_POST["porcao_qtd"];
-        if ($porcao_qtd=="") $porcao_qtd=0;
-        
-        //Pega valor unitário padrão do produto para incremento ou retirada de estoque
-        $valunietq = $_POST["valuni2"];
-        $valunietq = explode(" ", $valunietq);
-        $valunietq = $valunietq[1];
-        $valunietq = str_replace('.', '', $valunietq);
-        $valunietq = str_replace(',', '.', $valunietq);
-        
-        //Pega o valor unitário que que deverá ser usado na saida. 
-        //É necessário isto porque quando usa-se porcão o valor unitário pode ser diferente do valor unitário padrão do produto
-        $valunisai = $_POST["valuni3"];
-        $valunisai = explode(" ", $valunisai);
-        $valunisai = $valunisai[1];
-        $valunisai = str_replace('.', '', $valunisai);
-        $valunisai = str_replace(',', '.', $valunisai);
-        
-        //Pega o valor total a ser gravado na saída (no estoque não tem valor total)
-        $valtotsai = $_POST["valtot"];
-        $valtotsai = explode(" ", $valtotsai);
-        $valtotsai = $valtotsai[1];
-        $valtotsai = str_replace('.', '', $valtotsai);
-        $valtotsai = str_replace(',', '.', $valtotsai);
-        
-        //Pega quantidade para ser retirada ou incrementada no estoque
-        if ($porcao==0) $qtd = $_POST["qtd"];
-        else $qtd = $_POST["qtd2"];
-        $qtd = str_replace('.', '', $qtd);
-        $qtd = str_replace(',', '.', $qtd);
-        $qtdnoestoque = $_POST["qtdnoestoque"];
-        
-
     }
+    $id = $_REQUEST["id"];
+    $tiposaida = $_GET["tiposaida"];
+    $motivo = $_POST["motivo"];
+    $descricao = $_POST["descricao"];
+    $saipro = "";
+    $porcao = $_POST["porcao"];
+    if ($porcao=="") $porcao=0;
+    $lote = $_POST["lote"];
+    $lote2 = $_POST["lote2"];
+    $produto = $_POST["produto"];
+    $produto2 = $_POST["produto2"];
+    if ($produto2 != "") {
+        $produto = $produto2;
+    }
+    if ($lote2 != "") {
+        $lote = $lote2;
+    }
+
+
+    //Quantidade de porcoes
+    $porcao_qtd = $_POST["porcao_qtd"];
+    if ($porcao_qtd=="") $porcao_qtd=0;
+
+    //Pega valor unitário padrão do produto para incremento ou retirada de estoque
+    $valunietq = $_POST["valuni2"];
+    $valunietq = explode(" ", $valunietq);
+    $valunietq = $valunietq[1];
+    $valunietq = str_replace('.', '', $valunietq);
+    $valunietq = str_replace(',', '.', $valunietq);
+
+    //Pega o valor unitário que que deverá ser usado na saida. 
+    //É necessário isto porque quando usa-se porcão o valor unitário pode ser diferente do valor unitário padrão do produto
+    $valunisai = $_POST["valuni3"];
+    $valunisai = explode(" ", $valunisai);
+    $valunisai = $valunisai[1];
+    $valunisai = str_replace('.', '', $valunisai);
+    $valunisai = str_replace(',', '.', $valunisai);
+
+    //Pega o valor total a ser gravado na saída (no estoque não tem valor total)
+    $valtotsai = $_POST["valtot"];
+    $valtotsai = explode(" ", $valtotsai);
+    $valtotsai = $valtotsai[1];
+    $valtotsai = str_replace('.', '', $valtotsai);
+    $valtotsai = str_replace(',', '.', $valtotsai);
+
+    //Pega quantidade para ser retirada ou incrementada no estoque
+    if ($porcao==0) $qtd = $_POST["qtd"];
+    else $qtd = $_POST["qtd2"];
+    $qtd = str_replace('.', '', $qtd);
+    $qtd = str_replace(',', '.', $qtd);
+    $qtdnoestoque = $_POST["qtdnoestoque"];
+    
 }
 
+$passo= $_REQUEST["passo"];
+
+//Verificar se é uma edição, se sim então atualiza id e consumidor
+if (($operacao==2)&&($passo==2)) {
+    //print_r($_REQUEST);
+    $id_novo=$_REQUEST["id"];
+    if ($id_novo=="") $id_novo=$id;
+    $consumidor=$_REQUEST["consumidor"];
+    $sql11= "UPDATE saidas SET sai_consumidor=$consumidor, sai_id=$id_novo WHERE sai_codigo=$saida";
+    if (!$query11 = mysql_query($sql11)) die("<br>Erro11:" . mysql_error());
+}
 //echo "valunietq:$valunietq valunisai:$valunisai valtotsai:$valtotsai";
 
 //Verifica se a saida existe
@@ -209,15 +223,7 @@ if ($produto != "") {
 //echo "retirar: $retirar_produto - consumidor: $consumidor - tiposaida: $tiposaida - saida: $saida - saipro: $saipro - passo:$passo<br>";
 //echo "<br> <br>lote e produto: ($lote - $produto) <br>lote2 e produto2: ($lote2 - $produto2)<br> valuni:$valuni - qtd:$qtd - valtot:$valtot";
 //CONTROLE DO PASSO
-if ($passo == "") {
-    $passo = 1;
-} else if ($passo == 1) {
-    if ($tiposaida == 3) {
-        $passo = 1;
-    } else {
-        $passo = 2;
-    }
-}
+
 
 if ($tiposaida == "") {
     $tiposaida = 1;
@@ -253,11 +259,10 @@ if ($linhas == 0) {
     exit;
 }
 
-
 //Inicio do formulário de saidas
 $tpl1 = new Template("saidas_cadastrar.html");
-$tpl1->LINK_DESTINO = "saidas_cadastrar.php?tiposaida=$tiposaida";
-$tpl1->LINK_ATUAL = "saidas_cadastrar.php?tiposaida=$tiposaida";
+$tpl1->LINK_DESTINO = "saidas_cadastrar.php?tiposaida=$tiposaida&operacao=$operacao&codigo=$saida&id=$id";
+$tpl1->LINK_ATUAL = "saidas_cadastrar.php?tiposaida=$tiposaida&operacao=$operacao&codigo=$saida&id=$id";
 $tpl1->ICONES_CAMINHO = $icones;
 
 $tpl1->JS_CAMINHO = "saidas_cadastrar.js";
@@ -331,6 +336,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                 $fornecedor = $dados["ent_fornecedor"];
             }
             //Interir o produto no estoque
+            //echo "<br><br>inseriu no estoque<br><br>";
             $sql16 = "INSERT INTO estoque (etq_quiosque,etq_produto,etq_fornecedor,etq_lote,etq_quantidade,etq_valorunitario,etq_validade)
 			VALUES ('$usuario_quiosque','$produto','$fornecedor','$lote','$qtd','$valuni','$validade')";
             $query16 = mysql_query($sql16);
@@ -355,6 +361,8 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
     }
 } else {
     //Independente se for cadastrou ou edição, só inserir produto na saida se vier os dados do produto e lote etc. dos campos
+    //print_r($_REQUEST);
+    //echo "<br><br>saida: $saida produto:$produto lote:$lote<br><br>";
     if (($saida != "") && ($produto != "") && ($lote != "")) {
 
         //Verifica a quantida atual do estoque
@@ -375,7 +383,8 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
         //(Isso acontece quando o usu�rio inclui um produto na lista e pressiona F5)
         if ($qtdfinal >= 0) {
             //Inserindo os produtos na Sa�da
-             $sql_saida_produto = "
+            //echo "<br><br>inseriu nos itens da saida<br><br>";
+            $sql_saida_produto = "
             INSERT INTO saidas_produtos (
                 saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade
             )
@@ -446,6 +455,7 @@ if (($saida == 0) && ($passo == 2)) {
         $consumidor_cnpj2 =  str_replace("-", "", $consumidor_cnpj2);
         $consumidor_cnpj2 =  str_replace("_", "", $consumidor_cnpj2);
         
+        //echo "<br><br>cadastrou pessoa<br><br>";
         $sql1 = "
             INSERT INTO
                 pessoas (pes_id,pes_nome,pes_cnpj,pes_cpf,pes_tipopessoa,pes_cidade,pes_datacadastro,pes_horacadastro,pes_cooperativa,pes_possuiacesso,pes_categoria,pes_usuarioquecadastrou,pes_quiosquequecadastrou)
@@ -497,9 +507,19 @@ if ($tiposaida == 1) {
     $tpl1->CAMPO_TAMANHO = "8";
     $tpl1->CAMPO_ESTILO = "width:80px;";
     $tpl1->CAMPO_FOCO = "  ";
+    if ($saida!="") {
+        $sql22="SELECT sai_id FROM saidas WHERE sai_codigo=$saida";
+        if (!$query22=mysql_query($sql22)) die("Erro22: " . mysql_error());
+        $dados22=  mysql_fetch_array($query22);
+        $id=$dados22[0];
+    }
     $tpl1->CAMPO_VALOR = "$id";
-    $tpl1->CAMPO_DESABILITADO = "";
     $tpl1->CAMPO_OBRIGATORIO = " required ";
+    if ($passo!=1) {
+        $tpl1->CAMPO_DESABILITADO = " disabled";
+    } else {
+        $tpl1->CAMPO_DESABILITADO = " ";
+    }
     $tpl1->CAMPO_ONKEYUP = "";
     $tpl1->CAMPO_ONKEYDOWN = "";
     $tpl1->CAMPO_ONFOCUS = "";
@@ -697,8 +717,8 @@ if ($tiposaida == 3) {
     $tpl1->CAMPOOCULTO_NOME = "tiposaida";
     $tpl1->CAMPOOCULTO_VALOR = "$tiposaida";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
-    $tpl1->CAMPOOCULTO_NOME = "tiposaida";
-    $tpl1->CAMPOOCULTO_VALOR = "$tiposaida";
+    $tpl1->CAMPOOCULTO_NOME = "id2";
+    $tpl1->CAMPOOCULTO_VALOR = "$id";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
 }
 
@@ -720,7 +740,7 @@ if ($passo == 2) {
             $tpl->ICONES = $icones;
             //$tpl->MOTIVO_COMPLEMENTO = "";
             $tpl->block("BLOCK_ATENCAO");
-            $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=2&tiposaida=1";
+            $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=2&tiposaida=1&id=$id";
             $vendas_incompletas="<br> <i>";
             while ($dados4=  mysql_fetch_assoc($query4)) {
                 $vendainc_codigo=$dados4["sai_codigo"];
@@ -1061,7 +1081,7 @@ if ($passo == 2) {
     $tpl1->block("BLOCK_BOTOES_RODAPE");
 }
 
-//Bot�o Continuar
+//Botão Continuar
 $tpl1->BOTAO_TIPO = "submit";
 if ($passo == 2) {
     $tpl1->BOTAO_DESABILITADO = " disabled ";
@@ -1069,6 +1089,7 @@ if ($passo == 2) {
 } else {
     //$tpl1->block("BLOCK_FOCO");
     $tpl1->BOTAO_VALOR = "CONTINUAR";
+    $passo=2;
 }
 $tpl1->BOTAO_NOME = "botao_incluir";
 $tpl1->BOTAO_FOCO = " ";

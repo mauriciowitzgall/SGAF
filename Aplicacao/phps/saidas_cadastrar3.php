@@ -38,7 +38,6 @@ $descval = $_REQUEST["descval2"];
 $total = $_REQUEST["total2"];
 $metodopag = $_REQUEST["metodopag2"];
 
-//print_r($_REQUEST);
 
 $areceber = $_REQUEST["areceber2"];
 $dinheiro = $_REQUEST["dinheiro2"];

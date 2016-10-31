@@ -592,7 +592,7 @@ if ($linhas == 0) {
 
             //detalhes
             $tpl->LINK = "saidas_ver.php";
-            $tpl->LINK_COMPLEMENTO = "ope=3&tiposaida=1";
+            $tpl->LINK_COMPLEMENTO = "ope=3&tiposaida=1&passo=1";
             $tpl->ICONE_ARQUIVO = $icones . "detalhes.png";
             $tpl->OPERACAO_NOME = "Detalhes";
             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
@@ -646,7 +646,7 @@ if ($linhas == 0) {
                             if ($total_segundos < 900) { //O caixa tem 15 minutos ap�s o inicio para editar esta venda j� concluida 
                                 $tpl->OPERACAO_NOME = "Editar";
                                 $tpl->LINK = "saidas_cadastrar.php";
-                                $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1";
+                                $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=1";
                                 $tpl->ICONE_ARQUIVO = $icones . "editar.png";
                                 $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
                             } else {
@@ -657,7 +657,7 @@ if ($linhas == 0) {
                         } else { //Se for incompleta permitir que o caixa possa continuar a venda
                             $tpl->OPERACAO_NOME = "Editar";
                             $tpl->LINK = "saidas_cadastrar.php";
-                            $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1";
+                            $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=1";
                             $tpl->ICONE_ARQUIVO = $icones . "editar.png";
                             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
                         }
@@ -670,7 +670,7 @@ if ($linhas == 0) {
                 } else {
                     $tpl->OPERACAO_NOME = "Editar";
                     $tpl->LINK = "saidas_cadastrar.php";
-                    $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1";
+                    $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=1";
                     $tpl->ICONE_ARQUIVO = $icones . "editar.png";
                     $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
                 }
@@ -711,7 +711,7 @@ if ($tipopagina == "saidas") {
                 $tpl->block("BLOCK_RODAPE_BOTOES_DICA");*/
             } else {
                 $tpl->CADASTRAR_NOME = "REALIZAR VENDA";
-                $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1";
+                $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=1";
                 $tpl->block("BLOCK_RODAPE_BOTOES");
             }
         } else if ($usuario_caixa=="") {
@@ -725,7 +725,7 @@ if ($tipopagina == "saidas") {
             $tpl->block("BLOCK_RODAPE_BOTOES_DICA");*/
         } else {
             $tpl->CADASTRAR_NOME = "REALIZAR VENDA";
-            $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1";
+            $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=1";
             $tpl->block("BLOCK_RODAPE_BOTOES");
         }
     }
