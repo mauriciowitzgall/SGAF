@@ -99,12 +99,16 @@ $tpl1->OPTION_VALOR = "1";
 $tpl1->OPTION_NOME = "Pequena";
 $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
 $tpl1->block("BLOCK_SELECT_OPTION");
+
+/*
 $tpl1->OPTION_VALOR = "2";
 $tpl1->OPTION_NOME = "Grande";
 $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->OPTION_VALOR = "3";
 $tpl1->OPTION_NOME = "Granel";
 $tpl1->block("BLOCK_SELECT_OPTION");
+*/
+
 $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
