@@ -100,6 +100,12 @@
 
 <br>
 
+<!-- BEGIN BLOCK_FORM -->
+<form action="{FORM_LINK}" target="{FORM_TARGET}" method="post" name="{FORM_NOME}">   
+<!-- END BLOCK_FORM -->  
+
+
+
 <!-- BEGIN BLOCK_LISTAGEM -->
 <table 
     border="1" 
@@ -189,6 +195,69 @@
                       <!-- END BLOCK_TEXTO_CLASSE_EXTRA -->             
                 ">{TEXTO}</span>                        
                 <!-- END BLOCK_TEXTO -->  
+                
+                <!-- BEGIN BLOCK_CAMPO -->             
+                <input
+                type="{CAMPO_TIPO}" 
+                name="{CAMPO_NOME}" 
+                id="{CAMPO_ID}" 
+                size="{CAMPO_TAMANHO}"
+                value="{CAMPO_VALOR}"
+                maxlength="{CAMPO_QTDCARACTERES}"                
+                onkeyup="{CAMPO_ONKEYUP}"
+                onkeydown="{CAMPO_ONKEYDOWN}"
+                onblur="{CAMPO_ONBLUR}"
+                <!-- BEGIN BLOCK_CAMPO_MIN -->
+                min="{CAMPO_MIN}"
+                <!-- END BLOCK_CAMPO_MIN -->
+                <!-- BEGIN BLOCK_CAMPO_MAX -->
+                max="{CAMPO_MAX}"
+                <!-- END BLOCK_CAMPO_MAX -->
+                onclick="
+                <!-- BEGIN BLOCK_CAMPO_AUTOSELECIONAR -->
+                this.select()    
+                <!-- END BLOCK_CAMPO_AUTOSELECIONAR -->                        
+                {CAMPO_AOCLICAR}
+                " 
+                placeholder="{CAMPO_DICA}" 
+
+                <!-- BEGIN BLOCK_CAMPO_HISTORICODESATIVADO -->
+                autocomplete="off"
+                <!-- END BLOCK_CAMPO_HISTORICODESATIVADO -->
+
+                <!-- BEGIN BLOCK_CAMPO_AUTOFOCO -->
+                autofocus
+                <!-- END BLOCK_CAMPO_AUTOFOCO -->
+
+                <!-- BEGIN BLOCK_CAMPO_DESABILITADO -->
+                disabled                 
+                <!-- END BLOCK_CAMPO_DESABILITADO -->
+
+                <!-- BEGIN BLOCK_CAMPO_MARCADO -->
+                checked 
+                <!-- END BLOCK_CAMPO_MARCADO -->   
+
+                <!-- BEGIN BLOCK_CAMPO_OBRIGATORIO -->
+                required                 
+                <!-- END BLOCK_CAMPO_OBRIGATORIO -->
+
+                <!-- BEGIN BLOCK_CAMPO_ESTILO -->
+                style="{CAMPO_ESTILO}"                 
+                <!-- END BLOCK_CAMPO_ESTILO -->
+
+                <!-- BEGIN BLOCK_CAMPO_PADRAO -->
+                class=" campopadrao {CAMPO_CLASSE}" 
+                <!-- END BLOCK_CAMPO_PADRAO --> 
+
+                <!-- BEGIN BLOCK_CAMPO_PADRAO2 -->
+                class=" campopadrao2 {CAMPO_CLASSE2}" 
+                <!-- END BLOCK_CAMPO_PADRAO2 -->                
+
+                <!-- BEGIN BLOCK_CAMPO_DINAMICO -->
+                class=" {CAMPO_CLASSE} " 
+                <!-- END BLOCK_CAMPO_DINAMICO -->   
+                >
+                <!-- END BLOCK_CAMPO -->                     
                 
                 
                 

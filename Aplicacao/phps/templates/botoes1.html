@@ -7,7 +7,12 @@
 }
 </style>
 
+<!-- BEGIN BLOCK_QUEBRA_EMCIMA -->
+<br>
+<!-- END BLOCK_QUEBRA_EMCIMA -->
+
 <!-- BEGIN BLOCK_LINHAHORIZONTAL_EMCIMA -->
+
 <hr align="{LINHAHORINZONTAL_ALINHAMENTO}" class="{LINHAHORINZONTAL_CLASSE}">
 <!-- END BLOCK_LINHAHORIZONTAL_EMCIMA -->
 
@@ -146,6 +151,13 @@
                 title=""
                 class="botaopadrao botaopadraocadastrar"
                 <!-- END BLOCK_BOTAOPADRAO_CADASTRAR -->               
+               
+                <!-- BEGIN BLOCK_BOTAOPADRAO_GERAR -->  
+                value="GERAR" 
+                name="GERAR" 
+                title=""
+                class="botaopadrao botaopadraocadastrar"
+                <!-- END BLOCK_BOTAOPADRAO_GERAR -->               
                 
                 <!-- BEGIN BLOCK_BOTAOPADRAO_DESABILITADO --> 
                 disabled 
@@ -154,8 +166,12 @@
                 <!-- BEGIN BLOCK_BOTAOPADRAO_AUTOFOCO --> 
                 autofocus
                 <!-- END BLOCK_BOTAOPADRAO_AUTOFOCO -->  
+                
+                onclick="{ONCLICK}"
             >
-            <!-- END BLOCK_BOTAOPADRAO -->         
+            <!-- END BLOCK_BOTAOPADRAO -->  
+            
+            
 
             </a>            
         </td>

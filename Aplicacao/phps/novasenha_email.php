@@ -3,22 +3,22 @@
 //Conteúdo do e-mail
 $titulo="Recuperação de senha SGAF Online";
 $textoemail = "
-    Ecosoli Suporte\n\n
+    Titotec Suporte\n\n
     Recuperação de senha\n
     Para definir uma nova senha ao seu usuário no sistema SGAF Online, clique no link  a seguir:\n
     $link \n\n 
-    Este e-mail foi enviado para você porque este endereço de e-mail está cadastrado como referência para recuperação de senha no sistema SGAF Online (ecosoli.org).
+    Este e-mail foi enviado para você porque este endereço de e-mail está cadastrado como referência para recuperação de senha no sistema SGAF Online (titotec.com.br).
     \nSe você não sabe do que se trata isso, por favor ignore esta mensagem!
 ";
 
-$link="http://ecosoli.org/SGAF/teste.php";
+$link="http://titotec.com.br/SGAF/teste.php";
 
 //Destinatário
 $destinatario = "mauwitz@gmail.com";
 */
 
 //Configuração do Remetente
-$remetente_nome="Ecosoli Suporte";
+$remetente_nome="Titotec Suporte";
 $remetente = "ecosolisistemas@gmail.com";
 $remetente_senha = "m848484e";
 

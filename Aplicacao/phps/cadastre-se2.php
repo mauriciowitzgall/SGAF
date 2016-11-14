@@ -317,7 +317,7 @@
             $tpl->block("BLOCK_TITULO");
             $tpl->MOTIVO = "            
             <b><br>Bem Vindo ao SGAF (Sistema Gestor de Agricultura Familiar)</b><br>
-            <br>Para utilizar o sistema basta acessar o endereço: <b>http://ecosoli.org/SGAF/</b> informar seu CPF e a senha recém cadastrada. <br><br>
+            <br>Para utilizar o sistema basta acessar o endereço: <b>http://titotec.com.br/SGAF/</b> informar seu CPF e a senha recém cadastrada. <br><br>
         ";
             $tpl->MOTIVO_COMPLEMENTO = "";
             $tpl->block("BLOCK_MOTIVO");

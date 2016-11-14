@@ -109,13 +109,13 @@
                     $de_nome="SGAF Suporte ";
                     $assunto="Recuperar senha da conta SGAF Online";
                     $corpo = "
-                        Ecosoli Suporte\n\n
+                        Titotec Suporte\n\n
                         Recuperação de senha\n
                         Para definir uma nova senha ao seu usuário no sistema SGAF Online, clique no link  a seguir:\n
                          \n
-                        Este e-mail foi enviado para você porque este endereço de e-mail está cadastrado como referência para recuperação de senha no sistema SGAF Online (ecosoli.org).\n
+                        Este e-mail foi enviado para você porque este endereço de e-mail está cadastrado como referência para recuperação de senha no sistema SGAF Online (titotec.com.br).\n
                         Se você não sabe do que se trata isso, por favor ignore esta mensagem!\n\n
-                        Atenciosamente...\nEquipe Ecosoli Suporte
+                        Atenciosamente...\nEquipe Titotec Suporte
                     ";
                     smtpmailer($para, $de, $de_senha, $de_nome, $assunto, $corpo);
                     if (!empty($error)) echo $error;

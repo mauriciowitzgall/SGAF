@@ -134,6 +134,8 @@ UPDATE `configuracoes` SET `cnf_versao`='v3.5' WHERE `cnf_codigo`='1';
 
 -- Inicio versão 3.6b
 
+UPDATE `configuracoes` SET `cnf_versao`='v3.6b' WHERE `cnf_codigo`='1';
+
 INSERT INTO `produtos_recipientes` (`prorec_codigo`, `prorec_nome`) VALUES ('15', 'Frasco');
 INSERT INTO `produtos_recipientes` (`prorec_codigo`, `prorec_nome`) VALUES ('16', 'Vidrinho');
 INSERT INTO `produtos_recipientes` (`prorec_codigo`, `prorec_nome`) VALUES ('17', 'Saquinho');
