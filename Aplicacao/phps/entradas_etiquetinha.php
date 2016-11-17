@@ -202,7 +202,6 @@ if ($massa==1) {
                 $tpl->block("BLOCK_ETIQUETA_COLUNA");
             }
             if ($cont % 24 == 0) {
-                echo "nova tabela";
                 $tpl->block("BLOCK_ETIQUETA_TABELA");
             }
             

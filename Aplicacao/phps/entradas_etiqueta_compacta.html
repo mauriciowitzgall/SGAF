@@ -32,13 +32,14 @@
 }
 .tabela {
     width: 100%;
+    border: transparent;
     <!-- border-bottom: 2px gray dotted; -->
 }
 .linha {    
-    border-bottom: 2px gray dotted;
+    //border-bottom: 2px gray hidden;
 }
 .produto {
-    font-size: 13;
+    font-size: 10;
     font-weight: bold;
 }  
 .for_id  {
@@ -76,17 +77,15 @@
 .bordacentral {
     border-right: 1px gray dotted;
 }
-
-
 </style>
 <!-- BEGIN BLOCK_ETIQUETA_TABELA --> 
-<table border="0" class="tabela">
+<table border="1" class="tabela">
 <!-- BEGIN BLOCK_ETIQUETA_LINHA -->
     <tr class="">
+        <!-- BEGIN BLOCK_ETIQUETA_CONTEUDO -->
         <!-- BEGIN BLOCK_ETIQUETA_COLUNA -->
-        <td width="" align="center" class="linha">            
-            <span class="produto">{PRODUTO}</span> <span class="for_id">({FORNECEDOR_ID}) </span> <br>
-           
+        <td width="" align="center" class="linha" style="height:{COLUNA_ALTURA}; width:260px">            
+            <span class="produto">{PRODUTO}</span><br>
                 <!-- BEGIN BLOCK_CODBARRAS -->
                 <table border="0">
                     <tr>
@@ -112,21 +111,19 @@
                         <td align="center">{VALOR}</td>
                     </tr>
                 </table>
-                <!-- END BLOCK_CODBARRAS -->            
-            <!-- BEGIN BLOCK_PORQUILO -->            
-            <span class="peso">{QUANTIDADE} {SIGLA} </span><span class="demais">{VALOR_UNITARIO} {SIGLA2}</span>  <br>
-            <!-- END BLOCK_PORQUILO -->            
-            <span class="valor">{VALOR_TOTAL}</span> <br>
-            <span class="demais">{VALIDADE}</span> <br>
-            <span class=""></span>  <br>
+                <!-- END BLOCK_CODBARRAS -->                    
         </td> 
         <!-- END BLOCK_ETIQUETA_COLUNA -->
+        <!-- BEGIN BLOCK_ETIQUETA_COLUNA_ESPACO -->
+        <td width="{COLUNA_ESPACO_TAMANHO}"></td>
+        <!-- END BLOCK_ETIQUETA_COLUNA_ESPACO -->
+        
+        
+        <!-- END BLOCK_ETIQUETA_CONTEUDO -->
+        
     </tr>
-    <!-- END BLOCK_ETIQUETA_LINHA --> 
+    <!-- END BLOCK_ETIQUETA_LINHA -->
 </table> 
-<table>
-	<tr>
-	    <td height="161px">&nbsp;</td>
-	</tr>
-</table>
+
+
 <!-- END BLOCK_ETIQUETA_TABELA --> 

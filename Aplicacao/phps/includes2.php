@@ -17,7 +17,7 @@ require("templates/Template.class.php");
             }
 
             .relcorpo  {
-                padding:8px;	
+                padding:0px;	
             }
         </style>
         <script type="text/javascript">

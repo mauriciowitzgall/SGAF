@@ -97,17 +97,21 @@ $tpl1->SELECT_ONCHANGE="etiqueta_escolhida(this.value,$lote)";
 $tpl1->block("BLOCK_SELECT_ONCHANGE");
 $tpl1->OPTION_VALOR = "1";
 $tpl1->OPTION_NOME = "Pequena";
-$tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+//$tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
 $tpl1->block("BLOCK_SELECT_OPTION");
 
-/*
-$tpl1->OPTION_VALOR = "2";
+/*$tpl1->OPTION_VALOR = "2";
 $tpl1->OPTION_NOME = "Grande";
 $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->OPTION_VALOR = "3";
 $tpl1->OPTION_NOME = "Granel";
+$tpl1->block("BLOCK_SELECT_OPTION");*/
+$tpl1->OPTION_VALOR = "4";
+$tpl1->OPTION_NOME = "Compacta";
+$tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
 $tpl1->block("BLOCK_SELECT_OPTION");
-*/
+
+
 
 $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
@@ -140,7 +144,7 @@ $tpl2 = new Template("templates/lista2.html");
 $tpl2->block("BLOCK_TABELA_CHEIA");
 
 //Destino Padrão. este é alterado conforme seleciona o tipo de etiqueta no select
-$tpl2->FORM_LINK="entradas_etiquetinha.php?lote=$lote&massa=1";
+$tpl2->FORM_LINK="entradas_etiqueta_compacta.php?lote=$lote&massa=1";
 $tpl2->FORM_TARGET="";
 $tpl2->FORM_NOME="form2";
 $tpl2->block("BLOCK_FORM");
