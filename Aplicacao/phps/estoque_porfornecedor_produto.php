@@ -30,7 +30,7 @@ while ($dados=mysql_fetch_array($query)) {
 //SQL principal
 $sql1 = "
 SELECT 
-    pro_nome, sum(etq_quantidade) as qtdtot, round(sum(etq_valorunitario*etq_quantidade),2) as valtot, protip_sigla,etq_fornecedor,etq_produto, count(etq_fornecedor) as lotes, protip_codigo
+    pro_nome, sum(etq_quantidade) as qtdtot, round(sum(etq_valorunitario*etq_quantidade),2) as valtot, protip_sigla,etq_fornecedor,etq_produto, count(etq_fornecedor) as lotes, protip_codigo, pro_referencia, pro_tamanho, pro_cor, pro_descricao
 FROM
     estoque
     join produtos on (etq_produto=pro_codigo)
@@ -41,7 +41,7 @@ WHERE
 GROUP BY
     etq_produto
 ORDER BY
-    pro_nome
+   pro_nome, pro_referencia,pro_tamanho,pro_cor,pro_descricao 
 ";
 
 
@@ -81,7 +81,13 @@ if ($linhas1 != "") {
     $cont=0;
     while ($dados1 = mysql_fetch_array($query1)) {
         $cont++;
-        $tpl->PRODUTO_NOME = $dados1['pro_nome'];
+        $nome= $dados1['pro_nome'];
+        $referencia= $dados1['pro_referencia'];
+        $tamanho= $dados1['pro_tamanho'];
+        $cor= $dados1['pro_cor'];
+        $descricao= $dados1['pro_descricao'];
+        $nome2=" $nome $referencia $tamanho $cor $descricao ";
+        $tpl->PRODUTO_NOME = $nome2;
         $tpl->PRODUTO_CODIGO = $dados1['etq_produto'];
         $tpl->FORNECEDOR_CODIGO = $dados1['etq_fornecedor'];
         $tpl->LOTES = $dados1['lotes'];

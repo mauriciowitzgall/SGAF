@@ -16,7 +16,7 @@ $tpl->ICONES_CAMINHO = "$icones";
 //Inicio do FILTRO
 $filtro_produto_nome = $_POST["filtroprodutonome"];
 if (!empty($filtro_produto_nome)) {
-    $sql_filtro= $sql_filtro." and pro_nome like '%$filtro_produto_nome%'";
+    $sql_filtro= $sql_filtro." and ((pro_nome like '%$filtro_produto_nome%')or(pro_referencia like '%$filtro_produto_nome%')or(pro_tamanho like '%$filtro_produto_nome%')or(pro_cor like '%$filtro_produto_nome%')or(pro_descricao like '%$filtro_produto_nome%'))";
 }
 $filtro_produto_tamanho = $_POST["filtroprodutotamanho"];
 if (!empty($filtro_produto_tamanho)) {
@@ -98,7 +98,11 @@ SELECT DISTINCT
     pro_cooperativa,
     sum(etq_quantidade*etq_valorunitario) as valortot,    
     round(avg(etq_valorunitario),2) as valunimedia,
-    etq_produto
+    etq_produto,
+    pro_referencia,
+    pro_tamanho,
+    pro_cor,
+    pro_descricao
 FROM
     estoque
     join produtos on (pro_codigo=etq_produto)
@@ -110,9 +114,9 @@ WHERE
     etq_quiosque=$usuario_quiosque 
     $sql_filtro 
 GROUP BY
-    pro_nome
+    pro_codigo
 ORDER BY
-    pro_nome
+    pro_nome, pro_referencia,pro_tamanho,pro_cor,pro_descricao 
 ";
 
 //Paginacão
@@ -158,7 +162,13 @@ if ($linhas != "") {
         $tpl->block("BLOCK_LISTA_CABECALHO_TOTAL");
     }
     while ($dados = mysql_fetch_array($query)) {
-        $tpl->PRODUTO = $dados['pro_nome'];
+        $nome= $dados['pro_nome'];
+        $referencia= $dados['pro_referencia'];
+        $tamanho= $dados['pro_tamanho'];
+        $cor= $dados['pro_cor'];
+        $descricao= $dados['pro_descricao'];
+        $nome2=" $nome $referencia $tamanho $cor $descricao ";
+        $tpl->PRODUTO = $nome2;
         $tpl->PRODUTO_CODIGO = $dados['pro_codigo'];
         $tpl->MEDIA = "R$ ".number_format($dados['valunimedia'],2,',','.');
         $tipocontagem=$dados['protip_codigo'];

@@ -1005,7 +1005,7 @@ if ($passo == 2) {
     $tpl1->LISTA_GET_PASSO = $passo;
     $sql_lista = "
     SELECT 
-        pro_nome, pes_nome, saipro_lote, saipro_quantidade, saipro_valorunitario, saipro_valortotal,saipro_codigo,pro_codigo,saipro_codigo,saipro_porcao,saipro_porcao_quantidade,propor_nome,protip_sigla,pro_tipocontagem
+        pro_nome, pes_nome, saipro_lote, saipro_quantidade, saipro_valorunitario, saipro_valortotal,saipro_codigo,pro_codigo,saipro_codigo,saipro_porcao,saipro_porcao_quantidade,propor_nome,protip_sigla,pro_tipocontagem, pro_referencia,pro_tamanho,pro_cor,pro_descricao 
     FROM 
         saidas_produtos
         JOIN produtos ON (saipro_produto=pro_codigo)    
@@ -1034,7 +1034,15 @@ if ($passo == 2) {
             $num++;
             $tpl1->LISTA_GET_SAIPRO = $dados_lista["saipro_codigo"];
             $tpl1->LISTA_NUM = $dados_lista["saipro_codigo"];
-            $tpl1->LISTA_PRODUTO = $dados_lista["pro_nome"];
+            
+            $prod_nome=$dados_lista["pro_nome"];
+            $prod_referencia=$dados_lista["pro_referencia"];
+            $prod_tamanho=$dados_lista["pro_tamanho"];
+            $prod_cor=$dados_lista["pro_cor"];
+            $prod_descricao=$dados_lista["pro_descricao"];
+            
+            $nome2="$prod_nome $prod_referencia $prod_tamanho $prod_cor $prod_descricao";
+            $tpl1->LISTA_PRODUTO = $nome2;
             $tpl1->LISTA_PRODUTO_COD = $dados_lista["pro_codigo"];
             $tpl1->LISTA_FORNECEDOR = $dados_lista["pes_nome"];
             $tpl1->LISTA_LOTE = $dados_lista["saipro_lote"];

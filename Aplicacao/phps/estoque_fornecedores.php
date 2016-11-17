@@ -17,7 +17,7 @@ $valortot=0;
 
 $sql="
 SELECT
-    pro_codigo, pro_nome, pes_codigo, pes_nome, sum(etq_quantidade) as qtd, protip_sigla, count(etq_fornecedor) as lotes, round(sum(etq_quantidade*etq_valorunitario),2) as total,pes_id,protip_codigo
+    pro_codigo, pro_nome, pes_codigo, pes_nome, sum(etq_quantidade) as qtd, protip_sigla, count(etq_fornecedor) as lotes, round(sum(etq_quantidade*etq_valorunitario),2) as total,pes_id,protip_codigo,pro_referencia, pro_tamanho, pro_cor, pro_descricao
 FROM
     estoque
     join produtos on (pro_codigo=etq_produto)
@@ -28,9 +28,9 @@ WHERE
     etq_produto='$produto'  
     and ent_quiosque=$usuario_quiosque
 GROUP BY
-    pes_nome
+    pes_codigo
 ORDER BY
-    pro_nome
+    pes_nome
 
 ";
 //Pagina��o
@@ -72,7 +72,13 @@ if (!$query) die("Erro: ".mysql_error());
 while ($dados=  mysql_fetch_array($query))
 {
     $tpl->PRODUTO_CODIGO=$dados['pro_codigo'];
-    $tpl->PRODUTO_NOME=$dados['pro_nome'];
+    $nome= $dados['pro_nome'];
+    $referencia= $dados['pro_referencia'];
+    $tamanho= $dados['pro_tamanho'];
+    $cor= $dados['pro_cor'];
+    $descricao= $dados['pro_descricao'];
+    $nome2=" $nome $referencia $tamanho $cor $descricao ";
+    $tpl->PRODUTO_NOME=$nome2;
     $tpl->FORNECEDOR_CODIGO=$dados['pes_codigo'];
     $tpl->FORNECEDOR_ID=$dados['pes_id'];
     $tpl->FORNECEDOR=$dados['pes_nome'];

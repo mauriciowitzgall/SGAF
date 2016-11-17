@@ -238,7 +238,7 @@ $tpl2->block(BLOCK_LISTA_CABECALHO);
 //Mostra todos os produtos da saida em quest�o
 $sql2 = "
 SELECT 
-    saipro_codigo,pro_nome,pes_nome,saipro_lote,saipro_quantidade,protip_sigla,protip_codigo,saipro_valorunitario,saipro_valortotal
+    saipro_codigo,pro_nome,pes_nome,saipro_lote,saipro_quantidade,protip_sigla,protip_codigo,saipro_valorunitario,saipro_valortotal,pro_referencia,pro_tamanho,pro_cor,pro_descricao 
 FROM 
     saidas
     join saidas_produtos on (saipro_saida=sai_codigo)
@@ -268,7 +268,13 @@ while ($dados2 = mysql_fetch_assoc($query2)) {
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
     $tpl2->LISTA_COLUNA_TAMANHO = "";
     $tpl2->LISTA_COLUNA_CLASSE = "";
-    $tpl2->LISTA_COLUNA_VALOR = $dados2["pro_nome"];
+    $nome= $dados2['pro_nome'];
+    $referencia= $dados2['pro_referencia'];
+    $tamanho= $dados2['pro_tamanho'];
+    $cor= $dados2['pro_cor'];
+    $descricao= $dados2['pro_descricao'];
+    $nome2=" $nome $referencia $tamanho $cor $descricao ";
+    $tpl2->LISTA_COLUNA_VALOR = $nome2;
     $tpl2->block("BLOCK_LISTA_COLUNA");
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
     $tpl2->LISTA_COLUNA_TAMANHO = "";

@@ -16,7 +16,7 @@ $tpl->ICONES_CAMINHO = "$icones";
 $filtro_produto = $_POST["filtroproduto"];
 $filtro_produto_nome = $_POST["filtroprodutonome"];
 if (!empty($filtro_produto_nome)) 
-    $sql_filtro= $sql_filtro." and pro_nome like '%$filtro_produto_nome%'";
+    $sql_filtro= $sql_filtro." and ((pro_nome like '%$filtro_produto_nome%')or(pro_referencia like '%$filtro_produto_nome%')or(pro_tamanho like '%$filtro_produto_nome%')or(pro_cor like '%$filtro_produto_nome%')or(pro_descricao like '%$filtro_produto_nome%'))";
 $filtro_fornecedor = $_POST["filtrofornecedor"];
 if (($usuario_grupo == 5) && ($filtro_fornecedor != $usuario_codigo)) {
     $filtro_fornecedor = $usuario_codigo;
@@ -77,7 +77,8 @@ SELECT
     protip_codigo,
     etq_quantidade,
     protip_sigla,
-    etq_validade
+    etq_validade,
+    pro_referencia, pro_tamanho, pro_cor, pro_descricao
 FROM
     estoque
     join produtos on (pro_codigo=etq_produto)    
@@ -118,7 +119,13 @@ if (!$query)
 $linhas = mysql_num_rows($query);
 if ($linhas != "") {
     while ($dados = mysql_fetch_array($query)) {
-        $tpl->PRODUTO = $dados['pro_nome'];
+        $nome= $dados['pro_nome'];
+        $referencia= $dados['pro_referencia'];
+        $tamanho= $dados['pro_tamanho'];
+        $cor= $dados['pro_cor'];
+        $descricao= $dados['pro_descricao'];
+        $nome2=" $nome $referencia $tamanho $cor $descricao ";
+        $tpl->PRODUTO = $nome2;
         $tpl->PRODUTO_CODIGO = $dados['pro_codigo'];
         $tpl->FORNECEDOR = $dados['pes_nome'];
         $tpl->FORNECEDOR_CODIGO = $dados['pes_codigo'];

@@ -336,7 +336,7 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 if ($filtro_numero <> "")
     $sql_filtro_numero = " and sai_codigo = $filtro_numero ";
 if ($filtro_produto <> "")
-    $sql_filtro_produto = " and pro_nome like '%$filtro_produto %'";
+    $sql_filtro_produto = " and ((pro_nome like '%$filtro_produto%')or(pro_referencia like '%$filtro_produto%')or(pro_tamanho like '%$filtro_produto%')or(pro_cor like '%$filtro_produto%')or(pro_descricao like '%$filtro_produto%'))";
 if ($filtro_lote <> "")
     $sql_filtro_lote = " and saipro_lote = $filtro_lote ";
 if ($filtro_consumidor <> "")

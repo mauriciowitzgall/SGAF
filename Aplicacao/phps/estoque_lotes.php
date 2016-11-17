@@ -28,7 +28,7 @@ $valtot = 0;
 
 $sql = "
 SELECT
-    etq_valorunitario,etq_quantidade,protip_codigo,pro_nome,pes_nome,etq_lote,ent_datacadastro,etq_validade
+    etq_valorunitario,etq_quantidade,protip_codigo,pro_nome,pes_nome,etq_lote,ent_datacadastro,etq_validade,pro_referencia, pro_tamanho, pro_cor, pro_descricao
 FROM
     estoque
     join produtos on (pro_codigo=etq_produto)
@@ -83,7 +83,15 @@ $query = mysql_query($sql);
 if (!$query)
     die("Erro: " . mysql_error());
 while ($dados = mysql_fetch_array($query)) {
-    $tpl->PRODUTO_NOME = $dados['pro_nome'];
+    
+    $nome= $dados['pro_nome'];
+    $referencia= $dados['pro_referencia'];
+    $tamanho= $dados['pro_tamanho'];
+    $cor= $dados['pro_cor'];
+    $descricao= $dados['pro_descricao'];
+    $nome2=" $nome $referencia $tamanho $cor $descricao ";
+    
+    $tpl->PRODUTO_NOME = $nome2;
     $tpl->FORNECEDOR_NOME = $dados['pes_nome'];
     $tpl->LOTE = $dados['etq_lote'];
     $tpl->DATA = $dados['ent_datacadastro'];

@@ -115,7 +115,7 @@ include "includes.php";
         if ($filtrosupervisor != "")
             $sql_filtro = $sql_filtro . " and ent_supervisor=$filtrosupervisor";
         if ($filtroproduto != "") {
-            $sql_filtro = $sql_filtro . " and pro_nome like '%$filtroproduto%'";
+            $sql_filtro = $sql_filtro . " and ((pro_nome like '%$filtroproduto%')OR(pro_referencia like '%$filtroproduto%')OR(pro_tamanho like '%$filtroproduto%')OR(pro_cor like '%$filtroproduto%')OR(pro_descricao like '%$filtroproduto%'))";
             $sql_filtro_from = "join entradas_produtos on (entpro_entrada=ent_codigo) join produtos on (entpro_produto=pro_codigo)";
         }
         
@@ -129,7 +129,7 @@ include "includes.php";
 
 $sql = "
     SELECT DISTINCT
-            ent_codigo,ent_datacadastro,ent_horacadastro,ent_fornecedor,ent_supervisor,ent_tipo,ent_status,ent_valortotal
+            *
     FROM 
             entradas              
             $sql_filtro_from

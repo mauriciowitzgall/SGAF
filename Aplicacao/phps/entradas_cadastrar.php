@@ -359,23 +359,35 @@ if ($passo != "") {
 
     //PRODUTOS
     $sql = "
-        SELECT pro_codigo,pro_nome,prorec_nome,pro_volume,pro_marca,protip_sigla
+        SELECT *
         FROM produtos 
         JOIN mestre_produtos_tipo ON (mesprotip_produto=pro_codigo)
         join produtos_tipo on pro_tipocontagem=protip_codigo
         left JOIN produtos_recipientes on (prorec_codigo=pro_recipiente)
         WHERE pro_cooperativa='$usuario_cooperativa' 
         AND mesprotip_tipo=$tiponegociacao
-        ORDER BY pro_nome
+        ORDER BY pro_nome, pro_referencia, pro_tamanho, pro_cor, pro_descricao
     ";
     $query = mysql_query($sql);
     if ($query) {
-        while ($dados = mysql_fetch_array($query)) {
+        while ($dados = mysql_fetch_assoc($query)) {
             $tpl->SELECT2_OBRIGATORIO = " required ";
             $tpl->SELECT2_DESABILITADO = "";
-            $tpl->OPTION2_VALOR = "$dados[0]";
-            $tpl->OPTION2_TEXTO = "$dados[1] $dados[4] $dados[2] $dados[3] ($dados[5])";
-            if (($produto == $dados[0]) && ($produtomanter == 'on'))
+            $pro_codigo=$dados["pro_codigo"];
+            $tpl->OPTION2_VALOR = $pro_codigo;
+            $pro_nome=$dados["pro_nome"];
+            $pro_recipiente=$dados["prorec_nome"];
+            $pro_volume=$dados["pro_volume"];
+            $pro_marca=$dados["pro_marca"];
+            $pro_sigla=$dados["protip_sigla"];
+            $pro_referencia=$dados["pro_referencia"];
+            $pro_tamanho=$dados["pro_tamanho"];
+            $pro_cor=$dados["pro_cor"];
+            $pro_descricao=$dados["pro_descricao"];
+            $pro_nome2="$pro_nome $pro_referencia $pro_tamanho $pro_cor $pro_descricao";
+            //pro_codigo,pro_nome,prorec_nome,pro_volume,pro_marca,protip_sigla
+            $tpl->OPTION2_TEXTO = "$pro_nome2 $pro_marca $pro_recipiente $pro_volume ($pro_sigla)";
+            if (($produto == $pro_codigo) && ($produtomanter == 'on'))
                 $tpl->OPTION2_SELECIONADO = " selected ";
             else
                 $tpl->OPTION2_SELECIONADO = "";
@@ -408,7 +420,11 @@ if ($passo != "") {
                 entpro_valunicusto,
                 entpro_valtotcusto,
                 entpro_temsubprodutos,
-                entpro_retiradodoestoquesubprodutos
+                entpro_retiradodoestoquesubprodutos,
+                pro_referencia,
+                pro_tamanho,
+                pro_cor,
+                pro_descricao
 	FROM
 		entradas_produtos
 		join entradas on (ent_codigo=entpro_entrada) 
@@ -676,7 +692,8 @@ if ($passo != "") {
             while ($dados = mysql_fetch_array($query5)) {
                 $tpl->ENTRADAS_NUMERO = $dados['entpro_numero'];
                 $tpl->ENTRADAS_PRODUTO = $dados[3];
-                $tpl->ENTRADAS_PRODUTO_NOME = $dados[0];
+                $produto_nome2="$dados[0] $dados[13] $dados[14] $dados[15] $dados[16]";
+                $tpl->ENTRADAS_PRODUTO_NOME = $produto_nome2;
                 //$tpl->ENTRADAS_LOCAL = $dados[6];
                 $tpl->SIGLA = $dados["protip_sigla"];
                 if (($dados["protip_sigla"] == "kg.")||($dados["protip_sigla"] == "lt."))

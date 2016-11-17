@@ -223,15 +223,7 @@ $tpl2->CABECALHO_COLUNA_COLSPAN = "";
 $tpl2->CABECALHO_COLUNA_TAMANHO = "";
 $tpl2->CABECALHO_COLUNA_NOME = "SUPERVISOR";
 $tpl2->block("BLOCK_CABECALHO_COLUNA");
-$tpl2->CABECALHO_COLUNA_COLSPAN = "";
-$tpl2->CABECALHO_COLUNA_TAMANHO = "";
-$tpl2->CABECALHO_COLUNA_NOME = "TOTAL";
-$tpl2->block("BLOCK_CABECALHO_COLUNA");
-$tpl2->CABECALHO_COLUNA_COLSPAN = "";
-$tpl2->CABECALHO_COLUNA_TAMANHO = "";
-$tpl2->CABECALHO_COLUNA_NOME = "SIT.";
-$tpl2->block("BLOCK_CABECALHO_COLUNA");
-$tpl2->CABECALHO_COLUNA_COLSPAN = "4";
+$tpl2->CABECALHO_COLUNA_COLSPAN = "3";
 $tpl2->CABECALHO_COLUNA_TAMANHO = "";
 $tpl2->CABECALHO_COLUNA_NOME = "OPERAÇÃO";
 $tpl2->block("BLOCK_CABECALHO_COLUNA");
@@ -354,67 +346,12 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl2->block("BLOCK_CONTEUDO");
     $tpl2->block("BLOCK_COLUNA");
 
-    //Total 
-    $tpl2->COLUNA_TAMANHO = "";
-    $tpl2->COLUNA_ALINHAMENTO = "right";
-    $tpl2->TEXTO = "R$ " . number_format($totalbruto, 2, ',', '.');
-    $tpl2->block("BLOCK_TEXTO");
-    $tpl2->block("BLOCK_CONTEUDO");
-    $tpl2->block("BLOCK_COLUNA");
-
-    //Icone Situa��o
-    $tpl2->COLUNA_TAMANHO = "35px";
-    $tpl2->COLUNA_ALINHAMENTO = "center";
-    $tpl2->ICONE_TAMANHO = "15px";
-    $tpl2->ICONE_CAMINHO = "$icones";
-    if ($status == 2) {
-        if ($usuario_codigo == $supervisor) {
-            $tpl2->ICONE_NOMEARQUIVO = "bandeira3_vermelha.png";
-            $tpl2->ICONE_DICA = "Incompleta";
-            $tpl2->ICONE_NOMEALTERNATIVO = "Incompleta";
-        } else {
-            $dataatual = date("Y-m-d");
-            $horaatual = date("H:i:s");
-            $tempo1 = $data . "_" . $hora;
-            $tempo2 = $dataatual . "_" . $horaatual;
-            $total_segundos = diferenca_entre_datahora($tempo1, $tempo2);
-            if ($total_segundos > 5400) {
-                $tpl2->ICONE_NOMEARQUIVO = "bandeira3_vermelha.png";
-                $tpl2->ICONE_DICA = "Incompleta";
-                $tpl2->ICONE_NOMEALTERNATIVO = "Incompleta";
-            } else {
-                $tpl2->ICONE_NOMEARQUIVO = "bandeira3_laranja.png";
-                $tpl2->ICONE_DICA = "Esta saida está em andamento por outro supervisor!";
-                $tpl2->ICONE_NOMEALTERNATIVO = "Em uso";
-                $editar_ocultar = 1;
-                $editar_ocultar_motivo = "Esta devolução está em andamento por outro supervisor! Se este usuário não finalizar esta devolução em 1:30 (uma hora e meia) ela passará a ser incompleta e então você poderá finalizá-la!";
-            }
-        }
-    } else {
-        $tpl2->ICONE_NOMEARQUIVO = "bandeira3_verde.png";
-        $tpl2->ICONE_DICA = "Concluída";
-        $tpl2->ICONE_NOMEALTERNATIVO = "Concluída";
-    }
-    $tpl2->block("BLOCK_ICONE");
-    $tpl2->block("BLOCK_CONTEUDO");
-    $tpl2->block("BLOCK_COLUNA");
 
 
     //Opera�ões
     $tpl2->ICONES_CAMINHO = $icones;
 
-    //Opera��o Imprimir
-    $tpl2->COLUNA_TAMANHO = "35px";
-    $tpl2->COLUNA_ALINHAMENTO = "center";
-    $tpl2->block("BLOCK_CONTEUDO_LINK_NOVAJANELA");
-    $tpl2->CONTEUDO_LINK_ARQUIVO = "saidas_ver.php?codigo=$numero&tiposaida=3&ope=4";
-    $tpl2->block("BLOCK_CONTEUDO_LINK");
-    $tpl2->block("BLOCK_OPERACAO_IMPRIMIR_HABILITADO");
-    $tpl2->block("BLOCK_OPERACAO_IMPRIMIR");
-    $tpl2->block("BLOCK_OPERACAO");
-    $tpl2->block("BLOCK_CONTEUDO");
-    $tpl2->block("BLOCK_COLUNA_OPERACAO");
-    $tpl2->block("BLOCK_COLUNA");
+
 
     //Opera��o Ver
     $tpl2->COLUNA_TAMANHO = "35px";
@@ -431,7 +368,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     //Opera��o Editar
     $tpl2->COLUNA_TAMANHO = "35px";
     $tpl2->COLUNA_ALINHAMENTO = "center";
-    $tpl2->CONTEUDO_LINK_ARQUIVO = "saidas_cadastrar.php?operacao=2&saidatipo=3&codigo=$numero";
+    $tpl2->CONTEUDO_LINK_ARQUIVO = "saidas_cadastrar.php?operacao=2&tiposaida=3&codigo=$numero";
     $tpl2->block("BLOCK_CONTEUDO_LINK");
     if ($permissao_saidas_editar_devolucao == 1) {
         if ($editar_ocultar == 1) {

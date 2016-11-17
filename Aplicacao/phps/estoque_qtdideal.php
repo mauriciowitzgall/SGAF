@@ -133,7 +133,7 @@ $tpl2->block("BLOCK_CABECALHO");
   if (!empty($filtro_codigoproduto))
   $sql_filtro = " and pro_codigo=$filtro_codigoproduto ";
   if (!empty($filtro_nomeproduto))
-  $sql_filtro = " and pro_nome like '%$filtro_nomeproduto%'";
+  $sql_filtro = " and ((pro_nome like '%$filtro_nomeproduto%')or(pro_referencia like '%$filtro_nomeproduto%')or(pro_tamanho like '%$filtro_nomeproduto%')or(pro_cor like '%$filtro_nomeproduto%')or(pro_descricao like '%$filtro_nomeproduto%'))";
  
   if ($filtro_proprio==1) 
       $sql_filtro = $sql_filtro . " and pro_quiosquequecadastrou=$usuario_quiosque ";
@@ -190,7 +190,8 @@ SELECT
     ) AS qtd,
     protip_sigla,
     pro_quiosquequecadastrou,
-    protip_codigo
+    protip_codigo,
+    pro_referencia, pro_tamanho, pro_cor, pro_descricao
 FROM produtos
 join produtos_tipo on (pro_tipocontagem=protip_codigo)
 WHERE pro_cooperativa =$usuario_cooperativa
@@ -200,7 +201,7 @@ AND pro_codigo NOT IN (
     WHERE qtdide_quiosque =$usuario_quiosque
 )
 $sql_filtro
-ORDER BY pro_nome
+ORDER BY pro_nome,pro_referencia, pro_tamanho, pro_cor, pro_descricao
 ";
 $query5 = mysql_query($sql5);
 if (!$query5)
@@ -220,6 +221,11 @@ if ((mysql_num_rows($query) == 0) && (mysql_num_rows($query5) == 0)) {
         while ($dados = mysql_fetch_assoc($query1)) {
             $codigo_produto = $dados["pro_codigo"];
             $nome_produto = $dados["pro_nome"];
+            $referencia= $dados['pro_referencia'];
+            $tamanho= $dados['pro_tamanho'];
+            $cor= $dados['pro_cor'];
+            $descricao= $dados['pro_descricao'];
+            $nome_produto2=" $nome_produto $referencia $tamanho $cor $descricao ";
             $qtd = $dados["qtd"];
             $qtdide = $dados["qtdide"];
             $sigla = $dados["protip_sigla"];
@@ -261,7 +267,7 @@ if ((mysql_num_rows($query) == 0) && (mysql_num_rows($query5) == 0)) {
             $tpl2->block("BLOCK_COLUNA");
             $tpl2->COLUNA_TAMANHO = "";
             $tpl2->COLUNA_ALINHAMENTO = "";
-            $tpl2->TEXTO = "$nome_produto";
+            $tpl2->TEXTO = "$nome_produto2";
             $tpl2->block("BLOCK_TEXTO");
             $tpl2->block("BLOCK_CONTEUDO");
             $tpl2->block("BLOCK_COLUNA");

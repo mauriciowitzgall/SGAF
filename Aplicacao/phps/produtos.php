@@ -110,7 +110,7 @@ if ($filtroproprio=="") $filtroproprio=1;
     if ($filtrocodigo != "")
         $sql_filtro = $sql_filtro . " and pro_codigo=$filtrocodigo";
     if ($filtronome != "")
-        $sql_filtro = $sql_filtro . " and pro_nome like '%$filtronome%'";
+        $sql_filtro = $sql_filtro . " and ((pro_nome like '%$filtronome%') or (pro_referencia like '%$filtronome%') or (pro_tamanho like '%$filtronome%') or (pro_cor like '%$filtronome%') or (pro_descricao like '%$filtronome%'))";
     if ($filtrocategoria != "")
         $sql_filtro = $sql_filtro . " and pro_categoria = $filtrocategoria";
     if ($filtromarca != "")
@@ -131,7 +131,7 @@ FROM produtos
 left join produtos_recipientes on (pro_recipiente=prorec_codigo)
 WHERE pro_cooperativa=$usuario_cooperativa
 $sql_filtro
-ORDER BY pro_nome
+ORDER BY pro_nome, pro_referencia, pro_tamanho, pro_cor, pro_descricao
 ";
 
 //Paginação
@@ -195,6 +195,11 @@ ORDER BY pro_nome
             $recipiente = $array['prorec_nome'];
             $volume = $array['pro_volume'];
             $marca = $array['pro_marca'];
+            $referencia = $array['pro_referencia'];
+            $tamanho = $array['pro_tamanho'];
+            $cor = $array['pro_cor'];
+            $descricao = $array['pro_descricao'];
+            $nome2="$nome $referencia $tamanho $cor $descricao";
             $data = converte_data($array['pro_datacriacao']);
             $hora = converte_hora($array['pro_horacriacao']);
             $usuarioquecadastrou=$array['pro_usuarioquecadastrou'];
@@ -215,7 +220,7 @@ ORDER BY pro_nome
                 <td align="left"><?php echo "$hora"; ?></td>
                 -->
 
-                <td><?php echo "$nome"; ?></td>
+                <td><?php echo "$nome2"; ?></td>
                 <td><?php echo "$marca"; ?></td>
                 <td><?php echo "$recipiente"; ?></td>
                 <td><?php echo "$volume"; ?></td>
