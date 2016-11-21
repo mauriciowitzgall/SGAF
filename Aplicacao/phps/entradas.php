@@ -129,9 +129,9 @@ include "includes.php";
 
 $sql = "
     SELECT DISTINCT
-            *
+            e.*
     FROM 
-            entradas              
+            entradas e              
             $sql_filtro_from
     WHERE 
             ent_quiosque = '$usuario_quiosque'

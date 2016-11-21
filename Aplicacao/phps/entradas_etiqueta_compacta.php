@@ -82,7 +82,7 @@ if ($massa==1) {
                 $produto_tamanho = $dados["pro_tamanho"];
                 $produto_cor = $dados["pro_cor"];
                 $produto_descricao = $dados["pro_descricao"];
-                $produto_nome2= "$produto_nome $produto_referencia $produto_cor $produto_descricao ";
+                $produto_nome2= "$produto_nome $produto_referencia $produto_tamanho $produto_cor $produto_descricao";
                 $produto = $dados["pro_codigo"];
                 $produto_descricao = $dados["pro_descricao"];
                 $fornecedor = $dados["pes_codigo"];
@@ -103,7 +103,7 @@ if ($massa==1) {
             $etiqueta = $produto_barra . $lote_barra;
             $valor = $etiqueta;
             
-            $produto_nome2=substr($produto_nome2,0,50);
+            $produto_nome2=substr($produto_nome2,0,40);
             $tpl->PRODUTO = "$produto_nome2";
             
             //Código de Barras
@@ -169,7 +169,7 @@ if ($massa==1) {
 
             
             $pula = $cont / 3;
-            $tpl->COLUNA_ALTURA="106.6px";
+            $tpl->COLUNA_ALTURA="96.16px";
             
             if (is_int($pula) == true) {
                 //echo "($valor)<br>";
@@ -178,7 +178,7 @@ if ($massa==1) {
                 $tpl->block("BLOCK_ETIQUETA_LINHA");
             } else {
                 $tpl->block("BLOCK_ETIQUETA_COLUNA");
-                $tpl->COLUNA_ESPACO_TAMANHO="10px";
+                $tpl->COLUNA_ESPACO_TAMANHO="5px";
                 $tpl->block("BLOCK_ETIQUETA_COLUNA_ESPACO");
                 $tpl->block("BLOCK_ETIQUETA_CONTEUDO");
             }

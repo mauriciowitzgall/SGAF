@@ -182,6 +182,11 @@ if (!$query) die("Erro SQL 1: " . mysql_error());
 
 while ($dados = mysql_fetch_assoc($query)) {
     $produto_nome = $dados["pro_nome"];
+    $produto_referencia=$dados["pro_referencia"];
+    $produto_tamanho=$dados["pro_tamanho"];
+    $produto_cor=$dados["pro_cor"];
+    $produto_descricao=$dados["pro_descricao"];
+    $produto_nome2 = "$produto_nome $produto_referencia $produto_tamanho $produto_cor $produto_descricao";
     $numero=$dados["entpro_numero"];
     $qtd=$dados["entpro_quantidade"];
     $sigla=$dados["protip_sigla"];
@@ -197,7 +202,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     //Linha Produto
     $tpl2->COLUNA_TAMANHO = "";
     $tpl2->COLUNA_ALINHAMENTO = "left";
-    $tpl2->TEXTO = "$produto_nome";
+    $tpl2->TEXTO = "$produto_nome2";
     $tpl2->block("BLOCK_TEXTO");
     $tpl2->block("BLOCK_CONTEUDO");
     $tpl2->block("BLOCK_COLUNA");
