@@ -8,6 +8,8 @@ function etiqueta_escolhida(tipoetiqueta,lote) {
         document.form2.action = "entradas_etiquetagranel.php"+"?lote="+lote+"&massa=1";
     } else if (tipoetiqueta==4) {
         document.form2.action = "entradas_etiqueta_compacta.php"+"?lote="+lote+"&massa=1";
+    } else if (tipoetiqueta==5) {
+        document.form2.action = "entradas_etiqueta_compacta_etiquetadora.php"+"?lote="+lote+"&massa=1";
     } else {
         alert("Ocorreu um erro! Nada grave, porém, se persistir, favor contatar equipe de suporte!");
     }
