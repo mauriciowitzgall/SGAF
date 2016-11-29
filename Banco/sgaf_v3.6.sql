@@ -1,5 +1,5 @@
-CREATE DATABASE  IF NOT EXISTS `sgaf_labodega` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `sgaf_labodega`;
+CREATE DATABASE  IF NOT EXISTS `sgaf_cliente` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `sgaf_cliente`;
 -- MySQL dump 10.13  Distrib 5.6.19, for osx10.7 (i386)
 --
 -- Host: 127.0.0.1    Database: sgaf_labodega

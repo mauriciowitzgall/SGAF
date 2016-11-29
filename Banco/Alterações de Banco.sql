@@ -132,7 +132,7 @@ UPDATE `configuracoes` SET `cnf_versao`='v3.5' WHERE `cnf_codigo`='1';
 
 -- FIM --
 
--- Inicio versão 3.6b
+-- Inicio versão 3.6
 
 UPDATE `configuracoes` SET `cnf_versao`='v3.6b' WHERE `cnf_codigo`='1';
 
@@ -5760,5 +5760,6 @@ UPDATE `sgaf_labodega`.`estados` SET `est_sigla`='CE' WHERE `est_codigo`='06';
 -- Montar este SQL ************** 
 UPDATE "TODAS TABELAS QUE USAM CIDADE" SET cid_antiga = cid_nova
 
+UPDATE `sgaf_labodega`.`configuracoes` SET `cnf_versao`='v3.6' WHERE `cnf_codigo`='1';
 
 
