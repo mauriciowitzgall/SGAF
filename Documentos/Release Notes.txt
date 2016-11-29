@@ -150,3 +150,24 @@ Commit: 98474cf
 - Criado campo ID (ficha/comanda) na tela de saídas
 - Incluso 2 novas opções de filtro na tela de saidas: por id (comanda) e por status (completas e incompletas)
 
+3.6
+
+- Retirado tratamento que impede o vendedor de fazer uma nova venda quando há uma venda incompleta anterior. Isso se dá devido ao papel vendedor ser substituido pelo operador de caixa.
+- Várias correções visuais
+- Agora só é permitido inserir um produto composto por entrada, definindo aquele lote como lote de produção de uma produto só.
+- Corrigido erro de calculo ao finalizar uma venda, o valor bruto apresentava um valor muito algo devido a conversões de ponto e virgula
+- Corrigido erro que mostrava o nome do fornecedor errado ao gerar uma entrada
+- Corrigido erro que alterava o tipo de contagem do produto ao editar o mesmo
+- Corrigido erro 10 que acontecia quando se realizava uma saída de ajuste
+- Corrigido erro 8 ao remover um item da lista de itens da saída
+- Inserido novo campo de filtro "A receber" nas saídas
+- Criado campos novos no cadastro de produto: tamanho, cor, referencia. E foi adicionado campos de filtros deste campos em várias telas de listagem. O campo de filtro nome de produto pode ser usado como campo de pesquisa genérica para qualquer uma das informações dos campos novos
+- Alterado tabelas de cidade e estado. Foi inserido novas cidades e definido o código do IBGE, pré-requisito para o módulo Fiscal.
+- Corrigido erro que não estava salvando a idade/data nasc. no cadastro de pessoa
+- Criado um arquivo de configuração para centralizar todas as configurações do quiosque.
+- Ao editar uma venda, agora é possível alterar o ID e consumidor
+- Alterado todos os lugares que aparecia "Ecosoli" para "Titotec".
+- Criado método para imprimir etiquetas em massa, ou seja, todos os itens de uma entrada de uma única vez.
+- Alterado a tela de geração de etiquetas em massa para mostrar apenas o modelo "etiquetinha/etiqueta pequena"
+- Criado novo tipo de impressão de etiquetas chamado "Compacta". Este modelo só está disponível para impressão em massa.
+- Em várias telas o nome do produto agora é mostrado junto com referencia, tamanho, cor e descrição.
