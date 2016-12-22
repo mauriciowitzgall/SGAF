@@ -145,6 +145,44 @@ ADD COLUMN `pro_tamanho` VARCHAR(70) NULL DEFAULT NULL AFTER `pro_podesersubprod
 ADD COLUMN `pro_cor` VARCHAR(70) NULL DEFAULT NULL AFTER `pro_tamanho`,
 ADD COLUMN `pro_referencia` VARCHAR(100) NULL DEFAULT NULL AFTER `pro_cor`;
 
+
+ALTER TABLE `estados` 
+ADD COLUMN `est_codigo2` VARCHAR(2) NOT NULL AFTER `est_nome`;
+
+TRUNCATE TABLE `estados`;
+
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (1, 'Acre', 'AC', '12',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (2, 'Alagoas', 'AL', '27',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (3, 'Amapá', 'AP', '16',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (4, 'Amazonas', 'AM', '13',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (5, 'Bahia', 'BA', '29',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (6, 'Ceará', 'Ce', '23',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (7, 'Distrito Federal', 'DF', '53',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (8, 'Espírito Santo', 'ES', '32',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (9, 'Goiás', 'GO', '52',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (10, 'Maranhão', 'MA', '21',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (11, 'Mato Grosso do Sul', 'MS', '50',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (12, 'Mato Grosso', 'MT', '51',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (13, 'Minas Gerais', 'MS', '31',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (14, 'Paraná', 'PR', '41',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (15, 'Paraíba', 'PB', '25',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (16, 'Pará', 'PA', '15',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (17, 'Pernambuco', 'PE', '26',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (18, 'Piauí', 'PI', '22',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (19, 'Rio de Janeiro', 'RJ', '33',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (20, 'Rio Grande do Norte', 'RN', '24',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (21, 'Rio Grande do Sul', 'RS', '43',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (22, 'Rondônia', 'RO', '11',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (23, 'Roraima', 'RR', '14',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (24, 'Santa Catarina', 'SC', '42',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (25, 'Sergipe', 'SE', '28',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (26, 'São Paulo', 'SP', '35',1);
+INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (27, 'Tocantins', 'TO', '17',1);
+
+UPDATE `estados` SET `est_sigla`='MG' WHERE `est_codigo`='13';
+UPDATE `estados` SET `est_sigla`='CE' WHERE `est_codigo`='06';
+
+
 ALTER TABLE `cidades` 
 ADD COLUMN `cid_ibge` VARCHAR(8) NOT NULL AFTER `cid_nome`;
 
@@ -5721,45 +5759,10 @@ INSERT INTO `cidades` (cid_estado, cid_ibge, cid_nome) VALUES (9, '5222203', 'Vi
 INSERT INTO `cidades` (cid_estado, cid_ibge, cid_nome) VALUES (9, '5222302', 'Vila Propício');
 INSERT INTO `cidades` (cid_estado, cid_ibge, cid_nome) VALUES (7, '5300108', 'Brasília');
 
-ALTER TABLE `sgaf_labodega`.`estados` 
-ADD COLUMN `est_codigo2` VARCHAR(2) NOT NULL AFTER `est_nome`;
-
-TRUNCATE TABLE `estados`;
-
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (1, 'Acre', 'AC', '12',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (2, 'Alagoas', 'AL', '27',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (3, 'Amapá', 'AP', '16',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (4, 'Amazonas', 'AM', '13',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (5, 'Bahia', 'BA', '29',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (6, 'Ceará', 'Ce', '23',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (7, 'Distrito Federal', 'DF', '53',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (8, 'Espírito Santo', 'ES', '32',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (9, 'Goiás', 'GO', '52',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (10, 'Maranhão', 'MA', '21',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (11, 'Mato Grosso do Sul', 'MS', '50',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (12, 'Mato Grosso', 'MT', '51',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (13, 'Minas Gerais', 'MS', '31',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (14, 'Paraná', 'PR', '41',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (15, 'Paraíba', 'PB', '25',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (16, 'Pará', 'PA', '15',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (17, 'Pernambuco', 'PE', '26',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (18, 'Piauí', 'PI', '22',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (19, 'Rio de Janeiro', 'RJ', '33',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (20, 'Rio Grande do Norte', 'RN', '24',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (21, 'Rio Grande do Sul', 'RS', '43',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (22, 'Rondônia', 'RO', '11',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (23, 'Roraima', 'RR', '14',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (24, 'Santa Catarina', 'SC', '42',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (25, 'Sergipe', 'SE', '28',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (26, 'São Paulo', 'SP', '35',1);
-INSERT INTO `estados` (est_codigo, est_nome, est_sigla, est_codigo2, est_pais) VALUES (27, 'Tocantins', 'TO', '17',1);
-
-UPDATE `sgaf_labodega`.`estados` SET `est_sigla`='MG' WHERE `est_codigo`='13';
-UPDATE `sgaf_labodega`.`estados` SET `est_sigla`='CE' WHERE `est_codigo`='06';
 
 -- Montar este SQL ************** 
 UPDATE "TODAS TABELAS QUE USAM CIDADE" SET cid_antiga = cid_nova
 
-UPDATE `sgaf_labodega`.`configuracoes` SET `cnf_versao`='v3.6' WHERE `cnf_codigo`='1';
+UPDATE `configuracoes` SET `cnf_versao`='v3.6' WHERE `cnf_codigo`='1';
 
 

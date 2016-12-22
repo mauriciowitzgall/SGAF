@@ -300,7 +300,7 @@ foreach ($tipo as $tipo2) {
 
 //Insere no banco ou atualiza
 if ($operacao == "cadastrar") {
-    echo $sql = "
+    $sql = "
     INSERT INTO 
         pessoas (
             pes_id,
