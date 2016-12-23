@@ -65,8 +65,10 @@ $tpl->block("BLOCK_BOTOES");
 $tpl->show();
 
 
+
 include "rodape.php";
     
 
 ?>
+
 

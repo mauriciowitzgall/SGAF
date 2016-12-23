@@ -146,6 +146,9 @@ if (($usuario_grupo==1)||(($usuario_grupo==7))) {
         //Pessoas
         $sql3 = "DELETE FROM pessoas WHERE pes_cooperativa=$codigo and (pes_grupopermissoes != 1 OR pes_grupopermissoes is null)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL3: " . mysql_error());
+        // Quiosques Configuracões
+        $sql3 = "DELETE FROM quiosques_configuracoes WHERE quicnf_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo)";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL16: " . mysql_error()); 
         // Quiosques
         $sql3 = "DELETE FROM quiosques WHERE qui_cooperativa=$codigo";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL21: " . mysql_error());

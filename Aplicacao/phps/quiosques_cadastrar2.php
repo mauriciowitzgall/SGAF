@@ -68,6 +68,7 @@ $tpl_notificacao = new Template("templates/notificacao.html");
 
 
 if ($codigo == "") {
+    
     $idunico=  uniqid();
     $sql = " INSERT INTO quiosques (qui_nome,qui_cidade,qui_cep,qui_bairro,qui_vila,qui_endereco,qui_numero,qui_complemento,qui_referencia,qui_fone1,qui_fone2,qui_email,qui_obs,qui_datacadastro,qui_horacadastro,qui_cooperativa,qui_usuario,qui_idunico)
 	VALUES ('$nome','$cidade','$cep','$bairro','$vila','$endereco','$numero','$complemento','$referencia','$fone1','$fone2','$email','$obs','$datacadastro','$horacadastro','$cooperativa','$usuario_codigo','$idunico');";
@@ -90,6 +91,15 @@ if ($codigo == "") {
         if (!mysql_query($sql2))
             die("Erro7: " . mysql_error());
     }
+    //Deve-se definir uma configuração padrão inicial para o quiosque cadastrado 
+    $sql7 = " INSERT INTO quiosques_configuracoes (quicnf_quiosque,quicnf_usamodulofiscal)
+	VALUES ($ultimo,1);";
+    if (!$query7= mysql_query($sql7))  die("Erro SQL Configuração quiosque".mysql_error());    
+    
+    
+
+    
+    
 } else {
 
     $sql2 = "SELECT qui_cooperativa FROM quiosques WHERE qui_codigo=$codigo";

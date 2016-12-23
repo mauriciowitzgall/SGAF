@@ -275,6 +275,14 @@ if ($usuario_grupo==2) {
         if (!$query3) {
             die("Erro SQL: " . mysql_error());
         }
+        
+        //quiosques_configuracoes
+        $sql3 = "DELETE FROM quiosques_configuracoes WHERE quicnf_quiosque=$codigo";
+        $query3 = mysql_query($sql3);
+        if (!$query3) {
+            die("Erro SQL Configurações Quiosque: " . mysql_error());
+        }        
+        
         //quiosques
         $sql3 = "DELETE FROM quiosques WHERE qui_codigo = $codigo"; 
         $query3 = mysql_query($sql3);

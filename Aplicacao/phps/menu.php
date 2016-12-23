@@ -17,7 +17,7 @@ if ($usuario_grupo<>4) {
     $tpl_menu->TD_ALINHAMENTO_VERTICAL = "bottom";
 
     //Menu Padrão (para uso de supervisores etc.)
-    if (($tipopagina<>"admin")&&($tipopagina<>"trocaunidade")&&($tipopagina<>"locais")&&($tipopagina<>"cooperativa")&&($usuario_cooperativa!=0)) {
+    if (($tipopagina<>"admin")&&($tipopagina<>"trocaunidade")&&($tipopagina<>"quiosque_configuracao")&&($tipopagina<>"locais")&&($tipopagina<>"cooperativa")&&($usuario_cooperativa!=0)) {
 
         //Celula em branco na esquerda para que as demais celular fiquem alinhadas a direita
         $tpl_menu->TD_LARGURA = "";

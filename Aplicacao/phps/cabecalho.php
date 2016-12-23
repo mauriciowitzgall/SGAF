@@ -47,9 +47,15 @@ if ($usuario_caixa<>0) {
 $tpl8->block("BLOCK_NOME_QUIOSQUE_COOPERATIVA");
 
 
-//Configurações
+//Configurações Administradores 
 if (($usuario_grupo==1)||($usuario_grupo==7)) {
     $tpl8->block("BLOCK_CONFIGURACOES");
+}
+
+
+//Configurações do Quiosque 
+if (($usuario_grupo==3)||($usuario_quiosque!='')) {
+    $tpl8->block("BLOCK_CONFIGURACOES_QUIOSQUE");
 }
 
 
