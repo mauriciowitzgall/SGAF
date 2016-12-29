@@ -5,8 +5,10 @@ if ($permissao_quiosque_definirsupervisores <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
+$quiosque = $_GET["quiosque"];
 
-$tipopagina = "quiosques";
+if (($permissao_quiosque_cadastrar==1)&&($quiosque!=$usuario_quiosque)) $tipopagina = "quiosques2";
+else $tipopagina = "quiosques";
 include "includes.php";
 
 //Template de Título e Sub-título
@@ -18,7 +20,6 @@ $tpl_titulo->NOME_ARQUIVO_ICONE = "quiosque_supervisores.png";
 $tpl_titulo->show();
 
 //Inicio da exclus�o de entradas
-$quiosque = $_GET["quiosque"];
 $supervisor = $_GET["supervisor"];
 
 //Limpa o grupo de permissões do usu�rio da pessoa

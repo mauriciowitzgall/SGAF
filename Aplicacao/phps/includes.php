@@ -29,7 +29,6 @@ $modal=$_GET["modal"];
         <script type="text/javascript" src="js/_scripts/exemplo-calendario.js"></script>        
         <script type="text/javascript" src="js/jquery.price_format.1.5.js"></script>
         <script type="text/javascript" src="login_atualizarsessao.js"></script>
-        <script type="text/javascript" src="controle/google_analytics.js"></script>
     </head>
     
     <body bgcolor="">        

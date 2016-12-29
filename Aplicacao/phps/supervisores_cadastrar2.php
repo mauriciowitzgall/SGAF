@@ -7,11 +7,12 @@ if ($permissao_quiosque_definirsupervisores <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
+$quiosque = $_POST['quiosque'];
 
-$tipopagina = "quiosques";
+if (($permissao_quiosque_cadastrar==1)&&($quiosque!=$usuario_quiosque)) $tipopagina = "quiosques2";
+else $tipopagina = "quiosques";
 include "includes.php";
 
-$quiosque = $_POST['quiosque'];
 $supervisor = $_REQUEST['supervisor'];
 $operacao = $_POST['operacao'];
 $datafuncao = $_POST['datafuncao'];

@@ -4,7 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" type="text/css" href="classes.css" />
     <link rel="stylesheet" type="text/css" href="templates/geral.css">
-        <script type="text/javascript" src="controle/google_analytics.js"></script>
         <script type="text/javascript" src="js/jquery-1.3.2.js"></script>
         <script src="js/jquery.maskedinput-1.1.4.pack.js" type="text/javascript"></script>
         <script src="mascaras.js" type="text/javascript"></script>    

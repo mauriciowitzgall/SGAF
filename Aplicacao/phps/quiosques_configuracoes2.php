@@ -5,9 +5,14 @@ $tipopagina="quiosque_configuracao";
 require "login_verifica.php";
 include "includes.php";
 
-$usamodulofiscal = $_POST['usamodulofiscal'];
-$quiosque = $_POST['quiosque'];
 
+$quiosque = $_POST['quiosque'];
+$usamodulofiscal = $_POST['usamodulofiscal'];
+$crtnfe = $_POST['crtnfe'];
+$serienfe = $_POST['serienfe'];
+$tipoimpressaodanfe = $_POST['tipoimpressaodanfe'];
+$ambientenfe = $_POST['ambientenfe'];
+$versaonfe = $_POST['versaonfe'];
 
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
@@ -22,13 +27,18 @@ $tpl_titulo->show();
 //Estrutura da notificação
 $tpl_notificacao = new Template("templates/notificacao.html");
 $tpl_notificacao->ICONES = $icones;
-$tpl_notificacao->DESTINO = "inicio.php";
+$tpl_notificacao->DESTINO = "quiosques.php";
 
 $sql = "
 UPDATE
     quiosques_configuracoes
 SET            
-    quicnf_usamodulofiscal=$usamodulofiscal
+    quicnf_usamodulofiscal='$usamodulofiscal',
+    quicnf_crtnfe='$crtnfe',
+    quicnf_serienfe='$serienfe',
+    quicnf_tipoimpressaodanfe='$tipoimpressaodanfe',
+    quicnf_ambientenfe='$ambientenfe',
+    quicnf_versaonfe='$versaonfe'
 WHERE
     quicnf_quiosque=$quiosque
 ";

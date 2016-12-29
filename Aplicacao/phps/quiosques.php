@@ -8,7 +8,7 @@ if ($permissao_quiosque_ver <> 1) {
 }
 
 
-$tipopagina = "quiosques";
+$tipopagina = "quiosques2";
 include "includes.php";
 
 //Template de Título e Sub-título

@@ -6,8 +6,10 @@ if ($permissao_taxas_aplicar <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
+$quiosque = $_GET['qui'];
 
-$tipopagina = "quiosques";
+if (($permissao_quiosque_cadastrar==1)&&($quiosque!=$usuario_quiosque)) $tipopagina = "quiosques2";
+else $tipopagina = "quiosques";
 include "includes.php";
 include "controller/classes.php";
 
@@ -40,7 +42,6 @@ if ($linhas == 0) {
 
 //Pega todos os dados da tabela (Necessário caso seja uma edição)
 $taxa = $_GET['taxa'];
-$quiosque = $_GET['qui'];
 $operacao = $_GET['ope'];
 $tipo = $_GET['tipo'];
 

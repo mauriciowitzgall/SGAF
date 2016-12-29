@@ -23,9 +23,11 @@ if ($operacao == 'ver') {
     }
 }
 
+if (($permissao_quiosque_cadastrar==1)&&($codigo!=$usuario_quiosque)) $tipopagina = "quiosques2";
+else $tipopagina = "quiosques";
+
 
 include "includes.php";
-$tipopagina = "cooperativa";
 
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");

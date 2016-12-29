@@ -12,6 +12,10 @@ if ($codigo == "") {
         exit;
     }
 }
+
+if (($permissao_quiosque_cadastrar==1)&&($codigo!=$usuario_quiosque)) $tipopagina = "quiosques2";
+else $tipopagina = "quiosques";
+
 include "includes.php";
 //print_r($_REQUEST);
 
@@ -93,7 +97,7 @@ if ($codigo == "") {
     }
     //Deve-se definir uma configuração padrão inicial para o quiosque cadastrado 
     $sql7 = " INSERT INTO quiosques_configuracoes (quicnf_quiosque,quicnf_usamodulofiscal)
-	VALUES ($ultimo,1);";
+	VALUES ($ultimo,0);";
     if (!$query7= mysql_query($sql7))  die("Erro SQL Configuração quiosque".mysql_error());    
     
     

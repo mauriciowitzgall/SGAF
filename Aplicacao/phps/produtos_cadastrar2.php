@@ -28,8 +28,34 @@ $categoria = $_POST['categoria'];
 $descricao = $_POST['descricao'];
 $tiponegociacao = $_POST['box'];
 $codigounico = $_POST['codigounico'];
+$dadosfiscais = $_POST['dadosfiscais'];
+if ($dadosfiscais==1) {
+    $ncm = $_POST['nfencm_codigo'];
+    $cfop = $_POST['nfecfop_codigo'];
+    $icms = str_replace(",", ".",$_POST['nfeicms']);
+    $icmsst = str_replace(",", ".",$_POST['nfeicmsst']);
+    $ipi = str_replace(",", ".",$_POST['nfeipi']);
+    $pis = str_replace(",", ".",$_POST['nfepis']);
+    $cofins = str_replace(",", ".",$_POST['nfecofins']);
+    $origem = $_POST['nfeorigem'];
+    $cst = $_POST['nfecst_codigo'];
+    $csosn = $_POST['nfecsosn_codigo'];
+} else {
+    $ncm = 'null';
+    $cfop = 'null';
+    $icms = 'null';
+    $icmsst = 'null';
+    $ipi = 'null';
+    $pis = 'null';
+    $cofins = 'null';
+    $origem = 'null';
+    $cst = 'null';
+    $csosn = 'null';  
+}
 $data = date("Y/m/d");
 $hora = date("H:i:s");
+
+
 
 
 //Template de Título e Sub-título
@@ -79,8 +105,8 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     */
     
     $idunico=  uniqid();
-    $sql = "INSERT INTO produtos (pro_nome,pro_tipocontagem,pro_categoria,pro_descricao,pro_datacriacao,pro_horacriacao,pro_cooperativa,pro_volume,pro_marca,pro_recipiente,pro_composicao,pro_codigounico,pro_idunico,pro_industrializado,pro_usuarioquecadastrou,pro_quiosquequecadastrou,pro_tamanho,pro_cor,pro_referencia,pro_podesersubproduto)
-    VALUES ('$nome','$tipo','$categoria','$descricao','$data','$hora',$usuario_cooperativa,'$volume','$marca','$recipiente','$composicao','$codigounico','$idunico','$industrializado','$usuario_codigo','$usuario_quiosque','$tamanho','$cor','$referencia','$subproduto');";
+    $sql = "INSERT INTO produtos (pro_nome,pro_tipocontagem,pro_categoria,pro_descricao,pro_datacriacao,pro_horacriacao,pro_cooperativa,pro_volume,pro_marca,pro_recipiente,pro_composicao,pro_codigounico,pro_idunico,pro_industrializado,pro_usuarioquecadastrou,pro_quiosquequecadastrou,pro_tamanho,pro_cor,pro_referencia,pro_podesersubproduto,pro_dadosfiscais,pro_ncm,pro_cfop,pro_icms,pro_icmsst,pro_ipi,pro_pis,pro_cofins,pro_origem,pro_cst,pro_csosn)
+    VALUES ('$nome','$tipo','$categoria','$descricao','$data','$hora',$usuario_cooperativa,'$volume','$marca','$recipiente','$composicao','$codigounico','$idunico','$industrializado','$usuario_codigo','$usuario_quiosque','$tamanho','$cor','$referencia','$subproduto','$dadosfiscais',$ncm,$cfop,$icms,$icmsst,$ipi,$pis,$cofins,$origem,$cst,$csosn);";
     $query = mysql_query($sql);
     if (!$query)
         die("Erro22: " . mysql_error());
@@ -152,7 +178,18 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     pro_tamanho='$tamanho',
     pro_cor='$cor',
     pro_referencia='$referencia',
-    pro_podesersubproduto='$subproduto'
+    pro_podesersubproduto='$subproduto',
+    pro_dadosfiscais=$dadosfiscais,
+    pro_ncm=$ncm,
+    pro_cfop=$cfop,
+    pro_icms=$icms,
+    pro_icmsst=$icmsst,
+    pro_ipi=$ipi,
+    pro_pis=$pis,
+    pro_cofins=$cofins,
+    pro_origem=$origem,
+    pro_cst=$cst,
+    pro_csosn=$csosn
     WHERE pro_codigo = '$codigo'
     ";
     if (!mysql_query($sql))

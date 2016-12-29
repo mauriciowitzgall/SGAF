@@ -14,7 +14,6 @@
             <link href="js/_style/jquery.click-calendario-1.0.css" rel="stylesheet" type="text/css"/>
             <script type="text/javascript" src="js/_scripts/jquery.click-calendario-1.0-min.js"></script>		
             <script type="text/javascript" src="js/_scripts/exemplo-calendario.js"></script>        
-            <script type="text/javascript" src="controle/google_analytics.js"></script>
             <script type="text/javascript" src="funcoes.js"></script>
             <script type="text/javascript">
                 window.onload = function(){

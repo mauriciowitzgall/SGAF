@@ -7,7 +7,11 @@ if ($permissao_quiosque_versupervisores <> 1) {
     exit;
 }
 
-$tipopagina = "quiosques";
+$quiosque = $_GET['quiosque'];
+
+
+if (($permissao_quiosque_cadastrar==1)&&($quiosque!=$usuario_quiosque)) $tipopagina = "quiosques2";
+else $tipopagina = "quiosques";
 include "includes.php";
 
 //Template de Título e Sub-título
@@ -20,7 +24,6 @@ $tpl_titulo->show();
 
 $tpl = new Template("templates/listagem_2.html");
 $tpl->ICONE_ARQUIVO = $icones;
-$quiosque = $_GET['quiosque'];
 
 
 //Campo Quiosque no Topo

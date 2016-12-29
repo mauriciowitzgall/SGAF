@@ -5,8 +5,10 @@ if ($permissao_taxas_aplicar <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
+$quiosque = $_GET["qui"];
 
-$tipopagina = "quiosques";
+if (($permissao_quiosque_cadastrar==1)&&($quiosque!=$usuario_quiosque)) $tipopagina = "quiosques2";
+else $tipopagina = "quiosques";
 include "includes.php";
 
 //TÍTULO PRINCIPAL
@@ -18,7 +20,6 @@ $tpl_titulo->NOME_ARQUIVO_ICONE = "quiosques_taxas.png";
 $tpl_titulo->show();
 
 //Inicio da exclusão de entradas
-$quiosque = $_GET["qui"];
 $taxa = $_GET["taxa"];
 
 

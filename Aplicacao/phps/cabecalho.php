@@ -53,11 +53,6 @@ if (($usuario_grupo==1)||($usuario_grupo==7)) {
 }
 
 
-//Configurações do Quiosque 
-if (($usuario_grupo==3)||($usuario_quiosque!='')) {
-    $tpl8->block("BLOCK_CONFIGURACOES_QUIOSQUE");
-}
-
 
 //Grupo de permissão
 if ($usuario_grupo == 0) {
@@ -82,10 +77,6 @@ if ($usuario_grupo==4) {
     }
     
 }
-
-
-
-
 
 
 //Troca Unidade

@@ -6,12 +6,13 @@ if ($permissao_quiosque_vertaxas <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
+$quiosque = $_GET["quiosque"];
 
-$tipopagina = "quiosques";
+if (($permissao_quiosque_cadastrar==1)&&($quiosque!=$usuario_quiosque)) $tipopagina = "quiosques2";
+else $tipopagina = "quiosques";
 include "includes.php";
 include "controller/classes.php";
 
-$quiosque = $_GET["quiosque"];
 
 
 //TÍTULO PRINCIPAL

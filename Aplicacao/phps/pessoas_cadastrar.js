@@ -92,7 +92,6 @@ function aparece_tiponegociacao() {
 }
 
 $(document).ready(function() {
-
         aparece_tiponegociacao();
 
         tippes = $("select[name=tipopessoa]").val();    

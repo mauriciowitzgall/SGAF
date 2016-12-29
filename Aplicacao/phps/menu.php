@@ -17,23 +17,27 @@ if ($usuario_grupo<>4) {
     $tpl_menu->TD_ALINHAMENTO_VERTICAL = "bottom";
 
     //Menu Padrão (para uso de supervisores etc.)
-    if (($tipopagina<>"admin")&&($tipopagina<>"trocaunidade")&&($tipopagina<>"quiosque_configuracao")&&($tipopagina<>"locais")&&($tipopagina<>"cooperativa")&&($usuario_cooperativa!=0)) {
+    if (($tipopagina<>"admin")&&($tipopagina<>"trocaunidade")&&($tipopagina<>"locais")&&($tipopagina<>"quiosques2")&&($tipopagina<>"cooperativa")&&($usuario_cooperativa!=0)) {
 
+        
         //Celula em branco na esquerda para que as demais celular fiquem alinhadas a direita
         $tpl_menu->TD_LARGURA = "";
         $tpl_menu->block("BLOCK_MENU_ITEM");
 
         $tpl_menu->TD_LARGURA = "100px";
 
+        
+        
         //Quiosques
-        $tpl_menu->IMAGEM_TITULO = "Quiosques";
-        $tpl_menu->TITULO = "Quiosques";
+        $tpl_menu->IMAGEM_TITULO = "Quiosque";
+        $tpl_menu->TITULO = "Quiosque";
         if ($permissao_quiosque_ver == 1) {
             $tpl_menu->IMAGEM_ARQUIVO = "quiosques.png";
-            $tpl_menu->LINK = "quiosques.php";
+            $tpl_menu->LINK = "quiosques_cadastrar.php?codigo=$usuario_quiosque&operacao=editar";
             $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
             $tpl_menu->block("BLOCK_MENU_ITEM");
         }
+        
 
         //Pessoas
         $tpl_menu->IMAGEM_TITULO = "Pessoas";
@@ -155,32 +159,53 @@ if ($usuario_grupo<>4) {
         //Sub-menu Quiosque
         if ($tipopagina == "quiosques") {
 
-            //Quiosques
-            if ($permissao_quiosque_ver == 1) {
-                $tpl_menu->IMAGEM_TITULO = "Quiosques";
-                $tpl_menu->TITULO = "Quiosques";
-                $tpl_menu->IMAGEM_ARQUIVO = "quiosques.png";
-                $tpl_menu->LINK = "quiosques.php";
-                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-                $tpl_menu->block("BLOCK_MENU_ITEM");
-            }
-
             //Taxas
-            if ($permissao_taxas_ver == 1) {
+            if ($permissao_quiosque_ver == 1) {
                 $tpl_menu->IMAGEM_TITULO = "Taxas";
                 $tpl_menu->TITULO = "Taxas";
-                $tpl_menu->IMAGEM_ARQUIVO = "quiosques_taxas.png";
+                $tpl_menu->IMAGEM_ARQUIVO = "taxas.png";
                 $tpl_menu->LINK = "taxas.php";
                 $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
                 $tpl_menu->block("BLOCK_MENU_ITEM");
             }
 
-            //Taxas
-            if ($permissao_cooperativa_gestores_ver == 1) {
-                $tpl_menu->IMAGEM_TITULO = "Gestores";
-                $tpl_menu->TITULO = "Gestores";
-                $tpl_menu->IMAGEM_ARQUIVO = "cooperativa_gestores.png";
-                $tpl_menu->LINK = "cooperativa_gestores.php";
+            //Supervisores
+            if ($permissao_quiosque_ver == 1) {
+                $tpl_menu->IMAGEM_TITULO = "Supervisores";
+                $tpl_menu->TITULO = "Supervisores";
+                $tpl_menu->IMAGEM_ARQUIVO = "quiosque_supervisores.png";
+                $tpl_menu->LINK = "supervisores.php?quiosque=$usuario_quiosque";
+                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                $tpl_menu->block("BLOCK_MENU_ITEM");
+            }
+
+            //Taxas Quiosque
+            if ($permissao_taxas_ver == 1) {
+                $tpl_menu->IMAGEM_TITULO = "Taxas Quiosque";
+                $tpl_menu->TITULO = "Taxas Quiosque";
+                $tpl_menu->IMAGEM_ARQUIVO = "quiosques_taxas.png";
+                $tpl_menu->LINK = "quiosque_taxas.php?quiosque=$usuario_quiosque";
+                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                $tpl_menu->block("BLOCK_MENU_ITEM");
+            }
+
+            
+            //Configurações
+            if ($permissao_quiosque_editar == 1) {
+                $tpl_menu->IMAGEM_TITULO = "Configurações";
+                $tpl_menu->TITULO = "Configurações";
+                $tpl_menu->IMAGEM_ARQUIVO = "quiosques_configuracoes.png";
+                $tpl_menu->LINK = "quiosques_configuracoes.php";
+                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                $tpl_menu->block("BLOCK_MENU_ITEM");
+            }
+            
+            //Quiosque
+            if ($permissao_quiosque_editar == 1) {
+                $tpl_menu->IMAGEM_TITULO = "Quiosque";
+                $tpl_menu->TITULO = "Quiosque";
+                $tpl_menu->IMAGEM_ARQUIVO = "quiosques.png";
+                $tpl_menu->LINK = "quiosques_cadastrar.php?codigo=$usuario_quiosque&operacao=editar";
                 $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
                 $tpl_menu->block("BLOCK_MENU_ITEM");
             }
@@ -320,7 +345,7 @@ if ($usuario_grupo<>4) {
                 $tpl_menu->block("BLOCK_MENU_ITEM");
             }
         }
-    } else if (($tipopagina=="cooperativa")||($tipopagina=="locais")||($tipopagina=="configuracoes")){
+    } else if (($tipopagina=="cooperativa")||($tipopagina=="locais")||($tipopagina=="quiosques2")||($tipopagina=="configuracoes")){
         //$tpl_menu->TABELA_ALINHAMENTO = "right";
 
         //Celula em branco na esquerda para que as demais celular fiquem alinhadas a direita
@@ -335,6 +360,17 @@ if ($usuario_grupo<>4) {
             $tpl_menu->TD_LARGURA = "110px";
             $tpl_menu->TITULO = "Cooperativas";
             $tpl_menu->LINK = "cooperativas.php";
+            $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+            $tpl_menu->block("BLOCK_MENU_ITEM");
+        }
+
+        //Quiosques
+        if (($usuario_grupo==1)||($usuario_grupo==7)) {
+            $tpl_menu->IMAGEM_TITULO = "Quiosques";
+            $tpl_menu->TD_LARGURA = "110px";
+            $tpl_menu->TITULO = "Quiosques";
+            $tpl_menu->IMAGEM_ARQUIVO = "quiosques.png";
+            $tpl_menu->LINK = "quiosques.php";
             $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
             $tpl_menu->block("BLOCK_MENU_ITEM");
         }
@@ -377,7 +413,18 @@ if ($usuario_grupo<>4) {
 
         $tpl_menu->block("BLOCK_MENU");
 
-        //Sub-menu dos administradores
+        //Sub-menu Cooperativas
+        if ($tipopagina=="cooperativa") {
+            //Gestores
+            if ($permissao_cooperativa_gestores_ver == 1) {
+                $tpl_menu->IMAGEM_TITULO = "Gestores";
+                $tpl_menu->TITULO = "Gestores";
+                $tpl_menu->IMAGEM_ARQUIVO = "cooperativa_gestores.png";
+                $tpl_menu->LINK = "cooperativa_gestores.php";
+                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                $tpl_menu->block("BLOCK_MENU_ITEM");
+            }
+        }
 
         //Dados principais
         $tpl_menu->TABELA_TAMANHO = "";

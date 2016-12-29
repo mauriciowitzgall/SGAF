@@ -17,7 +17,15 @@ include "includes.php";
 <?php
 $codigo = $_GET['codigo'];
 $ver = $_GET['ver'];
-$sql = "SELECT * FROM produtos WHERE pro_codigo='$codigo'";
+$operacao = $_GET['operacao'];
+$sql = "SELECT * 
+    FROM produtos 
+    LEFT JOIN nfe_ncm on (pro_ncm=ncm_codigo)
+    LEFT JOIN nfe_cfop on (pro_cfop=cfop_codigo)
+    LEFT JOIN nfe_cst on (pro_cst=cst_codigo)
+    LEFT JOIN nfe_csosn on (pro_csosn=csosn_codigo)
+    WHERE pro_codigo='$codigo'
+";
 $query = mysql_query($sql);
 while ($array = mysql_fetch_array($query)) {
     $nome = $array['pro_nome'];
@@ -34,8 +42,49 @@ while ($array = mysql_fetch_array($query)) {
     $tamanho=$array['pro_tamanho'];
     $cor=$array['pro_cor'];
     $referencia=$array['pro_referencia'];
+    $ncm_codigo=$array['pro_ncm'];
+    $ncm=$array['ncm_id'];
+    $cfop_codigo=$array['pro_cfop'];
+    $cfop=$array['cfop_id'];
+    $icms=$array['pro_icms'];
+    $icmsst=$array['pro_icmsst'];
+    $ipi=$array['pro_ipi'];
+    $pis=$array['pro_pis'];
+    $cofins=$array['pro_cofins'];
+    $origem_codigo=$array['pro_origem'];
+    $cst_codigo=$array['pro_cst'];
+    $cst=$array['cst_id'];
+    $csosn_codigo=$array['pro_csosn'];
+    $csosn=$array['csosn_id'];
+    $dadosfiscais=$array['pro_dadosfiscais'];
     if ($subproduto=="") $subproduto=0;
 }
+
+$sql2 = "SELECT * FROM quiosques_configuracoes WHERE quicnf_quiosque='$usuario_quiosque'";
+if (!$query2 = mysql_query($sql2)) die ("Erro SQL Quiosque Configuracões: ".mysql_error());
+While ($dados2=  mysql_fetch_assoc($query2)) {
+    $usamodulofiscal=$dados2["quicnf_usamodulofiscal"];
+    $crt=$dados2["quicnf_crtnfe"];
+}
+
+//Se estiver parametrizado nas configuracoes do quiosque que ele usa módulo fiscal, logo por padrão os dados fiscais devem ser preenchidos
+if ($operacao==1) {
+    if ($usamodulofiscal==1) {
+        $dadosfiscais=1;
+    } else {
+        $dadosfiscais=0;
+    }  
+} 
+
+
+if ($cfop=="") $cfop="0.000";
+if ($icms=="") $icms="0,00";
+if ($icmsst=="") $icmsst="0,00";
+if ($ipi=="") $ipi="0,00";
+if ($pis=="") $pis="0,00";
+if ($cofins=="") $cofins="0,00";
+if ($icms=="") $icms="0,00";
+
 
 $sql2="SELECT quitipneg_tipo FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$usuario_quiosque";
 if (!$query2 = mysql_query($sql2)) die("Erro SQL2: ".mysql_error());
@@ -58,8 +107,160 @@ function atualiza_categorias () {
         $("select[name=categoria]").html(valor2);
     });    
 }
-    
-    window.onload = function(){
+        
+function pesquisa_ncm (valor) {
+    //alert("Pesquisa e popula label NCM: "+valor);
+    $.post("produtos_pesquisa_ncm.php",{
+        id:valor
+    },function(valor2){
+        //alert(valor2);
+        valor2=valor2.split("/");
+        valor3=valor2[0];
+        valor4=valor2[1];
+        //alert("v3:"+valor3+" e v4:"+valor4);
+        $("label[id=label_ncm]").text(valor3);
+        $("input[name=nfencm_codigo]").val(valor4);
+    });
+}
+        
+function pesquisa_cfop (valor) {
+    /*
+    $('#nfecfop').priceFormat({
+        prefix: '',
+        sufix: '',
+        centsLimit: 0,
+        centsSeparator: '',
+        thousandsSeparator: '.'
+    });
+    */
+    $.post("produtos_pesquisa_cfop.php",{
+        id:valor
+    },function(valor2){
+        valor2=valor2.split("/");
+        valor3=valor2[0];
+        valor4=valor2[1];
+        $("label[id=label_cfop]").text(valor3);
+        $("input[name=nfecfop_codigo]").val(valor4);
+    });
+}
+
+
+function pesquisa_origem (valor) {
+       
+    $.post("produtos_pesquisa_origem.php",{
+        codigo:valor
+    },function(valor2){
+        //alert(valor2);
+        $("label[id=label_origem]").text(valor2);
+    });
+}
+
+function pesquisa_cst (valor) {
+       
+    $.post("produtos_pesquisa_cst.php",{
+        id:valor
+    },function(valor2){
+        valor2=valor2.split("/");
+        valor3=valor2[0];
+        valor4=valor2[1];
+        $("label[id=label_cst]").text(valor3);
+        $("input[name=nfecst_codigo]").val(valor4);
+    });
+}
+
+function pesquisa_csosn (valor) {
+       
+    $.post("produtos_pesquisa_csosn.php",{
+        id:valor
+    },function(valor2){
+        valor2=valor2.split("/");
+        valor3=valor2[0];
+        valor4=valor2[1];
+        $("label[id=label_csosn]").text(valor3);
+        $("input[name=nfecsosn_codigo]").val(valor4);
+    });
+}
+
+
+function formato_porcentagem() {
+    $('#nfeicms').priceFormat({
+        prefix: '',
+        centsSeparator: ',',
+        thousandsSeparator: ''
+    });
+    $('#nfeicmsst').priceFormat({
+        prefix: '',
+        centsSeparator: ',',
+        thousandsSeparator: ''
+    });
+    $('#nfeipi').priceFormat({
+        prefix: '',
+        centsSeparator: ',',
+        thousandsSeparator: ''
+    });
+    $('#nfepis').priceFormat({
+        prefix: '',
+        centsSeparator: ',',
+        thousandsSeparator: ''
+    });
+    $('#nfecofins').priceFormat({
+        prefix: '',
+        centsSeparator: ',',
+        thousandsSeparator: ''
+    });
+}
+   
+function dados_fiscais(valor) {
+    crt = $("input[name=nfecrt]").val();
+    if (valor==1) {
+        document.form1.nfencm.required=true;
+        document.form1.nfecfop.required=true;
+        document.form1.nfeicms.required=true;
+        document.form1.nfeicmsst.required=true;
+        document.form1.nfeipi.required=true;
+        document.form1.nfepis.required=true;
+        document.form1.nfecofins.required=true;
+        document.form1.nfeorigem.required=true;
+        document.form1.nfecst.required=true;
+        document.form1.nfecsosn.required=true;
+        $("tr[id=linha_ncm]").show(); 
+        $("tr[id=linha_cfop]").show(); 
+        $("tr[id=linha_icms]").show(); 
+        $("tr[id=linha_icmsst]").show();
+        $("tr[id=linha_ipi]").show();
+        $("tr[id=linha_pis]").show();
+        $("tr[id=linha_cofins]").show();
+        $("tr[id=linha_origem]").show();
+        $("tr[id=linha_cst]").show();
+        if (crt==1) {
+            $("tr[id=linha_csosn]").show();
+        }
+    } else {
+        document.form1.nfencm.required=false;
+        document.form1.nfecfop.required=false;
+        document.form1.nfeicms.required=false;
+        document.form1.nfeicmsst.required=false;
+        document.form1.nfeipi.required=false;
+        document.form1.nfepis.required=false;
+        document.form1.nfecofins.required=false;
+        document.form1.nfeorigem.required=false;
+        document.form1.nfecst.required=false;
+        document.form1.nfecsosn.required=false;
+        $("tr[id=linha_ncm]").hide(); 
+        $("tr[id=linha_cfop]").hide(); 
+        $("tr[id=linha_icms]").hide(); 
+        $("tr[id=linha_icmsst]").hide();
+        $("tr[id=linha_ipi]").hide();
+        $("tr[id=linha_pis]").hide();
+        $("tr[id=linha_cofins]").hide();
+        $("tr[id=linha_origem]").hide();
+        $("tr[id=linha_cst]").hide();
+        $("tr[id=linha_csosn]").hide();
+    }
+  
+}
+   
+window.onload = function(){
     //industrializado
     ind=$("select[name=industrializado]").val();
     if (ind==0) {
@@ -81,10 +282,31 @@ function atualiza_categorias () {
         
     }
     
+
     
+    var dadosfiscais = $("select[name=dadosfiscais]").val();
+    dados_fiscais(dadosfiscais);
     
+    var ncm = $("input[name=nfencm]").val();
+    pesquisa_ncm(ncm);
     
-}
+    var cfop = $("input[name=nfecfop]").val();
+    pesquisa_cfop(cfop);
+    
+    var origem = $("input[name=nfeorigem]").val();
+    pesquisa_origem(origem);
+    
+    var cst = $("input[name=nfecst]").val();
+    pesquisa_cst(cst);
+    
+    var csosn = $("input[name=nfecsosn]").val();
+    pesquisa_csosn(csosn);
+
+    
+}   
+
+    
+
 
 </script>
 
@@ -330,11 +552,238 @@ if ($linhas == 0) {
                     <option value="1" <?php if ($subproduto==1) echo "selected"; else echo ""; ?>>Sim</option>
                 </select>
             </td>
+        </tr> 
+        
+        
+        
+        <tr>
+            <td align="right" width="200px"><b>Dados Fiscais: <label class="obrigatorio"></label></b></td>
+            <td align="left" valign="bottom">
+                <select name="dadosfiscais" onchange="dados_fiscais(this.value)" class="campopadrao" required="required" <?php if ($ver == 1) echo" disabled "; ?> >
+                    <option value="0" <?php if ($dadosfiscais==0) echo " selected ";  ?>>Não</option>
+                    <option value="1" <?php if ($dadosfiscais==1) echo " selected ";  ?>>Sim</option>
+                </select>
+                <span class="dicacampo"> </span>
+            </td>
         </tr>        
+        
+        <tr id="linha_ncm">
+            <td align="right" width="200px"><b>NCM: <label class="obrigatorio"></label></b></td>
+            <td align="left" width="">
+                <input  
+                    id="nfencm" 
+                    name="nfencm"  
+                    type="text" 
+                    size="16"
+                    maxlength="8"
+                    class="campopadrao"  
+                    value="<?php echo "$ncm"; ?>" 
+                    <?php if ($ver == 1) echo" disabled "; ?> 
+                    onkeyup="pesquisa_ncm(this.value)"
+                    onblur="pesquisa_ncm(this.value)"
+                    placeholder=""
+                    <?php if ($dadosfiscais==1) echo " required ";   ?>
+                >
+                <a class="link" href="produtos_ncm.php" target="_blank">
+                    <img width="12px" src="<?php echo $icones; ?>procurar.png" alt="" >
+                </a>
+                <label id="label_ncm"></label>
+                <input type="hidden" name="nfencm_codigo" value="<?php echo $ncm_codigo; ?>">
+            </td>
+        </tr>        
+        <tr  id="linha_cfop">
+            <td align="right" width="200px"><b>CFOP: <label class="obrigatorio"></label></b></td>
+            <td align="left" valign="bottom">
+                <input  
+                    id="nfecfop" 
+                    name="nfecfop"  
+                    type="text" 
+                    size="10"
+                    maxlength="5"
+                    class="campopadrao"  
+                    value="<?php echo "$cfop"; ?>" 
+                    <?php if ($ver == 1) echo" disabled "; ?> 
+                    onkeyup="pesquisa_cfop(this.value);"
+                    onblur="pesquisa_cfop(this.value);"
+                    onkeypress=""
+                    placeholder=""
+                    <?php if ($dadosfiscais==1) echo " required ";   ?>
+                >
+                <a class="link" href="produtos_cfop.php" target="_blank">
+                    <img width="12px" src="<?php echo $icones; ?>procurar.png" alt="" >
+                </a>
+                <label id="label_cfop"></label>
+                <input type="hidden" name="nfecfop_codigo" value="<?php echo $cfop_codigo; ?>">
+            </td>
+        </tr>        
+        <tr id="linha_icms">
+            <td align="right" width="200px"><b>ICMS: <label class="obrigatorio"></label></b></td>
+            <td align="left" width=""> 
+                <input  
+                    onkeypress=""  
+                    id="nfeicms" 
+                    type="text" 
+                    name="nfeicms" 
+                    onclick="select()" 
+                    onkeyup="formato_porcentagem()" 
+                    size="6" 
+                    class="campopadrao"  
+                    value="<?php echo number_format($icms,2,',',''); ?>" <?php if ($ver == 1) echo" disabled "; ?> 
+                    placeholder=""
+                    <?php if ($dadosfiscais==1) echo " required "; else echo " ";?> 
+                >
+                <span class="dicacampo">%</span></td>
+        </tr>
+        <tr id="linha_icmsst">
+            <td align="right" width="200px"><b>ICMSST: <label class="obrigatorio"></label></b></td>
+            <td align="left" width=""> 
+                <input  
+                    onkeypress=""  
+                    id="nfeicmsst" 
+                    type="text" 
+                    name="nfeicmsst" 
+                    onclick="select()" 
+                    onkeyup="formato_porcentagem()" 
+                    size="6" class="campopadrao"  
+                    value="<?php echo number_format($icmsst,2,',',''); ?>" <?php if ($ver == 1) echo" disabled "; ?> 
+                    placeholder="" 
+                    <?php if ($dadosfiscais==1) echo " required "; else echo " ";?> 
+                >
+                <span class="dicacampo">%</span></td>
+        </tr>
+        <tr id="linha_ipi">
+            <td align="right" width="200px"><b>IPI: <label class="obrigatorio"></label></b></td>
+            <td align="left" width=""> 
+                <input  
+                    onkeypress=""  
+                    id="nfeipi" 
+                    type="text" 
+                    name="nfeipi" 
+                    onclick="select()" 
+                    onkeyup="formato_porcentagem()" 
+                    size="6" 
+                    class="campopadrao"  
+                    value="<?php echo number_format($ipi,2,',',''); ?>" <?php if ($ver == 1) echo" disabled "; ?> 
+                    placeholder=""
+                    <?php if ($dadosfiscais==1) echo " required "; else echo " ";?> 
+                >
+                <span class="dicacampo">%</span></td>
+        </tr>
+        <tr id="linha_pis">
+            <td align="right" width="200px"><b>PIS: <label class="obrigatorio"></label></b></td>
+            <td align="left" width=""> 
+                <input  
+                    onkeypress=""  
+                    id="nfepis" 
+                    type="text" 
+                    name="nfepis" 
+                    onclick="select()" 
+                    onkeyup="formato_porcentagem()" 
+                    size="6" 
+                    class="campopadrao"  
+                    value="<?php echo number_format($pis,2,',',''); ?>" <?php if ($ver == 1) echo" disabled "; ?> 
+                    placeholder=""
+                    <?php if ($dadosfiscais==1) echo " required "; else echo " ";?> 
+                >
+                <span class="dicacampo">%</span></td>
+        </tr>
+        <tr id="linha_cofins">
+            <td align="right" width="200px"><b>COFINS: <label class="obrigatorio"></label></b></td>
+            <td align="left" width=""> 
+                <input  
+                    onkeypress=""  
+                    id="nfecofins" 
+                    type="text" 
+                    name="nfecofins" 
+                    onclick="select()" 
+                    onkeyup="formato_porcentagem()" 
+                    size="6" 
+                    class="campopadrao"  
+                    value="<?php echo number_format($cofins,2,',',''); ?>" <?php if ($ver == 1) echo" disabled "; ?> 
+                    placeholder=""
+                    <?php if ($dadosfiscais==1) echo " required "; else echo " ";?> 
+                >
+                <span class="dicacampo">%</span></td>
+        </tr>
+        
+        <tr id="linha_origem">
+            <td align="right" width="200px"><b>Origem: <label class="obrigatorio"></label></b></td>
+            <td align="left" width="">
+                <input  
+                    id="nfeorigem" 
+                    name="nfeorigem"  
+                    type="text" 
+                    size="3"
+                    maxlength="1"
+                    class="campopadrao"  
+                    value="<?php echo "$origem_codigo"; ?>" 
+                    <?php if ($ver == 1) echo" disabled "; ?> 
+                    onkeyup="pesquisa_origem(this.value)"
+                    onblur="pesquisa_origem(this.value)"
+                    placeholder=""
+                    <?php if ($dadosfiscais==1) echo " required ";   ?>
+                >
+                <a class="link" href="produtos_origem.php" target="_blank">
+                    <img width="12px" src="<?php echo $icones; ?>procurar.png" alt="" >
+                </a>
+                <label id="label_origem"></label>
+            </td>
+        </tr>   
+        <tr  id="linha_cst">
+            <td align="right" width="200px"><b>CST: <label class="obrigatorio"></label></b></td>
+            <td align="left" width="">
+                <input  
+                    id="nfecst" 
+                    name="nfecst"  
+                    type="text" 
+                    size="6"
+                    maxlength="3"
+                    class="campopadrao"  
+                    value="<?php echo "$cst"; ?>" 
+                    <?php if ($ver == 1) echo" disabled "; ?> 
+                    onkeyup="pesquisa_cst(this.value)"
+                    onblur="pesquisa_cst(this.value)"
+                    placeholder=""
+                    <?php if ($dadosfiscais==1) echo " required ";   ?>
+                >
+                <a class="link" href="produtos_cst.php" target="_blank">
+                    <img width="12px" src="<?php echo $icones; ?>procurar.png" alt="" >
+                </a>
+                <label id="label_cst"></label>
+                <input type="hidden" name="nfecst_codigo" value="<?php echo $cst_codigo; ?>">
+            </td>
+        </tr>   
+
+        <tr id="linha_csosn">
+            <td align="right" width="200px"><b>CSOSN: <label class="obrigatorio"></label></b></td>
+            <td align="left" width="">
+                <input  
+                    id="nfecsosn" 
+                    name="nfecsosn"  
+                    type="text" 
+                    size="6"
+                    maxlength="3"
+                    class="campopadrao"  
+                    value="<?php echo "$csosn"; ?>" 
+                    <?php if ($ver == 1) echo" disabled "; ?> 
+                    onkeyup="pesquisa_csosn(this.value)"
+                    onblur="pesquisa_csosn(this.value)"
+                    placeholder=""
+                    <?php if ($dadosfiscais==1) echo " required ";   ?>
+                >
+                <a class="link" href="produtos_csosn.php" target="_blank">
+                    <img width="12px" src="<?php echo $icones; ?>procurar.png" alt="" >
+                </a>
+                <label id="label_csosn"></label>
+                <input type="hidden" name="nfecsosn_codigo" value="<?php echo $csosn_codigo; ?>">
+            </td>
+        </tr>   
         
 
     </table>
 
+    <input type="hidden" name="nfecrt" value="<?php echo $crt; ?>">
+    
     <br />
     <hr align="left" >
     <?php
@@ -365,5 +814,7 @@ if ($linhas == 0) {
 }
     ?>
 </form>
+
+
 
 <?php include "rodape.php"; ?>

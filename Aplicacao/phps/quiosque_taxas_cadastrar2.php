@@ -7,12 +7,13 @@ if ($permissao_taxas_aplicar <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
+$quiosque = $_POST['quiosque2'];
 
-$tipopagina = "quiosques";
+if (($permissao_quiosque_cadastrar==1)&&($quiosque!=$usuario_quiosque)) $tipopagina = "quiosques2";
+else $tipopagina = "quiosques";
 include "includes.php";
 
 $taxa = $_POST['taxa'];
-$quiosque = $_POST['quiosque2'];
 $operacao = $_POST['operacao'];
 $taxavalor = dinheirosemcrifrao_para_numero($_POST['taxavalor']);
 

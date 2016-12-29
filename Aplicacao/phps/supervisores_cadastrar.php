@@ -6,8 +6,10 @@ if ($permissao_quiosque_definirsupervisores <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
+$quiosque = $_GET['quiosque'];
 
-$tipopagina = "quiosques";
+if (($permissao_quiosque_cadastrar==1)&&($quiosque!=$usuario_quiosque)) $tipopagina = "quiosques2";
+else $tipopagina = "quiosques";
 include "includes.php";
 
 
@@ -21,7 +23,6 @@ $tpl_titulo->show();
 
 //Pega todos os dados da tabela (Necessário caso seja uma edição)
 $supervisor = $_GET['codigo'];
-$quiosque = $_GET['quiosque'];
 $operacao = $_GET['operacao'];
 
 $sql = "SELECT qui_cooperativa,qui_nome FROM quiosques WHERE qui_codigo=$quiosque";
