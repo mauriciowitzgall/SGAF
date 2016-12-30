@@ -5,6 +5,7 @@ $tipopagina="quiosque_configuracao";
 require "login_verifica.php";
 include "includes.php";
 
+print_r($_REQUEST);
 
 $quiosque = $_POST['quiosque'];
 $usamodulofiscal = $_POST['usamodulofiscal'];
@@ -13,6 +14,19 @@ $serienfe = $_POST['serienfe'];
 $tipoimpressaodanfe = $_POST['tipoimpressaodanfe'];
 $ambientenfe = $_POST['ambientenfe'];
 $versaonfe = $_POST['versaonfe'];
+$razaosocial = $_POST['razaosocial'];
+$cnpj = $_POST['cnpj'];
+$cnpj = str_replace(".","", $cnpj);
+$cnpj = str_replace("/","", $cnpj);
+$cnpj = str_replace("-","", $cnpj);
+$ie = $_POST['ie'];
+$ie = str_replace(".","", $ie);
+$ie = str_replace("/","", $ie);
+$ie = str_replace("-","", $ie);
+$im = $_POST['im'];
+$im = str_replace(".","", $im);
+$im = str_replace("/","", $im);
+$im = str_replace("-","", $im);
 
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
@@ -27,7 +41,7 @@ $tpl_titulo->show();
 //Estrutura da notificação
 $tpl_notificacao = new Template("templates/notificacao.html");
 $tpl_notificacao->ICONES = $icones;
-$tpl_notificacao->DESTINO = "quiosques.php";
+$tpl_notificacao->DESTINO = "quiosques_configuracoes.php";
 
 $sql = "
 UPDATE
@@ -42,8 +56,24 @@ SET
 WHERE
     quicnf_quiosque=$quiosque
 ";
-if (!mysql_query($sql))
-    die("Erro: " . mysql_error());
+if (!mysql_query($sql)) die("Erro SQL quiosques_configuracoes: " . mysql_error());
+
+$sql2 = "
+UPDATE
+    quiosques
+SET            
+    qui_razaosocial='$razaosocial',
+    qui_cnpj='$cnpj',
+    qui_ie='$ie',
+    qui_im='$im'
+WHERE
+    qui_codigo=$quiosque
+";
+if (!mysql_query($sql2)) die("Erro SQL quiosques: " . mysql_error());
+
+
+
+
 $tpl_notificacao->block("BLOCK_CONFIRMAR");
 $tpl_notificacao->block("BLOCK_EDITADO");
 $tpl_notificacao->block("BLOCK_BOTAO");

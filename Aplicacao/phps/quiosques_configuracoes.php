@@ -9,8 +9,14 @@ function initPage(){
         $("tr[id=linha_ambientenfe]").hide(); 
         $("tr[id=linha_ultimanfe]").hide(); 
         $("tr[id=linha_versaonfe]").hide(); 
+        $("tr[id=linha_cnpj]").hide(); 
+        $("tr[id=linha_razaosocial]").hide(); 
+        $("tr[id=linha_ie]").hide(); 
+        $("tr[id=linha_im]").hide(); 
     }
-    verifica_usuario (); 
+    //verifica_usuario (); 
+    estado=$("input[name=quiosque_estado]").val(); 
+    mascara_ie(estado);
 }
 </script>
 
@@ -23,7 +29,15 @@ include "includes.php";
 //Futuramente pegar por POST quando for criado a coluna na listagem de quiosques permitindo um adminsitrador alterar estas configuracoes no quiosque desejado (sem a necessidade de estar logado no quiosque)
 $quiosque=$usuario_quiosque;
 
-$sql="SELECT * FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
+$sql="SELECT * 
+    FROM quiosques_configuracoes 
+    JOIN quiosques on (qui_codigo=quicnf_quiosque)
+    JOIN cidades on (qui_cidade=cid_codigo)
+    JOIN estados on (cid_estado=est_codigo)
+    WHERE quicnf_quiosque=$quiosque
+";
+
+
  if (!$query= mysql_query($sql)) die("Erro: " . mysql_error());
  while ($dados=  mysql_fetch_assoc($query)) {
      $usamodulofiscal=$dados["quicnf_usamodulofiscal"];
@@ -33,6 +47,12 @@ $sql="SELECT * FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
      $tipoimpressaodanfe=$dados["quicnf_tipoimpressaodanfe"];
      $ambientenfe=$dados["quicnf_ambientenfe"];
      $versaonfe=$dados["quicnf_versaonfe"];
+     $cnpj=$dados["qui_cnpj"];
+     $razaosocial=$dados["qui_razaosocial"];
+     $ie=$dados["qui_ie"];
+     $im=$dados["qui_im"];
+     $quiosque_estado=$dados["est_codigo"];
+     $quiosque_estado_sigla=$dados["est_sigla"];
  }
 
 //Template de Título e Sub-título
@@ -271,6 +291,116 @@ $tpl1->block("BLOCK_ITEM");
 
 
 
+//RAZÃO SOCIAL
+$tpl1->TITULO = "Razão Social";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_razaosocial";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->CAMPO_TIPO="text";
+$tpl1->CAMPO_NOME="razaosocial";
+$tpl1->CAMPO_ID="razaosocial";
+$tpl1->CAMPO_TAMANHO="45";
+$tpl1->CAMPO_VALOR="$razaosocial";
+$tpl1->CAMPO_QTD_CARACTERES="";
+if ($usamodulofiscal=='1') $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+$tpl1->CAMPO_ONBLUR="";
+$tpl1->CAMPO_DICA="";
+$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+//CNPJ
+$tpl1->TITULO = "CNPJ";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_cnpj";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->CAMPO_TIPO="text";
+$tpl1->CAMPO_NOME="cnpj";
+$tpl1->CAMPO_ID="cnpj";
+$tpl1->CAMPO_TAMANHO="25";
+$tpl1->CAMPO_VALOR="$cnpj";
+$tpl1->CAMPO_QTD_CARACTERES="";
+if ($usamodulofiscal=='1') $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+//$tpl1->CAMPO_ONKEYUP="mascara_cnpj()";
+//$tpl1->CAMPO_ONKEYDOWN="";
+//$tpl1->CAMPO_ONKEYPRESS="";
+$tpl1->CAMPO_ONBLUR="";
+//$tpl1->CAMPO_ONCLICK="";
+$tpl1->CAMPO_DICA="";
+//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR"); //Clicou seleciona conteudo
+//$tpl1->block("BLOCK_CAMPO_HISTORICO_DESATIVADO"); //autocomplete do navegador desligado
+//$tpl1->block("BLOCK_CAMPO_FOCO");
+$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+//$tpl1->block("BLOCK_CAMPO_NORMAL_OCULTO"); //Campo text que não aparece na tela
+//$tpl1->CAMPO_ESTILO="";
+//$tpl1->block("BLOCK_CAMPO_ESTILO");
+//$tpl1->block("BLOCK_CAMPO_DESABILITADO");
+//$tpl1->block("BLOCK_CAMPO_SOMENTELEITURA");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//IE
+$tpl1->TITULO = "IE";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_ie";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->CAMPO_TIPO="text";
+$tpl1->CAMPO_NOME="ie";
+$tpl1->CAMPO_ID="ie";
+$tpl1->CAMPO_TAMANHO="18";
+$tpl1->CAMPO_VALOR="$ie";
+$tpl1->CAMPO_QTD_CARACTERES="18";
+if ($usamodulofiscal=='1') $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+$tpl1->CAMPO_ONBLUR="valida_ie(this.value)";
+$tpl1->CAMPO_ONKEYUP="";
+$tpl1->CAMPO_DICA="";
+//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR"); //Clicou seleciona conteudo
+//$tpl1->block("BLOCK_CAMPO_HISTORICO_DESATIVADO"); //autocomplete do navegador desligado
+//$tpl1->block("BLOCK_CAMPO_FOCO");
+$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+//$tpl1->block("BLOCK_CAMPO_NORMAL_OCULTO"); //Campo text que não aparece na tela
+//$tpl1->CAMPO_ESTILO="";
+//$tpl1->block("BLOCK_CAMPO_ESTILO");
+//$tpl1->block("BLOCK_CAMPO_DESABILITADO");
+//$tpl1->block("BLOCK_CAMPO_SOMENTELEITURA");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//IM
+$tpl1->TITULO = "IM";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_im";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->CAMPO_TIPO="text";
+$tpl1->CAMPO_NOME="im";
+$tpl1->CAMPO_ID="im";
+$tpl1->CAMPO_TAMANHO="25";
+$tpl1->CAMPO_VALOR="$im";
+$tpl1->CAMPO_QTD_CARACTERES="30";
+if ($usamodulofiscal=='1') $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+//$tpl1->CAMPO_ONKEYDOWN="";
+//$tpl1->CAMPO_ONKEYPRESS="";
+$tpl1->CAMPO_ONBLUR="";
+//$tpl1->CAMPO_ONCLICK="";
+$tpl1->CAMPO_DICA="";
+//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR"); //Clicou seleciona conteudo
+//$tpl1->block("BLOCK_CAMPO_HISTORICO_DESATIVADO"); //autocomplete do navegador desligado
+//$tpl1->block("BLOCK_CAMPO_FOCO");
+$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+//$tpl1->block("BLOCK_CAMPO_NORMAL_OCULTO"); //Campo text que não aparece na tela
+//$tpl1->CAMPO_ESTILO="";
+//$tpl1->block("BLOCK_CAMPO_ESTILO");
+//$tpl1->block("BLOCK_CAMPO_DESABILITADO");
+//$tpl1->block("BLOCK_CAMPO_SOMENTELEITURA");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
 //-------------
 
 //Quiosque campo oculto
@@ -278,6 +408,16 @@ $tpl1->CAMPO_TIPO="hidden";
 $tpl1->CAMPO_NOME="quiosque";
 $tpl1->CAMPO_ID="quiosque";
 $tpl1->CAMPO_VALOR="$quiosque";
+$tpl1->block("BLOCK_CAMPO_NORMAL_OCULTO"); //Campo text que não aparece na tela
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//Quiosque Estado Oculto (necessário para fazer a máscara da inscricão estadual)
+$tpl1->CAMPO_TIPO="hidden";
+$tpl1->CAMPO_NOME="quiosque_estado";
+$tpl1->CAMPO_ID="quiosque_estado";
+$tpl1->CAMPO_VALOR="$quiosque_estado_sigla";
 $tpl1->block("BLOCK_CAMPO_NORMAL_OCULTO"); //Campo text que não aparece na tela
 $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");

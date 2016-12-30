@@ -17095,3 +17095,26 @@ INSERT INTO `sgaf_labodega`.`nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome
 
 ALTER TABLE `sgaf_labodega`.`produtos` 
 ADD COLUMN `pro_csosn` TINYINT(2) NULL AFTER `pro_cst`;
+
+
+ALTER TABLE `sgaf_labodega`.`quiosques` 
+ADD COLUMN `qui_cnpj` VARCHAR(14) NULL AFTER `qui_longitude`,
+ADD COLUMN `qui_ie` VARCHAR(14) NULL AFTER `qui_cnpj`,
+ADD COLUMN `qui_im` VARCHAR(30) NULL AFTER `qui_ie`;
+
+ALTER TABLE `sgaf_labodega`.`quiosques` 
+ADD COLUMN `qui_razaosocial` VARCHAR(128) NULL AFTER `qui_im`;
+
+CREATE TABLE `sgaf_labodega`.`nfe_vendas` (
+  `nfe_codigo` INT NOT NULL AUTO_INCREMENT,
+  `nfe_numero` INT(9) NOT NULL,
+  `nfe_dataemissao` TIMESTAMP NOT NULL,
+  `nfe_xml` BLOB NOT NULL,
+  `nfe_usuario` INT(11) NOT NULL,
+  PRIMARY KEY (`nfe_codigo`),
+  INDEX `idx_usuario` (`nfe_usuario` ASC),
+  CONSTRAINT `fk_nfe_usuario`
+    FOREIGN KEY (`nfe_usuario`)
+    REFERENCES `sgaf_labodega`.`pessoas` (`pes_codigo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);

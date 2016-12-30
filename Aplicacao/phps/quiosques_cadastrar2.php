@@ -17,10 +17,11 @@ if (($permissao_quiosque_cadastrar==1)&&($codigo!=$usuario_quiosque)) $tipopagin
 else $tipopagina = "quiosques";
 
 include "includes.php";
-//print_r($_REQUEST);
+print_r($_REQUEST);
 
 $erro = 0;
 $nome = $_POST['nome'];
+$razaosocial = $_POST['razaosocial'];
 $cidade = $_POST['cidade'];
 $cep = $_POST['cep'];
 $bairro = $_POST['bairro'];
@@ -33,11 +34,23 @@ $fone1 = $_POST['fone1'];
 $fone2 = $_POST['fone2'];
 $email = $_POST['email'];
 $obs = $_POST['obs'];
+$cnpj = $_POST['cnpj'];
+$cnpj = str_replace(".","", $cnpj);
+$cnpj = str_replace("/","", $cnpj);
+$cnpj = str_replace("-","", $cnpj);
+$ie = $_POST['ie'];
+$ie = str_replace(".","", $ie);
+$ie = str_replace("/","", $ie);
+$ie = str_replace("-","", $ie);
+$im = $_POST['im'];
+$im = str_replace(".","", $im);
+$im = str_replace("/","", $im);
+$im = str_replace("-","", $im);
 $datacadastro = date("Y-m-d");
 $horacadastro = date("H:i:s");
 $dataedicao = date("Y-m-d");
 $horaedicao = date("H:i:s");
-$paginadestino = "quiosques.php";
+$paginadestino = "inicio.php";
 $tiponegociacao = $_POST["box"];
 if ($permissao_quiosque_definircooperativa == 1) {
     $cooperativa = $_POST['cooperativa'];
@@ -74,8 +87,8 @@ $tpl_notificacao = new Template("templates/notificacao.html");
 if ($codigo == "") {
     
     $idunico=  uniqid();
-    $sql = " INSERT INTO quiosques (qui_nome,qui_cidade,qui_cep,qui_bairro,qui_vila,qui_endereco,qui_numero,qui_complemento,qui_referencia,qui_fone1,qui_fone2,qui_email,qui_obs,qui_datacadastro,qui_horacadastro,qui_cooperativa,qui_usuario,qui_idunico)
-	VALUES ('$nome','$cidade','$cep','$bairro','$vila','$endereco','$numero','$complemento','$referencia','$fone1','$fone2','$email','$obs','$datacadastro','$horacadastro','$cooperativa','$usuario_codigo','$idunico');";
+    $sql = " INSERT INTO quiosques (qui_nome,qui_cidade,qui_cep,qui_bairro,qui_vila,qui_endereco,qui_numero,qui_complemento,qui_referencia,qui_fone1,qui_fone2,qui_email,qui_obs,qui_datacadastro,qui_horacadastro,qui_cooperativa,qui_usuario,qui_idunico,qui_cnpj,qui_ie,qui_im,qui_razaosocial)
+	VALUES ('$nome','$cidade','$cep','$bairro','$vila','$endereco','$numero','$complemento','$referencia','$fone1','$fone2','$email','$obs','$datacadastro','$horacadastro','$cooperativa','$usuario_codigo','$idunico','$cnpj','$ie','$im','$razaosocial');";
     $query = mysql_query($sql);
     if (!$query)
         die("Erro SQL");    
@@ -116,7 +129,7 @@ if ($codigo == "") {
         $erro = 1;
     }
 
-    $sql = "UPDATE quiosques SET 
+    echo $sql = "UPDATE quiosques SET 
     qui_nome='$nome',
     qui_cidade='$cidade',
     qui_cep='$cep',
@@ -133,6 +146,10 @@ if ($codigo == "") {
     qui_dataedicao='$dataedicao',
     qui_horaedicao='$horaedicao',
     qui_usuario='$usuario_codigo',
+    qui_cnpj='$cnpj',
+    qui_ie='$ie',
+    qui_im='$im',
+    qui_razaosocial='$razaosocial',
     qui_obs='$obs'
     WHERE qui_codigo = '$codigo'
     ";
