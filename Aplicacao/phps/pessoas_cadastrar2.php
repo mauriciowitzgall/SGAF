@@ -16,7 +16,7 @@ if ($usuario_codigo != $codigo) {
 }
 include "includes.php";
 
-//print_r($_REQUEST);
+print_r($_REQUEST);
 
 $id = $_POST['id'];
 $cpf = $_POST['cpf'];
@@ -63,6 +63,21 @@ $tiponegociacao = $_POST['box2'];
 $pessoacontato = $_POST['pessoacontato'];
 $categoria = $_POST['categoria'];
 $datanasc = $_POST['datanasc'];
+$ie = $_POST['ie'];
+$ie = str_replace('_', '', $ie);
+$ie = str_replace('.', '', $ie);
+$ie = str_replace('-', '', $ie);
+$ie = str_replace('/', '', $ie);
+$im = $_POST['im'];
+$im = str_replace('_', '', $im);
+$im = str_replace('.', '', $im);
+$im = str_replace('-', '', $im);
+$im = str_replace('/', '', $im);
+$razaosocial = $_POST['razaosocial'];
+$documentoestrangeiro = $_POST['documentoestrangeiro'];
+$documentoestrangeiro_nome = $_POST['documentoestrangeiro_nome'];
+$contribuinteicms = $_POST['contribuinteicms'];
+
 
 
 //Template de Título e Sub-título
@@ -331,7 +346,13 @@ if ($operacao == "cadastrar") {
             pes_pessoacontato,
             pes_usuarioquecadastrou,
             pes_quiosquequecadastrou,
-            pes_datanascimento
+            pes_datanascimento,
+            pes_documentoestrangeiro_numero,
+            pes_documentoestrangeiro_nome,
+            pes_contribuinte_icms,
+            pes_ie,
+            pes_im,
+            pes_razaosocial
         )
     VALUES (
         '$id',
@@ -362,7 +383,13 @@ if ($operacao == "cadastrar") {
         '$pessoacontato',
         '$usuario_codigo',
         '$usuario_quiosque',
-        '$datanasc'
+        '$datanasc',
+        '$documentoestrangeiro',
+        '$documentoestrangeiro_nome',
+        '$contribuinteicms',
+        '$ie',
+        '$im',
+        '$ramal1'
     )";
     if (!mysql_query($sql))
         die("Erro6: " . mysql_error());
@@ -441,7 +468,13 @@ if ($operacao == "cadastrar") {
         pes_fone1ramal='$ramal1',
         pes_fone2ramal='$ramal2',
         pes_pessoacontato='$pessoacontato',
-        pes_datanascimento='$datanasc'
+        pes_datanascimento='$datanasc',
+        pes_documentoestrangeiro_numero='$documentoestrangeiro',
+        pes_documentoestrangeiro_nome='$documentoestrangeiro_nome',
+        pes_contribuinte_icms='$contribuinteicms',
+        pes_ie='$ie',
+        pes_im='$im',
+        pes_razaosocial='$razaosocial'
     WHERE 
         pes_codigo = '$codigo'
     ";

@@ -5,7 +5,7 @@ $tipopagina="quiosque_configuracao";
 require "login_verifica.php";
 include "includes.php";
 
-print_r($_REQUEST);
+//print_r($_REQUEST);
 
 $quiosque = $_POST['quiosque'];
 $usamodulofiscal = $_POST['usamodulofiscal'];

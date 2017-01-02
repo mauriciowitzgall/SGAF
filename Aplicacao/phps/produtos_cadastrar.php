@@ -114,7 +114,7 @@ function pesquisa_ncm (valor) {
         id:valor
     },function(valor2){
         //alert(valor2);
-        valor2=valor2.split("/");
+        valor2=valor2.split("^");
         valor3=valor2[0];
         valor4=valor2[1];
         //alert("v3:"+valor3+" e v4:"+valor4);

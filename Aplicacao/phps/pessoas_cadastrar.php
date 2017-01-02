@@ -64,11 +64,14 @@ if ($usuario_codigo != $codigo) {
     $cpf_desabilitado = 1;
 }
 
-
 $tipopagina = "pessoas";
 include "includes.php";
 
-
+//Verifica se esta parametrizado para usar módulo fiscal
+$sql2 = "SELECT * FROM quiosques_configuracoes WHERE quicnf_quiosque=$usuario_quiosque";
+if (!$query2= mysql_query($sql2)) die("Erro: " . mysql_error());
+$dados2=  mysql_fetch_assoc($query2);
+$usamodulofiscal=$dados2["quicnf_usamodulofiscal"];
 
 
 //Verifica se alguma cooperativa cadastrada, se não tiver então o root deve cadastrar uma antes de cadastrar um administrador
@@ -87,6 +90,7 @@ if ($linhas == 0) {
     $tpl->show();
     exit;
 }
+
 
 
 //Template de Título e Sub-título
@@ -138,6 +142,12 @@ if (($operacao == "editar") || ($operacao == 'ver')) {
         $pessoacontato = $array['pes_pessoacontato'];
         $categoria = $array['pes_categoria'];
         $datanasc = $array['pes_datanascimento'];
+        $razaosocial = $array['pes_razaosocial'];
+        $ie = $array['pes_ie'];
+        $im = $array['pes_im'];
+        $contribuinteicms = $array['pes_contribuinte_icms'];
+        $documentoestrangeiro = $array['pes_documentoestrangeiro_numero'];
+        $documentoestrangeiro_nome = $array['pes_documentoestrangeiro_nome'];
 
         if (($cidade!=0)&&($cidade!="")) {
             $sql = "SELECT * FROM cidades join estados on (cid_estado=est_codigo) WHERE cid_codigo='$cidade'";
@@ -361,12 +371,10 @@ $tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
 $tpl1->block("BLOCK_CAMPO_NORMAL");
 if ($cnpj_desabilitado == 1) {
     $tpl1->block("BLOCK_CAMPO_DESABILITADO");
-    //$tpl1->block("BLOCK_CAMPO_SOMENTELEITURA");
     $tpl1->CAMPOOCULTO_NOME = "cnpj";
     $tpl1->CAMPOOCULTO_VALOR = "$cnpj";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
 }
-//$tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
 IF ($operacao == 'ver')
     $tpl1->block("BLOCK_CAMPO_DESABILITADO");
 $tpl1->block("BLOCK_CAMPO");
@@ -380,38 +388,32 @@ $tpl1->LINHA_ID = "tr_cnpj";
 $tpl1->block("BLOCK_LINHA_ID");
 $tpl1->block("BLOCK_ITEM");
 
-
-//Data Nascimento
-$tpl1->TITULO = "Data Nasc.";
+//Razão Social
+$tpl1->TITULO = "Razão Social";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_QTD_CARACTERES = "";
-$tpl1->CAMPO_TIPO = "date";
-$tpl1->CAMPO_NOME = "datanasc";
+$tpl1->CAMPO_TIPO = "text";
+$tpl1->CAMPO_NOME = "razaosocial";
 $tpl1->CAMPO_DICA = "";
-$tpl1->CAMPO_ID = "datanasc";
-$tpl1->CAMPO_TAMANHO = "10";
-//$tpl1->CAMPO_ESTILO = "width:150px;";
+$tpl1->CAMPO_ID = "razaosocial";
+$tpl1->CAMPO_ONKEYPRESS = "";
+$tpl1->CAMPO_ONBLUR = "";
+$tpl1->CAMPO_ONCLICK = "";
+$tpl1->CAMPO_TAMANHO = "45";
+//$tpl1->CAMPO_ESTILO = "";
 //$tpl1->block("BLOCK_CAMPO_ESTILO");
-$tpl1->CAMPO_ONBLUR="";
-$tpl1->CAMPO_VALOR = $datanasc;
-$tpl1->CAMPO_QTD_CARACTERES = 10;
-$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+$tpl1->CAMPO_VALOR = $razaosocial;
+$tpl1->CAMPO_QTD_CARACTERES = 128;
+//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
 $tpl1->block("BLOCK_CAMPO_NORMAL");
-$tpl1->block("BLOCK_CAMPO_FOCO");
-//$tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
 IF ($operacao == 'ver')
     $tpl1->block("BLOCK_CAMPO_DESABILITADO");
 $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
-$tpl1->LINHA_ID = "tr_datanasc";
-if ($tipopessoa == 2) 
-    $tpl1->LINHA_CLASSE = "some";
-else
-    $tpl1->LINHA_CLASSE = "";
-$tpl1->block("BLOCK_LINHA_CLASSE");
+//$tpl1->block("BLOCK_LINHA_CLASSE");
+$tpl1->LINHA_ID = "linha_razaosocial";
 $tpl1->block("BLOCK_LINHA_ID");
 $tpl1->block("BLOCK_ITEM");
-
 
 
 //Pais
@@ -461,7 +463,7 @@ $tpl1->block("BLOCK_TITULO");
 $tpl1->SELECT_NOME = "estado";
 $tpl1->SELECT_ID = "estado";
 $tpl1->SELECT_TAMANHO = "";
-$tpl1->SELECT_ONCHANGE = "popula_cidades();";
+$tpl1->SELECT_ONCHANGE = "popula_cidades2();";
 $tpl1->block("BLOCK_SELECT_ONCHANGE");
 $tpl1->block("BLOCK_SELECT_NORMAL");
 //$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
@@ -542,6 +544,177 @@ $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
+
+
+//IE
+$tpl1->TITULO = "Inscrição Estadual (IE)";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->CAMPO_QTD_CARACTERES = "";
+$tpl1->CAMPO_TIPO = "text";
+$tpl1->CAMPO_NOME = "ie";
+$tpl1->CAMPO_DICA = "";
+$tpl1->CAMPO_ID = "ie";
+$tpl1->CAMPO_ONKEYPRESS = "";
+$tpl1->CAMPO_ONBLUR = "valida_ie2(this.value)";
+$tpl1->CAMPO_ONCLICK = "";
+$tpl1->CAMPO_TAMANHO = "18";
+//$tpl1->CAMPO_ESTILO = "";
+//$tpl1->block("BLOCK_CAMPO_ESTILO");
+$tpl1->CAMPO_VALOR = $ie;
+$tpl1->CAMPO_QTD_CARACTERES = 18;
+//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+$tpl1->block("BLOCK_CAMPO_NORMAL");
+IF ($operacao == 'ver')
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+//$tpl1->block("BLOCK_LINHA_CLASSE");
+$tpl1->LINHA_ID = "linha_ie";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->block("BLOCK_ITEM");
+
+//IE
+$tpl1->TITULO = "Inscrição Municial (IM)";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->CAMPO_QTD_CARACTERES = "";
+$tpl1->CAMPO_TIPO = "text";
+$tpl1->CAMPO_NOME = "im";
+$tpl1->CAMPO_DICA = "";
+$tpl1->CAMPO_ID = "im";
+$tpl1->CAMPO_ONKEYPRESS = "";
+$tpl1->CAMPO_ONBLUR = "";
+$tpl1->CAMPO_ONCLICK = "";
+$tpl1->CAMPO_TAMANHO = "30";
+//$tpl1->CAMPO_ESTILO = "";
+//$tpl1->block("BLOCK_CAMPO_ESTILO");
+$tpl1->CAMPO_VALOR = $im;
+$tpl1->CAMPO_QTD_CARACTERES = 30;
+//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+$tpl1->block("BLOCK_CAMPO_NORMAL");
+IF ($operacao == 'ver')
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+//$tpl1->block("BLOCK_LINHA_CLASSE");
+$tpl1->LINHA_ID = "linha_im";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->block("BLOCK_ITEM");
+
+//Documentos Estrangeiro
+$tpl1->TITULO = "Documentos Estrangeiro";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->CAMPO_QTD_CARACTERES = "";
+$tpl1->CAMPO_TIPO = "text";
+$tpl1->CAMPO_NOME = "documentoestrangeiro";
+$tpl1->CAMPO_DICA = "";
+$tpl1->CAMPO_ID = "documentoestrangeiro";
+$tpl1->CAMPO_ONKEYPRESS = "";
+$tpl1->CAMPO_ONBLUR = "";
+$tpl1->CAMPO_ONCLICK = "";
+$tpl1->CAMPO_TAMANHO = "30";
+$tpl1->CAMPO_DICA = "Número";
+//$tpl1->CAMPO_ESTILO = "";
+//$tpl1->block("BLOCK_CAMPO_ESTILO");
+$tpl1->CAMPO_VALOR = $documentoestrangeiro;
+$tpl1->CAMPO_QTD_CARACTERES = 30;
+//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+$tpl1->block("BLOCK_CAMPO_NORMAL");
+IF ($operacao == 'ver')
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+//Nome do documento
+$tpl1->CAMPO_QTD_CARACTERES = "";
+$tpl1->CAMPO_TIPO = "text";
+$tpl1->CAMPO_NOME = "documentoestrangeiro_nome";
+$tpl1->CAMPO_DICA = "";
+$tpl1->CAMPO_ID = "documentoestrangeiro_nome";
+$tpl1->CAMPO_ONKEYPRESS = "";
+$tpl1->CAMPO_ONBLUR = "";
+$tpl1->CAMPO_ONCLICK = "";
+$tpl1->CAMPO_TAMANHO = "20";
+$tpl1->CAMPO_DICA = "Tipo (Ex: passaporte)";
+//$tpl1->CAMPO_ESTILO = "";
+//$tpl1->block("BLOCK_CAMPO_ESTILO");
+$tpl1->CAMPO_VALOR = $documentoestrangeiro;
+$tpl1->CAMPO_QTD_CARACTERES = 20;
+//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+$tpl1->block("BLOCK_CAMPO_NORMAL");
+IF ($operacao == 'ver')
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+//$tpl1->block("BLOCK_LINHA_CLASSE");
+$tpl1->LINHA_ID = "linha_documentoestrangeiro";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->block("BLOCK_ITEM");
+
+//Contribuinte ICMS
+$tpl1->CAMPO_ONBLUR="";
+$tpl1->TITULO = "Contribuinte ICMS";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->SELECT_NOME = "contribuinteicms";
+$tpl1->CAMPO_DICA = "";
+$tpl1->SELECT_ID = "contribuinteicms";
+$tpl1->SELECT_TAMANHO = "";
+//$tpl1->SELECT_ONCHANGE = "";
+//$tpl1->block("BLOCK_SELECT_ONCHANGE");
+//$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
+$tpl1->OPTION_VALOR = "0";
+$tpl1->OPTION_NOME = "Não";
+if ($contribuinteicms==0) $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = "1";
+$tpl1->OPTION_NOME = "Sim";
+if ($contribuinteicms==1) $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+if ($operacao == 'ver')
+    $tpl1->block("BLOCK_SELECT_DESABILITADO");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->LINHA_ID = "linha_contribuinteicms";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+
+
+
+//Data Nascimento
+$tpl1->TITULO = "Data Nasc.";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->CAMPO_QTD_CARACTERES = "";
+$tpl1->CAMPO_TIPO = "date";
+$tpl1->CAMPO_NOME = "datanasc";
+$tpl1->CAMPO_DICA = "";
+$tpl1->CAMPO_ID = "datanasc";
+$tpl1->CAMPO_TAMANHO = "10";
+//$tpl1->CAMPO_ESTILO = "width:150px;";
+//$tpl1->block("BLOCK_CAMPO_ESTILO");
+$tpl1->CAMPO_ONBLUR="";
+$tpl1->CAMPO_VALOR = $datanasc;
+$tpl1->CAMPO_QTD_CARACTERES = 10;
+$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+$tpl1->block("BLOCK_CAMPO_NORMAL");
+$tpl1->block("BLOCK_CAMPO_FOCO");
+//$tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+IF ($operacao == 'ver')
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->LINHA_ID = "tr_datanasc";
+if ($tipopessoa == 2) 
+    $tpl1->LINHA_CLASSE = "some";
+else
+    $tpl1->LINHA_CLASSE = "";
+$tpl1->block("BLOCK_LINHA_CLASSE");
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->block("BLOCK_ITEM");
+
+
+/*
 //Vila
 $tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Vila";
@@ -562,27 +735,9 @@ IF ($operacao == 'ver')
 $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
+*/
 
-//Bairro
-$tpl1->CAMPO_ONBLUR="";
-$tpl1->TITULO = "Bairro";
-$tpl1->block("BLOCK_TITULO");
-$tpl1->CAMPO_TIPO = "text";
-$tpl1->CAMPO_QTD_CARACTERES = "";
-$tpl1->CAMPO_NOME = "bairro";
-$tpl1->CAMPO_DICA = "";
-$tpl1->CAMPO_ONCLICK = "";
-$tpl1->CAMPO_ID = "";
-$tpl1->CAMPO_TAMANHO = "35";
-$tpl1->CAMPO_VALOR = $bairro;
-$tpl1->CAMPO_QTD_CARACTERES = 70;
-$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
-$tpl1->block("BLOCK_CAMPO_NORMAL");
-IF ($operacao == 'ver')
-    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
-$tpl1->block("BLOCK_CAMPO");
-$tpl1->block("BLOCK_CONTEUDO");
-$tpl1->block("BLOCK_ITEM");
+
 
 //Endereço
 $tpl1->CAMPO_ONBLUR="";
@@ -652,6 +807,28 @@ $tpl1->CAMPO_ONCLICK = "";
 $tpl1->CAMPO_ID = "";
 $tpl1->CAMPO_TAMANHO = "50";
 $tpl1->CAMPO_VALOR = $referencia;
+$tpl1->CAMPO_QTD_CARACTERES = 70;
+$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+$tpl1->block("BLOCK_CAMPO_NORMAL");
+IF ($operacao == 'ver')
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+//Bairro
+$tpl1->CAMPO_ONBLUR="";
+$tpl1->TITULO = "Bairro";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->CAMPO_TIPO = "text";
+$tpl1->CAMPO_QTD_CARACTERES = "";
+$tpl1->CAMPO_NOME = "bairro";
+$tpl1->CAMPO_DICA = "";
+$tpl1->CAMPO_ONCLICK = "";
+$tpl1->CAMPO_ID = "";
+$tpl1->CAMPO_TAMANHO = "35";
+$tpl1->CAMPO_VALOR = $bairro;
 $tpl1->CAMPO_QTD_CARACTERES = 70;
 $tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
 $tpl1->block("BLOCK_CAMPO_NORMAL");
@@ -1496,6 +1673,11 @@ if ($operacao == "editar") {
 //Operação
 $tpl1->CAMPOOCULTO_NOME = "operacao";
 $tpl1->CAMPOOCULTO_VALOR = "$operacao";
+$tpl1->block("BLOCK_CAMPOSOCULTOS");
+
+//Operação
+$tpl1->CAMPOOCULTO_NOME = "usamodulofiscal";
+$tpl1->CAMPOOCULTO_VALOR = "$usamodulofiscal";
 $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
 

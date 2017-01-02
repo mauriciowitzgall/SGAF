@@ -17118,3 +17118,17 @@ CREATE TABLE `sgaf_labodega`.`nfe_vendas` (
     REFERENCES `sgaf_labodega`.`pessoas` (`pes_codigo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
+ALTER TABLE `sgaf_labodega`.`pessoas` 
+ADD COLUMN `pes_documentoestrangeiro_numero` VARCHAR(128) NULL AFTER `pes_datanascimento`,
+ADD COLUMN `pes_documentoestrangeiro_nome` VARCHAR(128) NULL AFTER `pes_documentoestrangeiro_numero`,
+ADD COLUMN `pes_contribuinte_icms` TINYINT(1) NULL AFTER `pes_documentoestrangeiro_nome`,
+ADD COLUMN `pes_ie` VARCHAR(18) NULL AFTER `pes_contribuinte_icms`,
+ADD COLUMN `pes_im` VARCHAR(30) NULL AFTER `pes_ie`,
+ADD COLUMN `pes_razaosocial` VARCHAR(128) NULL AFTER `pes_im`;
+
+INSERT INTO `sgaf_labodega`.`relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`, `rel_horacadastro`) VALUES ('14', 'Lista de produtos com dados fiscais', 'Utilizado para ver todos os dados fiscais de cada produto cadastrado', '2017-01-02', '18:22:00');
+INSERT INTO `sgaf_labodega`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('14', '1');
+INSERT INTO `sgaf_labodega`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('14', '2');
+INSERT INTO `sgaf_labodega`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('14', '3');
+

@@ -26,7 +26,7 @@ function usa_modulo_fiscal (valor) {
         document.form1.ambientenfe.required=false;
         document.form1.versaonfe.required=false;
         document.form1.cnpj.required=false;
-        document.form1.razaosocialj.required=false;
+        document.form1.razaosocial.required=false;
         document.form1.ie.required=false;
         document.form1.im.required=false;
         $("tr[id=linha_crtnfe]").hide(); 

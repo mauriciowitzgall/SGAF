@@ -13,6 +13,7 @@ $codigo = $_GET['codigo'];
 $nome = ucwords(strtolower($_POST['nome']));
 $nome2 = ucwords(strtolower($_POST['nome2']));
 
+//print_r($_REQUEST);
 
 $tipo = $_POST['tipo'];
 $marca = $_POST['marca'];

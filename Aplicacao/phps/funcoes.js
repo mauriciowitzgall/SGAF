@@ -557,6 +557,9 @@ function popula_estados() {
         pais: $("select[name=pais]").val()
     }, function(valor) {
         $("select[name=estado]").html(valor);
+            $("input[name=ie]").val("");
+            $("input[name=im]").val("");
+            $("#ie").unmask();
     });
 }
 
