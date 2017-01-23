@@ -601,6 +601,7 @@ $tpl1->block("BLOCK_LINHA_ID");
 $tpl1->block("BLOCK_ITEM");
 
 //Documentos Estrangeiro
+
 $tpl1->TITULO = "Documentos Estrangeiro";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_QTD_CARACTERES = "";

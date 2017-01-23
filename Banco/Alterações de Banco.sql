@@ -17132,3 +17132,30 @@ INSERT INTO `sgaf_labodega`.`relatorios_permissao` (`relper_relatorio`, `relper_
 INSERT INTO `sgaf_labodega`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('14', '2');
 INSERT INTO `sgaf_labodega`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('14', '3');
 
+INSERT INTO `sgaf_labodega`.`paises` (`pai_codigo`, `pai_sigla`, `pai_nome`) VALUES ('0', '---', 'Outro');
+
+
+CREATE TABLE `sgaf_labodega`.`nfe_danfeimpressao` (
+  `danfe_codigo` INT NOT NULL,
+  `danfe_id` TINYINT(2) NOT NULL,
+  `danfe_nome` VARCHAR(256) NOT NULL,
+  PRIMARY KEY (`danfe_codigo`));
+
+INSERT INTO `sgaf_labodega`.`nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('0', '0', 'Sem geração de DANFE');
+INSERT INTO `sgaf_labodega`.`nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('1', '55', 'DANFE Normal');
+INSERT INTO `sgaf_labodega`.`nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('2', '55', 'DANFE Normal Paisagem');
+INSERT INTO `sgaf_labodega`.`nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('3', '55', 'DANFE Simplificado A4');
+INSERT INTO `sgaf_labodega`.`nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('4', '65', 'DANFE NFC-e (Cupom Fiscal)');
+INSERT INTO `sgaf_labodega`.`nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('5', '65', 'DANFE NFC-e Mensagem Eletrônica (E-mail)');
+
+CREATE TABLE `sgaf_labodega`.`nfe_indicador_presenca` (
+  `indpre_codigo` INT NOT NULL,
+  `indpre_nome` VARCHAR(256) NOT NULL,
+  PRIMARY KEY (`indpre_codigo`));
+
+INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('0', 'Não se aplica (por exemplo, Nota Fiscal complementar ou de ajuste)');
+INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('1', 'Operação presencial');
+INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('2', 'Operação não presencial Internet');
+INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('3', 'Operação não presencial Tele-atendimento');
+INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('4', 'NFC-e em operação com entrega a domicílio');
+INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('9', 'Operação não presencial Outros');

@@ -81,38 +81,6 @@ $totalliq = $total + $forcado;
  */
 
 
-
-
-
-//Template de Título e Sub-título
-$tpl_titulo = new Template("templates/titulos.html");
-$tpl_titulo->TITULO = "SAIDAS";
-$tpl_titulo->SUBTITULO = "CADASTRO/EDIÇÃO";
-$tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "saidas.png";
-$tpl_titulo->show();
-
-//
-//echo "saida: $saida <br>";
-//echo "passo: $passo <br><br>";  
-//echo "Valor Bruto: $valbru <br>";  
-//echo "Desconto Percentual: $descper <br>";
-//echo "Desconto Valor: $descval <br>";  
-//echo "Total com Desconto: $total <br>";
-//echo "Valor Recebido: $dinheiro <br>";
-//echo "Troco: $troco <br>";
-//echo "Troco Devolvido: $troco_devolvido <br>";
-//echo "Acrescimo For�ado: $forcadoacre <br>";
-//echo "Desconto For�ado: $forcadodesc <br>";
-//echo "Total Liquido: $totalliq <br>";
-//Estrutura da notifica��o
-$tpl_notificacao = new Template("templates/notificacao.html");
-$tpl_notificacao->ICONES = $icones;
-if ($tiposai == "3")
-    $tpl_notificacao->DESTINO = "saidas_devolucao.php";
-else
-    $tpl_notificacao->DESTINO = "saidas.php";
-
 //Se for saida do tipo Venda (não devolução)
 if ($tipo == 1) {
     $sql_filtro = " 
@@ -127,8 +95,6 @@ if ($tipo == 1) {
        sai_metpag='$metodopag',
    ";
 }
-
-
 $sql = "
 UPDATE
     saidas
@@ -138,25 +104,73 @@ SET
     sai_totalliquido='$totalliq',
     $sql_filtro
     sai_status=1
-
 WHERE
     sai_codigo=$saida
 ";
 if (!mysql_query($sql))
     die("Erro: " . mysql_error());
 
-//botão continuar
-$tpl_notificacao->block("BLOCK_CONFIRMAR");
-$tpl_notificacao->block("BLOCK_CADASTRADO");
-$tpl_notificacao->block("BLOCK_BOTAO");
 
-//botão cadastrar mais
-$tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar.php?tiposaida=$tiposai";
-//$tpl->block("BLOCK_BOTAOGERAL_NOVAJANELA");
-$tpl_notificacao->BOTAOGERAL_TIPO="button";
-$tpl_notificacao->BOTAOGERAL_NOME="REALIZAR NOVA SAIDA";
-$tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
-$tpl_notificacao->block("BLOCK_BOTAOGERAL");
+//Template de Título e Sub-título
+$tpl_titulo = new Template("templates/titulos.html");
+$tpl_titulo->TITULO = "SAIDAS";
+$tpl_titulo->SUBTITULO = "CADASTRO/EDIÇÃO";
+$tpl_titulo->ICONES_CAMINHO = "$icones";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "saidas.png";
+$tpl_titulo->show();
+
+
+$tpl_notificacao = new Template("templates/notificacao.html");
+$tpl_notificacao->ICONES = $icones;
+
+//Botões para vendas normais
+$sql = "SELECT * FROM quiosques_configuracoes WHERE quicnf_quiosque=$usuario_quiosque";
+if (!$query=mysql_query($sql)) die("Erro SQL quiosque configuracoes:" . mysql_error());
+$dados = mysql_fetch_assoc($query);
+$usamodulofiscal=$dados["quicnf_usamodulofiscal"];
+
+if ($usamodulofiscal==1) {
+    $tpl_notificacao->block("BLOCK_CONFIRMAR");
+    $tpl_notificacao->block("BLOCK_CADASTRADO");
+    //Botão gerar nota fiscal AGORA
+    $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar_nfe.php?saida=$saida";
+    //$tpl->block("BLOCK_BOTAOGERAL_NOVAJANELA");
+    $tpl_notificacao->BOTAOGERAL_TIPO="button";
+    $tpl_notificacao->BOTAOGERAL_NOME="GERAR NOTA";
+    //$tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
+    $tpl_notificacao->block("BLOCK_BOTAOGERAL");    
+    
+    //Botão gerar nota fiscal DEPOIS
+    $tpl_notificacao->BOTAOGERAL_DESTINO="saidas.php";
+    //$tpl->block("BLOCK_BOTAOGERAL_NOVAJANELA");
+    $tpl_notificacao->BOTAOGERAL_TIPO="button";
+    $tpl_notificacao->BOTAOGERAL_NOME="DEPOIS";
+    $tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
+    $tpl_notificacao->block("BLOCK_BOTAOGERAL");      
+    
+} else {
+    
+    //Venda padrão ou devolução sem usar módulo fiscal
+    if ($tiposai == "3")
+        $tpl_notificacao->DESTINO = "saidas_devolucao.php";
+    else
+        $tpl_notificacao->DESTINO = "saidas.php";
+    
+    //Botão continuar
+    $tpl_notificacao->block("BLOCK_CONFIRMAR");
+    $tpl_notificacao->block("BLOCK_CADASTRADO");
+    $tpl_notificacao->block("BLOCK_BOTAO");
+
+    //Botão cadastrar mais
+    $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar.php?tiposaida=$tiposai";
+    //$tpl->block("BLOCK_BOTAOGERAL_NOVAJANELA");
+    $tpl_notificacao->BOTAOGERAL_TIPO="button";
+    $tpl_notificacao->BOTAOGERAL_NOME="REALIZAR NOVA SAIDA";
+    $tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
+    $tpl_notificacao->block("BLOCK_BOTAOGERAL");
+
+}
 
 $tpl_notificacao->show();
+
 ?>

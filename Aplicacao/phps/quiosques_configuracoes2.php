@@ -28,6 +28,13 @@ $im = str_replace(".","", $im);
 $im = str_replace("/","", $im);
 $im = str_replace("-","", $im);
 
+if ($usuario_grupo==1) {
+    $ultimanfe = $_POST['ultimanfe'];
+    $complemento.=" , quicnf_ultimanfe=$ultimanfe"; 
+}
+
+
+
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "QUIOSQUE";
@@ -53,6 +60,7 @@ SET
     quicnf_tipoimpressaodanfe='$tipoimpressaodanfe',
     quicnf_ambientenfe='$ambientenfe',
     quicnf_versaonfe='$versaonfe'
+    $complemento    
 WHERE
     quicnf_quiosque=$quiosque
 ";

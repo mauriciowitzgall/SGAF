@@ -62,14 +62,11 @@ function tipo_pessoa(valor) {
         $("tr[id=linha_razaosocial]").hide();             
         $("tr[id=linha_ie]").hide();             
         $("tr[id=linha_im]").hide();             
-        $("tr[id=linha_documentoestrangeiro]").hide();             
         $("tr[id=linha_contribuinteicms]").hide();   
         $("select[name=cnpj]").attr("required", false);  
         $("select[name=razaosocial]").attr("required", false);  
         $("select[name=ie]").attr("required", false);  
         $("select[name=im]").attr("required", false);  
-        $("select[name=documentoestrangeiro]").attr("required", false);  
-        $("select[name=documentoestrangeiro_nome]").attr("required", false);  
         $("select[name=contribuinteicms]").attr("required", false); 
         $("select[name=categoria]").attr("required", false);
         $("select[name=pais]").attr("required", false);            
@@ -98,10 +95,9 @@ function tipo_pessoa(valor) {
         $("tr[id=linha_razaosocial]").show();             
         $("tr[id=linha_ie]").show();             
         $("tr[id=linha_im]").show();             
-        $("tr[id=linha_documentoestrangeiro]").show();             
         $("tr[id=linha_contribuinteicms]").show();
         $("select[name=categoria]").attr("required", true);            
-        $("input[nme=cpf]").attr("required", false);
+        $("input[name=cpf]").attr("required", false);
         var usamodulofiscal=$("input[name=usamodulofiscal]").val();
         //alert(usamodulofiscal);
         if (usamodulofiscal==1) {
@@ -109,8 +105,6 @@ function tipo_pessoa(valor) {
             $("input[name=ie]").attr("required", true);            
             $("input[name=im]").attr("required", true);            
             $("input[name=razaosocial]").attr("required", true);            
-            $("input[name=documentoestrangeiro]").attr("required", true);            
-            $("input[name=documentoestrangeiro_nome]").attr("required", true);            
             $("select[name=pais]").attr("required", true);            
             $("select[name=estado]").attr("required", true);            
             $("select[name=cidade]").attr("required", true);            
@@ -120,8 +114,6 @@ function tipo_pessoa(valor) {
             $("input[name=ie]").attr("required", false);            
             $("input[name=im]").attr("required", false);            
             $("input[name=razaosocial]").attr("required", false);            
-            $("input[name=documentoestrangeiro]").attr("required", false);            
-            $("input[name=documentoestrangeiro_nome]").attr("required", false);
             $("select[name=pais]").attr("required", false);            
             $("select[name=estado]").attr("required", false);            
             $("select[name=cidade]").attr("required", false);            

@@ -366,11 +366,11 @@ if ($linhas == 0) {
         </tr>
         <tr id="id_codigounico">
             <td align="right" width="200px">
-                <b>Código Único (barras): <label class="obrigatorio"></label>
+                <b>Código barras EAN: <label class="obrigatorio"></label>
                 </b>
             </td>
             <td align="left" width="">
-                <input  onkeypress=""  id="capitalizar" type="text" name="codigounico" maxlength="13" size="15" class="campopadrao"  value="<?php echo "$codigounico"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder="">
+                <input  onkeypress=""  id="capitalizar" type="text" name="codigounico" maxlength="13" size="18" class="campopadrao"  value="<?php echo "$codigounico"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder="">
             </td>
         </tr>
         <tr>

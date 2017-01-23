@@ -169,32 +169,18 @@ $tpl1->SELECT_ID = "tipoimpressaodanfe";
 $tpl1->SELECT_TAMANHO = "";
 //$tpl1->SELECT_ONCHANGE = "";
 //$tpl1->block("BLOCK_SELECT_ONCHANGE");
+
+$sql2="SELECT * FROM nfe_danfeimpressao ORDER BY danfe_codigo";
+if (!$query2= mysql_query($sql2)) die("Erro: " . mysql_error());
 if ($usamodulofiscal=='1') $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
-$tpl1->block("BLOCK_SELECT_OPTION_PADRAO"); //Selecione
-$tpl1->OPTION_VALOR = 0;
-$tpl1->OPTION_NOME = "Sem geração de DANFE";
-if ($tipoimpressaodanfe=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-$tpl1->block("BLOCK_SELECT_OPTION");
-$tpl1->OPTION_VALOR = 1;
-$tpl1->OPTION_NOME = "DANFE Normal";
-if ($tipoimpressaodanfe=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-$tpl1->block("BLOCK_SELECT_OPTION");
-$tpl1->OPTION_VALOR = 2;
-$tpl1->OPTION_NOME = "DANFE Normal Paisagem";
-if ($tipoimpressaodanfe=='2') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-$tpl1->block("BLOCK_SELECT_OPTION");
-$tpl1->OPTION_VALOR = 3;
-$tpl1->OPTION_NOME = "DANFE Simplificado A4";
-if ($tipoimpressaodanfe=='3') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-$tpl1->block("BLOCK_SELECT_OPTION");
-$tpl1->OPTION_VALOR = 4;
-$tpl1->OPTION_NOME = "DANFE NFC-e (Cupom Fiscal)";
-if ($tipoimpressaodanfe=='4') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-$tpl1->block("BLOCK_SELECT_OPTION");
-$tpl1->OPTION_VALOR = 5;
-$tpl1->OPTION_NOME = "DANFE NFC-e Mensagem Eletrônica (E-mail)";
-if ($tipoimpressaodanfe=='5') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-$tpl1->block("BLOCK_SELECT_OPTION");
+while ($dados2=  mysql_fetch_assoc($query2)) {
+    $danfe_codigo=$dados2["danfe_codigo"];
+    if ($tipoimpressaodanfe==$danfe_codigo) $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+    $danfe_nome=$dados2["danfe_nome"];
+    $tpl1->OPTION_VALOR = "$danfe_codigo";
+    $tpl1->OPTION_NOME = "$danfe_nome";    
+    $tpl1->block("BLOCK_SELECT_OPTION");
+ }
 $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
@@ -264,10 +250,10 @@ $tpl1->TITULO = "Última NFE";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->LINHA_ID="linha_ultimanfe";
 $tpl1->block("BLOCK_LINHA_ID");
-$tpl1->CAMPO_TIPO="text";
+$tpl1->CAMPO_TIPO="number";
 $tpl1->CAMPO_NOME="ultimanfe";
 $tpl1->CAMPO_ID="ultimanfe";
-$tpl1->CAMPO_TAMANHO="18";
+$tpl1->CAMPO_TAMANHO="9";
 $tpl1->CAMPO_VALOR="$ultimanfe";
 $tpl1->CAMPO_QTD_CARACTERES="9";
 //$tpl1->CAMPO_ONKEYUP="";
@@ -283,8 +269,10 @@ $tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
 //$tpl1->block("BLOCK_CAMPO_NORMAL_OCULTO"); //Campo text que não aparece na tela
 //$tpl1->CAMPO_ESTILO="";
 //$tpl1->block("BLOCK_CAMPO_ESTILO");
-$tpl1->block("BLOCK_CAMPO_DESABILITADO");
-$tpl1->block("BLOCK_CAMPO_SOMENTELEITURA");
+if ($usuario_grupo != 1)  {
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl1->block("BLOCK_CAMPO_SOMENTELEITURA");
+}
 $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
@@ -434,6 +422,12 @@ $tpl1->block("BLOCK_BOTAO_SALVAR");
 $tpl1->block("BLOCK_BOTAO_VOLTAR");
 $tpl1->block("BLOCK_BOTOES");
 $tpl1->show();
+
+/*
+$dataatual = date("Y/m/d");
+$date = new DateTime($dataatual, new DateTimeZone(date_default_timezone_get()));
+echo $date->format('Y-m-d H:i:sP') . "\n";
+*/
 
 include "rodape.php";
 ?>
