@@ -17159,3 +17159,47 @@ INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_n
 INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('3', 'Operação não presencial Tele-atendimento');
 INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('4', 'NFC-e em operação com entrega a domicílio');
 INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('9', 'Operação não presencial Outros');
+
+ALTER TABLE `sgaf_labodega`.`produtos` 
+DROP COLUMN `pro_icms`;
+
+ALTER TABLE `sgaf_labodega`.`produtos` 
+DROP COLUMN `pro_icmsst`;
+
+
+CREATE TABLE `sgaf_labodega`.`nfe_faturamento` (
+  `nfefat_codigo` INT NOT NULL AUTO_INCREMENT,
+  `nfefat_ano` MEDIUMINT NOT NULL,
+  `nfefat_mes` TINYINT NOT NULL,
+  `nfefat_valor` FLOAT NOT NULL,
+  PRIMARY KEY (`nfefat_codigo`, `nfefat_ano`));
+
+ALTER TABLE `sgaf_labodega`.`nfe_faturamento` 
+CHANGE COLUMN `nfefat_valor` `nfefat_valor` DECIMAL(9,2) NOT NULL ;
+
+
+CREATE TABLE `nfe_simplesnacional` (
+  `nfesnc_codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `nfesnc_de` decimal(9,2) DEFAULT NULL,
+  `nfesnc_ate` decimal(9,2) DEFAULT NULL,
+  `nfesnc_icms` decimal(9,2) DEFAULT NULL,
+  `nfesnc_aliquotafinalcomercio` decimal(5,2) DEFAULT NULL,
+  `nfesnc_aliquotafinalindustria` decimal(5,2) DEFAULT NULL,
+  PRIMARY KEY (`nfesnc_codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+
+INSERT INTO `nfe_simplesnacional` VALUES (1,0.00,180000.00,0.00,2.75,3.25),(2,180000.01,360000.00,0.00,3.61,4.11),(3,360000.01,540000.00,1.31,5.82,6.32),(4,540000.01,720000.00,1.50,6.48,6.98),(5,720000.01,900000.00,1.87,6.89,7.39),(6,900000.01,1080000.00,2.00,7.46,7.96),(7,1080000.01,1260000.00,2.20,7.72,8.22),(8,1260000.01,1440000.00,2.30,7.88,8.38),(9,1440000.01,1620000.00,2.50,8.46,8.96),(10,1620000.01,1800000.00,2.55,8.57,9.07),(11,1800000.01,1980000.00,2.70,9.27,9.77),(12,1980000.01,2160000.00,2.75,9.38,9.88),(13,2160000.01,2340000.00,2.85,9.53,10.03),(14,2340000.01,2540000.00,2.90,9.65,10.15),(15,2540000.01,2700000.00,3.00,9.81,10.31),(16,2700000.01,2880000.00,3.30,10.71,11.21),(17,2880000.01,3060000.00,3.40,10.87,11.37),(18,3060000.01,3240000.00,3.50,11.04,11.54),(19,3240000.01,3420000.00,3.65,11.25,11.75),(20,3420000.01,3600000.00,3.80,11.46,11.96);
+
+ALTER TABLE `nfe_simplesnacional` 
+CHANGE COLUMN `nfesnc_codigo` `nfesn_codigo` INT(11) NOT NULL AUTO_INCREMENT ,
+CHANGE COLUMN `nfesnc_de` `nfesn_de` DECIMAL(9,2) NULL DEFAULT NULL ,
+CHANGE COLUMN `nfesnc_ate` `nfesn_ate` DECIMAL(9,2) NULL DEFAULT NULL ,
+CHANGE COLUMN `nfesnc_icms` `nfesn_icms` DECIMAL(9,2) NULL DEFAULT NULL ,
+CHANGE COLUMN `nfesnc_aliquotafinalcomercio` `nfesn_aliquotafinalcomercio` DECIMAL(5,2) NULL DEFAULT NULL ,
+CHANGE COLUMN `nfesnc_aliquotafinalindustria` `nfesn_aliquotafinalindustria` DECIMAL(5,2) NULL DEFAULT NULL ;
+
+ALTER TABLE `sgaf_labodega`.`nfe_faturamento` 
+ADD COLUMN `nfefat_quiosque` INT(12) NULL AFTER `nfefat_valor`;
+
+ALTER TABLE `sgaf_labodega`.`nfe_faturamento` 
+CHANGE COLUMN `nfefat_quiosque` `nfefat_quiosque` INT(12) NOT NULL ;

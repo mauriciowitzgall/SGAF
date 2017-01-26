@@ -46,8 +46,6 @@ while ($array = mysql_fetch_array($query)) {
     $ncm=$array['ncm_id'];
     $cfop_codigo=$array['pro_cfop'];
     $cfop=$array['cfop_id'];
-    $icms=$array['pro_icms'];
-    $icmsst=$array['pro_icmsst'];
     $ipi=$array['pro_ipi'];
     $pis=$array['pro_pis'];
     $cofins=$array['pro_cofins'];
@@ -78,12 +76,22 @@ if ($operacao==1) {
 
 
 if ($cfop=="") $cfop="0.000";
-if ($icms=="") $icms="0,00";
-if ($icmsst=="") $icmsst="0,00";
 if ($ipi=="") $ipi="0,00";
 if ($pis=="") $pis="0,00";
 if ($cofins=="") $cofins="0,00";
-if ($icms=="") $icms="0,00";
+
+$sql_fatanual="SELECT sum(nfefat_valor) as fatanual FROM nfe_faturamento WHERE nfefat_quiosque=$usuario_quiosque ORDER BY nfefat_codigo DESC LIMIT 12";
+if (!$query_fatanual = mysql_query($sql_fatanual)) die("Erro SQL Faturamento Anual: ".mysql_error());
+$dados_fatanual=  mysql_fetch_assoc($query_fatanual);
+$fatanual=$dados_fatanual["fatanual"];
+echo "Faturamento Anual: ($fatanual)";
+
+$sql_simplesnacional = "SELECT nfesn_icms FROM nfe_simplesnacional WHERE nfesn_de <= $fatanual AND nfesn_ate >= $fatanual";
+if (!$query_simplesnacional = mysql_query($sql_simplesnacional)) die("Erro SQL Consulta ICMS Simples Nacional: ".mysql_error());
+$dados_simplesnacional=  mysql_fetch_assoc($query_simplesnacional);
+$icms_atual=$dados_simplesnacional["nfesn_icms"];
+echo "ICMS Atual: ($icms_atual)";
+
 
 
 $sql2="SELECT quitipneg_tipo FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$usuario_quiosque";
@@ -183,16 +191,6 @@ function pesquisa_csosn (valor) {
 
 
 function formato_porcentagem() {
-    $('#nfeicms').priceFormat({
-        prefix: '',
-        centsSeparator: ',',
-        thousandsSeparator: ''
-    });
-    $('#nfeicmsst').priceFormat({
-        prefix: '',
-        centsSeparator: ',',
-        thousandsSeparator: ''
-    });
     $('#nfeipi').priceFormat({
         prefix: '',
         centsSeparator: ',',
@@ -215,8 +213,6 @@ function dados_fiscais(valor) {
     if (valor==1) {
         document.form1.nfencm.required=true;
         document.form1.nfecfop.required=true;
-        document.form1.nfeicms.required=true;
-        document.form1.nfeicmsst.required=true;
         document.form1.nfeipi.required=true;
         document.form1.nfepis.required=true;
         document.form1.nfecofins.required=true;
@@ -226,7 +222,6 @@ function dados_fiscais(valor) {
         $("tr[id=linha_ncm]").show(); 
         $("tr[id=linha_cfop]").show(); 
         $("tr[id=linha_icms]").show(); 
-        $("tr[id=linha_icmsst]").show();
         $("tr[id=linha_ipi]").show();
         $("tr[id=linha_pis]").show();
         $("tr[id=linha_cofins]").show();
@@ -238,8 +233,6 @@ function dados_fiscais(valor) {
     } else {
         document.form1.nfencm.required=false;
         document.form1.nfecfop.required=false;
-        document.form1.nfeicms.required=false;
-        document.form1.nfeicmsst.required=false;
         document.form1.nfeipi.required=false;
         document.form1.nfepis.required=false;
         document.form1.nfecofins.required=false;
@@ -249,7 +242,6 @@ function dados_fiscais(valor) {
         $("tr[id=linha_ncm]").hide(); 
         $("tr[id=linha_cfop]").hide(); 
         $("tr[id=linha_icms]").hide(); 
-        $("tr[id=linha_icmsst]").hide();
         $("tr[id=linha_ipi]").hide();
         $("tr[id=linha_pis]").hide();
         $("tr[id=linha_cofins]").hide();
@@ -568,7 +560,9 @@ if ($linhas == 0) {
         </tr>        
         
         <tr id="linha_ncm">
-            <td align="right" width="200px"><b>NCM: <label class="obrigatorio"></label></b></td>
+            <td align="right" width="200px"><b>NCM: <label class="obrigatorio"></label></b>
+                <img width="12px" class="" src="<?php echo $icones; ?>info.png" alt="Nomenclatura Comum do Merscosul" title="Nomenclatura Comum do Merscosul">
+            </td>
             <td align="left" width="">
                 <input  
                     id="nfencm" 
@@ -592,7 +586,9 @@ if ($linhas == 0) {
             </td>
         </tr>        
         <tr  id="linha_cfop">
-            <td align="right" width="200px"><b>CFOP: <label class="obrigatorio"></label></b></td>
+            <td align="right" width="200px"><b>CFOP Padrão:<label class="obrigatorio"></label></b>
+                <img width="12px" src="<?php echo $icones; ?>info.png" alt="Código Fiscal de Operações e Prestações" title="Código Fiscal de Operações e Prestações">
+            </td>
             <td align="left" valign="bottom">
                 <input  
                     id="nfecfop" 
@@ -617,42 +613,30 @@ if ($linhas == 0) {
             </td>
         </tr>        
         <tr id="linha_icms">
-            <td align="right" width="200px"><b>ICMS: <label class="obrigatorio"></label></b></td>
+            <td align="right" width="200px"><b>ICMS atual: <label class="obrigatorio"></label></b>
+                <img width="12px" class="" src="<?php echo $icones; ?>info.png" alt="Imposto Sobre Circulação De Mercadorias e Serviços" title="Código Fiscal de Operações e Prestações">
+            </td>
             <td align="left" width=""> 
                 <input  
                     onkeypress=""  
                     id="nfeicms" 
                     type="text" 
                     name="nfeicms" 
-                    onclick="select()" 
-                    onkeyup="formato_porcentagem()" 
+                    onclick="" 
+                    onkeyup="" 
                     size="6" 
-                    class="campopadrao"  
-                    value="<?php echo number_format($icms,2,',',''); ?>" <?php if ($ver == 1) echo" disabled "; ?> 
+                    class="campopadrao" 
+                    disabled 
+                    value="<?php echo number_format($icms_atual,2,',',''); ?>" 
                     placeholder=""
-                    <?php if ($dadosfiscais==1) echo " required "; else echo " ";?> 
                 >
                 <span class="dicacampo">%</span></td>
         </tr>
-        <tr id="linha_icmsst">
-            <td align="right" width="200px"><b>ICMSST: <label class="obrigatorio"></label></b></td>
-            <td align="left" width=""> 
-                <input  
-                    onkeypress=""  
-                    id="nfeicmsst" 
-                    type="text" 
-                    name="nfeicmsst" 
-                    onclick="select()" 
-                    onkeyup="formato_porcentagem()" 
-                    size="6" class="campopadrao"  
-                    value="<?php echo number_format($icmsst,2,',',''); ?>" <?php if ($ver == 1) echo" disabled "; ?> 
-                    placeholder="" 
-                    <?php if ($dadosfiscais==1) echo " required "; else echo " ";?> 
-                >
-                <span class="dicacampo">%</span></td>
-        </tr>
+        
         <tr id="linha_ipi">
-            <td align="right" width="200px"><b>IPI: <label class="obrigatorio"></label></b></td>
+            <td align="right" width="200px"><b>IPI: <label class="obrigatorio"></label></b>
+                <img width="12px" class="" src="<?php echo $icones; ?>info.png" alt="Imposto sobre Produto Industrializado" title="Imposto sobre Produto Industrializado">
+            </td>
             <td align="left" width=""> 
                 <input  
                     onkeypress=""  
@@ -670,7 +654,9 @@ if ($linhas == 0) {
                 <span class="dicacampo">%</span></td>
         </tr>
         <tr id="linha_pis">
-            <td align="right" width="200px"><b>PIS: <label class="obrigatorio"></label></b></td>
+            <td align="right" width="200px"><b>PIS: <label class="obrigatorio"></label></b>
+                <img width="12px" class="" src="<?php echo $icones; ?>info.png" alt="Programa de Integração Social" title="Programa de Integração Social">
+            </td>
             <td align="left" width=""> 
                 <input  
                     onkeypress=""  
@@ -688,7 +674,9 @@ if ($linhas == 0) {
                 <span class="dicacampo">%</span></td>
         </tr>
         <tr id="linha_cofins">
-            <td align="right" width="200px"><b>COFINS: <label class="obrigatorio"></label></b></td>
+            <td align="right" width="200px"><b>COFINS: <label class="obrigatorio"></label></b>
+                <img width="12px" class="" src="<?php echo $icones; ?>info.png" alt="Contribuição para o Financiamento da Seguridade Social" title="Contribuição para o Financiamento da Seguridade Social">
+            </td>
             <td align="left" width=""> 
                 <input  
                     onkeypress=""  
