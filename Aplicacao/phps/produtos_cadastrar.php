@@ -22,8 +22,6 @@ $sql = "SELECT *
     FROM produtos 
     LEFT JOIN nfe_ncm on (pro_ncm=ncm_codigo)
     LEFT JOIN nfe_cfop on (pro_cfop=cfop_codigo)
-    LEFT JOIN nfe_cst on (pro_cst=cst_codigo)
-    LEFT JOIN nfe_csosn on (pro_csosn=csosn_codigo)
     WHERE pro_codigo='$codigo'
 ";
 $query = mysql_query($sql);
@@ -50,13 +48,11 @@ while ($array = mysql_fetch_array($query)) {
     $pis=$array['pro_pis'];
     $cofins=$array['pro_cofins'];
     $origem_codigo=$array['pro_origem'];
-    $cst_codigo=$array['pro_cst'];
-    $cst=$array['cst_id'];
-    $csosn_codigo=$array['pro_csosn'];
-    $csosn=$array['csosn_id'];
     $dadosfiscais=$array['pro_dadosfiscais'];
     if ($subproduto=="") $subproduto=0;
 }
+
+if ($origem_codigo=="") $origem_codigo=0;
 
 $sql2 = "SELECT * FROM quiosques_configuracoes WHERE quicnf_quiosque='$usuario_quiosque'";
 if (!$query2 = mysql_query($sql2)) die ("Erro SQL Quiosque Configuracões: ".mysql_error());
@@ -74,23 +70,31 @@ if ($operacao==1) {
     }  
 } 
 
-
-if ($cfop=="") $cfop="0.000";
 if ($ipi=="") $ipi="0,00";
 if ($pis=="") $pis="0,00";
 if ($cofins=="") $cofins="0,00";
 
-$sql_fatanual="SELECT sum(nfefat_valor) as fatanual FROM nfe_faturamento WHERE nfefat_quiosque=$usuario_quiosque ORDER BY nfefat_codigo DESC LIMIT 12";
-if (!$query_fatanual = mysql_query($sql_fatanual)) die("Erro SQL Faturamento Anual: ".mysql_error());
-$dados_fatanual=  mysql_fetch_assoc($query_fatanual);
-$fatanual=$dados_fatanual["fatanual"];
-echo "Faturamento Anual: ($fatanual)";
 
-$sql_simplesnacional = "SELECT nfesn_icms FROM nfe_simplesnacional WHERE nfesn_de <= $fatanual AND nfesn_ate >= $fatanual";
-if (!$query_simplesnacional = mysql_query($sql_simplesnacional)) die("Erro SQL Consulta ICMS Simples Nacional: ".mysql_error());
-$dados_simplesnacional=  mysql_fetch_assoc($query_simplesnacional);
-$icms_atual=$dados_simplesnacional["nfesn_icms"];
-echo "ICMS Atual: ($icms_atual)";
+//Verifica qual é o faturamento dos ultimos 12 meses
+$sql="SELECT sum(nfefat_valor) as fatanual FROM (SELECT nfefat_valor FROM nfe_faturamento WHERE nfefat_quiosque=$usuario_quiosque ORDER BY nfefat_codigo DESC LIMIT 12) as subt;";
+if (!$query = mysql_query($sql)) die("Erro SQL Faturamento Anual: ".mysql_error());
+$dados=mysql_fetch_assoc($query);
+$fatanual=$dados["fatanual"];
+//echo "Faturamento Anual: ($fatanual)";
+
+//Verifica se é do Simples Nacional
+if ($fatanual<=3600000) {    
+    //Verifica qual é o valor do ICMS a partir da tabela de calculo pronta 
+    $sql_simplesnacional = "SELECT nfesn_icms FROM nfe_simplesnacional WHERE nfesn_de <= $fatanual AND nfesn_ate >= $fatanual";
+    if (!$query_simplesnacional = mysql_query($sql_simplesnacional)) die("Erro SQL Consulta ICMS Simples Nacional: ".mysql_error());
+    $dados_simplesnacional=  mysql_fetch_assoc($query_simplesnacional);
+    $icms_atual=$dados_simplesnacional["nfesn_icms"];
+    $simplesnacional=1;
+} else {
+    $icms_atual="???";
+    $simplesnacional=0;
+}
+
 
 
 
@@ -163,32 +167,6 @@ function pesquisa_origem (valor) {
     });
 }
 
-function pesquisa_cst (valor) {
-       
-    $.post("produtos_pesquisa_cst.php",{
-        id:valor
-    },function(valor2){
-        valor2=valor2.split("/");
-        valor3=valor2[0];
-        valor4=valor2[1];
-        $("label[id=label_cst]").text(valor3);
-        $("input[name=nfecst_codigo]").val(valor4);
-    });
-}
-
-function pesquisa_csosn (valor) {
-       
-    $.post("produtos_pesquisa_csosn.php",{
-        id:valor
-    },function(valor2){
-        valor2=valor2.split("/");
-        valor3=valor2[0];
-        valor4=valor2[1];
-        $("label[id=label_csosn]").text(valor3);
-        $("input[name=nfecsosn_codigo]").val(valor4);
-    });
-}
-
 
 function formato_porcentagem() {
     $('#nfeipi').priceFormat({
@@ -213,12 +191,8 @@ function dados_fiscais(valor) {
     if (valor==1) {
         document.form1.nfencm.required=true;
         document.form1.nfecfop.required=true;
-        document.form1.nfeipi.required=true;
-        document.form1.nfepis.required=true;
-        document.form1.nfecofins.required=true;
         document.form1.nfeorigem.required=true;
-        document.form1.nfecst.required=true;
-        document.form1.nfecsosn.required=true;
+
         $("tr[id=linha_ncm]").show(); 
         $("tr[id=linha_cfop]").show(); 
         $("tr[id=linha_icms]").show(); 
@@ -226,10 +200,8 @@ function dados_fiscais(valor) {
         $("tr[id=linha_pis]").show();
         $("tr[id=linha_cofins]").show();
         $("tr[id=linha_origem]").show();
-        $("tr[id=linha_cst]").show();
-        if (crt==1) {
-            $("tr[id=linha_csosn]").show();
-        }
+
+
     } else {
         document.form1.nfencm.required=false;
         document.form1.nfecfop.required=false;
@@ -237,8 +209,6 @@ function dados_fiscais(valor) {
         document.form1.nfepis.required=false;
         document.form1.nfecofins.required=false;
         document.form1.nfeorigem.required=false;
-        document.form1.nfecst.required=false;
-        document.form1.nfecsosn.required=false;
         $("tr[id=linha_ncm]").hide(); 
         $("tr[id=linha_cfop]").hide(); 
         $("tr[id=linha_icms]").hide(); 
@@ -246,8 +216,6 @@ function dados_fiscais(valor) {
         $("tr[id=linha_pis]").hide();
         $("tr[id=linha_cofins]").hide();
         $("tr[id=linha_origem]").hide();
-        $("tr[id=linha_cst]").hide();
-        $("tr[id=linha_csosn]").hide();
     }
   
 }
@@ -288,12 +256,6 @@ window.onload = function(){
     var origem = $("input[name=nfeorigem]").val();
     pesquisa_origem(origem);
     
-    var cst = $("input[name=nfecst]").val();
-    pesquisa_cst(cst);
-    
-    var csosn = $("input[name=nfecsosn]").val();
-    pesquisa_csosn(csosn);
-
     
 }   
 
@@ -646,10 +608,11 @@ if ($linhas == 0) {
                     onclick="select()" 
                     onkeyup="formato_porcentagem()" 
                     size="6" 
-                    class="campopadrao"  
-                    value="<?php echo number_format($ipi,2,',',''); ?>" <?php if ($ver == 1) echo" disabled "; ?> 
+                    class="campopadrao"
+                    <?php if (($simplesnacional==1)||($ver==1)) echo " disabled "; ?>
+                    value="<?php echo number_format($ipi,2,',',''); ?>" 
                     placeholder=""
-                    <?php if ($dadosfiscais==1) echo " required "; else echo " ";?> 
+                    <?php if (($dadosfiscais==1)&&($simplesnacional==0)) echo " required "; else echo " ";?> 
                 >
                 <span class="dicacampo">%</span></td>
         </tr>
@@ -667,9 +630,10 @@ if ($linhas == 0) {
                     onkeyup="formato_porcentagem()" 
                     size="6" 
                     class="campopadrao"  
-                    value="<?php echo number_format($pis,2,',',''); ?>" <?php if ($ver == 1) echo" disabled "; ?> 
+                    <?php if (($simplesnacional==1)||($ver==1)) echo " disabled "; ?>
+                    value="<?php echo number_format($pis,2,',',''); ?>" 
                     placeholder=""
-                    <?php if ($dadosfiscais==1) echo " required "; else echo " ";?> 
+                    <?php if (($dadosfiscais==1)&&($simplesnacional==0)) echo " required "; else echo " ";?> 
                 >
                 <span class="dicacampo">%</span></td>
         </tr>
@@ -687,9 +651,10 @@ if ($linhas == 0) {
                     onkeyup="formato_porcentagem()" 
                     size="6" 
                     class="campopadrao"  
-                    value="<?php echo number_format($cofins,2,',',''); ?>" <?php if ($ver == 1) echo" disabled "; ?> 
+                    <?php if (($simplesnacional==1)||($ver==1)) echo " disabled "; ?>
+                    value="<?php echo number_format($cofins,2,',',''); ?>"
                     placeholder=""
-                    <?php if ($dadosfiscais==1) echo " required "; else echo " ";?> 
+                    <?php if (($dadosfiscais==1)&&($simplesnacional==0)) echo " required "; else echo " ";?>  
                 >
                 <span class="dicacampo">%</span></td>
         </tr>
@@ -717,57 +682,6 @@ if ($linhas == 0) {
                 <label id="label_origem"></label>
             </td>
         </tr>   
-        <tr  id="linha_cst">
-            <td align="right" width="200px"><b>CST: <label class="obrigatorio"></label></b></td>
-            <td align="left" width="">
-                <input  
-                    id="nfecst" 
-                    name="nfecst"  
-                    type="text" 
-                    size="6"
-                    maxlength="3"
-                    class="campopadrao"  
-                    value="<?php echo "$cst"; ?>" 
-                    <?php if ($ver == 1) echo" disabled "; ?> 
-                    onkeyup="pesquisa_cst(this.value)"
-                    onblur="pesquisa_cst(this.value)"
-                    placeholder=""
-                    <?php if ($dadosfiscais==1) echo " required ";   ?>
-                >
-                <a class="link" href="produtos_cst.php" target="_blank">
-                    <img width="12px" src="<?php echo $icones; ?>procurar.png" alt="" >
-                </a>
-                <label id="label_cst"></label>
-                <input type="hidden" name="nfecst_codigo" value="<?php echo $cst_codigo; ?>">
-            </td>
-        </tr>   
-
-        <tr id="linha_csosn">
-            <td align="right" width="200px"><b>CSOSN: <label class="obrigatorio"></label></b></td>
-            <td align="left" width="">
-                <input  
-                    id="nfecsosn" 
-                    name="nfecsosn"  
-                    type="text" 
-                    size="6"
-                    maxlength="3"
-                    class="campopadrao"  
-                    value="<?php echo "$csosn"; ?>" 
-                    <?php if ($ver == 1) echo" disabled "; ?> 
-                    onkeyup="pesquisa_csosn(this.value)"
-                    onblur="pesquisa_csosn(this.value)"
-                    placeholder=""
-                    <?php if ($dadosfiscais==1) echo " required ";   ?>
-                >
-                <a class="link" href="produtos_csosn.php" target="_blank">
-                    <img width="12px" src="<?php echo $icones; ?>procurar.png" alt="" >
-                </a>
-                <label id="label_csosn"></label>
-                <input type="hidden" name="nfecsosn_codigo" value="<?php echo $csosn_codigo; ?>">
-            </td>
-        </tr>   
-        
-
     </table>
 
     <input type="hidden" name="nfecrt" value="<?php echo $crt; ?>">

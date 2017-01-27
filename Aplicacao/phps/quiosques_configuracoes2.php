@@ -5,16 +5,22 @@ $tipopagina="quiosque_configuracao";
 require "login_verifica.php";
 include "includes.php";
 
-//print_r($_REQUEST);
+print_r($_REQUEST);
 
 $quiosque = $_POST['quiosque'];
 $usamodulofiscal = $_POST['usamodulofiscal'];
 $crtnfe = $_POST['crtnfe'];
+$cstnfe = $_POST['cstnfe'];
+$csosnnfe = $_POST['csosnnfe'];
 $serienfe = $_POST['serienfe'];
 $tipoimpressaodanfe = $_POST['tipoimpressaodanfe'];
 $ambientenfe = $_POST['ambientenfe'];
 $versaonfe = $_POST['versaonfe'];
 $razaosocial = $_POST['razaosocial'];
+$tipopessoanfe = $_POST['tipopessoanfe'];
+$cpf = $_POST['cpf'];
+$cpf = str_replace(".","", $cpf);
+$cpf = str_replace("-","", $cpf);
 $cnpj = $_POST['cnpj'];
 $cnpj = str_replace(".","", $cnpj);
 $cnpj = str_replace("/","", $cnpj);
@@ -56,6 +62,8 @@ UPDATE
 SET            
     quicnf_usamodulofiscal='$usamodulofiscal',
     quicnf_crtnfe='$crtnfe',
+    quicnf_cstnfe='$cstnfe',
+    quicnf_csosnnfe='$csosnnfe',
     quicnf_serienfe='$serienfe',
     quicnf_tipoimpressaodanfe='$tipoimpressaodanfe',
     quicnf_ambientenfe='$ambientenfe',
@@ -73,6 +81,8 @@ SET
     qui_razaosocial='$razaosocial',
     qui_cnpj='$cnpj',
     qui_ie='$ie',
+    qui_cpf='$cpf',
+    qui_tipopessoa='$tipopessoanfe',
     qui_im='$im'
 WHERE
     qui_codigo=$quiosque

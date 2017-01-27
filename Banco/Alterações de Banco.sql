@@ -17203,3 +17203,19 @@ ADD COLUMN `nfefat_quiosque` INT(12) NULL AFTER `nfefat_valor`;
 
 ALTER TABLE `sgaf_labodega`.`nfe_faturamento` 
 CHANGE COLUMN `nfefat_quiosque` `nfefat_quiosque` INT(12) NOT NULL ;
+
+ALTER TABLE `sgaf_labodega`.`produtos` 
+DROP COLUMN `pro_csosn`,
+DROP COLUMN `pro_cst`;
+
+ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_cst` INT(2) NULL AFTER `quicnf_versaonfe`,
+ADD COLUMN `quicnf_csosn` INT(2) NULL AFTER `quicnf_cst`;
+
+ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+CHANGE COLUMN `quicnf_cst` `quicnf_cstnfe` INT(2) NULL DEFAULT NULL ,
+CHANGE COLUMN `quicnf_csosn` `quicnf_csosnnfe` INT(2) NULL DEFAULT NULL ;
+
+ALTER TABLE `sgaf_labodega`.`quiosques` 
+ADD COLUMN `qui_cpf` VARCHAR(11) NULL AFTER `qui_razaosocial`,
+ADD COLUMN `qui_tipopessoa` INT(1) NULL AFTER `qui_cpf`;

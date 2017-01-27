@@ -4,15 +4,24 @@ function initPage(){
     var usa = $("select[name=usamodulofiscal]").val();
     if (usa==0) {
         $("tr[id=linha_crtnfe]").hide(); 
+        $("tr[id=linha_cstnfe]").hide(); 
+        $("tr[id=linha_csosnnfe]").hide(); 
+        $("tr[id=linha_faturamentoanualatual]").hide(); 
+        $("tr[id=linha_icmsatual]").hide(); 
         $("tr[id=linha_serienfe]").hide(); 
         $("tr[id=linha_tipoimpressaodanfe]").hide(); 
         $("tr[id=linha_ambientenfe]").hide(); 
         $("tr[id=linha_ultimanfe]").hide(); 
         $("tr[id=linha_versaonfe]").hide(); 
+        $("tr[id=linha_tipopessoanfe]").hide(); 
+        $("tr[id=linha_cpf]").hide(); 
         $("tr[id=linha_cnpj]").hide(); 
         $("tr[id=linha_razaosocial]").hide(); 
         $("tr[id=linha_ie]").hide(); 
         $("tr[id=linha_im]").hide(); 
+    } else {
+        tipopessoa=$("select[name=tipopessoanfe]").val();
+        tipo_pessoa(tipopessoa);
     }
     //verifica_usuario (); 
     estado=$("input[name=quiosque_estado]").val(); 
@@ -44,9 +53,13 @@ $sql="SELECT *
      $ultimanfe=$dados["quicnf_ultimanfe"];
      $serienfe=$dados["quicnf_serienfe"];
      $crtnfe=$dados["quicnf_crtnfe"];
+     $cstnfe=$dados["quicnf_cstnfe"];
+     $csosnnfe=$dados["quicnf_csosnnfe"];
      $tipoimpressaodanfe=$dados["quicnf_tipoimpressaodanfe"];
      $ambientenfe=$dados["quicnf_ambientenfe"];
      $versaonfe=$dados["quicnf_versaonfe"];
+     $tipopessoanfe=$dados["qui_tipopessoa"];
+     $cpf=$dados["qui_cpf"];
      $cnpj=$dados["qui_cnpj"];
      $razaosocial=$dados["qui_razaosocial"];
      $ie=$dados["qui_ie"];
@@ -155,6 +168,111 @@ $tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
 //$tpl1->block("BLOCK_CAMPO_DESABILITADO");
 //$tpl1->block("BLOCK_CAMPO_SOMENTELEITURA");
 $tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+//Faturamento Anual Atual
+$tpl1->TITULO = "Faturamento Anual Atual";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_faturamentoanualatual";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->CAMPO_TIPO="text";
+$tpl1->CAMPO_NOME="faturamentoanualatualnfe";
+$tpl1->CAMPO_ID="faturamentoanualatualnfe";
+$tpl1->CAMPO_TAMANHO="18";
+//Verifica qual é o faturamento dos ultimos 12 meses
+$sql="SELECT sum(nfefat_valor) as fatanual FROM (SELECT nfefat_valor FROM nfe_faturamento WHERE nfefat_quiosque=$usuario_quiosque ORDER BY nfefat_codigo DESC LIMIT 12) as subt;";
+if (!$query = mysql_query($sql)) die("Erro SQL Faturamento Anual: ".mysql_error());
+$dados=mysql_fetch_assoc($query);
+$fatanual=$dados["fatanual"];
+//echo "Faturamento Anual: ($fatanual)";
+$tpl1->CAMPO_VALOR= "R$ " . number_format($fatanual, 2, ',', '.');
+$tpl1->CAMPO_QTD_CARACTERES="9";
+$tpl1->CAMPO_DICA="";
+$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//ICMS Atual
+$tpl1->TITULO = "ICMS Atual";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_icmsatual";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->CAMPO_TIPO="text";
+$tpl1->CAMPO_NOME="icmsatualnfe";
+$tpl1->CAMPO_ID="icmsatualnfe";
+$tpl1->CAMPO_TAMANHO="8";
+$sql_simplesnacional = "SELECT nfesn_icms FROM nfe_simplesnacional WHERE nfesn_de <= $fatanual AND nfesn_ate >= $fatanual";
+if (!$query_simplesnacional = mysql_query($sql_simplesnacional)) die("Erro SQL Consulta ICMS Simples Nacional: ".mysql_error());
+$dados_simplesnacional=  mysql_fetch_assoc($query_simplesnacional);
+$icms_atual=$dados_simplesnacional["nfesn_icms"];
+$tpl1->CAMPO_VALOR="$icms_atual";
+$tpl1->CAMPO_QTD_CARACTERES="4";
+$tpl1->CAMPO_DICA="";
+$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->TEXTO_ID="";
+$tpl1->TEXTO="%";
+$tpl1->block("BLOCK_TEXTO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//CST
+$tpl1->TITULO = "CST";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_cstnfe";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "cstnfe";
+$tpl1->SELECT_ID = "cstnfe";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
+$sql2="SELECT * FROM nfe_cst ORDER BY cst_id";
+if (!$query2= mysql_query($sql2)) die("Erro: " . mysql_error());
+if ($usamodulofiscal=='1') $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+while ($dados2=  mysql_fetch_assoc($query2)) {
+    $cst_codigo=$dados2["cst_codigo"];
+    if ($cstnfe==$cst_codigo) $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+    $cst_nome=$dados2["cst_nome"];
+    $cst_id=$dados2["cst_id"];
+    $tpl1->OPTION_VALOR = "$cst_codigo";
+    $tpl1->OPTION_NOME = "($cst_id) $cst_nome";    
+    $tpl1->block("BLOCK_SELECT_OPTION");
+ }
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+
+
+//CSOSN
+$tpl1->TITULO = "CSOSN";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_csosnnfe";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "csosnnfe";
+$tpl1->SELECT_ID = "csosnnfe";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
+$sql2="SELECT * FROM nfe_csosn ORDER BY csosn_id";
+if (!$query2= mysql_query($sql2)) die("Erro: " . mysql_error());
+if ($usamodulofiscal=='1') $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+while ($dados2=  mysql_fetch_assoc($query2)) {
+    $csosn_codigo=$dados2["csosn_codigo"];
+    if ($csosnnfe==$csosn_codigo) $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+    $csosn_nome=$dados2["csosn_nome"];
+    $csosn_id=$dados2["csosn_id"];
+    $tpl1->OPTION_VALOR = "$csosn_codigo";
+    $tpl1->OPTION_NOME = "($csosn_id) $csosn_nome";    
+    $tpl1->block("BLOCK_SELECT_OPTION");
+ }
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
@@ -277,6 +395,30 @@ $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
+//Tipo Pessoa
+$tpl1->TITULO = "Tipo Pessoa";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_tipopessoanfe";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "tipopessoanfe";
+$tpl1->SELECT_ID = "tipopessoanfe";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "tipo_pessoa(this.value)";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+if ($usamodulofiscal=='1') $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->block("BLOCK_SELECT_OPTION_PADRAO"); //Selecione
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Física";
+if ($tipopessoanfe=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 2;
+$tpl1->OPTION_NOME = "Jurídica";
+if ($tipopessoanfe=='2') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
 
 
 //RAZÃO SOCIAL
@@ -310,7 +452,39 @@ $tpl1->CAMPO_ID="cnpj";
 $tpl1->CAMPO_TAMANHO="25";
 $tpl1->CAMPO_VALOR="$cnpj";
 $tpl1->CAMPO_QTD_CARACTERES="";
-if ($usamodulofiscal=='1') $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+if (($usamodulofiscal=='1')&&($tipopessoanfe==2)) $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+//$tpl1->CAMPO_ONKEYUP="mascara_cnpj()";
+//$tpl1->CAMPO_ONKEYDOWN="";
+//$tpl1->CAMPO_ONKEYPRESS="";
+$tpl1->CAMPO_ONBLUR="";
+//$tpl1->CAMPO_ONCLICK="";
+$tpl1->CAMPO_DICA="";
+//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR"); //Clicou seleciona conteudo
+//$tpl1->block("BLOCK_CAMPO_HISTORICO_DESATIVADO"); //autocomplete do navegador desligado
+//$tpl1->block("BLOCK_CAMPO_FOCO");
+$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+//$tpl1->block("BLOCK_CAMPO_NORMAL_OCULTO"); //Campo text que não aparece na tela
+//$tpl1->CAMPO_ESTILO="";
+//$tpl1->block("BLOCK_CAMPO_ESTILO");
+//$tpl1->block("BLOCK_CAMPO_DESABILITADO");
+//$tpl1->block("BLOCK_CAMPO_SOMENTELEITURA");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+//CPF
+$tpl1->TITULO = "CPF";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_cpf";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->CAMPO_TIPO="text";
+$tpl1->CAMPO_NOME="cpf";
+$tpl1->CAMPO_ID="cpf";
+$tpl1->CAMPO_TAMANHO="20";
+$tpl1->CAMPO_VALOR="$cpf";
+$tpl1->CAMPO_QTD_CARACTERES="14";
+if (($usamodulofiscal=='1')&&($tipopessoanfe==1)) $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
 //$tpl1->CAMPO_ONKEYUP="mascara_cnpj()";
 //$tpl1->CAMPO_ONKEYDOWN="";
 //$tpl1->CAMPO_ONKEYPRESS="";
@@ -369,7 +543,7 @@ $tpl1->CAMPO_ID="im";
 $tpl1->CAMPO_TAMANHO="25";
 $tpl1->CAMPO_VALOR="$im";
 $tpl1->CAMPO_QTD_CARACTERES="30";
-if ($usamodulofiscal=='1') $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+if (($usamodulofiscal=='1')&&($tipopessoanfe==2)) $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
 //$tpl1->CAMPO_ONKEYDOWN="";
 //$tpl1->CAMPO_ONKEYPRESS="";
 $tpl1->CAMPO_ONBLUR="";
@@ -387,6 +561,8 @@ $tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
 $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
+
+
 
 
 //-------------

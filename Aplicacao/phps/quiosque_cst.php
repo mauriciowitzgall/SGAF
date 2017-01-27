@@ -10,7 +10,7 @@ $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "PRODUTOS";
 $tpl_titulo->SUBTITULO = "CST (Código da Situação Tributária)";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "produtos.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "quiosques_configuracoes.png";
 $tpl_titulo->show();
 
 //Listagem

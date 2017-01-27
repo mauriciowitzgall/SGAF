@@ -25,6 +25,14 @@ $tpl->TITULO="";
 $tpl->ASTERISCO=""; //Simbolo do obrigatório
 $tpl->block("BLOCK_TITULO");
 
+//Link
+$tpl1->LINK=".php";
+$tpl1->LINK_TARGET="_blank";
+$tpl1->LINK_NOME="";
+$tpl1->LINK_ID="";
+$tpl1->block("BLOCK_LINK");
+
+
 //Campo
 $tpl->CAMPO_TIPO="";
 $tpl->CAMPO_NOME="";
