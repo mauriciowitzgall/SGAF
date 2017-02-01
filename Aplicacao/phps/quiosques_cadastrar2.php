@@ -17,7 +17,7 @@ if (($permissao_quiosque_cadastrar==1)&&($codigo!=$usuario_quiosque)) $tipopagin
 else $tipopagina = "quiosques";
 
 include "includes.php";
-print_r($_REQUEST);
+//print_r($_REQUEST);
 
 $erro = 0;
 $nome = $_POST['nome'];
@@ -38,6 +38,9 @@ $cnpj = $_POST['cnpj'];
 $cnpj = str_replace(".","", $cnpj);
 $cnpj = str_replace("/","", $cnpj);
 $cnpj = str_replace("-","", $cnpj);
+$cpf = $_POST['cpf'];
+$cpf = str_replace(".","", $cpf);
+$cpf = str_replace("-","", $cpf);
 $ie = $_POST['ie'];
 $ie = str_replace(".","", $ie);
 $ie = str_replace("/","", $ie);
@@ -109,8 +112,8 @@ if ($codigo == "") {
             die("Erro7: " . mysql_error());
     }
     //Deve-se definir uma configuração padrão inicial para o quiosque cadastrado 
-    $sql7 = " INSERT INTO quiosques_configuracoes (quicnf_quiosque,quicnf_usamodulofiscal)
-	VALUES ($ultimo,0);";
+    $sql7 = " INSERT INTO quiosques_configuracoes (quicnf_quiosque,quicnf_usamodulofiscal,quicnf_usacomanda)
+	VALUES ($ultimo,0,0);";
     if (!$query7= mysql_query($sql7))  die("Erro SQL Configuração quiosque".mysql_error());    
     
     
@@ -129,7 +132,7 @@ if ($codigo == "") {
         $erro = 1;
     }
 
-    echo $sql = "UPDATE quiosques SET 
+    $sql = "UPDATE quiosques SET 
     qui_nome='$nome',
     qui_cidade='$cidade',
     qui_cep='$cep',
@@ -147,6 +150,7 @@ if ($codigo == "") {
     qui_horaedicao='$horaedicao',
     qui_usuario='$usuario_codigo',
     qui_cnpj='$cnpj',
+    qui_cpf='$cpf',
     qui_ie='$ie',
     qui_im='$im',
     qui_razaosocial='$razaosocial',

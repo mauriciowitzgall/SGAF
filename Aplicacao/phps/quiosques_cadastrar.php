@@ -38,6 +38,7 @@ $tpl_titulo->NOME_ARQUIVO_ICONE = "quiosques.png";
 $tpl_titulo->show();
 
 //Pega todos os dados da tabela (Necessário caso seja uma edi��o ou visuliza��o de detalhes)
+$usamodulofiscal=usamodulofiscal($usuario_quiosque);
 $sql = "SELECT * FROM quiosques WHERE qui_codigo='$codigo'";
 $query = mysql_query($sql);
 if (!$query)
@@ -61,6 +62,8 @@ while ($array = mysql_fetch_array($query)) {
     $ie = $array['qui_ie'];
     $im = $array['qui_im'];
     $razaosocial = $array['qui_razaosocial'];
+    $tipopessoa = $array['qui_tipopessoa'];
+    $cpf = $array['qui_cpf'];
 
     //Pega todos os dados da tabela (Necessário caso seja uma edi��o)
     $sql = "SELECT * FROM cidades join estados on (cid_estado=est_codigo) WHERE cid_codigo='$cidade'";
@@ -72,6 +75,8 @@ while ($array = mysql_fetch_array($query)) {
         $pais = $dados["est_pais"];
     }
 }
+
+
 
 //Estrutura dos campos de cadastro
 $tpl1 = new Template("templates/cadastro_edicao_detalhes_2.html");
@@ -236,7 +241,7 @@ $tpl1->CAMPO_ID = "cnpj";
 $tpl1->CAMPO_TAMANHO = "25";
 $tpl1->CAMPO_VALOR = $cnpj;
 $tpl1->CAMPO_QTD_CARACTERES = 18;
-$tpl1->CAMPO_ONBLUR="";
+$tpl1->CAMPO_ONBLUR="valida_cnpj(this.value);";
 //$tpl1->block("BLOCK_CAMPO_HISTORICO_DESATIVADO");
 //$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
 $tpl1->block("BLOCK_CAMPO_NORMAL");
@@ -420,7 +425,7 @@ $tpl1->CAMPO_QTD_CARACTERES = "";
 $tpl1->CAMPO_NOME = "cep";
 $tpl1->CAMPO_DICA = "";
 $tpl1->CAMPO_ID = "cep";
-$tpl1->CAMPO_TAMANHO = "9";
+$tpl1->CAMPO_TAMANHO = "12";
 $tpl1->CAMPO_VALOR = $cep;
 $tpl1->CAMPO_QTD_CARACTERES = 9;
 $tpl1->block("BLOCK_CAMPO_HISTORICO_DESATIVADO");
@@ -480,6 +485,46 @@ $tpl1->CAMPO_ID = "";
 $tpl1->CAMPO_TAMANHO = "40";
 $tpl1->CAMPO_VALOR = $email;
 $tpl1->CAMPO_QTD_CARACTERES = 70;
+$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+$tpl1->block("BLOCK_CAMPO_HISTORICO_DESATIVADO");
+$tpl1->block("BLOCK_CAMPO_NORMAL");
+if ($operacao == 'ver')
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//Nome Responsável
+$tpl1->TITULO = "Nome Responsável";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->CAMPO_TIPO = "responsavel";
+$tpl1->CAMPO_QTD_CARACTERES = "";
+$tpl1->CAMPO_NOME = "responsavel";
+$tpl1->CAMPO_DICA = "";
+$tpl1->CAMPO_ID = "responsavel";
+$tpl1->CAMPO_TAMANHO = "40";
+$tpl1->CAMPO_VALOR = $responsavel;
+$tpl1->CAMPO_QTD_CARACTERES = 70;
+$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+$tpl1->block("BLOCK_CAMPO_NORMAL");
+if ($operacao == 'ver')
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//CPF
+$tpl1->TITULO = "CPF";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->CAMPO_TIPO = "cpf";
+$tpl1->CAMPO_QTD_CARACTERES = "";
+$tpl1->CAMPO_NOME = "cpf";
+$tpl1->CAMPO_DICA = "";
+$tpl1->CAMPO_ID = "cpf";
+$tpl1->CAMPO_TAMANHO = "20";
+$tpl1->CAMPO_VALOR = $cpf;
+$tpl1->CAMPO_QTD_CARACTERES = 14;
+$tpl1->CAMPO_ONBLUR = "valida_cpf(this.value);";
 $tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
 $tpl1->block("BLOCK_CAMPO_HISTORICO_DESATIVADO");
 $tpl1->block("BLOCK_CAMPO_NORMAL");
@@ -603,8 +648,18 @@ if ($operacao == "editar") {
     $tpl1->CAMPOOCULTO_NOME = "nomenobanco";
     $tpl1->CAMPOOCULTO_VALOR = "$nome";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
+
+    //Usa Módulo Fiscal
+    $tpl1->CAMPOOCULTO_NOME = "usamodulofiscal";
+    $tpl1->CAMPOOCULTO_VALOR = "$usamodulofiscal";
+    $tpl1->block("BLOCK_CAMPOSOCULTOS");
+
+    //Usa Módulo Fiscal Tipo Pessoa
+    $tpl1->CAMPOOCULTO_NOME = "tipopessoa";
+    $tpl1->CAMPOOCULTO_VALOR = "$tipopessoa";
+    $tpl1->block("BLOCK_CAMPOSOCULTOS");
 }
-//Opera��o
+//Operação
 $tpl1->CAMPOOCULTO_NOME = "operacao";
 $tpl1->CAMPOOCULTO_VALOR = "$operacao";
 $tpl1->block("BLOCK_CAMPOSOCULTOS");

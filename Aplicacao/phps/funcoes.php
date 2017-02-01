@@ -142,4 +142,23 @@ function limpa_cnpj($valor) {
     return $valor;
 }
 
+function usamodulofiscal($quiosque){
+    $sql="SELECT quicnf_usamodulofiscal FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
+    if (!$query= mysql_query($sql)) die("Erro função pega configuração usa módulo fiscal: " . mysql_error());
+    while ($dados=  mysql_fetch_assoc($query)) {    
+        $usa=$dados["quicnf_usamodulofiscal"];
+    }
+    return $usa;
+}
+
+function usamodulofiscal_tipopessoa($quiosque){
+    $sql="SELECT qui_tipopessoa FROM quiosques WHERE qui_codigo=$quiosque";
+    if (!$query= mysql_query($sql)) die("Erro SQL Função: usamodulofiscal_tipopessoa: " . mysql_error());
+    while ($dados=  mysql_fetch_assoc($query)) {    
+        $tipopessoa=$dados["qui_tipopessoa"];
+    }
+    return $tipopessoa;
+}
+
+
 ?>

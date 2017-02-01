@@ -2,30 +2,15 @@
 window.onload = initPage;
 function initPage(){
     var usa = $("select[name=usamodulofiscal]").val();
-    if (usa==0) {
-        $("tr[id=linha_crtnfe]").hide(); 
-        $("tr[id=linha_cstnfe]").hide(); 
-        $("tr[id=linha_csosnnfe]").hide(); 
-        $("tr[id=linha_faturamentoanualatual]").hide(); 
-        $("tr[id=linha_icmsatual]").hide(); 
-        $("tr[id=linha_serienfe]").hide(); 
-        $("tr[id=linha_tipoimpressaodanfe]").hide(); 
-        $("tr[id=linha_ambientenfe]").hide(); 
-        $("tr[id=linha_ultimanfe]").hide(); 
-        $("tr[id=linha_versaonfe]").hide(); 
-        $("tr[id=linha_tipopessoanfe]").hide(); 
-        $("tr[id=linha_cpf]").hide(); 
-        $("tr[id=linha_cnpj]").hide(); 
-        $("tr[id=linha_razaosocial]").hide(); 
-        $("tr[id=linha_ie]").hide(); 
-        $("tr[id=linha_im]").hide(); 
-    } else {
+    usa_modulo_fiscal(usa);
+
+    if (usa==1) {
         tipopessoa=$("select[name=tipopessoanfe]").val();
         tipo_pessoa(tipopessoa);
+
+        estado=$("input[name=quiosque_estado]").val(); 
+        mascara_ie(estado);
     }
-    //verifica_usuario (); 
-    estado=$("input[name=quiosque_estado]").val(); 
-    mascara_ie(estado);
 }
 </script>
 
@@ -58,12 +43,17 @@ $sql="SELECT *
      $tipoimpressaodanfe=$dados["quicnf_tipoimpressaodanfe"];
      $ambientenfe=$dados["quicnf_ambientenfe"];
      $versaonfe=$dados["quicnf_versaonfe"];
+     $usacomanda=$dados["quicnf_usacomanda"];
      $tipopessoanfe=$dados["qui_tipopessoa"];
      $cpf=$dados["qui_cpf"];
      $cnpj=$dados["qui_cnpj"];
      $razaosocial=$dados["qui_razaosocial"];
      $ie=$dados["qui_ie"];
      $im=$dados["qui_im"];
+     $endereco=$dados["qui_endereco"];
+     $endereco_numero=$dados["qui_numero"];
+     $bairro=$dados["qui_bairro"];
+     $cep=$dados["qui_cep"];
      $quiosque_estado=$dados["est_codigo"];
      $quiosque_estado_sigla=$dados["est_sigla"];
  }
@@ -107,6 +97,39 @@ $tpl1->OPTION_NOME = "Não";
 if ($usamodulofiscal=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
 $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+
+//Versão NFE
+$tpl1->TITULO = "Versão NFE";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_versaonfe";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->CAMPO_TIPO="text";
+$tpl1->CAMPO_NOME="versaonfe";
+$tpl1->CAMPO_ID="versaonfe";
+$tpl1->CAMPO_TAMANHO="18";
+$tpl1->CAMPO_VALOR="$versaonfe";
+$tpl1->CAMPO_QTD_CARACTERES="9";
+if ($usamodulofiscal=='1') $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+//$tpl1->CAMPO_ONKEYUP="";
+//$tpl1->CAMPO_ONKEYDOWN="";
+//$tpl1->CAMPO_ONKEYPRESS="";
+//$tpl1->CAMPO_ONBLUR="";
+//$tpl1->CAMPO_ONCLICK="";
+$tpl1->CAMPO_DICA="";
+//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR"); //Clicou seleciona conteudo
+//$tpl1->block("BLOCK_CAMPO_HISTORICO_DESATIVADO"); //autocomplete do navegador desligado
+//$tpl1->block("BLOCK_CAMPO_FOCO");
+$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+//$tpl1->block("BLOCK_CAMPO_NORMAL_OCULTO"); //Campo text que não aparece na tela
+//$tpl1->CAMPO_ESTILO="";
+//$tpl1->block("BLOCK_CAMPO_ESTILO");
+//$tpl1->block("BLOCK_CAMPO_DESABILITADO");
+//$tpl1->block("BLOCK_CAMPO_SOMENTELEITURA");
+$tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
@@ -331,37 +354,6 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
-//Versão NFE
-$tpl1->TITULO = "Versão NFE";
-$tpl1->block("BLOCK_TITULO");
-$tpl1->LINHA_ID="linha_versaonfe";
-$tpl1->block("BLOCK_LINHA_ID");
-$tpl1->CAMPO_TIPO="text";
-$tpl1->CAMPO_NOME="versaonfe";
-$tpl1->CAMPO_ID="versaonfe";
-$tpl1->CAMPO_TAMANHO="18";
-$tpl1->CAMPO_VALOR="$versaonfe";
-$tpl1->CAMPO_QTD_CARACTERES="9";
-if ($usamodulofiscal=='1') $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
-//$tpl1->CAMPO_ONKEYUP="";
-//$tpl1->CAMPO_ONKEYDOWN="";
-//$tpl1->CAMPO_ONKEYPRESS="";
-//$tpl1->CAMPO_ONBLUR="";
-//$tpl1->CAMPO_ONCLICK="";
-$tpl1->CAMPO_DICA="";
-//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR"); //Clicou seleciona conteudo
-//$tpl1->block("BLOCK_CAMPO_HISTORICO_DESATIVADO"); //autocomplete do navegador desligado
-//$tpl1->block("BLOCK_CAMPO_FOCO");
-$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
-//$tpl1->block("BLOCK_CAMPO_NORMAL_OCULTO"); //Campo text que não aparece na tela
-//$tpl1->CAMPO_ESTILO="";
-//$tpl1->block("BLOCK_CAMPO_ESTILO");
-//$tpl1->block("BLOCK_CAMPO_DESABILITADO");
-//$tpl1->block("BLOCK_CAMPO_SOMENTELEITURA");
-$tpl1->block("BLOCK_CAMPO");
-$tpl1->block("BLOCK_CONTEUDO");
-$tpl1->block("BLOCK_ITEM");
-
 
 //Ultima NFE
 $tpl1->TITULO = "Última NFE";
@@ -452,6 +444,7 @@ $tpl1->CAMPO_ID="cnpj";
 $tpl1->CAMPO_TAMANHO="25";
 $tpl1->CAMPO_VALOR="$cnpj";
 $tpl1->CAMPO_QTD_CARACTERES="";
+$tpl1->CAMPO_ONBLUR="valida_cnpj(this.value);";
 if (($usamodulofiscal=='1')&&($tipopessoanfe==2)) $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
 //$tpl1->CAMPO_ONKEYUP="mascara_cnpj()";
 //$tpl1->CAMPO_ONKEYDOWN="";
@@ -488,7 +481,7 @@ if (($usamodulofiscal=='1')&&($tipopessoanfe==1)) $tpl1->block("BLOCK_CAMPO_OBRI
 //$tpl1->CAMPO_ONKEYUP="mascara_cnpj()";
 //$tpl1->CAMPO_ONKEYDOWN="";
 //$tpl1->CAMPO_ONKEYPRESS="";
-$tpl1->CAMPO_ONBLUR="";
+$tpl1->CAMPO_ONBLUR="valida_cpf(this.value);";
 //$tpl1->CAMPO_ONCLICK="";
 $tpl1->CAMPO_DICA="";
 //$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR"); //Clicou seleciona conteudo
@@ -543,7 +536,6 @@ $tpl1->CAMPO_ID="im";
 $tpl1->CAMPO_TAMANHO="25";
 $tpl1->CAMPO_VALOR="$im";
 $tpl1->CAMPO_QTD_CARACTERES="30";
-if (($usamodulofiscal=='1')&&($tipopessoanfe==2)) $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
 //$tpl1->CAMPO_ONKEYDOWN="";
 //$tpl1->CAMPO_ONKEYPRESS="";
 $tpl1->CAMPO_ONBLUR="";
@@ -563,6 +555,93 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
+
+//Endereço
+$tpl1->TITULO = "Endereço";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_endereco";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->CAMPO_TIPO="text";
+$tpl1->CAMPO_NOME="endereco";
+$tpl1->CAMPO_ID="endereco";
+$tpl1->CAMPO_TAMANHO="45";
+$tpl1->CAMPO_VALOR="$endereco";
+$tpl1->CAMPO_QTD_CARACTERES="70";
+$tpl1->CAMPO_ONBLUR="";
+$tpl1->CAMPO_DICA="";
+$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->CAMPO_TIPO="number";
+$tpl1->CAMPO_NOME="endereco_numero";
+$tpl1->CAMPO_ID="endereco_numero";
+$tpl1->CAMPO_TAMANHO="5";
+$tpl1->CAMPO_VALOR="$endereco_numero";
+$tpl1->CAMPO_QTD_CARACTERES="6";
+$tpl1->CAMPO_DICA="Nº";
+$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//Bairro
+$tpl1->TITULO = "Bairro";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_bairro";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->CAMPO_TIPO="text";
+$tpl1->CAMPO_NOME="bairro";
+$tpl1->CAMPO_ID="bairro";
+$tpl1->CAMPO_TAMANHO="45";
+$tpl1->CAMPO_VALOR="$bairro";
+$tpl1->CAMPO_QTD_CARACTERES="70";
+$tpl1->CAMPO_DICA="";
+$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//CEP
+$tpl1->TITULO = "CEP";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_cep";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->CAMPO_TIPO="text";
+$tpl1->CAMPO_NOME="cep";
+$tpl1->CAMPO_ID="cep";
+$tpl1->CAMPO_TAMANHO="12";
+$tpl1->CAMPO_VALOR="$cep";
+$tpl1->CAMPO_QTD_CARACTERES="9";
+$tpl1->CAMPO_DICA="";
+$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+//Usa Comanda
+$tpl1->TITULO = "Usa Comanda / Ident.";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_usacomanda";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "usacomanda";
+$tpl1->SELECT_ID = "usacomanda";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($usacomanda=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($usacomanda=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
 
 
 //-------------

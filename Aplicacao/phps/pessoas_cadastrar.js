@@ -47,6 +47,12 @@ function pessoas_popula_quiosque (valor) {
 
 
 function tipo_pessoa(valor) {
+    var usamodulofiscal=$("input[name=usamodulofiscal]").val();
+    if (usamodulofiscal==1) {
+        $("input[name=cidade").attr("required", true);
+    } else {
+        $("input[name=cidade").attr("required", false);
+    }
     if (valor==1) { //Pessoa Física
         $("tr[id=tr_categoria]").hide(); 
         $("tr[id=tr_cnpj]").hide();            
@@ -60,7 +66,6 @@ function tipo_pessoa(valor) {
         $("span[id=span_supervisor]").show(); 
         $("span[id=span_caixa]").show();             
         $("tr[id=linha_razaosocial]").hide();             
-        $("tr[id=linha_ie]").hide();             
         $("tr[id=linha_im]").hide();             
         $("tr[id=linha_contribuinteicms]").hide();   
         $("select[name=cnpj]").attr("required", false);  
@@ -68,16 +73,15 @@ function tipo_pessoa(valor) {
         $("select[name=ie]").attr("required", false);  
         $("select[name=im]").attr("required", false);  
         $("select[name=contribuinteicms]").attr("required", false); 
-        $("select[name=categoria]").attr("required", false);
-        $("select[name=pais]").attr("required", false);            
-        $("select[name=estado]").attr("required", false);            
-        $("select[name=cidade]").attr("required", false);            
+        $("select[name=categoria]").attr("required", false);            
         $("select[name=contribuinteicms]").attr("required", false);        
-        var usamodulofiscal=$("input[name=usamodulofiscal]").val();
+        $("input[name=cnpj").attr("required", false);
         if (usamodulofiscal==1) {
             $("input[name=cpf]").attr("required", true);
+            $("select[name=cidade]").attr("required", true);            
         } else {
             $("input[name=cpf]").attr("required", false);
+            $("select[name=cidade]").attr("required", false);                    
         }
     } else if (valor==2) { //Pessoa Jurídica
         //alert('2');
@@ -95,29 +99,20 @@ function tipo_pessoa(valor) {
         $("tr[id=linha_razaosocial]").show();             
         $("tr[id=linha_ie]").show();             
         $("tr[id=linha_im]").show();             
-        $("tr[id=linha_contribuinteicms]").show();
         $("select[name=categoria]").attr("required", true);            
         $("input[name=cpf]").attr("required", false);
-        var usamodulofiscal=$("input[name=usamodulofiscal]").val();
-        //alert(usamodulofiscal);
         if (usamodulofiscal==1) {
+            $("tr[id=linha_contribuinteicms]").show();
             $("input[name=cnpj]").attr("required", true);            
-            $("input[name=ie]").attr("required", true);            
-            $("input[name=im]").attr("required", true);            
             $("input[name=razaosocial]").attr("required", true);            
-            $("select[name=pais]").attr("required", true);            
-            $("select[name=estado]").attr("required", true);            
             $("select[name=cidade]").attr("required", true);            
-            $("select[name=contribuinteicms]").attr("required", true);            
+            $("select[name=contribuinteicms]").attr("required", true);                       
         } else {
+            $("tr[id=linha_contribuinteicms]").hide();
             $("input[name=cnpj]").attr("required", false);            
-            $("input[name=ie]").attr("required", false);            
-            $("input[name=im]").attr("required", false);            
             $("input[name=razaosocial]").attr("required", false);            
-            $("select[name=pais]").attr("required", false);            
-            $("select[name=estado]").attr("required", false);            
             $("select[name=cidade]").attr("required", false);            
-            $("select[name=contribuinteicms]").attr("required", false);   
+            $("select[name=contribuinteicms]").attr("required", false);            
         }
     } else {
         alert("Erro de envio de parametros para a função");
@@ -136,19 +131,21 @@ function aparece_tiponegociacao() {
 }
 
 $(document).ready(function() {
-        aparece_tiponegociacao();
+    aparece_tiponegociacao();
 
-        tippes = $("select[name=tipopessoa]").val();    
-        verifica_usuario (tippes); 
+    tippes = $("select[name=tipopessoa]").val();    
+    verifica_usuario (tippes); 
 
-        //Verifica o tipo de pessoa fisica ou jurídica para mostrar os campos corretos na tela
-        pessoa=$("select[name=tipopessoa]").val();
-        //alert(pessoa);
-        tipo_pessoa(pessoa);
-        
-        //Verifica qual mascara de IE deve usar
-        estado=document.getElementById("estado").options[document.getElementById("estado").selectedIndex].text;
-        mascara_ie(estado);
+    //Verifica o tipo de pessoa fisica ou jurídica para mostrar os campos corretos na tela
+    pessoa=$("select[name=tipopessoa]").val();
+    //alert(pessoa);
+    tipo_pessoa(pessoa);
+
+    //Verifica qual mascara de IE deve usar
+    estado=document.getElementById("estado").options[document.getElementById("estado").selectedIndex].text;
+    mascara_ie(estado);
+
+    contribuinte_icms($("select[name=contribuinteicms]").val());
 
 });
 
@@ -170,4 +167,12 @@ function popula_cidades2() {
         var est= document.getElementById("estado").options[document.getElementById("estado").selectedIndex].text;
         mascara_ie(est);
     });
+}
+
+function contribuinte_icms(valor) {
+    if (valor==1) {
+        $("input[name=ie]").attr("required", true);            
+    } else {
+        $("input[name=ie]").attr("required", false); 
+    }
 }

@@ -17219,3 +17219,18 @@ CHANGE COLUMN `quicnf_csosn` `quicnf_csosnnfe` INT(2) NULL DEFAULT NULL ;
 ALTER TABLE `sgaf_labodega`.`quiosques` 
 ADD COLUMN `qui_cpf` VARCHAR(11) NULL AFTER `qui_razaosocial`,
 ADD COLUMN `qui_tipopessoa` INT(1) NULL AFTER `qui_cpf`;
+
+
+CREATE TABLE `sgaf_labodega`.`nfe_contribuinteicms` (
+  `cicms_codigo` INT NOT NULL,
+  `cicms_nome` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`cicms_codigo`));
+
+INSERT INTO `sgaf_labodega`.`nfe_contribuinteicms` (`cicms_codigo`, `cicms_nome`) VALUES ('1', 'Contribuinte ICMS');
+INSERT INTO `sgaf_labodega`.`nfe_contribuinteicms` (`cicms_codigo`, `cicms_nome`) VALUES ('2', 'Contribuinte isento de Inscrição no cadastro de Contribuintes do ICMS');
+INSERT INTO `sgaf_labodega`.`nfe_contribuinteicms` (`cicms_codigo`, `cicms_nome`) VALUES ('9', 'Não Contribuinte');
+
+
+ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+CHANGE COLUMN `quicnf_usamodulofiscal` `quicnf_usamodulofiscal` INT(11) NOT NULL DEFAULT 0 ,
+ADD COLUMN `quicnf_usacomanda` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_csosnnfe`;

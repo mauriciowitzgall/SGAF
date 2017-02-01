@@ -22,13 +22,14 @@ $(document).ready(function() {
             var est= document.getElementById("estado").options[document.getElementById("estado").selectedIndex].text;
             mascara_ie(est);
         });
-    });  
-    
-    
+    });
+
     estado=document.getElementById("estado").options[document.getElementById("estado").selectedIndex].text;
     //alert(estado);
     mascara_ie(estado);
     
+    var usa= $("input[name=usamodulofiscal]").val();
+    usa_modulo_fiscal(usa);
     
 });
 
@@ -39,3 +40,26 @@ function valida_ie2 (valor) {
 }
 
 
+function usa_modulo_fiscal (usa) {
+    var tipopessoa= $("input[name=tipopessoa]").val();
+    if (usa==1) {
+        document.form1.ie.required=true;
+        document.form1.endereco.required=true;
+        document.form1.numero.required=true;
+        document.form1.bairro.required=true;
+        document.form1.cep.required=true;
+        if (tipopessoa==1) {
+            document.form1.cpf.required=true;
+            document.form1.cnpj.required=false;
+            document.form1.razaosocial.required=false;
+        } else if (tipopessoa==2){
+            document.form1.cpf.required=false;
+            document.form1.cnpj.required=true;  
+            document.form1.razaosocial.required=true; 
+        } else {
+            alert("Erro grave, contate o suporte! Erro: 5434")
+        }
+    } else {
+        
+    }
+}

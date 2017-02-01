@@ -5,7 +5,7 @@ $tipopagina="quiosque_configuracao";
 require "login_verifica.php";
 include "includes.php";
 
-print_r($_REQUEST);
+//print_r($_REQUEST);
 
 $quiosque = $_POST['quiosque'];
 $usamodulofiscal = $_POST['usamodulofiscal'];
@@ -18,6 +18,7 @@ $ambientenfe = $_POST['ambientenfe'];
 $versaonfe = $_POST['versaonfe'];
 $razaosocial = $_POST['razaosocial'];
 $tipopessoanfe = $_POST['tipopessoanfe'];
+$usacomanda = $_POST['usacomanda'];
 $cpf = $_POST['cpf'];
 $cpf = str_replace(".","", $cpf);
 $cpf = str_replace("-","", $cpf);
@@ -33,6 +34,12 @@ $im = $_POST['im'];
 $im = str_replace(".","", $im);
 $im = str_replace("/","", $im);
 $im = str_replace("-","", $im);
+
+$endereco = $_POST['endereco'];
+$endereco_numero = $_POST['endereco_numero'];
+$bairro = $_POST['bairro'];
+$cep = $_POST['cep'];
+
 
 if ($usuario_grupo==1) {
     $ultimanfe = $_POST['ultimanfe'];
@@ -67,6 +74,7 @@ SET
     quicnf_serienfe='$serienfe',
     quicnf_tipoimpressaodanfe='$tipoimpressaodanfe',
     quicnf_ambientenfe='$ambientenfe',
+    quicnf_usacomanda='$usacomanda',
     quicnf_versaonfe='$versaonfe'
     $complemento    
 WHERE
@@ -83,6 +91,10 @@ SET
     qui_ie='$ie',
     qui_cpf='$cpf',
     qui_tipopessoa='$tipopessoanfe',
+    qui_endereco='$endereco',
+    qui_numero='$endereco_numero',
+    qui_bairro='$bairro',
+    qui_cep='$cep',
     qui_im='$im'
 WHERE
     qui_codigo=$quiosque

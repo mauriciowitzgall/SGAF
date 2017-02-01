@@ -210,6 +210,33 @@ $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
+
+//Nome 
+$tpl1->CAMPO_ONBLUR="";
+$tpl1->TITULO = "Nome";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->CAMPO_QTD_CARACTERES = "";
+$tpl1->CAMPO_TIPO = "text";
+$tpl1->CAMPO_NOME = "nome";
+$tpl1->CAMPO_DICA = "";
+$tpl1->CAMPO_ID = "capitalizar";
+$tpl1->CAMPO_ONKEYPRESS = "";
+$tpl1->CAMPO_ONCLICK = "";
+$tpl1->CAMPO_TAMANHO = "35";
+$tpl1->CAMPO_VALOR = $nome;
+$tpl1->CAMPO_QTD_CARACTERES = 70;
+$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+$tpl1->block("BLOCK_CAMPO_NORMAL");
+//$tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO_FOCO");
+$tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+IF ($operacao == 'ver')
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
 //Tipo de pessoa
 $tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Tipo Pessoa";
@@ -277,142 +304,6 @@ $tpl1->LINHA_ID = "tr_categoria";
 $tpl1->block("BLOCK_LINHA_ID");
 $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
-$tpl1->block("BLOCK_ITEM");
-
-
-
-//Nome 
-$tpl1->CAMPO_ONBLUR="";
-$tpl1->TITULO = "Nome";
-$tpl1->block("BLOCK_TITULO");
-$tpl1->CAMPO_QTD_CARACTERES = "";
-$tpl1->CAMPO_TIPO = "text";
-$tpl1->CAMPO_NOME = "nome";
-$tpl1->CAMPO_DICA = "";
-$tpl1->CAMPO_ID = "capitalizar";
-$tpl1->CAMPO_ONKEYPRESS = "";
-$tpl1->CAMPO_ONCLICK = "";
-$tpl1->CAMPO_TAMANHO = "35";
-$tpl1->CAMPO_VALOR = $nome;
-$tpl1->CAMPO_QTD_CARACTERES = 70;
-$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
-$tpl1->block("BLOCK_CAMPO_NORMAL");
-//$tpl1->block("BLOCK_CAMPO_DESABILITADO");
-$tpl1->block("BLOCK_CAMPO_FOCO");
-$tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
-IF ($operacao == 'ver')
-    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
-$tpl1->block("BLOCK_CAMPO");
-$tpl1->block("BLOCK_CONTEUDO");
-$tpl1->block("BLOCK_ITEM");
-
-//CPF
-$tpl1->TITULO = "CPF";
-$tpl1->block("BLOCK_TITULO");
-$tpl1->CAMPO_QTD_CARACTERES = "";
-$tpl1->CAMPO_TIPO = "text";
-$tpl1->CAMPO_NOME = "cpf";
-$tpl1->CAMPO_DICA = "";
-$tpl1->CAMPO_ID = "cpf";
-$tpl1->CAMPO_ONKEYPRESS = "return submitenter(this,event)";
-if ($codigo == "")
-    $cod = 0;
-else
-    $cod = $codigo;
-$tpl1->CAMPO_ONBLUR = "valida_cpf(this.value); verifica_cpf_cadastro(this.value,1,$cod,$oper_num);";
-$tpl1->CAMPO_ONCLICK = "this.select();";
-$tpl1->CAMPO_TAMANHO = "14";
-$tpl1->CAMPO_VALOR = $cpf;
-$tpl1->CAMPO_QTD_CARACTERES = 14;
-$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
-$tpl1->block("BLOCK_CAMPO_NORMAL");
-if ($cpf_desabilitado == 1) {
-    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
-    //$tpl1->block("BLOCK_CAMPO_SOMENTELEITURA");
-    $tpl1->CAMPOOCULTO_NOME = "cpf";
-    $tpl1->CAMPOOCULTO_VALOR = "$cpf";
-    $tpl1->block("BLOCK_CAMPOSOCULTOS");
-}
-//$tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
-IF ($operacao == 'ver')
-    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
-$tpl1->block("BLOCK_CAMPO");
-$tpl1->block("BLOCK_CONTEUDO");
-if ($tipopessoa == 2)
-    $tpl1->LINHA_CLASSE = "some";
-else
-    $tpl1->LINHA_CLASSE = "";
-$tpl1->block("BLOCK_LINHA_CLASSE");
-$tpl1->LINHA_ID = "tr_cpf";
-$tpl1->block("BLOCK_LINHA_ID");
-$tpl1->block("BLOCK_ITEM");
-
-//CNPJ
-$tpl1->TITULO = "CNPJ";
-$tpl1->block("BLOCK_TITULO");
-$tpl1->CAMPO_QTD_CARACTERES = "";
-$tpl1->CAMPO_TIPO = "text";
-$tpl1->CAMPO_NOME = "cnpj";
-$tpl1->CAMPO_DICA = "";
-$tpl1->CAMPO_ID = "cnpj";
-$tpl1->CAMPO_ONKEYPRESS = "return submitenter(this,event)";
-if ($codigo == "")
-    $cod = 0;
-else
-    $cod = $codigo;
-$tpl1->CAMPO_ONBLUR = "valida_cnpj(this.value); verifica_cnpj_cadastro(this.value,$cod,$oper_num);";
-$tpl1->CAMPO_ONCLICK = "this.select();";
-$tpl1->CAMPO_TAMANHO = "14";
-$tpl1->CAMPO_ESTILO = "width: 180px";
-$tpl1->block("BLOCK_CAMPO_ESTILO");
-$tpl1->CAMPO_VALOR = $cnpj;
-$tpl1->CAMPO_QTD_CARACTERES = 18;
-$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
-$tpl1->block("BLOCK_CAMPO_NORMAL");
-if ($cnpj_desabilitado == 1) {
-    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
-    $tpl1->CAMPOOCULTO_NOME = "cnpj";
-    $tpl1->CAMPOOCULTO_VALOR = "$cnpj";
-    $tpl1->block("BLOCK_CAMPOSOCULTOS");
-}
-IF ($operacao == 'ver')
-    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
-$tpl1->block("BLOCK_CAMPO");
-$tpl1->block("BLOCK_CONTEUDO");
-if (($tipopessoa == 1) || ($codigo == ""))
-    $tpl1->LINHA_CLASSE = "some";
-else
-    $tpl1->LINHA_CLASSE = "";
-$tpl1->block("BLOCK_LINHA_CLASSE");
-$tpl1->LINHA_ID = "tr_cnpj";
-$tpl1->block("BLOCK_LINHA_ID");
-$tpl1->block("BLOCK_ITEM");
-
-//Razão Social
-$tpl1->TITULO = "Razão Social";
-$tpl1->block("BLOCK_TITULO");
-$tpl1->CAMPO_QTD_CARACTERES = "";
-$tpl1->CAMPO_TIPO = "text";
-$tpl1->CAMPO_NOME = "razaosocial";
-$tpl1->CAMPO_DICA = "";
-$tpl1->CAMPO_ID = "razaosocial";
-$tpl1->CAMPO_ONKEYPRESS = "";
-$tpl1->CAMPO_ONBLUR = "";
-$tpl1->CAMPO_ONCLICK = "";
-$tpl1->CAMPO_TAMANHO = "45";
-//$tpl1->CAMPO_ESTILO = "";
-//$tpl1->block("BLOCK_CAMPO_ESTILO");
-$tpl1->CAMPO_VALOR = $razaosocial;
-$tpl1->CAMPO_QTD_CARACTERES = 128;
-//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
-$tpl1->block("BLOCK_CAMPO_NORMAL");
-IF ($operacao == 'ver')
-    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
-$tpl1->block("BLOCK_CAMPO");
-$tpl1->block("BLOCK_CONTEUDO");
-//$tpl1->block("BLOCK_LINHA_CLASSE");
-$tpl1->LINHA_ID = "linha_razaosocial";
-$tpl1->block("BLOCK_LINHA_ID");
 $tpl1->block("BLOCK_ITEM");
 
 
@@ -545,6 +436,149 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
+//CPF
+$tpl1->TITULO = "CPF";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->CAMPO_QTD_CARACTERES = "";
+$tpl1->CAMPO_TIPO = "text";
+$tpl1->CAMPO_NOME = "cpf";
+$tpl1->CAMPO_DICA = "";
+$tpl1->CAMPO_ID = "cpf";
+$tpl1->CAMPO_ONKEYPRESS = "return submitenter(this,event)";
+if ($codigo == "")
+    $cod = 0;
+else
+    $cod = $codigo;
+$tpl1->CAMPO_ONBLUR = "valida_cpf(this.value); verifica_cpf_cadastro(this.value,1,$cod,$oper_num);";
+$tpl1->CAMPO_ONCLICK = "this.select();";
+$tpl1->CAMPO_TAMANHO = "14";
+$tpl1->CAMPO_VALOR = $cpf;
+$tpl1->CAMPO_QTD_CARACTERES = 14;
+$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+$tpl1->block("BLOCK_CAMPO_NORMAL");
+if ($cpf_desabilitado == 1) {
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+    //$tpl1->block("BLOCK_CAMPO_SOMENTELEITURA");
+    $tpl1->CAMPOOCULTO_NOME = "cpf";
+    $tpl1->CAMPOOCULTO_VALOR = "$cpf";
+    $tpl1->block("BLOCK_CAMPOSOCULTOS");
+}
+//$tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+IF ($operacao == 'ver')
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+if ($tipopessoa == 2)
+    $tpl1->LINHA_CLASSE = "some";
+else
+    $tpl1->LINHA_CLASSE = "";
+$tpl1->block("BLOCK_LINHA_CLASSE");
+$tpl1->LINHA_ID = "tr_cpf";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->block("BLOCK_ITEM");
+
+//CNPJ
+$tpl1->TITULO = "CNPJ";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->CAMPO_QTD_CARACTERES = "";
+$tpl1->CAMPO_TIPO = "text";
+$tpl1->CAMPO_NOME = "cnpj";
+$tpl1->CAMPO_DICA = "";
+$tpl1->CAMPO_ID = "cnpj";
+$tpl1->CAMPO_ONKEYPRESS = "return submitenter(this,event)";
+if ($codigo == "")
+    $cod = 0;
+else
+    $cod = $codigo;
+$tpl1->CAMPO_ONBLUR = "valida_cnpj(this.value); verifica_cnpj_cadastro(this.value,$cod,$oper_num);";
+$tpl1->CAMPO_ONCLICK = "this.select();";
+$tpl1->CAMPO_TAMANHO = "14";
+$tpl1->CAMPO_ESTILO = "width: 180px";
+$tpl1->block("BLOCK_CAMPO_ESTILO");
+$tpl1->CAMPO_VALOR = $cnpj;
+$tpl1->CAMPO_QTD_CARACTERES = 18;
+$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+$tpl1->block("BLOCK_CAMPO_NORMAL");
+if ($cnpj_desabilitado == 1) {
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl1->CAMPOOCULTO_NOME = "cnpj";
+    $tpl1->CAMPOOCULTO_VALOR = "$cnpj";
+    $tpl1->block("BLOCK_CAMPOSOCULTOS");
+}
+IF ($operacao == 'ver')
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+if (($tipopessoa == 1) || ($codigo == ""))
+    $tpl1->LINHA_CLASSE = "some";
+else
+    $tpl1->LINHA_CLASSE = "";
+$tpl1->block("BLOCK_LINHA_CLASSE");
+$tpl1->LINHA_ID = "tr_cnpj";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->block("BLOCK_ITEM");
+
+//Razão Social
+$tpl1->TITULO = "Razão Social";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->CAMPO_QTD_CARACTERES = "";
+$tpl1->CAMPO_TIPO = "text";
+$tpl1->CAMPO_NOME = "razaosocial";
+$tpl1->CAMPO_DICA = "";
+$tpl1->CAMPO_ID = "razaosocial";
+$tpl1->CAMPO_ONKEYPRESS = "";
+$tpl1->CAMPO_ONBLUR = "";
+$tpl1->CAMPO_ONCLICK = "";
+$tpl1->CAMPO_TAMANHO = "45";
+//$tpl1->CAMPO_ESTILO = "";
+//$tpl1->block("BLOCK_CAMPO_ESTILO");
+$tpl1->CAMPO_VALOR = $razaosocial;
+$tpl1->CAMPO_QTD_CARACTERES = 128;
+//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+$tpl1->block("BLOCK_CAMPO_NORMAL");
+IF ($operacao == 'ver')
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+//$tpl1->block("BLOCK_LINHA_CLASSE");
+$tpl1->LINHA_ID = "linha_razaosocial";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->block("BLOCK_ITEM");
+
+
+//Contribuinte ICMS
+$tpl1->CAMPO_ONBLUR="";
+$tpl1->TITULO = "Contribuinte ICMS";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->SELECT_NOME = "contribuinteicms";
+$tpl1->CAMPO_DICA = "";
+$tpl1->SELECT_ID = "contribuinteicms";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "contribuinte_icms(this.value)";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
+
+$sql="SELECT * FROM nfe_contribuinteicms ORDER BY cicms_codigo";
+if (!$query = mysql_query($sql)) die("Erro: 89" . mysql_error());
+while ($dados = mysql_fetch_assoc($query)) {
+    $cicms_codigo=$dados["cicms_codigo"];
+    $cicms_nome=$dados["cicms_nome"];
+    $tpl1->OPTION_VALOR = "$cicms_codigo";
+    $tpl1->OPTION_NOME = "$cicms_nome";    
+    if ($contribuinteicms==$cicms_codigo) $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+    $tpl1->block("BLOCK_SELECT_OPTION");
+
+}
+if ($operacao == 'ver') $tpl1->block("BLOCK_SELECT_DESABILITADO");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->LINHA_ID = "linha_contribuinteicms";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
 
 //IE
 $tpl1->TITULO = "Inscrição Estadual (IE)";
@@ -573,7 +607,7 @@ $tpl1->LINHA_ID = "linha_ie";
 $tpl1->block("BLOCK_LINHA_ID");
 $tpl1->block("BLOCK_ITEM");
 
-//IE
+//IM
 $tpl1->TITULO = "Inscrição Municial (IM)";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_QTD_CARACTERES = "";
@@ -648,35 +682,6 @@ $tpl1->block("BLOCK_CONTEUDO");
 //$tpl1->block("BLOCK_LINHA_CLASSE");
 $tpl1->LINHA_ID = "linha_documentoestrangeiro";
 $tpl1->block("BLOCK_LINHA_ID");
-$tpl1->block("BLOCK_ITEM");
-
-//Contribuinte ICMS
-$tpl1->CAMPO_ONBLUR="";
-$tpl1->TITULO = "Contribuinte ICMS";
-$tpl1->block("BLOCK_TITULO");
-$tpl1->SELECT_NOME = "contribuinteicms";
-$tpl1->CAMPO_DICA = "";
-$tpl1->SELECT_ID = "contribuinteicms";
-$tpl1->SELECT_TAMANHO = "";
-//$tpl1->SELECT_ONCHANGE = "";
-//$tpl1->block("BLOCK_SELECT_ONCHANGE");
-//$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
-$tpl1->block("BLOCK_SELECT_NORMAL");
-$tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
-$tpl1->OPTION_VALOR = "0";
-$tpl1->OPTION_NOME = "Não";
-if ($contribuinteicms==0) $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-$tpl1->block("BLOCK_SELECT_OPTION");
-$tpl1->OPTION_VALOR = "1";
-$tpl1->OPTION_NOME = "Sim";
-if ($contribuinteicms==1) $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-$tpl1->block("BLOCK_SELECT_OPTION");
-if ($operacao == 'ver')
-    $tpl1->block("BLOCK_SELECT_DESABILITADO");
-$tpl1->block("BLOCK_SELECT");
-$tpl1->LINHA_ID = "linha_contribuinteicms";
-$tpl1->block("BLOCK_LINHA_ID");
-$tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
@@ -849,9 +854,9 @@ $tpl1->CAMPO_NOME = "cep";
 $tpl1->CAMPO_DICA = "";
 $tpl1->CAMPO_ID = "cep";
 $tpl1->CAMPO_ONCLICK = "";
-$tpl1->CAMPO_TAMANHO = "9";
+$tpl1->CAMPO_TAMANHO = "12";
 $tpl1->CAMPO_VALOR = $cep;
-$tpl1->CAMPO_QTD_CARACTERES = 9;
+$tpl1->CAMPO_QTD_CARACTERES = "9";
 $tpl1->block("BLOCK_CAMPO_NORMAL");
 IF ($operacao == 'ver')
     $tpl1->block("BLOCK_CAMPO_DESABILITADO");

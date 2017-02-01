@@ -16,7 +16,7 @@ if ($usuario_codigo != $codigo) {
 }
 include "includes.php";
 
-print_r($_REQUEST);
+//print_r($_REQUEST);
 
 $id = $_POST['id'];
 $cpf = $_POST['cpf'];
@@ -389,7 +389,7 @@ if ($operacao == "cadastrar") {
         '$contribuinteicms',
         '$ie',
         '$im',
-        '$ramal1'
+        '$razaosocial'
     )";
     if (!mysql_query($sql))
         die("Erro6: " . mysql_error());
