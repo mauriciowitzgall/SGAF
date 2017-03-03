@@ -126,10 +126,10 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     $tpl_notificacao = new Template("templates/notificacao.html");
 
     $tpl_notificacao->BOTAOGERAL_DESTINO="produtos_cadastrar.php";
-    $tpl_notificacao->block("BLOCK_BOTAOGERAL_NOVAJANELA");
+    //$tpl_notificacao->block("BLOCK_BOTAOGERAL_NOVAJANELA");
     $tpl_notificacao->BOTAOGERAL_TIPO="button";
     $tpl_notificacao->BOTAOGERAL_NOME="CADASTRAR MAIS";
-    //$tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
+    $tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
     $tpl_notificacao->block("BLOCK_BOTAOGERAL");
 
     $tpl_notificacao->ICONES = $icones;

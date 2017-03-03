@@ -43,7 +43,7 @@ $cep = $_POST['cep'];
 
 if ($usuario_grupo==1) {
     $ultimanfe = $_POST['ultimanfe'];
-    $complemento.=" , quicnf_ultimanfe=$ultimanfe"; 
+    $complemento.=" , quicnf_ultimanfe='$ultimanfe'"; 
 }
 
 

@@ -149,6 +149,11 @@ if (($usuario_grupo==1)||(($usuario_grupo==7))) {
         // Quiosques Configuracões
         $sql3 = "DELETE FROM quiosques_configuracoes WHERE quicnf_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL16: " . mysql_error()); 
+        // Faturamento ultimos 12 meses (módulo fiscal)
+        $sql3 = "DELETE FROM nfe_faturamento WHERE nfefat_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo)";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL76: " . mysql_error()); 
+        
+        
         // Quiosques
         $sql3 = "DELETE FROM quiosques WHERE qui_cooperativa=$codigo";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL21: " . mysql_error());

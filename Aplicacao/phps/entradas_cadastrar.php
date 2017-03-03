@@ -366,7 +366,7 @@ if ($passo != "") {
         left JOIN produtos_recipientes on (prorec_codigo=pro_recipiente)
         WHERE pro_cooperativa='$usuario_cooperativa' 
         AND mesprotip_tipo=$tiponegociacao
-        ORDER BY pro_nome, pro_referencia, pro_tamanho, pro_cor, pro_descricao
+        ORDER BY pro_referencia, pro_nome, pro_tamanho, pro_cor, pro_descricao
     ";
     $query = mysql_query($sql);
     if ($query) {
@@ -384,7 +384,7 @@ if ($passo != "") {
             $pro_tamanho=$dados["pro_tamanho"];
             $pro_cor=$dados["pro_cor"];
             $pro_descricao=$dados["pro_descricao"];
-            $pro_nome2="$pro_nome $pro_tamanho $pro_cor $pro_descricao";
+            $pro_nome2="$pro_referencia $pro_nome $pro_tamanho $pro_cor $pro_descricao";
             //pro_codigo,pro_nome,prorec_nome,pro_volume,pro_marca,protip_sigla
             $tpl->OPTION2_TEXTO = "$pro_nome2 $pro_marca $pro_recipiente $pro_volume ($pro_sigla)";
             if (($produto == $pro_codigo) && ($produtomanter == 'on'))
@@ -676,7 +676,7 @@ if ($passo != "") {
         $tpl->block("BLOCK_CUSTO_CABECALHO");
         //$tpl->block("BLOCK_LUCRO_CABECALHO");
     }
-    
+    $tpl->block("BLOCK_SUBPRODUTOS_CABECALHO");
     $tpl->block("BLOCK_VENDA_VALUNI_CABECALHO");
     $tpl->block("BLOCK_VENDA_CABECALHO");
 
@@ -692,7 +692,7 @@ if ($passo != "") {
             while ($dados = mysql_fetch_array($query5)) {
                 $tpl->ENTRADAS_NUMERO = $dados['entpro_numero'];
                 $tpl->ENTRADAS_PRODUTO = $dados[3];
-                $produto_nome2="$dados[0] $dados[13] $dados[14] $dados[15] $dados[16]";
+                $produto_nome2="$dados[13] $dados[0]  $dados[14] $dados[15] $dados[16]";
                 $tpl->ENTRADAS_PRODUTO_NOME = $produto_nome2;
                 //$tpl->ENTRADAS_LOCAL = $dados[6];
                 $tpl->SIGLA = $dados["protip_sigla"];
@@ -721,9 +721,6 @@ if ($passo != "") {
                 //Subprodutos
                 $subprodutos_retirado_do_estoque=$dados["entpro_retiradodoestoquesubprodutos"];
                 $temsubprodutos2=$dados["entpro_temsubprodutos"];
-                
-                
-                
                 if ($temsubprodutos2==1) { //mostra icone
                     $tpl->NOMEARQUIVO="subproduto.png";
                     $tpl->TITULO="Este é um produto composto (possui sub-produtos)";
@@ -761,6 +758,7 @@ if ($passo != "") {
 
                 }
                 $tpl->block("BLOCK_SUBPRODUTOS_TEM");
+                
                 
                 
                 //Verifica se ja foi efetuado Saídas quaisquer para o lote/entrada em questão

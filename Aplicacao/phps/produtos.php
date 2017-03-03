@@ -160,6 +160,7 @@ ORDER BY pro_nome, pro_referencia, pro_tamanho, pro_cor, pro_descricao
         <tr valign="middle" class="tabelacabecalho1">
             <td width="30px">COD.</td>
             <!-- <td width="" colspan="2">DATA</td> -->
+            <td width="30px">REF</td>
             <td width="100px">NOME</td>
             <td colspan="" align="center">MARCA</td>
             <td colspan="" align="center">REC.</td>
@@ -220,6 +221,7 @@ ORDER BY pro_nome, pro_referencia, pro_tamanho, pro_cor, pro_descricao
                 <td align="left"><?php echo "$hora"; ?></td>
                 -->
 
+                <td align="right"><?php echo "$referencia"; ?></td>
                 <td><?php echo "$nome2"; ?></td>
                 <td><?php echo "$marca"; ?></td>
                 <td><?php echo "$recipiente"; ?></td>

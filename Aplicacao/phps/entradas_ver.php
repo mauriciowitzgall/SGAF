@@ -169,8 +169,7 @@ while ($dados = mysql_fetch_array($query)) {
         $tpl->block("BLOCK_VENDA_VALUNI");
     }
 
-    $tpl->ENTRADAS_VENDA_TOTAL = "R$ " . number_format($dados['2'] * $dados['4'], 2, ',', '.');
-    $tpl->block("BLOCK_VENDA");
+
 
     $tpl->PRODUTO = $dados[3];
     $numero = $dados[9];

@@ -308,6 +308,10 @@ if ($linhas == 0) {
             <td align="right" width="200px"><b>Nome: <label class="obrigatorio"></label></b></td>
             <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="nome" autofocus size="45" class="campopadrao" required value="<?php echo "$nome"; ?>" <?php if ($ver == 1) echo" disabled "; ?> ></td>
         </tr>
+       <tr id="id_referencia">
+            <td align="right" width="200px"><b>Referência: <label class="obrigatorio"></label></b></td>
+            <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="referencia"  size="35" class="campopadrao"  value="<?php echo "$referencia"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"> Ex: numero do pedido/cardápio</span></td>
+        </tr>
         <tr>
             <td align="right" width="200px"><b>Produto industrializado <label class="obrigatorio"></label></b></td>
             <td align="left" width="">
@@ -402,10 +406,6 @@ if ($linhas == 0) {
        <tr id="id_cor">
             <td align="right" width="200px"><b>Cor: <label class="obrigatorio"></label></b></td>
             <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="cor"  size="18" class="campopadrao"  value="<?php echo "$cor"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"> Ex: Amarelo, Branco com listras pretas... (Use sempre cores no masculino!)</span></td>
-        </tr>
-       <tr id="id_referencia">
-            <td align="right" width="200px"><b>Referência: <label class="obrigatorio"></label></b></td>
-            <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="referencia"  size="35" class="campopadrao"  value="<?php echo "$referencia"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"> Qualquer coisa! Ex: o nome de uma empresa</span></td>
         </tr>
         
         <tr>

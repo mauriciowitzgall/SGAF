@@ -1,6 +1,6 @@
 <?php 
 $hostname = "localhost";
-$db = "sgaf_labodega";
+$db = "sgaf_v4.0b1";
 $user = "root";
 $pass = "";
 
