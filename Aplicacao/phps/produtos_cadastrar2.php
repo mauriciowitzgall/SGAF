@@ -123,9 +123,15 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         if (!mysql_query($sql2))
             die("Erro7: " . mysql_error());
     }
-
-
     $tpl_notificacao = new Template("templates/notificacao.html");
+
+    $tpl_notificacao->BOTAOGERAL_DESTINO="produtos_cadastrar.php";
+    $tpl_notificacao->block("BLOCK_BOTAOGERAL_NOVAJANELA");
+    $tpl_notificacao->BOTAOGERAL_TIPO="button";
+    $tpl_notificacao->BOTAOGERAL_NOME="CADASTRAR MAIS";
+    //$tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
+    $tpl_notificacao->block("BLOCK_BOTAOGERAL");
+
     $tpl_notificacao->ICONES = $icones;
     $tpl_notificacao->MOTIVO_COMPLEMENTO = "";
     $tpl_notificacao->DESTINO = "produtos.php";
@@ -177,6 +183,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     pro_referencia='$referencia',
     pro_podesersubproduto='$subproduto',
     pro_dadosfiscais=$dadosfiscais,
+    pro_industrializado=$industrializado,
     pro_ncm=$ncm,
     pro_cfop=$cfop,
     pro_ipi=$ipi,
@@ -203,6 +210,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         if (!mysql_query($sql2))
             die("Erro78: " . mysql_error());
     }
+    
 
     $tpl_notificacao = new Template("templates/notificacao.html");
     $tpl_notificacao->ICONES = $icones;
@@ -211,6 +219,9 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     $tpl_notificacao->block("BLOCK_CONFIRMAR");
     $tpl_notificacao->block("BLOCK_EDITADO");
     $tpl_notificacao->block("BLOCK_BOTAO");
+    
+ 
+    
     $tpl_notificacao->show();
     
 }

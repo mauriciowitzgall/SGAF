@@ -4,6 +4,8 @@ require "login_verifica.php";
 include "controle/conexao.php";
 include "controle/conexao_tipo.php";
 
+$produto=$_POST["produto"];
+
 $sql = "
 SELECT DISTINCT
     pro_codigo,pro_nome,pro_referencia, pro_tamanho, pro_cor, pro_descricao
@@ -27,6 +29,7 @@ while ($dados = mysql_fetch_array($query)) {
     $cor= $dados['pro_cor'];
     $descricao= $dados['pro_descricao'];
     $nome2=" $nome $referencia $tamanho $cor $descricao ";
-    echo "<option value='$codigo'>$nome2</option>";
+    if ($produto==$codigo) $selecionado=" selected "; else $selecionado="  ";
+    echo "<option value='$codigo' $selecionado >$nome2</option>";
 }
 ?>

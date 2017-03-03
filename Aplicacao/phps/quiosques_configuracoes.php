@@ -205,10 +205,12 @@ $tpl1->CAMPO_NOME="faturamentoanualatualnfe";
 $tpl1->CAMPO_ID="faturamentoanualatualnfe";
 $tpl1->CAMPO_TAMANHO="18";
 //Verifica qual é o faturamento dos ultimos 12 meses
-$sql="SELECT sum(nfefat_valor) as fatanual FROM (SELECT nfefat_valor FROM nfe_faturamento WHERE nfefat_quiosque=$usuario_quiosque ORDER BY nfefat_codigo DESC LIMIT 12) as subt;";
-if (!$query = mysql_query($sql)) die("Erro SQL Faturamento Anual: ".mysql_error());
-$dados=mysql_fetch_assoc($query);
-$fatanual=$dados["fatanual"];
+if ($usamodulofiscal==1) {
+    $sql="SELECT sum(nfefat_valor) as fatanual FROM (SELECT nfefat_valor FROM nfe_faturamento WHERE nfefat_quiosque=$usuario_quiosque ORDER BY nfefat_codigo DESC LIMIT 12) as subt;";
+    if (!$query = mysql_query($sql)) die("Erro SQL Faturamento Anual: ".mysql_error());
+    $dados=mysql_fetch_assoc($query);
+    $fatanual=$dados["fatanual"];
+}
 //echo "Faturamento Anual: ($fatanual)";
 $tpl1->CAMPO_VALOR= "R$ " . number_format($fatanual, 2, ',', '.');
 $tpl1->CAMPO_QTD_CARACTERES="9";
@@ -228,10 +230,12 @@ $tpl1->CAMPO_TIPO="text";
 $tpl1->CAMPO_NOME="icmsatualnfe";
 $tpl1->CAMPO_ID="icmsatualnfe";
 $tpl1->CAMPO_TAMANHO="8";
-$sql_simplesnacional = "SELECT nfesn_icms FROM nfe_simplesnacional WHERE nfesn_de <= $fatanual AND nfesn_ate >= $fatanual";
-if (!$query_simplesnacional = mysql_query($sql_simplesnacional)) die("Erro SQL Consulta ICMS Simples Nacional: ".mysql_error());
-$dados_simplesnacional=  mysql_fetch_assoc($query_simplesnacional);
-$icms_atual=$dados_simplesnacional["nfesn_icms"];
+if ($usamodulofiscal==1) {
+    $sql_simplesnacional = "SELECT nfesn_icms FROM nfe_simplesnacional WHERE nfesn_de <= $fatanual AND nfesn_ate >= $fatanual";
+    if (!$query_simplesnacional = mysql_query($sql_simplesnacional)) die("Erro SQL Consulta ICMS Simples Nacional: ".mysql_error());
+    $dados_simplesnacional=  mysql_fetch_assoc($query_simplesnacional);
+    $icms_atual=$dados_simplesnacional["nfesn_icms"];
+}
 $tpl1->CAMPO_VALOR="$icms_atual";
 $tpl1->CAMPO_QTD_CARACTERES="4";
 $tpl1->CAMPO_DICA="";

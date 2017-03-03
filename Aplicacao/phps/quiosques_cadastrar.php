@@ -513,6 +513,8 @@ $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
+
+
 //CPF
 $tpl1->TITULO = "CPF";
 $tpl1->block("BLOCK_TITULO");
@@ -533,6 +535,9 @@ if ($operacao == 'ver')
 $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
+//necessário para que os outros campos onblur não peguem a validação do cpf
+$tpl1->CAMPO_ONBLUR = "";
+
 
 //Observação
 $tpl1->TITULO = "Observação";

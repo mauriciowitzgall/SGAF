@@ -384,7 +384,7 @@ if ($passo != "") {
             $pro_tamanho=$dados["pro_tamanho"];
             $pro_cor=$dados["pro_cor"];
             $pro_descricao=$dados["pro_descricao"];
-            $pro_nome2="$pro_nome $pro_referencia $pro_tamanho $pro_cor $pro_descricao";
+            $pro_nome2="$pro_nome $pro_tamanho $pro_cor $pro_descricao";
             //pro_codigo,pro_nome,prorec_nome,pro_volume,pro_marca,protip_sigla
             $tpl->OPTION2_TEXTO = "$pro_nome2 $pro_marca $pro_recipiente $pro_volume ($pro_sigla)";
             if (($produto == $pro_codigo) && ($produtomanter == 'on'))

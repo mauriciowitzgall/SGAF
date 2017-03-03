@@ -160,5 +160,13 @@ function usamodulofiscal_tipopessoa($quiosque){
     return $tipopessoa;
 }
 
+function usacomanda($quiosque) {
+    $sql="SELECT quicnf_usacomanda FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
+    if (!$query= mysql_query($sql)) die("Erro SQL Função: usacomanda: " . mysql_error());
+    while ($dados=  mysql_fetch_assoc($query)) {    
+        $usa=$dados["quicnf_usacomanda"];
+    }
+    return $usa;
+}
 
 ?>

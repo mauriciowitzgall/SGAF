@@ -33,7 +33,7 @@ if ($usuario_grupo<>4) {
         $tpl_menu->TITULO = "Quiosque";
         if ($permissao_quiosque_ver == 1) {
             $tpl_menu->IMAGEM_ARQUIVO = "quiosques.png";
-            $tpl_menu->LINK = "quiosques_cadastrar.php?codigo=$usuario_quiosque&operacao=editar";
+            $tpl_menu->LINK = "quiosques_configuracoes.php";
             $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
             $tpl_menu->block("BLOCK_MENU_ITEM");
         }

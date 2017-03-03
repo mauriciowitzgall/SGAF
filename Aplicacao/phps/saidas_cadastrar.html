@@ -3,7 +3,6 @@
 <script type="text/javascript" src="{JS_CAMINHO}"></script>
 <!-- END BLOCK_JS --> 
 
-
 <br>
 <form action="{LINK_DESTINO}" method="post" name="form1">
     <table summary="" border="0" class="tabela1" cellpadding="4" >
@@ -16,10 +15,21 @@
                 <!-- END BLOCK_TITULO -->             
             </td>            
             <td align="left" width="" id="{TD_ID}">
+                <!-- BEGIN BLOCK_CONTEUDO --> 
                 
                 
                 <!-- BEGIN BLOCK_SELECT --> 
-                <select name="{SELECT_NOME}" class="campopadrao" style="{SELECT_CLASSE}"  {SELECT_DESABILITADO} {SELECT_OBRIGATORIO} {SELECT_FOCO} onchange="{SELECT_AOTROCAR}">           
+                <select 
+                    name="{SELECT_NOME}" 
+                    class="campopadrao" 
+                    style="{SELECT_CLASSE}"  
+                    {SELECT_DESABILITADO} 
+                    {SELECT_OBRIGATORIO} 
+                    {SELECT_FOCO} 
+                    onchange="{SELECT_AOTROCAR}" 
+                    onfocus="{SELECT_ONFOCUS}"
+                id="{SELECT_NOME}"
+                    >           
                 <!-- BEGIN BLOCK_SELECT_OPTION --> 
                 <option value="{OPTION_VALOR}"{OPTION_SELECIONADO}>{OPTION_NOME}</option> 
                 <!-- END BLOCK_SELECT_OPTION --> 
@@ -44,7 +54,7 @@
                        value="{CAMPO_VALOR}" 
                        maxlength="{CAMPO_QTD_CARACTERES}" 
                        autocomplete="off" 
-                       onclick="this.select()"
+                       onclick=""
                        onfocus="{CAMPO_ONFOCUS}"
                        {CAMPO_DESABILITADO} 
                        {CAMPO_OBRIGATORIO} 
@@ -72,8 +82,10 @@
                 <textarea class="textarea1" cols="{TEXTAREA_TAMANHO}" name="{TEXTAREA_NOME}" {TEXTAREA_DESABILITADO} >{TEXTAREA_TEXTO}</textarea>                       
                 <!-- END BLOCK_TEXTAREA --> 
 
+                <!-- END BLOCK_CONTEUDO --> 
 
-            </td>            
+            </td>   
+
         </tr>
         <!-- END BLOCK_ITEM -->
     </table>

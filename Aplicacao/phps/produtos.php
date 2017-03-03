@@ -199,7 +199,7 @@ ORDER BY pro_nome, pro_referencia, pro_tamanho, pro_cor, pro_descricao
             $tamanho = $array['pro_tamanho'];
             $cor = $array['pro_cor'];
             $descricao = $array['pro_descricao'];
-            $nome2="$nome $referencia $tamanho $cor $descricao";
+            $nome2="$nome $tamanho $cor $descricao";
             $data = converte_data($array['pro_datacriacao']);
             $hora = converte_hora($array['pro_horacriacao']);
             $usuarioquecadastrou=$array['pro_usuarioquecadastrou'];

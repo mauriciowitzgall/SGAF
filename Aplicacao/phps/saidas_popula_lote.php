@@ -26,8 +26,9 @@ $query = mysql_query($sql);
 if (!$query)
     die("Erro: " . mysql_error());
 if (mysql_num_rows($query) == 0) {
-    echo "<option value=''>N�o h� registros</option>";
+    echo "<option value=''>Não há registros</option>";
 } else {
+    if (mysql_num_rows($query) == 1) $selecionado = " selected ";
     echo "<option value='0'>Selecione</option>";
     while ($dados = mysql_fetch_assoc($query)) {
         $lote = $dados["etq_lote"];             
@@ -36,7 +37,7 @@ if (mysql_num_rows($query) == 0) {
             $local="(".$local.")";
         }
         //echo "<option value='$lote'>$lote, $fornecedor_nome, $local ($data $hora)</option>";
-        echo "<option value='$lote'>$lote $local</option>";
+        echo "<option value='$lote' $selecionado>$lote $local</option>";
     }
 }
 ?>

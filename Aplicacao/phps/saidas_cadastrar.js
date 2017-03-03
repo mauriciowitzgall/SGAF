@@ -1,121 +1,39 @@
 
 $(window).load(function() {
 
-
-
-    if (document.forms["form1"].elements["id"]) {
-        document.forms["form1"].elements["id"].focus();
+    var usacomanda= $("input[name=usacomanda]").val();
+    if (usacomanda==1) {
+        document.form1.id.required=true;
+        $("input[id=linha_comanda]").show();
+        //Foco no ID
+        if (document.forms["form1"].elements["id"]) {
+            document.forms["form1"].elements["id"].focus();
+        }
+    } else if (usacomanda==0) {
+        document.form1.id.required=false;
+        $("tr[id=linha_comanda]").hide();
+    } else {
+        alert("Erro Grave, contate o suporte: 44545");
     }
+
+
     
     $("input[id=cliente_nome]").hide();
     tipopessoa=$("select[name=tipopessoa]").val();
     if (tipopessoa==1) { //Se for novo registro, então o padrão é aparecer o cpf, pessoa fisica
         $("input[id=cpf]").show();
         $("input[id=cnpj]").hide();
-    } else if (passo=2) {
+    } else if (tipopessoa==2) {
         $("input[id=cnpj]").show();
         $("input[id=cpf]").hide();
     } 
 
 
     //Popular Produto    
-    $.post("saidas_popula_produto.php", {}, function(valor) {
-        $("select[name=produto]").html(valor);
-        document.forms["form1"].qtd.disabled = true;
-        document.forms["form1"].porcao_qtd.disabled = true;
-    });
+    popular_produto();
 
-    //Ao selecionar o produto
-    $("select[name=produto]").change(function() {
-        
-        //Popula o Fornecedor        
-        $("select[name=fornecedor]").html('<option>Aguarde, carregando...</option>');
-        $.post("saidas_popula_fornecedor.php", {
-            produto: $(this).val()
-        }, function(valor) {
-            $("select[name=fornecedor]").html(valor);
-        });
-        //Zerar campos
-        $("input[name=etiqueta]").val("");
-        $("input[name=qtd]").val("");
-        $("input[name=qtd2]").val("");
-        $("select[name=lote]").html("");
-        $("input[name=valuni]").val("");
-        $("input[name=valuni3]").val("");
-        $("input[name=valtot]").val("");
-        $("span[name=qtdnoestoque]").text("");
-        $("select[name=porcao]").html("");
-        $("span[name=porcao_qtd_label]").text("");
-        $("input[name=porcao_qtd]").val("");
-        
-        //Popula tipo de contagem ao lado do campo de quantidade
-        $.post("saidas_verifica_tipocontagem_nome.php", {
-            produto: $("select[name=produto]").val()
-        }, function(valor) {
-            $("span[name=tipocontagem]").text(valor);
-        });
-        
-        //Desabilita o campo quantidade e o botão de incluir
-        document.forms["form1"].qtd.disabled = true;
-        document.forms["form1"].porcao_qtd.disabled = true;
-        document.forms["form1"].botao_incluir.disabled = true;
-        
-        
-        
-        //Define máscara para campo quantidade de porções
-        $("input[name=porcao_qtd]").val("").priceFormat({
-            prefix: '',
-            centsSeparator: '',
-            centsLimit: 0,
-            thousandsSeparator: ''
-        });  
-    });
-
-    //Ao selecionar o fornecedor
-    $("select[name=fornecedor]").change(function() {
-        
-        
-        //Popula o Lote
-        $("select[name=lote]").html('<option>Aguarde, carregando...</option>');
-        $.post("saidas_popula_lote.php", {
-            produto: $("select[name=produto]").val(),
-            fornecedor: $(this).val()
-        }, function(valor) {
-            $("select[name=lote]").html(valor);
-        });
-        
-        //Zerar campos
-        $("input[name=valuni]").val("");
-        $("input[name=valuni3]").val("");
-        $("input[name=valtot]").val("");
-        $("span[name=qtdnoestoque]").text("");
-        $("input[name=qtd]").val("");
-        $("input[name=qtd2]").val("");
-        $("input[name=porcao_qtd]").val("");
-        $("select[name=porcao]").html("");
-        
-        //Habilita botão e campo quantidade
-        document.forms["form1"].qtd.disabled = true;
-        document.forms["form1"].porcao_qtd.disabled = true;
-        document.forms["form1"].botao_incluir.disabled = true;
-    });
-
-    //Ao selecionar o lote
-    $("select[name=lote]").change(function() {
-        
-        $("input[name=porcao_qtd]").val("");
-        
-        produto_selecionado();
-        
-        //Popula porcoes
-        $.post("saidas_popula_porcoes.php", {
-            produto: $("select[name=produto]").val()
-        }, function(valor) {
-            //alert(valor);
-            $("select[name=porcao]").html(valor);
-        }); 
-
-    });
+    //Define o foco padrão
+    document.forms["form1"].elements["produto_referencia"].focus();
     
     //Ao selecionar porcoes
     $("select[name=porcao]").change(function() {
@@ -170,9 +88,6 @@ $(window).load(function() {
                 
             });      
         });
-        
-        
-        
         porcao2=$("select[name=porcao]").val();
         if (porcao2=="") {
             document.forms["form1"].porcao_qtd.disabled = true;
@@ -188,76 +103,276 @@ $(window).load(function() {
                 document.forms["form1"].porcao_qtd.disabled = true;
             } 
         }
-        
-       
-
-        
     });
 });
 
-function produto_selecionado() {
-    //Popula valor unitário padrão
-    $.post("saidas_valorunitario.php", {
-        lote: $("select[name=lote]").val(),
-        produto: $("select[name=produto]").val()
-    }, function(valor) {
-        $("input[name=valuni]").val(valor);
-        $("input[name=valuni2]").val(valor);
-        $("input[name=valuni3]").val(valor);
+function popular_produto (produto) {
+    //alert(produto);
+    $.post("saidas_popula_produto.php", { produto: produto }, function(valor) {
+        $("select[name=produto]").html(valor);
+        document.forms["form1"].qtd.disabled = true;
+        document.forms["form1"].porcao_qtd.disabled = true;
     });
-    $("input[name=valtot]").val("");
+        
+}
 
-    //Verifica o tipo de contagem
-    $.post("saidas_verifica_tipocontagem.php", {
+function selecionar_produto (produto,focoqtd) {
+    
+    //alert("Selecionando PRODUTO: "+produto);
+       
+
+    //Zerar campos
+    $("input[name=etiqueta]").val("");
+    $("input[name=etiqueta2]").val("");
+    $("input[name=qtd]").val("");
+    $("input[name=qtd2]").val("");
+    $("select[name=lote]").html("");
+    $("input[name=valuni]").val("");
+    $("input[name=valuni3]").val("");
+    $("input[name=valtot]").val("");
+    $("span[name=qtdnoestoque]").text("");
+    $("select[name=porcao]").html("");
+    $("span[name=porcao_qtd_label]").text("");
+    $("input[name=porcao_qtd]").val("");
+
+    //Popula tipo de contagem ao lado do campo de quantidade
+    $.post("saidas_verifica_tipocontagem_nome.php", {
         produto: $("select[name=produto]").val()
     }, function(valor) {
-        //Popula quantidade em estoque
-        $.post("saidas_verifica_estoque.php", {
-            lote: $("select[name=lote]").val(),
-            produto: $("select[name=produto]").val()
-        }, function(valor2) {
-            var etqatu = valor2;
-            var estoqueatual = etqatu.replace(".", "");
-            estoqueatual = estoqueatual.replace(",", ".");
-            if (etqatu == "") {
-                $("span[name=qtdnoestoque]").text("");
-                $("input[name=qtd]").val("");
-                $("input[name=qtd2]").val("");
-                document.forms["form1"].botao_incluir.disabled = true;
-                document.forms["form1"].qtd.disabled = true;
-                document.forms["form1"].porcao_qtd.disabled = true;
-            } else {
-                document.forms["form1"].qtd.disabled = false;
-                porcao2=$("select[name=porcao]").val();
-                if ((porcao2!="")&&(porcao2!= null)&&(porcao2!== undefined)&&(porcao2!= 0)) document.forms["form1"].porcao_qtd.disabled = false;
-                else document.forms["form1"].porcao_qtd.disabled = true;
-                $("span[name=qtdnoestoque]").text("(" + etqatu + " no estoque)");
-                if ((valor == 2)||(valor==3)) { //Se o tipo de contagem for 'kg' ou 'lt'
-                    $("input[name=qtd]").val("");
-                    $("input[name=qtd2]").val("");
-                    document.forms["form1"].botao_incluir.disabled = true;
-                } else { //Se o tipo de contagem for por unidade
-                    if (estoqueatual >= 1) {
-                        $("input[name=qtd]").val("1");
-                        $("input[name=qtd2]").val("1");
-                        tot=$("input[name=valuni2]").val();
-                        $("input[name=valtot]").val(tot);
-                        document.forms["form1"].botao_incluir.disabled = false;
+        $("span[name=tipocontagem]").text(valor);
+    });
 
-                        //Etiqueta validada e campos preenchidos, joga o foco para a quantidade
-                        document.forms["form1"].elements["qtd"].focus();
-                        document.forms["form1"].elements["qtd"].select();
-                    } else {
-                        $("input[name=qtd]").val(etqatu);
-                        $("input[name=qtd2]").val(etqatu);
-                    }
-                    calcula_totais();
-                    document.forms["form1"].botao_incluir.disabled = false;
+    //Popula a Referencia do produto
+    /*
+    if (produto!="") {
+        $("input[name=produto_referencia]").val("");
+        $.post("saidas_popula_produto_referencia.php", {
+            produto: produto
+        }, function(valor) {
+            //alert("produto referencia:"+valor);
+            $("input[name=produto_referencia]").val(valor);
+        });
+    }*/
 
-                }
+    //Desabilita o campo quantidade e o botão de incluir
+    document.forms["form1"].qtd.disabled = true;
+    document.forms["form1"].porcao_qtd.disabled = true;
+    document.forms["form1"].botao_incluir.disabled = true;
+
+    //Define máscara para campo quantidade de porções
+    $("input[name=porcao_qtd]").val("").priceFormat({
+        prefix: '',
+        centsSeparator: '',
+        centsLimit: 0,
+        thousandsSeparator: ''
+    }); 
+    
+    //Popula o Fornecedor        
+    if (produto!="") {
+        popular_fornecedor(produto,focoqtd);
+    }
+
+
+}
+
+function selecionar_fornecedor (fornecedor,focoqtd) {
+    
+    //alert("Selecionando FORNECEDOR: "+fornecedor);    
+    
+    produto=$("select[name=produto]").val();
+    
+    //Popula o Lote
+    popular_lote(produto,fornecedor,focoqtd);
+
+    //Zerar campos
+    $("input[name=valuni]").val("");
+    $("input[name=valuni3]").val("");
+    $("input[name=valtot]").val("");
+    $("span[name=qtdnoestoque]").text("");
+    $("input[name=qtd]").val("");
+    $("input[name=qtd2]").val("");
+    $("input[name=porcao_qtd]").val("");
+    $("select[name=porcao]").html("");
+
+    //Habilita botão e campo quantidade
+    document.forms["form1"].qtd.disabled = true;
+    document.forms["form1"].porcao_qtd.disabled = true;
+    document.forms["form1"].botao_incluir.disabled = true;    
+    
+    
+}
+
+function popular_fornecedor (produto,focoqtd) {
+    $("select[name=fornecedor]").html('<option>Aguarde, carregando...</option>');
+    $.post("saidas_popula_fornecedor.php", {
+        produto: produto
+    }, function(valor) {
+        //alert(valor);
+        if (valor==0) {
+            $("select[name=fornecedor]").html("<option value=''>Não há registros</option>");
+        } else {
+            $("select[name=fornecedor]").html(valor);
+        }
+        $.post("saidas_verifica_fornecedor_unico.php", {
+            produto: produto
+        }, function(fornecedor) {
+            fornecedor=fornecedor.replace(/(\r\n|\n|\r)/gm,"");
+            //alert(fornecedor);
+            if (fornecedor!=0) { //Tem apenas um fornecedor
+                selecionar_fornecedor(fornecedor,focoqtd);
+            } else { //Tem mais de um fornecedor
+                //alert("Tem mais de um fornecedor");
+                if (focoqtd==1) document.forms["form1"].elements["fornecedor"].focus();            
+            }
+        });
+    });   
+}
+
+function popular_lote (produto,fornecedor,focoqtd) {
+    $("select[name=lote]").html('<option>Aguarde, carregando...</option>');
+    $.post("saidas_popula_lote.php", {
+        produto: produto,
+        fornecedor: fornecedor
+    }, function(valor) {
+        $("select[name=lote]").html(valor);
+            $.post("saidas_verifica_lote_unico.php", {
+            produto: produto,
+            fornec: fornecedor
+        }, function(lote) {
+            lote=lote.replace(/(\r\n|\n|\r)/gm,"");
+            if (lote!=0) { //Só tem um lote
+                selecionar_lote(lote,produto,focoqtd);
+            } else { //tem mais de um lote
+                document.forms["form1"].elements["lote"].focus();            
             }
         });
     });
+    //alert(fornecedor);
+}
+
+function selecionar_lote (lote,produto,focoqtd) {
+    
+    //alert("Selecionando LOTE: "+lote);   
+    if ((produto=="")||(!produto)) produto=$("select[name=produto]").val();
+    //alert("O produto é: "+produto);   
+    //alert("O focoqtd é: "+focoqtd);   
+    if (focoqtd!='0') {
+        focoqtd=1;
+    } else {
+        focoqtd=0;
+    }
+    //alert("O focoqtd no selecionar_lote é: "+focoqtd);   
+
+    
+    $("input[name=porcao_qtd]").val("");
+    produtoelote_selecionado(produto,lote,focoqtd);
+
+    //Popula porcoes
+    $.post("saidas_popula_porcoes.php", {
+        produto: $("select[name=produto]").val()
+    }, function(valor) {
+        //alert(valor);
+        $("select[name=porcao]").html(valor);
+    }); 
+    
+}
+
+
+function produtoelote_selecionado(produto,lote,focoqtd) {
+    
+    if ((produto!="")&&(lote!="")) {
+        //alert("Populando valor unitário... produto:"+produto+" lote:"+lote+" focoqtd:"+focoqtd);
+        //Popula valor unitário padrão
+        $.post("saidas_valorunitario.php", {
+            lote: lote,
+            produto: produto
+        }, function(valor) {
+            //alert(valor);
+            //alert("entrou");
+            $("input[name=valuni]").val(valor);
+            $("input[name=valuni2]").val(valor);
+            $("input[name=valuni3]").val(valor);
+        });
+        $("input[name=valtot]").val("");
+
+        //Verifica o tipo de contagem
+        $.post("saidas_verifica_tipocontagem.php", {
+            produto: $("select[name=produto]").val()
+        }, function(valor) {
+            //Popula quantidade em estoque
+            $.post("saidas_verifica_estoque.php", {
+                lote: $("select[name=lote]").val(),
+                produto: $("select[name=produto]").val()
+            }, function(valor2) {
+                var etqatu = valor2;
+                var estoqueatual = etqatu.replace(".", "");
+                estoqueatual = estoqueatual.replace(",", ".");
+                if (etqatu == "") {
+                    $("span[name=qtdnoestoque]").text("");
+                    $("input[name=qtd]").val("");
+                    $("input[name=qtd2]").val("");
+                    document.forms["form1"].botao_incluir.disabled = true;
+                    document.forms["form1"].qtd.disabled = true;
+                    document.forms["form1"].porcao_qtd.disabled = true;
+                } else {
+                    document.forms["form1"].qtd.disabled = false;
+                    porcao2=$("select[name=porcao]").val();
+                    if ((porcao2!="")&&(porcao2!= null)&&(porcao2!== undefined)&&(porcao2!= 0)) document.forms["form1"].porcao_qtd.disabled = false;
+                    else document.forms["form1"].porcao_qtd.disabled = true;
+                    $("span[name=qtdnoestoque]").text("(" + etqatu + " no estoque)");
+                    if ((valor == 2)||(valor==3)) { //Se o tipo de contagem for 'kg' ou 'lt'
+                        $("input[name=qtd]").val("");
+                        $("input[name=qtd2]").val("");
+                        document.forms["form1"].botao_incluir.disabled = true;
+                    } else { //Se o tipo de contagem for por unidade
+                        if (estoqueatual >= 1) {
+                            $("input[name=qtd]").val("1");
+                            $("input[name=qtd2]").val("1");
+                            tot=$("input[name=valuni2]").val();
+                            $("input[name=valtot]").val(tot);
+                            document.forms["form1"].botao_incluir.disabled = false;
+                            //alert("O foco é: "+focoqtd);
+                            
+                            
+                        } else {
+                            $("input[name=qtd]").val(etqatu);
+                            $("input[name=qtd2]").val(etqatu);
+                        }
+                        saidas_qtd();
+                        document.forms["form1"].botao_incluir.disabled = false;
+
+                    }
+                    //Caso tenha vários lotes ou fornecedores o campo foco virá indefinido, por isso definimos ele como 0, para não setar o foco na quantidade
+                    if (focoqtd!=0) focoqtd=1; 
+                        //alert("O foco agoraaaaaa é:"+focoqtd);
+                        if (focoqtd==1) {
+                            foco_quantidade();
+                    } 
+                }
+            });
+        });
+    }
+}
+
+function foco_produto_referencia () {
+    //alert("saiu do campo");
+    produto=$("select[name=produto]").val();
+    if (produto==null) produto="";
+    fornecedor=$("select[name=fornecedor]").val();
+    if (fornecedor==null) fornecedor="";
+    lote=$("select[name=lote]").val();
+    if (lote==null) lote="";
+    //alert(produto+"/"+fornecedor+"/"+lote);
+    if ((produto!="")&&(fornecedor!="")&&(lote!="")) {
+        foco_quantidade();
+    }
+}
+
+
+function foco_quantidade () {
+    //alert("foco deverá ser na quantidade");
+    document.forms["form1"].elements["qtd"].focus();
+    document.forms["form1"].elements["qtd"].select();   
 }
 
 
@@ -324,6 +439,7 @@ function saidas_qtd() {
                 $("input[name=valtot]").val("");
             } else {
                 //Calcula o total
+                //alert(qtddigitada);
                 if (qtddigitada == 0) {
                     $("input[name=valtot]").val("");
                     document.forms["form1"].botao_incluir.disabled = true;
@@ -358,8 +474,9 @@ function saidas_qtd() {
     });
 }
 
-//Etiqueta
+//Código de Barras Interno
 function valida_etiqueta(campo) {
+    //alert(campo);
     var qtd_caracteres;
     var digits = "0123456789"
     var campo_temp
@@ -371,7 +488,8 @@ function valida_etiqueta(campo) {
     }
     //Conta quantos caracteres foram digitados no código da etiqueta
     qtd_caracteres = document.forms["form1"].etiqueta.value.length;
-    //Se a etiqueta n�o tem nada digitado ent�o habilita-se o produto para escolhe-lo manualmente
+    //Se a etiqueta não tem nada digitado então habilita-se o produto para escolhe-lo manualmente
+
     if (qtd_caracteres == 0) {
         $.post("saidas_popula_produto.php", {}, function(valor) {
             $("select[name=produto]").html(valor);
@@ -387,19 +505,22 @@ function valida_etiqueta(campo) {
         $("span[name=tipocontagem]").text("");
         $("span[name=qtdnoestoque]").text("");
         document.forms["form1"].produto.disabled = false;
+        document.forms["form1"].produto_referencia.disabled = false;
         document.forms["form1"].fornecedor.disabled = false;
         document.forms["form1"].lote.disabled = false;
         document.forms["form1"].etiqueta2.disabled = false;
         document.forms["form1"].botao_incluir.disabled = true;
     }
-    //Se a etiqueta est� sendo preenchida ent�o desabilitar tudo
+    //Se a etiqueta está sendo preenchida então desabilitar tudo
     else if ((qtd_caracteres >= 1) && (qtd_caracteres <= 13)) {
         $("select[name=produto]").html("");
+        $("input[name=produto_referencia]").html("");
         $("input[name=etiqueta2]").html("");
         $("select[name=fornecedor]").html("");
         $("select[name=lote]").html("");
         $("select[name=porcao]").html("");
         document.forms["form1"].produto.disabled = true;
+        document.forms["form1"].produto_referencia.disabled = true;
         document.forms["form1"].fornecedor.disabled = true;
         document.forms["form1"].etiqueta2.disabled = true;
         document.forms["form1"].lote.disabled = true;
@@ -415,7 +536,6 @@ function valida_etiqueta(campo) {
         $("span[name=qtdnoestoque]").text("");
         document.forms["form1"].botao_incluir.disabled = true;
     }
-
     //Ao terminar de digitar verifica o codigo digitado e depois faz todos os calculos
     else if (qtd_caracteres == 14) {
         //Se o usu�rio apertou qualquer outro bot�o que n�o seja numero n�o executar nada
@@ -427,13 +547,16 @@ function valida_etiqueta(campo) {
             //Caso o numero da etiqueta n�o corresponta a um produto ou lote n�o existente no banco
             if (x == "invalida") {
                 alert("Etiqueta Inválida");
+                $("input[name=etiqueta]").val("");
+                //$("input[name=etiqueta]").focus();
+                
             }
             //O produto e lote existem, mas no estoque esse produto n�o est� incluido nesse lote.
             else if (x == "semestoque") {
                 alert("Este produto não consta no estoque do sistema. Por favor, anote o número desta etiqueta para analisar depois");
                 document.forms["form1"].botao_incluir.disabled = true;
             }
-            //O c�digo � valido
+            //O código é valido
             else {
 
                 //Preenche o campo Produto
@@ -445,6 +568,7 @@ function valida_etiqueta(campo) {
                     $.post("saidas_etiqueta_produto_codigo.php", {
                         etiqueta: $("input[name=etiqueta]").val()
                     }, function(valor) {
+                        produto=valor;
                         $("input[name=produto2]").val(valor);
                     });
                     //Preenche o campo Fornecedor
@@ -461,13 +585,16 @@ function valida_etiqueta(campo) {
                             $.post("saidas_etiqueta_lote_codigo.php", {
                                 etiqueta: $("input[name=etiqueta]").val()
                             }, function(valor) {
+                                lote=valor;
                                 $("input[name=lote2]").val(valor);
                                 //Atualiza o tipo de contagem
                                 $.post("saidas_verifica_tipocontagem_nome.php", {
                                     produto: $("select[name=produto]").val()
                                 }, function(valor) {
                                     $("span[name=tipocontagem]").text(valor);
-                                    produto_selecionado();
+                                    lote=eliminar_zeros_a_esquerda(lote);
+                                    //alert("vaiiii:"+produto+"/"+lote);
+                                    produtoelote_selecionado(produto,lote,1);
                                 });
                             });
                         });
@@ -482,7 +609,7 @@ function valida_etiqueta(campo) {
         alert("Erro gravíssimo, o valor da etiqueta tem mais que 14 dígitos");
     }
 }
-//Etiqueta
+//Código de Barras EAN 
 function valida_etiqueta2(campo) {
     var qtd_caracteres;
     var digits = "0123456789"
@@ -500,6 +627,7 @@ function valida_etiqueta2(campo) {
         $.post("saidas_popula_produto.php", {}, function(valor) {
             $("select[name=produto]").html(valor);
         });
+        $("input[name=produto_quantidade]").val("");
         $("input[name=etiqueta]").val("");
         $("select[name=fornecedor]").html("");
         $("select[name=lote]").html("");
@@ -508,9 +636,11 @@ function valida_etiqueta2(campo) {
         $("input[name=valuni]").val("");
         $("input[name=valuni3]").val("");
         $("input[name=valtot]").val("");
+        $("input[name=quantidade_referencia]").val("");
         $("span[name=tipocontagem]").text("");
         $("span[name=qtdnoestoque]").text("");
         document.forms["form1"].produto.disabled = false;
+        document.forms["form1"].produto_referencia.disabled = false;
         document.forms["form1"].etiqueta.disabled = false;
         document.forms["form1"].fornecedor.disabled = false;
         document.forms["form1"].lote.disabled = false;
@@ -520,15 +650,18 @@ function valida_etiqueta2(campo) {
     else if ((qtd_caracteres >= 1) && (qtd_caracteres <= 12)) {
         $("input[name=etiqueta]").val("");
         $("select[name=produto]").html("");
+        $("input[name=produto_referencia]").val("");
         $("select[name=fornecedor]").html("");
         $("select[name=lote]").html("");
         $("select[name=porcao]").html("");
         document.forms["form1"].produto.disabled = true;
+        document.forms["form1"].produto_referencia.disabled = true;
         document.forms["form1"].etiqueta.disabled = true;
-        //document.forms["form1"].fornecedor.disabled= true;        
-        //document.forms["form1"].lote.disabled= true;        
+        document.forms["form1"].fornecedor.disabled= true;        
+        document.forms["form1"].lote.disabled= true;        
         document.forms["form1"].qtd.disabled = true;
         document.forms["form1"].porcao_qtd.disabled = true;
+        document.forms["form1"].porcao.disabled = true;
         $("input[name=qtd]").val("");
         $("input[name=qtd2]").val("");
         $("input[name=valuni]").val("");
@@ -538,18 +671,25 @@ function valida_etiqueta2(campo) {
         $("span[name=tipocontagem]").text("");
         $("span[name=qtdnoestoque]").text("");
         document.forms["form1"].botao_incluir.disabled = true;
-    }
-
-    //Ao terminar de digitar verifica o codigo digitado e depois faz todos os calculos
-    else if (qtd_caracteres == 13) {
+    } else if (qtd_caracteres == 13) { //Ao terminar de digitar verifica o codigo digitado e depois faz todos os calculos
         //Se o usu�rio apertou qualquer outro bot�o que n�o seja numero n�o executar nada
         //-----
+        //alert("tem 13 digitos");
+        document.forms["form1"].produto.disabled = false;
+        document.forms["form1"].produto_referencia.disabled = false;
+        document.forms["form1"].etiqueta.disabled = false;
+        document.forms["form1"].fornecedor.disabled= false;        
+        document.forms["form1"].lote.disabled= false;        
+        document.forms["form1"].qtd.disabled = false;
+        document.forms["form1"].porcao_qtd.disabled = false;
+        document.forms["form1"].porcao.disabled = false;
+        
         $.post("saidas_valida_etiqueta2.php", {
             etiqueta2: $("input[name=etiqueta2]").val()
         }, function(valor) {
             //alert(valor);
             var x = valor;
-            //Caso o numero da etiqueta n�o corresponta a um produto ou lote n�o existente no banco
+            //Caso o numero da etiqueta não corresponda a um produto ou lote não existente no banco
             if (x == "invalida") {
                 alert("Etiqueta Inválida");
                 $("input[name=etiqueta2]").val("");
@@ -558,35 +698,17 @@ function valida_etiqueta2(campo) {
             //O codigo é valido
             else {
                 //Preenche o campo Produto
-                $.post("saidas_etiqueta_produto2.php", {
+                $.post("saidas_etiqueta_produto_codigo2.php", {
                     etiqueta2: $("input[name=etiqueta2]").val()
                 }, function(valor) {
-                    //alert(valor);
-                    $("select[name=produto]").html(valor);                                        
-                    //Preenche o campo oculto do produto com o codigo dele
-                    $.post("saidas_etiqueta_produto_codigo2.php", {
-                        etiqueta2: $("input[name=etiqueta2]").val()
-                    }, function(valor) {
-                        $("input[name=produto2]").val(valor);
-                    });
-                    //Preenche o campo Fornecedor
-                    $.post("saidas_etiqueta_fornecedor2.php", {
-                        etiqueta2: $("input[name=etiqueta2]").val()
-                    }, function(valor) {
-                        //alert(valor);
-                        $("select[name=fornecedor]").html(valor);
-                        //Preenche o campo Lote
-                    });
-                    $.post("saidas_etiqueta_lote2.php", {
-                        etiqueta2: $("input[name=etiqueta2]").val()
-                    }, function(valor) {
-                        $("select[name=lote]").html(valor);
-                        $("select[name=lote]").focus();
-                        //Preenche o campo oculto do lote com o codigo dele
-                        produto_selecionado();
-                    });
-
+                    var produto=valor;
+                    //alert("produto:"+produto);
+                    $("input[name=produto2]").val(valor);
+                    popular_produto(produto);
+                    selecionar_produto(produto,1);
+                    document.forms["form1"].elements["qtd"].focus();
                 });
+                
 
             }
         });
@@ -816,3 +938,44 @@ function verifica_cnpj(valor) {
     }
 }
 
+function verifica_produto_referencia(valor) {
+    if (valor!="") { //Preenche o campo produto referencia com a referencia do produto
+        $.post("saidas_produto_referencia.php", {
+            referencia: valor
+        }, function(produtos) {
+            //alert("Produtos encontrados a partir da referencia:"+produtos);
+            produtos2=produtos.split("|");
+            produto_codigo=produtos2[0];
+            produto_nome=produtos2[1];
+            if (produtos!=0) { //Se o produto é valido e uma referencia foi encontrada então popular
+                $("select[name=produto]").html("<option value='"+produto_codigo+"'>"+produto_nome+" </option>");
+                document.forms["form1"].produto.disabled = true;
+                $("input[name=produto2]").val(produto_codigo);
+                selecionar_produto(produto_codigo,0);                
+            } else {
+                $.post("saidas_popula_produto.php", {}, function(valor) {
+                    $("select[name=produto]").html(valor);
+                    document.forms["form1"].produto.disabled = false;
+                });
+                $("select[name=lote]").html("");
+                $("select[name=fornecedor]").html("");
+                selecionar_produto("",0);   
+            }
+
+        });
+    } else {
+        $.post("saidas_popula_produto.php", {}, function(valor) {
+            $("select[name=produto]").html(valor);
+            document.forms["form1"].produto.disabled = false;
+        });
+    }
+    
+}
+
+function eliminar_zeros_a_esquerda(sStr){
+   var i;
+   for(i=0;i<sStr.length;i++)
+      if(sStr.charAt(i)!='0')
+         return sStr.substring(i);
+   return sStr;
+}

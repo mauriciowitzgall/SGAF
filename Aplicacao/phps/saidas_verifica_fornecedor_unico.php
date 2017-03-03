@@ -1,7 +1,6 @@
 <?php
 include "controle/conexao.php";
-include "controle/conexao_tipo.php";
-include "funcoes.php";
+//include "controle/conexao_tipo.php";
 require "login_verifica.php";
 
 $produto = $_POST["produto"];
@@ -24,14 +23,19 @@ if (!$query) die("Erro: " . mysql_error());
 $linhas=mysql_num_rows($query);
 if ($linhas == 0) {
     echo "0";
-} else {
-    if ($linhas==1) $selecionado= " selected ";
-    echo "<option value=''>Selecione</option>";
+} else if ($linhas == 1){
+    //Se tiver apenas um fornecedor deve retornar o código dele para depois auto-selecionar
     while ($dados = mysql_fetch_assoc($query)) {
         $fornecedor = $dados["pes_codigo"];             
-        $fornecedor_nome = $dados["pes_nome"];             
-        echo "<option value='$fornecedor' $selecionado >$fornecedor_nome</option>";
+        $fornecedor_nome = $dados["pes_nome"];   
+        
+        echo "$fornecedor";
     }
 
+} else if ($linhas>1){
+    //echo "Tem mais de um fornecedor";
+    echo "0";
+} else {
+    echo "Erro!";
 }
 ?>

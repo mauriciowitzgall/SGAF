@@ -1,7 +1,11 @@
 <?php
+
+//print_r($_REQUEST);
+
 //Verifica se o usuário pode acessar a tela
 require "login_verifica.php";
 $saida = $_GET["codigo"];
+$ignorar_vendas_incompletas = $_REQUEST["ignorar_vendas_incompletas"];
 $tiposaida = $_REQUEST["tiposaida"];
 if ($tiposaida == 1) {
     if ($permissao_saidas_cadastrar <> 1) {
@@ -48,7 +52,8 @@ $horaatual = date("H:i:s");
 $operacao = $_GET["operacao"]; //Operação 1=Cadastrar 2=Editar 3=Ver
 
 
-       
+//Verifica se usa comanda
+$usacomanda=usacomanda($usuario_quiosque);
 
 
 $retirar_produto = $_GET["retirar_produto"];
@@ -91,7 +96,7 @@ if ($retirar_produto == '1') {
         $operacao=1;
         $saida = $_POST["saida"];
         $passo = $_POST["passo"];
-        $consumidor = $_POST["consumidor"];
+        $consumidor = $_REQUEST["consumidor"];
         $cliente_nome = $_POST["cliente_nome"];
         $tipopessoa = $_POST["tipopessoa"];
         $consumidor_cpf=$_POST["cpf"];
@@ -363,7 +368,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
     //Independente se for cadastrou ou edição, só inserir produto na saida se vier os dados do produto e lote etc. dos campos
     //print_r($_REQUEST);
     //echo "<br><br>saida: $saida produto:$produto lote:$lote<br><br>";
-   
+   //echo "$saida / $produto / $lote ";
     if (($saida != "") && ($produto != "") && ($lote != "")) {
 
         //Verifica a quantida atual do estoque
@@ -382,7 +387,6 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
 
         //Se a quantidade final do estoque ficar negativa ent�o n�o permitir seja inserido a saida deste produto e nem atualizado o estoque        
         //(Isso acontece quando o usu�rio inclui um produto na lista e pressiona F5)
-        echo "TESTE: $qtdfinal";
         if ($qtdfinal >= 0) {
             //Inserindo os produtos na Sa�da
             //echo "<br><br>inseriu nos itens da saida<br><br>";
@@ -391,7 +395,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                 saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade
             )
             VALUES (
-                '$saida','$produto','$lote','$qtd','$valunisai',$valtotsai,$porcao,$porcao_qtd
+                '$saida','$produto','$lote','$qtd','$valunisai','$valtotsai',$porcao,$porcao_qtd
             )        
             ";
             $query_saida_produto = mysql_query($sql_saida_produto);
@@ -498,10 +502,11 @@ $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
 
 if ($tiposaida == 1) {
-
+    
     //ID, Comanda, Ficha
+    $tpl1->TR_ID="linha_comanda";
     $tpl1->CAMPO_QTD_CARACTERES = "8";
-    $tpl1->TITULO = "ID";
+    $tpl1->TITULO = "Comanda / Ident.";
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
     $tpl1->CAMPO_TIPO = "number";
@@ -516,7 +521,7 @@ if ($tiposaida == 1) {
         $id=$dados22[0];
     }
     $tpl1->CAMPO_VALOR = "$id";
-    $tpl1->CAMPO_OBRIGATORIO = " required ";
+    $tpl1->CAMPO_OBRIGATORIO = "  ";
     if ($passo!=1) {
         $tpl1->CAMPO_DESABILITADO = " disabled";
     } else {
@@ -526,9 +531,12 @@ if ($tiposaida == 1) {
     $tpl1->CAMPO_ONKEYDOWN = "";
     $tpl1->CAMPO_ONFOCUS = "";
     $tpl1->block("BLOCK_CAMPO");
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
-
+    
+    
     //Consumidor Cliente
+    $tpl1->TR_ID="";
     $tpl1->CAMPO_QTD_CARACTERES = "14";
     $tpl1->TITULO = "Consumidor";
     $tpl1->ASTERISCO = "";
@@ -637,9 +645,7 @@ if ($tiposaida == 1) {
         ORDER BY
             pes_nome
     ";
-    $query = mysql_query($sql);
-    if (!$query)
-        die("Erro 8: " . mysql_error());
+    if (!$query = mysql_query($sql)) die("Erro 8: " . mysql_error());
     $tpl1->OPTION2_VALOR = "0";
     $tpl1->OPTION2_NOME = "Clientes Geral";
     $tpl1->OPTION2_SELECIONADO = " selected ";
@@ -657,7 +663,7 @@ if ($tiposaida == 1) {
     $tpl1->block("BLOCK_SELECT2");
     
     
-    
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
 }
 
@@ -695,6 +701,7 @@ if ($tiposaida == 3) {
         $tpl1->block("BLOCK_SELECT_OPTION");
     }
     $tpl1->block("BLOCK_SELECT");
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
 
     //Descri��o
@@ -710,6 +717,7 @@ if ($tiposaida == 3) {
         $tpl1->TEXTAREA_DESABILITADO = " ";
     }
     $tpl1->block("BLOCK_TEXTAREA");
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
 
     //Alguns campos est�o desabilitados, portando deve-se enviar atraves de campos ocultos
@@ -724,12 +732,11 @@ if ($tiposaida == 3) {
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
 }
 
-
 if ($passo == 2) {
     
    
     //Verifica se o consumidor possui vendas incompleta
-    if ($consumidor!="") { // Se for uma devolução, então não realizar essa verificação
+    if (($passo==2)&&($ignorar_vendas_incompletas!=1)) { // Se for uma devolução, então não realizar essa verificação
         
         $sql4="SELECT * from saidas  WHERE sai_status=2 and sai_consumidor= $consumidor and sai_codigo not in ($saida)";
         if (!$query4 = mysql_query($sql4)) die("Erro 4:" . mysql_error());
@@ -742,7 +749,7 @@ if ($passo == 2) {
             $tpl->ICONES = $icones;
             //$tpl->MOTIVO_COMPLEMENTO = "";
             $tpl->block("BLOCK_ATENCAO");
-            $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=2&tiposaida=1&id=$id";
+            $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=$operacao&tiposaida=1&id=$id&consumidor=$consumidor&passo=2&usacomanda=$usacomanda&ignorar_vendas_incompletas=1";
             $vendas_incompletas="<br> <i>";
             while ($dados4=  mysql_fetch_assoc($query4)) {
                 $vendainc_codigo=$dados4["sai_codigo"];
@@ -773,7 +780,7 @@ if ($passo == 2) {
     $tpl1->CAMPO_TIPO = "text";
     $tpl1->CAMPO_NOME = "etiqueta";
     $tpl1->CAMPO_TAMANHO = "15";
-    $tpl1->CAMPO_FOCO = " autofocus ";
+    $tpl1->CAMPO_FOCO = " ";
     $tpl1->CAMPO_VALOR = "";
     $tpl1->CAMPO_DESABILITADO = "";
     $tpl1->CAMPO_OBRIGATORIO = " ";
@@ -782,6 +789,7 @@ if ($passo == 2) {
     $tpl1->CAMPO_ONFOCUS = "";
     $tpl1->block("BLOCK_TITULO");
     $tpl1->block("BLOCK_CAMPO");
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
 
     //Etiqueta Produto Industrializado
@@ -798,22 +806,42 @@ if ($passo == 2) {
     $tpl1->CAMPO_ONKEYUP = "valida_etiqueta2(this)";
     $tpl1->CAMPO_ONKEYDOWN = "";
     $tpl1->CAMPO_ONFOCUS = "";
+    $tpl1->CAMPO_ONBLUR = "";
     $tpl1->block("BLOCK_TITULO");
     $tpl1->block("BLOCK_CAMPO");
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
 
+
+    
 
     //Produto
     $tpl1->TITULO = "Produto";
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
+    $tpl1->ASTERISCO = "";
+    $tpl1->CAMPO_TIPO = "text";
+    $tpl1->CAMPO_NOME = "produto_referencia";
+    $tpl1->CAMPO_TAMANHO = "7";
+    $tpl1->CAMPO_VALOR = "";
+    $tpl1->CAMPO_FOCO = "";
+    $tpl1->CAMPO_DESABILITADO = "";
+    $tpl1->CAMPO_ONKEYPRESS = "";
+    $tpl1->CAMPO_ONKEYUP = "verifica_produto_referencia(this.value)";
+    $tpl1->CAMPO_ONKEYDOWN = "";
+    $tpl1->CAMPO_ONBLUR = "foco_produto_referencia()";
+    $tpl1->CAMPO_ESTILO = " ";
+    $tpl1->CAMPO_OBRIGATORIO = " ";
+    $tpl1->block("BLOCK_CAMPO");    
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->SELECT_NOME = "produto";    
-    $tpl1->SELECT_AOTROCAR = " ";
+    $tpl1->SELECT_AOTROCAR = "selecionar_produto(this.value) ";
     $tpl1->SELECT_OBRIGATORIO = " required ";
     $tpl1->SELECT_FOCO = "  ";
     $tpl1->SELECT_DESABILITADO = "  ";
-    $tpl1->SELECT_CLASSE = " width:200px; ";
+    $tpl1->SELECT_CLASSE = " width:300px; ";
     $tpl1->block("BLOCK_SELECT");
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
 
     //Fornecedor
@@ -822,10 +850,12 @@ if ($passo == 2) {
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
     $tpl1->SELECT_NOME = "fornecedor";
+    $tpl1->SELECT_AOTROCAR = "selecionar_fornecedor(this.value) ";
     $tpl1->SELECT_OBRIGATORIO = "  ";
     $tpl1->SELECT_FOCO = "  ";
     $tpl1->SELECT_DESABILITADO = "  ";
     $tpl1->block("BLOCK_SELECT");
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
 
     //Lote
@@ -837,11 +867,12 @@ if ($passo == 2) {
     $tpl1->SELECT_OBRIGATORIO = " required ";
     $tpl1->SELECT_FOCO = "  ";
     $tpl1->SELECT_DESABILITADO = "  ";
-    $tpl1->SELECT_AOTROCAR = "popula_lote_oculto(this.value);";
+    $tpl1->SELECT_AOTROCAR = "popula_lote_oculto(this.value);  selecionar_lote(this.value)";
     $tpl1->SPAN2_NOME = "prateleira";
     $tpl1->SPAN2_VALOR = "";
     $tpl1->block("BLOCK_SPAN2");
     $tpl1->block("BLOCK_SELECT");
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
 
     //Porção
@@ -859,6 +890,7 @@ if ($passo == 2) {
     $tpl1->SPAN2_VALOR = "";
     $tpl1->block("BLOCK_SPAN2");
     $tpl1->block("BLOCK_SELECT");
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
     //oculto
     $tpl1->CAMPOOCULTO_NOME = "porcao_oculto";
@@ -878,14 +910,16 @@ if ($passo == 2) {
     $tpl1->CAMPO_NOME = "porcao_qtd";
     $tpl1->CAMPO_TAMANHO = "9";
     $tpl1->CAMPO_VALOR = "";
-    $tpl1->CAMPO_FOCO = "";
+    $tpl1->CAMPO_FOCO = " ";
     $tpl1->CAMPO_DESABILITADO = "";
     $tpl1->CAMPO_ONKEYPRESS = "";
     $tpl1->CAMPO_ONKEYUP = "porcoesqtd(); saidas_qtd();";
     $tpl1->CAMPO_ONKEYDOWN = "";
     $tpl1->CAMPO_ONFOCUS = "";
     $tpl1->CAMPO_OBRIGATORIO = " ";
+    $tpl1->CAMPO_ONBLUR = "";
     $tpl1->block("BLOCK_CAMPO");
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
 
     //Quantidade
@@ -916,6 +950,7 @@ if ($passo == 2) {
     $tpl1->SPAN_CLASS = "  ";
     $tpl1->block("BLOCK_SPAN");
     $tpl1->block("BLOCK_CAMPO");
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
     $tpl1->CAMPOOCULTO_NOME = "qtd2";
     $tpl1->CAMPOOCULTO_VALOR = "";
@@ -938,6 +973,7 @@ if ($passo == 2) {
     $tpl1->CAMPO_ONFOCUS = "";
     $tpl1->block("BLOCK_TITULO");
     $tpl1->block("BLOCK_CAMPO");
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
     //usado para receber o valor unitário padrão do produto
     $tpl1->CAMPOOCULTO_NOME = "valuni2";
@@ -966,6 +1002,7 @@ if ($passo == 2) {
     $tpl1->CAMPO_ONFOCUS = "";
     $tpl1->block("BLOCK_TITULO");
     $tpl1->block("BLOCK_CAMPO");
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
 
     //Como o campo está desabilitado é necessário criar um campo oculto. Este é populado via javascript
@@ -1104,6 +1141,7 @@ if ($passo == 2) {
 $tpl1->BOTAO_NOME = "botao_incluir";
 $tpl1->BOTAO_FOCO = " ";
 $tpl1->block("BLOCK_BOTAO1");
+$tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 if ($tiposaida == 3) {
@@ -1111,8 +1149,17 @@ if ($tiposaida == 3) {
 }
 $valor2 = "R$ " . number_format($total_geral, 2, ',', '.');
 $tpl1->VALBRU2 = $valor2;
+
+
+//Passo
 $tpl1->CAMPOOCULTO_NOME = "passo";
 $tpl1->CAMPOOCULTO_VALOR = $passo;
 $tpl1->block("BLOCK_CAMPOSOCULTOS");
+
+//Usa Comanda / Indentificador
+$tpl1->CAMPOOCULTO_NOME = "usacomanda";
+$tpl1->CAMPOOCULTO_VALOR = $usacomanda;
+$tpl1->block("BLOCK_CAMPOSOCULTOS");
+
 $tpl1->show();
 ?>

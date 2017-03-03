@@ -186,7 +186,7 @@ function calcula_valor_percent() {
     venda = parseFloat(venda);
 
     //=(venda*100/custo)-100    
-    if (venda != 0)
+    if ((venda != 0)&&(custo!=0))
         percent = (venda * 100 / custo) - 100;
     else
         percent = 0;

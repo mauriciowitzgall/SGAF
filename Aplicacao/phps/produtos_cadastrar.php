@@ -75,26 +75,30 @@ if ($pis=="") $pis="0,00";
 if ($cofins=="") $cofins="0,00";
 
 
-//Verifica qual é o faturamento dos ultimos 12 meses
-$sql="SELECT sum(nfefat_valor) as fatanual FROM (SELECT nfefat_valor FROM nfe_faturamento WHERE nfefat_quiosque=$usuario_quiosque ORDER BY nfefat_codigo DESC LIMIT 12) as subt;";
-if (!$query = mysql_query($sql)) die("Erro SQL Faturamento Anual: ".mysql_error());
-$dados=mysql_fetch_assoc($query);
-$fatanual=$dados["fatanual"];
-//echo "Faturamento Anual: ($fatanual)";
+//Se utiliza módulo fiscal calcula o valor do ICMS
+if ($usamodulofiscal==1) {
 
-//Verifica se é do Simples Nacional
-if ($fatanual<=3600000) {    
-    //Verifica qual é o valor do ICMS a partir da tabela de calculo pronta 
-    $sql_simplesnacional = "SELECT nfesn_icms FROM nfe_simplesnacional WHERE nfesn_de <= $fatanual AND nfesn_ate >= $fatanual";
-    if (!$query_simplesnacional = mysql_query($sql_simplesnacional)) die("Erro SQL Consulta ICMS Simples Nacional: ".mysql_error());
-    $dados_simplesnacional=  mysql_fetch_assoc($query_simplesnacional);
-    $icms_atual=$dados_simplesnacional["nfesn_icms"];
-    $simplesnacional=1;
-} else {
-    $icms_atual="???";
-    $simplesnacional=0;
+    //Verifica qual é o faturamento dos ultimos 12 meses
+    $sql="SELECT sum(nfefat_valor) as fatanual FROM (SELECT nfefat_valor FROM nfe_faturamento WHERE nfefat_quiosque=$usuario_quiosque ORDER BY nfefat_codigo DESC LIMIT 12) as subt;";
+    if (!$query = mysql_query($sql)) die("Erro SQL Faturamento Anual: ".mysql_error());
+    $dados=mysql_fetch_assoc($query);
+    $fatanual=$dados["fatanual"];
+    //echo "Faturamento Anual: ($fatanual)";
+
+    //Verifica se é do Simples Nacional
+    if ($fatanual<=3600000) {    
+        //Verifica qual é o valor do ICMS a partir da tabela de calculo pronta 
+        $sql_simplesnacional = "SELECT nfesn_icms FROM nfe_simplesnacional WHERE nfesn_de <= $fatanual AND nfesn_ate >= $fatanual";
+        if (!$query_simplesnacional = mysql_query($sql_simplesnacional)) die("Erro SQL Consulta ICMS Simples Nacional: ".mysql_error());
+        $dados_simplesnacional=  mysql_fetch_assoc($query_simplesnacional);
+        $icms_atual=$dados_simplesnacional["nfesn_icms"];
+        $simplesnacional=1;
+    } else {
+        $icms_atual="???";
+        $simplesnacional=0;
+    }
+
 }
-
 
 
 

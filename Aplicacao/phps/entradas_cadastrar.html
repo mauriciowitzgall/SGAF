@@ -2,16 +2,26 @@
 <script type="text/javascript">
     window.onload = function() {
         var manter = $("input[name=produtomanter]").val();
-        if (manter = 'on') {
-            valida_produto();
-            if (document.forms["form1"].qtd)
-                document.forms["form1"].qtd.focus();
-        }
-        desabilita_campos();
-        verifica_incluir();
+        if (manter='undefined') manter=1;
+        else manter=0;
+        var passo = $("input[name=passo]").val();
+        //alert(passo);
+        if (passo>2) {
+            desabilita_campos();
+            if (manter = 'on') {
+                valida_produto();
+                if (document.forms["form1"].qtd)
+                    document.forms["form1"].qtd.focus();
+            }
+            verifica_incluir();
 
+            
+        
+        }
         tipneg= $("select[name=tiponegociacao]").val();
-        //popula_tipopessoa(tipneg);
+        //alert(tipneg);
+        popula_tipopessoa(tipneg);
+
     };
 
 function mascara_percent() {
