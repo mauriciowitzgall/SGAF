@@ -162,7 +162,7 @@ if ($usamodulofiscal==1) {
     $tpl_notificacao->block("BLOCK_BOTAO");
 
     //Botão cadastrar mais
-    $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar.php?tiposaida=$tiposai";
+    $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar.php?tiposaida=$tiposai&operacao=1&passo=1";
     //$tpl->block("BLOCK_BOTAOGERAL_NOVAJANELA");
     $tpl_notificacao->BOTAOGERAL_TIPO="button";
     $tpl_notificacao->BOTAOGERAL_NOME="REALIZAR NOVA SAIDA";
