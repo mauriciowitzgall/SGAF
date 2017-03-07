@@ -223,6 +223,25 @@ function dados_fiscais(valor) {
     }
   
 }
+
+function referencia_valida_caracteres_especiais (valor) {
+    if(valor.match(/'/)) valor = valor.replace("'","");
+    if(valor.match(/!/)) valor = valor.replace("!","");
+    if(valor.match(/@/)) valor = valor.replace("@","");
+    if(valor.match(/#/)) valor = valor.replace("#","");
+    if(valor.match(/$/)) valor = valor.replace("$","");
+    if(valor.match(/%/)) valor = valor.replace("%","");
+    if(valor.match(/^/)) valor = valor.replace("ˆ","");
+    if(valor.match(/&/)) valor = valor.replace("&","");
+    if(valor.match(/{/)) valor = valor.replace("{","");
+    if(valor.match(/}/)) valor = valor.replace("}","");
+    if(valor.match(/|/)) valor = valor.replace("|","");
+    if(valor.match(/˜/)) valor = valor.replace("˜","");
+    if(valor.match(/`/)) valor = valor.replace("`","");
+    //alert(valor);
+    $("input[name=referencia]").val(valor);
+}
+
    
 window.onload = function(){
     //industrializado
@@ -310,7 +329,7 @@ if ($linhas == 0) {
         </tr>
        <tr id="id_referencia">
             <td align="right" width="200px"><b>Referência: <label class="obrigatorio"></label></b></td>
-            <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="referencia"  size="35" class="campopadrao"  value="<?php echo "$referencia"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"> Ex: numero do pedido/cardápio</span></td>
+            <td align="left" width=""><input  onkeyup="referencia_valida_caracteres_especiais(this.value)"  id="referencia" type="text" name="referencia"  size="35" class="campopadrao"  value="<?php echo "$referencia"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"> Ex: numero do pedido/cardápio</span></td>
         </tr>
         <tr>
             <td align="right" width="200px"><b>Produto industrializado <label class="obrigatorio"></label></b></td>

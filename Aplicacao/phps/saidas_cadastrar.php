@@ -826,7 +826,7 @@ if ($passo == 2) {
     $tpl1->CAMPO_FOCO = "";
     $tpl1->CAMPO_DESABILITADO = "";
     $tpl1->CAMPO_ONKEYPRESS = "";
-    $tpl1->CAMPO_ONKEYUP = "verifica_produto_referencia(this.value)";
+    $tpl1->CAMPO_ONKEYUP = "verifica_produto_referencia(this.value); referencia_valida_caracteres_especiais(this.value);";
     $tpl1->CAMPO_ONKEYDOWN = "";
     $tpl1->CAMPO_ONBLUR = "foco_produto_referencia()";
     $tpl1->CAMPO_ESTILO = " ";

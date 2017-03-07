@@ -939,6 +939,22 @@ function verifica_cnpj(valor) {
 }
 
 function verifica_produto_referencia(valor) {
+    
+    if(valor.match(/'/)) valor = valor.replace("'","");
+    if(valor.match(/!/)) valor = valor.replace("!","");
+    if(valor.match(/@/)) valor = valor.replace("@","");
+    if(valor.match(/#/)) valor = valor.replace("#","");
+    if(valor.match(/$/)) valor = valor.replace("$","");
+    if(valor.match(/%/)) valor = valor.replace("%","");
+    if(valor.match(/^/)) valor = valor.replace("ˆ","");
+    if(valor.match(/&/)) valor = valor.replace("&","");
+    if(valor.match(/{/)) valor = valor.replace("{","");
+    if(valor.match(/}/)) valor = valor.replace("}","");
+    if(valor.match(/|/)) valor = valor.replace("|","");
+    if(valor.match(/˜/)) valor = valor.replace("˜","");
+    if(valor.match(/`/)) valor = valor.replace("`","");
+    $("input[name=produto_referencia]").val(valor);
+    
     if (valor!="") { //Preenche o campo produto referencia com a referencia do produto
         $.post("saidas_produto_referencia.php", {
             referencia: valor
