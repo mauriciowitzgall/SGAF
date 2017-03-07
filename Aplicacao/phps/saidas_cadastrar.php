@@ -117,8 +117,8 @@ if ($retirar_produto == '1') {
     }
     $id = $_REQUEST["id"];
     $tiposaida = $_GET["tiposaida"];
-    $motivo = $_POST["motivo"];
-    $descricao = $_POST["descricao"];
+    if ($operacao==1) $motivo = $_REQUEST["motivo"];
+    if ($operacao==1) $descricao = $_POST["descricao"];
     $saipro = "";
     $porcao = $_POST["porcao"];
     if ($porcao=="") $porcao=0;
@@ -172,7 +172,7 @@ if ($retirar_produto == '1') {
 $passo= $_REQUEST["passo"];
 
 //Verificar se é uma edição, se sim então atualiza id e consumidor
-if (($operacao==2)&&($passo==2)) {
+if (($operacao==2)&&($passo==2)&&($tiposaida!=3)) {
     //print_r($_REQUEST);
     $id_novo=$_REQUEST["id"];
     if ($id_novo=="") $id_novo=$id;
@@ -736,8 +736,7 @@ if ($passo == 2) {
     
    
     //Verifica se o consumidor possui vendas incompleta
-    if (($passo==2)&&($ignorar_vendas_incompletas!=1)) { // Se for uma devolução, então não realizar essa verificação
-        
+    if (($passo==2)&&($ignorar_vendas_incompletas!=1)&&($tiposaida!=3)) { // Se for uma devolução, então não realizar essa verificação
         $sql4="SELECT * from saidas  WHERE sai_status=2 and sai_consumidor= $consumidor and sai_codigo not in ($saida)";
         if (!$query4 = mysql_query($sql4)) die("Erro 4:" . mysql_error());
         $linhas4 = mysql_num_rows($query4);
@@ -1079,8 +1078,9 @@ if ($passo == 2) {
             $prod_tamanho=$dados_lista["pro_tamanho"];
             $prod_cor=$dados_lista["pro_cor"];
             $prod_descricao=$dados_lista["pro_descricao"];
-            
-            $nome2="$prod_nome $prod_referencia $prod_tamanho $prod_cor $prod_descricao";
+
+            $nome2="$prod_nome $prod_tamanho $prod_cor $prod_descricao";
+            $tpl1->LISTA_PRODUTO_REFERENCIA = $prod_referencia;
             $tpl1->LISTA_PRODUTO = $nome2;
             $tpl1->LISTA_PRODUTO_COD = $dados_lista["pro_codigo"];
             $tpl1->LISTA_FORNECEDOR = $dados_lista["pes_nome"];

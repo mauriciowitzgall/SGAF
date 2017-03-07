@@ -14,7 +14,7 @@ include "includes.php";
 //TÍTULO GERAL DA PAGINA
 $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "SAIDAS  ";
-$tpl_titulo->SUBTITULO = "LISTAGEM DE DEVOLUÇÕES";
+$tpl_titulo->SUBTITULO = "LISTAGEM DE AJUSTES DE SAIDAS";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "saidas.png";
 $tpl_titulo->show();
