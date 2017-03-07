@@ -44,6 +44,7 @@ $sql="SELECT *
      $ambientenfe=$dados["quicnf_ambientenfe"];
      $versaonfe=$dados["quicnf_versaonfe"];
      $usacomanda=$dados["quicnf_usacomanda"];
+     $classificacaopadraoestoque=$dados["quicnf_classificacaopadraoestoque"];
      $tipopessoanfe=$dados["qui_tipopessoa"];
      $cpf=$dados["qui_cpf"];
      $cnpj=$dados["qui_cnpj"];
@@ -641,6 +642,31 @@ $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->OPTION_VALOR = 0;
 $tpl1->OPTION_NOME = "Não";
 if ($usacomanda=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+//Estoque Classificação Padrão
+$tpl1->TITULO = "Ordenação Padrão Estoque";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_classificacaopadraoestoque";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "classificacaopadraoestoque";
+$tpl1->SELECT_ID = "classificacaopadraoestoque";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Nome do produto";
+if ($classificacaopadraoestoque=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 2;
+$tpl1->OPTION_NOME = "Referência do produto";
+if ($classificacaopadraoestoque=='2') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
 $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT");

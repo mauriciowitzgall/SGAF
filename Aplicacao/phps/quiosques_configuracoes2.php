@@ -19,6 +19,7 @@ $versaonfe = $_POST['versaonfe'];
 $razaosocial = $_POST['razaosocial'];
 $tipopessoanfe = $_POST['tipopessoanfe'];
 $usacomanda = $_POST['usacomanda'];
+$classificacaopadraoestoque = $_POST['classificacaopadraoestoque'];
 $cpf = $_POST['cpf'];
 $cpf = str_replace(".","", $cpf);
 $cpf = str_replace("-","", $cpf);
@@ -75,6 +76,7 @@ SET
     quicnf_tipoimpressaodanfe='$tipoimpressaodanfe',
     quicnf_ambientenfe='$ambientenfe',
     quicnf_usacomanda='$usacomanda',
+    quicnf_classificacaopadraoestoque='$classificacaopadraoestoque',
     quicnf_versaonfe='$versaonfe'
     $complemento    
 WHERE

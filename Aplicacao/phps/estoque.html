@@ -10,11 +10,11 @@
     </tr>
 </table>
 <hr align="left" class="linhacurta" >
-<br>
+
 
 <!-- BEGIN BLOCK_FILTRO  -->
 <form action="estoque.php" method="post" name="formfiltro">
-<table width="" class="tabelafiltro">
+<table width="" class="tabelafiltro" border="0">
     <tr>             
         <td><b>&nbsp;Produto:</b><br>
             <input type="text" size="35" name="filtroprodutonome" value="{PRODUTO_NOME}" class="campopadrao">
@@ -35,7 +35,10 @@
         <td><b>&nbsp;Descrição:</b><br>
             <input type="text" size="20" name="filtroprodutodescricao" value="{PRODUTO_DESCRICAO}" class="campopadrao">
         </td>
-        <td width="15px"></td>
+    </tr>
+</table>
+<table class="tabelafiltro" border="0">
+    <tr>
         <td><b>&nbsp;Categoria:</b><br>
             <select name="filtrocategoria" class="campopadrao">
                 <option value="">Todos</option> 
@@ -44,7 +47,6 @@
                 <!-- END BLOCK_FILTRO_CATEGORIA  -->
             </select>
         </td>         
-       
     </tr>      
 </table>
 <br>
@@ -70,7 +72,7 @@
     </tr>
     <!-- BEGIN BLOCK_LISTA -->
     <tr class="{ATINGIU_ESTOQUE_MINIMO}">
-        <td align="right">{PRODUTO_CODIGO}</td>
+        <td align="right">{PRODUTO_REFERENCIA}</td>
         <td><a href="produtos_cadastrar.php?codigo={PRODUTO_CODIGO}&ver=1&link=estoque.php" class="link {ATINGIU_ESTOQUE_MINIMO}" title="Ver detalhes"><span class="{ATINGIU_ESTOQUE_MINIMO}">{PRODUTO}</span></a></td>
         <td align="right" width="" >{QUANTIDADE}</td>        
         <td align="left" width="" >{SIGLA}</td>        

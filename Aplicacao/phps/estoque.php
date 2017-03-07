@@ -80,9 +80,21 @@ while ($dados_categoria = mysql_fetch_array($query_categoria)) {
     $tpl->block("BLOCK_FILTRO_CATEGORIA");
 }
 
-
-
 $tpl->block("BLOCK_FILTRO");
+
+//Verifica qual é a ordenação padrão das configuracões do quiosque
+$sql2 = "SELECT * FROM quiosques_configuracoes WHERE quicnf_quiosque=$usuario_quiosque";
+if (!$query2= mysql_query($sql2)) die("Erro: " . mysql_error());
+$dados2=  mysql_fetch_assoc($query2);
+$classificacaopadraoestoque=$dados2["quicnf_classificacaopadraoestoque"];
+if ($classificacaopadraoestoque==1) { //Por Nome do produto
+    $sql_ordenacao = "pro_nome, pro_referencia,pro_tamanho,pro_cor,pro_descricao";
+} else if ($classificacaopadraoestoque==2) { //Por Referencia do produto
+    $sql_ordenacao = "pro_referencia,pro_nome,pro_tamanho,pro_cor,pro_descricao";
+} else {
+    $sql_ordenacao = "pro_nome"; 
+}
+
 
 //Inicio da tabela de listagem
 //SQL principal
@@ -116,7 +128,7 @@ WHERE
 GROUP BY
     pro_codigo
 ORDER BY
-    pro_nome, pro_referencia,pro_tamanho,pro_cor,pro_descricao 
+    $sql_ordenacao 
 ";
 
 //Paginacão
@@ -167,9 +179,10 @@ if ($linhas != "") {
         $tamanho= $dados['pro_tamanho'];
         $cor= $dados['pro_cor'];
         $descricao= $dados['pro_descricao'];
-        $nome2=" $nome $referencia $tamanho $cor $descricao ";
+        $nome2=" $nome $tamanho $cor $descricao ";
         $tpl->PRODUTO = $nome2;
         $tpl->PRODUTO_CODIGO = $dados['pro_codigo'];
+        $tpl->PRODUTO_REFERENCIA = $dados['pro_referencia'];
         $tpl->MEDIA = "R$ ".number_format($dados['valunimedia'],2,',','.');
         $tipocontagem=$dados['protip_codigo'];
         if (($tipocontagem==2)||($tipocontagem==3))
@@ -180,7 +193,6 @@ if ($linhas != "") {
         //Se o usu�rio for um fornecedor ent�o n�o mostrar algumas colunas
         
         $tpl->CATEGORIA = $dados['cat_nome'];
-        $tpl->PRODUTO_CODIGO = $dados['pro_codigo'];
         $produto = $dados['pro_codigo'];
         $fornecedor = $dados['etq_fornecedor'];
         $sqltot = "

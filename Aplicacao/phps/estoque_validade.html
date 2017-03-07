@@ -41,7 +41,7 @@
 
     <table border="1" class="tabela1" cellpadding="4" width="100%">
         <tr valign="middle" class="tabelacabecalho1">
-            <td width="">PRODUTO</td>        
+            <td width="" colspan="2">PRODUTO</td>        
             <td width=""  colspan="2">FORNECEDOR</td>        
             <td width="" >LOTE</td>
             <td width="" colspan="2">QUANTIDADE</td>
@@ -50,6 +50,7 @@
         </tr>
         <!-- BEGIN BLOCK_LISTA -->
         <tr>
+            <td align="right">{PRODUTO_REFERENCIA}</td>
             <td align="left"> <a href="produtos_cadastrar.php?codigo={PRODUTO_CODIGO}&ver=1&link=estoque_validade.php" class="link " title="Ver detalhes"><span class="{VENCEU}">{PRODUTO}</span></a></td>
             <td class="{VENCEU}" align="right">{FORNECEDOR_ID}</td>
             <td align="left"><a href="pessoas_cadastrar.php?codigo={FORNECEDOR_CODIGO}&operacao=ver" class="link " title="Ver detalhes"><span class="{VENCEU}">{FORNECEDOR}</span></a></td>

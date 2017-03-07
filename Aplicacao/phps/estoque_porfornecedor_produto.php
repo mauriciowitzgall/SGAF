@@ -27,10 +27,27 @@ while ($dados=mysql_fetch_array($query)) {
     $tpl->FORNECEDOR_NOME=$dados["pes_nome"];
 }
 
+
+//Verifica qual é a ordenação padrão das configuracões do quiosque
+$sql2 = "SELECT * FROM quiosques_configuracoes WHERE quicnf_quiosque=$usuario_quiosque";
+if (!$query2= mysql_query($sql2)) die("Erro: " . mysql_error());
+$dados2=  mysql_fetch_assoc($query2);
+$classificacaopadraoestoque=$dados2["quicnf_classificacaopadraoestoque"];
+if ($classificacaopadraoestoque==1) { //Por nome do produto
+    $sql_ordenacao = "pro_nome, pro_referencia,pro_tamanho,pro_cor,pro_descricao";
+} else if ($classificacaopadraoestoque==2) { //Por referencia do produto
+    $sql_ordenacao = "pro_referencia,pro_nome,pro_tamanho,pro_cor,pro_descricao";
+} else {
+    $sql_ordenacao = "pro_nome"; 
+}
+
+
+
+
 //SQL principal
 $sql1 = "
 SELECT 
-    pro_nome, sum(etq_quantidade) as qtdtot, round(sum(etq_valorunitario*etq_quantidade),2) as valtot, protip_sigla,etq_fornecedor,etq_produto, count(etq_fornecedor) as lotes, protip_codigo, pro_referencia, pro_tamanho, pro_cor, pro_descricao
+    pro_nome, sum(etq_quantidade) as qtdtot, round(sum(etq_valorunitario*etq_quantidade),2) as valtot, protip_sigla,etq_fornecedor,etq_produto, count(etq_fornecedor) as lotes, protip_codigo, pro_tamanho, pro_cor, pro_descricao, pro_referencia
 FROM
     estoque
     join produtos on (etq_produto=pro_codigo)
@@ -41,7 +58,7 @@ WHERE
 GROUP BY
     etq_produto
 ORDER BY
-   pro_nome, pro_referencia,pro_tamanho,pro_cor,pro_descricao 
+   $sql_ordenacao
 ";
 
 
@@ -86,9 +103,10 @@ if ($linhas1 != "") {
         $tamanho= $dados1['pro_tamanho'];
         $cor= $dados1['pro_cor'];
         $descricao= $dados1['pro_descricao'];
-        $nome2=" $nome $referencia $tamanho $cor $descricao ";
+        $nome2=" $nome $tamanho $cor $descricao ";
         $tpl->PRODUTO_NOME = $nome2;
         $tpl->PRODUTO_CODIGO = $dados1['etq_produto'];
+        $tpl->PRODUTO_REFERENCIA = $dados1['pro_referencia'];
         $tpl->FORNECEDOR_CODIGO = $dados1['etq_fornecedor'];
         $tpl->LOTES = $dados1['lotes'];
         $tipocontagem=$dados1['protip_codigo'];

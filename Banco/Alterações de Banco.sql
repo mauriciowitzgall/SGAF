@@ -5768,9 +5768,9 @@ UPDATE `configuracoes` SET `cnf_versao`='v3.6' WHERE `cnf_codigo`='1';
 
 -- FIM --
 
--- Inicio versão 3.7
+-- Inicio versão 4.0b1
 
-UPDATE `configuracoes` SET `cnf_versao`='v3.7b' WHERE `cnf_codigo`='1';
+UPDATE `configuracoes` SET `cnf_versao`='v4.0b1' WHERE `cnf_codigo`='1';
 
 -- Criando estrutura inicial para implementação do módulo fiscal (nfe, nota fiscal eletronica)
 
@@ -17234,3 +17234,15 @@ INSERT INTO `sgaf_labodega`.`nfe_contribuinteicms` (`cicms_codigo`, `cicms_nome`
 ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
 CHANGE COLUMN `quicnf_usamodulofiscal` `quicnf_usamodulofiscal` INT(11) NOT NULL DEFAULT 0 ,
 ADD COLUMN `quicnf_usacomanda` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_csosnnfe`;
+
+
+
+# Versão 4.0b2 - Inicio
+
+UPDATE `sgaf_v4.0b1`.`configuracoes` SET `cnf_versao`='v4.0b2 ' WHERE `cnf_codigo`='1';
+
+ALTER TABLE `sgaf_v4.0b1`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_classificacaopadraoestoque` INT(3) NULL AFTER `quicnf_usacomanda`;
+
+
+

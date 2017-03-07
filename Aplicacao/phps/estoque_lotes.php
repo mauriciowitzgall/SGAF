@@ -89,8 +89,7 @@ while ($dados = mysql_fetch_array($query)) {
     $tamanho= $dados['pro_tamanho'];
     $cor= $dados['pro_cor'];
     $descricao= $dados['pro_descricao'];
-    $nome2=" $nome $referencia $tamanho $cor $descricao ";
-    
+    $nome2=" $nome $tamanho $cor $descricao ";
     $tpl->PRODUTO_NOME = $nome2;
     $tpl->FORNECEDOR_NOME = $dados['pes_nome'];
     $tpl->LOTE = $dados['etq_lote'];

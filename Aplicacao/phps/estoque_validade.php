@@ -78,6 +78,7 @@ SELECT
     etq_quantidade,
     protip_sigla,
     etq_validade,
+    pro_referencia,
     pro_referencia, pro_tamanho, pro_cor, pro_descricao
 FROM
     estoque
@@ -124,9 +125,10 @@ if ($linhas != "") {
         $tamanho= $dados['pro_tamanho'];
         $cor= $dados['pro_cor'];
         $descricao= $dados['pro_descricao'];
-        $nome2=" $nome $referencia $tamanho $cor $descricao ";
+        $nome2=" $nome $tamanho $cor $descricao ";
         $tpl->PRODUTO = $nome2;
         $tpl->PRODUTO_CODIGO = $dados['pro_codigo'];
+        $tpl->PRODUTO_REFERENCIA = $dados['pro_referencia'];
         $tpl->FORNECEDOR = $dados['pes_nome'];
         $tpl->FORNECEDOR_CODIGO = $dados['pes_codigo'];
         $tpl->FORNECEDOR_ID = $dados['pes_id'];

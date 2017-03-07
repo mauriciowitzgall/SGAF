@@ -1458,6 +1458,8 @@ if ($operacao == "editar") {
             $tpl1->TITULO_ID = "span_password";
             $tpl1->block("BLOCK_TITULO_ID");
             $tpl1->block("BLOCK_TITULO");
+            $tpl1->LINHA_ID="tr_senha";
+            $tpl1->block("BLOCK_LINHA_ID");            
             $tpl1->CAMPO_TIPO = "password";
             $tpl1->CAMPO_QTD_CARACTERES = "";
             $tpl1->CAMPO_NOME = "senha";
@@ -1482,6 +1484,8 @@ if ($operacao == "editar") {
             $tpl1->TITULO_ID = "span_senha2";
             $tpl1->block("BLOCK_TITULO_ID");
             $tpl1->block("BLOCK_TITULO");
+            $tpl1->LINHA_ID="tr_senha";
+            $tpl1->block("BLOCK_LINHA_ID");            
             $tpl1->CAMPO_TIPO = "password";
             $tpl1->CAMPO_QTD_CARACTERES = "";
             $tpl1->CAMPO_NOME = "senha2";
