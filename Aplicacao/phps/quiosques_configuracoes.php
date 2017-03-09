@@ -212,6 +212,7 @@ if ($usamodulofiscal==1) {
     $dados=mysql_fetch_assoc($query);
     $fatanual=$dados["fatanual"];
 }
+if ($fatanual=="") $fatanual=0;
 //echo "Faturamento Anual: ($fatanual)";
 $tpl1->CAMPO_VALOR= "R$ " . number_format($fatanual, 2, ',', '.');
 $tpl1->CAMPO_QTD_CARACTERES="9";
