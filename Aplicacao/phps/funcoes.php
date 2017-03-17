@@ -151,6 +151,15 @@ function usamodulofiscal($quiosque){
     return $usa;
 }
 
+function usadevolucoessobrevendas($quiosque){
+    $sql="SELECT quicnf_devolucoessobrevendas FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
+    if (!$query= mysql_query($sql)) die("Erro função pega configuração usa devoluções sobre vendas: " . mysql_error());
+    while ($dados=  mysql_fetch_assoc($query)) {    
+        $usa=$dados["quicnf_devolucoessobrevendas"];
+    }
+    return $usa;
+}
+
 function usamodulofiscal_tipopessoa($quiosque){
     $sql="SELECT qui_tipopessoa FROM quiosques WHERE qui_codigo=$quiosque";
     if (!$query= mysql_query($sql)) die("Erro SQL Função: usamodulofiscal_tipopessoa: " . mysql_error());

@@ -1083,7 +1083,7 @@ if ($passo == 2) {
             $tpl1->LISTA_PRODUTO_REFERENCIA = $prod_referencia;
             $tpl1->LISTA_PRODUTO = $nome2;
             $tpl1->LISTA_PRODUTO_COD = $dados_lista["pro_codigo"];
-            $tpl1->LISTA_FORNECEDOR = $dados_lista["pes_nome"];
+            //$tpl1->LISTA_FORNECEDOR = $dados_lista["pes_nome"];
             $tpl1->LISTA_LOTE = $dados_lista["saipro_lote"];
             $tipocontagem=$dados_lista["pro_tipocontagem"];
             if (($tipocontagem==2)||($tipocontagem==3)) {
@@ -1109,6 +1109,9 @@ if ($passo == 2) {
     }
     $tpl1->TOTAL_GERAL = "R$ " . number_format($total_geral, 2, ',', '.');
     $tpl1->block("BLOCK_LISTAGEM");
+    
+    //BOTÕES
+    //Botão Finalizar/Avançar/Salvar
     if ($tiposaida == 1) {
         $tpl1->FORM_LINK = "saidas_cadastrar2.php?tiposai=$tiposaida";
         $tpl1->block("BLOCK_SALVAR_VENDA");
@@ -1117,14 +1120,48 @@ if ($passo == 2) {
         $tpl1->block("BLOCK_SALVAR_DEVOLUCAO");
     }
     $tpl1->block("BLOCK_BOTOES_RODAPE_SALVAR");
-    $tpl1->LINK_CANCELAR = "saidas_deletar.php?codigo=$saida&tiposaida=$tiposaida";
-    $tpl1->block("BLOCK_BOTOES_RODAPE_ELIMINAR");
+    
+    
+    //Botão Cancelar
     if ($tiposaida == 1) {
         $tpl1->LINK_CANCELAR = "saidas.php";
     } else {
         $tpl1->LINK_CANCELAR = "saidas_devolucao.php";
     }
     $tpl1->block("BLOCK_BOTOES_RODAPE_CANCELAR");
+    
+    
+    //Botão Eliminar Venda
+    //Verificar se foi emitido nota, se sim então não permitir a eliminação da venda
+    $sql="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
+    if (!$query = mysql_query($sql)) die("Erro BOTÃO ELIMINAR VENDA: (((" . mysql_error().")))");
+    $linhas = mysql_num_rows($query);
+    if ($linhas==0) {
+        $temnota=0;
+        $tpl1->LINK_ELIMINAR = "saidas_deletar.php?codigo=$saida&tiposaida=$tiposaida";
+        $tpl1->block("BLOCK_BOTOES_RODAPE_ELIMINAR");
+    } else {
+        $temnota=1;
+    }
+    
+    
+    //Botão Devoluções
+    $usadevolucoessobrevendas=usadevolucoessobrevendas($usuario_quiosque);
+    if ($usadevolucoessobrevendas==1) {
+        $tpl1->LINK_DEVOLUCOES = "saidas_devolucoes.php?codigo=$saida";
+        $tpl1->block("BLOCK_BOTOES_RODAPE_DEVOLUCOES");  
+    }
+    
+    //Botão Cancelar Nota
+    //Se foi emitido nota fiscal e o usuário usa módulo fisca então pode cancelar a nota
+    $usamodulofiscal=usamodulofiscal($usuario_quiosque);
+    //echo "[$usadevolucoessobrevendas]";
+    if (($temnota==1)&&($usamodulofiscal==1)) {
+        $tpl1->LINK_CANCELARNOTA = "saidas_cancelarnota.php?codigo=$saida";
+        $tpl1->block("BLOCK_BOTOES_RODAPE_CANCELARNOTA");  
+    }
+    
+    
     $tpl1->block("BLOCK_BOTOES_RODAPE");
 }
 

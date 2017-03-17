@@ -89,7 +89,7 @@ if ($usamodulofiscal==1) {
     if ($fatanual<=3600000) {    
         //Verifica qual é o valor do ICMS a partir da tabela de calculo pronta 
         $sql_simplesnacional = "SELECT nfesn_icms FROM nfe_simplesnacional WHERE nfesn_de <= $fatanual AND nfesn_ate >= $fatanual";
-        if (!$query_simplesnacional = mysql_query($sql_simplesnacional)) die("Erro SQL Consulta ICMS Simples Nacional: ".mysql_error());
+        if (!$query_simplesnacional = mysql_query($sql_simplesnacional)) die(" Você está utilizando o módulo fiscal, é necessário que iformar ao sistema o faturamento de sua empresa dos utlimos 12 meses. Solicitie a um administrador para inserir estas informações no banco de dados antes de iniciar o cadastro de produtos. ");
         $dados_simplesnacional=  mysql_fetch_assoc($query_simplesnacional);
         $icms_atual=$dados_simplesnacional["nfesn_icms"];
         $simplesnacional=1;

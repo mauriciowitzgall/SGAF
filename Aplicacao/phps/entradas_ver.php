@@ -103,14 +103,15 @@ $tpl->block("BLOCK_HR");
 
 $tpl->block("BLOCK_DATAHORA");
 
+
+
 //Cabeçalho
-if ($tiponegociacao == 1) {
-    $tpl->block("BLOCK_VENDA_VALUNI_CABECALHO");
-    $tpl->block("BLOCK_VENDA_CABECALHO");
-} else if ($tiponegociacao == 2) {
+$tpl->block("BLOCK_VENDA_VALUNI_CABECALHO");
+if ($tiponegociacao==2) {
     $tpl->block("BLOCK_CUSTO_CABECALHO");
-    $tpl->block("BLOCK_VENDA_CABECALHO");
+    $tpl->block("BLOCK_SUBPRODUTOS_CABECALHO");
 }
+$tpl->block("BLOCK_VENDA_CABECALHO");
 
 
 
@@ -130,7 +131,9 @@ SELECT
     protip_sigla,
     protip_codigo,
     ent_tiponegociacao,
-    entpro_valunicusto
+    entpro_valunicusto,
+    entpro_temsubprodutos,
+    entpro_retiradodoestoquesubprodutos
 FROM
     entradas_produtos
     join entradas on (ent_codigo=entpro_entrada) 
@@ -147,8 +150,10 @@ if (!$query)
 
 
 while ($dados = mysql_fetch_array($query)) {
+    $numero = $dados[9];
     $validade = $dados[5];
     $tpl->ENTRADAS_NUMERO = $dados[9];
+    $tpl->PRODUTO = $dados[3];
     $tpl->ENTRADAS_PRODUTO = $dados[3];
     $tpl->ENTRADAS_PRODUTO_NOME = $dados[0];
     $tpl->ENTRADAS_DATA = converte_data($dados[7]);
@@ -169,11 +174,55 @@ while ($dados = mysql_fetch_array($query)) {
         $tpl->block("BLOCK_VENDA_VALUNI");
     }
 
-
-
-    $tpl->PRODUTO = $dados[3];
-    $numero = $dados[9];
+    
     $tpl->ENTRADAS_VALIDADE = converte_data($validade);
+    
+    //Subprodutos
+    if ($tiponegociacao==2) {
+        
+    
+        $subprodutos_retirado_do_estoque=$dados["entpro_retiradodoestoquesubprodutos"];
+        $temsubprodutos2=$dados["entpro_temsubprodutos"];
+        if ($temsubprodutos2==1) { //mostra icone
+            $tpl->NOMEARQUIVO="subproduto.png";
+            $tpl->TITULO="Este é um produto composto (possui sub-produtos)";
+
+            if ($subprodutos_retirado_do_estoque==1) {
+                $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="saidas.png";
+                $tpl->SUBPRODUTOS_TITULO="Os subprodutos foram retirados do estoque";
+                $tpl->SUBPRODUTOS_ALINHAMENTO="right";
+                $tpl->SUBPRODUTOS_NOMEICONEARQUIVO_VER="procurar.png";
+                $tpl->block("BLOCK_SUBPRODUTOS");
+                $tpl->block("BLOCK_SUBPRODUTOS_VER");
+                $tpl->SUBPRODUTOS_COLSPAN="";
+            }
+            else if ($subprodutos_retirado_do_estoque==2) {
+                $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="saidas2.png";
+                $tpl->SUBPRODUTOS_NOMEICONEARQUIVO_VER="procurar_desabilitado.png";
+                $tpl->SUBPRODUTOS_TITULO="Optou-se por não realizar a retirada dos sub-produtos do estoque";
+                $tpl->SUBPRODUTOS_COLSPAN="";
+                $tpl->SUBPRODUTOS_ALINHAMENTO="right";
+                $tpl->block("BLOCK_SUBPRODUTOS");
+                $tpl->block("BLOCK_SUBPRODUTOS_VER");
+            } else { //não foi deicido ainda o que ferá se vai tirar do estoque ou não
+                $tpl->SUBPRODUTOS_COLSPAN="2";
+                $tpl->SUBPRODUTOS_ALINHAMENTO="center";
+                $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="atencao.png";
+                $tpl->SUBPRODUTOS_TITULO="Ainda não decidiu-se se será realizado a retirada dos sub-produtos do estoque";
+                $tpl->block("BLOCK_SUBPRODUTOS");
+
+
+            }
+        } else { //não mostra icone
+            $tpl->NOMEARQUIVO="subproduto2.png";
+            $tpl->TITULO="Este é não é um produto composto.";
+            $tpl->SUBPRODUTOS_COLSPAN="2";
+
+        }
+        $tpl->block("BLOCK_SUBPRODUTOS_TEM");    
+        $tpl->block("BLOCK_SUBPRODUTOS_MOSTRAR");    
+    }
+    
     $tpl->IMPRIMIR_LINK = "entradas_etiquetas.php?lote=$entrada&numero=$numero";
     $tpl->IMPRIMIR = $icones . "etiquetas.png";
 
@@ -182,11 +231,15 @@ while ($dados = mysql_fetch_array($query)) {
     $tpl->block("BLOCK_LISTA");
 }
 
+//RODAPÉ
+
 if ($tiponegociacao == 2) {
     $tpl->block("BLOCK_CUSTO_RODAPE");
+    $tpl->block("BLOCK_SUBPRODUTOS_RODAPE");
+} else {
+    $tpl->block("BLOCK_VENDA_VALUNI_RODAPE");
 }
 
-$tpl->block("BLOCK_VENDA_VALUNI_RODAPE");
 
 //Calcula o total de venda
 if ($tiponegociacao == 1) {
@@ -195,7 +248,7 @@ if ($tiponegociacao == 1) {
     $dados11 = mysql_fetch_array($query11);
     $tot11 = "R$ " . number_format($dados11[0], 2, ',', '.');
     $tpl->TOTAL_VENDA = "$tot11";
-    $tpl->block("BLOCK_VENDA_RODAPE");
+    //$tpl->block("BLOCK_VENDA_RODAPE");
 }
 
 //Calcula o valor total de custo geral da entrada

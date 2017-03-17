@@ -18,9 +18,11 @@
             
         
         }
+        
         tipneg= $("select[name=tiponegociacao]").val();
-        //alert(tipneg);
-        popula_tipopessoa(tipneg);
+        if (passo<=2) popula_tipopessoa(tipneg);
+
+        
 
     };
 
@@ -483,7 +485,7 @@ function limpa_item_validade (){
             <td width="100px" align="center" colspan="2">QUANTIDADE</td>	
             <!-- BEGIN BLOCK_CUSTO_CABECALHO -->
             <td width="" align="center">VALOR UNIT. CUSTO</td>          
-            <!-- <td width="" align="center">VALOR TOT. CUSTO</td> -->
+            <td width="" align="center">VALOR TOT. CUSTO</td>
             <!-- END BLOCK_CUSTO_CABECALHO -->
             <!-- BEGIN BLOCK_VENDA_VALUNI_CABECALHO -->
             <td width="" align="center">VALOR UNIT. VENDA</td>          
@@ -512,7 +514,7 @@ function limpa_item_validade (){
             <td align="left">{SIGLA}</td>
             <!-- BEGIN BLOCK_CUSTO -->
             <td align="right">{ENTRADAS_VALORUNI_CUSTO}</td>
-             <!-- <td align="right">{ENTRADAS_VALOR_TOTAL_CUSTO}</td> -->
+            <td align="right">{ENTRADAS_VALOR_TOTAL_CUSTO}</td>
             <!-- END BLOCK_CUSTO -->
             <!-- BEGIN BLOCK_VENDA_VALUNI -->
             <td align="right">{ENTRADAS_VALORUNI}</td>    
@@ -521,23 +523,26 @@ function limpa_item_validade (){
              <!-- <td align="right">{ENTRADAS_VENDA_TOTAL}</td> -->                    
             <!-- END BLOCK_VENDA -->
             <td align="right">{ENTRADAS_VALIDADE}</td>
+            
+            <!-- BEGIN BLOCK_SUBPRODUTOS_MOSTRAR -->
             <td align="right">
-                <!-- BEGIN BLOCK_SUBPRODUTOS_TEM -->
+            <!-- BEGIN BLOCK_SUBPRODUTOS_TEM -->
                 <img  width="15px"  src="../imagens/icones/geral/{NOMEARQUIVO}"  title="{TITULO}" alt="{TITULO}" />
-                <!-- END BLOCK_SUBPRODUTOS_TEM -->
+            <!-- END BLOCK_SUBPRODUTOS_TEM -->
             </td>
             <td align="{SUBPRODUTOS_ALINHAMENTO}" colspan="{SUBPRODUTOS_COLSPAN}">
-                <!-- BEGIN BLOCK_SUBPRODUTOS -->
+            <!-- BEGIN BLOCK_SUBPRODUTOS -->
                 <img  width="15px"  src="../imagens/icones/geral/{SUBPRODUTOS_NOMEICONEARQUIVO}"  title="{SUBPRODUTOS_TITULO}" alt="{SUBPRODUTOS_TITULO}" />
-                <!-- END BLOCK_SUBPRODUTOS -->
+            <!-- END BLOCK_SUBPRODUTOS -->
             </td>
-                <!-- BEGIN BLOCK_SUBPRODUTOS_VER -->
+            <!-- BEGIN BLOCK_SUBPRODUTOS_VER -->
             <td align="left">
                 <a href="#" target="_blank" class="link1">
                     <img  width="15px"  src="../imagens/icones/geral/{SUBPRODUTOS_NOMEICONEARQUIVO_VER}"  title="Ver Sub-produtos" alt="Ver" />
                 </a>
             </td>
-                <!-- END BLOCK_SUBPRODUTOS_VER -->
+            <!-- END BLOCK_SUBPRODUTOS_VER -->
+            <!-- END BLOCK_SUBPRODUTOS_MOSTRAR -->
             
             <!-- BEGIN BLOCK_LUCRO -->
             <td align="right">{ENTRADAS_VALOR_LUCRO}</td>
@@ -577,23 +582,22 @@ function limpa_item_validade (){
             <td> </td>
             <td> </td>
             <!-- BEGIN BLOCK_CUSTO_RODAPE -->
-            <td> </td>
-             <!--  <td align="right">{TOTAL_CUSTO}</td> -->
+            <td align="right"></td>
+            <td align="right">{TOTAL_CUSTO}</td>
             <!-- END BLOCK_CUSTO_RODAPE -->
             <!-- BEGIN BLOCK_VENDA_VALUNI_RODAPE -->
             <td> </td>            
             <!-- END BLOCK_VENDA_VALUNI_RODAPE -->
             <!-- BEGIN BLOCK_VENDA_RODAPE -->
-            <!--  <td align="right">{TOTAL_VENDA}</td> -->
+            <td align="right">{TOTAL_VENDA}</td>
             <!-- END BLOCK_VENDA_RODAPE -->
             <!-- BEGIN BLOCK_LUCRO_RODAPE -->
-             <!-- <td align="right">{TOTAL_LUCRO}</td> -->
+            <td align="right">{TOTAL_LUCRO}</td>
             <!-- END BLOCK_LUCRO_RODAPE -->
             <td> </td>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-            <td> </td>
+            <!--  BEGIN BLOCK_SUBPRODUTOS_RODAPE -->            
+            <td colspan="3"></td>
+            <!--  END BLOCK_SUBPRODUTOS_RODAPE -->            
             <!--  BEGIN BLOCK_LISTA_NADA_OPERACAO -->            
             <td> </td>
             <!--  END BLOCK_LISTA_NADA_OPERACAO -->

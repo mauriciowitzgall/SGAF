@@ -107,6 +107,19 @@ if ($filtroproprio=="") $filtroproprio=1;
     <br>
 
     <?php
+    
+    //Verifica qual é a ordenação padrão das configuracões do quiosque
+    $sql2 = "SELECT * FROM quiosques_configuracoes WHERE quicnf_quiosque=$usuario_quiosque";
+    if (!$query2= mysql_query($sql2)) die("Erro: " . mysql_error());
+    $dados2=  mysql_fetch_assoc($query2);
+    $classificacaopadraoestoque=$dados2["quicnf_classificacaopadraoestoque"];
+    if ($classificacaopadraoestoque==1) { //Por Nome do produto
+        $sql_ordenacao = "pro_nome, pro_referencia,pro_tamanho,pro_cor,pro_descricao";
+    } else if ($classificacaopadraoestoque==2) { //Por Referencia do produto
+        $sql_ordenacao = "pro_referencia,pro_nome,pro_tamanho,pro_cor,pro_descricao";
+    } else {
+        $sql_ordenacao = "pro_nome"; 
+    }    
     if ($filtrocodigo != "")
         $sql_filtro = $sql_filtro . " and pro_codigo=$filtrocodigo";
     if ($filtronome != "")
@@ -131,7 +144,7 @@ FROM produtos
 left join produtos_recipientes on (pro_recipiente=prorec_codigo)
 WHERE pro_cooperativa=$usuario_cooperativa
 $sql_filtro
-ORDER BY pro_nome, pro_referencia, pro_tamanho, pro_cor, pro_descricao
+ORDER BY $sql_ordenacao
 ";
 
 //Paginação

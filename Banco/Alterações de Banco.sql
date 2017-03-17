@@ -17245,4 +17245,46 @@ ALTER TABLE `sgaf_v4.0b1`.`quiosques_configuracoes`
 ADD COLUMN `quicnf_classificacaopadraoestoque` INT(3) NULL AFTER `quicnf_usacomanda`;
 
 
+CREATE TABLE `sgaf_v4.0b1`.`saidas_devolucoes` (
+  `saidev_saida` INT NOT NULL,
+  `saidev_numero` VARCHAR(45) NOT NULL,
+  `saidev_data` VARCHAR(45) NOT NULL,
+  `saidev_usuario` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`saidev_saida`, `saidev_numero`));
 
+CREATE TABLE `sgaf_v4.0b1`.`saidas_devolucoes_produtos` (
+  `saidevpro_saida` INT NOT NULL,
+  `saidevpro_numero` VARCHAR(45) NOT NULL,
+  `saidevpro_item` VARCHAR(45) NOT NULL,
+  `saidevpro_produto` VARCHAR(45) NOT NULL,
+  `saidevpro_qtddevolvida` VARCHAR(45) NOT NULL,
+  `saidevpro_valuni` VARCHAR(45) NOT NULL,
+  `saidevpro_valtot` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`saidevpro_saida`, `saidevpro_numero`, `saidevpro_item`));
+
+ALTER TABLE `sgaf_v4.0b1`.`saidas_devolucoes` 
+CHANGE COLUMN `saidev_saida` `saidev_saida` BIGINT(20) NOT NULL ,
+CHANGE COLUMN `saidev_numero` `saidev_numero` INT(4) NOT NULL ,
+CHANGE COLUMN `saidev_data` `saidev_data` DATETIME NOT NULL ,
+CHANGE COLUMN `saidev_usuario` `saidev_usuario` INT(11) NOT NULL ,
+ADD COLUMN `saidev_valtot` FLOAT NULL AFTER `saidev_usuario`;
+
+ALTER TABLE `sgaf_v4.0b1`.`saidas_devolucoes` 
+CHANGE COLUMN `saidev_numero` `saidev_numero` INT(3) NOT NULL ;
+
+ALTER TABLE `sgaf_v4.0b1`.`saidas_devolucoes_produtos` 
+CHANGE COLUMN `saidevpro_saida` `saidevpro_saida` BIGINT(20) NOT NULL ,
+CHANGE COLUMN `saidevpro_numero` `saidevpro_numero` INT(3) NOT NULL ,
+CHANGE COLUMN `saidevpro_item` `saidevpro_item` INT(4) NOT NULL ,
+CHANGE COLUMN `saidevpro_produto` `saidevpro_produto` BIGINT(20) NOT NULL ,
+CHANGE COLUMN `saidevpro_qtddevolvida` `saidevpro_qtddevolvida` FLOAT NOT NULL ,
+CHANGE COLUMN `saidevpro_valuni` `saidevpro_valuni` FLOAT NOT NULL ,
+CHANGE COLUMN `saidevpro_valtot` `saidevpro_valtot` FLOAT NOT NULL ;
+
+ALTER TABLE `sgaf_v4.0b1`.`nfe_vendas` 
+ADD COLUMN `nfe_finalidade` INT(1) NOT NULL AFTER `nfe_usuario`;
+
+ALTER TABLE `sgaf_v4.0b1`.`quiosques_configuracoes` 
+CHANGE COLUMN `quicnf_usacomanda` `quicnf_usacomanda` INT(1) NOT NULL DEFAULT 1 ,
+CHANGE COLUMN `quicnf_classificacaopadraoestoque` `quicnf_classificacaopadraoestoque` INT(3) NOT NULL DEFAULT 1 ,
+ADD COLUMN `quicnf_devolucoessobrevendas` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_classificacaopadraoestoque`;

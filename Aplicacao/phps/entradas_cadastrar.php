@@ -264,24 +264,21 @@ ORDER BY
 $query = mysql_query($sql);
 if ($query) {
     $tpl->SELECT_OBRIGATORIO = " required ";
-    if ($passo == "") {
-        $tpl->SELECT_DESABILITADO = "";
-    } else {
-        $tpl->SELECT_DESABILITADO = " disabled ";
-    }
+    if ($passo == "")  $tpl->SELECT_DESABILITADO = "";
+    else  //$tpl->SELECT_DESABILITADO = " disabled ";
+    
     //Caso a operação seja VER ent�o desabilitar o select e trocar a classe
-    if ($operacao == 3) {
-        $tpl->SELECT_DESABILITADO = " disabled ";
-    }
+    if ($operacao == 3) $tpl->SELECT_DESABILITADO = " disabled ";
+    
     if ($operacao != 1) {
-
         while ($dados = mysql_fetch_array($query)) {
             $tpl->OPTION_VALOR = $dados[0];
             $tpl->OPTION_TEXTO = "$dados[1]";
             if ($dados[0] == $fornecedor) {
+                //echo "$dados[0] == $fornecedor";
                 $tpl->OPTION_SELECIONADO = " SELECTED ";
             } else {
-                $tpl->OPTION_SELECIONADO = "";
+                $tpl->OPTION_SELECIONADO = " ";
             }
             $tpl->block("BLOCK_OPTIONS_FORNECEDOR");
         }
@@ -675,8 +672,8 @@ if ($passo != "") {
     IF ($tiponegociacao == 2) {
         $tpl->block("BLOCK_CUSTO_CABECALHO");
         //$tpl->block("BLOCK_LUCRO_CABECALHO");
+        $tpl->block("BLOCK_SUBPRODUTOS_CABECALHO");
     }
-    $tpl->block("BLOCK_SUBPRODUTOS_CABECALHO");
     $tpl->block("BLOCK_VENDA_VALUNI_CABECALHO");
     $tpl->block("BLOCK_VENDA_CABECALHO");
 
@@ -719,45 +716,48 @@ if ($passo != "") {
                 $tpl->ENTRADAS_VALIDADE= converte_data($dados[5]);
                 
                 //Subprodutos
-                $subprodutos_retirado_do_estoque=$dados["entpro_retiradodoestoquesubprodutos"];
-                $temsubprodutos2=$dados["entpro_temsubprodutos"];
-                if ($temsubprodutos2==1) { //mostra icone
-                    $tpl->NOMEARQUIVO="subproduto.png";
-                    $tpl->TITULO="Este é um produto composto (possui sub-produtos)";
-                    
-                    if ($subprodutos_retirado_do_estoque==1) {
-                        $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="saidas.png";
-                        $tpl->SUBPRODUTOS_TITULO="Os subprodutos foram retirados do estoque";
-                        $tpl->SUBPRODUTOS_ALINHAMENTO="right";
-                        $tpl->SUBPRODUTOS_NOMEICONEARQUIVO_VER="procurar.png";
-                        $tpl->block("BLOCK_SUBPRODUTOS");
-                        $tpl->block("BLOCK_SUBPRODUTOS_VER");
-                        $tpl->SUBPRODUTOS_COLSPAN="";
-                    }
-                    else if ($subprodutos_retirado_do_estoque==2) {
-                        $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="saidas2.png";
-                        $tpl->SUBPRODUTOS_NOMEICONEARQUIVO_VER="procurar_desabilitado.png";
-                        $tpl->SUBPRODUTOS_TITULO="Optou-se por não realizar a retirada dos sub-produtos do estoque";
-                        $tpl->SUBPRODUTOS_COLSPAN="";
-                        $tpl->SUBPRODUTOS_ALINHAMENTO="right";
-                        $tpl->block("BLOCK_SUBPRODUTOS");
-                        $tpl->block("BLOCK_SUBPRODUTOS_VER");
-                    } else { //não foi deicido ainda o que ferá se vai tirar do estoque ou não
+                if ($tiponegociacao!=1) {
+                    $subprodutos_retirado_do_estoque=$dados["entpro_retiradodoestoquesubprodutos"];
+                    $temsubprodutos2=$dados["entpro_temsubprodutos"];
+                    if ($temsubprodutos2==1) { //mostra icone
+                        $tpl->NOMEARQUIVO="subproduto.png";
+                        $tpl->TITULO="Este é um produto composto (possui sub-produtos)";
+
+                        if ($subprodutos_retirado_do_estoque==1) {
+                            $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="saidas.png";
+                            $tpl->SUBPRODUTOS_TITULO="Os subprodutos foram retirados do estoque";
+                            $tpl->SUBPRODUTOS_ALINHAMENTO="right";
+                            $tpl->SUBPRODUTOS_NOMEICONEARQUIVO_VER="procurar.png";
+                            $tpl->block("BLOCK_SUBPRODUTOS");
+                            $tpl->block("BLOCK_SUBPRODUTOS_VER");
+                            $tpl->SUBPRODUTOS_COLSPAN="";
+                        }
+                        else if ($subprodutos_retirado_do_estoque==2) {
+                            $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="saidas2.png";
+                            $tpl->SUBPRODUTOS_NOMEICONEARQUIVO_VER="procurar_desabilitado.png";
+                            $tpl->SUBPRODUTOS_TITULO="Optou-se por não realizar a retirada dos sub-produtos do estoque";
+                            $tpl->SUBPRODUTOS_COLSPAN="";
+                            $tpl->SUBPRODUTOS_ALINHAMENTO="right";
+                            $tpl->block("BLOCK_SUBPRODUTOS");
+                            $tpl->block("BLOCK_SUBPRODUTOS_VER");
+                        } else { //não foi deicido ainda o que ferá se vai tirar do estoque ou não
+                            $tpl->SUBPRODUTOS_COLSPAN="2";
+                            $tpl->SUBPRODUTOS_ALINHAMENTO="center";
+                            $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="atencao.png";
+                            $tpl->SUBPRODUTOS_TITULO="Ainda não decidiu-se se será realizado a retirada dos sub-produtos do estoque";
+                            $tpl->block("BLOCK_SUBPRODUTOS");
+
+
+                        }
+                    } else { //não mostra icone
+                        $tpl->NOMEARQUIVO="subproduto2.png";
+                        $tpl->TITULO="Este é não é um produto composto.";
                         $tpl->SUBPRODUTOS_COLSPAN="2";
-                        $tpl->SUBPRODUTOS_ALINHAMENTO="center";
-                        $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="atencao.png";
-                        $tpl->SUBPRODUTOS_TITULO="Ainda não decidiu-se se será realizado a retirada dos sub-produtos do estoque";
-                        $tpl->block("BLOCK_SUBPRODUTOS");
 
-                        
                     }
-                } else { //não mostra icone
-                    $tpl->NOMEARQUIVO="subproduto2.png";
-                    $tpl->TITULO="Este é não é um produto composto.";
-                    $tpl->SUBPRODUTOS_COLSPAN="2";
-
+                    $tpl->block("BLOCK_SUBPRODUTOS_TEM");
+                    $tpl->block("BLOCK_SUBPRODUTOS_MOSTRAR");
                 }
-                $tpl->block("BLOCK_SUBPRODUTOS_TEM");
                 
                 
                 
@@ -821,6 +821,7 @@ if ($passo != "") {
         if ($tiponegociacao == 2) {
             $tpl->block("BLOCK_CUSTO_RODAPE");
             //$tpl->block("BLOCK_LUCRO_RODAPE");
+            $tpl->block("BLOCK_SUBPRODUTOS_RODAPE");
         }
         $tpl->block("BLOCK_VENDA_RODAPE");
         $tpl->block("BLOCK_PASSO2");

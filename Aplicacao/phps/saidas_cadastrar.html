@@ -107,7 +107,9 @@
     <tr valign="middle" class="tabelacabecalho1">                   
         <td width="" colspan="">Nº</td>     
         <td width="" colspan="2">PRODUTO</td>
+        <!-- BEGIN BLOCK_LISTA_CABECALHO_FORNECEDOR -->
         <td width="" colspan="">FORNECEDOR</td>
+        <!-- END BLOCK_LISTA_CABECALHO_FORNECEDOR -->
         <td width="" colspan="">LOTE</td>
         <td width="" colspan="2">QUANTIDADE</td>
         <!--  BEGIN BLOCK_LISTA_PORCAO_CABECALHO -->
@@ -123,7 +125,10 @@
         <td>{LISTA_NUM}</td>     
         <td>{LISTA_PRODUTO_REFERENCIA}</td>
         <td>{LISTA_PRODUTO}</td>
+        
+        <!-- BEGIN BLOCK_LISTA_FORNECEDOR -->
         <td>{LISTA_FORNECEDOR}</td>
+        <!-- END BLOCK_LISTA_FORNECEDOR -->
         <td>{LISTA_LOTE}</td>
         <td align="right">{LISTA_QTD}</td>
         <td align="left">{LISTA_TIPOCONTAGEM}</td>
@@ -172,17 +177,33 @@
 <input type="hidden" name="valbru2" value="{VALBRU2}">
 <input type="hidden" name="saida" value="{LISTA_GET_SAIDA}">
 <input type="hidden" name="passo" value="1">
-<table>
+<table border="0" >
     <tr>
             
         <!-- BEGIN BLOCK_BOTOES_RODAPE_ELIMINAR -->
-        <td width="100%" align="left">
-            <a href="{LINK_CANCELAR}" class="link">
+        <td width="" align="left">
+            <a href="{LINK_ELIMINAR}" class="link">
                 <input type="button" value="ELIMINAR A VENDA" class="botao botaovermelho fonte3"  >
             </a>    
         </td>
         <!-- END BLOCK_BOTOES_RODAPE_ELIMINAR -->
         
+        <!-- BEGIN BLOCK_BOTOES_RODAPE_DEVOLUCOES -->
+        <td width="" align="left">
+            <a href="{LINK_DEVOLUCOES}" class="link">
+                <input type="button" value="DEVOLUÇÕES" class="botao botaoamarelo fonte3"  >
+            </a>    
+        </td>
+        <!-- END BLOCK_BOTOES_RODAPE_DEVOLUCOES -->
+        
+        <!-- BEGIN BLOCK_BOTOES_RODAPE_CANCELARNOTA -->
+        <td width="" align="left">
+            <a href="{LINK_CANCELARNOTA}" class="link">
+                <input type="button" value="CANCELAR NOTA" class="botao botaovermelho fonte3"  >
+            </a>    
+        </td>
+        <!-- END BLOCK_BOTOES_RODAPE_CANCELARNOTA -->
+        <td width="100%"> </td>
         <!-- BEGIN BLOCK_BOTOES_RODAPE_CANCELAR -->
         <td>
             <a href="{LINK_CANCELAR}" class="link">

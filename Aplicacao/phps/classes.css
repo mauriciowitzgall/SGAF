@@ -151,6 +151,13 @@
     background-color: #900000;
     color:white;
 }
+.botaoamarelo {    
+    background-color: lightyellow;
+}
+.botaoamarelo:hover {    
+    background-color: #660;
+    color:white;
+}
 .botaoverde {    
     background-color: #E0EEE0
 }
