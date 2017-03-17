@@ -206,12 +206,12 @@ $tpl2 = new Template("templates/lista1.html");
 $tpl2->block(BLOCK_TABELA_CHEIA);
 
 //Cabecalho
-$tpl2->CABECALHO_COLUNA_TAMANHO = "100px";
+$tpl2->CABECALHO_COLUNA_TAMANHO = "30px";
 $tpl2->CABECALHO_COLUNA_COLSPAN = "";
 $tpl2->CABECALHO_COLUNA_NOME = "Nº";
 $tpl2->block(BLOCK_LISTA_CABECALHO);
 $tpl2->CABECALHO_COLUNA_TAMANHO = "";
-$tpl2->CABECALHO_COLUNA_COLSPAN = "";
+$tpl2->CABECALHO_COLUNA_COLSPAN = "2";
 $tpl2->CABECALHO_COLUNA_NOME = "PRODUTO";
 $tpl2->block(BLOCK_LISTA_CABECALHO);
 $tpl2->CABECALHO_COLUNA_TAMANHO = "";
@@ -265,15 +265,20 @@ while ($dados2 = mysql_fetch_assoc($query2)) {
     $tpl2->LISTA_COLUNA_VALOR = $dados2["saipro_codigo"];
     $tpl2->block("BLOCK_LISTA_COLUNA");
 
-    $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
-    $tpl2->LISTA_COLUNA_TAMANHO = "";
-    $tpl2->LISTA_COLUNA_CLASSE = "";
     $nome= $dados2['pro_nome'];
     $referencia= $dados2['pro_referencia'];
     $tamanho= $dados2['pro_tamanho'];
     $cor= $dados2['pro_cor'];
     $descricao= $dados2['pro_descricao'];
-    $nome2=" $nome $referencia $tamanho $cor $descricao ";
+    $nome2="$nome $tamanho $cor $descricao ";
+    $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
+    $tpl2->LISTA_COLUNA_TAMANHO = "";
+    $tpl2->LISTA_COLUNA_CLASSE = "";
+    $tpl2->LISTA_COLUNA_VALOR = $referencia;
+    $tpl2->block("BLOCK_LISTA_COLUNA");
+    $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
+    $tpl2->LISTA_COLUNA_TAMANHO = "";
+    $tpl2->LISTA_COLUNA_CLASSE = "";
     $tpl2->LISTA_COLUNA_VALOR = $nome2;
     $tpl2->block("BLOCK_LISTA_COLUNA");
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
@@ -324,6 +329,8 @@ $tpl2->LISTA_CLASSE = "tabelarodape1";
 
 $tpl2->LISTA_CLASSE = "tabelarodape1";
 $tpl2->block("BLOCK_LISTA_CLASSE");
+$tpl2->LISTA_COLUNA_VALOR = " ";
+$tpl2->block("BLOCK_LISTA_COLUNA");
 $tpl2->LISTA_COLUNA_VALOR = " ";
 $tpl2->block("BLOCK_LISTA_COLUNA");
 $tpl2->LISTA_COLUNA_VALOR = " ";
