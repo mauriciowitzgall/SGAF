@@ -101,7 +101,13 @@ if (($operacao == 3) || ($operacao == 2)) {
     $fornecedor = $dados["ent_fornecedor"];
     $tipopessoa = $dados["pes_tipopessoa"];
     $tiponegociacao = $dados["ent_tiponegociacao"];
+    $data = $dados["ent_datacadastro"];
+    $hora = $dados["ent_horacadastro"];
+} else {
+    $data = $_REQUEST["data1"];
+    $hora = $_REQUEST["hora1"];
 }
+
 $tpl->FORNECEDOR = $fornecedor;
 $tpl->TIPOPESSOA = $tipopessoa;
 $tpl->TIPONEGOCIACAO = $tiponegociacao;
@@ -157,8 +163,8 @@ if ($linhas == 0) {
 }
 
 
-$data = date("Y/m/d");
-$hora = date("H:i:s");
+$dataatual = date("Y-m-d");
+$horaatual = date("H:i:s");
 $tipo = 1;
 
 $produtomanter = $_POST['produtomanter'];
@@ -169,6 +175,18 @@ if ($produtomanter == 'on') {
 }
 
 //PASSO 1
+//Data e Hora
+if ($operacao==1) {
+    $tpl->ENTRADAS_DATA="$dataatual";
+    $tpl->ENTRADAS_HORA="$horaatual";
+} else {
+    $tpl->ENTRADAS_DATA="$data";
+    $tpl->ENTRADAS_HORA="$hora"; 
+    $tpl->block("BLOCK_DATA_DESABILITADA");
+    $tpl->block("BLOCK_HORA_DESABILITADA");
+}
+$tpl->block("BLOCK_DATAHORA");
+
 //Tipo de negociação
 $sql = "
     SELECT tipneg_codigo,tipneg_nome

@@ -287,11 +287,35 @@ function limpa_item_validade (){
         <!--  BEGIN BLOCK_DATAHORA -->
         <tr>
             <td align="right"><b>Data: <label class="obrigatorio"></label></b></td>
-            <td class="fundo1" ><input type="text" size="8" style="width: 100px;" required name="data1" class="campopadrao" disabled value="{ENTRADAS_DATA}"> </td>
+            <td class="fundo1" >
+                <input 
+                    type="date" 
+                    size="" style="width: 150px;" 
+                    required 
+                    name="data1" 
+                    class="campopadrao"  
+                    value="{ENTRADAS_DATA}" 
+                    <!--  BEGIN BLOCK_DATA_DESABILITADA -->
+                     disabled 
+                    <!--  END BLOCK_DATA_DESABILITADA -->
+                    
+                >
+            </td>
         </tr>    
         <tr>
             <td align="right"><b>Hora: <label class="obrigatorio"></label></b></td>
-            <td class="fundo1" ><input type="text" size="8" required name="hora1" class="campopadrao" disabled value="{ENTRADAS_HORA}"></td>
+            <td class="fundo1" >
+                <input 
+                    type="time" 
+                    size="" required 
+                    name="hora1" 
+                    class="campopadrao"  
+                    value="{ENTRADAS_HORA}"
+                    <!--  BEGIN BLOCK_HORA_DESABILITADA -->
+                     disabled 
+                    <!--  END BLOCK_HORA_DESABILITADA -->
+                >
+            </td>
         </tr> 
         <!--  END BLOCK_DATAHORA --> 
  
