@@ -1,6 +1,6 @@
 <?php
 
-//print_r($_REQUEST);
+print_r($_REQUEST);
 
 //Verifica se o usuário pode acessar a tela
 require "login_verifica.php";
@@ -92,6 +92,10 @@ if ($retirar_produto == '1') {
             $descricao = $dados["sai_descricao"];
         }
         
+
+        
+        
+  
     } else { //Caso seja uma venda nova, cadastro
         $operacao=1;
         $saida = $_POST["saida"];
@@ -168,6 +172,7 @@ if ($retirar_produto == '1') {
     $qtdnoestoque = $_POST["qtdnoestoque"];
     
 }
+
 
 $passo= $_REQUEST["passo"];
 
@@ -1145,9 +1150,17 @@ if ($passo == 2) {
     }
     
     
+    //Verifica qual é o status atual da venda (venda completa ou incompleta)
+    $sql = "SELECT sai_status FROM saidas WHERE sai_codigo=$saida";
+    if (!$query=mysql_query($sql)) die("Erro de SQL:" . mysql_error());
+    $dados = mysql_fetch_assoc($query);
+    $status_venda = $dados["sai_status"];
+    //echo "($status_venda)";
+    
+    
     //Botão Devoluções
     $usadevolucoessobrevendas=usadevolucoessobrevendas($usuario_quiosque);
-    if ($usadevolucoessobrevendas==1) {
+    if (($usadevolucoessobrevendas==1)&&($status_venda==1)) {
         $tpl1->LINK_DEVOLUCOES = "saidas_devolucoes.php?codigo=$saida";
         $tpl1->block("BLOCK_BOTOES_RODAPE_DEVOLUCOES");  
     }

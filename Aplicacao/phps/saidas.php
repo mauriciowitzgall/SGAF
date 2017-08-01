@@ -260,11 +260,16 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "Nº";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
+
 //Comanda ID
-$tpl->CABECALHO_COLUNA_TAMANHO = "";
-$tpl->CABECALHO_COLUNA_COLSPAN = "";
-$tpl->CABECALHO_COLUNA_NOME = "ID";
-$tpl->block("BLOCK_LISTA_CABECALHO");
+$usacomanda=usacomanda($usuario_quiosque);
+if ($usacomanda==1) {
+    $tpl->CABECALHO_COLUNA_TAMANHO = "";
+    $tpl->CABECALHO_COLUNA_COLSPAN = "";
+    $tpl->CABECALHO_COLUNA_NOME = "ID";
+    $tpl->block("BLOCK_LISTA_CABECALHO");
+}
+
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "2";
@@ -456,11 +461,14 @@ if ($linhas == 0) {
         $tpl->block("BLOCK_LISTA_COLUNA");
 
         //Coluna ID
-        $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
-        $tpl->LISTA_COLUNA_CLASSE = "";
-        $tpl->LISTA_COLUNA_VALOR = $id;
-        $tpl->block("BLOCK_LISTA_COLUNA");
-
+        $usacomanda=usacomanda($usuario_quiosque);
+        if ($usacomanda==1) {
+            $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
+            $tpl->LISTA_COLUNA_CLASSE = "";
+            $tpl->LISTA_COLUNA_VALOR = $id;
+            $tpl->block("BLOCK_LISTA_COLUNA");
+        }
+        
         //Coluna Data    
         $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
         $tpl->LISTA_COLUNA_VALOR = converte_data($data);
