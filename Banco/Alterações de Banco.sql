@@ -17288,3 +17288,23 @@ ALTER TABLE `sgaf_v4.0b1`.`quiosques_configuracoes`
 CHANGE COLUMN `quicnf_usacomanda` `quicnf_usacomanda` INT(1) NOT NULL DEFAULT 1 ,
 CHANGE COLUMN `quicnf_classificacaopadraoestoque` `quicnf_classificacaopadraoestoque` INT(3) NOT NULL DEFAULT 1 ,
 ADD COLUMN `quicnf_devolucoessobrevendas` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_classificacaopadraoestoque`;
+
+
+-----
+
+ALTER TABLE `sgaf_v4.0b1`.`saidas_devolucoes` 
+CHANGE COLUMN `saidev_numero` `saidev_numero` INT(3) NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`saidev_numero`);
+
+ALTER TABLE `sgaf_v4.0b1`.`saidas_devolucoes` 
+CHANGE COLUMN `saidev_numero` `saidev_numero` BIGINT(20) NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `sgaf_v4.0b1`.`saidas_devolucoes_produtos` 
+CHANGE COLUMN `saidevpro_numero` `saidevpro_numerodev` BIGINT(20) NOT NULL FIRST,
+CHANGE COLUMN `saidevpro_item` `saidevpro_itemsaida` INT(4) NOT NULL ,
+ADD COLUMN `saidevpro_itemdev` INT(3) NOT NULL AFTER `saidevpro_numerodev`,
+ADD COLUMN `saidevpro_lote` BIGINT(20) NOT NULL AFTER `saidevpro_produto`,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`saidevpro_numerodev`, `saidevpro_itemdev`);
+

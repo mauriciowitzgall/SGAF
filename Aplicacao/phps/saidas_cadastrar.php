@@ -1,6 +1,6 @@
 <?php
 
-print_r($_REQUEST);
+//print_r($_REQUEST);
 
 //Verifica se o usuário pode acessar a tela
 require "login_verifica.php";
@@ -632,6 +632,15 @@ if ($tiposaida == 1) {
         $tpl1->SELECT2_DESABILITADO = " disabled ";
     } else {
         $tpl1->SELECT2_DESABILITADO = " ";
+    }
+    
+    //Pesquisa tipo pessoa do novo consumidor escolhido
+    if ($consumidor=="") $tipopessoa=1; //Se for cliente geral entao é pessoa fisica
+    else {
+        $sql2="SELECT pes_tipopessoa FROM pessoas WHERE pes_codigo=$consumidor";
+        if (!$query2 = mysql_query($sql2)) die("Erro 7: " . mysql_error());
+        $dados2=mysql_fetch_array($query2);
+        $tipopessoa=$dados2[0];
     }
     if ($consumidor!=0) {
         $sql_filtro.="and pes_tipopessoa=$tipopessoa";

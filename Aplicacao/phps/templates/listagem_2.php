@@ -164,6 +164,7 @@ $tpl->block("BLOCK_LISTA");
 $tpl->block("BLOCK_LISTA_NADA");
 
 
+
 //Paginação
 $tpl->PASTA_ICONES="";
 $tpl->PAGINAATUAL="";

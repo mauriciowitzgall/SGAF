@@ -16,7 +16,14 @@ $(window).load(function() {
         alert("Erro Grave, contate o suporte: 44545");
     }
 
-
+    $("select[id=consumidor]").change(function () {
+        consumidor=$("select[id=consumidor]").val();
+        $("input[id=cpf]").val("");
+        $("input[id=cnpj]").val("");
+        
+        
+        
+    });
     
     $("input[id=cliente_nome]").hide();
     tipopessoa=$("select[name=tipopessoa]").val();

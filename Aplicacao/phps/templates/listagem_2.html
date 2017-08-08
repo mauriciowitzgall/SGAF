@@ -39,6 +39,13 @@
     .tab_operacao {
         background-color: #E4E4E4;
     }
+    
+    .tab_rodape {
+        font-weight: bold;        
+        background-color: #E4E4E4;	
+        border: 1px gray solid;
+    }
+    
 </style>
 
 
@@ -332,7 +339,38 @@
             <td colspan="30" align="center" class="errado"> Nenhum resultado!</td>
         </tr>
         <!-- END BLOCK_LISTA_NADA -->          
+        
+        
+        
+        <!-- BEGIN BLOCK_RODAPE -->
+        <tfoot>
+            <!-- BEGIN BLOCK_RODAPE_LINHA -->
+            <tr valign="middle" class="tab_rodape">                    
+                <!-- BEGIN BLOCK_RODAPE_COLUNA -->
+                <td width="{RODAPE_COLUNA_TAMANHO}" colspan="{RODAPE_COLUNA_COLSPAN}" rowspan="{RODAPE_COLUNA_ROWSPAN}" align="{RODAPE_COLUNA_ALINHAMENTO}">
+                    <span class="tab_titrodape"> {RODAPE_COLUNA_NOME}</span>
+                    <!-- BEGIN BLOCK_RODAPE_CONTEUDO -->
+                    <!-- BEGIN BLOCK_RODAPE_ICONE -->
+                    <img 
+                        width="{ICONE_RODAPE_TAMANHO}" 
+                        src="{ICONE_RODAPE_CAMINHO}{ICONE_RODAPE_NOMEARQUIVO}" 
+                        title="{ICONE_RODAPE_DICA}" 
+                        alt="{ICONE_RODAPE_NOMEALTERNATIVO}"
+                    >                
+                    <!-- END BLOCK_RODAPE_ICONE -->
+                    <!-- END BLOCK_RODAPE_CONTEUDO -->
+                </td> 
+                <!-- END BLOCK_RODAPE_COLUNA -->            
+            </tr>        
+            <!-- END BLOCK_RODAPE_LINHA -->        
+        </tfoot>
+        <!-- END BLOCK_RODAPE -->
+    
+    
+    
     </table>
+    
+    
     
     
     <!-- BEGIN BLOCK_PAGINACAO -->          
