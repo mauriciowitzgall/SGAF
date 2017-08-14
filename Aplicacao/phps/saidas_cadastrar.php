@@ -1088,6 +1088,7 @@ if ($passo == 2) {
     } else {
         $num = 0;
         $total_geral = 0;
+        $temdevolucoes=0;
         $tpl1->block("BLOCK_LISTA_PORCAO_CABECALHO");
         while ($dados_lista = mysql_fetch_array($query_lista)) {
             $num++;
@@ -1134,7 +1135,7 @@ if ($passo == 2) {
             if (!$query18 = mysql_query($sql18)) die("Erro CONSULTA DEVOLUCOES:" . mysql_error()."");
             $linhas18=mysql_num_rows($query18);
 
-            if ($linhas18>=1) {$temdevolucao=1; } else {$temdevolucao=0;}
+            if ($linhas18>=1) { $temdevolucao=1; $temdevolucoes=1;} else {$temdevolucao=0; }
             if ($temdevolucao==1) {
                 $tpl1->EXCLUIR_MOTIVO="Este item possui devoluções vinculados!";
                 $tpl1->block("BLOCK_LISTA_EXCLUIR_DESABILITADO");
@@ -1147,6 +1148,9 @@ if ($passo == 2) {
     }
     $tpl1->TOTAL_GERAL = "R$ " . number_format($total_geral, 2, ',', '.');
     $tpl1->block("BLOCK_LISTAGEM");
+
+
+
     
     //BOTÕES
     //Botão Finalizar/Avançar/Salvar
@@ -1156,6 +1160,10 @@ if ($passo == 2) {
     } else if ($tiposaida == 3) {
         $tpl1->FORM_LINK = "saidas_cadastrar3.php?tiposai=3";
         $tpl1->block("BLOCK_SALVAR_DEVOLUCAO");
+    }
+    if ($temdevolucoes==1) {
+        $tpl1->SALVAR_DESABILIDADO=" disabled ";
+        $tpl1->TITULO="Não é possível editar a venda quando se tem devoluções!";
     }
     $tpl1->block("BLOCK_BOTOES_RODAPE_SALVAR");
     

@@ -326,7 +326,7 @@ if ($passo == 2) {
     AND ent_tiponegociacao = 2
     AND ent_quiosque = $usuario_quiosque
     AND sai_datahoracadastro BETWEEN '$dataini_datetime' AND '$datafim_datetime:59'
-
+    AND sai_areceber=0 
     AND sai_tipo = 1
     AND sai_status = 1
     ";

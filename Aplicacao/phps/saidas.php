@@ -426,6 +426,7 @@ if ($linhas == 0) {
     while ($dados = mysql_fetch_array($query)) {
 
         $numero = $dados["sai_codigo"];
+        $saida=$numero;
         $data = $dados["sai_datacadastro"];
         $hora = $dados["sai_horacadastro"];
         $consumidor = $dados["sai_consumidor"];
@@ -632,6 +633,20 @@ if ($linhas == 0) {
             die("Erro de SQL (23):" . mysql_error());
         $linhas23 = mysql_num_rows($query23);
 
+        $temdevolucoes=0;
+        //Verifica se há produtos devolvidos nesta venda
+        $sql18="SELECT * FROM saidas_devolucoes_produtos WHERE saidevpro_saida=$saida";
+        if (!$query18 = mysql_query($sql18)) die("Erro CONSULTA DEVOLUCOES:" . mysql_error()."");
+        $linhas18=mysql_num_rows($query18);
+        if ($linhas18>0) $temdevolucoes=1;
+
+
+        //Verificar se foi emitido nota nesta venda
+        $sql9="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
+        if (!$query9 = mysql_query($sql9)) die("Erro Tem Nota: (((" . mysql_error().")))");
+        $linhas9 = mysql_num_rows($query9);    
+        if ($linhas9>0) $temnota=1; else $temnota=0;    
+
 
         //editar 
         $permiteedicaoclientenavenda=permiteedicaoclientenavenda($usuario_quiosque);
@@ -648,56 +663,70 @@ if ($linhas == 0) {
                 $tpl->ICONE_ARQUIVO = $icones . "editar_desabilitado.png";
                 $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");
             } else {
-                //Se for um operador de caixa deve permitir a edição de apenas a ultima venda realizada por ele sob algumas condições
-                if ($usuario_grupo == 4) {
-                    //Verifica qual foi a ultima venda realizada por este caixa
-                    $sql_ven = "SELECT max(sai_codigo) FROM saidas JOIN caixas_operacoes on sai_caixaoperacaonumero=caiopo_numero WHERE caiopo_operador=$usuario_codigo";
-                    $query_ven = mysql_query($sql_ven);
-                    if (!$query_ven)
-                        die("Erro de SQL Caixa Ultima Venda:" . mysql_error());
-                    $dados_ven = mysql_fetch_array($query_ven);
-                    $ultimo = $dados_ven[0];
+                 // Se tiver devoluções não pode editar.
+                if ($temdevolucoes==1) {
+                    $tpl->OPERACAO_NOME = "Você não pode editar vendas que possuem DEVOLUÇÕES!";
+                    $tpl->ICONE_ARQUIVO = $icones . "editar_desabilitado.png";
+                    $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");
+                } else {
+                    //Se foi gerado nota fiscal não pode editar.
+                    if ($temnota==1) {
+                        $tpl->OPERACAO_NOME = "Você não pode editar vendas que possuem NOTA FISCAL GERADA";
+                        $tpl->ICONE_ARQUIVO = $icones . "editar_desabilitado.png";
+                        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");
+                    } else {
+                        //Se for um operador de caixa deve permitir a edição de apenas a ultima venda realizada por ele sob algumas condições
+                        if ($usuario_grupo == 4) {
+                            //Verifica qual foi a ultima venda realizada por este caixa
+                            $sql_ven = "SELECT max(sai_codigo) FROM saidas JOIN caixas_operacoes on sai_caixaoperacaonumero=caiopo_numero WHERE caiopo_operador=$usuario_codigo";
+                            $query_ven = mysql_query($sql_ven);
+                            if (!$query_ven)
+                                die("Erro de SQL Caixa Ultima Venda:" . mysql_error());
+                            $dados_ven = mysql_fetch_array($query_ven);
+                            $ultimo = $dados_ven[0];
 
-                    
-                    //Se esta Sa�da for a ultima Saída que o caixa efetuou                   
-                    if (($numero == $ultimo) || ($status == 2)) {
-                        if ($status == 1) { //Se a venda ja foi concluída o caixa tem um limite de tempo para pode editá-la
-                            $dataatual = date("Y-m-d");
-                            $horaatual = date("H:i:s");
-                            $tempo1 = $data . "_" . $hora;
-                            $tempo2 = $dataatual . "_" . $horaatual;
-                            $total_segundos = diferenca_entre_datahora($tempo1, $tempo2);
-                            if ($total_segundos < 900) { //O caixa tem 15 minutos ap�s o inicio para editar esta venda j� concluida 
-                                $tpl->OPERACAO_NOME = "Editar";
-                                $tpl->LINK = "saidas_cadastrar.php";
+                            
+                            //Se esta Sa�da for a ultima Saída que o caixa efetuou                   
+                            if (($numero == $ultimo) || ($status == 2)) {
+                                if ($status == 1) { //Se a venda ja foi concluída o caixa tem um limite de tempo para pode editá-la
+                                    $dataatual = date("Y-m-d");
+                                    $horaatual = date("H:i:s");
+                                    $tempo1 = $data . "_" . $hora;
+                                    $tempo2 = $dataatual . "_" . $horaatual;
+                                    $total_segundos = diferenca_entre_datahora($tempo1, $tempo2);
+                                    if ($total_segundos < 900) { //O caixa tem 15 minutos ap�s o inicio para editar esta venda j� concluida 
+                                        $tpl->OPERACAO_NOME = "Editar";
+                                        $tpl->LINK = "saidas_cadastrar.php";
 
-                                $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=$passo";
-                                $tpl->ICONE_ARQUIVO = $icones . "editar.png";
-                                $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
+                                        $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=$passo";
+                                        $tpl->ICONE_ARQUIVO = $icones . "editar.png";
+                                        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
+                                    } else {
+                                        $tpl->OPERACAO_NOME = "Você não pode editar sua última venda porque já passou 15 minutos após a finalização da venda!";
+                                        $tpl->ICONE_ARQUIVO = $icones . "editar_desabilitado.png";
+                                        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");
+                                    }
+                                } else { //Se for incompleta permitir que o caixa possa continuar a venda
+                                    $tpl->OPERACAO_NOME = "Editar";
+                                    $tpl->LINK = "saidas_cadastrar.php";
+                                    $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=$passo";
+                                    $tpl->ICONE_ARQUIVO = $icones . "editar.png";
+                                    $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
+                                }
                             } else {
-                                $tpl->OPERACAO_NOME = "Você não pode editar sua última venda porque já passou 15 minutos após a finalização da venda!";
+
+                                $tpl->OPERACAO_NOME = "Você não pode editar vendas antigas! Se precisa alterar ou remover alguma venda, contate um supervisor!";
                                 $tpl->ICONE_ARQUIVO = $icones . "editar_desabilitado.png";
                                 $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");
                             }
-                        } else { //Se for incompleta permitir que o caixa possa continuar a venda
+                        } else {
                             $tpl->OPERACAO_NOME = "Editar";
                             $tpl->LINK = "saidas_cadastrar.php";
                             $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=$passo";
                             $tpl->ICONE_ARQUIVO = $icones . "editar.png";
                             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
                         }
-                    } else {
-
-                        $tpl->OPERACAO_NOME = "Você não pode editar vendas antigas! Se precisa alterar ou remover alguma venda, contate um supervisor!";
-                        $tpl->ICONE_ARQUIVO = $icones . "editar_desabilitado.png";
-                        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");
                     }
-                } else {
-                    $tpl->OPERACAO_NOME = "Editar";
-                    $tpl->LINK = "saidas_cadastrar.php";
-                    $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=$passo";
-                    $tpl->ICONE_ARQUIVO = $icones . "editar.png";
-                    $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
                 }
             }
         }
