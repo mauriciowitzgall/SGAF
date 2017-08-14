@@ -55,15 +55,16 @@ $tpl = new Template("templates/listagem.html");
 
 //Filtro Inicio
 $filtro_numero = $_REQUEST["filtro_numero"];
-$filtro_produto = $_POST["filtro_produto"];
+$filtro_produto = $_REQUEST["filtro_produto"];
 $filtro_consumidor = $_POST["filtro_consumidor"];
 $filtro_fornecedor = $_POST["filtro_fornecedor"];
 $filtro_tipo = $_POST["filtro_tipo"];
-$filtro_lote = $_POST["filtro_lote"];
+$filtro_lote = $_REQUEST["filtro_lote"];
 $filtro_caixaoperacao = $_REQUEST["filtro_caixaoperacao"];
 $filtro_id = $_REQUEST["filtro_id"];
 $filtro_status = $_REQUEST["filtro_status"];
 $filtro_areceber = $_REQUEST["filtro_areceber"];
+$filtro_devolucao = $_REQUEST["filtro_devolucao"];
 $tpl->LINK_FILTRO = "saidas.php";
 $tpl->FORM_ONLOAD = "valida_filtro_saidas_numero()";
 
@@ -217,14 +218,12 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 $tpl->SELECT_TITULO = "À receber";
 $tpl->SELECT_NOME = "filtro_areceber";
 $tpl->SELECT_OBRIGATORIO = "";
-
 if ($filtro_areceber=="") {
     $tpl->SELECT_OPTION_SELECIONADO = " selected ";
 } else {
     $tpl->SELECT_OPTION_SELECIONADO = "";
 }
 $tpl->block("BLOCK_FILTRO_SELECT_OPTIONPADRAO");
-
 $tpl->SELECT_OPTION_CODIGO = "1";
 $tpl->SELECT_OPTION_NOME = "Sim";
 if ($filtro_areceber == 1) {
@@ -233,7 +232,6 @@ if ($filtro_areceber == 1) {
     $tpl->SELECT_OPTION_SELECIONADO = "";
 }
 $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
-
 $tpl->SELECT_OPTION_CODIGO = "0";
 $tpl->SELECT_OPTION_NOME = "Não";
 if ($filtro_areceber == '0') {
@@ -242,8 +240,18 @@ if ($filtro_areceber == '0') {
     $tpl->SELECT_OPTION_SELECIONADO = "";
 }
 $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
-
 $tpl->block("BLOCK_FILTRO_SELECT");
+$tpl->block("BLOCK_FILTRO_ESPACO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
+//Filtro Nº Operação Caixa
+$tpl->CAMPO_TITULO = "Nº Devolução";
+$tpl->CAMPO_TAMANHO = "10";
+$tpl->CAMPO_NOME = "filtro_devolucao";
+$tpl->CAMPO_VALOR = $filtro_devolucao;
+$tpl->CAMPO_QTD_CARACTERES = "";
+$tpl->CAMPO_ONKEYUP = "";
+$tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_ESPACO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
@@ -341,7 +349,7 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 if ($filtro_numero <> "")
     $sql_filtro_numero = " and sai_codigo = $filtro_numero ";
 if ($filtro_produto <> "")
-    $sql_filtro_produto = " and ((pro_nome like '%$filtro_produto%')or(pro_referencia like '%$filtro_produto%')or(pro_tamanho like '%$filtro_produto%')or(pro_cor like '%$filtro_produto%')or(pro_descricao like '%$filtro_produto%'))";
+    $sql_filtro_produto = " and ((pro_nome like '%$filtro_produto%')or(pro_referencia like '%$filtro_produto%')or(pro_tamanho like '%$filtro_produto%')or(pro_cor like '%$filtro_produto%')or(pro_descricao like '%$filtro_produto%')or (pro_codigo like '%$filtro_produto%'))";
 if ($filtro_lote <> "")
     $sql_filtro_lote = " and saipro_lote = $filtro_lote ";
 if ($filtro_consumidor <> "")
@@ -360,9 +368,11 @@ if ($filtro_id <> "")
     $sql_filtro_id = " and sai_id = $filtro_id ";
 if ($filtro_status <> "")
     $sql_filtro_status = " and sai_status = $filtro_status ";
+if ($filtro_devolucao <> "")
+    $filtro_devolucao = " and saidev_numero = $filtro_devolucao ";
 if ($filtro_areceber <> "")
     $sql_filtro_areceber = " and sai_areceber = $filtro_areceber ";
-$sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_fornecedor . " " . $sql_filtro_caixaoperacao." ".$sql_filtro_id." ".$sql_filtro_status. " ".$sql_filtro_areceber;
+$sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_fornecedor . " " . $sql_filtro_caixaoperacao." ".$sql_filtro_id." ".$sql_filtro_status. " ".$sql_filtro_areceber." ".$filtro_devolucao;
 
 
 //SQL Principal das linhas
@@ -376,6 +386,7 @@ left join entradas on (saipro_lote=ent_codigo)
 left join caixas_operacoes on (sai_caixaoperacaonumero=caiopo_numero)
 left join caixas on (caiopo_caixa=cai_codigo)
 left join pessoas on (pes_codigo=caiopo_operador)
+LEFT JOIN saidas_devolucoes on (sai_codigo=saidev_saida)
 WHERE sai_quiosque=$usuario_quiosque and
 sai_tipo=1 $sql_filtro 
 ORDER BY sai_codigo DESC
@@ -622,7 +633,10 @@ if ($linhas == 0) {
         $linhas23 = mysql_num_rows($query23);
 
 
-        //editar        
+        //editar 
+        $permiteedicaoclientenavenda=permiteedicaoclientenavenda($usuario_quiosque);
+        if ($permiteedicaoclientenavenda==1) $passo=1; else $passo=2;
+
         if ($permissao_saidas_editar == 1) {
             //Se algum produto ja foi acertado não pode editar
             if ($linhas22 > 0) {
@@ -643,6 +657,8 @@ if ($linhas == 0) {
                         die("Erro de SQL Caixa Ultima Venda:" . mysql_error());
                     $dados_ven = mysql_fetch_array($query_ven);
                     $ultimo = $dados_ven[0];
+
+                    
                     //Se esta Sa�da for a ultima Saída que o caixa efetuou                   
                     if (($numero == $ultimo) || ($status == 2)) {
                         if ($status == 1) { //Se a venda ja foi concluída o caixa tem um limite de tempo para pode editá-la
@@ -654,7 +670,8 @@ if ($linhas == 0) {
                             if ($total_segundos < 900) { //O caixa tem 15 minutos ap�s o inicio para editar esta venda j� concluida 
                                 $tpl->OPERACAO_NOME = "Editar";
                                 $tpl->LINK = "saidas_cadastrar.php";
-                                $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=1";
+
+                                $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=$passo";
                                 $tpl->ICONE_ARQUIVO = $icones . "editar.png";
                                 $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
                             } else {
@@ -665,7 +682,7 @@ if ($linhas == 0) {
                         } else { //Se for incompleta permitir que o caixa possa continuar a venda
                             $tpl->OPERACAO_NOME = "Editar";
                             $tpl->LINK = "saidas_cadastrar.php";
-                            $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=1";
+                            $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=$passo";
                             $tpl->ICONE_ARQUIVO = $icones . "editar.png";
                             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
                         }
@@ -678,7 +695,7 @@ if ($linhas == 0) {
                 } else {
                     $tpl->OPERACAO_NOME = "Editar";
                     $tpl->LINK = "saidas_cadastrar.php";
-                    $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=1";
+                    $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=$passo";
                     $tpl->ICONE_ARQUIVO = $icones . "editar.png";
                     $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
                 }

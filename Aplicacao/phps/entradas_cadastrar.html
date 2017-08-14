@@ -111,7 +111,7 @@ function valida_produto() {
 
             document.forms["form1"].valuni.disabled = true;
             document.forms["form1"].valunicusto.disabled = true;
-            document.forms["form1"].percent.disabled = true;
+            //document.forms["form1"].percent.disabled = true;
             document.forms["form1"].percent2.disabled = true;                
             document.forms["form1"].validade.disabled = true;
             document.forms["form1"].validade_item.disabled = true;
@@ -163,7 +163,7 @@ function desabilita_campos() {
             document.forms["form1"].validade_item.disabled = false;
             document.forms["form1"].local.disabled = false;
             document.forms["form1"].valunicusto.disabled = false;
-            document.forms["form1"].percent.disabled = false;
+            //document.forms["form1"].percent.disabled = false;
             document.forms["form1"].percent2.disabled = false;
     }
         //alert("Habilita");
@@ -176,7 +176,7 @@ function desabilita_campos() {
         document.forms["form1"].validade.value = "";
         document.forms["form1"].local.disabled = true;
         document.forms["form1"].valunicusto.disabled = true;
-        document.forms["form1"].percent.disabled = true;
+        //document.forms["form1"].percent.disabled = true;
         document.forms["form1"].percent2.disabled = true;
         //alert("desabilitar");            
     }
@@ -434,9 +434,9 @@ function limpa_item_validade (){
         <tr>
             <td align="right"><b>Valor Unitário Custo: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
-                <input type="text" size="8" style="width: 100px;" required  name="valunicusto" class="campopadrao campo_tamanho_3 campo_qtd" autocomplete="off" onclick="this.select()" onkeyup="" onblur="calcula_valor_percent();">&nbsp;
+                <input type="text" size="8" style="width: 100px;" required  name="valunicusto" class="campopadrao campo_tamanho_3 campo_qtd" autocomplete="off" onclick="this.select()" onkeyup="" onblur="calcula_valor_percent(); ">&nbsp;
                 <!-- <span name="qtdtipcon" class="dicacampo" autocomplete="off" ></span> -->
-                <input id="percent2" name="percent2" type="text" value="" class="campopadrao campo_tamanho_2  campo_qtd" size="5" onblur="calcula_valor_venda();" onkeyup="mascara_percent();" onclick="this.select()" >
+                <input id="percent2" name="percent2" type="text" value="" class="campopadrao campo_tamanho_2  campo_qtd" size="5" onblur="calcula_valor_venda();" onkeyup="mascara_percent();" onclick="this.select()" tabindex="-1">
                 <span name="" class="dicacampo" autocomplete="off" >%</span>            
             </td>
         </tr>
@@ -444,10 +444,10 @@ function limpa_item_validade (){
         <tr>
             <td align="right"><b>Valor Unitário Venda: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
-                <input type="text" size="10" style="width: 100px;" required  name="valuni" class="campopadrao campo_tamanho_3  campo_qtd" autocomplete="off" onclick="this.select()" onkeyup="verifica_incluir();" onblur="calcula_valor_percent();">&nbsp;
+                <input type="text" size="10" style="width: 100px;" required  name="valuni" class="campopadrao campo_tamanho_3  campo_qtd" autocomplete="off" onclick="this.select()" onkeyup="verifica_incluir();" onblur="calcula_valor_percent(); ">&nbsp;
                 <!-- <span name="qtdtipcon" class="dicacampo" autocomplete="off" ></span> -->
                 <!--  BEGIN BLOCK_PERCENT -->
-                <input id="percent" name="percent" type="text" value="" class="campopadrao campo_tamanho_2  campo_qtd" size="5" onblur="calcula_valor_unitario();" onkeyup="mascara_percent();"  onclick="this.select()" >
+                <input id="percent" name="percent" type="text" value="" class="campopadrao campo_tamanho_2  campo_qtd" size="5" onblur="//calcula_valor_unitario();" onkeyup="mascara_percent();"  onclick="this.select()" disabled="disabled" a="aa">
                 <span name="" class="dicacampo" autocomplete="off" >%</span>
                 <!--  END BLOCK_PERCENT -->
             </td>
@@ -532,7 +532,7 @@ function limpa_item_validade (){
         <!--  BEGIN BLOCK_LISTA -->
         <tr class="lin">
             <td>{ENTRADAS_NUMERO}</td>
-            <td align="right" width="30px">{ENTRADAS_PRODUTO}</td>
+            <td align="right" width="80px">{ENTRADAS_PRODUTO}</td>
             <td>{ENTRADAS_PRODUTO_NOME}</td>
             <td align="right">{ENTRADAS_QTD}</td>
             <td align="left">{SIGLA}</td>
@@ -588,6 +588,15 @@ function limpa_item_validade (){
                 </a>
             </td>
             <!--  END BLOCK_LISTA_OPERACAO_EXCLUIR -->
+
+            <!--  BEGIN BLOCK_LISTA_OPERACAO_VERVENDAS -->
+            <td align="center" class="fundo1">
+                <a href="saidas.php?filtro_produto={VERVENDAS_PRODUTO}&filtro_lote={VERVENDAS_LOTE}" class="link1">
+                    <img  width="15px" src="{ICONES_CAMINHO}{ICONES_ARQUIVO}"  title="{ICONES_TITULO}" alt="Remover" />
+                </a>
+            </td>
+            <!--  END BLOCK_LISTA_OPERACAO_VERVENDAS -->
+
             <!--  END BLOCK_LISTA_OPERACAO -->        
         </tr>
         <!--  END BLOCK_LISTA -->

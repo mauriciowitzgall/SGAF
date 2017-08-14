@@ -17308,3 +17308,18 @@ ADD COLUMN `saidevpro_lote` BIGINT(20) NOT NULL AFTER `saidevpro_produto`,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`saidevpro_numerodev`, `saidevpro_itemdev`);
 
+ALTER TABLE `sgaf_v4.0b1`.`saidas_devolucoes` 
+CHANGE COLUMN `saidev_data` `saidev_data` TIMESTAMP NOT NULL ;
+
+ALTER TABLE `sgaf_v4.0b1`.`saidas_devolucoes_produtos` 
+ENGINE = MyISAM ,
+CHANGE COLUMN `saidevpro_itemdev` `saidevpro_itemdev` INT(3) NOT NULL AUTO_INCREMENT ;
+
+
+ALTER TABLE `sgaf_v4.0b1`.`caixas_entradassaidas` 
+CHANGE COLUMN `caientsai_descricao` `caientsai_descricao` TEXT NULL DEFAULT NULL ;
+
+ALTER TABLE `sgaf_v4.0b1`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_permiteedicaoclientenavenda` INT(1) NOT NULL DEFAULT '1' AFTER `quicnf_devolucoessobrevendas`;
+
+

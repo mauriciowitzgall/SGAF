@@ -100,6 +100,12 @@ if ($usamodulofiscal==1) {
     $tpl->block("BLOCK_LISTA_CABECALHO");
 }
 
+//Remover
+    $tpl->CABECALHO_COLUNA_TAMANHO="";
+    $tpl->CABECALHO_COLUNA_COLSPAN="";
+    $tpl->CABECALHO_COLUNA_NOME="OPERAÇÕES";
+    $tpl->block("BLOCK_LISTA_CABECALHO");
+
 //SQL Principal
 $sql="
     SELECT * 
@@ -163,7 +169,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $tpl->LISTA_COLUNA_ALINHAMENTO="right";
     $tpl->LISTA_COLUNA_CLASSE="";
     $tpl->LISTA_COLUNA_TAMANHO="";
-    $sql2="SELECT count(saidevpro_itemdev) as qtd_itens FROM saidas_devolucoes_produtos WHERE saidevpro_saida=$saida";
+    $sql2="SELECT count(saidevpro_itemdev) as qtd_itens FROM saidas_devolucoes_produtos WHERE saidevpro_saida=$saida AND saidevpro_numerodev=$numero";
     if (!$query2=mysql_query($sql2)) die("Erro SQL Pegar total de itens: " . mysql_error());
     $dados2=mysql_fetch_assoc($query2);
     $qtd_itens=$dados2["qtd_itens"];    
@@ -192,7 +198,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
         $tpl->IMAGEM_TITULO="Nota Fiscal";
         //Verificar se foi emitido nota
         $sql3="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
-        if (!$query3 = mysql_query($sql3)) die("Erro BOTÃO ELIMINAR VENDA: (((" . mysql_error().")))");
+        if (!$query3 = mysql_query($sql3)) die("Erro NFE Emitida: (((" . mysql_error().")))");
         $linhas3 = mysql_num_rows($query3);
         if ($linhas3==0) $temnota=0; 
         else  $temnota=1;
@@ -203,7 +209,29 @@ while ($dados=  mysql_fetch_assoc($query)) {
         }
         $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
         $tpl->block("BLOCK_LISTA_COLUNA_ICONES"); 
+    }  
+
+    //Remover devolução
+    $tpl->IMAGEM_ALINHAMENTO="center";
+    $tpl->LINK="saidas_devolucoes_deletar.php?devolucao=$numero&saida=$saida";
+    $tpl->IMAGEM_TAMANHO="12px";
+    $tpl->IMAGEM_PASTA="$icones";
+    $tpl->IMAGEM_TITULO="Remover";
+    //Verificar se foi emitido nota
+    $sql3="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
+    if (!$query3 = mysql_query($sql3)) die("Erro Botão remover devolucao: (((" . mysql_error().")))");
+    $linhas3 = mysql_num_rows($query3);
+    if ($linhas3==0) $temnota=0; else  $temnota=1;
+    if ($temnota==1) {
+        $tpl->IMAGEM_NOMEARQUIVO="remover_desabilitado.png"; 
+        $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM_SEMLINK");
     }
+    else {
+        $tpl->IMAGEM_NOMEARQUIVO="remover.png";
+        $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+    }
+    
+    $tpl->block("BLOCK_LISTA_COLUNA_ICONES"); 
    
     $tpl->block("BLOCK_LISTA"); 
     $cont++;

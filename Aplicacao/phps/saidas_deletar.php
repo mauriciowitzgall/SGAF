@@ -51,13 +51,13 @@ if ($usuario_grupo == 4) {
         $tpl6->block("BLOCK_MOTIVO");
         $tpl6->block("BLOCK_BOTAO_VOLTAR");
         $tpl6->show();
-        $excluir = 0;
+        $saidausuariopermissao = 0;
         exit;
     } else {
-        $excluir = 1;
+        $saidausuariopermissao = 1;
     }
 } else if (($usuario_grupo == 1) || ($usuario_grupo == 3)) {
-    $excluir = 1;
+    $saidausuariopermissao = 1;
 } else {
     $tpl6 = new Template("templates/notificacao.html");
     $tpl6->block("BLOCK_ERRO");
@@ -66,9 +66,53 @@ if ($usuario_grupo == 4) {
     $tpl6->MOTIVO = "Você não tem permissão para excluir Saídas!";
     $tpl6->block("BLOCK_MOTIVO");
     $tpl6->block("BLOCK_BOTAO_VOLTAR");
-    $excluir = 0;
-    $tpl6->show();
+    $saidausuariopermissao = 0;
+    exit;
 }
+
+//Verificar se foi emitido nota e se possui devolucoes,  se sim então não permitir a eliminação da venda
+$sql="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
+if (!$query = mysql_query($sql)) die("Erro BOTÃO ELIMINAR VENDA 1: (((" . mysql_error().")))");
+$linhas = mysql_num_rows($query);
+if ($linhas==0) { 
+    $temnota=0;
+} else {
+    $temnota=1;
+    $tpl6 = new Template("templates/notificacao.html");
+    $tpl6->block("BLOCK_ERRO");
+    $tpl6->ICONES = $icones;
+    $tpl6->block("BLOCK_NAOAPAGADO");
+    $tpl6->MOTIVO = "Você não pode apagar uma venda/saída que possui nota fiscal gerada!";
+    $tpl6->block("BLOCK_MOTIVO");
+    $tpl6->block("BLOCK_BOTAO_VOLTAR");
+    $tpl6->show();
+    exit;
+}
+
+//Verifica se há devoluções
+$sql="SELECT * FROM saidas_devolucoes WHERE saidev_saida=$saida";
+if (!$query = mysql_query($sql)) die("Erro BOTÃO ELIMINAR VENDA 2: (((" . mysql_error().")))");
+$linhas = mysql_num_rows($query);
+if ($linhas>0) {
+    $temdevolucao=1; 
+    $tpl6 = new Template("templates/notificacao.html");
+    $tpl6->block("BLOCK_ERRO");
+    $tpl6->ICONES = $icones;
+    $tpl6->block("BLOCK_NAOAPAGADO");
+    $tpl6->MOTIVO = "Você não pode apagar uma venda/saída que possui devoluções. <br>Apague estas primeiro antes de excluir a venda!";
+    $tpl6->block("BLOCK_MOTIVO");
+    $tpl6->block("BLOCK_BOTAO_VOLTAR");
+    $tpl6->show();
+    exit;    
+} else { 
+    $temdevolucao=0;
+}
+
+
+if(($temnota==0)&&($saidausuariopermissao==1)&&($temdevolucao==0)) { 
+    $excluir=1;
+}
+
 
 if ($excluir = 1) { //Devolver para o estoque, e excluir da saida
     //Carrega informações dos produtos da Saída

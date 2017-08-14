@@ -21,6 +21,7 @@ $tipopessoanfe = $_POST['tipopessoanfe'];
 $usacomanda = $_POST['usacomanda'];
 $classificacaopadraoestoque = $_POST['classificacaopadraoestoque'];
 $devolucoessobrevendas = $_POST['devolucoessobrevendas'];
+$permiteedicaoclientenavenda = $_POST['permiteedicaoclientenavenda'];
 $cpf = $_POST['cpf'];
 $cpf = str_replace(".","", $cpf);
 $cpf = str_replace("-","", $cpf);
@@ -79,6 +80,7 @@ SET
     quicnf_usacomanda='$usacomanda',
     quicnf_classificacaopadraoestoque='$classificacaopadraoestoque',
     quicnf_devolucoessobrevendas='$devolucoessobrevendas',
+    quicnf_permiteedicaoclientenavenda=$permiteedicaoclientenavenda,
     quicnf_versaonfe='$versaonfe'
     $complemento    
 WHERE

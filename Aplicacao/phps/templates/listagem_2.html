@@ -253,6 +253,9 @@
                         <img name="{IMAGEM_NOME}" id="{IMAGEM_NOME}" width="{IMAGEM_TAMANHO}" src="{IMAGEM_PASTA}{IMAGEM_NOMEARQUIVO}" title="{IMAGEM_TITULO}"  alt="{IMAGEM_TITULO}" />
                     </a>
                     <!-- END BLOCK_LISTA_COLUNA_IMAGEM -->
+                    <!-- BEGIN BLOCK_LISTA_COLUNA_IMAGEM_SEMLINK -->
+                        <img name="{IMAGEM_NOME}" id="{IMAGEM_NOME}" width="{IMAGEM_TAMANHO}" src="{IMAGEM_PASTA}{IMAGEM_NOMEARQUIVO}" title="{IMAGEM_TITULO}"  alt="{IMAGEM_TITULO}" />
+                    <!-- END BLOCK_LISTA_COLUNA_IMAGEM_SEMLINK -->
                 </td>
                 <!-- END BLOCK_LISTA_COLUNA_ICONES -->
 
@@ -348,7 +351,7 @@
             <tr valign="middle" class="tab_rodape">                    
                 <!-- BEGIN BLOCK_RODAPE_COLUNA -->
                 <td width="{RODAPE_COLUNA_TAMANHO}" colspan="{RODAPE_COLUNA_COLSPAN}" rowspan="{RODAPE_COLUNA_ROWSPAN}" align="{RODAPE_COLUNA_ALINHAMENTO}">
-                    <span class="tab_titrodape"> {RODAPE_COLUNA_NOME}</span>
+                    <span class="tab_titrodape" nome="{RODAPE_SPAN_NOME}" id="{RODAPE_SPAN_NOME}"> {RODAPE_COLUNA_NOME}</span>
                     <!-- BEGIN BLOCK_RODAPE_CONTEUDO -->
                     <!-- BEGIN BLOCK_RODAPE_ICONE -->
                     <img 
@@ -397,8 +400,6 @@
 
     
     
-
-    
     
     
     <!-- BEGIN BLOCK_RODAPE_BOTOES -->
@@ -422,5 +423,9 @@
         <!-- END BLOCK_RODAPE_BOTAO -->    
     <!-- END BLOCK_RODAPE_BOTOES -->
 
-    
+ <!-- BEGIN BLOCK_FECHARFORM -->
+</form>
+ <!-- END BLOCK_FECHARFORM -->
+
+
 </body>

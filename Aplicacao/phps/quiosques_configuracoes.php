@@ -57,7 +57,8 @@ $sql="SELECT *
      $bairro=$dados["qui_bairro"];
      $cep=$dados["qui_cep"];
      $quiosque_estado=$dados["est_codigo"];
-     $quiosque_estado_sigla=$dados["est_sigla"];
+     $quiosque_estado=$dados["est_codigo"];
+     $permiteedicaoclientenavenda=$dados["quicnf_permiteedicaoclientenavenda"];
  }
 
 //Template de Título e Sub-título
@@ -700,6 +701,30 @@ $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
+
+
+//Permitir edição do cliente na venda
+$tpl1->TITULO = "Permitir edição de cliente na venda";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_permiteedicaoclientenavenda";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "permiteedicaoclientenavenda";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($permiteedicaoclientenavenda=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($permiteedicaoclientenavenda=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
 
 //-------------
 

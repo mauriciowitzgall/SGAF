@@ -112,7 +112,7 @@ if ($tiponegociacao==2) {
     $tpl->block("BLOCK_SUBPRODUTOS_CABECALHO");
 }
 $tpl->block("BLOCK_VENDA_CABECALHO");
-
+$tpl->OPER_COLSPAN="2";
 
 
 //Pega todos os dados da listagem de produtos da entrada
@@ -133,7 +133,8 @@ SELECT
     ent_tiponegociacao,
     entpro_valunicusto,
     entpro_temsubprodutos,
-    entpro_retiradodoestoquesubprodutos
+    entpro_retiradodoestoquesubprodutos,
+    pro_referencia
 FROM
     entradas_produtos
     join entradas on (ent_codigo=entpro_entrada) 
@@ -152,9 +153,13 @@ if (!$query)
 while ($dados = mysql_fetch_array($query)) {
     $numero = $dados[9];
     $validade = $dados[5];
+    $produto_codigo=$dados[3];
+    $lote=$entrada;
     $tpl->ENTRADAS_NUMERO = $dados[9];
     $tpl->PRODUTO = $dados[3];
-    $tpl->ENTRADAS_PRODUTO = $dados[3];
+    $numeroreferencia=$dados[3];
+    if ($dados[16]!="") $numeroreferencia.=" ($dados[16])";
+    $tpl->ENTRADAS_PRODUTO = $numeroreferencia;
     $tpl->ENTRADAS_PRODUTO_NOME = $dados[0];
     $tpl->ENTRADAS_DATA = converte_data($dados[7]);
     $tpl->ENTRADAS_HORA = converte_hora($dados[8]);
@@ -164,13 +169,16 @@ while ($dados = mysql_fetch_array($query)) {
         $tpl->ENTRADAS_QTD = number_format($dados[2], 3, ',', '.');
     else
         $tpl->ENTRADAS_QTD = number_format($dados[2], 0, '', '.');
+    $tpl->ENTRADAS_VALORUNI = "R$ " . number_format($dados[4], 2, ',', '.');
     if ($tiponegociacao == 2) {
         $tpl->ENTRADAS_VALORUNI_CUSTO = "R$ " . number_format($dados['entpro_valunicusto'], 2, ',', '.');
         $tpl->ENTRADAS_VALOR_TOTAL_CUSTO = "R$ " . number_format($dados['entpro_quantidade'] * $dados['entpro_valunicusto'], 2, ',', '.');
         $tpl->block("BLOCK_CUSTO");
+        
+        $tpl->block("BLOCK_VENDA_VALUNI");
+
     } else if ($tiponegociacao == 1) {
         $totalvenda = $dados[4] * $dados[2];
-        $tpl->ENTRADAS_VALORUNI = "R$ " . number_format($dados[4], 2, ',', '.');
         $tpl->block("BLOCK_VENDA_VALUNI");
     }
 
@@ -227,6 +235,15 @@ while ($dados = mysql_fetch_array($query)) {
     $tpl->IMPRIMIR = $icones . "etiquetas.png";
 
     $tpl->block("BLOCK_LISTA_OPERACAO_ETIQUETAS");
+    
+
+    $tpl->ICONES_ARQUIVO="vendas.png";
+    $tpl->ICONES_CAMINHO="$icones";
+    $tpl->ICONES_TITULO="Ver Vendas";
+    $tpl->VERVENDAS_PRODUTO="$produto_codigo";
+    $tpl->VERVENDAS_LOTE="$lote";
+    $tpl->block("BLOCK_LISTA_OPERACAO_VERVENDAS");
+
     $tpl->block("BLOCK_LISTA_OPERACAO");
     $tpl->block("BLOCK_LISTA");
 }
@@ -236,6 +253,8 @@ while ($dados = mysql_fetch_array($query)) {
 if ($tiponegociacao == 2) {
     $tpl->block("BLOCK_CUSTO_RODAPE");
     $tpl->block("BLOCK_SUBPRODUTOS_RODAPE");
+    $tpl->block("BLOCK_VENDA_VALUNI_RODAPE");
+    
 } else {
     $tpl->block("BLOCK_VENDA_VALUNI_RODAPE");
 }
@@ -270,8 +289,12 @@ $tpl->TOTAL_CUSTO = "$tot9";
   $tpl->TOTAL_LUCRO = "$tot10";
  */
 
-//Icone imprimir etiqueta
+//Rodapé imprimir etiqueta
 $tpl->block("BLOCK_LISTA_NADA_OPERACAO");
+//Rodapé ver vendas
+$tpl->block("BLOCK_LISTA_NADA_OPERACAO");
+
+
 
 $tpl->block("BLOCK_BOTAO_VOLTAR");
 $tpl->block("BLOCK_BOTAO_IMPRIMIR");

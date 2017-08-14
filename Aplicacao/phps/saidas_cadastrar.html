@@ -144,7 +144,15 @@
                 <img width="15px"  src="{ICONES_CAMINHO}remover.png"  title="Remover" alt="Remover">
             </a> 
         </td>
-        <!--  END BLOCK_LISTA_EXCLUIR -->          
+        <!--  END BLOCK_LISTA_EXCLUIR -->   
+        <!--  BEGIN BLOCK_LISTA_EXCLUIR_DESABILITADO -->
+        <td align="center" class="fundo1" width="35px">
+            <img width="15px"  src="{ICONES_CAMINHO}remover_desabilitado.png"  title="{EXCLUIR_MOTIVO}" alt="Remover">
+        </td>
+        <!--  END BLOCK_LISTA_EXCLUIR_DESABILITADO -->    
+
+
+
         </td>
     </tr>
     <!-- END BLOCK_LISTA -->
@@ -190,7 +198,7 @@
         <!-- BEGIN BLOCK_BOTOES_RODAPE_DEVOLUCOES -->
         <td width="" align="left">
             <a href="{LINK_DEVOLUCOES}" class="link">
-                <input type="button" value="DEVOLUÇÕES" class="botao botaoamarelo fonte3"  >
+                <input type="button" value="DEVOLUÇÕES {QTD_DEVOLUCOES}" class="botao botaoamarelo fonte3"  >
             </a>    
         </td>
         <!-- END BLOCK_BOTOES_RODAPE_DEVOLUCOES -->

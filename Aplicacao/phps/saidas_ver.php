@@ -59,6 +59,7 @@ $descricao = $dados["sai_descricao"];
 $data = $dados["sai_datacadastro"];
 $hora = $dados["sai_horacadastro"];
 $numero = $dados["sai_codigo"];
+$status_venda=$dados["sai_status"];
 
 $totalbruto = $dados["sai_totalbruto"];
 $areceber = $dados["sai_areceber"];
@@ -238,7 +239,7 @@ $tpl2->block(BLOCK_LISTA_CABECALHO);
 //Mostra todos os produtos da saida em quest�o
 $sql2 = "
 SELECT 
-    saipro_codigo,pro_nome,pes_nome,saipro_lote,saipro_quantidade,protip_sigla,protip_codigo,saipro_valorunitario,saipro_valortotal,pro_referencia,pro_tamanho,pro_cor,pro_descricao 
+    saipro_codigo,pro_nome,pes_nome,saipro_lote,saipro_quantidade,protip_sigla,protip_codigo,saipro_valorunitario,saipro_valortotal,pro_referencia,pro_tamanho,pro_cor,pro_descricao,pro_codigo
 FROM 
     saidas
     join saidas_produtos on (saipro_saida=sai_codigo)
@@ -266,6 +267,7 @@ while ($dados2 = mysql_fetch_assoc($query2)) {
     $tpl2->block("BLOCK_LISTA_COLUNA");
 
     $nome= $dados2['pro_nome'];
+    $produto_codigo= $dados2['pro_codigo'];
     $referencia= $dados2['pro_referencia'];
     $tamanho= $dados2['pro_tamanho'];
     $cor= $dados2['pro_cor'];
@@ -274,7 +276,11 @@ while ($dados2 = mysql_fetch_assoc($query2)) {
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
     $tpl2->LISTA_COLUNA_TAMANHO = "";
     $tpl2->LISTA_COLUNA_CLASSE = "";
-    $tpl2->LISTA_COLUNA_VALOR = $referencia;
+    $numeroreferencia=$produto_codigo;
+    if ($referencia!="") $numeroreferencia.=" ($referencia)";
+
+    $tpl1->LISTA_PRODUTO_REFERENCIA = $numeroreferencia;
+    $tpl2->LISTA_COLUNA_VALOR = $numeroreferencia;
     $tpl2->block("BLOCK_LISTA_COLUNA");
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
     $tpl2->LISTA_COLUNA_TAMANHO = "";
@@ -601,6 +607,40 @@ if ($ope != 4) {
     $tpl4->block("BLOCK_BOTAOPADRAO");
     $tpl->block("BLOCK_CONTEUDO");
     $tpl4->block("BLOCK_COLUNA");
+
+
+    //Botão Devoluções
+    $usadevolucoessobrevendas=usadevolucoessobrevendas($usuario_quiosque);
+    if (($usadevolucoessobrevendas==1)&&($status_venda==1)) {
+        $sql12="SELECT count(saidev_numero) as qtd_devolucoes FROM saidas_devolucoes WHERE saidev_saida=$saida";
+        if (!$query12=mysql_query($sql12)) die("Erro de SQL12:" . mysql_error());
+        $dados12=mysql_fetch_assoc($query12);
+        $qtd_devolucoes=$dados12["qtd_devolucoes"];  
+        if ($qtd_devolucoes>0) $qtd_devolucoes_texto="($qtd_devolucoes)";  else $qtd_devolucoes_texto=""; 
+        $tpl4->COLUNA_TAMANHO="";
+        $tpl4->COLUNA_ALINHAMENTO  ="";                
+        $tpl4->COLUNA_LINK_ARQUIVO="saidas_devolucoes.php?codigo=$saida";
+        $tpl4->COLUNA_LINK_CLASSE="";
+        $tpl4->COLUNA_LINK_TARGET="";
+        $tpl4->block(BLOCK_COLUNA_LINK);  
+        $tpl4->BOTAO_CLASSE="botao botaoamarelo fonte3";
+        $tpl4->block(BLOCK_BOTAO_DINAMICO); 
+        $tpl4->BOTAO_TECLA="";
+        $tpl4->BOTAO_TIPO="button";
+        $tpl4->BOTAO_VALOR ="DEVOLUÇÕES $qtd_devolucoes_texto";
+        $tpl4->BOTAO_NOME="DEVOLUÇÕES";
+        $tpl4->BOTAO_ID="";
+        $tpl4->BOTAO_DICA="";
+        $tpl4->BOTAO_ONCLICK="";
+        $tpl4->BOTAOPADRAO_CLASSE="botao botaoamarelo fonte3";
+        $tpl4->block(BLOCK_BOTAO);         
+        $tpl4->ONCLICK="";
+        $tpl4->block(BLOCK_COLUNA);
+        $tpl4->block(BLOCK_LINHA);
+        $tpl4->block(BLOCK_BOTOES);
+       
+    }
+
 
     $tpl4->block("BLOCK_LINHA");
     $tpl4->block("BLOCK_BOTOES");

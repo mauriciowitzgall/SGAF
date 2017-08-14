@@ -439,7 +439,8 @@ if ($passo != "") {
                 pro_referencia,
                 pro_tamanho,
                 pro_cor,
-                pro_descricao
+                pro_descricao,
+                entpro_produto
 	FROM
 		entradas_produtos
 		join entradas on (ent_codigo=entpro_entrada) 
@@ -706,8 +707,11 @@ if ($passo != "") {
             $tpl->block("BLOCK_CABECALHO_OPERACAO");
             while ($dados = mysql_fetch_array($query5)) {
                 $tpl->ENTRADAS_NUMERO = $dados['entpro_numero'];
-                $tpl->ENTRADAS_PRODUTO = $dados[3];
-                $produto_nome2="$dados[13] $dados[0]  $dados[14] $dados[15] $dados[16]";
+                
+                $numeroreferencia=$dados['entpro_produto'];
+                if ($dados[13]!="") $numeroreferencia.=" ($dados[13])";
+                $tpl->ENTRADAS_PRODUTO = $numeroreferencia;
+                $produto_nome2="$dados[0]  $dados[14] $dados[15] $dados[16]";
                 $tpl->ENTRADAS_PRODUTO_NOME = $produto_nome2;
                 //$tpl->ENTRADAS_LOCAL = $dados[6];
                 $tpl->SIGLA = $dados["protip_sigla"];

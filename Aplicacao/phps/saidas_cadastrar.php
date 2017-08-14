@@ -52,6 +52,11 @@ $horaatual = date("H:i:s");
 $operacao = $_GET["operacao"]; //Operação 1=Cadastrar 2=Editar 3=Ver
 
 
+//Verifica se permite edicão de cliente na venda
+$permiteedicaoclientenavenda=permiteedicaoclientenavenda($usuario_quiosque);
+
+
+
 //Verifica se usa comanda
 $usacomanda=usacomanda($usuario_quiosque);
 
@@ -80,7 +85,7 @@ if ($retirar_produto == '1') {
         ";
         $query = mysql_query($sql);
         if (!$query)
-            die("Erro de SQL11:" . mysql_error());
+            die("Erro de SQL98:" . mysql_error());
         while ($dados = mysql_fetch_assoc($query)) {
             $consumidor = $dados["sai_consumidor"];
             $consumidor_cpf = $dados["pes_cpf"];
@@ -176,8 +181,9 @@ if ($retirar_produto == '1') {
 
 $passo= $_REQUEST["passo"];
 
+
 //Verificar se é uma edição, se sim então atualiza id e consumidor
-if (($operacao==2)&&($passo==2)&&($tiposaida!=3)) {
+if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&($permiteedicaoclientenavenda==1)) {
     //print_r($_REQUEST);
     $id_novo=$_REQUEST["id"];
     if ($id_novo=="") $id_novo=$id;
@@ -245,7 +251,7 @@ $tpl_titulo->TITULO = "SAÍDAS";
 if ($tiposaida == 1) {
     $tpl_titulo->SUBTITULO = "VENDA";
 } else {
-    $tpl_titulo->SUBTITULO = "DEVOLUÇÃO";
+    $tpl_titulo->SUBTITULO = "AJUSTE";
 }
 $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "saidas.png";
@@ -750,7 +756,7 @@ if ($passo == 2) {
     
    
     //Verifica se o consumidor possui vendas incompleta
-    if (($passo==2)&&($ignorar_vendas_incompletas!=1)&&($tiposaida!=3)) { // Se for uma devolução, então não realizar essa verificação
+    if (($passo==2)&&($ignorar_vendas_incompletas!=1)&&($tiposaida!=3)&&($produto=="")) { // Se for uma devolução, então não realizar essa verificação
         $sql4="SELECT * from saidas  WHERE sai_status=2 and sai_consumidor= $consumidor and sai_codigo not in ($saida)";
         if (!$query4 = mysql_query($sql4)) die("Erro 4:" . mysql_error());
         $linhas4 = mysql_num_rows($query4);
@@ -785,6 +791,7 @@ if ($passo == 2) {
             exit;
         }
     }
+
 
     //Etiqueta
     $tpl1->CAMPO_QTD_CARACTERES = "14";
@@ -1057,7 +1064,7 @@ if ($passo == 2) {
     $tpl1->LISTA_GET_PASSO = $passo;
     $sql_lista = "
     SELECT 
-        pro_nome, pes_nome, saipro_lote, saipro_quantidade, saipro_valorunitario, saipro_valortotal,saipro_codigo,pro_codigo,saipro_codigo,saipro_porcao,saipro_porcao_quantidade,propor_nome,protip_sigla,pro_tipocontagem, pro_referencia,pro_tamanho,pro_cor,pro_descricao 
+        pro_nome, pes_nome, saipro_lote, saipro_quantidade, saipro_valorunitario, saipro_valortotal,saipro_codigo,pro_codigo,saipro_codigo,saipro_porcao,saipro_porcao_quantidade,propor_nome,protip_sigla,pro_tipocontagem, pro_referencia,pro_tamanho,pro_cor,pro_descricao,saipro_produto
     FROM 
         saidas_produtos
         JOIN produtos ON (saipro_produto=pro_codigo)    
@@ -1086,15 +1093,18 @@ if ($passo == 2) {
             $num++;
             $tpl1->LISTA_GET_SAIPRO = $dados_lista["saipro_codigo"];
             $tpl1->LISTA_NUM = $dados_lista["saipro_codigo"];
-            
+            $itemvenda=$dados_lista["saipro_codigo"];
             $prod_nome=$dados_lista["pro_nome"];
             $prod_referencia=$dados_lista["pro_referencia"];
             $prod_tamanho=$dados_lista["pro_tamanho"];
             $prod_cor=$dados_lista["pro_cor"];
             $prod_descricao=$dados_lista["pro_descricao"];
-
+            $lote=$dados_lista["saipro_lote"];
+            $produto_codigo=$dados_lista["saipro_produto"];
             $nome2="$prod_nome $prod_tamanho $prod_cor $prod_descricao";
-            $tpl1->LISTA_PRODUTO_REFERENCIA = $prod_referencia;
+            $numeroreferencia=$produto_codigo;
+            if ($prod_referencia!="") $numeroreferencia.=" ($prod_referencia)";
+            $tpl1->LISTA_PRODUTO_REFERENCIA = $numeroreferencia;
             $tpl1->LISTA_PRODUTO = $nome2;
             $tpl1->LISTA_PRODUTO_COD = $dados_lista["pro_codigo"];
             //$tpl1->LISTA_FORNECEDOR = $dados_lista["pes_nome"];
@@ -1117,7 +1127,21 @@ if ($passo == 2) {
 
             $total = $dados_lista["saipro_valortotal"];
             $total_geral = $total_geral + $total;
-            $tpl1->block("BLOCK_LISTA_EXCLUIR");
+
+            //Não é possíve excluir itens da venda caso tenha devoluções ou nota fiscal gerada.
+            //Verifica se há produtos devolvidos deste produto e lote
+            $sql18="SELECT * FROM saidas_devolucoes_produtos WHERE saidevpro_saida=$saida AND saidevpro_itemsaida=$itemvenda";
+            if (!$query18 = mysql_query($sql18)) die("Erro CONSULTA DEVOLUCOES:" . mysql_error()."");
+            $linhas18=mysql_num_rows($query18);
+
+            if ($linhas18>=1) {$temdevolucao=1; } else {$temdevolucao=0;}
+            if ($temdevolucao==1) {
+                $tpl1->EXCLUIR_MOTIVO="Este item possui devoluções vinculados!";
+                $tpl1->block("BLOCK_LISTA_EXCLUIR_DESABILITADO");
+            } else {
+                $tpl1->block("BLOCK_LISTA_EXCLUIR");
+            }
+
             $tpl1->block("BLOCK_LISTA");
         }
     }
@@ -1146,18 +1170,21 @@ if ($passo == 2) {
     
     
     //Botão Eliminar Venda
-    //Verificar se foi emitido nota, se sim então não permitir a eliminação da venda
+    //Verificar se foi emitido nota e se possui devolucoes,  se sim então não permitir a eliminação da venda
     $sql="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
-    if (!$query = mysql_query($sql)) die("Erro BOTÃO ELIMINAR VENDA: (((" . mysql_error().")))");
+    if (!$query = mysql_query($sql)) die("Erro BOTÃO ELIMINAR VENDA 1: (((" . mysql_error().")))");
     $linhas = mysql_num_rows($query);
-    if ($linhas==0) {
-        $temnota=0;
-        $tpl1->LINK_ELIMINAR = "saidas_deletar.php?codigo=$saida&tiposaida=$tiposaida";
+    if ($linhas==0) $temnota=0; else $temnota=1;
+    //Verifica se há devoluções
+    $sql="SELECT * FROM saidas_devolucoes WHERE saidev_saida=$saida";
+    if (!$query = mysql_query($sql)) die("Erro BOTÃO ELIMINAR VENDA 2: (((" . mysql_error().")))");
+    $linhas = mysql_num_rows($query);
+    if ($linhas>0) $temdevolucao=1; else $temdevolucao=0;
+    if (($temdevolucao==0)&&($temnota==0)) {
         $tpl1->block("BLOCK_BOTOES_RODAPE_ELIMINAR");
-    } else {
-        $temnota=1;
-    }
+        $tpl1->LINK_ELIMINAR = "saidas_deletar.php?codigo=$saida&tiposaida=$tiposaida";
     
+    }
     
     //Verifica qual é o status atual da venda (venda completa ou incompleta)
     $sql = "SELECT sai_status FROM saidas WHERE sai_codigo=$saida";
@@ -1171,6 +1198,11 @@ if ($passo == 2) {
     $usadevolucoessobrevendas=usadevolucoessobrevendas($usuario_quiosque);
     if (($usadevolucoessobrevendas==1)&&($status_venda==1)) {
         $tpl1->LINK_DEVOLUCOES = "saidas_devolucoes.php?codigo=$saida";
+        $sql12="SELECT count(saidev_numero) as qtd_devolucoes FROM saidas_devolucoes WHERE saidev_saida=$saida";
+        if (!$query12=mysql_query($sql12)) die("Erro de SQL12:" . mysql_error());
+        $dados12=mysql_fetch_assoc($query12);
+        $qtd_devolucoes=$dados12["qtd_devolucoes"];
+        if ($qtd_devolucoes>0) $tpl1->QTD_DEVOLUCOES=" ($qtd_devolucoes)"; else $tpl1->QTD_DEVOLUCOES="";
         $tpl1->block("BLOCK_BOTOES_RODAPE_DEVOLUCOES");  
     }
     

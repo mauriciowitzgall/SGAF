@@ -406,7 +406,7 @@ $tpl1->SELECT_TAMANHO = "";
 $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
 //Se a operação for editar então mostrar os options, e o option em questão selecionado
-if (($operacao == "editar") || ($operacao == "ver") || ($estado != "")) {
+if ((($operacao == "editar") || ($operacao == "ver")) && ($estado != "")) {
     $sql = "  SELECT DISTINCT
         cid_codigo,cid_nome
     FROM

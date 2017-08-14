@@ -177,5 +177,13 @@ function usacomanda($quiosque) {
     }
     return $usa;
 }
+function permiteedicaoclientenavenda($quiosque) {
+    $sql="SELECT quicnf_permiteedicaoclientenavenda FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
+    if (!$query= mysql_query($sql)) die("Erro SQL Função: usacomanda: " . mysql_error());
+    while ($dados=  mysql_fetch_assoc($query)) {    
+        $permite=$dados["quicnf_permiteedicaoclientenavenda"];
+    }
+    return $permite;
+}
 
 ?>

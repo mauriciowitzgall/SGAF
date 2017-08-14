@@ -177,6 +177,17 @@ if ($usuario_grupo==2) {
         if (!$query3) {
             die("Erro SQL: " . mysql_error());
         }
+
+
+        //Itens de devolução
+        echo $sql3 = "DELETE FROM saidas_devolucoes_produtos WHERE saidevpro_saida in (SELECT saidev_saida FROM saidas_devolucoes JOIN saidas on (saidev_saida=sai_codigo) WHERE sai_quiosque=$codigo)";
+        if (!$query3 = mysql_query($sql3)) die("Erro SQL 88: " . mysql_error());
+        
+        //Devoluções
+        echo $sql3 = "DELETE FROM saidas_devolucoes WHERE saidev_saida in (SELECT sai_codigo FROM saidas WHERE sai_quiosque=$codigo)";
+        if (!$query3 = mysql_query($sql3)) die("Erro SQL 89: " . mysql_error());
+        
+
         
         // Saídas
         $sql3 = "DELETE FROM saidas_produtos WHERE saipro_saida in (SELECT sai_codigo FROM saidas WHERE sai_quiosque=$codigo)";
@@ -275,6 +286,10 @@ if ($usuario_grupo==2) {
         if (!$query3) {
             die("Erro SQL: " . mysql_error());
         }
+
+
+
+
         
         //quiosques_configuracoes
         $sql3 = "DELETE FROM quiosques_configuracoes WHERE quicnf_quiosque=$codigo";
@@ -285,10 +300,8 @@ if ($usuario_grupo==2) {
         
         //quiosques
         $sql3 = "DELETE FROM quiosques WHERE qui_codigo = $codigo"; 
-        $query3 = mysql_query($sql3);
-        if (!$query3) {
-            die("Erro SQL: " . mysql_error());
-        }
+        if (!$query3 = mysql_query($sql3))  die("Erro SQL: " . mysql_error());
+        
         
         //Zera grupo de permissoes todos usuários que estao vinculados ao quiosque deletado que não sejam adminsitradores ou gestores
         //DEVE VIR ANTES DO SQL QUE ZERA QUIOSQUE

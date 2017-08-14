@@ -26,7 +26,7 @@ $saida=$_GET["saida"];
 
 
 $tpl = new Template("templates/listagem_2.html");
-$tpl->LINK_FILTRO = "saidas_devolucoes_cadastrar2.php";
+$tpl->LINK_FILTRO = "saidas_devolucoes_cadastrar2.php?saida=$saida";
 
 //Pega dados da venda para popular os campos de filtro desabilitados
 $sql="SELECT * FROM saidas LEFT JOIN pessoas on sai_consumidor = pes_codigo WHERE sai_codigo=$saida";
@@ -76,6 +76,12 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 $tpl->CABECALHO_COLUNA_TAMANHO="";
 $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="PRODUTO";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
+//Lote
+$tpl->CABECALHO_COLUNA_TAMANHO="";
+$tpl->CABECALHO_COLUNA_COLSPAN="";
+$tpl->CABECALHO_COLUNA_NOME="LOTE";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Quantidade Venda
@@ -129,6 +135,7 @@ while ($dados3=  mysql_fetch_assoc($query3)) {
     $qtdvenda=$dados3["saipro_quantidade"];
     $produto_tipocontagem_sigla=$dados3["protip_sigla"];
     $valuni=$dados3["saipro_valorunitario"];
+    $lote=$dados3["saipro_lote"];
     
 
     /*if ($qtd_emestoque==0) {
@@ -154,6 +161,14 @@ while ($dados3=  mysql_fetch_assoc($query3)) {
     $tpl->LISTA_COLUNA_CLASSE="";
     $tpl->LISTA_COLUNA_TAMANHO="";
     $tpl->LISTA_COLUNA_VALOR= "$produto_nome";
+    $tpl->block("BLOCK_LISTA_COLUNA");
+    //Produto
+    $tpl->LISTA_COLUNA_ALINHAMENTO="right";
+    $tpl->LISTA_COLUNA_COLSPAN="";
+    $tpl->LISTA_COLUNA_ROWSPAN="";
+    $tpl->LISTA_COLUNA_CLASSE="";
+    $tpl->LISTA_COLUNA_TAMANHO="";
+    $tpl->LISTA_COLUNA_VALOR= "$lote";
     $tpl->block("BLOCK_LISTA_COLUNA");
 
     //Quantidade Original da Venda
@@ -189,10 +204,10 @@ while ($dados3=  mysql_fetch_assoc($query3)) {
     $nome="qtddigitada_"."$itemvenda";
     $id=$nome;
     $qtdlimite=$qtdvenda - $qtddevolvida;
-    if ($qtdlimite==0) $desabilita=" disabled ";
+    if ($qtdlimite==0) $desabilita=" disabled "; else $desabilita="";
     $nome_valuni="valuni_"."$itemvenda";
     $nome_valtot="valtot_"."$itemvenda";
-    $tpl->LISTA_COLUNA_VALOR= "<input type='number' pattern='[0-9]+$' min='0' max='$qtdlimite' name='$nome'id='$id' $desabilita class='campopadrao' style='width:70px' onblur='verifica_qtd_digitada(this, $itemvenda)' > / $qtdlimite $produto_tipocontagem_sigla";
+    $tpl->LISTA_COLUNA_VALOR= "<input type='number' pattern='[0-9]+$' min='0' max='$qtdlimite' name='$nome' id='$id' $desabilita class='campopadrao' style='width:70px' onblur='verifica_qtd_digitada(this, $itemvenda)' > / $qtdlimite $produto_tipocontagem_sigla";
     $tpl->block("BLOCK_LISTA_COLUNA");
 
 
@@ -225,6 +240,7 @@ $tpl->RODAPE_COLUNA_COLSPAN="";
 $tpl->RODAPE_COLUNA_ROWSPAN="";
 $tpl->RODAPE_COLUNA_ALINHAMENTO="";
 $tpl->RODAPE_COLUNA_NOME=" ";
+$tpl->RODAPE_SPAN_NOME="";
 $tpl->block("BLOCK_RODAPE_CONTEUDO");
 $tpl->block("BLOCK_RODAPE_COLUNA");       
 //2
@@ -233,6 +249,7 @@ $tpl->RODAPE_COLUNA_COLSPAN="";
 $tpl->RODAPE_COLUNA_ROWSPAN="";
 $tpl->RODAPE_COLUNA_ALINHAMENTO="";
 $tpl->RODAPE_COLUNA_NOME=" ";
+$tpl->RODAPE_SPAN_NOME="";
 $tpl->block("BLOCK_RODAPE_CONTEUDO");
 $tpl->block("BLOCK_RODAPE_COLUNA");       
 //3
@@ -241,6 +258,7 @@ $tpl->RODAPE_COLUNA_COLSPAN="";
 $tpl->RODAPE_COLUNA_ROWSPAN="";
 $tpl->RODAPE_COLUNA_ALINHAMENTO="";
 $tpl->RODAPE_COLUNA_NOME=" ";
+$tpl->RODAPE_SPAN_NOME="";
 $tpl->block("BLOCK_RODAPE_CONTEUDO");
 $tpl->block("BLOCK_RODAPE_COLUNA");       
 //4
@@ -249,6 +267,7 @@ $tpl->RODAPE_COLUNA_COLSPAN="";
 $tpl->RODAPE_COLUNA_ROWSPAN="";
 $tpl->RODAPE_COLUNA_ALINHAMENTO="";
 $tpl->RODAPE_COLUNA_NOME=" ";
+$tpl->RODAPE_SPAN_NOME="";
 $tpl->block("BLOCK_RODAPE_CONTEUDO");
 $tpl->block("BLOCK_RODAPE_COLUNA");       
 //5
@@ -257,6 +276,7 @@ $tpl->RODAPE_COLUNA_COLSPAN="";
 $tpl->RODAPE_COLUNA_ROWSPAN="";
 $tpl->RODAPE_COLUNA_ALINHAMENTO="";
 $tpl->RODAPE_COLUNA_NOME=" ";
+$tpl->RODAPE_SPAN_NOME="";
 $tpl->block("BLOCK_RODAPE_CONTEUDO");
 $tpl->block("BLOCK_RODAPE_COLUNA");       
 //6
@@ -265,18 +285,35 @@ $tpl->RODAPE_COLUNA_COLSPAN="";
 $tpl->RODAPE_COLUNA_ROWSPAN="";
 $tpl->RODAPE_COLUNA_ALINHAMENTO="";
 $tpl->RODAPE_COLUNA_NOME=" ";
+$tpl->RODAPE_SPAN_NOME="";
+$tpl->block("BLOCK_RODAPE_CONTEUDO");
+$tpl->block("BLOCK_RODAPE_COLUNA");  
+//7
+$tpl->RODAPE_COLUNA_TAMANHO="";
+$tpl->RODAPE_COLUNA_COLSPAN="";
+$tpl->RODAPE_COLUNA_ROWSPAN="";
+$tpl->RODAPE_COLUNA_ALINHAMENTO="";
+$tpl->RODAPE_COLUNA_NOME=" ";
+$tpl->RODAPE_SPAN_NOME="";
 $tpl->block("BLOCK_RODAPE_CONTEUDO");
 $tpl->block("BLOCK_RODAPE_COLUNA");       
-//7
+//8
 $tpl->RODAPE_COLUNA_TAMANHO="";
 $tpl->RODAPE_COLUNA_COLSPAN="";
 $tpl->RODAPE_COLUNA_ROWSPAN="";
 $tpl->RODAPE_COLUNA_ALINHAMENTO="right";
 $tpl->RODAPE_COLUNA_NOME=" - ";
+$tpl->RODAPE_SPAN_NOME="valtot";
 $tpl->block("BLOCK_RODAPE_CONTEUDO");
 $tpl->block("BLOCK_RODAPE_COLUNA");       
 $tpl->block("BLOCK_RODAPE_LINHA"); 
 $tpl->block("BLOCK_RODAPE");
+
+
+//botão oculto valor total da devolucao
+$tpl->CAMPOOCULTO_NOME="campooculto_valtot";
+$tpl->CAMPOOCULTO_VALOR="";
+$tpl->block("BLOCK_CAMPOSOCULTOS");
 
 
 if (mysql_num_rows($query3) == 0) $tpl->block("BLOCK_LISTA_NADA");
@@ -322,6 +359,7 @@ $tpl4->block("BLOCK_BOTAOPADRAO");
 $tpl4->block("BLOCK_COLUNA");
 $tpl4->block("BLOCK_LINHA");
 $tpl4->block("BLOCK_BOTOES");
+$tpl4->block("BLOCK_FECHARFORM");
 
 
 $tpl4->show();
