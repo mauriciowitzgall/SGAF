@@ -17323,3 +17323,48 @@ ALTER TABLE `sgaf_v4.0b1`.`quiosques_configuracoes`
 ADD COLUMN `quicnf_permiteedicaoclientenavenda` INT(1) NOT NULL DEFAULT '1' AFTER `quicnf_devolucoessobrevendas`;
 
 
+CREATE TABLE `sgaf`.`saidas_pagamentos` (
+  `saipag_codigo` INT NOT NULL AUTO_INCREMENT,
+  `saipag_saida` BIGINT NOT NULL,
+  `saipag_qtdparcelas` INT NOT NULL DEFAULT 1,
+  `saipag_valor` FLOAT NOT NULL,
+  `saipag_obs` TEXT NULL,
+  `saipag_caixaoperacao` INT NULL,
+  PRIMARY KEY (`saipag_codigo`),
+  INDEX `saida` (`saipag_saida` ASC),
+  INDEX `caixaoperacao` (`saipag_caixaoperacao` ASC))
+ENGINE = MyISAM;
+
+
+ALTER TABLE `sgaf`.`saidas_pagamentos` 
+DROP COLUMN `saipag_qtdparcelas`;
+
+ALTER TABLE `sgaf`.`saidas_pagamentos` 
+ADD COLUMN `saipag_metpagamento` TINYINT NOT NULL AFTER `saipag_caixaoperacao`;
+
+ALTER TABLE `sgaf`.`saidas` 
+ADD COLUMN `sai_qtdparcelas` INT NOT NULL DEFAULT 1 AFTER `sai_id`;
+
+ALTER TABLE `sgaf`.`saidas` 
+CHANGE COLUMN `sai_qtdparcelas` `sai_qtdparcelas` TINYINT NOT NULL DEFAULT '1' ;
+
+
+ALTER TABLE `sgaf`.`saidas_pagamentos` 
+ADD COLUMN `saipag_data` TIMESTAMP NOT NULL AFTER `saipag_codigo`;
+
+
+ALTER TABLE `sgaf`.`caixas_entradassaidas` 
+DROP COLUMN `caientsai_venda`,
+DROP COLUMN `caientsai_areceber`;
+
+
+ALTER TABLE `sgaf`.`saidas_pagamentos` 
+DROP COLUMN `saipag_caixaoperacao`,
+DROP INDEX `caixaoperacao` ;
+
+ALTER TABLE `sgaf`.`caixas_entradassaidas` 
+ADD COLUMN `caientsai_saidapagamento` INT NOT NULL DEFAULT 0 AFTER `caientsai_numerooperacao`,
+ADD COLUMN `caientsai_saidadevolucao` INT NOT NULL DEFAULT 0 AFTER `caientsai_saidapagamento`;
+
+
+

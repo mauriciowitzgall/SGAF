@@ -6,7 +6,7 @@ if ($permissao_saidas_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
-$tipopagina = "saidas";
+$tipopagina = "devolucoes";
 include "includes.php";
 
 

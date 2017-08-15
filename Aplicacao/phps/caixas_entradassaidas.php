@@ -101,11 +101,6 @@ $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="DESCRIÇÃO";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-//À Receber
-$tpl->CABECALHO_COLUNA_TAMANHO="";
-$tpl->CABECALHO_COLUNA_COLSPAN="2";
-$tpl->CABECALHO_COLUNA_NOME="À RECEBER";
-$tpl->block("BLOCK_LISTA_CABECALHO");
 
 
 
@@ -120,7 +115,8 @@ if ($situacao==1) {
 $sql="
     SELECT * FROM caixas_entradassaidas
     JOIN caixas_tipo on (caientsai_tipo=caitip_codigo)
-    LEFT JOIN saidas on (caientsai_venda=sai_codigo)
+    LEFT JOIN saidas_pagamentos on (caientsai_saidapagamento=saipag_codigo)
+    LEFT JOIN saidas on (saipag_saida=sai_codigo)
     LEFT JOIN pessoas on (sai_consumidor=pes_codigo)
     WHERE caientsai_numerooperacao=$numero
     $sql_filtro 
@@ -158,8 +154,10 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $usuarioquecadastrou= $dados["caientsai_usuarioquecadastrou"];
     $consumidor_nome= $dados["pes_nome"];
     $id= $dados["caientsai_id"];
+    $saidapagamento=$dados["caientsai_saidapagamento"];
+    if ($saidapagamento>0) $tempagamento=1; else $tempagamento=0;
+    $saida=$dados["sai_codigo"];
 
-    
     //ID
     $tpl->LISTA_COLUNA_ALINHAMENTO="right";
     $tpl->LISTA_COLUNA_CLASSE="";
@@ -218,22 +216,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $tpl->LISTA_COLUNA_VALOR= "$descricao";
     $tpl->block("BLOCK_LISTA_COLUNA");
     
-    //A Receber
-    $tpl->LISTA_COLUNA_ALINHAMENTO="right";
-    $tpl->LISTA_COLUNA_CLASSE="";
-    $tpl->LISTA_COLUNA_TAMANHO="";
-    if ($areceber==1) {
-        $tpl->LISTA_COLUNA_VALOR= "$consumidor_nome";
-    } else {
-        $tpl->LISTA_COLUNA_VALOR= "";
-    }
-    $tpl->block("BLOCK_LISTA_COLUNA");
-    $tpl->LISTA_COLUNA_ALINHAMENTO="left";
-    $tpl->LISTA_COLUNA_CLASSE="";
-    $tpl->LISTA_COLUNA_TAMANHO="";
-    if ($venda==0) $venda="";
-    $tpl->LISTA_COLUNA_VALOR= "$venda";
-    $tpl->block("BLOCK_LISTA_COLUNA");
+    
     
     //Operações
     $tpl->ICONE_ARQUIVO="$icones";
@@ -247,11 +230,16 @@ while ($dados=  mysql_fetch_assoc($query)) {
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EDITAR");
 
         //Excluir
-        //$tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR_DESABILITADO");
-        $tpl->LINK="caixas_entradassaidas_deletar.php";
-        $tpl->CODIGO="$id";
-        $tpl->LINK_COMPLEMENTO="operacao=excluir&caixa=$caixa&numero=$numero";
-        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR");
+        if ($tempagamento==1) {
+
+            $tpl->NAOEXCLUIR_MOTIVO="Você não pode excluir este lançamento porque ele está vinculado a um PAGAMENTO na venda nº $saida, pagamento nº $saidapagamento.";
+            $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR_DESABILITADO");
+        } else {
+            $tpl->LINK="caixas_entradassaidas_deletar.php";
+            $tpl->CODIGO="$id";
+            $tpl->LINK_COMPLEMENTO="operacao=excluir&caixa=$caixa&numero=$numero";
+            $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR");
+        }
     }
 
     $tpl->block("BLOCK_LISTA"); 

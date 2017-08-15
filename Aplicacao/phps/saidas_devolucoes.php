@@ -1,5 +1,5 @@
 <?php
-$tipopagina = "saidas";
+$tipopagina = "";
 
 //Verifica se o usuário tem permissão para acessar este conteúdo
 require "login_verifica.php";

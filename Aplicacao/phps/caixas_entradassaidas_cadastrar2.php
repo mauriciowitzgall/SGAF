@@ -65,8 +65,6 @@ if ($operacao == 'cadastrar') {
             caientsai_valor,
             caientsai_datacadastro,
             caientsai_descricao,
-            caientsai_areceber,
-            caientsai_venda,
             caientsai_usuarioquecadastrou,
             caientsai_numerooperacao
         )
@@ -75,8 +73,6 @@ if ($operacao == 'cadastrar') {
         '$valor_db',
         '$datahoraatual',
         '$descricao',
-        $areceber,
-        $venda,    
         '$usuario_codigo',    
         '$numero'    
     )";
@@ -101,9 +97,7 @@ if ($operacao == 'editar') {
     SET            
         caientsai_tipo='$tipo',
         caientsai_valor='$valor_db',
-        caientsai_descricao='$descricao',
-        caientsai_areceber='$areceber',
-        caientsai_venda='$venda'
+        caientsai_descricao='$descricao'
     WHERE
         caientsai_id='$id'
     ";

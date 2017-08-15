@@ -96,7 +96,7 @@ if ($usuario_grupo<>4) {
         $tpl_menu->TD_LARGURA = "110px";
         if ($permissao_saidas_ver == 1) {
             if ($usuario_quiosque != 0) {
-                $tpl_menu->IMAGEM_ARQUIVO = "saidas.png";
+                $tpl_menu->IMAGEM_ARQUIVO = "vendas.png";
                 $tpl_menu->LINK = "saidas.php";
                 $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
                 $tpl_menu->block("BLOCK_MENU_ITEM");
