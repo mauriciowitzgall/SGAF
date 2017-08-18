@@ -57,7 +57,7 @@
             <!-- BEGIN BLOCK_FILTRO_COLUNA -->
             
             <!-- BEGIN BLOCK_FILTRO_CAMPO -->
-            <td><b>&nbsp;{CAMPO_TITULO}:</b><br>
+            <td width="{COLUNA_TAMANHO}"><b>&nbsp;{CAMPO_TITULO}:</b><br>
                 <input 
                     size="{CAMPO_TAMANHO}" 
                     type="text" 
@@ -74,13 +74,34 @@
                     style="{CAMPO_ESTILO}" 
                     <!-- END BLOCK_FILTRO_CAMPO_ESTILO -->                    
                     >
+                <!-- BEGIN BLOCK_ICONE --> 
+                         
+                <img 
+                    src="{ICONE_ARQUIVO}" 
+                    width="
+                    <!-- BEGIN BLOCK_ICONE_TAMANHOPADRAO --> 
+                    12px
+                    <!-- END BLOCK_ICONE_TAMANHOPADRAO -->                
+                    {ICONE_TAMANHO}
+                    " 
+                    title="{ICONE_DICA}" 
+                    alt="{ICONE_ALTERNATIVO}"
+                    id="{ICONE_ID}"
+                    onclick="{ICONE_AOCLICAR}
+                    " 
+                    >
+                <!-- END BLOCK_ICONE --> 
             </td>
             <!-- BEGIN BLOCK_FILTRO_CAMPO_TEXTO -->
             <td width="{CAMPO_TEXTO_TAMANHO}">{CAMPO_TEXTO_TEXTO}</td>  
             <!-- END BLOCK_FILTRO_CAMPO_TEXTO -->
             
             
-            <td width="15px"></td>               
+
+
+            <td width="15px"></td>
+
+
             <!-- END BLOCK_FILTRO_CAMPO -->
             
                
@@ -117,6 +138,9 @@
             <td width="15px"></td>               
             <!-- END BLOCK_FILTRO_SELECT -->
 
+
+
+
             <!-- BEGIN BLOCK_RODAPE_BOTAO_MODELO -->
             <td width="100%" align="right">
                 
@@ -144,6 +168,7 @@
             <!-- END BLOCK_FILTRO_COLUNA -->
         </tr>
     </table>
+
 
     
     <!-- BEGIN BLOCK_FILTRO_BOTOES -->   
@@ -176,6 +201,7 @@
         </tr>
     </table>
     <!-- END BLOCK_FILTRO_BOTOES -->   
+
     <br>  
     <!-- END BLOCK_FILTRO -->    
 

@@ -34,22 +34,74 @@ $consumidor_nome=$dados["pes_nome"];
 $datavenda=$dados["sai_datacadastro"];
 $horavenda=$dados["sai_horacadastro"];
 $qtd_parcelas=$dados["sai_qtdparcelas"];
+$venda_totalcomdesconto=$dados["sai_totalcomdesconto"];
+$venda_totalbruto=$dados["sai_totalbruto"];
+$venda_descontovalor=$dados["sai_descontovalor"];
+$venda_descontopercentual=$dados["sai_descontopercentual"];
+
+
+//Verifica se tem pagamentos, e calcula o total de pagamentos recebidos
+$sql2 = "
+    SELECT *
+    FROM saidas_pagamentos
+    join saidas on (sai_codigo=saipag_saida)
+    join metodos_pagamento on (saipag_metpagamento=metpag_codigo)
+    WHERE sai_codigo=$saida
+    ORDER BY saipag_data DESC
+";
+if (!$query2 = mysql_query($sql2)) die("Erro48" . mysql_error());
+$linhas2=mysql_num_rows($query2);
+$tempagamentos=0;
+$pag_total=0;
+while ($dados2=mysql_fetch_assoc($query2)) {
+    $tempagamentos=1;
+    $valor=$dados2["saipag_valor"];
+    $pag_total+=$valor;
+}
+
+
+//Pega o valor total das devoluções
+$sql18="
+    SELECT * 
+    FROM saidas_devolucoes_produtos
+    JOIN saidas_devolucoes on saidevpro_numerodev=saidev_numero
+    JOIN saidas on saidev_saida=sai_codigo
+    JOIN produtos on saidevpro_produto=pro_codigo 
+    LEFT JOIN pessoas on sai_consumidor = pes_codigo 
+    WHERE saidev_saida=$saida
+    ORDER BY saidevpro_itemdev DESC
+    ";
+if (!$query18 = mysql_query($sql18)) die("Erro CONSULTA DEVOLUCOES:" . mysql_error()."");
+$linhas18=mysql_num_rows($query18);
+if ($linhas18>0) $temdevolucoes=1; else $temdevolucoes=0;
+$dev_total=0;
+while ($dados18=mysql_fetch_assoc($query18)) {
+    $val=$dados18["saidevpro_valtot"];
+    $dev_total+=$val;
+}
+
+
+
+$tpl->COLUNA_TAMANHO = "";
+
 
 //Campo Filtro Código da venda
 $tpl->CAMPO_TITULO = "Venda";
 $tpl->CAMPO_VALOR = $saida;
-$tpl->CAMPO_TAMANHO = "";
+$tpl->CAMPO_TAMANHO = "10";
 $tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
+
 //Campo Filtro Data da Venda
 $tpl->CAMPO_TITULO = "Data da Venda";
 $tpl->CAMPO_VALOR = converte_data($datavenda)." ".substr($horavenda,0,5);
-$tpl->CAMPO_TAMANHO = "";
+$tpl->CAMPO_TAMANHO = "17";
 $tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
+
 
 //Campo Filtro Consumidor Nome
 $tpl->CAMPO_TITULO = "Consumidor";
@@ -60,30 +112,103 @@ $tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
+
 //Campo Filtro Quantidade Parcelas
-$tpl->CAMPO_TITULO = "Qtd. Parcelas";
+$tpl->CAMPO_TITULO = "Parcelas";
 $tpl->CAMPO_VALOR = $qtd_parcelas."x";
+$tpl->CAMPO_TAMANHO = "10";
+$tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_FILTRO_CAMPO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
+
+//Campo Filtro Total Venda
+$tpl->COLUNA_TAMANHO = "";
+$tpl->CAMPO_TITULO = "Total Venda";
+$tpl->CAMPO_VALOR = "R$ " . number_format($venda_totalbruto, 2, ',', '.');
+$tpl->CAMPO_TAMANHO = "17";
+$tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_FILTRO_CAMPO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
+//Campo Filtro Descondo da Venda
+$tpl->COLUNA_TAMANHO = "";
+$tpl->CAMPO_TITULO = "Desconto";
+$tpl->CAMPO_TAMANHO = "25";
+$tpl->CAMPO_VALOR = "R$ " . number_format($venda_descontovalor, 2, ',', '.'). " (".str_replace(".", ",", $venda_descontopercentual)."%) ";
+$tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_FILTRO_CAMPO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
+$tpl->block("BLOCK_FILTRO");
+
+
+//Campo Filtro Total Liquido da Venda
+$tpl->CAMPO_TITULO = "Total Liq. Venda";
+$totalliquido=$venda_totalbruto-$venda_descontovalor;
+$tpl->CAMPO_VALOR = "R$ " . number_format($totalliquido, 2, ',', '.');
+$tpl->CAMPO_TAMANHO = "17";
+$tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_FILTRO_CAMPO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
+
+
+//Campo Filtro Total Devolvido
+$tpl->COLUNA_TAMANHO = "";
+if ($temdevolucoes==1) {
+    $tpl->CAMPO_TITULO = "Total Devolvido";
+    $dev_total_comdesconto=$dev_total*(100-$venda_descontopercentual)/100;
+    $tpl->CAMPO_VALOR = "R$ " . number_format($dev_total_comdesconto, 2, ',', '.');
+    $tpl->CAMPO_TAMANHO = "";
+    $tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
+    $tpl->block("BLOCK_FILTRO_CAMPO");
+    $tpl->block("BLOCK_FILTRO_COLUNA");
+}
+
+
+//Campo Filtro Total Pago
+$tpl->CAMPO_TITULO = "Total Pago";
+$tpl->CAMPO_VALOR = "R$ " . number_format($pag_total, 2, ',', '.');
 $tpl->CAMPO_TAMANHO = "";
 $tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
-//Botão Cadastrar novo pagamento
-$tpl->LINK = "saidas_pagamentos_cadastrar.php?saida=$saida";
-$tpl->BOTAO_NOME = "NOVO PAGAMENTO";
-$tpl->block("BLOCK_RODAPE_BOTAO_MODELO");
+
+//Campo Filtro Total a receber
+$tpl->CAMPO_TITULO = "Saldo Pendente";
+$saldofinal=$totalliquido-$pag_total;
+$tpl->CAMPO_VALOR = "R$ " . number_format($saldofinal, 2, ',', '.');
+$tpl->CAMPO_TAMANHO = "";
+$tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
-$tpl->block("BLOCK_FILTRO");
 
 
-
-
+//Botão Cadastrar novo pagamento
+if ($saldofinal==0) {
+    $tpl->LINK = "";
+    $tpl->BOTAO_NOME = "NOVO PAGAMENTO";
+    $tpl->BOTAO_TITULO="Não é possível realizar novos pagamentos porque a venda foi completamente paga!";
+    $tpl->block("BLOCK_RODAPE_BOTAO_MODELO_DESABILITADO");
+    $tpl->block("BLOCK_RODAPE_BOTAO_MODELO");
+    $tpl->block("BLOCK_FILTRO_COLUNA");
+    $tpl->block("BLOCK_FILTRO");   
+}else {
+    $tpl->BOTAO_TITULO="";
+    $tpl->LINK = "saidas_pagamentos_cadastrar.php?saida=$saida";
+    $tpl->BOTAO_NOME = "NOVO PAGAMENTO";
+    $tpl->block("BLOCK_RODAPE_BOTAO_MODELO");
+    $tpl->block("BLOCK_FILTRO_COLUNA");
+    $tpl->block("BLOCK_FILTRO");
+}
 
 
 //INICIO DA LISTAGEM 
 
 //Numero
-$tpl->CABECALHO_COLUNA_TAMANHO="30px";
+$tpl->CABECALHO_COLUNA_TAMANHO="";
 $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="Nº";
 $tpl->block("BLOCK_LISTA_CABECALHO");
@@ -208,16 +333,34 @@ while ($dados=  mysql_fetch_assoc($query)) {
     
 
     //Remover 
-    $tpl->IMAGEM_ALINHAMENTO="center";
-    $tpl->LINK="saidas_pagamentos_deletar.php?numero=$numero&saida=$saida";
-    $tpl->IMAGEM_TAMANHO="12px";
-    $tpl->IMAGEM_PASTA="$icones";
-    $tpl->IMAGEM_TITULO="Remover";
-    $tpl->IMAGEM_NOMEARQUIVO="remover.png";
-    $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
-    $tpl->block("BLOCK_LISTA_COLUNA_ICONES"); 
+    //Se este pagamento foi gerado automaticamente abatimento de alguma devolução então não pode excluir.
+    $sql2="SELECT * FROM saidas_devolucoes WHERE saidev_pagamento=$numero";
+    if (!$query2= mysql_query($sql2)) die("Erro SQL 2:" . mysql_error());
+    $linhas2=mysql_num_rows($query2);
+    if ($linhas2>0) { //nao pode excluir
+        $tpl->IMAGEM_ALINHAMENTO="center";
+        $tpl->IMAGEM_TAMANHO="12px";
+        $tpl->IMAGEM_PASTA="$icones";
+        $tpl->IMAGEM_TITULO="Você não pode excluir este pagamento porque há uma devolução vinculada!";
+        $tpl->IMAGEM_NOMEARQUIVO="remover_desabilitado.png";
+        $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM_SEMLINK");
+        $tpl->block("BLOCK_LISTA_COLUNA_ICONES"); 
+
+
+    } else { //permite excluir
+        $tpl->IMAGEM_ALINHAMENTO="center";
+        $tpl->LINK="saidas_pagamentos_deletar.php?numero=$numero&saida=$saida";
+        $tpl->IMAGEM_TAMANHO="12px";
+        $tpl->IMAGEM_PASTA="$icones";
+        $tpl->IMAGEM_TITULO="Remover";
+        $tpl->IMAGEM_NOMEARQUIVO="remover.png";
+        $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
+        $tpl->block("BLOCK_LISTA_COLUNA_ICONES"); 
+    }
+
     $tpl->block("BLOCK_LISTA"); 
     $cont++;
+
 }
 
 if (mysql_num_rows($query) == 0) {

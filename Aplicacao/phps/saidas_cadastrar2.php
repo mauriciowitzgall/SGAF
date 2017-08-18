@@ -20,7 +20,10 @@ if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
 $saida = $_POST["saida"];
 $passo = $_POST["passo"];
 $tiposai = $_REQUEST["tiposai"];
-$descper = number_format($_POST["descper"],2,'.','');
+$descper=$_POST["descper"];
+$descper = str_replace('.', '', $descper);
+$descper = str_replace(',', '.', $descper);
+$descper = number_format($descper,2,'.','');
 $descval = number_format(dinheiro_para_numero($_POST["descval"]),2,'.','');
 $total = dinheiro_para_numero($_POST["total2"]);
 $total = number_format($total,2,'.','');

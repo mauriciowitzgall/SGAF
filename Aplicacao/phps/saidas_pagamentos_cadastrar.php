@@ -165,6 +165,7 @@ $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_COLUNA");
 $tpl->CAMPO_ESTILO="width:120px;";
 $tpl->block("BLOCK_CAMPO_ESTILO");
+$tpl->block("BLOCK_CAMPO_AUTOSELECIONAR");
 $tpl->COLUNA_ALINHAMENTO = "left";
 $tpl->COLUNA_TAMANHO = "";
 $tpl->CAMPO_TIPO = "text";

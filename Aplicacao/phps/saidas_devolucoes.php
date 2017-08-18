@@ -29,6 +29,8 @@ $dados=mysql_fetch_assoc($query);
 $consumidor_nome=$dados["pes_nome"];
 $datavenda=$dados["sai_datacadastro"];
 $horavenda=$dados["sai_horacadastro"];
+$descper=$dados["sai_descontopercentual"];
+$totalbruto=$dados["sai_totalbruto"];
 
 //Campo Filtro Código da venda
 $tpl->CAMPO_TITULO = "Venda";
@@ -56,12 +58,36 @@ $tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
+//Campo Filtro Consumidor Nome
+$tpl->CAMPO_TITULO = "Desconto";
+$tpl->CAMPO_VALOR = str_replace(".", ",", $descper)."%";
+$tpl->CAMPO_TAMANHO = "";
+$tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_FILTRO_CAMPO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
 
 //Botão Cadastrar nova Devolução
-$tpl->LINK = "saidas_devolucoes_cadastrar.php?saida=$saida";
-$tpl->BOTAO_NOME = "NOVA DEVOLUÇÃO";
-$tpl->block("BLOCK_RODAPE_BOTAO_MODELO");
-$tpl->block("BLOCK_FILTRO_COLUNA");
+//Se todos os itens foram devolvidos então não pode mais registrar devoluções
+$sql="SELECT sum(saidevpro_valtot) as total_devolvido FROM saidas_devolucoes_produtos WHERE saidevpro_saida=$saida";
+if (!$query=mysql_query($sql)) die("Erro SQL: " . mysql_error());
+$dados=mysql_fetch_assoc($query);
+$total_devolvido=$dados["total_devolvido"];
+if ($total_devolvido==$totalbruto) {
+    $tpl->block("BLOCK_RODAPE_BOTAO_MODELO_DESABILITADO");
+    $tpl->LINK = "";
+    $tpl->BOTAO_NOME = "NOVA DEVOLUÇÃO";
+    $tpl->BOTAO_TITULO = "Já foi devolvido todos os produtos!";
+    $tpl->block("BLOCK_RODAPE_BOTAO_MODELO");
+    $tpl->block("BLOCK_FILTRO_COLUNA");
+
+} else {
+    $tpl->LINK = "saidas_devolucoes_cadastrar.php?saida=$saida";
+    $tpl->BOTAO_NOME = "NOVA DEVOLUÇÃO";
+    $tpl->BOTAO_TITULO = "";
+    $tpl->block("BLOCK_RODAPE_BOTAO_MODELO");
+    $tpl->block("BLOCK_FILTRO_COLUNA");
+}
 $tpl->block("BLOCK_FILTRO");
 
 

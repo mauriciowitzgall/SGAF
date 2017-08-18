@@ -116,8 +116,6 @@ $sql="
     SELECT * FROM caixas_entradassaidas
     JOIN caixas_tipo on (caientsai_tipo=caitip_codigo)
     LEFT JOIN saidas_pagamentos on (caientsai_saidapagamento=saipag_codigo)
-    LEFT JOIN saidas on (saipag_saida=sai_codigo)
-    LEFT JOIN pessoas on (sai_consumidor=pes_codigo)
     WHERE caientsai_numerooperacao=$numero
     $sql_filtro 
     ORDER BY caientsai_id DESC
@@ -152,11 +150,11 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $areceber= $dados["caientsai_areceber"];
     $venda= $dados["caientsai_venda"];
     $usuarioquecadastrou= $dados["caientsai_usuarioquecadastrou"];
-    $consumidor_nome= $dados["pes_nome"];
     $id= $dados["caientsai_id"];
     $saidapagamento=$dados["caientsai_saidapagamento"];
     if ($saidapagamento>0) $tempagamento=1; else $tempagamento=0;
-    $saida=$dados["sai_codigo"];
+    $saidadevolucao=$dados["caientsai_saidadevolucao"];
+    if ($saidadevolucao>0) $temdevolucao=1; else $temdevolucao=0;
 
     //ID
     $tpl->LISTA_COLUNA_ALINHAMENTO="right";
@@ -231,10 +229,12 @@ while ($dados=  mysql_fetch_assoc($query)) {
 
         //Excluir
         if ($tempagamento==1) {
-
-            $tpl->NAOEXCLUIR_MOTIVO="Você não pode excluir este lançamento porque ele está vinculado a um PAGAMENTO na venda nº $saida, pagamento nº $saidapagamento.";
+            $tpl->NAOEXCLUIR_MOTIVO="Você não pode excluir este lançamento porque ele está vinculado a um PAGAMENTO!";
             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR_DESABILITADO");
-        } else {
+        } else if ($temdevolucao==1) {
+            $tpl->NAOEXCLUIR_MOTIVO="Você não pode excluir este lançamento porque ele está vinculado a uma DEVOLUÇÃO!";
+            $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR_DESABILITADO");
+        } else{
             $tpl->LINK="caixas_entradassaidas_deletar.php";
             $tpl->CODIGO="$id";
             $tpl->LINK_COMPLEMENTO="operacao=excluir&caixa=$caixa&numero=$numero";

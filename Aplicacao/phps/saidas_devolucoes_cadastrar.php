@@ -35,7 +35,7 @@ $dados=mysql_fetch_assoc($query);
 $consumidor_nome=$dados["pes_nome"];
 $datavenda=$dados["sai_datacadastro"];
 $horavenda=$dados["sai_horacadastro"];
-
+$descper=$dados["sai_descontopercentual"];
 
 //Saída / Venda
 $tpl->CAMPO_TITULO = "Saída / Venda";
@@ -57,8 +57,18 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 
 //Campo Filtro Consumidor Nome
 $tpl->CAMPO_TITULO = "Consumidor";
+$tpl->CAMPO_NOME = "consumidor";
 if ($consumidor_nome=="") $consumidor_nome="Cliente Geral";
 $tpl->CAMPO_VALOR = $consumidor_nome;
+$tpl->CAMPO_TAMANHO = "";
+$tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_FILTRO_CAMPO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
+//Campo Filtro Desconto
+$tpl->CAMPO_TITULO = "Desconto";
+$tpl->CAMPO_NOME = "descper";
+$tpl->CAMPO_VALOR = str_replace(".", ",", $descper)."%";
 $tpl->CAMPO_TAMANHO = "";
 $tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_FILTRO_CAMPO");
@@ -114,6 +124,12 @@ $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="VALOR TOT.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
+//Valor Total com Desconto
+$tpl->CABECALHO_COLUNA_TAMANHO="";
+$tpl->CABECALHO_COLUNA_COLSPAN="";
+$tpl->CABECALHO_COLUNA_NOME="VAL. TOT. COM DESC.";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
 
 
 //Mostra todos os itens da venda
@@ -136,6 +152,7 @@ while ($dados3=  mysql_fetch_assoc($query3)) {
     $produto_tipocontagem_sigla=$dados3["protip_sigla"];
     $valuni=$dados3["saipro_valorunitario"];
     $lote=$dados3["saipro_lote"];
+    $descper=$dados3["sai_descontopercentual"];
     
 
     /*if ($qtd_emestoque==0) {
@@ -207,6 +224,7 @@ while ($dados3=  mysql_fetch_assoc($query3)) {
     if ($qtdlimite==0) $desabilita=" disabled "; else $desabilita="";
     $nome_valuni="valuni_"."$itemvenda";
     $nome_valtot="valtot_"."$itemvenda";
+    $nome_valtot_comdesconto="valtot_comdesconto_"."$itemvenda";
     $tpl->LISTA_COLUNA_VALOR= "<input type='number' pattern='[0-9]+$' min='0' max='$qtdlimite' name='$nome' id='$id' $desabilita class='campopadrao' style='width:70px' onblur='verifica_qtd_digitada(this, $itemvenda)' > / $qtdlimite $produto_tipocontagem_sigla";
     $tpl->block("BLOCK_LISTA_COLUNA");
 
@@ -228,6 +246,15 @@ while ($dados3=  mysql_fetch_assoc($query3)) {
     $tpl->LISTA_COLUNA_CLASSE="";
     $tpl->LISTA_COLUNA_TAMANHO="";
     $tpl->LISTA_COLUNA_VALOR= "<span name='$nome_valtot' id='$nome_valtot'> - </span>";
+    $tpl->block("BLOCK_LISTA_COLUNA");
+
+    //Val Tot. com Desconto
+    $tpl->LISTA_COLUNA_ALINHAMENTO="right";
+    $tpl->LISTA_COLUNA_COLSPAN="";
+    $tpl->LISTA_COLUNA_ROWSPAN="";
+    $tpl->LISTA_COLUNA_CLASSE="";
+    $tpl->LISTA_COLUNA_TAMANHO="";
+    $tpl->LISTA_COLUNA_VALOR= "<span name='$nome_valtot_comdesconto' id='$nome_valtot_comdesconto'> - </span>";
     $tpl->block("BLOCK_LISTA_COLUNA");
     
 
@@ -305,13 +332,29 @@ $tpl->RODAPE_COLUNA_ALINHAMENTO="right";
 $tpl->RODAPE_COLUNA_NOME=" - ";
 $tpl->RODAPE_SPAN_NOME="valtot";
 $tpl->block("BLOCK_RODAPE_CONTEUDO");
+$tpl->block("BLOCK_RODAPE_COLUNA");     
+//9
+$tpl->RODAPE_COLUNA_TAMANHO="";
+$tpl->RODAPE_COLUNA_COLSPAN="";
+$tpl->RODAPE_COLUNA_ROWSPAN="";
+$tpl->RODAPE_COLUNA_ALINHAMENTO="right";
+$tpl->RODAPE_COLUNA_NOME=" - ";
+$tpl->RODAPE_SPAN_NOME="valtot_comdesconto";
+$tpl->block("BLOCK_RODAPE_CONTEUDO");
 $tpl->block("BLOCK_RODAPE_COLUNA");       
+
+
+
 $tpl->block("BLOCK_RODAPE_LINHA"); 
 $tpl->block("BLOCK_RODAPE");
 
 
 //botão oculto valor total da devolucao
 $tpl->CAMPOOCULTO_NOME="campooculto_valtot";
+$tpl->CAMPOOCULTO_VALOR="";
+$tpl->block("BLOCK_CAMPOSOCULTOS");
+//botão oculto valor total da devolucao
+$tpl->CAMPOOCULTO_NOME="campooculto_valtot_comdesconto";
 $tpl->CAMPOOCULTO_VALOR="";
 $tpl->block("BLOCK_CAMPOSOCULTOS");
 

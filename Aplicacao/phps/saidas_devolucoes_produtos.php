@@ -14,7 +14,7 @@ $numero_devolucao=$_GET["codigo"];
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "VENDAS DEVOLUÇÕES";
-$tpl_titulo->SUBTITULO = "LISTA DE PRODUTOS DEVOLVIDOS DE UMA DEVOLUÇVENDA";
+$tpl_titulo->SUBTITULO = "LISTA DE PRODUTOS DEVOLVIDOS";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "vendas.png";
 $tpl_titulo->show();
@@ -36,19 +36,12 @@ $dados=mysql_fetch_assoc($query);
 $data_devolucao=$dados["saidev_data"];
 $saida=$dados["saidev_saida"];
 $consumidor_nome=$dados["pes_nome"];
+$descper=$dados["sai_descontopercentual"];
 
 
 //Campo Filtro Numero da devolução
 $tpl->CAMPO_TITULO = "Número";
 $tpl->CAMPO_VALOR = $numero_devolucao;
-$tpl->CAMPO_TAMANHO = "";
-$tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
-$tpl->block("BLOCK_FILTRO_CAMPO");
-$tpl->block("BLOCK_FILTRO_COLUNA");
-
-//Campo Filtro Data da devolução
-$tpl->CAMPO_TITULO = "Data";
-$tpl->CAMPO_VALOR = converte_datahora($data_devolucao);
 $tpl->CAMPO_TAMANHO = "";
 $tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_FILTRO_CAMPO");
@@ -62,11 +55,27 @@ $tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
+//Campo Filtro Data da devolução
+$tpl->CAMPO_TITULO = "Data";
+$tpl->CAMPO_VALOR = converte_datahora($data_devolucao);
+$tpl->CAMPO_TAMANHO = "";
+$tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_FILTRO_CAMPO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
 
 //Campo Filtro Consumidor Nome
 $tpl->CAMPO_TITULO = "Consumidor";
 if ($consumidor_nome=="") $consumidor_nome="Cliente Geral";
 $tpl->CAMPO_VALOR = $consumidor_nome;
+$tpl->CAMPO_TAMANHO = "";
+$tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_FILTRO_CAMPO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
+//Campo Filtro Desconto
+$tpl->CAMPO_TITULO = "Desconto";
+$tpl->CAMPO_VALOR = str_replace(".", ",", $descper)."%";
 $tpl->CAMPO_TAMANHO = "";
 $tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_FILTRO_CAMPO");
@@ -111,13 +120,19 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 //Valor Unitário
 $tpl->CABECALHO_COLUNA_TAMANHO="";
 $tpl->CABECALHO_COLUNA_COLSPAN="";
-$tpl->CABECALHO_COLUNA_NOME="Valor Unitário";
+$tpl->CABECALHO_COLUNA_NOME="VAL. UNI.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Valor Final
 $tpl->CABECALHO_COLUNA_TAMANHO="";
 $tpl->CABECALHO_COLUNA_COLSPAN="";
-$tpl->CABECALHO_COLUNA_NOME="Valor Final";
+$tpl->CABECALHO_COLUNA_NOME="VAL. TOT.";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
+//Valor Final com desconto
+$tpl->CABECALHO_COLUNA_TAMANHO="";
+$tpl->CABECALHO_COLUNA_COLSPAN="";
+$tpl->CABECALHO_COLUNA_NOME="VAL. TOT. COM DESC.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 
@@ -165,6 +180,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $valtot= $dados["saidevpro_valtot"];
     $usuario= $dados["saidev_usuario"];
     $usuario_nome= $dados["pes_nome"];
+    $descper= $dados["sai_descontopercentual"];
 
 
     //Nº ITEM
@@ -216,7 +232,16 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $tpl->LISTA_COLUNA_VALOR=   "R$ " . number_format($valtot, 2, ',', '.');
     $tpl->block("BLOCK_LISTA_COLUNA");
 
+    //Valor Total com desconto
+    $tpl->LISTA_COLUNA_ALINHAMENTO="right";
+    $tpl->LISTA_COLUNA_CLASSE="";
+    $tpl->LISTA_COLUNA_TAMANHO="";
+    $valtot_comdesconto=$valtot*(100-$descper)/100;
+    $tpl->LISTA_COLUNA_VALOR=   "R$ " . number_format($valtot_comdesconto, 2, ',', '.');
+    $tpl->block("BLOCK_LISTA_COLUNA");
+
     $tot=$tot+$valtot;
+    $tot_comdesconto+=$valtot_comdesconto;
    
    
     $tpl->block("BLOCK_LISTA"); 
@@ -254,6 +279,11 @@ $tpl->block("BLOCK_RODAPE_CONTEUDO");
 $tpl->block("BLOCK_RODAPE_COLUNA");
 //7 Total final
 $tpl->RODAPE_COLUNA_NOME= "R$ " . number_format($tot, 2, ',', '.');
+$tpl->RODAPE_COLUNA_ALINHAMENTO="right";
+$tpl->block("BLOCK_RODAPE_CONTEUDO");
+$tpl->block("BLOCK_RODAPE_COLUNA");
+//8 Total final Com desconto
+$tpl->RODAPE_COLUNA_NOME= "R$ " . number_format($tot_comdesconto, 2, ',', '.');
 $tpl->RODAPE_COLUNA_ALINHAMENTO="right";
 $tpl->block("BLOCK_RODAPE_CONTEUDO");
 $tpl->block("BLOCK_RODAPE_COLUNA");

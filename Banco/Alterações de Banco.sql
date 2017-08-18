@@ -17367,4 +17367,7 @@ ADD COLUMN `caientsai_saidapagamento` INT NOT NULL DEFAULT 0 AFTER `caientsai_nu
 ADD COLUMN `caientsai_saidadevolucao` INT NOT NULL DEFAULT 0 AFTER `caientsai_saidapagamento`;
 
 
+ALTER TABLE `sgaf`.`saidas_devolucoes` 
+ADD COLUMN `saidev_pagamento` INT NULL AFTER `saidev_valtot`;
+
 
