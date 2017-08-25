@@ -34,6 +34,20 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "caixas.png";
 $tpl_titulo->show();
 
+
+$usacaixa=usamodulocaixa($usuario_quiosque);
+if ($usacaixa!=1) {
+    $tpl6 = new Template("templates/notificacao.html");
+    $tpl6->block("BLOCK_ERRO");
+    $tpl6->ICONES = $icones;
+    //$tpl6->block("BLOCK_NAOAPAGADO");
+    $tpl6->MOTIVO = "Você não tem permissão para acessar esta tela.<br>Se deseja realizar vendas solicite a um administrador para <br><b>HABILITAR MÓDULO CAIXA</b>";
+    $tpl6->block("BLOCK_MOTIVO");
+    $tpl6->block("BLOCK_BOTAO_VOLTAR");
+    $tpl6->show();
+    exit;
+}
+
 $tpl = new Template("templates/cadastro_edicao_detalhes_2.html");
 
 $tpl->LINK_DESTINO="caixas_cadastrar2.php";

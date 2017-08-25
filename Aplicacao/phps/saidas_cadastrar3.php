@@ -9,6 +9,20 @@ if ($permissao_saidas_cadastrar <> 1) {
 $tipopagina = "saidas";
 include "includes.php";
 
+$usavendas=usamodulovendas($usuario_quiosque);
+if ($usavendas!=1) {
+    $tpl6 = new Template("templates/notificacao.html");
+    $tpl6->block("BLOCK_ERRO");
+    $tpl6->ICONES = $icones;
+    //$tpl6->block("BLOCK_NAOAPAGADO");
+    $tpl6->MOTIVO = "Você não tem permissão para acessar esta tela.<br>Se deseja realizar vendas solicite a um administrador para <br><b>HABILITAR MÓDULO VENDAS</b>";
+    $tpl6->block("BLOCK_MOTIVO");
+    $tpl6->block("BLOCK_BOTAO_VOLTAR");
+    $tpl6->show();
+    exit;
+}
+
+
 //Verifica se o usuário é um caixa e não tem caixa aberto, se sim não pode acessar as vendas
 if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
     header("Location: permissoes_semacesso.php");
@@ -47,7 +61,7 @@ else
     $troco = $_REQUEST["troco2"];
 $troco_devolvido = number_format(dinheiro_para_numero($_REQUEST["troco_devolvido"]), 2, '.', '');
 
-//print_r($_REQUEST);
+//rint_r($_REQUEST);
 //Calcula o valor do desconto ou acr�scimo for�ado
 if ($troco_devolvido == "")
     $troco_devolvido = 0;
@@ -119,6 +133,35 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "saidas.png";
 $tpl_titulo->show();
 
+
+//Verifica se é uma conta areceber, se for avaliar se o cliente foi identificado! Caso não tenha sido sugerir edição.
+$sql = "SELECT * FROM saidas WHERE sai_codigo=$saida";
+if (!$query=mysql_query($sql)) die("Erro SQL 8:" . mysql_error());
+$dados=mysql_fetch_assoc($query);
+$consumidor=$dados["sai_consumidor"];
+$areceber=$dados["sai_areceber"];
+if (($consumidor==0)&&($areceber==1)) {
+
+  $tpl6 = new Template("templates/notificacao.html");
+  $tpl6->ICONES = $icones;
+
+  //$tpl6->block("BLOCK_CONFIRMAR");
+  $tpl6->block("BLOCK_ATENCAO");
+  //$tpl6->block("BLOCK_CADASTRADO");    
+  $tpl6->MOTIVO = "Não é permitido realizar vendas A RECEBER sem identificação do consumidor!<br><br>Você deve Editar esta venda e <b>IDENTIFICAR o CONSUMIDOR! </b><br>";
+  $tpl6->block("BLOCK_MOTIVO");
+  
+  $tpl6->DESTINO = "saidas_cadastrar.php?codigo=$saida&operacao=2&tiposaida=1&passo=1&editarconsumidor=1";
+  $tpl6->PERGUNTA = "";
+  $tpl6->block("BLOCK_BOTAO");
+  
+  //$tpl6->NAO_LINK = "saidas.php";
+  $tpl6->LINK_TARGET = "";
+  //$tpl6->block("BLOCK_BOTAO_NAO_LINK");
+  //$tpl6->block("BLOCK_BOTAO_SIMNAO");
+  $tpl6->show();
+  exit;
+}
 
 $tpl_notificacao = new Template("templates/notificacao.html");
 $tpl_notificacao->ICONES = $icones;

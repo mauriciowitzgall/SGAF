@@ -177,6 +177,7 @@ function usacomanda($quiosque) {
     }
     return $usa;
 }
+
 function permiteedicaoclientenavenda($quiosque) {
     $sql="SELECT quicnf_permiteedicaoclientenavenda FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
     if (!$query= mysql_query($sql)) die("Erro SQL Função: usacomanda: " . mysql_error());
@@ -185,5 +186,33 @@ function permiteedicaoclientenavenda($quiosque) {
     }
     return $permite;
 }
+
+function usamodulocaixa($quiosque) {
+    $sql="SELECT quicnf_usamodulocaixa FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
+    if (!$query= mysql_query($sql)) die("Erro SQL Função: usamodulovendas: " . mysql_error());
+    while ($dados=  mysql_fetch_assoc($query)) {    
+        $usa=$dados["quicnf_usamodulocaixa"];
+    }
+    return $usa;
+}
+
+function usamodulovendas($quiosque) {
+    $sql="SELECT quicnf_usamodulovendas FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
+    if (!$query= mysql_query($sql)) die("Erro SQL Função: usamodulovendas: " . mysql_error());
+    while ($dados=  mysql_fetch_assoc($query)) {    
+        $usa=$dados["quicnf_usamodulovendas"];
+    }
+    return $usa;
+}
+
+function pessoa_caixaoperacao($pessoa) {
+    $sql="SELECT pes_caixaoperacaonumero FROM pessoas WHERE pes_codigo=$pessoa";
+    if (!$query= mysql_query($sql)) die("Erro SQL Função: usamodulovendas: " . mysql_error());
+    while ($dados=  mysql_fetch_assoc($query)) {    
+        $caixaoperacao=$dados["pes_caixaoperacaonumero"];
+    }
+    return $caixaoperacao;
+}
+
 
 ?>

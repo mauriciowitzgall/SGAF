@@ -59,23 +59,30 @@ if ($temnota==1) {
 }
 
 
-//Ao tentar excluir uma devolução deve-se verificar se há saidas de caixa que foram efetuadas nesta devolução. Se sim, para poder voltar ao cenário anterior a criação desta devolução deve-se receber de volta o valor retirado do caixa. Sendo assim é perguntado ao caixa se ele recebeu o valor de volta, se ele recebeu enão deve-se gerar um pagamento no valor retirado do caixa, e consequentemente uma entrada de caixa
-$sql="SELECT * FROM caixas_entradassaidas WHERE caientsai_saidadevolucao=$devolucao";
-if (!$query = mysql_query($sql)) die("Erro SQL: " . mysql_error());
-$linhas=mysql_num_rows($query);
-if ($linhas>0) $temsaidadecaixa=1; else $temsaidadecaixa=0;
+//Ao tentar excluir uma devolução deve-se receber de volta do cliente o dinheiro pago a ele (caso tenha sido pago). 
+//Calcula o valor que deve ser recebido do cliete (valor este que foi definido quando a devolução foi realizada).
+$sql="SELECT * FROM saidas_devolucoes JOIN saidas on (sai_codigo=saidev_saida) WHERE saidev_numero=$devolucao";
+if (!$query = mysql_query($sql)) die("Erro SQL 11: " . mysql_error());
 $dados=mysql_fetch_assoc($query);
-$valorsaidadecaixa=$dados["caientsai_valor"];
-$valorsaidadecaixa_mostra= "R$ " . number_format($valorsaidadecaixa, 2, ',', '.');
-if (($temsaidadecaixa==1)&&($recebido!=1)) {
+$devolucao_liquido=$dados["saidev_valliq"];
+$saida_liquido=$dados["sai_totalliquido"];
+$devolucao_pagamento=$dados["saidev_pagamento"];
+if ($devolucao_pagamento>0)  $filtro_compagamento="AND saipag_codigo not in ($devolucao_pagamento)";
+$sql="SELECT sum(saipag_valor) as 'totalpago' FROM saidas_pagamentos WHERE saipag_saida=$saida $filtro_compagamento";
+if (!$query = mysql_query($sql)) die("Erro SQL 13: " . mysql_error());
+$dados=mysql_fetch_assoc($query);
+$totalpago=$dados["totalpago"];
+$saldo=$devolucao_liquido - ($saida_liquido-$totalpago);
+$saldo_mostra= "R$ " . number_format($saldo, 2, ',', '.');
+if (($recebido!=1)&&($saldo>0)) {
     $tpl6 = new Template("templates/notificacao.html");
     $tpl6->ICONES = $icones;
     $tpl6->block("BLOCK_CONFIRMAR");
     //$tpl6->block("BLOCK_CADASTRADO");    
-    $tpl6->MOTIVO = "Para pode excluir esta devolução você deve receber de volta do cliente o valor pago a ele quando foi registrado esta devolução!";
+    $tpl6->MOTIVO = "Para pode excluir esta devolução você deve receber de volta do cliente o valor pago a ele quando foi registrado esta devolução!<br> Se você não pagou nada ao cliente ";
     $tpl6->LINK = "saidas_devolucoes_deletar.php?devolucao=$devolucao&recebido=1&saida=$saida";
     $tpl6->block("BLOCK_MOTIVO");
-    $tpl6->PERGUNTA = "Você recebeu de volta o valor de: <br><span class='fonte5'>$valorsaidadecaixa_mostra</span>";
+    $tpl6->PERGUNTA = "Você recebeu de volta o valor de: <br><span class='fonte5'>$saldo_mostra</span>";
     $tpl6->block("BLOCK_PERGUNTA");
     $tpl6->NAO_LINK = "saidas_devolucoes.php?codigo=$saida";
     $tpl6->LINK_TARGET = "";
@@ -85,14 +92,11 @@ if (($temsaidadecaixa==1)&&($recebido!=1)) {
     $excluir=0;
     exit;
 
-}
-
-
-
+} 
 
 
 //Todas validações feitas, PODE Excluir
-if (($excluir = 1)&&($recebido==1)) { //Devolver para o estoque, e excluir da saida
+if ($excluir = 1) { //Devolver para o estoque, e excluir da saida
 
     //Realizar a retirada do estoque dos itens devolvidos
     //Consulta todos os itens da devolução para fazer a remoção do estoque um por um
@@ -182,7 +186,7 @@ if (($excluir = 1)&&($recebido==1)) { //Devolver para o estoque, e excluir da sa
     if ($pagamento_abatido>0) {
         
         $sql="SELECT * FROM caixas_entradassaidas WHERE caientsai_saidapagamento=$pagamento_abatido";
-        if (!$query = mysql_query($sql)) die("Erro SQL: " . mysql_error());
+        if (!$query = mysql_query($sql)) die("Erro SQL 9: " . mysql_error());
         //$linhas=mysql_num_rows($query);
         //if ($linhas>0) $tementradadecaixa=1; else $tementradadecaixa=0;
         $dados=mysql_fetch_assoc($query);
@@ -205,7 +209,7 @@ if (($excluir = 1)&&($recebido==1)) { //Devolver para o estoque, e excluir da sa
                 '2',
                 '$valorentradacaixa',
                 '$datahoraatual',
-                'Gerado automaticamente a partir da <b>EXCLUSÃO</b> de um <b>PAGAMENTO</b> gerado pela <b>DEVOLUÇÃO</b> nº $devolucao da venda nº $saida',  
+                'Gerado automaticamente a partir da EXCLUSÃO de um PAGAMENTO gerado pela DEVOLUÇÃO nº $devolucao da venda nº $saida',  
                 '$usuario_codigo',    
                 '$caixaoperacao'
         )";

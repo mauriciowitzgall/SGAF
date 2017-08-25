@@ -91,20 +91,29 @@ if ($usuario_grupo<>4) {
 
 
         //Saidas
-        $tpl_menu->IMAGEM_TITULO = "Saídas";
-        $tpl_menu->TITULO = "Saídas";
+        $usavendas=usamodulovendas($usuario_quiosque);
+        if ($usavendas==1) {
+            $tpl_menu->IMAGEM_TITULO = "Vendas";
+            $tpl_menu->TITULO = "Vendas";
+            $tpl_menu->IMAGEM_ARQUIVO = "vendas.png";
+            $tpl_menu->LINK = "saidas.php";
+        } else {
+            $tpl_menu->IMAGEM_TITULO = "Saídas";
+            $tpl_menu->TITULO = "Saídas";
+            $tpl_menu->IMAGEM_ARQUIVO = "saidas.png";
+            $tpl_menu->LINK = "saidas_devolucao.php";
+        }
         $tpl_menu->TD_LARGURA = "110px";
         if ($permissao_saidas_ver == 1) {
             if ($usuario_quiosque != 0) {
-                $tpl_menu->IMAGEM_ARQUIVO = "vendas.png";
-                $tpl_menu->LINK = "saidas.php";
                 $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
                 $tpl_menu->block("BLOCK_MENU_ITEM");
             }
         }
 
          //Caixas
-        if (($permissao_caixas_ver==1)) {
+        $usacaixa=usamodulocaixa($usuario_quiosque);
+        if (($permissao_caixas_ver==1)&&($usacaixa==1)) {
             if ($usuario_quiosque != 0) {
                 $tpl_menu->TD_LARGURA = "110px";
                 $tpl_menu->IMAGEM_ARQUIVO = "caixas.png";
@@ -302,17 +311,18 @@ if ($usuario_grupo<>4) {
         }
         //Sub-menu Saidas
         if ($tipopagina == "saidas") {
-            //Devolução
+
+            //Ajuste/Devolução
             if ($permissao_saidas_cadastrar_devolucao == 1) {
                 $tpl_menu->LINK = "saidas_devolucao.php";
                 $tpl_menu->IMAGEM_ARQUIVO = "saidas.png";
-                $tpl_menu->IMAGEM_TITULO = "Devolução/Ajuste";
-                $tpl_menu->TITULO = "Ajuste";
+                $tpl_menu->IMAGEM_TITULO = "Ajustes";
+                $tpl_menu->TITULO = "Ajustes";
                 $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
                 $tpl_menu->block("BLOCK_MENU_ITEM");
             }
             //Vendas
-            if ($usuario_grupo != 4) {
+            if (($usuario_grupo != 4)&&($usavendas==1)) {
 
                 if ($permissao_saidas_cadastrar == 1) {
                     $tpl_menu->LINK = "saidas.php";

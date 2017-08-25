@@ -19,11 +19,28 @@ if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
 
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
-$tpl_titulo->TITULO = "SAÍDAS";
+$tpl_titulo->TITULO = "VENDAS";
 $tpl_titulo->SUBTITULO = "LISTAGEM DE VENDAS";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "saidas.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "vendas.png";
 $tpl_titulo->show();
+
+$usacaixa=usamodulocaixa($usuario_quiosque);
+
+
+$usavendas=usamodulovendas($usuario_quiosque);
+if ($usavendas!=1) {
+    $tpl6 = new Template("templates/notificacao.html");
+    $tpl6->block("BLOCK_ERRO");
+    $tpl6->ICONES = $icones;
+    //$tpl6->block("BLOCK_NAOAPAGADO");
+    $tpl6->MOTIVO = "Você não tem permissão para acessar esta tela.<br>Se deseja realizar vendas solicite a um administrador para <br><b>HABILITAR MÓDULO VENDAS</b>";
+    $tpl6->block("BLOCK_MOTIVO");
+    $tpl6->block("BLOCK_BOTAO_VOLTAR");
+    $tpl6->show();
+    exit;
+}
+
 
 
 //Se não tiver nehuma saida registra e nenhum caixa criado então sugerir criar caixa e abri-lo
@@ -60,6 +77,13 @@ $filtro_consumidor = $_POST["filtro_consumidor"];
 $filtro_fornecedor = $_POST["filtro_fornecedor"];
 $filtro_tipo = $_POST["filtro_tipo"];
 $filtro_lote = $_REQUEST["filtro_lote"];
+
+$usacomanda=usacomanda($usuario_quiosque);
+
+
+//Se o usuario tem uma caixa definido então mostrar apenas as saidas deste
+$caixaoperacao = pessoa_caixaoperacao($usuario_codigo);
+
 $filtro_caixaoperacao = $_REQUEST["filtro_caixaoperacao"];
 $filtro_id = $_REQUEST["filtro_id"];
 $filtro_status = $_REQUEST["filtro_status"];
@@ -167,29 +191,33 @@ $tpl->block("BLOCK_FILTRO_ESPACO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
 //Filtro Nº Operação Caixa
-$tpl->CAMPO_TITULO = "Nº Caixa Oper.";
-$tpl->CAMPO_TAMANHO = "10";
-$tpl->CAMPO_NOME = "filtro_caixaoperacao";
-$tpl->CAMPO_VALOR = $filtro_caixaoperacao;
-$tpl->CAMPO_QTD_CARACTERES = "";
-$tpl->CAMPO_ONKEYUP = "";
-$tpl->block("BLOCK_FILTRO_CAMPO");
-$tpl->block("BLOCK_FILTRO_ESPACO");
-$tpl->block("BLOCK_FILTRO_COLUNA");
+if (($caixaoperacao=="")&&($usacaixa==1)) {
+    $tpl->CAMPO_TITULO = "Nº Caixa Oper.";
+    $tpl->CAMPO_TAMANHO = "10";
+    $tpl->CAMPO_NOME = "filtro_caixaoperacao";
+    $tpl->CAMPO_VALOR = $filtro_caixaoperacao;
+    $tpl->CAMPO_QTD_CARACTERES = "";
+    $tpl->CAMPO_ONKEYUP = "";
+    $tpl->block("BLOCK_FILTRO_CAMPO");
+    $tpl->block("BLOCK_FILTRO_ESPACO");
+    $tpl->block("BLOCK_FILTRO_COLUNA");
+}
 
 //Filtro fim
 $tpl->block("BLOCK_FILTRO");
 
-//ID
-$tpl->CAMPO_TITULO = "ID (Comanda)";
-$tpl->CAMPO_TAMANHO = "10";
-$tpl->CAMPO_NOME = "filtro_id";
-$tpl->CAMPO_VALOR = $filtro_id;
-$tpl->CAMPO_QTD_CARACTERES = "";
-$tpl->CAMPO_ONKEYUP = "";
-$tpl->block("BLOCK_FILTRO_CAMPO");
-$tpl->block("BLOCK_FILTRO_ESPACO");
-$tpl->block("BLOCK_FILTRO_COLUNA");
+//Comanda
+if ($usacomanda==1) {
+    $tpl->CAMPO_TITULO = "ID (Comanda)";
+    $tpl->CAMPO_TAMANHO = "10";
+    $tpl->CAMPO_NOME = "filtro_id";
+    $tpl->CAMPO_VALOR = $filtro_id;
+    $tpl->CAMPO_QTD_CARACTERES = "";
+    $tpl->CAMPO_ONKEYUP = "";
+    $tpl->block("BLOCK_FILTRO_CAMPO");
+    $tpl->block("BLOCK_FILTRO_ESPACO");
+    $tpl->block("BLOCK_FILTRO_COLUNA");
+}
 
 //Filtro Status
 $tpl->SELECT_TITULO = "Status";
@@ -244,16 +272,19 @@ $tpl->block("BLOCK_FILTRO_SELECT");
 $tpl->block("BLOCK_FILTRO_ESPACO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
-//Filtro Nº Operação Caixa
-$tpl->CAMPO_TITULO = "Nº Devolução";
-$tpl->CAMPO_TAMANHO = "10";
-$tpl->CAMPO_NOME = "filtro_devolucao";
-$tpl->CAMPO_VALOR = $filtro_devolucao;
-$tpl->CAMPO_QTD_CARACTERES = "";
-$tpl->CAMPO_ONKEYUP = "";
-$tpl->block("BLOCK_FILTRO_CAMPO");
-$tpl->block("BLOCK_FILTRO_ESPACO");
-$tpl->block("BLOCK_FILTRO_COLUNA");
+//Filtro Nº Devolução
+$usadevolucoessobrevendas=usadevolucoessobrevendas($usuario_quiosque);
+if ($usadevolucoessobrevendas==1) {
+    $tpl->CAMPO_TITULO = "Nº Devolução";
+    $tpl->CAMPO_TAMANHO = "10";
+    $tpl->CAMPO_NOME = "filtro_devolucao";
+    $tpl->CAMPO_VALOR = $filtro_devolucao;
+    $tpl->CAMPO_QTD_CARACTERES = "";
+    $tpl->CAMPO_ONKEYUP = "";
+    $tpl->block("BLOCK_FILTRO_CAMPO");
+    $tpl->block("BLOCK_FILTRO_ESPACO");
+    $tpl->block("BLOCK_FILTRO_COLUNA");
+}
 
 
 $tpl->block("BLOCK_FILTRO");
@@ -270,7 +301,6 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 
 
 //Comanda ID
-$usacomanda=usacomanda($usuario_quiosque);
 if ($usacomanda==1) {
     $tpl->CABECALHO_COLUNA_TAMANHO = "";
     $tpl->CABECALHO_COLUNA_COLSPAN = "";
@@ -360,8 +390,6 @@ if ($filtro_fornecedor <> "")
     $sql_filtro_fornecedor = " and ent_fornecedor = $filtro_fornecedor ";
 if ($filtro_tipo <> "")
     $sql_filtro_tipo = " and sai_tipo = $filtro_tipo ";
-if ($usuario_caixa_operacao <> "")
-    $sql_filtro_caixa = " and sai_caixaoperacaonumero = $usuario_caixa_operacao ";
 if ($filtro_caixaoperacao <> "")
     $sql_filtro_caixaoperacao = " and sai_caixaoperacaonumero = $filtro_caixaoperacao ";
 if ($filtro_id <> "")
@@ -372,12 +400,24 @@ if ($filtro_devolucao <> "")
     $filtro_devolucao = " and saidev_numero = $filtro_devolucao ";
 if ($filtro_areceber <> "")
     $sql_filtro_areceber = " and sai_areceber = $filtro_areceber ";
+//Se o usuário logado possui um caixa definido para vendas, então mostrar apenas as vendas realizadas nesta operação de caixa
+//Se o usuario filtrar por A RECEBER então deve ignorar a validação anterior para mostar todas vendas a receber de outros caixas e operações.
+if ($filtro_areceber!=1) {
+    if ($caixaoperacao > 0) {
+        $sql_filtro_caixaoperacao= " AND sai_caixaoperacaonumero=$caixaoperacao";
+    }
+}
+
+
+
+//Se  o for filtrado para mostrar apenas as vendas a receber, o resultado deve mostrar vendas de outros dias e outros caixas.
+if ($filtro_areceber==1) $sql_filtro_caixaoperacao="";
 $sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_fornecedor . " " . $sql_filtro_caixaoperacao." ".$sql_filtro_id." ".$sql_filtro_status. " ".$sql_filtro_areceber." ".$filtro_devolucao;
 
 
 //SQL Principal das linhas
 $sql = "
-SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo,sai_usuarioquecadastrou,caiopo_operador, (SELECT pes_nome FROM pessoas p WHERE p.pes_codigo=sai_usuarioquecadastrou) as usuarioquecadastrou_nome,sai_id
+SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo,sai_usuarioquecadastrou,caiopo_operador, (SELECT pes_nome FROM pessoas p WHERE p.pes_codigo=sai_usuarioquecadastrou) as usuarioquecadastrou_nome,sai_id,sai_descontoforcado,sai_acrescimoforcado,sai_descontovalor
 FROM saidas 
 JOIN saidas_tipo on (sai_tipo=saitip_codigo) 
 left join saidas_produtos on (saipro_saida=sai_codigo)
@@ -444,6 +484,9 @@ if ($linhas == 0) {
         $usuarioquecadastrou_nome=$dados["usuarioquecadastrou_nome"];
         $caixaoperadornome = $dados["pes_nome"];
         $caixaoperadorresponsavel = $dados["caiopo_operador"];
+        $desconto = $dados["sai_descontovalor"];
+        $troco_desconto = $dados["sai_descontoforcado"];
+        $troco_acrescimo = $dados["sai_acrescimoforcado"];
         $id = $dados["sai_id"];
 
         //Cor de fundo da linha
@@ -536,20 +579,20 @@ if ($linhas == 0) {
         //Total
         $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
         $tpl->LISTA_COLUNA_CLASSE = "";
-        $tpl->LISTA_COLUNA_VALOR = "R$ " . number_format($valorbruto, 2, ',', '.');
+        $tpl->LISTA_COLUNA_VALOR = "R$ " . number_format($valorbruto,2, ',', '.');
         $tpl->block("BLOCK_LISTA_COLUNA");
 
 
         //Desconto
         $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
-        $desconto = number_format($valorbruto - $valorliquido, 2);
+        $desconto_mostra = number_format($desconto + $troco_desconto - $troco_acrescimo, 2,",",".");
         if ($desconto == 0)
             $tpl->LISTA_COLUNA_CLASSE = "";
-        else if ($desconto > 0)
+        else if ($desconto_mostra > 0)
             $tpl->LISTA_COLUNA_CLASSE = "tabelalinhavermelha";
         else
             $tpl->LISTA_COLUNA_CLASSE = "tabelalinhaazul";
-        $tpl->LISTA_COLUNA_VALOR = "R$ " . number_format(abs($desconto), 2, ',', '.');
+        $tpl->LISTA_COLUNA_VALOR = "$desconto_mostra";
         $tpl->block("BLOCK_LISTA_COLUNA");
 
         
@@ -579,11 +622,11 @@ if ($linhas == 0) {
         
         //Metodo de pagamento
         if ($metodopag == 1) {
-            $tpl->ICONE_ARQUIVO = $icones . "dinheiro5.png";
+            $tpl->ICONE_ARQUIVO = $icones . "dinheiro2.png";
             $tpl->OPERACAO_NOME = "Dinheiro";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
         } else if ($metodopag == 2) {
-            $tpl->ICONE_ARQUIVO = $icones . "credit_card.png";
+            $tpl->ICONE_ARQUIVO = $icones . "cartao1.png";
             $tpl->OPERACAO_NOME = "Cartão Crédito";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
         } else if ($metodopag == 3) {
@@ -596,7 +639,7 @@ if ($linhas == 0) {
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
         } else if ($metodopag==4){
             $tpl->OPERACAO_NOME = "Cheque";
-            $tpl->ICONE_ARQUIVO = $icones . "cheque2.png";
+            $tpl->ICONE_ARQUIVO = $icones . "cheque1.png";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
         } else {
             $tpl->OPERACAO_NOME = "Desconhecido";

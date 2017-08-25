@@ -19,13 +19,32 @@ $tpl_titulo->NOME_ARQUIVO_ICONE = "devolucoes.png";
 $tpl_titulo->show();
 
 $datahoraatual=date("Y-m-d H:i:s");
+$usamodulocaixa=usamodulocaixa($usuario_quiosque);
 
 //Pegar todos os dados digitados
 //print_r($_REQUEST);
 $saida=$_GET["saida"];
 $valtot=$_REQUEST["campooculto_valtot"];
-$valtot_comdesconto=$_REQUEST["campooculto_valtotcomdesconto"];
+$valtot_comdesconto=$_REQUEST["campooculto_valtot_comdesconto"];
+$valliq=$valtot_comdesconto;
     
+
+//Verifica os valores totais da venda
+$sql3 = "
+    SELECT *
+    FROM saidas
+    WHERE sai_codigo=$saida
+";
+if (!$query3 = mysql_query($sql3)) die("Erro3" . mysql_error());
+$sai_total = 0;
+$dados3=mysql_fetch_assoc($query3); 
+$total_venda_comdesconto= $dados3["sai_totalcomdesconto"];
+$total_venda_bruto= $dados3["sai_totalbruto"];
+$venda_descontovalor= $dados3["sai_descontovalor"];
+$venda_descontopercentual= $dados3["sai_descontopercentual"];
+$areceber= $dados3["sai_areceber"];
+
+
 
 //Gravar o registro da nova devolução
 //Inserindo o registro da devolução
@@ -33,11 +52,13 @@ $sql="
     INSERT INTO saidas_devolucoes (
         saidev_saida,
         saidev_usuario,
-        saidev_valtot
+        saidev_valtot,
+        saidev_valliq
     ) VALUES (
         $saida,
         $usuario_codigo,
-        $valtot
+        $valtot,
+        $valliq
     )
 ";
 
@@ -57,6 +78,7 @@ while ($dados2=mysql_fetch_assoc($query2)) {
     $lote=$dados2["saipro_lote"];
     $valuniitem=$dados2["saipro_valorunitario"];
     $valtotitem=$valuniitem*$qtddigitada;
+    $valtotliq=$valtotitem*(100-$venda_descontopercentual)/100;
 
     if ($qtddigitada>0) {
         //Inserir este item na devolução
@@ -69,7 +91,8 @@ while ($dados2=mysql_fetch_assoc($query2)) {
                 saidevpro_lote,
                 saidevpro_qtddevolvida,
                 saidevpro_valuni,
-                saidevpro_valtot
+                saidevpro_valtot,
+                saidevpro_valtotliq
             ) VALUES (
                 $devolucao,
                 $saida,
@@ -78,7 +101,8 @@ while ($dados2=mysql_fetch_assoc($query2)) {
                 $lote,
                 $qtddigitada,
                 $valuniitem,
-                $valtotitem
+                $valtotitem,
+                $valtotliq
             )
         ";
         if (!$query3 = mysql_query($sql3)) die("Erro ao itens da devolucao:" . mysql_error());
@@ -153,36 +177,23 @@ while ($dados2=mysql_fetch_assoc($query2)) {
 
 
 //Verifica qual é o numero da operação de caixa do cliente logado
-$sql="
-    SELECT cai_codigo,cai_nome,caiopo_numero
-    FROM pessoas 
-    JOIN caixas_operacoes on (caiopo_numero=pes_caixaoperacaonumero) 
-    JOIN caixas on (caiopo_caixa=cai_codigo)
-    WHERE pes_codigo=$usuario_codigo
-";
-$query = mysql_query($sql);
-if (!$query) die("Erro de SQL Cabeçalho:" . mysql_error());
-$dados=mysql_fetch_array($query);
-$usuario_caixa=$dados[0];
-$usuario_caixa_nome=$dados[1];
-$usuario_caixa_operacao=$dados[2];
-$caixaoperacao=$dados[2];
+if ($usamodulocaixa==1) {
+    $sql="
+        SELECT cai_codigo,cai_nome,caiopo_numero
+        FROM pessoas 
+        JOIN caixas_operacoes on (caiopo_numero=pes_caixaoperacaonumero) 
+        JOIN caixas on (caiopo_caixa=cai_codigo)
+        WHERE pes_codigo=$usuario_codigo
+    ";
+    $query = mysql_query($sql);
+    if (!$query) die("Erro de SQL Cabeçalho:" . mysql_error());
+    $dados=mysql_fetch_array($query);
+    $usuario_caixa=$dados[0];
+    $usuario_caixa_nome=$dados[1];
+    $usuario_caixa_operacao=$dados[2];
+    $caixaoperacao=$dados[2];
+}
 
-
-//Verifica os valores totais da venda
-$sql3 = "
-    SELECT *
-    FROM saidas
-    WHERE sai_codigo=$saida
-";
-if (!$query3 = mysql_query($sql3)) die("Erro3" . mysql_error());
-$sai_total = 0;
-$dados3=mysql_fetch_assoc($query3); 
-$total_venda_comdesconto= $dados3["sai_totalcomdesconto"];
-$total_venda_bruto= $dados3["sai_totalbruto"];
-$venda_descontovalor= $dados3["sai_descontovalor"];
-$venda_descontopercentual= $dados3["sai_descontopercentual"];
-$areceber= $dados3["sai_areceber"];
 
 
 //Verifica se tem pagamentos, e calcula o total de pagamentos recebidos
@@ -268,7 +279,7 @@ if ($pendente>0) {
     $pag_ultimo=mysql_insert_id();
     //echo "<br><br>FOI GERADO UM PAGAMENTO NO VALOR DEVOLVIDO PARA ABATER O SALDO DEVEDOR.<br><br>";
     $abatido_mostra="R$ ".number_format($abatido, 2, ',', '.');
-    $filtro_pagamento="Foi gerado um <b>PAGAMENTO</b> no valor de <b>$abatido_mostra </b>para abatimento do saldo devedor.";
+    $filtro_pagamento="<br>- Foi gerado um <b>PAGAMENTO</b> no valor de <b>$abatido_mostra </b>para abatimento do saldo devedor!<br>";
 
 
     //Atualiza devolução registrando o numero do pagamento, isso é necessário para quando excluir a devolução excluir também o pagamento
@@ -277,28 +288,30 @@ if ($pendente>0) {
 
 
     //Gera entrada de caixa a partir do pagamento abatido
-    $sql8 = "
-    INSERT INTO 
-        caixas_entradassaidas (
-            caientsai_tipo,
-            caientsai_valor,
-            caientsai_datacadastro,
-            caientsai_descricao,
-            caientsai_usuarioquecadastrou,
-            caientsai_numerooperacao,
-            caientsai_saidapagamento
-        )
-    VALUES (
-        '1',
-        '$abatido',
-        '$datahoraatual',
-        'Registro Automático para ABATIMENTO da DEVOLUÇÃO: $devolucao, na VENDA: $saida',  
-        '$usuario_codigo',    
-        '$caixaoperacao',
-        '$pag_ultimo'    
-    )";
-    if (!$query8= mysql_query($sql8)) die("Erro de SQL:" . mysql_error());
-    $filtro_caixa_entrada="Foi gerado uma <b>ENTRADA DE CAIXA</b> no caixa no valor abatido.";
+    if ($usamodulocaixa==1) {
+        $sql8 = "
+        INSERT INTO 
+            caixas_entradassaidas (
+                caientsai_tipo,
+                caientsai_valor,
+                caientsai_datacadastro,
+                caientsai_descricao,
+                caientsai_usuarioquecadastrou,
+                caientsai_numerooperacao,
+                caientsai_saidapagamento
+            )
+        VALUES (
+            '1',
+            '$abatido',
+            '$datahoraatual',
+            'Registro Automático para ABATIMENTO da DEVOLUÇÃO: $devolucao, na VENDA: $saida',  
+            '$usuario_codigo',    
+            '$caixaoperacao',
+            '$pag_ultimo'    
+        )";
+        if (!$query8= mysql_query($sql8)) die("Erro de SQL:" . mysql_error());
+        $filtro_caixa_entrada="<br>- Foi gerado uma <b>ENTRADA DE CAIXA</b> no caixa no valor abatido!<br>";
+    }
 
 }
 
@@ -307,7 +320,7 @@ if ($pendente>0) {
 
 if ($saldo> 0) {
     $total_adevolver=$saldo;
-    $filtro_pagar="Você deve <b>DEVOLVER</b> ao cliente: <br><span class='fonte5'>R$ $total_adevolver</span>";
+    $filtro_pagar="<br>Você deve <b>DEVOLVER</b> ao cliente: <br><span class='fonte5'>R$ ".number_format($total_adevolver,2,",",".")."</span><br><br>";
     $total_areceber=0;
 } else if ($saldo<0) {
     $total_adevolver=0;
@@ -323,28 +336,32 @@ if ($saldo> 0) {
 
 
 //Sempre deve ser gerado uma saída de caixa no valor da devolução. 
-$sql8 = "
-INSERT INTO 
-    caixas_entradassaidas (
-        caientsai_tipo,
-        caientsai_valor,
-        caientsai_datacadastro,
-        caientsai_descricao,
-        caientsai_usuarioquecadastrou,
-        caientsai_numerooperacao,
-        caientsai_saidadevolucao
-    )
-VALUES (
-    '2',
-    '$valtot_comdesconto',
-    '$datahoraatual',
-    'Gerado automaticamente a partir da DEVOLUÇÃO nº $devolucao da venda nº $saida',  
-    '$usuario_codigo',    
-    '$caixaoperacao',
-    '$devolucao'    
-)";
-if (!$query8= mysql_query($sql8)) die("Erro de SQL:" . mysql_error());
-$filtro_caixa_saida="Foi gerado uma <b>SAÍDA DE CAIXA</b> no valor da devolução.";
+if ($usamodulocaixa==1) {
+    $sql8 = "
+    INSERT INTO 
+        caixas_entradassaidas (
+            caientsai_tipo,
+            caientsai_valor,
+            caientsai_datacadastro,
+            caientsai_descricao,
+            caientsai_usuarioquecadastrou,
+            caientsai_numerooperacao,
+            caientsai_saidadevolucao
+        )
+    VALUES (
+        '2',
+        '$valtot_comdesconto',
+        '$datahoraatual',
+        'Gerado automaticamente a partir da DEVOLUÇÃO nº $devolucao da venda nº $saida',  
+        '$usuario_codigo',    
+        '$caixaoperacao',
+        '$devolucao'    
+    )";
+    if (!$query8= mysql_query($sql8)) die("Erro de SQL:" . mysql_error());
+    $filtro_caixa_saida="<br>- Foi gerado uma <b>SAÍDA DE CAIXA</b> no valor da devolução!<br>";
+    
+}
+
 
 
 //Mostrar notificação informando que foi inserido no estoque o produto. Se foi gerado algum pagamento. Se o dinheiro saiu/entrou do caixa. 
@@ -360,7 +377,7 @@ $tpl->LINK = "saidas_devolucoes.php?codigo=$saida";
 
 $total_venda_bruto_mostra="R$ ".number_format($total_venda_bruto, 2, ',', '.');
 $venda_descontovalor_mostra=number_format($venda_descontovalor, 2, ',', '.');
-$venda_descontopercentual_mostra="R$ ".number_format($venda_descontopercentual, 2, ',', '.');
+$venda_descontopercentual_mostra=number_format($venda_descontopercentual, 2, ',', '.');
 $total_venda_comdesconto_mostra="R$ ".number_format($total_venda_comdesconto, 2, ',', '.');
 $valtot_mostra="R$ ".number_format($valtot, 2, ',', '.');
 $valtot_comdesconto_mostra="R$ ".number_format($valtot_comdesconto, 2, ',', '.');
@@ -370,25 +387,44 @@ $total_areceber_mostra="R$ ".number_format($total_areceber, 2, ',', '.');
 $total_adevolver_mostra="R$ ".number_format($total_adevolver, 2, ',', '.');
 
 
-$tpl->MOTIVO = "
-    Devolução registrada com sucesso! <br>
-    <br>Os itens devolvidos foram <b>ADICIONADOS AO ESTOQUE</b> novamente<br>
-    
-    <br><b>RESUMO:</b><br>
-    Valor da Venda Bruto: $total_venda_bruto_mostra <br>
-    Desconto da Venda: $venda_descontovalor_mostra / $venda_descontopercentual_mostra % <br>
-    Liquido da Venda: $total_venda_comdesconto_mostra<br>
-    Valor Desta Devolução: $valtot_mostra <br>
-    Valor Desta Devolução com o Desconto: $valtot_comdesconto_mostra  <br>
+if ($venda_descontovalor>0) {
+    $filtro_comdesconto="
+        Desconto da Venda: $venda_descontovalor_mostra / $venda_descontopercentual_mostra % <br>
+        Valor da Venda (com desconto): $total_venda_comdesconto_mostra<br>
+    ";
+    $filtro_valordestadevolucao = "Valor Desta Devolução com o Desconto: $valtot_comdesconto_mostra  <br>";
+} else {
+    $filtro_comdesconto="";
+    $filtro_valordestadevolucao="";
+}
+
+if ($areceber==1) {
+    $filtro_areceber="
     Total Já Pago: $pag_total_mostra <br>
     Saldo Devedor Pendente: $pendente_mostra <br>
     Total a Receber Atual: $total_areceber_mostra <br>
-    Total a Devolver: $total_adevolver_mostra <br>
-    <br>$filtro_pagamento<br>
-    $filtro_caixa_entrada<br>
-    <br>$filtro_pagar<br>
-    <br>$filtro_caixa_saida<br><br>
+    Total a Devolver: $total_adevolver_mostra <br>    
+    ";
+} else {
+    $filtro_areceber="";
+}
 
+
+$tpl->MOTIVO = "
+    Devolução registrada com sucesso! <br>
+    
+    <br><b>RESUMO:</b><br>
+    Valor da Venda: $total_venda_bruto_mostra <br>
+    $filtro_comdesconto
+    Valor Desta Devolução: $valtot_mostra <br>
+    $filtro_valordestadevolucao
+    $filtro_areceber
+    $filtro_pagamento
+    $filtro_caixa_entrada
+    $filtro_pagar
+    $filtro_caixa_saida
+    - Os itens devolvidos foram <b>ADICIONADOS AO ESTOQUE</b> novamente<br>
+    <br>
 ";
 $tpl->block("BLOCK_MOTIVO");
 //$tpl->PERGUNTA = "Deseja gerar nota fiscal?";

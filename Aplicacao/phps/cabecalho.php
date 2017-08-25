@@ -44,13 +44,21 @@ if ($usuario_caixa<>0) {
     $tpl8->CAIXAUSUARIO="$usuario_caixa_nome";
     $tpl8->block("BLOCK_NOME_CAIXA");
 }
+
 $tpl8->block("BLOCK_NOME_QUIOSQUE_COOPERATIVA");
 
 
 //Configurações Administradores 
 if (($usuario_grupo==1)||($usuario_grupo==7)) {
     $tpl8->block("BLOCK_CONFIGURACOES");
+    if ($usuario_caixa_operacao!="") {
+        $tpl8->CAIXAOPERACAO="$usuario_caixa_operacao";
+        $tpl8->block("BLOCK_FLUXOCAIXA");
+    }
+
+
 }
+
 
 
 

@@ -11,6 +11,20 @@ $tipopagina = "saidas";
 include "includes.php";
 //include "funcoes.php";
 
+$usavendas=usamodulovendas($usuario_quiosque);
+if ($usavendas!=1) {
+    $tpl6 = new Template("templates/notificacao.html");
+    $tpl6->block("BLOCK_ERRO");
+    $tpl6->ICONES = $icones;
+    //$tpl6->block("BLOCK_NAOAPAGADO");
+    $tpl6->MOTIVO = "Você não tem permissão para acessar esta tela.<br>Se deseja realizar vendas solicite a um administrador para <br><b>HABILITAR MÓDULO VENDAS</b>";
+    $tpl6->block("BLOCK_MOTIVO");
+    $tpl6->block("BLOCK_BOTAO_VOLTAR");
+    $tpl6->show();
+    exit;
+}
+
+
 //Verifica se o usuário é um caixa e não tem caixa aberto, se sim não pode acessar as vendas
 if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
     header("Location: permissoes_semacesso.php");

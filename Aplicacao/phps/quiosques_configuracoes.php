@@ -77,7 +77,7 @@ $tpl1->JS_CAMINHO = "quiosques_configuracoes.js";
 $tpl1->block("BLOCK_JS");
 
 //Usa Módulo Fiscal
-$tpl1->TITULO = "Modulo Fiscal";
+$tpl1->TITULO = "Módulo Fiscal";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->LINHA_ID="linha_usamodulofiscal";
 $tpl1->block("BLOCK_LINHA_ID");
@@ -627,8 +627,33 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
+
+//Estoque Classificação Padrão
+$tpl1->TITULO = "Class. Padrão Produtos";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_classificacaopadraoestoque";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "classificacaopadraoestoque";
+$tpl1->SELECT_ID = "classificacaopadraoestoque";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Nome do produto";
+if ($classificacaopadraoestoque=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 2;
+$tpl1->OPTION_NOME = "Referência do produto";
+if ($classificacaopadraoestoque=='2') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
 //Usa Comanda
-$tpl1->TITULO = "Usa Comanda / Ident.";
+$tpl1->TITULO = "Comanda";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->LINHA_ID="linha_usacomanda";
 $tpl1->block("BLOCK_LINHA_ID");
@@ -652,33 +677,8 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
-//Estoque Classificação Padrão
-$tpl1->TITULO = "Classificação Padrão Produtos";
-$tpl1->block("BLOCK_TITULO");
-$tpl1->LINHA_ID="linha_classificacaopadraoestoque";
-$tpl1->block("BLOCK_LINHA_ID");
-$tpl1->SELECT_NOME = "classificacaopadraoestoque";
-$tpl1->SELECT_ID = "classificacaopadraoestoque";
-$tpl1->SELECT_TAMANHO = "";
-$tpl1->SELECT_ONCHANGE = "";
-$tpl1->block("BLOCK_SELECT_ONCHANGE");
-$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
-$tpl1->OPTION_VALOR = 1;
-$tpl1->OPTION_NOME = "Nome do produto";
-if ($classificacaopadraoestoque=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-$tpl1->block("BLOCK_SELECT_OPTION");
-$tpl1->OPTION_VALOR = 2;
-$tpl1->OPTION_NOME = "Referência do produto";
-if ($classificacaopadraoestoque=='2') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-$tpl1->block("BLOCK_SELECT_OPTION");
-$tpl1->block("BLOCK_SELECT_NORMAL");
-$tpl1->block("BLOCK_SELECT");
-$tpl1->block("BLOCK_CONTEUDO");
-$tpl1->block("BLOCK_ITEM");
-
-
 //Usa devoluções sobre as vendas
-$tpl1->TITULO = "Permitir devoluções sobre vendas";
+$tpl1->TITULO = "Devoluções";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->LINHA_ID="linha_devolucoessobrevendas";
 $tpl1->block("BLOCK_LINHA_ID");
@@ -704,7 +704,7 @@ $tpl1->block("BLOCK_ITEM");
 
 
 //Permitir edição do cliente na venda
-$tpl1->TITULO = "Permitir edição de cliente na venda";
+$tpl1->TITULO = "Editar Cliente na Venda";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->LINHA_ID="linha_permiteedicaoclientenavenda";
 $tpl1->block("BLOCK_LINHA_ID");
@@ -720,6 +720,55 @@ $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->OPTION_VALOR = 1;
 $tpl1->OPTION_NOME = "Sim";
 if ($permiteedicaoclientenavenda=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+//Usa Módulo Caixa
+$usacaixa=usamodulocaixa($usuario_quiosque);
+$tpl1->TITULO = "Módulo Caixa";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "usacaixa";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($usacaixa=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($usacaixa=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//Usa Módulo Vendas
+$usavendas=usamodulovendas($usuario_quiosque);
+$tpl1->TITULO = "Módulo Vendas";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "usavendas";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($usavendas=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($usavendas=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
 $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT");

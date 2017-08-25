@@ -17371,3 +17371,18 @@ ALTER TABLE `sgaf`.`saidas_devolucoes`
 ADD COLUMN `saidev_pagamento` INT NULL AFTER `saidev_valtot`;
 
 
+ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_usamodulocaixa` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_permiteedicaoclientenavenda`;
+
+ALTER TABLE `sgaf`.`saidas_devolucoes` 
+ADD COLUMN `saidev_valliq` FLOAT NULL AFTER `saidev_pagamento`;
+
+ALTER TABLE `sgaf`.`saidas_devolucoes_produtos` 
+ADD COLUMN `saidevpro_valtotliq` FLOAT NOT NULL AFTER `saidevpro_valtot`;
+
+ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_usamodulovendas` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_usamodulocaixa`;
+
+
+
+

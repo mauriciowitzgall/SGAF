@@ -37,6 +37,22 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "caixa_entradasaida.png";
 $tpl_titulo->show();
 
+
+$usacaixa=usamodulocaixa($usuario_quiosque);
+if ($usacaixa!=1) {
+    $tpl6 = new Template("templates/notificacao.html");
+    $tpl6->block("BLOCK_ERRO");
+    $tpl6->ICONES = $icones;
+    //$tpl6->block("BLOCK_NAOAPAGADO");
+    $tpl6->MOTIVO = "Você não tem permissão para acessar esta tela.<br>Se deseja realizar vendas solicite a um administrador para <br><b>HABILITAR MÓDULO CAIXA</b>";
+    $tpl6->block("BLOCK_MOTIVO");
+    $tpl6->block("BLOCK_BOTAO_VOLTAR");
+    $tpl6->show();
+    exit;
+}
+
+
+
 $tpl = new Template("templates/listagem_2.html");
 
 //Campo Caixa no Topo
@@ -121,24 +137,11 @@ $sql="
     ORDER BY caientsai_id DESC
 ";
 
-//Paginação
+
 $query = mysql_query($sql);
 if (!$query)
     die("Erro SQL Principal Paginação:" . mysql_error());
-$linhas = mysql_num_rows($query);
-$por_pagina = $usuario_paginacao;
-$paginaatual = $_POST["paginaatual"];
-$paginas = ceil($linhas / $por_pagina);
-//Se � a primeira vez que acessa a pagina ent�o come�ar na pagina 1
-if (($paginaatual == "") || ($paginas < $paginaatual) || ($paginaatual <= 0)) {
-    $paginaatual = 1;
-}
-$comeco = ($paginaatual - 1) * $por_pagina;
-$tpl->PAGINAS = "$paginas";
-$tpl->PAGINAATUAL = "$paginaatual";
-$tpl->PASTA_ICONES = "$icones";
-$tpl->block("BLOCK_PAGINACAO");
-$sql = $sql . " LIMIT $comeco,$por_pagina ";
+
 
 $cont=0;
 while ($dados=  mysql_fetch_assoc($query)) {

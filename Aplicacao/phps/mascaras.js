@@ -12,20 +12,20 @@ $(document).ready(function(){
         }
     );
     */
-   
-    $("#telefone1").mask("(99)9999-9999");
-    $("#telefone2").mask("(99)9999-9999");
-    $("#telefone1pv").mask("(99)9999-9999");
-    $("#telefone2pv").mask("(99)9999-9999");
-    $("#cpf").mask("999.999.999-99");
-    $("#cep").mask("99999-999");
-    $("#cep2").mask("99999-999");
-    $("#data").mask("99/99/9999");
-    $("#data_1").mask("99/99/9999");
-    $("#data_2").mask("99/99/9999");
-    $("#data_5").mask("99/99/9999");
-    $("#calendario").mask("99/99/9999");
-    $("#cnpj").mask("99.999.999/9999-99");
+
+    if (document.getElementById('telefone1')) $("#telefone1").mask("(99)9999-9999");
+    if (document.getElementById('telefone2')) $("#telefone2").mask("(99)9999-9999");
+    if (document.getElementById('telefone1pv')) $("#telefone1pv").mask("(99)9999-9999");
+    if (document.getElementById('telefone2pv')) $("#telefone2pv").mask("(99)9999-9999");
+    if (document.getElementById('cpf')) $("#cpf").mask("999.999.999-99");
+    if (document.getElementById('cep')) $("#cep").mask("99999-999");
+    if (document.getElementById('cep2')) $("#cep2").mask("99999-999");
+    if (document.getElementById('data')) $("#data").mask("99/99/9999");
+    if (document.getElementById('data_1')) $("#data_1").mask("99/99/9999");
+    if (document.getElementById('data_2')) $("#data_2").mask("99/99/9999");
+    if (document.getElementById('data_5')) $("#data_5").mask("99/99/9999");
+    if (document.getElementById('calendario'))  $("#calendario").mask("99/99/9999");
+    if (document.getElementById('cnpj')) $("#cnpj").mask("99.999.999/9999-99");
 });
 
 

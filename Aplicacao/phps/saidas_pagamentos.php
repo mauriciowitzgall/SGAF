@@ -187,22 +187,27 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 
 
 //Botão Cadastrar novo pagamento
+$usacaixa=usamodulocaixa($usuario_quiosque);
+$caixaoperacao=pessoa_caixaoperacao($usuario_codigo);
+if ($caixaoperacao=="") $temcaixaoperacao=0; else $temcaixaoperacao=1;
 if ($saldofinal==0) {
     $tpl->LINK = "";
     $tpl->BOTAO_NOME = "NOVO PAGAMENTO";
     $tpl->BOTAO_TITULO="Não é possível realizar novos pagamentos porque a venda foi completamente paga!";
-    $tpl->block("BLOCK_RODAPE_BOTAO_MODELO_DESABILITADO");
-    $tpl->block("BLOCK_RODAPE_BOTAO_MODELO");
-    $tpl->block("BLOCK_FILTRO_COLUNA");
-    $tpl->block("BLOCK_FILTRO");   
-}else {
+    $tpl->block("BLOCK_RODAPE_BOTAO_MODELO_DESABILITADO");  
+} else if (($usacaixa==1)&&($temcaixaoperacao==0)) {
+    $tpl->LINK = "";
+    $tpl->BOTAO_NOME = "NOVO PAGAMENTO";
+    $tpl->BOTAO_TITULO="Não é possível realizar novos pagamentos porque você precisa primeiro informar qual é o caixa que está atuando!";
+    $tpl->block("BLOCK_RODAPE_BOTAO_MODELO_DESABILITADO");  
+} else {
     $tpl->BOTAO_TITULO="";
     $tpl->LINK = "saidas_pagamentos_cadastrar.php?saida=$saida";
     $tpl->BOTAO_NOME = "NOVO PAGAMENTO";
-    $tpl->block("BLOCK_RODAPE_BOTAO_MODELO");
-    $tpl->block("BLOCK_FILTRO_COLUNA");
-    $tpl->block("BLOCK_FILTRO");
 }
+$tpl->block("BLOCK_RODAPE_BOTAO_MODELO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+$tpl->block("BLOCK_FILTRO");
 
 
 //INICIO DA LISTAGEM 
@@ -238,10 +243,13 @@ $tpl->CABECALHO_COLUNA_NOME="OBSSERVAÇÃO";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Caixa Operação
-$tpl->CABECALHO_COLUNA_TAMANHO="";
-$tpl->CABECALHO_COLUNA_COLSPAN="";
-$tpl->CABECALHO_COLUNA_NOME="CAIXA OPERAÇÃO";
-$tpl->block("BLOCK_LISTA_CABECALHO");
+$usacaixa=usamodulocaixa($usuario_quiosque);
+if ($usacaixa==1) {
+    $tpl->CABECALHO_COLUNA_TAMANHO="";
+    $tpl->CABECALHO_COLUNA_COLSPAN="";
+    $tpl->CABECALHO_COLUNA_NOME="CAIXA OPERAÇÃO";
+    $tpl->block("BLOCK_LISTA_CABECALHO");
+}
 
 //Remover
 $tpl->CABECALHO_COLUNA_TAMANHO="";
@@ -254,6 +262,7 @@ $sql="
     SELECT * 
     FROM saidas_pagamentos
     JOIN metodos_pagamento on (saipag_metpagamento=metpag_codigo)
+    LEFT JOIN caixas_entradassaidas on (caientsai_saidapagamento=saipag_codigo)
     WHERE saipag_saida=$saida 
     ORDER BY saipag_data DESC
 ";
@@ -286,7 +295,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $metpag= $dados["saipag_metpagamento"];
     $metpag_nome= $dados["metpag_nome"];
     $obs= $dados["saipag_obs"];
-    $caixa_operacao= $dados["saipag_caixaoperacao"];
+    $caixa_operacao= $dados["caientsai_saidapagamento"];
 
 
     //Nº
@@ -325,12 +334,13 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $tpl->block("BLOCK_LISTA_COLUNA");    
     
     //Caixa Operação
-    $tpl->LISTA_COLUNA_ALINHAMENTO="";
-    $tpl->LISTA_COLUNA_CLASSE="";
-    $tpl->LISTA_COLUNA_TAMANHO="";
-    $tpl->LISTA_COLUNA_VALOR=  "$caixa_operacao";
-    $tpl->block("BLOCK_LISTA_COLUNA");
-    
+    if ($usacaixa==1) {
+        $tpl->LISTA_COLUNA_ALINHAMENTO="";
+        $tpl->LISTA_COLUNA_CLASSE="";
+        $tpl->LISTA_COLUNA_TAMANHO="";
+        $tpl->LISTA_COLUNA_VALOR=  "$caixa_operacao";
+        $tpl->block("BLOCK_LISTA_COLUNA");
+    }
 
     //Remover 
     //Se este pagamento foi gerado automaticamente abatimento de alguma devolução então não pode excluir.

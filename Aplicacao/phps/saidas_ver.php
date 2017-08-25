@@ -239,7 +239,7 @@ $tpl2->block(BLOCK_LISTA_CABECALHO);
 //Mostra todos os produtos da saida em quest�o
 $sql2 = "
 SELECT 
-    saipro_codigo,pro_nome,pes_nome,saipro_lote,saipro_quantidade,protip_sigla,protip_codigo,saipro_valorunitario,saipro_valortotal,pro_referencia,pro_tamanho,pro_cor,pro_descricao,pro_codigo,sai_totalcomdesconto
+    saipro_codigo,pro_nome,pes_nome,saipro_lote,saipro_quantidade,protip_sigla,protip_codigo,saipro_valorunitario,saipro_valortotal,pro_referencia,pro_tamanho,pro_cor,pro_descricao,pro_codigo,sai_totalcomdesconto,metpag_nome
 FROM 
     saidas
     join saidas_produtos on (saipro_saida=sai_codigo)
@@ -247,6 +247,7 @@ FROM
     join produtos_tipo on (pro_tipocontagem=protip_codigo)
     join entradas on (saipro_lote=ent_codigo)
     join pessoas on (ent_fornecedor=pes_codigo)
+    join metodos_pagamento on (sai_metpag=metpag_codigo)
 WHERE
     sai_codigo=$saida
 ";
@@ -444,10 +445,34 @@ $tpl3->block("BLOCK_CONTEUDO");
 $tpl3->block("BLOCK_COLUNA");
 $tpl3->block("BLOCK_LINHA");
 
+
+//Método de Pagamento
+$tpl3->COLUNA_ALINHAMENTO = "right";
+$tpl3->COLUNA_TAMANHO = "200px";
+$tpl3->TITULO = "Metodo Pagamento";
+$tpl3->block("BLOCK_TITULO");
+$tpl3->block("BLOCK_CONTEUDO");
+$tpl3->block("BLOCK_COLUNA");
+$tpl3->COLUNA_ALINHAMENTO = "";
+$tpl3->COLUNA_TAMANHO = "";
+$tpl3->CAMPO_TIPO = "text";
+$tpl3->CAMPO_NOME = "metpag";
+if ($areceber==1) $tpl3->CAMPO_VALOR = "À receber";
+else $tpl3->CAMPO_VALOR = $dados["metpag_nome"];
+$tpl3->block("BLOCK_CAMPO_PADRAO");
+$tpl3->block("BLOCK_CAMPO_DESABILITADO");
+$tpl3->block("BLOCK_CAMPO");
+$tpl3->block("BLOCK_CONTEUDO");
+$tpl3->block("BLOCK_COLUNA");
+$tpl3->block("BLOCK_LINHA");
+
+
+
+
 if ($areceber != 1) {
 
-//Valor Recebido
-//Titulo
+    //Valor Recebido
+    //Titulo
     $tpl3->COLUNA_ALINHAMENTO = "right";
     $tpl3->COLUNA_TAMANHO = "200px";
     $tpl3->TITULO = "Valor Recebido";
@@ -456,7 +481,7 @@ if ($areceber != 1) {
     $tpl3->block("BLOCK_COLUNA");
     $tpl3->COLUNA_ALINHAMENTO = "";
     $tpl3->COLUNA_TAMANHO = "";
-//Campo
+    //Campo
     $tpl3->CAMPO_TIPO = "text";
     $tpl3->CAMPO_NOME = "valorecebido";
     $valorecebido = $dados["sai_valorecebido"];
@@ -468,8 +493,8 @@ if ($areceber != 1) {
     $tpl3->block("BLOCK_COLUNA");
     $tpl3->block("BLOCK_LINHA");
 
-//Troco
-//Titulo
+    //Troco
+    //Titulo
     $tpl3->COLUNA_ALINHAMENTO = "right";
     $tpl3->COLUNA_TAMANHO = "200px";
     $tpl3->TITULO = "Troco";
@@ -478,7 +503,7 @@ if ($areceber != 1) {
     $tpl3->block("BLOCK_COLUNA");
     $tpl3->COLUNA_ALINHAMENTO = "";
     $tpl3->COLUNA_TAMANHO = "";
-//Campo
+    //Campo
     $tpl3->CAMPO_TIPO = "text";
     $tpl3->CAMPO_NOME = "totalcomdesconto";
     $troco = $dados["sai_troco"];
@@ -490,8 +515,8 @@ if ($areceber != 1) {
     $tpl3->block("BLOCK_COLUNA");
     $tpl3->block("BLOCK_LINHA");
 
-//Troco Devolvido
-//Titulo
+    //Troco Devolvido
+    //Titulo
     $tpl3->COLUNA_ALINHAMENTO = "right";
     $tpl3->COLUNA_TAMANHO = "200px";
     $tpl3->TITULO = "Troco Devolvido";
@@ -500,7 +525,7 @@ if ($areceber != 1) {
     $tpl3->block("BLOCK_COLUNA");
     $tpl3->COLUNA_ALINHAMENTO = "";
     $tpl3->COLUNA_TAMANHO = "";
-//Campo
+    //Campo
     $tpl3->CAMPO_TIPO = "text";
     $tpl3->CAMPO_NOME = "trocodevolvido";
     $trocodevolvido = $dados["sai_trocodevolvido"];
@@ -512,8 +537,8 @@ if ($areceber != 1) {
     $tpl3->block("BLOCK_COLUNA");
     $tpl3->block("BLOCK_LINHA");
 
-//Desconto For�ado
-//Titulo
+    //Desconto For�ado
+    //Titulo
     $tpl3->COLUNA_ALINHAMENTO = "right";
     $tpl3->COLUNA_TAMANHO = "200px";
     $tpl3->TITULO = "Desconto Forçado";
@@ -522,7 +547,7 @@ if ($areceber != 1) {
     $tpl3->block("BLOCK_COLUNA");
     $tpl3->COLUNA_ALINHAMENTO = "";
     $tpl3->COLUNA_TAMANHO = "";
-//Campo
+    //Campo
     $tpl3->CAMPO_TIPO = "text";
     $tpl3->CAMPO_NOME = "descontoforcado";
     $descontoforcado = $dados["sai_descontoforcado"];
@@ -534,8 +559,8 @@ if ($areceber != 1) {
     $tpl3->block("BLOCK_COLUNA");
     $tpl3->block("BLOCK_LINHA");
 
-//Acrescimo For�ado
-//Titulo
+    //Acrescimo For�ado
+    //Titulo
     $tpl3->COLUNA_ALINHAMENTO = "right";
     $tpl3->COLUNA_TAMANHO = "200px";
     $tpl3->TITULO = "Acréscimo Forçado";
@@ -544,7 +569,7 @@ if ($areceber != 1) {
     $tpl3->block("BLOCK_COLUNA");
     $tpl3->COLUNA_ALINHAMENTO = "";
     $tpl3->COLUNA_TAMANHO = "";
-//Campo
+    //Campo
     $tpl3->CAMPO_TIPO = "text";
     $tpl3->CAMPO_NOME = "acrescimoforcado";
     $acrescimoforcado = $dados["sai_acrescimoforcado"];
@@ -556,8 +581,8 @@ if ($areceber != 1) {
     $tpl3->block("BLOCK_COLUNA");
     $tpl3->block("BLOCK_LINHA");
 
-//Total Liquido
-//Titulo
+    //Total Liquido
+    //Titulo
     $tpl3->COLUNA_ALINHAMENTO = "right";
     $tpl3->COLUNA_TAMANHO = "200px";
     $tpl3->TITULO = "Total Liquido";
@@ -566,7 +591,7 @@ if ($areceber != 1) {
     $tpl3->block("BLOCK_COLUNA");
     $tpl3->COLUNA_ALINHAMENTO = "";
     $tpl3->COLUNA_TAMANHO = "";
-//Campo
+    //Campo
     $tpl3->CAMPO_TIPO = "text";
     $tpl3->CAMPO_NOME = "totalliquido";
     $totalliquido = $dados["sai_totalliquido"];
@@ -578,6 +603,9 @@ if ($areceber != 1) {
     $tpl3->block("BLOCK_COLUNA");
     $tpl3->block("BLOCK_LINHA");
 }
+
+
+
 
 $tpl3->show();
 
@@ -697,7 +725,7 @@ $sql18="
     JOIN produtos on saidevpro_produto=pro_codigo 
     LEFT JOIN pessoas on sai_consumidor = pes_codigo 
     WHERE saidev_saida=$saida
-    ORDER BY saidevpro_itemdev DESC
+    ORDER BY saidev_numero DESC
     ";
 if (!$query18 = mysql_query($sql18)) die("Erro CONSULTA DEVOLUCOES:" . mysql_error()."");
 $linhas18=mysql_num_rows($query18);
@@ -1016,6 +1044,7 @@ if ($ope != 4) {
     $tpl4->block("BLOCK_LINHAHORIZONTAL_EMCIMA");
     $tpl4->block("BLOCK_COLUNA_LINK_VOLTAR");
     //$tpl4->COLUNA_LINK_ARQUIVO = "saidas.php";
+    $tpl4->COLUNA_LINK_ARQUIVO = "";
     $tpl4->block("BLOCK_COLUNA_LINK");
     $tpl4->block("BLOCK_BOTAOPADRAO_SIMPLES");
     $tpl4->block("BLOCK_BOTAOPADRAO_VOLTAR");

@@ -19,6 +19,8 @@ $versaonfe = $_POST['versaonfe'];
 $razaosocial = $_POST['razaosocial'];
 $tipopessoanfe = $_POST['tipopessoanfe'];
 $usacomanda = $_POST['usacomanda'];
+$usacaixa = $_POST['usacaixa'];
+$usavendas = $_POST['usavendas'];
 $classificacaopadraoestoque = $_POST['classificacaopadraoestoque'];
 $devolucoessobrevendas = $_POST['devolucoessobrevendas'];
 $permiteedicaoclientenavenda = $_POST['permiteedicaoclientenavenda'];
@@ -81,7 +83,9 @@ SET
     quicnf_classificacaopadraoestoque='$classificacaopadraoestoque',
     quicnf_devolucoessobrevendas='$devolucoessobrevendas',
     quicnf_permiteedicaoclientenavenda=$permiteedicaoclientenavenda,
-    quicnf_versaonfe='$versaonfe'
+    quicnf_versaonfe='$versaonfe',
+    quicnf_usamodulocaixa='$usacaixa',
+    quicnf_usamodulovendas='$usavendas'
     $complemento    
 WHERE
     quicnf_quiosque=$quiosque

@@ -21,6 +21,10 @@ $tpl_titulo->show();
 
 $datahoraatual=date("Y-m-d H:i:s");
 
+//Pega o nuemro da ultima operação de caixa do caixa do usuario
+$caixaoperacao=pessoa_caixaoperacao($usuario_codigo);
+//echo "($caixaoperacao)";
+
 
 //Pegar todos os dados digitados
 //print_r($_REQUEST);
@@ -51,11 +55,6 @@ if (!$query = mysql_query($sql)) die("Erro SQL 1:" . mysql_error());
 $pag_ultimo=mysql_insert_id();
 
 
-//Pega o nuemro da ultima operação de caixa do caixa do usuario
-$sql="SELECT max(caiopo_numero) FROM caixas_operacoes WHERE caiopo_caixa=$usuario_caixa";
-if (!$query=mysql_query($sql)) die("Erro SQL 2: " . mysql_error());
-$dados=mysql_fetch_array($query);
-$caixaoperacao=$dados[0];
 
 
 //Gerar saída de caixa

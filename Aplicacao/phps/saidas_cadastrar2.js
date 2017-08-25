@@ -44,9 +44,7 @@ function desconto(campo) {
     
     //Recalcula o total final com desconto
     valorfinal=total-descval;
-    valorfinal=valorfinal.toFixed(2);
-    valorfinal=valorfinal.replace(".",",");
-    $("input[name=total]").val("R$ "+ valorfinal.formatMoney(2, ',', '.'));//alimenta o input desabilitado
+    $("input[name=total]").val("R$ "+valorfinal.formatMoney(2, ',', '.'));//alimenta o input desabilitado
     $("input[name=total2]").val("R$ "+valorfinal);//alimenta o input hidden
 
     

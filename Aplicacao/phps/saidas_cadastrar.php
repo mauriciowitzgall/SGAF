@@ -40,6 +40,21 @@ if ($saida != "") {
 $tipopagina = "saidas";
 include "includes.php";
 
+$usavendas=usamodulovendas($usuario_quiosque);
+if ($usavendas!=1) {
+    $tpl6 = new Template("templates/notificacao.html");
+    $tpl6->block("BLOCK_ERRO");
+    $tpl6->ICONES = $icones;
+    //$tpl6->block("BLOCK_NAOAPAGADO");
+    $tpl6->MOTIVO = "Você não tem permissão para acessar esta tela.<br>Se deseja realizar vendas solicite a um administrador para <br><b>HABILITAR MÓDULO VENDAS</b>";
+    $tpl6->block("BLOCK_MOTIVO");
+    $tpl6->block("BLOCK_BOTAO_VOLTAR");
+    $tpl6->show();
+    exit;
+}
+
+
+
 //Verifica se o usuário é um caixa e não tem caixa aberto, se sim não pode acessar as vendas
 if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
     header("Location: permissoes_semacesso.php");
@@ -54,7 +69,11 @@ $operacao = $_GET["operacao"]; //Operação 1=Cadastrar 2=Editar 3=Ver
 
 //Verifica se permite edicão de cliente na venda
 $permiteedicaoclientenavenda=permiteedicaoclientenavenda($usuario_quiosque);
-
+//Só existe uma excessão que permite editar o cliente sem que esteja parametrizado para isso, que é quando é feita uma venda a receber sem identificar o consumidor, ao final da venda é sugerido para editar a venda e alterar o consumidor!
+$editarconsumidor=$_GET["editarconsumidor"];
+if ($editarconsumidor==1) {
+    $permiteedicaoclientenavenda=1;
+}
 
 
 //Verifica se usa comanda
@@ -277,8 +296,8 @@ if ($linhas == 0) {
 
 //Inicio do formulário de saidas
 $tpl1 = new Template("saidas_cadastrar.html");
-$tpl1->LINK_DESTINO = "saidas_cadastrar.php?tiposaida=$tiposaida&operacao=$operacao&codigo=$saida&id=$id";
-$tpl1->LINK_ATUAL = "saidas_cadastrar.php?tiposaida=$tiposaida&operacao=$operacao&codigo=$saida&id=$id";
+$tpl1->LINK_DESTINO = "saidas_cadastrar.php?tiposaida=$tiposaida&operacao=$operacao&codigo=$saida&id=$id&editarconsumidor=$editarconsumidor";
+$tpl1->LINK_ATUAL = "saidas_cadastrar.php?tiposaida=$tiposaida&operacao=$operacao&codigo=$saida&id=$id&editarconsumidor=$editarconsumidor";
 $tpl1->ICONES_CAMINHO = $icones;
 
 $tpl1->JS_CAMINHO = "saidas_cadastrar.js";
