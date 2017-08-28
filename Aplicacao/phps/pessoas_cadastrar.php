@@ -140,7 +140,7 @@ if (($operacao == "editar") || ($operacao == 'ver')) {
         $ramal2 = $array['pes_fone2ramal'];
         $tipopessoa = $array['pes_tipopessoa'];
         $pessoacontato = $array['pes_pessoacontato'];
-        $categoria = $array['pes_categoria'];
+        //$categoria = $array['pes_categoria'];
         $datanasc = $array['pes_datanascimento'];
         $razaosocial = $array['pes_razaosocial'];
         $ie = $array['pes_ie'];
@@ -269,6 +269,7 @@ $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
+/*
 //Categoria
 $tpl1->CAMPO_ONBLUR="";
 $tpl1->TITULO = "Categoria";
@@ -305,7 +306,7 @@ $tpl1->block("BLOCK_LINHA_ID");
 $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
-
+*/
 
 //Pais
 $tpl1->CAMPO_ONBLUR="";

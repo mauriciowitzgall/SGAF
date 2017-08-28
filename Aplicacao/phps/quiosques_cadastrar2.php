@@ -21,6 +21,8 @@ include "includes.php";
 
 $erro = 0;
 $nome = $_POST['nome'];
+
+
 $razaosocial = $_POST['razaosocial'];
 $cidade = $_POST['cidade'];
 $cep = $_POST['cep'];
@@ -61,6 +63,12 @@ if ($permissao_quiosque_definircooperativa == 1) {
     $cooperativa = $usuario_cooperativa;
 }
 
+
+//Verifica se o nome do quiosque sofreu alterações, se sim, revalidar sessão para alterar o nome do cabeçalho.
+$sql="SELECT qui_nome FROM quiosques WHERE qui_codigo=$codigo";
+if (!$query= mysql_query($sql))  die("Erro SQL 7".mysql_error());  
+$dados=mysql_fetch_assoc($query);
+$nome_banco=$dados["qui_nome"];
 
 
 //Template de Título e Sub-título
@@ -132,6 +140,7 @@ if ($codigo == "") {
         $erro = 1;
     }
 
+
     $sql = "UPDATE quiosques SET 
     qui_nome='$nome',
     qui_cidade='$cidade',
@@ -178,6 +187,7 @@ if ($codigo == "") {
     }
 }
 ?>
+<br><br>
 <table summary="" border="1" class="tabela1" cellpadding="4" align="center">
     <tr valign="middle" align="center">
         <td valign="middle" align="right" class="celula1"><?php if ($erro == 0) { ?><img src="<?php echo $icones; ?>confirmar.png" ><?php } else { ?><img src="<?php echo $icones; ?>erro.png" ><?php } ?></td><td class="celula2">
@@ -195,5 +205,13 @@ if ($codigo == "") {
 </table>
 
 <br /><br />
-<?php include "rodape.php"; ?>
+<?php 
+include "rodape.php"; 
+
+if ($nome!=$nome_banco) {
+    $quiosque=$usuario_quiosque;
+    include "revalidar_sessao.php";
+} 
+
+?>
 

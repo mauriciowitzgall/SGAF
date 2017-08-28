@@ -17384,5 +17384,11 @@ ALTER TABLE `sgaf`.`quiosques_configuracoes`
 ADD COLUMN `quicnf_usamodulovendas` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_usamodulocaixa`;
 
 
+ALTER TABLE `sgaf`.`pessoas` 
+DROP COLUMN `pes_categoria`,
+DROP INDEX `pes_categoria` ,
+ADD INDEX `pes_categoria` (`pes_tipopessoa` ASC);
+
+DROP TABLE IF EXISTS `pessoas_categoria`;
 
 

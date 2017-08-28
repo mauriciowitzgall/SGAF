@@ -61,7 +61,7 @@ $ramal1 = $_POST['fone1ramal'];
 $ramal2 = $_POST['fone2ramal'];
 $tiponegociacao = $_POST['box2'];
 $pessoacontato = $_POST['pessoacontato'];
-$categoria = $_POST['categoria'];
+//$categoria = $_POST['categoria'];
 $datanasc = $_POST['datanasc'];
 $ie = $_POST['ie'];
 $ie = str_replace('_', '', $ie);
@@ -339,7 +339,6 @@ if ($operacao == "cadastrar") {
             pes_datacadastro,
             pes_horacadastro,
             pes_tipopessoa,
-            pes_categoria,
             pes_cnpj,
             pes_fone1ramal,
             pes_fone2ramal,
@@ -376,7 +375,6 @@ if ($operacao == "cadastrar") {
         '$data',
         '$hora',
         '$tipopessoa',
-        '$categoria',
         '$cnpj',
         '$ramal1',
         '$ramal2',
@@ -463,7 +461,6 @@ if ($operacao == "cadastrar") {
         pes_grupopermissoes='$grupopermissoes',
         pes_quiosqueusuario='$quiosqueusuario',
         pes_tipopessoa='$tipopessoa',
-        pes_categoria='$categoria',
         pes_cnpj='$cnpj',
         pes_fone1ramal='$ramal1',
         pes_fone2ramal='$ramal2',

@@ -139,7 +139,6 @@ $tpl1->SELECT_ID = "pais";
 $tpl1->SELECT_TAMANHO = "";
 $tpl1->SELECT_ONCHANGE = "popula_estados();";
 $tpl1->block("BLOCK_SELECT_ONCHANGE");
-
 if ($operacao == 'ver')
     $tpl1->block("BLOCK_SELECT_DESABILITADO");
 $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
@@ -161,6 +160,9 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl1->OPTION_NOME = $dados["pai_nome"];
     if ($pais == $dados["pai_codigo"]) {
         $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+    } else if (($pais=="")&&($dados["pai_codigo"])==1) {
+        $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+        $pais=1;
     }
     $tpl1->block("BLOCK_SELECT_OPTION");
 }
@@ -179,7 +181,7 @@ $tpl1->block("BLOCK_SELECT_ONCHANGE");
 $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
 $tpl1->block("BLOCK_SELECT_OPTION_PADRAO2");
 //Se a opera��o for editar ent�o mostrar os options, e o option em quest�o selecionado
-if ($codigo != "") {
+if (($codigo != "")||($pais==1)) {
     $sql = "SELECT * FROM estados WHERE est_pais=$pais ORDER BY est_nome";
     $query = mysql_query($sql);
     if (!$query)

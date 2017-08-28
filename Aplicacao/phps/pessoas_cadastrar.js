@@ -51,7 +51,7 @@ function tipo_pessoa(valor) {
         $("input[name=cidade").attr("required", false);
     }
     if (valor==1) { //Pessoa Física
-        $("tr[id=tr_categoria]").hide(); 
+        //$("tr[id=tr_categoria]").hide(); 
         $("tr[id=tr_cnpj]").hide();            
         $("tr[id=tr_pessoacontato]").hide(); 
         $("input[id=telefone1ramal]").hide(); 
@@ -70,7 +70,7 @@ function tipo_pessoa(valor) {
         $("select[name=ie]").attr("required", false);  
         $("select[name=im]").attr("required", false);  
         $("select[name=contribuinteicms]").attr("required", false); 
-        $("select[name=categoria]").attr("required", false);            
+        //$("select[name=categoria]").attr("required", false);            
         $("select[name=contribuinteicms]").attr("required", false);        
         $("input[name=cnpj").attr("required", false);
         if (usamodulofiscal==1) {
@@ -82,7 +82,7 @@ function tipo_pessoa(valor) {
         }
     } else if (valor==2) { //Pessoa Jurídica
         //alert('2');
-        $("tr[id=tr_categoria]").show(); 
+        //$("tr[id=tr_categoria]").show(); 
         $("tr[id=tr_cnpj]").show();            
         $("tr[id=tr_pessoacontato]").show(); 
         $("input[id=telefone1ramal]").show(); 
@@ -96,7 +96,7 @@ function tipo_pessoa(valor) {
         $("tr[id=linha_razaosocial]").show();             
         $("tr[id=linha_ie]").show();             
         $("tr[id=linha_im]").show();             
-        $("select[name=categoria]").attr("required", true);            
+        //$("select[name=categoria]").attr("required", true);            
         $("input[name=cpf]").attr("required", false);
         if (usamodulofiscal==1) {
             $("tr[id=linha_contribuinteicms]").show();

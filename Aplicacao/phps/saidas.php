@@ -27,7 +27,6 @@ $tpl_titulo->show();
 
 $usacaixa=usamodulocaixa($usuario_quiosque);
 
-
 $usavendas=usamodulovendas($usuario_quiosque);
 if ($usavendas!=1) {
     $tpl6 = new Template("templates/notificacao.html");
@@ -44,25 +43,27 @@ if ($usavendas!=1) {
 
 
 //Se não tiver nehuma saida registra e nenhum caixa criado então sugerir criar caixa e abri-lo
-$sql = "SELECT * FROM saidas WHERE sai_quiosque=$usuario_quiosque";
-$query = mysql_query($sql);
-if (!$query)    die("Erro: " . mysql_error());
-$linhas_saidas = mysql_num_rows($query);
-$sql = "SELECT * FROM caixas WHERE cai_quiosque=$usuario_quiosque and cai_status=1";
-$query = mysql_query($sql);
-if (!$query)    die("Erro: " . mysql_error());
-$linhas_caixa = mysql_num_rows($query);
-$linhas=$linhas_caixa+$linhas_saidas;
-if ($linhas == 0) {
-    echo "<br><br>";
-    $tpl = new Template("templates/notificacao.html");
-    $tpl->ICONES = $icones;
-    $tpl->MOTIVO_COMPLEMENTO = "Para poder realizar vendas é necessário que você tenha um caixa aberto.</b>Clique abaixo para registrar um novo caixa e após abri-lo!";
-    $tpl->block("BLOCK_ATENCAO");
-    $tpl->DESTINO = "caixas_cadastrar.php?operacao=cadastrar";
-    $tpl->block("BLOCK_BOTAO");
-    $tpl->show();
-    exit;
+if ($usacaixa==1) {
+    $sql = "SELECT * FROM saidas WHERE sai_quiosque=$usuario_quiosque";
+    $query = mysql_query($sql);
+    if (!$query)    die("Erro: " . mysql_error());
+    $linhas_saidas = mysql_num_rows($query);
+    $sql = "SELECT * FROM caixas WHERE cai_quiosque=$usuario_quiosque and cai_status=1";
+    $query = mysql_query($sql);
+    if (!$query)    die("Erro: " . mysql_error());
+    $linhas_caixa = mysql_num_rows($query);
+    $linhas=$linhas_caixa+$linhas_saidas;
+    if ($linhas == 0) {
+        echo "<br><br>";
+        $tpl = new Template("templates/notificacao.html");
+        $tpl->ICONES = $icones;
+        $tpl->MOTIVO_COMPLEMENTO = "Para poder realizar vendas é necessário que você tenha um caixa aberto.</b>Clique abaixo para registrar um novo caixa e após abri-lo!";
+        $tpl->block("BLOCK_ATENCAO");
+        $tpl->DESTINO = "caixas_cadastrar.php?operacao=cadastrar";
+        $tpl->block("BLOCK_BOTAO");
+        $tpl->show();
+        exit;
+    }
 }
 
 
@@ -346,10 +347,12 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "DESC.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
-$tpl->CABECALHO_COLUNA_TAMANHO = "";
-$tpl->CABECALHO_COLUNA_COLSPAN = "3";
-$tpl->CABECALHO_COLUNA_NOME = "CAIXA";
-$tpl->block("BLOCK_LISTA_CABECALHO");
+if ($usacaixa==1) {
+    $tpl->CABECALHO_COLUNA_TAMANHO = "";
+    $tpl->CABECALHO_COLUNA_COLSPAN = "3";
+    $tpl->CABECALHO_COLUNA_NOME = "CAIXA";
+    $tpl->block("BLOCK_LISTA_CABECALHO");
+}
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "40 px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
@@ -597,26 +600,26 @@ if ($linhas == 0) {
 
         
         //Coluna Caixa
-        $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
-        $tpl->LISTA_COLUNA_CLASSE = "";
-        $tpl->LISTA_COLUNA_VALOR = $caixanome;
-        $tpl->block("BLOCK_LISTA_COLUNA");
-        $tpl->LISTA_COLUNA_ALINHAMENTO = "left";
-        $tpl->LISTA_COLUNA_CLASSE = "";
-        $tpl->LISTA_COLUNA_VALOR = $caixaoperadornome;
-        $tpl->block("BLOCK_LISTA_COLUNA");
-        
-        if ($caixaoperadorresponsavel==$usuarioquecadastrou) {
-            $tpl->ICONE2_TAMANHO = "10px";
-            $tpl->ICONE2_ARQUIVO = $icones2 . "supervisor2.png";
-            $tpl->OPERACAO2_NOME = "";
-            $tpl->block("BLOCK_LISTA_COLUNA_ICONE2");            
-        } else {
-            $tpl->ICONE2_TAMANHO = "10px";
-            $tpl->ICONE2_ARQUIVO = $icones2 . "supervisor.png";
-            $tpl->OPERACAO2_NOME = "Venda efetuada por: $usuarioquecadastrou_nome";
-            $tpl->block("BLOCK_LISTA_COLUNA_ICONE2");
-            
+        if ($usacaixa==1) {
+            $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
+            $tpl->LISTA_COLUNA_CLASSE = "";
+            $tpl->LISTA_COLUNA_VALOR = $caixanome;
+            $tpl->block("BLOCK_LISTA_COLUNA");
+            $tpl->LISTA_COLUNA_ALINHAMENTO = "left";
+            $tpl->LISTA_COLUNA_CLASSE = "";
+            $tpl->LISTA_COLUNA_VALOR = $caixaoperadornome;
+            $tpl->block("BLOCK_LISTA_COLUNA");
+            if ($caixaoperadorresponsavel==$usuarioquecadastrou) {
+                $tpl->ICONE2_TAMANHO = "10px";
+                $tpl->ICONE2_ARQUIVO = $icones2 . "supervisor2.png";
+                $tpl->OPERACAO2_NOME = "";
+                $tpl->block("BLOCK_LISTA_COLUNA_ICONE2");            
+            } else {
+                $tpl->ICONE2_TAMANHO = "10px";
+                $tpl->ICONE2_ARQUIVO = $icones2 . "supervisor.png";
+                $tpl->OPERACAO2_NOME = "Venda efetuada por: $usuarioquecadastrou_nome";
+                $tpl->block("BLOCK_LISTA_COLUNA_ICONE2");
+            }
         }
         
         
@@ -831,7 +834,7 @@ if ($tipopagina == "saidas") {
                 $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=1";
                 $tpl->block("BLOCK_RODAPE_BOTOES");
             }
-        } else if ($usuario_caixa=="") {
+        } else if (($usacaixa==1)&&($usuario_caixa=="")) {
             $tpl->CADASTRAR_NOME = "REALIZAR VENDA";
             $dica="Para realizar vendas é necessário definir um caixa aberto padrão!";
             $tpl->TITULO="$dica";

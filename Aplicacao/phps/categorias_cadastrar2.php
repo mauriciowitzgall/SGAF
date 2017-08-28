@@ -75,7 +75,7 @@ $paginadestino="categorias.php";
         if ($modal==1) {
             ?><input type="button" value="CONTINUAR" autofocus class="botao fonte3" onclick="javascript:window.close()"><?php
         } else {
-            if ($erro==0) { ?><a class="link" href="<?php echo "$paginadestino"; ?>"><input type="button" value="CONTINUAR" autofocus class="botao fonte3"></a> <?php } 
+            if ($erro==0) { ?><a class="link" href=""><input type="button" value="CADASTRAR MAIS" class="botao fonte3"></a>&nbsp;&nbsp;&nbsp; <a class="link" href="<?php echo "$paginadestino"; ?>"><input type="button" value="CONTINUAR" autofocus class="botao fonte3"></a><?php } 
             else { ?> <button class="botao fonte3" onclick=javascript:window.history.back()>VOLTAR</button> <?php } 
         }?>
    </td>
