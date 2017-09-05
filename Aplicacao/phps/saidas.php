@@ -25,9 +25,7 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "vendas.png";
 $tpl_titulo->show();
 
-$usacaixa=usamodulocaixa($usuario_quiosque);
 
-$usavendas=usamodulovendas($usuario_quiosque);
 if ($usavendas!=1) {
     $tpl6 = new Template("templates/notificacao.html");
     $tpl6->block("BLOCK_ERRO");

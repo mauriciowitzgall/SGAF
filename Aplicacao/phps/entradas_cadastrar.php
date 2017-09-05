@@ -33,6 +33,7 @@ $marca = $_POST['marca'];
 $item_numero = $_POST['item_numero'];
 
 
+
 $qtd = $_POST['qtd'];
 $qtd = str_replace('.', '', $qtd);
 $qtd = str_replace(',', '.', $qtd);
@@ -416,8 +417,11 @@ if ($passo != "") {
 
 
     $tpl->block("BLOCK_BOTAO_PASSO2");
-    if ($tiponegociacao == 2)
+    if ($tiponegociacao == 2) {
         $tpl->block("BLOCK_CAMPO_VALCUSTO");
+    }
+
+    
 
 
     //PASSO 3 - Mostra os produtos já inseridos na entrada e/ou faz a insersão!

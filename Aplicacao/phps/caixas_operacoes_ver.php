@@ -59,7 +59,6 @@ $tpl_titulo->NOME_ARQUIVO_ICONE = "caixas_encerrar.png";
 $tpl_titulo->show();
 
 
-$usacaixa=usamodulocaixa($usuario_quiosque);
 if ($usacaixa!=1) {
     $tpl6 = new Template("templates/notificacao.html");
     $tpl6->block("BLOCK_ERRO");

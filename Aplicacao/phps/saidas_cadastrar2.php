@@ -11,7 +11,6 @@ $tipopagina = "saidas";
 include "includes.php";
 //include "funcoes.php";
 
-$usavendas=usamodulovendas($usuario_quiosque);
 if ($usavendas!=1) {
     $tpl6 = new Template("templates/notificacao.html");
     $tpl6->block("BLOCK_ERRO");

@@ -14,6 +14,8 @@ $tipopagina = "produtos";
 include "includes.php";
 ?>
 
+<script type="text/javascript" src="produtos_cadastrar.js"></script>
+
 <?php
 $codigo = $_GET['codigo'];
 $ver = $_GET['ver'];
@@ -49,6 +51,9 @@ while ($array = mysql_fetch_array($query)) {
     $cofins=$array['pro_cofins'];
     $origem_codigo=$array['pro_origem'];
     $dadosfiscais=$array['pro_dadosfiscais'];
+    $controlarestoque=$array['pro_controlarestoque'];
+    $valunicusto=$array['pro_valunicusto'];
+    $valunivenda=$array['pro_valunivenda'];
     if ($subproduto=="") $subproduto=0;
 }
 
@@ -112,180 +117,9 @@ while ($dados2 = mysql_fetch_array($query2)) {
 }
 
 ?>
+
 <script type="text/javascript" src="js/capitular.js"></script>
-<script type="text/javascript">
 
-function atualiza_categorias () {
-    $.post("produtos_cadastrar_atualiza_categorias.php",{
-        cooperativa:<?php echo $usuario_cooperativa; ?>
-    },function(valor2){
-        //alert(valor2);
-        $("select[name=categoria]").html(valor2);
-    });    
-}
-        
-function pesquisa_ncm (valor) {
-    //alert("Pesquisa e popula label NCM: "+valor);
-    $.post("produtos_pesquisa_ncm.php",{
-        id:valor
-    },function(valor2){
-        //alert(valor2);
-        valor2=valor2.split("^");
-        valor3=valor2[0];
-        valor4=valor2[1];
-        //alert("v3:"+valor3+" e v4:"+valor4);
-        $("label[id=label_ncm]").text(valor3);
-        $("input[name=nfencm_codigo]").val(valor4);
-    });
-}
-        
-function pesquisa_cfop (valor) {
-    /*
-    $('#nfecfop').priceFormat({
-        prefix: '',
-        sufix: '',
-        centsLimit: 0,
-        centsSeparator: '',
-        thousandsSeparator: '.'
-    });
-    */
-    $.post("produtos_pesquisa_cfop.php",{
-        id:valor
-    },function(valor2){
-        valor2=valor2.split("/");
-        valor3=valor2[0];
-        valor4=valor2[1];
-        $("label[id=label_cfop]").text(valor3);
-        $("input[name=nfecfop_codigo]").val(valor4);
-    });
-}
-
-
-function pesquisa_origem (valor) {
-       
-    $.post("produtos_pesquisa_origem.php",{
-        codigo:valor
-    },function(valor2){
-        //alert(valor2);
-        $("label[id=label_origem]").text(valor2);
-    });
-}
-
-
-function formato_porcentagem() {
-    $('#nfeipi').priceFormat({
-        prefix: '',
-        centsSeparator: ',',
-        thousandsSeparator: ''
-    });
-    $('#nfepis').priceFormat({
-        prefix: '',
-        centsSeparator: ',',
-        thousandsSeparator: ''
-    });
-    $('#nfecofins').priceFormat({
-        prefix: '',
-        centsSeparator: ',',
-        thousandsSeparator: ''
-    });
-}
-   
-function dados_fiscais(valor) {
-    crt = $("input[name=nfecrt]").val();
-    if (valor==1) {
-        document.form1.nfencm.required=true;
-        document.form1.nfecfop.required=true;
-        document.form1.nfeorigem.required=true;
-
-        $("tr[id=linha_ncm]").show(); 
-        $("tr[id=linha_cfop]").show(); 
-        $("tr[id=linha_icms]").show(); 
-        $("tr[id=linha_ipi]").show();
-        $("tr[id=linha_pis]").show();
-        $("tr[id=linha_cofins]").show();
-        $("tr[id=linha_origem]").show();
-
-
-    } else {
-        document.form1.nfencm.required=false;
-        document.form1.nfecfop.required=false;
-        document.form1.nfeipi.required=false;
-        document.form1.nfepis.required=false;
-        document.form1.nfecofins.required=false;
-        document.form1.nfeorigem.required=false;
-        $("tr[id=linha_ncm]").hide(); 
-        $("tr[id=linha_cfop]").hide(); 
-        $("tr[id=linha_icms]").hide(); 
-        $("tr[id=linha_ipi]").hide();
-        $("tr[id=linha_pis]").hide();
-        $("tr[id=linha_cofins]").hide();
-        $("tr[id=linha_origem]").hide();
-    }
-  
-}
-
-function referencia_valida_caracteres_especiais (valor) {
-    if(valor.match(/'/)) valor = valor.replace("'","");
-    if(valor.match(/!/)) valor = valor.replace("!","");
-    if(valor.match(/@/)) valor = valor.replace("@","");
-    if(valor.match(/#/)) valor = valor.replace("#","");
-    if(valor.match(/$/)) valor = valor.replace("$","");
-    if(valor.match(/%/)) valor = valor.replace("%","");
-    if(valor.match(/^/)) valor = valor.replace("ˆ","");
-    if(valor.match(/&/)) valor = valor.replace("&","");
-    if(valor.match(/{/)) valor = valor.replace("{","");
-    if(valor.match(/}/)) valor = valor.replace("}","");
-    if(valor.match(/|/)) valor = valor.replace("|","");
-    if(valor.match(/˜/)) valor = valor.replace("˜","");
-    if(valor.match(/`/)) valor = valor.replace("`","");
-    //alert(valor);
-    $("input[name=referencia]").val(valor);
-}
-
-   
-window.onload = function(){
-    //industrializado
-    ind=$("select[name=industrializado]").val();
-    if (ind==0) {
-        $("tr[id=id_marca]").hide(); 
-        $("tr[id=id_codigounico]").hide(); 
-    } else {
-        $("tr[id=id_marca]").show(); 
-        $("tr[id=id_codigounico]").show(); 
-    }
-    
-    //tipo de contagem    
-    tipocon=$("select[name=tipo]").val();
-    if ((tipocon==2)||(tipocon==3)) {
-        $("tr[id=id_volume]").hide(); 
-        $("tr[id=id_recipiente]").hide(); 
-    } else {
-        $("tr[id=id_volume]").show(); 
-        $("tr[id=id_recipiente]").show(); 
-        
-    }
-    
-
-    
-    var dadosfiscais = $("select[name=dadosfiscais]").val();
-    dados_fiscais(dadosfiscais);
-    
-    var ncm = $("input[name=nfencm]").val();
-    pesquisa_ncm(ncm);
-    
-    var cfop = $("input[name=nfecfop]").val();
-    pesquisa_cfop(cfop);
-    
-    var origem = $("input[name=nfeorigem]").val();
-    pesquisa_origem(origem);
-    
-    
-}   
-
-    
-
-
-</script>
 
  
 <table summary="" class="" border="0">
@@ -521,6 +355,7 @@ if ($linhas == 0) {
                 
             </td>
         </tr>
+        <?php  if ($usaproducao==1) { ?>
         <tr>
             <td align="right" width="200px"><b>Sub-produto / Matéria-Prima: <label class="obrigatorio"></label></b></td>
             <td align="left" valign="bottom">
@@ -530,7 +365,7 @@ if ($linhas == 0) {
                 </select>
             </td>
         </tr> 
-        
+        <?php } ?>
         
         
         <tr>
@@ -704,9 +539,33 @@ if ($linhas == 0) {
                 </a>
                 <label id="label_origem"></label>
             </td>
-        </tr>   
+        </tr> 
+
+        
+        <tr>
+            <td align="right" width="200px"><b>Controlar Estoque <label class="obrigatorio"></label></b></td>
+            <td align="left" valign="bottom">
+                <select name="controlarestoque" onchange="" class="campopadrao" required="required" <?php if ($ver == 1) echo" disabled "; ?> >
+                    <option value="0" <?php if ($controlarestoque==0) echo " selected ";  ?>>Não</option>
+                    <option value="1" <?php if ($controlarestoque==1) echo " selected ";  ?>>Sim</option>
+                </select>
+                <span class="dicacampo"> </span>
+            </td>
+        </tr>  
+
+       <tr id="valunicusto_linha">
+            <td align="right" width="200px"><b>Valor Unitário Custo: <label class="obrigatorio"></label></b></td>
+            <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="valunicusto"  size="18" class="campopadrao"  value="<?php echo "$valunicusto"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"></span></td>
+        </tr>
+       <tr id="valunivenda_linha">
+            <td align="right" width="200px"><b>Valor Unitário Venda: <label class="obrigatorio"></label></b></td>
+            <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="valunivenda"  size="18" class="campopadrao"  value="<?php echo "$valunivenda"; ?>" <?php if ($ver == 1) echo" disabled "; ?>required  placeholder=""><span class="dicacampo"></span></td>
+        </tr>
+
+
     </table>
 
+    <input type="hidden" name="cooperativa_oculto" value="<?php echo $usuario_cooperativa ?>">
     <input type="hidden" name="nfecrt" value="<?php echo $crt; ?>">
     
     <br />

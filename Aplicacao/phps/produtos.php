@@ -10,7 +10,13 @@ if ($permissao_produtos_ver <> 1) {
 
 $tipopagina = "produtos";
 ?>
-<?php include "includes.php"; ?>
+<?php include "includes.php"; 
+
+$usamoduloproducao=usamoduloproducao($usuario_quiosque); 
+$usavendaporcoes=usavendaporcoes($usuario_quiosque); 
+
+
+?>
 <script type="text/javascript" src="paginacao.js"></script>
 
 <table summary="" class="" border="0">
@@ -178,9 +184,13 @@ ORDER BY $sql_ordenacao
             <td colspan="" align="center">MARCA</td>
             <td colspan="" align="center">REC.</td>
             <td colspan="" align="center">VOL.</td>
+            <?php if (($usavendaporcoes==1)&&($usavendas==1)) { ?>
             <td width="10px" align="center" colspan="2">PORÇÕES</td>	
-            <td width="10px" align="center" colspan="2">SUB-PRODUTOS</td>	
-            
+            <?php } ?>
+            <?php if (($usamoduloproducao==1)) { ?>            
+            <td width="10px" align="center" colspan="2">SUB-PRODUTOS</td>   
+            <?php } ?>
+
             <?php
             $oper = 1;
             $oper_tamanho = 0;
@@ -240,25 +250,27 @@ ORDER BY $sql_ordenacao
                 <td><?php echo "$recipiente"; ?></td>
                 <td><?php echo "$volume"; ?></td>
                
+                <?php if (($usavendaporcoes==1)&&($usavendas==1)) { ?>
                 <td width="" align="right"><b><?php echo "($qtdporcoes)"; ?> </b></td>            
                 <td width="" align="left">
                     <a href="produtos_porcoes.php?produto=<?php echo "$codigo"; ?>">
                     <img width="18px" src="../imagens/icones/geral/procurar.png" title="Produrar" alt="Procurar">
                     </a>
                 </td>
-                
-                <?php
-                $sql2 = "SELECT count(*) as qtd FROM produtos_subproduto WHERE prosub_produto=$codigo";
-                $query2 = mysql_query($sql2);
-                $array2 = mysql_fetch_array($query2);
-                $qtdsubproduto=$array2["qtd"];
+                <?php } ?>
+                <?php if ($usamoduloproducao==1) { 
+                    $sql2 = "SELECT count(*) as qtd FROM produtos_subproduto WHERE prosub_produto=$codigo";
+                    $query2 = mysql_query($sql2);
+                    $array2 = mysql_fetch_array($query2);
+                    $qtdsubproduto=$array2["qtd"];
                 ?>
                 <td width="" align="right"><b><?php echo "($qtdsubproduto)"; ?> </b></td>            
                 <td width="" align="left">
                     <a href="produtos_subprodutos.php?produto=<?php echo "$codigo"; ?>">
                     <img width="18px" src="../imagens/icones/geral/procurar.png" title="Produrar" alt="Procurar">
                     </a>
-                </td>            
+                </td>
+                <?php } ?>            
                 
               
 

@@ -21,6 +21,9 @@ $tipopessoanfe = $_POST['tipopessoanfe'];
 $usacomanda = $_POST['usacomanda'];
 $usacaixa = $_POST['usacaixa'];
 $usavendas = $_POST['usavendas'];
+$usaproducao = $_POST['usaproducao'];
+$usaestoque = $_POST['usaestoque'];
+$usavendaporcoes = $_POST['usavendaporcoes'];
 $classificacaopadraoestoque = $_POST['classificacaopadraoestoque'];
 $devolucoessobrevendas = $_POST['devolucoessobrevendas'];
 $permiteedicaoclientenavenda = $_POST['permiteedicaoclientenavenda'];
@@ -85,7 +88,10 @@ SET
     quicnf_permiteedicaoclientenavenda=$permiteedicaoclientenavenda,
     quicnf_versaonfe='$versaonfe',
     quicnf_usamodulocaixa='$usacaixa',
-    quicnf_usamodulovendas='$usavendas'
+    quicnf_usamodulovendas='$usavendas',
+    quicnf_usamoduloproducao='$usaproducao',
+    quicnf_usamoduloestoque='$usaestoque',
+    quicnf_usavendaporcoes='$usavendaporcoes'
     $complemento    
 WHERE
     quicnf_quiosque=$quiosque

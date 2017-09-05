@@ -120,11 +120,15 @@ function aparece_tiponegociacao() {
     //alert("opa");
     var fornec= $("input[id=fornec]").val();
     //alert(fornec);
-    if (document.form1.fornec.checked == true) {
-        $("tr[id=tr_tiponegociacao]").show();
+    var temp= document.form1.fornec; 
+    if (temp) {
+            
+        if (document.form1.fornec.checked == true) {
+            $("tr[id=tr_tiponegociacao]").show();
+        }
+        else
+            $("tr[id=tr_tiponegociacao]").hide();       
     }
-    else
-        $("tr[id=tr_tiponegociacao]").hide();       
 }
 
 $(document).ready(function() {

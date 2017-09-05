@@ -259,7 +259,7 @@ $sql = "
                             $imagemtip=$icones."consignacao.png";
                         }
                         else {
-                            $imagemtip=$icones."revenda.png";
+                            $imagemtip=$icones."fechamentos.png";
                             $titulo="Revenda";
                         }
                         ?>    

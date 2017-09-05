@@ -50,64 +50,70 @@ if ($usuario_grupo<>4) {
         }
 
         //Produtos
-        $tpl_menu->IMAGEM_TITULO = "Produtos";
-        $tpl_menu->TITULO = "Produtos";
-        if ($permissao_produtos_ver == 1) {
-            $tpl_menu->IMAGEM_ARQUIVO = "produtos.png";
-            $tpl_menu->LINK = "produtos.php";
-            $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-            $tpl_menu->block("BLOCK_MENU_ITEM");
+        if (($usavendas==1)||($usaproducao==1)||($usaestoque==1)) {
+            $tpl_menu->IMAGEM_TITULO = "Produtos";
+            $tpl_menu->TITULO = "Produtos";
+            if ($permissao_produtos_ver == 1) {
+                $tpl_menu->IMAGEM_ARQUIVO = "produtos.png";
+                $tpl_menu->LINK = "produtos.php";
+                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                $tpl_menu->block("BLOCK_MENU_ITEM");
+            }
         }
 
 
 
         //Entradas
-        $tpl_menu->IMAGEM_TITULO = "Entradas";
-        $tpl_menu->TITULO = "Entradas";
-        if ($permissao_entradas_ver == 1) {
-            if ($usuario_quiosque != 0) {
-                $tpl_menu->IMAGEM_ARQUIVO = "entradas.png";
-                $tpl_menu->LINK = "entradas.php";
-                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-                $tpl_menu->block("BLOCK_MENU_ITEM");
+        if (($usaproducao==1)||($usaestoque==1)) {
+            $tpl_menu->IMAGEM_TITULO = "Entradas";
+            $tpl_menu->TITULO = "Entradas";
+            if ($permissao_entradas_ver == 1) {
+                if ($usuario_quiosque != 0) {
+                    $tpl_menu->IMAGEM_ARQUIVO = "entradas.png";
+                    $tpl_menu->LINK = "entradas.php";
+                    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                    $tpl_menu->block("BLOCK_MENU_ITEM");
+                }
             }
         }
 
         //Estoque
-        $tpl_menu->IMAGEM_TITULO = "Estoque";
-        $tpl_menu->TITULO = "Estoque";
-        if ($permissao_estoque_ver == 1) {
-            if ($usuario_quiosque != 0) {
+        if (($usaproducao==1)||($usaestoque==1)) {
+            $tpl_menu->IMAGEM_TITULO = "Estoque";
+            $tpl_menu->TITULO = "Estoque";
+            if ($permissao_estoque_ver == 1) {
+                if ($usuario_quiosque != 0) {
 
-                $tpl_menu->IMAGEM_ARQUIVO = "estoque.png";
-                if ($usuario_grupo == 5)
-                    $tpl_menu->LINK = "estoque_porfornecedor_produto.php?fornecedor=$usuario_codigo";
-                else
-                    $tpl_menu->LINK = "estoque.php";
-                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-                $tpl_menu->block("BLOCK_MENU_ITEM");
+                    $tpl_menu->IMAGEM_ARQUIVO = "estoque.png";
+                    if ($usuario_grupo == 5)
+                        $tpl_menu->LINK = "estoque_porfornecedor_produto.php?fornecedor=$usuario_codigo";
+                    else
+                        $tpl_menu->LINK = "estoque.php";
+                    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                    $tpl_menu->block("BLOCK_MENU_ITEM");
+                }
             }
         }
 
-
         //Saidas
-        $usavendas=usamodulovendas($usuario_quiosque);
-        if ($usavendas==1) {
-            $tpl_menu->IMAGEM_TITULO = "Vendas";
-            $tpl_menu->TITULO = "Vendas";
-            $tpl_menu->IMAGEM_ARQUIVO = "vendas.png";
-            $tpl_menu->LINK = "saidas.php";
-        } else {
-            $tpl_menu->IMAGEM_TITULO = "Saídas";
-            $tpl_menu->TITULO = "Saídas";
-            $tpl_menu->IMAGEM_ARQUIVO = "saidas.png";
-            $tpl_menu->LINK = "saidas_devolucao.php";
-        }
-        $tpl_menu->TD_LARGURA = "110px";
-        if ($permissao_saidas_ver == 1) {
-            if ($usuario_quiosque != 0) {
-                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-                $tpl_menu->block("BLOCK_MENU_ITEM");
+        if (($usaestoque==1)||($usavendas==1)) {
+            if ($usavendas==1) {
+                $tpl_menu->IMAGEM_TITULO = "Vendas";
+                $tpl_menu->TITULO = "Vendas";
+                $tpl_menu->IMAGEM_ARQUIVO = "vendas.png";
+                $tpl_menu->LINK = "saidas.php";
+            } else {
+                $tpl_menu->IMAGEM_TITULO = "Saídas";
+                $tpl_menu->TITULO = "Saídas";
+                $tpl_menu->IMAGEM_ARQUIVO = "saidas.png";
+                $tpl_menu->LINK = "saidas_devolucao.php";
+            }
+            $tpl_menu->TD_LARGURA = "110px";
+            if ($permissao_saidas_ver == 1) {
+                if ($usuario_quiosque != 0) {
+                    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                    $tpl_menu->block("BLOCK_MENU_ITEM");
+                }
             }
         }
 
@@ -125,18 +131,31 @@ if ($usuario_grupo<>4) {
             }
         }
 
-        //Negociações
-        $tpl_menu->IMAGEM_TITULO = "Negociações";
-        $tpl_menu->TITULO = "Negociações";
-        if ($permissao_acertos_ver == 1) {
-            if ($usuario_quiosque != 0) {
-                $tpl_menu->IMAGEM_ARQUIVO = "acertos3.png";
-                if ($quiosque_consignacao==1)
+        //Consignações
+        if (($quiosque_consignacao==1)&&($usavendas==1)) {
+            $tpl_menu->IMAGEM_TITULO = "Acertos";
+            $tpl_menu->TITULO = "Acertos";
+            if ($permissao_acertos_ver == 1) {
+                if ($usuario_quiosque != 0) {
+                    $tpl_menu->IMAGEM_ARQUIVO = "consignacao.png";
                     $tpl_menu->LINK = "acertos.php";
-                else
+                    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                    $tpl_menu->block("BLOCK_MENU_ITEM");
+                }
+            }
+        }
+
+        //Fechamentos de Revendas
+        if (($quiosque_revenda==1)&&($usavendas==1)) {
+            $tpl_menu->IMAGEM_TITULO = "Fechamentos";
+            $tpl_menu->TITULO = "Fechamentos";
+            if ($permissao_acertos_ver == 1) {
+                if ($usuario_quiosque != 0) {
+                    $tpl_menu->IMAGEM_ARQUIVO = "fechamentos.png";
                     $tpl_menu->LINK = "acertos_revenda.php";
-                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-                $tpl_menu->block("BLOCK_MENU_ITEM");
+                    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                    $tpl_menu->block("BLOCK_MENU_ITEM");
+                }
             }
         }
 
@@ -169,13 +188,15 @@ if ($usuario_grupo<>4) {
         if ($tipopagina == "quiosques") {
 
             //Taxas
-            if ($permissao_quiosque_ver == 1) {
-                $tpl_menu->IMAGEM_TITULO = "Taxas";
-                $tpl_menu->TITULO = "Taxas";
-                $tpl_menu->IMAGEM_ARQUIVO = "taxas.png";
-                $tpl_menu->LINK = "taxas.php";
-                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-                $tpl_menu->block("BLOCK_MENU_ITEM");
+            if ($usavendas==1) {
+                if ($permissao_quiosque_ver == 1) {
+                    $tpl_menu->IMAGEM_TITULO = "Taxas";
+                    $tpl_menu->TITULO = "Taxas";
+                    $tpl_menu->IMAGEM_ARQUIVO = "taxas.png";
+                    $tpl_menu->LINK = "taxas.php";
+                    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                    $tpl_menu->block("BLOCK_MENU_ITEM");
+                }
             }
 
             //Supervisores
@@ -189,15 +210,16 @@ if ($usuario_grupo<>4) {
             }
 
             //Taxas Quiosque
-            if ($permissao_taxas_ver == 1) {
-                $tpl_menu->IMAGEM_TITULO = "Taxas Quiosque";
-                $tpl_menu->TITULO = "Taxas Quiosque";
-                $tpl_menu->IMAGEM_ARQUIVO = "quiosques_taxas.png";
-                $tpl_menu->LINK = "quiosque_taxas.php?quiosque=$usuario_quiosque";
-                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-                $tpl_menu->block("BLOCK_MENU_ITEM");
+            if ($usavendas==1) {                
+                if ($permissao_taxas_ver == 1) {
+                    $tpl_menu->IMAGEM_TITULO = "Taxas Quiosque";
+                    $tpl_menu->TITULO = "Taxas Quiosque";
+                    $tpl_menu->IMAGEM_ARQUIVO = "quiosques_taxas.png";
+                    $tpl_menu->LINK = "quiosque_taxas.php?quiosque=$usuario_quiosque";
+                    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                    $tpl_menu->block("BLOCK_MENU_ITEM");
+                }
             }
-
             
             //Configurações
             if ($permissao_quiosque_editar == 1) {
@@ -224,15 +246,6 @@ if ($usuario_grupo<>4) {
 
         //Sub-menu Produtos
         if ($tipopagina == "produtos") {
-
-            if ($permissao_produtos_ver == 1) {
-                $tpl_menu->LINK = "produtos.php";
-                $tpl_menu->IMAGEM_ARQUIVO = "produtos.png";
-                $tpl_menu->IMAGEM_TITULO = "Produtos";
-                $tpl_menu->TITULO = "Produtos";
-                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-                $tpl_menu->block("BLOCK_MENU_ITEM");
-            }
 
             //Categorias
             if ($permissao_categorias_ver == 1) {
@@ -335,6 +348,7 @@ if ($usuario_grupo<>4) {
             }
         }
 
+        /*
         //Negociações
         if ($tipopagina == "negociacoes") {
             //Consignados
@@ -348,13 +362,14 @@ if ($usuario_grupo<>4) {
             }
             if ($quiosque_revenda == 1) {
                 $tpl_menu->LINK = "acertos_revenda.php";
-                $tpl_menu->IMAGEM_ARQUIVO = "revenda.png";
+                $tpl_menu->IMAGEM_ARQUIVO = "fechamentos.png";
                 $tpl_menu->IMAGEM_TITULO = "Fechamento Revendas";
                 $tpl_menu->TITULO = "Fechamento Revendas";
                 $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
                 $tpl_menu->block("BLOCK_MENU_ITEM");
             }
         }
+        */
     } else if (($tipopagina=="cooperativa")||($tipopagina=="locais")||($tipopagina=="quiosques2")||($tipopagina=="configuracoes")){
         //$tpl_menu->TABELA_ALINHAMENTO = "right";
 

@@ -187,7 +187,6 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 
 
 //Botão Cadastrar novo pagamento
-$usacaixa=usamodulocaixa($usuario_quiosque);
 $caixaoperacao=pessoa_caixaoperacao($usuario_codigo);
 if ($caixaoperacao=="") $temcaixaoperacao=0; else $temcaixaoperacao=1;
 if ($saldofinal==0) {
@@ -243,7 +242,6 @@ $tpl->CABECALHO_COLUNA_NOME="OBSSERVAÇÃO";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Caixa Operação
-$usacaixa=usamodulocaixa($usuario_quiosque);
 if ($usacaixa==1) {
     $tpl->CABECALHO_COLUNA_TAMANHO="";
     $tpl->CABECALHO_COLUNA_COLSPAN="";

@@ -17391,4 +17391,21 @@ ADD INDEX `pes_categoria` (`pes_tipopessoa` ASC);
 
 DROP TABLE IF EXISTS `pessoas_categoria`;
 
+ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_usamoduloproducao` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_usamodulovendas`;
+
+
+ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_usamoduloestoque` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_usamoduloproducao`;
+
+ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_usavendaporcoes` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_usamoduloestoque`;
+
+ALTER TABLE `sgaf`.`produtos` 
+ADD COLUMN `pro_controlarestoque` INT(1) NOT NULL DEFAULT 1 AFTER `pro_origem`;
+
+
+ALTER TABLE `sgaf`.`produtos` 
+ADD COLUMN `pro_valunicusto` VARCHAR(45) NULL AFTER `pro_controlarestoque`,
+ADD COLUMN `pro_valunivenda` VARCHAR(45) NULL AFTER `pro_valunicusto`;
 

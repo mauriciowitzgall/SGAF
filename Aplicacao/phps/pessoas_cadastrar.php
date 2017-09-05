@@ -18,6 +18,8 @@ if ($operacao == "editar")
 if ($operacao == "ver")
     $oper_num = 3;
 
+
+
 //Se o usuario estiver alterando seu próprio cadastro passa
 $cpf_desabilitado = 0;
 if ($usuario_codigo != $codigo) {
@@ -66,6 +68,8 @@ if ($usuario_codigo != $codigo) {
 
 $tipopagina = "pessoas";
 include "includes.php";
+
+
 
 //Verifica se esta parametrizado para usar módulo fiscal
 $sql2 = "SELECT * FROM quiosques_configuracoes WHERE quicnf_quiosque=$usuario_quiosque";
@@ -1137,72 +1141,80 @@ if (($permissao_pessoas_cadastrar_supervisores == 1) || (($permissao_pessoas_ver
 
 //Tipo caixa
 if (($permissao_pessoas_cadastrar_caixas == 1) || (($permissao_pessoas_ver_caixas == 1) && ($operacao == 'ver'))) {
-    $tpl1->CHECKBOX_NOME = "box[3]";
-    $tpl1->CHECKBOX_ID = "vend";
-    $tpl1->CHECKBOX_VALOR = "4";
-    $tpl1->LABEL_NOME = "Caixa";
-    if ($tipo_caixa == 1)
-        $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
-    //Se for edição de pessoa
-    if ($operacao == "editar") {
-        //Verifica se a pessoa em questão é operador de caixa de algum quiosque, se sim então desabilitar esse check
-        $sql2 = "SELECT * FROM caixas_operadores WHERE caiope_operador=$codigo";
-        $query2 = mysql_query($sql2);
-        if (!$query2)
-            die("Erro: 12" . mysql_error());
-        $total2 = mysql_num_rows($query2);
-        if ($total2 > 0) {
-            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-            $tpl1->CHECKBOX_ICONE_ARQUIVO = "../imagens/icones/geral/info.png";
-            $tpl1->CHECKBOX_ICONE_MENSAGEM = "Você não pode desmarcar esta opção porque esta pessoa atualmente é caixa de algum quiosque";
-            $tpl1->block("BLOCK_CHECKBOX_ICONE");
-            //Chama o campo oculto caso o checkbox fique desabilitado
-            $tpl1->CAMPOOCULTO_NOME = "box[3]";
-            $tpl1->CAMPOOCULTO_VALOR = "4";
-            $tpl1->block("BLOCK_CAMPOSOCULTOS");
+    if ($usacaixa==1) {
+
+
+        $tpl1->CHECKBOX_NOME = "box[3]";
+        $tpl1->CHECKBOX_ID = "vend";
+        $tpl1->CHECKBOX_VALOR = "4";
+        $tpl1->LABEL_NOME = "Caixa";
+        if ($tipo_caixa == 1)
+            $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+        //Se for edição de pessoa
+        if ($operacao == "editar") {
+            //Verifica se a pessoa em questão é operador de caixa de algum quiosque, se sim então desabilitar esse check
+            $sql2 = "SELECT * FROM caixas_operadores WHERE caiope_operador=$codigo";
+            $query2 = mysql_query($sql2);
+            if (!$query2)
+                die("Erro: 12" . mysql_error());
+            $total2 = mysql_num_rows($query2);
+            if ($total2 > 0) {
+                $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+                $tpl1->CHECKBOX_ICONE_ARQUIVO = "../imagens/icones/geral/info.png";
+                $tpl1->CHECKBOX_ICONE_MENSAGEM = "Você não pode desmarcar esta opção porque esta pessoa atualmente é caixa de algum quiosque";
+                $tpl1->block("BLOCK_CHECKBOX_ICONE");
+                //Chama o campo oculto caso o checkbox fique desabilitado
+                $tpl1->CAMPOOCULTO_NOME = "box[3]";
+                $tpl1->CAMPOOCULTO_VALOR = "4";
+                $tpl1->block("BLOCK_CAMPOSOCULTOS");
+            }
         }
+        if ($operacao == 'ver')
+            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+        if ($tipopessoa == 2) {
+            $tpl1->CHECKBOX_SPAN_CLASSE = "some";
+        } else {
+            $tpl1->CHECKBOX_SPAN_CLASSE = "";
+        }
+        $tpl1->CHECKBOX_SPAN_ID = "span_caixa";
+        $tpl1->block("BLOCK_CHECKBOX");
     }
-    if ($operacao == 'ver')
-        $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-    if ($tipopessoa == 2) {
-        $tpl1->CHECKBOX_SPAN_CLASSE = "some";
-    } else {
-        $tpl1->CHECKBOX_SPAN_CLASSE = "";
-    }
-    $tpl1->CHECKBOX_SPAN_ID = "span_caixa";
-    $tpl1->block("BLOCK_CHECKBOX");
 }
 
 //Tipo Fornecedor
 if (($permissao_pessoas_cadastrar_fornecedores == 1) || (($permissao_pessoas_ver_fornecedores == 1) && ($operacao == 'ver'))) {
-    $tpl1->CHECKBOX_NOME = "box[4]";
-    $tpl1->CHECKBOX_ID = "fornec";
-    $tpl1->CHECKBOX_VALOR = "5";
-    $tpl1->LABEL_NOME = "Fornecedor";
-    if ($tipo_fornecedor == 1)
-        $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
-    if ($operacao == 'ver')
-        $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-    $tpl1->CHECKBOX_ONCLICK = "aparece_tiponegociacao();";
-    $tpl1->block("BLOCK_CHECKBOX_ONCLICK");
-    $tpl1->CHECKBOX_SPAN_CLASSE = "";
-    $tpl1->CHECKBOX_SPAN_ID = "span_fornecedor";
-    $tpl1->block("BLOCK_CHECKBOX");
+    if (($usaproducao==1)||($usaestoque==1)) {
+        $tpl1->CHECKBOX_NOME = "box[4]";
+        $tpl1->CHECKBOX_ID = "fornec";
+        $tpl1->CHECKBOX_VALOR = "5";
+        $tpl1->LABEL_NOME = "Fornecedor";
+        if ($tipo_fornecedor == 1)
+            $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+        if ($operacao == 'ver')
+            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+        $tpl1->CHECKBOX_ONCLICK = "aparece_tiponegociacao();";
+        $tpl1->block("BLOCK_CHECKBOX_ONCLICK");
+        $tpl1->CHECKBOX_SPAN_CLASSE = "";
+        $tpl1->CHECKBOX_SPAN_ID = "span_fornecedor";
+        $tpl1->block("BLOCK_CHECKBOX");
+    }
 }
 
 //Tipo Consumidor
 if (($permissao_pessoas_cadastrar_consumidores == 1) || (($permissao_pessoas_ver_consumidores == 1) && ($operacao == 'ver'))) {
-    $tpl1->CHECKBOX_NOME = "box[5]";
-    $tpl1->CHECKBOX_ID = "consum";
-    $tpl1->CHECKBOX_VALOR = "6";
-    $tpl1->LABEL_NOME = "Consumidor";
-    if ($tipo_consumidor == 1)
-        $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
-    if ($operacao == 'ver')
-        $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
-    $tpl1->CHECKBOX_SPAN_CLASSE = "";
-    $tpl1->CHECKBOX_SPAN_ID = "span_consumidor";
-    $tpl1->block("BLOCK_CHECKBOX");
+    if ($usavendas==1) {
+        $tpl1->CHECKBOX_NOME = "box[5]";
+        $tpl1->CHECKBOX_ID = "consum";
+        $tpl1->CHECKBOX_VALOR = "6";
+        $tpl1->LABEL_NOME = "Consumidor";
+        if ($tipo_consumidor == 1)
+            $tpl1->block("BLOCK_CHECKBOX_SELECIONADO");
+        if ($operacao == 'ver')
+            $tpl1->block("BLOCK_CHECKBOX_DESABILITADO");
+        $tpl1->CHECKBOX_SPAN_CLASSE = "";
+        $tpl1->CHECKBOX_SPAN_ID = "span_consumidor";
+        $tpl1->block("BLOCK_CHECKBOX");
+    }
 }
 
 $tpl1->block("BLOCK_TITULO");

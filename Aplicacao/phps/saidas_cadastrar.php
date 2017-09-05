@@ -40,8 +40,7 @@ if ($saida != "") {
 $tipopagina = "saidas";
 include "includes.php";
 
-$usavendas=usamodulovendas($usuario_quiosque);
-if ($usavendas!=1) {
+if (($usavendas!=1)&&($tiposaida!=3)) {
     $tpl6 = new Template("templates/notificacao.html");
     $tpl6->block("BLOCK_ERRO");
     $tpl6->ICONES = $icones;

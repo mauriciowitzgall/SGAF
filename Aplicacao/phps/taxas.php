@@ -269,7 +269,7 @@ while ($dados = mysql_fetch_assoc($query)) {
         $tpl2->ICONE_DICA = "Consignação";
         $tpl2->ICONE_NOMEALTERNATIVO = "Consignação";
     } else if ($tiponegociacao == 2) {
-        $tpl2->ICONE_NOMEARQUIVO = "revenda.png";
+        $tpl2->ICONE_NOMEARQUIVO = "fechamentos.png";
         $tpl2->ICONE_DICA = "Revenda";
         $tpl2->ICONE_NOMEALTERNATIVO = "Revenda";
     } else {

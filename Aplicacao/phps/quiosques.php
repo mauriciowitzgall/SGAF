@@ -339,7 +339,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl->IMAGEM_TITULO = "Revenda";
     $tpl->IMAGEM_NOMEARQUIVO = "revenda_desabilitado.png";
     if ($tipo_revenda == 1) {
-        $tpl->IMAGEM_NOMEARQUIVO = "revenda.png";
+        $tpl->IMAGEM_NOMEARQUIVO = "fechamentos.png";
     }
     $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
     $tpl->IMAGEM_ALINHAMENTO="center";

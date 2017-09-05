@@ -42,7 +42,7 @@ $tpl_titulo = new Template("templates/titulos.html");
 $tpl_titulo->TITULO = "FECHAMENTO DE REVENDAS";
 $tpl_titulo->SUBTITULO = "CADASTRO DE FECHAMENTOS DE REVENDAS";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "revenda.png";
+$tpl_titulo->NOME_ARQUIVO_ICONE = "fechamentos.png";
 $tpl_titulo->show();
 
 

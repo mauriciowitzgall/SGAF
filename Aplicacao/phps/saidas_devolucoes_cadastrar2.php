@@ -19,7 +19,6 @@ $tpl_titulo->NOME_ARQUIVO_ICONE = "devolucoes.png";
 $tpl_titulo->show();
 
 $datahoraatual=date("Y-m-d H:i:s");
-$usamodulocaixa=usamodulocaixa($usuario_quiosque);
 
 //Pegar todos os dados digitados
 //print_r($_REQUEST);

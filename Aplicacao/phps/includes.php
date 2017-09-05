@@ -36,12 +36,20 @@ $modal=$_GET["modal"];
             include "controle/conexao.php";
             //include "controle/conexao_tipo.php";
             require_once "funcoes.php";
+            $usaestoque=usamoduloestoque($usuario_quiosque);
+            $usaproducao=usamoduloproducao($usuario_quiosque);
+            $usavendas=usamodulovendas($usuario_quiosque);
+            $usacaixa=usamodulocaixa($usuario_quiosque);
+            $usavendaporcoes=usavendaporcoes($usuario_quiosque);
             //include "conexao_tipo.php";
             if ($modal!=1) {
                 include "cabecalho.php";
                 include "menu.php";
             }
             include "js/mascaras.php";
+
+
+            
             ?>
             <div class="corpo">
 

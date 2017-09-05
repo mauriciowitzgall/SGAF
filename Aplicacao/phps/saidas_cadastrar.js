@@ -40,7 +40,7 @@ $(window).load(function() {
     popular_produto();
 
     //Define o foco padrão
-    document.forms["form1"].elements["produto_referencia"].focus();
+    var temp=document.forms["form1"].elements["produto_referencia"]; if (temp) document.forms["form1"].elements["produto_referencia"].focus();
     
     //Ao selecionar porcoes
     $("select[name=porcao]").change(function() {
@@ -63,7 +63,7 @@ $(window).load(function() {
             if (porcao=="") {
                 porcao=0;
                 $("input[name=porcao_qtd]").val("");
-                document.forms["form1"].qtd.disabled = false;
+                var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = false;
 
             }
             $.post("saidas_popula_valuniref.php", {
@@ -102,12 +102,12 @@ $(window).load(function() {
             lote2=$("select[name=lote]").val();
             //alert("Lote2="+lote2);
             if ((lote2!="")&&(lote2!= null)&&(lote2!== undefined)&&(lote2!= 0)) {
-                document.forms["form1"].qtd.disabled = true;
-                document.forms["form1"].porcao_qtd.disabled = false;
+                var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = true;
+                var temp=document.forms["form1"].porcao_qtd; if (temp) document.forms["form1"].porcao_qtd.disabled = false;
             }             
             else {
-                document.forms["form1"].qtd.disabled = false;
-                document.forms["form1"].porcao_qtd.disabled = true;
+                var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = false;
+                 var temp=document.forms["form1"].porcao_qtd; if (temp) document.forms["form1"].porcao_qtd.disabled = true;
             } 
         }
     });
@@ -117,8 +117,8 @@ function popular_produto (produto) {
     //alert(produto);
     $.post("saidas_popula_produto.php", { produto: produto }, function(valor) {
         $("select[name=produto]").html(valor);
-        document.forms["form1"].qtd.disabled = true;
-        document.forms["form1"].porcao_qtd.disabled = true;
+        var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = true;
+         var temp=document.forms["form1"].porcao_qtd; if (temp) document.forms["form1"].porcao_qtd.disabled = true;
     });
         
 }
@@ -162,8 +162,8 @@ function selecionar_produto (produto,focoqtd) {
     }*/
 
     //Desabilita o campo quantidade e o botão de incluir
-    document.forms["form1"].qtd.disabled = true;
-    document.forms["form1"].porcao_qtd.disabled = true;
+    var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = true;
+     var temp=document.forms["form1"].porcao_qtd; if (temp) document.forms["form1"].porcao_qtd.disabled = true;
     document.forms["form1"].botao_incluir.disabled = true;
 
     //Define máscara para campo quantidade de porções
@@ -202,8 +202,8 @@ function selecionar_fornecedor (fornecedor,focoqtd) {
     $("select[name=porcao]").html("");
 
     //Habilita botão e campo quantidade
-    document.forms["form1"].qtd.disabled = true;
-    document.forms["form1"].porcao_qtd.disabled = true;
+    var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = true;
+     var temp=document.forms["form1"].porcao_qtd; if (temp) document.forms["form1"].porcao_qtd.disabled = true;
     document.forms["form1"].botao_incluir.disabled = true;    
     
     
@@ -319,10 +319,10 @@ function produtoelote_selecionado(produto,lote,focoqtd) {
                     $("input[name=qtd]").val("");
                     $("input[name=qtd2]").val("");
                     document.forms["form1"].botao_incluir.disabled = true;
-                    document.forms["form1"].qtd.disabled = true;
-                    document.forms["form1"].porcao_qtd.disabled = true;
+                    var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = true;
+                    var temp=document.forms["form1"].porcao_qtd; if (temp) document.forms["form1"].porcao_qtd.disabled = true;
                 } else {
-                    document.forms["form1"].qtd.disabled = false;
+                    var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = false;
                     porcao2=$("select[name=porcao]").val();
                     if ((porcao2!="")&&(porcao2!= null)&&(porcao2!== undefined)&&(porcao2!= 0)) document.forms["form1"].porcao_qtd.disabled = false;
                     else document.forms["form1"].porcao_qtd.disabled = true;
@@ -531,8 +531,8 @@ function valida_etiqueta(campo) {
         document.forms["form1"].fornecedor.disabled = true;
         document.forms["form1"].etiqueta2.disabled = true;
         document.forms["form1"].lote.disabled = true;
-        document.forms["form1"].qtd.disabled = true;
-        document.forms["form1"].porcao_qtd.disabled = true;
+        var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = true;
+         var temp=document.forms["form1"].porcao_qtd; if (temp) document.forms["form1"].porcao_qtd.disabled = true;
         $("input[name=qtd]").val("");
         $("input[name=qtd2]").val("");
         $("input[name=valuni]").val("");
@@ -666,7 +666,7 @@ function valida_etiqueta2(campo) {
         document.forms["form1"].etiqueta.disabled = true;
         document.forms["form1"].fornecedor.disabled= true;        
         document.forms["form1"].lote.disabled= true;        
-        document.forms["form1"].qtd.disabled = true;
+        var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = true;
         document.forms["form1"].porcao_qtd.disabled = true;
         document.forms["form1"].porcao.disabled = true;
         $("input[name=qtd]").val("");
@@ -687,7 +687,7 @@ function valida_etiqueta2(campo) {
         document.forms["form1"].etiqueta.disabled = false;
         document.forms["form1"].fornecedor.disabled= false;        
         document.forms["form1"].lote.disabled= false;        
-        document.forms["form1"].qtd.disabled = false;
+        var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = false;
         document.forms["form1"].porcao_qtd.disabled = false;
         document.forms["form1"].porcao.disabled = false;
         
@@ -812,7 +812,7 @@ function porcoesqtd() {
         centsSeparator: ',',
         thousandsSeparator: '.'
     });
-    document.forms["form1"].qtd.disabled = true;
+    var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = true;
     document.forms["form1"].botao_incluir.disabled = false;
     
     

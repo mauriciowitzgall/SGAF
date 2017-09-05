@@ -188,17 +188,19 @@ if ($operacao == "editar") {
 //Se o usuário está editando seu próprio cadastro então n�o � alterado/considerado o Tipo
 if ($codigo != $usuario_codigo) {
     //Verifica se foi selecionado pelo meno um campos de tipo de pessoa
-    if (empty($tipo)) {
-        $tpl_notificacao->block("BLOCK_ERRO");
-        if ($operacao == "cadastrar")
-            $tpl_notificacao->block("BLOCK_NAOCADASTRADO");
-        else
-            $tpl_notificacao->block("BLOCK_NAOEDITADO");
-        $tpl_notificacao->FALTADADOS_MOTIVO = "É obrigatório selecionar pelo menos um tipo de pessoa!";
-        $tpl_notificacao->block("BLOCK_MOTIVO_FALTADADOS");
-        $tpl_notificacao->block("BLOCK_BOTAO_VOLTAR");
-        $tpl_notificacao->show();
-        exit;
+    if (($usaestoque==1)||($usavendas==1)||($usaproducao==1)||($usacaixa==1)) {
+        if (empty($tipo)) {
+            $tpl_notificacao->block("BLOCK_ERRO");
+            if ($operacao == "cadastrar")
+                $tpl_notificacao->block("BLOCK_NAOCADASTRADO");
+            else
+                $tpl_notificacao->block("BLOCK_NAOEDITADO");
+            $tpl_notificacao->FALTADADOS_MOTIVO = "É obrigatório selecionar pelo menos um tipo de pessoa!";
+            $tpl_notificacao->block("BLOCK_MOTIVO_FALTADADOS");
+            $tpl_notificacao->block("BLOCK_BOTAO_VOLTAR");
+            $tpl_notificacao->show();
+            exit;
+        }
     }
 }
 

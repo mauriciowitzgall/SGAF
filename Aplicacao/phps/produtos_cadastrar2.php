@@ -13,7 +13,7 @@ $codigo = $_GET['codigo'];
 $nome = ucwords(strtolower($_POST['nome']));
 $nome2 = ucwords(strtolower($_POST['nome2']));
 
-//print_r($_REQUEST);
+print_r($_REQUEST);
 
 $tipo = $_POST['tipo'];
 $marca = $_POST['marca'];
@@ -30,6 +30,10 @@ $descricao = $_POST['descricao'];
 $tiponegociacao = $_POST['box'];
 $codigounico = $_POST['codigounico'];
 $dadosfiscais = $_POST['dadosfiscais'];
+$controlarestoque = $_POST['controlarestoque'];
+$valunicusto = $_POST['valunicusto'];
+$valunivenda = $_POST['valunivenda'];
+
 if ($dadosfiscais==1) {
     $ncm = $_POST['nfencm_codigo'];
     $cfop = $_POST['nfecfop_codigo'];
@@ -102,8 +106,72 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     */
     
     $idunico=  uniqid();
-    $sql = "INSERT INTO produtos (pro_nome,pro_tipocontagem,pro_categoria,pro_descricao,pro_datacriacao,pro_horacriacao,pro_cooperativa,pro_volume,pro_marca,pro_recipiente,pro_composicao,pro_codigounico,pro_idunico,pro_industrializado,pro_usuarioquecadastrou,pro_quiosquequecadastrou,pro_tamanho,pro_cor,pro_referencia,pro_podesersubproduto,pro_dadosfiscais,pro_ncm,pro_cfop,pro_ipi,pro_pis,pro_cofins,pro_origem)
-    VALUES ('$nome','$tipo','$categoria','$descricao','$data','$hora',$usuario_cooperativa,'$volume','$marca','$recipiente','$composicao','$codigounico','$idunico','$industrializado','$usuario_codigo','$usuario_quiosque','$tamanho','$cor','$referencia','$subproduto','$dadosfiscais',$ncm,$cfop,$ipi,$pis,$cofins,$origem);";
+    if ($controlarestoque==0) {
+        $filtro_controlarestoque_campos=", pro_controlarestoque, pro_valunicusto, pro_valunivenda ";
+        $filtro_controlarestoque_valor=", 0, '$valunicusto' , '$valunivenda' ";
+    } else {
+        $filtro_controlarestoque_campos="";
+        $filtro_controlarestoque_valor="";
+    }
+    echo $sql = "INSERT INTO produtos (
+        pro_nome,
+        pro_tipocontagem,
+        pro_categoria,
+        pro_descricao,
+        pro_datacriacao,
+        pro_horacriacao,
+        pro_cooperativa,
+        pro_volume,
+        pro_marca,
+        pro_recipiente,
+        pro_composicao,
+        pro_codigounico,
+        pro_idunico,
+        pro_industrializado,
+        pro_usuarioquecadastrou,
+        pro_quiosquequecadastrou,
+        pro_tamanho,
+        pro_cor,
+        pro_referencia,
+        pro_podesersubproduto,
+        pro_dadosfiscais,
+        pro_ncm,
+        pro_cfop,
+        pro_ipi,
+        pro_pis,
+        pro_cofins,
+        pro_origem
+        $filtro_controlarestoque_campos
+    ) VALUES (
+        '$nome',
+        '$tipo',
+        '$categoria',
+        '$descricao',
+        '$data',
+        '$hora',
+        $usuario_cooperativa,
+        '$volume',
+        '$marca',
+        '$recipiente',
+        '$composicao',
+        '$codigounico',
+        '$idunico',
+        '$industrializado',
+        '$usuario_codigo',
+        '$usuario_quiosque',
+        '$tamanho',
+        '$cor',
+        '$referencia',
+        '$subproduto',
+        '$dadosfiscais',
+        $ncm,
+        $cfop,
+        $ipi,
+        $pis,
+        $cofins,
+        $origem
+        $filtro_controlarestoque_valor
+    );";
     $query = mysql_query($sql);
     if (!$query)
         die("Erro22: " . mysql_error());
@@ -165,7 +233,12 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     } else { 
     
     */
-    $sql = "UPDATE produtos SET 
+    if ($controlarestoque==0) {
+        $filtro_controlarestoque_update=", pro_controlarestoque=$controlarestoque , pro_valunicusto='$valunicusto' , pro_valunivenda='$valunivenda'";
+    } else {
+        $filtro_controlarestoque_update="";
+    }
+    echo $sql = "UPDATE produtos SET 
     pro_nome='$nome',
     pro_tipocontagem='$tipo',
     pro_categoria='$categoria',
@@ -190,6 +263,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     pro_pis=$pis,
     pro_cofins=$cofins,
     pro_origem=$origem
+    $filtro_controlarestoque_update
     WHERE pro_codigo = '$codigo'
     ";
     if (!mysql_query($sql))
