@@ -65,10 +65,12 @@ if ($permissao_quiosque_definircooperativa == 1) {
 
 
 //Verifica se o nome do quiosque sofreu alterações, se sim, revalidar sessão para alterar o nome do cabeçalho.
-$sql="SELECT qui_nome FROM quiosques WHERE qui_codigo=$codigo";
-if (!$query= mysql_query($sql))  die("Erro SQL 7".mysql_error());  
-$dados=mysql_fetch_assoc($query);
-$nome_banco=$dados["qui_nome"];
+if ($codigo!="") {
+    $sql="SELECT qui_nome FROM quiosques WHERE qui_codigo=$codigo";
+    if (!$query= mysql_query($sql))  die("Erro SQL 7".mysql_error());  
+    $dados=mysql_fetch_assoc($query);
+    $nome_banco=$dados["qui_nome"];
+}
 
 
 //Template de Título e Sub-título
