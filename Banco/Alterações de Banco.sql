@@ -17420,5 +17420,9 @@ UPDATE `SGAF_labodega`.`configuracoes` SET `cnf_versao`='v4.0b4' WHERE `cnf_codi
 ALTER TABLE `sgaf_labodega`.`produtos_recipientes` 
 ADD COLUMN `prorec_global` INT(1) NOT NULL DEFAULT 0 AFTER `prorec_sigla`;
 
+INSERT INTO `sgaf_labodega`.`produtos_recipientes` (`prorec_nome`) VALUES ('Caixinha');
+
+INSERT INTO `sgaf_labodega`.`produtos_recipientes` (`prorec_nome`) VALUES ('Potinho');
 
 UPDATE produtos_recipientes SET prorec_global=1 WHERE prorec_codigo>0;
+
