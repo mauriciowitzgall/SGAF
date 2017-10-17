@@ -125,6 +125,19 @@ function referencia_valida_caracteres_especiais (valor) {
     $("input[name=referencia]").val(valor);
 }
 
+function verifica_controlarestoque () {
+    controlarestoque=$("select[name=controlarestoque]").val();
+    if (controlarestoque==0) {
+        $("tr[id=valunicusto_linha]").show(); 
+        $("tr[id=valunivenda_linha]").show(); 
+        document.form1.valunivenda.required=true;
+    } else {
+        $("tr[id=valunicusto_linha]").hide(); 
+        $("tr[id=valunivenda_linha]").hide(); 
+        document.form1.valunivenda.required=false;
+    }
+}
+
    
 window.onload = function(){
     //industrializado
@@ -149,6 +162,8 @@ window.onload = function(){
     }
     
 
+    verifica_controlarestoque();
+    
     
     var dadosfiscais = $("select[name=dadosfiscais]").val();
     dados_fiscais(dadosfiscais);

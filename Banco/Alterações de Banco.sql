@@ -17289,8 +17289,7 @@ CHANGE COLUMN `quicnf_usacomanda` `quicnf_usacomanda` INT(1) NOT NULL DEFAULT 1 
 CHANGE COLUMN `quicnf_classificacaopadraoestoque` `quicnf_classificacaopadraoestoque` INT(3) NOT NULL DEFAULT 1 ,
 ADD COLUMN `quicnf_devolucoessobrevendas` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_classificacaopadraoestoque`;
 
-
------
+# Versão 4.0b3 - Inicio
 
 ALTER TABLE `sgaf_v4.0b1`.`saidas_devolucoes` 
 CHANGE COLUMN `saidev_numero` `saidev_numero` INT(3) NOT NULL AUTO_INCREMENT FIRST,
@@ -17408,4 +17407,14 @@ ADD COLUMN `pro_controlarestoque` INT(1) NOT NULL DEFAULT 1 AFTER `pro_origem`;
 ALTER TABLE `sgaf`.`produtos` 
 ADD COLUMN `pro_valunicusto` VARCHAR(45) NULL AFTER `pro_controlarestoque`,
 ADD COLUMN `pro_valunivenda` VARCHAR(45) NULL AFTER `pro_valunicusto`;
+
+
+------ FIM ------
+
+------ INICIO v4.0b4 ------
+
+UPDATE `SGAF_labodega`.`configuracoes` SET `cnf_versao`='v4.0b4' WHERE `cnf_codigo`='1';
+
+
+
 

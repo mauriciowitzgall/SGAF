@@ -64,6 +64,7 @@ if (!$query2 = mysql_query($sql2)) die ("Erro SQL Quiosque Configuracões: ".mys
 While ($dados2=  mysql_fetch_assoc($query2)) {
     $usamodulofiscal=$dados2["quicnf_usamodulofiscal"];
     $crt=$dados2["quicnf_crtnfe"];
+    $usamoduloestoque=$dados2["quicnf_usamoduloestoque"];
 }
 
 //Se estiver parametrizado nas configuracoes do quiosque que ele usa módulo fiscal, logo por padrão os dados fiscais devem ser preenchidos
@@ -545,7 +546,14 @@ if ($linhas == 0) {
         <tr>
             <td align="right" width="200px"><b>Controlar Estoque <label class="obrigatorio"></label></b></td>
             <td align="left" valign="bottom">
-                <select name="controlarestoque" onchange="" class="campopadrao" required="required" <?php if ($ver == 1) echo" disabled "; ?> >
+                <?php 
+                    if ($controlarestoque=="") {
+                        if ($usamoduloestoque==1) $controlarestoque=1;
+                        if ($usamoduloestoque==0) $controlarestoque=0;
+                    }
+                ?>
+
+                <select name="controlarestoque" class="campopadrao" required="required" <?php if ($ver == 1) echo" disabled "; ?> onchange="verifica_controlarestoque();">
                     <option value="0" <?php if ($controlarestoque==0) echo " selected ";  ?>>Não</option>
                     <option value="1" <?php if ($controlarestoque==1) echo " selected ";  ?>>Sim</option>
                 </select>

@@ -41,6 +41,7 @@ $filtrocor = $_POST['filtrocor'];
 $filtroreferencia = $_POST['filtroreferencia'];
 $filtrodescricao = $_POST['filtrodescricao'];
 $filtroproprio = $_POST['filtroproprio'];
+$filtroean = $_POST['filtroean'];
 if ($filtroproprio=="") $filtroproprio=1;
 ?>
 <form action="produtos.php" name="form1" method="post">
@@ -51,13 +52,13 @@ if ($filtroproprio=="") $filtroproprio=1;
             <td width="15px"></td>
             <td><b>&nbsp;Nome:</b><br><input size="25" type="text" name="filtronome" class="campopadrao" value="<?php echo "$filtronome"; ?>"></td>
             <td width="15px"></td>
-            <td><b>&nbsp;Marca:</b><br><input size="25" type="text" name="filtromarca" class="campopadrao" value="<?php echo "$filtromarca"; ?>"></td>
+            <td><b>&nbsp;Marca:</b><br><input size="15" type="text" name="filtromarca" class="campopadrao" value="<?php echo "$filtromarca"; ?>"></td>
             <td width="15px"></td>
             <td><b>&nbsp;Tamanho:</b><br><input size="12" type="text" name="filtrotamanho" class="campopadrao" value="<?php echo "$filtrotamanho"; ?>"></td>
             <td width="15px"></td>
-            <td><b>&nbsp;Cor:</b><br><input size="18" type="text" name="filtrocor" class="campopadrao" value="<?php echo "$filtrocor"; ?>"></td>
+            <td><b>&nbsp;Cor:</b><br><input size="15" type="text" name="filtrocor" class="campopadrao" value="<?php echo "$filtrocor"; ?>"></td>
             <td width="15px"></td>
-            <td><b>&nbsp;Referência:</b><br><input size="30" type="text" name="filtroreferencia" class="campopadrao" value="<?php echo "$filtroreferencia"; ?>"></td>
+            <td><b>&nbsp;Referência:</b><br><input size="20" type="text" name="filtroreferencia" class="campopadrao" value="<?php echo "$filtroreferencia"; ?>"></td>
             <td width="15px"></td>
         </tr>
     </table><br>
@@ -88,6 +89,9 @@ if ($filtroproprio=="") $filtroproprio=1;
                     <option value="0" <?php if ($filtroproprio==0) echo " selected "?>>Todos</option>
                 </select>
             </td>
+            <td width="15px"></td>
+            <td><b>&nbsp;Código Barras (EAN):</b><br><input size="20" type="text" name="filtroean" class="campopadrao" value="<?php echo "$filtroean";
+             ?>"></td>
         </tr>
     </table>
     <br>
@@ -142,6 +146,8 @@ if ($filtroproprio=="") $filtroproprio=1;
         $sql_filtro = $sql_filtro . " and pro_referencia like '%$filtroreferencia%'";
     if ($filtrodescricao != "")
         $sql_filtro = $sql_filtro . " and pro_descricao like '%$filtrodescricao%'";
+    if ($filtroean != "")
+        $sql_filtro = $sql_filtro . " and pro_codigounico  = '$filtroean'";
     if ($filtroproprio==1) $sql_filtro.=" and pro_quiosquequecadastrou=$usuario_quiosque ";
 
     $sql = "

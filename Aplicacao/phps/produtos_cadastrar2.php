@@ -13,7 +13,7 @@ $codigo = $_GET['codigo'];
 $nome = ucwords(strtolower($_POST['nome']));
 $nome2 = ucwords(strtolower($_POST['nome2']));
 
-print_r($_REQUEST);
+//print_r($_REQUEST);
 
 $tipo = $_POST['tipo'];
 $marca = $_POST['marca'];
@@ -113,7 +113,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         $filtro_controlarestoque_campos="";
         $filtro_controlarestoque_valor="";
     }
-    echo $sql = "INSERT INTO produtos (
+    $sql = "INSERT INTO produtos (
         pro_nome,
         pro_tipocontagem,
         pro_categoria,
@@ -238,7 +238,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     } else {
         $filtro_controlarestoque_update="";
     }
-    echo $sql = "UPDATE produtos SET 
+    $sql = "UPDATE produtos SET 
     pro_nome='$nome',
     pro_tipocontagem='$tipo',
     pro_categoria='$categoria',
