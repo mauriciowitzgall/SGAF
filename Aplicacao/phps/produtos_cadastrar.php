@@ -251,6 +251,10 @@ if ($linhas == 0) {
                         }
                     ?>
                 </select>
+                <a class="link" href="#"><img id="atualizar_recipiente" src="../imagens/icones/geral/atualizar.png" width="12px" onclick="atualiza_recipiente()"></a>
+                <a href="produtos_recipientes_cadastrar.php?modal=1&operacao=cadastrar" target="_blank" class="link">
+                    <img id="atualizar_recipiente" src="../imagens/icones/geral/add.png" width="12px">
+                </a>                
             </td>
         </tr>
        <tr id="id_tamanho">

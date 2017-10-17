@@ -256,6 +256,15 @@ if ($usuario_grupo<>4) {
                 $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
                 $tpl_menu->block("BLOCK_MENU_ITEM");
             }
+            //Recipientes
+            if ($permissao_categorias_ver == 1) {
+                $tpl_menu->LINK = "produtos_recipientes.php";
+                $tpl_menu->IMAGEM_ARQUIVO = "recipientes.png";
+                $tpl_menu->IMAGEM_TITULO = "Recipientes";
+                $tpl_menu->TITULO = "Recipientes";
+                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                $tpl_menu->block("BLOCK_MENU_ITEM");
+            }
 
         }
         //Sub-menu Estoque
