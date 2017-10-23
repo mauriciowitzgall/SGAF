@@ -200,7 +200,7 @@ if (($usuario_grupo == 1) || ($usuario_grupo == 2)) {
     $sql = "SELECT qui_codigo,qui_nome FROM quiosques WHERE qui_cooperativa=$usuario_cooperativa";
     $query = mysql_query($sql); if (!$query) die("Erro: 8" . mysql_error());
     while ($dados = mysql_fetch_assoc($query)) {
-        if ($quiosqueusuario == $dados['qui_codigo'])
+        if ($usuario_quiosque == $dados['qui_codigo'])
             $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
         $tpl1->OPTION_VALOR = $dados["qui_codigo"];
         $tpl1->OPTION_NOME = $dados["qui_nome"];
@@ -216,7 +216,7 @@ if (($usuario_grupo == 1) || ($usuario_grupo == 2)) {
     ";
     $query = mysql_query($sql); if (!$query) die("Erro: 8" . mysql_error());
     while ($dados = mysql_fetch_assoc($query)) {
-        if ($quiosqueusuario == $dados['qui_codigo'])
+        if ($usuario_quiosque == $dados['qui_codigo'])
             $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
         $tpl1->OPTION_VALOR = $dados["qui_codigo"];
         $tpl1->OPTION_NOME = $dados["qui_nome"];
@@ -233,7 +233,7 @@ if (($usuario_grupo == 1) || ($usuario_grupo == 2)) {
     ";
     $query = mysql_query($sql); if (!$query) die("Erro: 8" . mysql_error());
     while ($dados = mysql_fetch_assoc($query)) {
-        if ($quiosqueusuario == $dados['qui_codigo'])
+        if ($usuario_quiosque == $dados['qui_codigo'])
             $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
         $tpl1->OPTION_VALOR = $dados["qui_codigo"];
         $tpl1->OPTION_NOME = $dados["qui_nome"];
@@ -249,7 +249,7 @@ if (($usuario_grupo == 1) || ($usuario_grupo == 2)) {
     ";
     $query = mysql_query($sql); if (!$query) die("Erro: 8" . mysql_error());
     while ($dados = mysql_fetch_assoc($query)) {
-        if ($quiosqueusuario == $dados['qui_codigo'])
+        if ($usuario_quiosque == $dados['qui_codigo'])
             $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
         $tpl1->OPTION_VALOR = $dados["qui_codigo"];
         $tpl1->OPTION_NOME = $dados["qui_nome"];
