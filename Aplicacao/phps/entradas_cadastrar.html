@@ -1,6 +1,10 @@
 
 <script type="text/javascript">
     window.onload = function() {
+        
+        verifica_paravenda();
+
+
         var manter = $("input[name=produtomanter]").val();
         if (manter='undefined') manter=1;
         else manter=0;
@@ -25,6 +29,28 @@
         
 
     };
+
+
+function verifica_paravenda () {
+    paravenda=$("select[name=paravenda]").val();
+    //alert(paravenda);
+    if (paravenda==1) {
+        $("tr[id=linha_tiponeg]").show();
+        $("tr[id=linha_tipopessoa]").show();
+        $("tr[id=linha_fornecedor]").show();
+        $("select[name=tiponegociacao]").attr("required", true);      
+        $("select[name=fornecedor]").attr("required", true);      
+    } else {
+        $("tr[id=linha_tiponeg]").hide();
+        $("tr[id=linha_tipopessoa]").hide();
+        $("tr[id=linha_fornecedor]").hide();
+        $("select[name=tiponegociacao]").attr("required", false);      
+        $("select[name=fornecedor]").attr("required", false);    
+    }
+
+
+
+}
 
 function mascara_percent() {
         $('#percent').priceFormat({
@@ -65,20 +91,23 @@ function valida_produto() {
     $.post("entradas_valorunitario2.php", {
         produto: $("select[name=produto]").val(),
         fornecedor: $("select[name=fornecedor]").val(),
-        entrada: $("input[name=entrada2]").val()
+        entrada: $("input[name=entrada2]").val(),
+        paravenda: $("select[name=paravenda]").val()
     }, function(valor) {
         //alert(valor);
         if (valor == "naoestanalista") {
-            document.forms["form1"].valuni.disabled = false;
+            if (document.forms["form1"].elements["valuni"]) document.forms["form1"].valuni.disabled = false;
             document.forms["form1"].validade.disabled = false;
             document.forms["form1"].validade_item.disabled = false;
             //Se o campo está oculto dá pau no javascript a partir o ponto que o sistema não consegue localizar o campo                
-            document.forms["form1"].valunicusto.disabled = false;
+            
+            if (document.forms["form1"].elements["valunicusto"]) document.forms["form1"].valunicusto.disabled = false;
             desabilita_campos();
             //alert('n�o esta na lista');
             $.post("entradas_valorunitario.php", {
                 produto: $("select[name=produto]").val(),
-                fornecedor: $("select[name=fornecedor]").val()
+                fornecedor: $("select[name=fornecedor]").val(),
+                paravenda: $("select[name=paravenda]").val()
             }, function(valor2) {
                 //alert(valor2);
                 var quebra = valor2.split("|");
@@ -111,13 +140,14 @@ function valida_produto() {
             $("input[name=valunicusto]").val(valunicusto).priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
             $("input[name=valunicusto2]").val(valunicusto).priceFormat({prefix: '', centsSeparator: ',', thousandsSeparator: '.'});
 
-            document.forms["form1"].valuni.disabled = true;
-            document.forms["form1"].valunicusto.disabled = true;
+            if (document.forms["form1"].elements["valuni"]) document.forms["form1"].valuni.disabled = true;
+            if (document.forms["form1"].elements["valunicusto"]) document.forms["form1"].valunicusto.disabled = true;
             //document.forms["form1"].percent.disabled = true;
             var temp=document.forms["form1"].percent2; if (temp) document.forms["form1"].percent2.disabled = true;                
             document.forms["form1"].validade.disabled = true;
             document.forms["form1"].validade_item.disabled = true;
             //alert('esta na lista');
+
 
         }
     });
@@ -131,7 +161,6 @@ function valida_produto() {
     });
 
     $("input[name=qtd]").val("");
-
     desabilita_campos();
 }
 
@@ -139,6 +168,7 @@ function desabilita_campos() {
     //alert("entrou");
     var produto = $("select[name=produto]").val();
     var produtocomposto = $("input[name=produtocomposto]").val();
+    var paravenda = $("select[name=paravenda]").val();
     //alert(produtocomposto);
     
     //Se tiver um produto composto na lista de itens, não pode mais selecionar um produto, pois só pode ter um produto composto por entrada
@@ -160,19 +190,19 @@ function desabilita_campos() {
     if (produto != '') { 
         if (document.forms["form1"].qtd) { //se os campos existirem
             document.forms["form1"].qtd.disabled = false;
-            document.forms["form1"].valuni.disabled = false;
+            if (document.forms["form1"].elements["valuni"]) document.forms["form1"].valuni.disabled = false;
             document.forms["form1"].validade.disabled = false;
             document.forms["form1"].validade_item.disabled = false;
             document.forms["form1"].local.disabled = false;
             document.forms["form1"].valunicusto.disabled = false;
             //document.forms["form1"].percent.disabled = false;
             var temp=document.forms["form1"].percent2; if (temp) document.forms["form1"].percent2.disabled = false;
-    }
+        }   
         //alert("Habilita");
     }
     else {
         document.forms["form1"].qtd.disabled = true;
-        document.forms["form1"].valuni.disabled = true;
+        if (document.forms["form1"].elements["valuni"]) document.forms["form1"].valuni.disabled = true;
         document.forms["form1"].validade.disabled = true;
         document.forms["form1"].validade_item.disabled = true;
         document.forms["form1"].validade.value = "";
@@ -263,6 +293,74 @@ function limpa_item_validade (){
 }
 
 
+function popula_produtos_pelamarca(valor) {
+    if ($("input[name=tiponegociacao2]").val()) {
+        tipneg2 = $("input[name=tiponegociacao2]").val();
+    } else {
+        tipneg2=0;
+    }
+    //alert(tipneg2);
+    if (valor == 'todas') {
+        $.post("entradas_popula_produtos_pelamarca2.php", {
+            tiponeg: tipneg2
+        }, function(valor2) {
+            $("select[name=produto]").html(valor2);
+        });
+    } else {
+        $.post("entradas_popula_produtos_pelamarca.php", {
+            marca: valor,
+            tiponegociacao: tipneg2
+
+        }, function(valor2) {
+            //alert(valor2);
+            $("select[name=produto]").html(valor2);
+        });
+    }
+}
+
+
+function calcula_valor_percent() {
+    var paravenda=$("select[name=paravenda]").val();
+    //alert(paravenda);
+    if (paravenda!=0) {
+
+        var custo = $("input[name=valunicusto]").val();
+        var venda = $("input[name=valuni]").val();
+        custo = custo.replace("R$ ", "");
+        custo = custo.replace(".", "");
+        custo = custo.replace(",", ".");
+        custo = parseFloat(custo);
+        venda = venda.replace("R$ ", "");
+        venda = venda.replace(".", "");
+        venda = venda.replace(",", ".");
+        venda = parseFloat(venda);
+
+        //=(venda*100/custo)-100    
+        if ((venda != 0)&&(custo!=0))
+            percent = (venda * 100 / custo) - 100;
+        else
+            percent = 0;
+
+        percent = percent.toFixed(2);
+        var per = String(percent);
+        per = per.replace(".", ",");
+        
+        //alert(custo2);
+        $("input[name=percent2]").val(per);
+
+        if (venda != 0)
+            percent2 = -((custo * 100 / venda) - 100);
+        else
+            percent2 = 0;
+        percent2 = percent2.toFixed(2);
+        percent2 = percent2.replace(".", ",");
+        $("input[name=percent]").val(percent2);
+
+    }
+
+}
+
+
 </script>
 
 <table summary="" class="tabela1" border="0">
@@ -321,9 +419,24 @@ function limpa_item_validade (){
         </tr> 
         <!--  END BLOCK_DATAHORA --> 
  
+        <!--  BEGIN BLOCK_SELECT_PARAVENDA -->
+        <tr id="linha_paravenda">
+            <td align="right" width="200px"><b>Produtos serão vendidos? <label class="obrigatorio"></label></b></td>
+            <td class="fundo1" >
+                <select autofocus="1" name="paravenda" onchange="verifica_paravenda();" class="campopadrao campo_tamanho_6" {SELECT_PARAVENDA_OBRIGATORIO} {SELECT_PARAVENDA_DESABILITADO} >
+                    <option value="0" {PARAVENDA_NAO_SELECIONADO}>Não</option> 
+                    <option value="1" {PARAVENDA_SIM_SELECIONADO}>Sim</option> 
+                </select>
+                 <input type="hidden" name="paravenda2" value="{PARAVENDA}">
+            </td>            
+        </tr>
+
+
+        <!--  END BLOCK_SELECT_PARAVENDA -->  
+
 
         <!--  BEGIN BLOCK_SELECT_TIPONEGOCIACAO -->
-        <tr>
+        <tr id="linha_tiponeg">
             <td align="right" width="200px"><b>Tipo de Negociação: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
                 <select autofocus="1" name="tiponegociacao" onchange="popula_tipopessoa(this.value);" class="campopadrao campo_tamanho_6" {SELECT_OBRIGATORIO} {SELECT_DESABILITADO} >
@@ -339,7 +452,7 @@ function limpa_item_validade (){
 
 
         <!--  BEGIN BLOCK_SELECT_TIPOPESSOA -->
-        <tr>
+        <tr id="linha_tipopessoa">
             <td align="right" width="200px"><b>Tipo de Pessoa: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
                 <select autofocus="" name="tipopessoa" class="campopadrao campo_tamanho_6" {SELECT_TIPOPESSOA_OBRIGATORIO} {SELECT_TIPOPESSOA_DESABILITADO} onchange="popula_fornecedores2(this.value);">
@@ -358,7 +471,7 @@ function limpa_item_validade (){
         </tr>
         <!--  END BLOCK_SELECT_TIPOPESSOA -->
         <!--  BEGIN BLOCK_SELECT_FORNECEDOR -->
-        <tr>
+        <tr id="linha_fornecedor">
             <td align="right" width="200px"><b>Fornecedor: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
                 <select autofocus="1" name="fornecedor" class="campopadrao campo_tamanho_6" {SELECT_OBRIGATORIO} {SELECT_DESABILITADO} >
@@ -436,13 +549,14 @@ function limpa_item_validade (){
         <tr>
             <td align="right"><b>Valor Unitário Custo: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
-                <input type="text" size="8" style="width: 100px;" required  name="valunicusto" class="campopadrao campo_tamanho_3 campo_qtd" autocomplete="off" onclick="this.select()" onkeyup="" onblur="calcula_valor_percent(); ">&nbsp;    
+                <input type="text" size="8" style="width: 100px;" {VALUNI_OBRIGATORIO}  name="valunicusto" class="campopadrao campo_tamanho_3 campo_qtd" autocomplete="off" onclick="this.select()" onkeyup="" onblur="calcula_valor_percent(); ">&nbsp;    
                 <!-- <span name="qtdtipcon" class="dicacampo" autocomplete="off" ></span> -->
                 <input id="percent2" name="percent2" type="text" value="" class="campopadrao campo_tamanho_2  campo_qtd" size="5" onblur="calcula_valor_venda();" onkeyup="mascara_percent();" onclick="this.select()" tabindex="-1">
                 <span name="" class="dicacampo" autocomplete="off" >%</span>            
             </td>
         </tr>
         <!--  END BLOCK_CAMPO_VALCUSTO -->
+        <!--  BEGIN BLOCK_CAMPO_VALVENDA -->
         <tr>
             <td align="right"><b>Valor Unitário Venda: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
@@ -454,6 +568,7 @@ function limpa_item_validade (){
                 <!--  END BLOCK_PERCENT -->
             </td>
         </tr>
+        <!--  END BLOCK_CAMPO_VALVENDA -->
         <tr>
             <td align="right"><b>Validade: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >

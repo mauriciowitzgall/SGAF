@@ -5,30 +5,37 @@ include "funcoes.php";
 
 $produto = $_POST["produto"];
 $fornecedor = $_POST["fornecedor"];
+$paravenda = $_POST["paravenda"];
 
 //Se n�o tiver nenhum produto selecionado ent�o deixar o campo em branco e n�o fazer nada
-if (($produto == "") || ($fornecedor == "")) {
+if (($produto == "")) {
     echo "";
     exit;
 }
 
 
 //Verifica qual � a ultima entrada que o fornecedor em quest�o realizou com o produto em quest�o
-$sql1 = "
-SELECT 
-    MAX( ent_codigo ) as entrada
-FROM 
-    entradas 
-    join entradas_produtos on (ent_codigo=entpro_entrada)
-WHERE 
-    ent_fornecedor = $fornecedor and 
-    entpro_produto = $produto
-";
-$query1 = mysql_query($sql1);
-if (!$query1)
-    die("Erro de SQL 22:" . mysql_error());
-$dados1 = mysql_fetch_assoc($query1);
-$entrada_ultima = $dados1["entrada"];
+if ($paravenda==1) {
+    $sql1 = "
+    SELECT 
+        MAX( ent_codigo ) as entrada
+    FROM 
+        entradas 
+        join entradas_produtos on (ent_codigo=entpro_entrada)
+    WHERE 
+        ent_fornecedor = $fornecedor and 
+        entpro_produto = $produto
+    ";
+    $query1 = mysql_query($sql1);
+    if (!$query1)
+        die("Erro de SQL 22:" . mysql_error());
+    $dados1 = mysql_fetch_assoc($query1);
+    $entrada_ultima = $dados1["entrada"];
+} else {
+    $entrada_ultima = "";
+}
+
+
 
 //Se o fornecedor nunca efetuou entradas com este produto ent�o o valor unit�rio � nulo
 if ($entrada_ultima == "") {

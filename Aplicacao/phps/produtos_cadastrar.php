@@ -52,6 +52,7 @@ while ($array = mysql_fetch_array($query)) {
     $origem_codigo=$array['pro_origem'];
     $dadosfiscais=$array['pro_dadosfiscais'];
     $controlarestoque=$array['pro_controlarestoque'];
+    $evendido=$array['pro_evendido'];
     $valunicusto=$array['pro_valunicusto'];
     $valunivenda=$array['pro_valunivenda'];
     if ($subproduto=="") $subproduto=0;
@@ -276,7 +277,51 @@ if ($linhas == 0) {
             <td align="left" width=""><textarea class="textarea1" cols="55" name="descricao" <?php if ($ver == 1) echo" disabled "; ?> ><?php echo "$descricao"; ?></textarea></td>
         </tr>
 
-        <tr>  
+        
+        <tr>
+            <td align="right" width="200px"><b>Categoria: <label class="obrigatorio"></label></b></td>
+            <td align="left" valign="bottom">
+                <select name="categoria" class="campopadrao" required="required" <?php if ($ver == 1) echo" disabled "; ?> >
+                    <option value="">Selecione</option>		
+                    <?php
+                    $sql1 = "SELECT * FROM produtos_categorias WHERE cat_cooperativa=$usuario_cooperativa ORDER BY cat_nome";
+                    $query1 = mysql_query($sql1);
+                    while ($array1 = mysql_fetch_array($query1)) {
+                        ?><option value="<?php echo"$array1[0]"; ?>" <?php
+                    if ($array1[0] == $categoria) {
+                        echo "selected ";
+                    }
+                        ?> ><?php echo"$array1[1]"; ?></option><?php
+                        }
+                    ?>
+                </select>
+                <a class="link" href="#"><img id="atualizar_categoria" src="../imagens/icones/geral/atualizar.png" width="12px" onclick="atualiza_categorias()"></a>
+                <a href="categorias_cadastrar.php?modal=1" target="_blank" class="link">
+                    <img id="atualizar_categoria" src="../imagens/icones/geral/add.png" width="12px">
+                </a>
+                
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right" width="200px"><b>É Vendido? <label class="obrigatorio"></label></b></td>
+            <td align="left" valign="bottom">
+                <?php 
+                    if ($evendido=="") {
+                        if ($usavendas==1) $evendido=1;
+                        if ($usavendas==0) $evendido=0;
+                    }
+                ?>
+
+                <select name="evendido" class="campopadrao" required="required" <?php if ($ver == 1) echo" disabled "; ?> onchange="verifica_evendido();">
+                    <option value="0" <?php if ($evendido==0) echo " selected ";  ?>>Não</option>
+                    <option value="1" <?php if ($evendido==1) echo " selected ";  ?>>Sim</option>
+                </select>
+                <span class="dicacampo"> </span>
+            </td>
+        </tr>        
+
+        <tr id="linha_tiponeg">  
             <td align="right" width="200px">
 
                 <b>
@@ -336,30 +381,9 @@ if ($linhas == 0) {
                 <?php } ?>
             </td>        
         </tr>
-        <tr>
-            <td align="right" width="200px"><b>Categoria: <label class="obrigatorio"></label></b></td>
-            <td align="left" valign="bottom">
-                <select name="categoria" class="campopadrao" required="required" <?php if ($ver == 1) echo" disabled "; ?> >
-                    <option value="">Selecione</option>		
-                    <?php
-                    $sql1 = "SELECT * FROM produtos_categorias WHERE cat_cooperativa=$usuario_cooperativa ORDER BY cat_nome";
-                    $query1 = mysql_query($sql1);
-                    while ($array1 = mysql_fetch_array($query1)) {
-                        ?><option value="<?php echo"$array1[0]"; ?>" <?php
-                    if ($array1[0] == $categoria) {
-                        echo "selected ";
-                    }
-                        ?> ><?php echo"$array1[1]"; ?></option><?php
-                        }
-                    ?>
-                </select>
-                <a class="link" href="#"><img id="atualizar_categoria" src="../imagens/icones/geral/atualizar.png" width="12px" onclick="atualiza_categorias()"></a>
-                <a href="categorias_cadastrar.php?modal=1" target="_blank" class="link">
-                    <img id="atualizar_categoria" src="../imagens/icones/geral/add.png" width="12px">
-                </a>
-                
-            </td>
-        </tr>
+
+
+
         <?php  if ($usaproducao==1) { ?>
         <tr>
             <td align="right" width="200px"><b>Sub-produto / Matéria-Prima: <label class="obrigatorio"></label></b></td>
@@ -564,6 +588,8 @@ if ($linhas == 0) {
                 <span class="dicacampo"> </span>
             </td>
         </tr>  
+
+          
 
        <tr id="valunicusto_linha">
             <td align="right" width="200px"><b>Valor Unitário Custo: <label class="obrigatorio"></label></b></td>

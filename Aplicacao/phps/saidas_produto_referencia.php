@@ -6,7 +6,7 @@ include "controle/conexao.php";
 $referencia = $_POST["referencia"];
 
 //Verifica se existe algum produto com esta referencia
-$sql = "SELECT pro_codigo,pro_nome FROM produtos WHERE pro_referencia='$referencia'";
+$sql = "SELECT pro_codigo,pro_nome FROM produtos WHERE pro_referencia='$referencia' AND pro_evendido=1";
 if (!$query=mysql_query($sql)) die("Erro: " . mysql_error());
 $linhas = mysql_num_rows($query);
 if ($linhas>0) {

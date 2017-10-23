@@ -31,6 +31,8 @@ $tiponegociacao = $_POST['box'];
 $codigounico = $_POST['codigounico'];
 $dadosfiscais = $_POST['dadosfiscais'];
 $controlarestoque = $_POST['controlarestoque'];
+$evendido = $_POST['evendido'];
+if ($evendido=="") $evendido=0;
 $valunicusto = $_POST['valunicusto'];
 $valunivenda = $_POST['valunivenda'];
 
@@ -68,17 +70,20 @@ $tpl_titulo->NOME_ARQUIVO_ICONE = "produtos.png";
 $tpl_titulo->show();
 
 //Verifica se foi selecionado pelo menos um tipo de negociacao
-if (empty($tiponegociacao)) {
-    $tpl_notificacao = new Template("templates/notificacao.html");
-    $tpl_notificacao->ICONES = $icones;
-    $tpl_notificacao->MOTIVO_COMPLEMENTO = "É necessário selecionar pelo menos um tipo de negociação!";
-    //$tpl_notificacao->DESTINO = "produtos.php";
-    $tpl_notificacao->block("BLOCK_ERRO");
-    $tpl_notificacao->block("BLOCK_NAOEDITADO");
-    //$tpl_notificacao->block("BLOCK_MOTIVO_JAEXISTE");
-    $tpl_notificacao->block("BLOCK_BOTAO_VOLTAR");
-    $tpl_notificacao->show();
-    exit;
+
+if ($evendido==1) {
+    if (empty($tiponegociacao)) {
+        $tpl_notificacao = new Template("templates/notificacao.html");
+        $tpl_notificacao->ICONES = $icones;
+        $tpl_notificacao->MOTIVO_COMPLEMENTO = "É necessário selecionar pelo menos um tipo de negociação!";
+        //$tpl_notificacao->DESTINO = "produtos.php";
+        $tpl_notificacao->block("BLOCK_ERRO");
+        $tpl_notificacao->block("BLOCK_NAOEDITADO");
+        //$tpl_notificacao->block("BLOCK_MOTIVO_JAEXISTE");
+        $tpl_notificacao->block("BLOCK_BOTAO_VOLTAR");
+        $tpl_notificacao->show();
+        exit;
+    }
 }
 
 
@@ -140,7 +145,8 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         pro_ipi,
         pro_pis,
         pro_cofins,
-        pro_origem
+        pro_origem,
+        pro_evendido
         $filtro_controlarestoque_campos
     ) VALUES (
         '$nome',
@@ -169,7 +175,8 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         $ipi,
         $pis,
         $cofins,
-        $origem
+        $origem,
+        $evendido
         $filtro_controlarestoque_valor
     );";
     $query = mysql_query($sql);
@@ -262,7 +269,8 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     pro_ipi=$ipi,
     pro_pis=$pis,
     pro_cofins=$cofins,
-    pro_origem=$origem
+    pro_origem=$origem,
+    pro_evendido=$evendido
     $filtro_controlarestoque_update
     WHERE pro_codigo = '$codigo'
     ";

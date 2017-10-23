@@ -303,22 +303,20 @@ if ($usuario_grupo<>4) {
                     $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
                     $tpl_menu->block("BLOCK_MENU_ITEM");
 
-                    if ($usuario_grupo == 5)
-                        $tpl_menu->LINK = "estoque_porfornecedor_produto.php?fornecedor=$usuario_codigo";
-                    else
-                        $tpl_menu->LINK = "estoque_porfornecedor.php";
+                    if ($usuario_grupo == 5)  $tpl_menu->LINK = "estoque_porfornecedor_produto.php?fornecedor=$usuario_codigo";
+                    else $tpl_menu->LINK = "estoque_porfornecedor.php";
                     $tpl_menu->IMAGEM_ARQUIVO = "estoque.png";
                     $tpl_menu->IMAGEM_TITULO = "Fornecedores";
                     $tpl_menu->TITULO = "Fornecedores";
                     $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
                     $tpl_menu->block("BLOCK_MENU_ITEM");
 
-                        $tpl_menu->LINK = "estoque_validade.php";
-                        $tpl_menu->IMAGEM_ARQUIVO = "estoque.png";
-                        $tpl_menu->IMAGEM_TITULO = "Validade";
-                        $tpl_menu->TITULO = "Validade";
-                        $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-                        $tpl_menu->block("BLOCK_MENU_ITEM");
+                    $tpl_menu->LINK = "estoque_validade.php";
+                    $tpl_menu->IMAGEM_ARQUIVO = "estoque.png";
+                    $tpl_menu->IMAGEM_TITULO = "Validade";
+                    $tpl_menu->TITULO = "Validade";
+                    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                    $tpl_menu->block("BLOCK_MENU_ITEM");
 
                     if ($permissao_estoque_qtdide_definir == 1) {
                         $tpl_menu->LINK = "estoque_qtdideal.php";
@@ -328,6 +326,14 @@ if ($usuario_grupo<>4) {
                         $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
                         $tpl_menu->block("BLOCK_MENU_ITEM");
                     }
+                    
+                    $tpl_menu->LINK = "estoque_imobilizado.php";
+                    $tpl_menu->IMAGEM_ARQUIVO = "estoque.png";
+                    $tpl_menu->IMAGEM_TITULO = "Imobilizado";
+                    $tpl_menu->TITULO = "Imobilizado";
+                    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                    $tpl_menu->block("BLOCK_MENU_ITEM");
+
                 }
             }
         }

@@ -138,6 +138,17 @@ function verifica_controlarestoque () {
     }
 }
 
+function verifica_evendido () {
+    evendido=$("select[name=evendido]").val();
+    if (evendido==1) {
+        $("tr[id=linha_tiponeg]").show(); 
+        //document.form1.box.required=true;
+    } else {
+        $("tr[id=linha_tiponeg]").hide(); 
+        //if (document.form1.box) document.form1.box.required=false;
+    }
+}
+
    
 window.onload = function(){
     //industrializado
@@ -177,5 +188,6 @@ window.onload = function(){
     var origem = $("input[name=nfeorigem]").val();
     pesquisa_origem(origem);
     
+    verifica_evendido();
     
 }   

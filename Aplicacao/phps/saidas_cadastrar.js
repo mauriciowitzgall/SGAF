@@ -16,6 +16,16 @@ $(window).load(function() {
         alert("Erro Grave, contate o suporte: 44545");
     }
 
+
+    var usavendaporcoes=$("input[name=usavendaporcoes]").val();
+    if (usavendaporcoes==1) {
+        $("tr[id=linha_porcoes]").show();
+        $("tr[id=linha_porcoes_qtd]").show();
+    } else {
+        $("tr[id=linha_porcoes]").hide();
+        $("tr[id=linha_porcoes_qtd]").hide();
+    }
+
     $("select[id=consumidor]").change(function () {
         consumidor=$("select[id=consumidor]").val();
         $("input[id=cpf]").val("");

@@ -9,12 +9,18 @@ if ($permissao_entradas_cadastrar <> 1) {
 
 include "includes.php";
 
+//print_r($_REQUEST);
 
 $tpl = new Template("entradas_cadastrar.html");
 $tpl->ICONES_CAMINHO = "$icones";
 $operacao = $_GET["operacao"]; //Opera��o 1=Cadastras 2=Editar 3=Ver
 //Cadastro de uma nova entrada
 $passo = $_POST['passo'];
+
+//print_r($_REQUEST);
+$paravenda = $_POST['paravenda'];
+if ($paravenda=="") $paravenda = $_POST['paravenda2'];
+
 $entrada = $_POST['entrada'];
 $tiponegociacao = $_POST['tiponegociacao'];
 if ($tiponegociacao == "") { //caso o campo fornecedor fique desabilitado!
@@ -94,7 +100,7 @@ if ($cancelar == 1) {
 //Caso seja uma operação seja ver ou editar
 if (($operacao == 3) || ($operacao == 2)) {
     $entrada = $_GET['codigo'];
-    $sql = "SELECT * FROM entradas join pessoas on (ent_fornecedor=pes_codigo)WHERE ent_codigo=$entrada";
+    $sql = "SELECT * FROM entradas left join pessoas on (ent_fornecedor=pes_codigo) WHERE ent_codigo=$entrada";
     $query = mysql_query($sql);
     if (!$query)
         die("Erro SQL" . mysql_error());
@@ -102,8 +108,10 @@ if (($operacao == 3) || ($operacao == 2)) {
     $fornecedor = $dados["ent_fornecedor"];
     $tipopessoa = $dados["pes_tipopessoa"];
     $tiponegociacao = $dados["ent_tiponegociacao"];
+    $paravenda = $dados["ent_paravenda"];
     $data = $dados["ent_datacadastro"];
     $hora = $dados["ent_horacadastro"];
+    $paravenda = $dados["ent_paravenda"];
 } else {
     $data = $_REQUEST["data1"];
     $hora = $_REQUEST["hora1"];
@@ -112,6 +120,7 @@ if (($operacao == 3) || ($operacao == 2)) {
 $tpl->FORNECEDOR = $fornecedor;
 $tpl->TIPOPESSOA = $tipopessoa;
 $tpl->TIPONEGOCIACAO = $tiponegociacao;
+$tpl->PARAVENDA = $paravenda;
 IF ($tiponegociacao == 2)
     $tpl->block(BLOCK_PERCENT);
 
@@ -188,125 +197,153 @@ if ($operacao==1) {
 }
 $tpl->block("BLOCK_DATAHORA");
 
-//Tipo de negociação
-$sql = "
-    SELECT tipneg_codigo,tipneg_nome
-    FROM tipo_negociacao
-    JOIN quiosques_tiponegociacao ON (tipneg_codigo=quitipneg_tipo)
-    WHERE quitipneg_quiosque=$usuario_quiosque
-";
-$query = mysql_query($sql);
-if ($query) {
-    $tpl->SELECT_OBRIGATORIO = " required ";
-    if ($passo == "") {
-        $tpl->SELECT_DESABILITADO = "";
+//Produtos serão vendidos ou nao
+$tpl->SELECT_PARAVENDA_OBRIGATORIO=" required ";
+if ($passo>=2) $tpl->SELECT_PARAVENDA_DESABILITADO=" disabled ";
+if (($operacao==1)&&($paravenda=="")) {
+    if ($usavendas==1) {
+        $tpl->PARAVENDA_SIM_SELECIONADO=" selected ";
+        $tpl->PARAVENDA_NAO_SELECIONADO=" ";   
     } else {
-        $tpl->SELECT_DESABILITADO = " disabled ";
+        $tpl->PARAVENDA_SIM_SELECIONADO="  ";
+        $tpl->PARAVENDA_NAO_SELECIONADO=" selected ";     
     }
-    //Caso a operação seja VER então desabilitar o select e trocar a classe
-    if ($operacao == 3) {
-        $tpl->SELECT_DESABILITADO = " disabled ";
+} else {
+    if ($paravenda==1) {
+        $tpl->PARAVENDA_SIM_SELECIONADO=" selected ";
+        $tpl->PARAVENDA_NAO_SELECIONADO=" "; 
+    } else {
+        $tpl->PARAVENDA_SIM_SELECIONADO="  ";
+        $tpl->PARAVENDA_NAO_SELECIONADO=" selected ";          
     }
-    $linhas=  mysql_num_rows($query);
-    while ($dados = mysql_fetch_array($query)) {
-        $tpl->OPTION_VALOR = $dados[0];
-        $tpl->OPTION_TEXTO = "$dados[1]";
-        //Quando for novo cadastro de entrada, se o quiosque tiver apenas 1 tipo de negociação então já deixa selecionado
-        if ($operacao=="1") {
-            if ($linhas==1)  $tpl->OPTION_SELECIONADO = " SELECTED ";
-            else $tpl->OPTION_SELECIONADO = "  ";
+}
+
+$tpl->block("BLOCK_SELECT_PARAVENDA");
+
+if ((($operacao=="")||($operacao==1))||(($operacao==2)&&($paravenda==1))) {
+
+
+
+    //Tipo de negociação
+    $sql = "
+        SELECT tipneg_codigo,tipneg_nome
+        FROM tipo_negociacao
+        JOIN quiosques_tiponegociacao ON (tipneg_codigo=quitipneg_tipo)
+        WHERE quitipneg_quiosque=$usuario_quiosque
+    ";
+    $query = mysql_query($sql);
+    if ($query) {
+        $tpl->SELECT_OBRIGATORIO = " required ";
+        if ($passo == "") {
+            $tpl->SELECT_DESABILITADO = "";
         } else {
-            //se for edição seleciona o que está no banco
-            if ($dados[0] == $tiponegociacao) {
-                $tpl->OPTION_SELECIONADO = " SELECTED ";
-            } else {
-                $tpl->OPTION_SELECIONADO = "";
-            }
+            $tpl->SELECT_DESABILITADO = " disabled ";
         }
-        $tpl->block("BLOCK_OPTIONS_TIPONEGOCIACAO");
-    }
-} else {
-    echo mysql_error();
-}
-$tpl->block("BLOCK_SELECT_TIPONEGOCIACAO");
-
-
-//Tipo de pessoa
-$sql = "SELECT pestippes_codigo,pestippes_nome FROM pessoas_tipopessoa";
-$query = mysql_query($sql);
-if ($query) {
-    if ($passo == "") {
-        $tpl->SELECT_TIPOPESSOA_DESABILITADO = "";
-    } else {
-        $tpl->SELECT_TIPOPESSOA_DESABILITADO = " disabled ";
-    }
-    //Caso a operação seja VER então desabilitar o select e trocar a classe
-    if ($operacao == 3) {
-        $tpl->SELECT_TIPOPESSOA_DESABILITADO = " disabled ";
-    }
-    if ($operacao != 1) {
-
-        while ($dados = mysql_fetch_array($query)) {
-            $tpl->OPTION_TIPOPESSOA_VALOR = $dados[0];
-            $tpl->OPTION_TIPOPESSOA_TEXTO = "$dados[1]";
-            if ($dados[0] == $tipopessoa) {
-                $tpl->OPTION_TIPOPESSOA_SELECIONADO = " SELECTED ";
-            } else {
-                $tpl->OPTION_TIPOPESSOA_SELECIONADO = "";
-            }
-            $tpl->block("BLOCK_OPTIONS_TIPOPESSOA");
+        //Caso a operação seja VER então desabilitar o select e trocar a classe
+        if ($operacao == 3) {
+            $tpl->SELECT_DESABILITADO = " disabled ";
         }
-        $tpl->block("BLOCK_OPTIONPADRAO");
-    } else {
-        $tpl->block("BLOCK_OPTIONPADRAO2");
-    }
-} else {
-    echo mysql_error();
-}
-$tpl->block("BLOCK_SELECT_TIPOPESSOA");
-
-
-
-//Fornecedor
-$sql = "
-SELECT 
-    pes_codigo,pes_nome
-FROM 
-    pessoas 
-    inner join mestre_pessoas_tipo on (pes_codigo=mespestip_pessoa)
-WHERE 
-    mespestip_tipo=5 and 
-    pes_cooperativa=$usuario_cooperativa 
-ORDER BY 
-    pes_nome
-";
-$query = mysql_query($sql);
-if ($query) {
-    $tpl->SELECT_OBRIGATORIO = " required ";
-    if ($passo == "")  $tpl->SELECT_DESABILITADO = "";
-    else  //$tpl->SELECT_DESABILITADO = " disabled ";
-    
-    //Caso a operação seja VER ent�o desabilitar o select e trocar a classe
-    if ($operacao == 3) $tpl->SELECT_DESABILITADO = " disabled ";
-    
-    if ($operacao != 1) {
+        $linhas=  mysql_num_rows($query);
         while ($dados = mysql_fetch_array($query)) {
             $tpl->OPTION_VALOR = $dados[0];
             $tpl->OPTION_TEXTO = "$dados[1]";
-            if ($dados[0] == $fornecedor) {
-                //echo "$dados[0] == $fornecedor";
-                $tpl->OPTION_SELECIONADO = " SELECTED ";
+            //Quando for novo cadastro de entrada, se o quiosque tiver apenas 1 tipo de negociação então já deixa selecionado
+            if ($operacao=="1") {
+                if ($linhas==1)  $tpl->OPTION_SELECIONADO = " SELECTED ";
+                else $tpl->OPTION_SELECIONADO = "  ";
             } else {
-                $tpl->OPTION_SELECIONADO = " ";
+                //se for edição seleciona o que está no banco
+                if ($dados[0] == $tiponegociacao) {
+                    $tpl->OPTION_SELECIONADO = " SELECTED ";
+                } else {
+                    $tpl->OPTION_SELECIONADO = "";
+                }
             }
-            $tpl->block("BLOCK_OPTIONS_FORNECEDOR");
+            $tpl->block("BLOCK_OPTIONS_TIPONEGOCIACAO");
         }
+    } else {
+        echo mysql_error();
     }
-} else {
-    echo mysql_error();
-}
-$tpl->block("BLOCK_SELECT_FORNECEDOR");
+    $tpl->block("BLOCK_SELECT_TIPONEGOCIACAO");
 
+
+    //Tipo de pessoa
+    $sql = "SELECT pestippes_codigo,pestippes_nome FROM pessoas_tipopessoa";
+    $query = mysql_query($sql);
+    if ($query) {
+        if ($passo == "") {
+            $tpl->SELECT_TIPOPESSOA_DESABILITADO = "";
+        } else {
+            $tpl->SELECT_TIPOPESSOA_DESABILITADO = " disabled ";
+        }
+        //Caso a operação seja VER então desabilitar o select e trocar a classe
+        if ($operacao == 3) {
+            $tpl->SELECT_TIPOPESSOA_DESABILITADO = " disabled ";
+        }
+        if ($operacao != 1) {
+
+            while ($dados = mysql_fetch_array($query)) {
+                $tpl->OPTION_TIPOPESSOA_VALOR = $dados[0];
+                $tpl->OPTION_TIPOPESSOA_TEXTO = "$dados[1]";
+                if ($dados[0] == $tipopessoa) {
+                    $tpl->OPTION_TIPOPESSOA_SELECIONADO = " SELECTED ";
+                } else {
+                    $tpl->OPTION_TIPOPESSOA_SELECIONADO = "";
+                }
+                $tpl->block("BLOCK_OPTIONS_TIPOPESSOA");
+            }
+            $tpl->block("BLOCK_OPTIONPADRAO");
+        } else {
+            $tpl->block("BLOCK_OPTIONPADRAO2");
+        }
+    } else {
+        echo mysql_error();
+    }
+    $tpl->block("BLOCK_SELECT_TIPOPESSOA");
+
+
+
+    //Fornecedor
+    $sql = "
+    SELECT 
+        pes_codigo,pes_nome
+    FROM 
+        pessoas 
+        inner join mestre_pessoas_tipo on (pes_codigo=mespestip_pessoa)
+    WHERE 
+        mespestip_tipo=5 and 
+        pes_cooperativa=$usuario_cooperativa 
+    ORDER BY 
+        pes_nome
+    ";
+    $query = mysql_query($sql);
+    if ($query) {
+        $tpl->SELECT_OBRIGATORIO = " required ";
+        if ($passo == "")  $tpl->SELECT_DESABILITADO = "";
+        else  //$tpl->SELECT_DESABILITADO = " disabled ";
+        
+        //Caso a operação seja VER ent�o desabilitar o select e trocar a classe
+        if ($operacao == 3) $tpl->SELECT_DESABILITADO = " disabled ";
+        
+        if ($operacao != 1) {
+            while ($dados = mysql_fetch_array($query)) {
+                $tpl->OPTION_VALOR = $dados[0];
+                $tpl->OPTION_TEXTO = "$dados[1]";
+                if ($dados[0] == $fornecedor) {
+                    //echo "$dados[0] == $fornecedor";
+                    $tpl->OPTION_SELECIONADO = " SELECTED ";
+                } else {
+                    $tpl->OPTION_SELECIONADO = " ";
+                }
+                $tpl->block("BLOCK_OPTIONS_FORNECEDOR");
+            }
+        }
+    } else {
+        echo mysql_error();
+    }
+    $tpl->block("BLOCK_SELECT_FORNECEDOR");
+
+}
 
 if ($passo == "") {
     $tpl->block("BLOCK_BOTAO_PASSO1");
@@ -326,9 +363,9 @@ if ($passo != "") {
     if ($entrada == "") {
         $sql = "
 		INSERT INTO entradas 
-			(ent_quiosque,ent_fornecedor,ent_supervisor,ent_datacadastro,ent_horacadastro,ent_tipo,ent_status,ent_tiponegociacao )
+			(ent_quiosque,ent_fornecedor,ent_supervisor,ent_datacadastro,ent_horacadastro,ent_tipo,ent_status,ent_tiponegociacao,ent_paravenda )
 		VALUES
-			('$usuario_quiosque','$fornecedor','$usuario_codigo','$data','$hora','$tipo',2,'$tiponegociacao');";
+			('$usuario_quiosque','$fornecedor','$usuario_codigo','$data','$hora','$tipo',2,'$tiponegociacao', $paravenda);";
         if (mysql_query($sql)) {
             
         } else {
@@ -338,13 +375,22 @@ if ($passo != "") {
         $tpl->ENTRADA = $entrada;
     }
 
+
     //Marca
+    if ($paravenda==1) {
+        $filtro_marca_tabela=" JOIN mestre_produtos_tipo ON (mesprotip_produto=pro_codigo)";
+        $filtro_marca_valor= " AND mesprotip_tipo=$tiponegociacao AND pro_evendido=1 ";
+    } else {
+        $filtro_marca_tabela=" ";
+        $filtro_marca_valor= " AND pro_evendido=0 ";
+
+    }
     $sql = "
         SELECT DISTINCT TRIM(pro_marca)
         FROM produtos 
-        JOIN mestre_produtos_tipo ON (mesprotip_produto=pro_codigo)
+        $filtro_marca_tabela
         WHERE pro_cooperativa='$usuario_cooperativa' 
-        AND mesprotip_tipo=$tiponegociacao
+        $filtro_marca_valor
         ORDER BY TRIM(pro_marca)
     ";
     $query = mysql_query($sql);
@@ -374,14 +420,22 @@ if ($passo != "") {
 
 
     //PRODUTOS
+    if ($paravenda==1) {
+        $filtro_produto_tabela=" JOIN mestre_produtos_tipo ON (mesprotip_produto=pro_codigo) ";
+        $filtro_produto_valor= " AND mesprotip_tipo=$tiponegociacao AND pro_evendido=1 ";
+    } else {
+        $filtro_produto_tabela=" ";
+        $filtro_produto_valor= " AND pro_evendido=0 ";
+
+    }    
     $sql = "
         SELECT *
         FROM produtos 
-        JOIN mestre_produtos_tipo ON (mesprotip_produto=pro_codigo)
+        $filtro_produto_tabela
         join produtos_tipo on pro_tipocontagem=protip_codigo
         left JOIN produtos_recipientes on (prorec_codigo=pro_recipiente)
         WHERE pro_cooperativa='$usuario_cooperativa' 
-        AND mesprotip_tipo=$tiponegociacao
+        $filtro_produto_valor
         ORDER BY pro_referencia, pro_nome, pro_tamanho, pro_cor, pro_descricao
     ";
     $query = mysql_query($sql);
@@ -417,11 +471,16 @@ if ($passo != "") {
 
 
     $tpl->block("BLOCK_BOTAO_PASSO2");
-    if ($tiponegociacao == 2) {
+    if (($tiponegociacao == 2)||($paravenda==0)) {
+        if ($tiponegociacao==2) $tpl->VALUNI_OBRIGATORIO=" required ";
+        else $tpl->VALUNI_OBRIGATORIO="  ";
         $tpl->block("BLOCK_CAMPO_VALCUSTO");
     }
 
-    
+    if ($paravenda!=0) {
+        $tpl->block("BLOCK_CAMPO_VALVENDA");
+    }
+
 
 
     //PASSO 3 - Mostra os produtos já inseridos na entrada e/ou faz a insersão!
@@ -692,12 +751,15 @@ if ($passo != "") {
     
     //Lista de produtos
     $tpl->ENTRADA = $entrada;
-    IF ($tiponegociacao == 2) {
+    if (($tiponegociacao == 2)||($paravenda==0)) {
         $tpl->block("BLOCK_CUSTO_CABECALHO");
         //$tpl->block("BLOCK_LUCRO_CABECALHO");
-        $tpl->block("BLOCK_SUBPRODUTOS_CABECALHO");
     }
-    $tpl->block("BLOCK_VENDA_VALUNI_CABECALHO");
+    if (($tiponegociacao!=1)&&($usaproducao==1)) $tpl->block("BLOCK_SUBPRODUTOS_CABECALHO");
+    
+    if ($paravenda==1) {
+        $tpl->block("BLOCK_VENDA_VALUNI_CABECALHO");
+    }
     $tpl->block("BLOCK_VENDA_CABECALHO");
 
     $query5 = mysql_query($sql5);
@@ -724,9 +786,9 @@ if ($passo != "") {
                 else
                     $tpl->ENTRADAS_QTD = number_format($dados[2], 0, ',', '.');
                 $tpl->ENTRADAS_VALORUNI = "R$ " . number_format($dados[4], 2, ',', '.');
-                $tpl->block("BLOCK_VENDA_VALUNI");
+                if ($paravenda==1) $tpl->block("BLOCK_VENDA_VALUNI");
                 $tpl->ENTRADAS_VENDA_TOTAL = "R$ " . number_format(($dados[2] * $dados[4]), 2, ',', '.');
-                if ($tiponegociacao == 2) {
+                if (($tiponegociacao == 2)||($paravenda==0)) {
                     $tpl->ENTRADAS_VALORUNI_CUSTO = "R$ " . number_format($dados[9], 2, ',', '.');
                     $tpl->ENTRADAS_VALOR_TOTAL_CUSTO = "R$ " . number_format($dados[2] * $dados[9], 2, ',', '.');
                     $lucro = ($dados[2] * $dados[4]) - ($dados[2] * $dados[9]);
@@ -742,7 +804,7 @@ if ($passo != "") {
                 $tpl->ENTRADAS_VALIDADE= converte_data($dados[5]);
                 
                 //Subprodutos
-                if ($tiponegociacao!=1) {
+                if (($tiponegociacao!=1)&&($usaproducao==1)) {
                     $subprodutos_retirado_do_estoque=$dados["entpro_retiradodoestoquesubprodutos"];
                     $temsubprodutos2=$dados["entpro_temsubprodutos"];
                     if ($temsubprodutos2==1) { //mostra icone
@@ -844,12 +906,12 @@ if ($passo != "") {
             //$tpl->TOTAL_ENTRADA = "$tot8";
             $tpl->TOTAL_LUCRO = "$tot10";
         }
-        if ($tiponegociacao == 2) {
+        if (($tiponegociacao == 2)||($paravenda==0)) {
             $tpl->block("BLOCK_CUSTO_RODAPE");
             //$tpl->block("BLOCK_LUCRO_RODAPE");
-            $tpl->block("BLOCK_SUBPRODUTOS_RODAPE");
         }
-        $tpl->block("BLOCK_VENDA_RODAPE");
+        if (($tiponegociacao!=1)&&($usaproducao==1)) $tpl->block("BLOCK_SUBPRODUTOS_RODAPE");
+        if ($paravenda==1) $tpl->block("BLOCK_VENDA_RODAPE");
         $tpl->block("BLOCK_PASSO2");
         $tpl->VALIDADE_MIN = date("Y-m-d");        
         $tpl->OPERACAO = $operacao;

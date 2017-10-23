@@ -865,7 +865,7 @@ if ($passo == 2) {
     $tpl1->CAMPO_FOCO = "";
     $tpl1->CAMPO_DESABILITADO = "";
     $tpl1->CAMPO_ONKEYPRESS = "";
-    $tpl1->CAMPO_ONKEYUP = "verifica_produto_referencia(this.value); referencia_valida_caracteres_especiais(this.value);";
+    $tpl1->CAMPO_ONKEYUP = "verifica_produto_referencia(this.value);";
     $tpl1->CAMPO_ONKEYDOWN = "";
     $tpl1->CAMPO_ONBLUR = "foco_produto_referencia()";
     $tpl1->CAMPO_ESTILO = " ";
@@ -912,6 +912,8 @@ if ($passo == 2) {
     $tpl1->block("BLOCK_SELECT");
     $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
+
+
 
     //Porção
     $tpl1->TR_ID="linha_porcoes";
@@ -1100,14 +1102,14 @@ if ($passo == 2) {
         die("Erro: " . mysql_error());
     $linhas_lista = mysql_num_rows($query_lista);
     if ($linhas_lista == 0) {
-        $tpl1->block("BLOCK_LISTA_PORCAO_CABECALHO");
+        if ($usavendaporcoes==1) $tpl1->block("BLOCK_LISTA_PORCAO_CABECALHO");
         $tpl1->block("BLOCK_LISTA_NADA");
         $tpl1->SALVAR_DESABILIDADO = " disabled ";
     } else {
         $num = 0;
         $total_geral = 0;
         $temdevolucoes=0;
-        $tpl1->block("BLOCK_LISTA_PORCAO_CABECALHO");
+        if ($usavendaporcoes==1)  $tpl1->block("BLOCK_LISTA_PORCAO_CABECALHO");
         while ($dados_lista = mysql_fetch_array($query_lista)) {
             $num++;
             $tpl1->LISTA_GET_SAIPRO = $dados_lista["saipro_codigo"];
@@ -1135,11 +1137,13 @@ if ($passo == 2) {
                 $tpl1->LISTA_QTD = number_format($dados_lista["saipro_quantidade"], 0, '', '.');
             }
             $tpl1->LISTA_TIPOCONTAGEM = $dados_lista["protip_sigla"];
-            $tpl1->LISTA_PORCAO_NOME = $dados_lista["propor_nome"];
             $qtdporcao=$dados_lista["saipro_porcao_quantidade"];
             if ($qtdporcao==0) $qtdporcao="";
-            $tpl1->LISTA_PORCAO_QTD = $qtdporcao;
-            $tpl1->block("BLOCK_LISTA_PORCAO_LINHA");
+            if ($usavendaporcoes==1) {
+                $tpl1->block("BLOCK_LISTA_PORCAO_LINHA");
+                $tpl1->LISTA_PORCAO_NOME = $dados_lista["propor_nome"];
+                $tpl1->LISTA_PORCAO_QTD = $qtdporcao;
+            }
             $tpl1->LISTA_VALUNI = "R$ " . number_format($dados_lista["saipro_valorunitario"], 2, ',', '.');
             $tpl1->LISTA_VALTOT = "R$ " . number_format($dados_lista["saipro_valortotal"], 2, ',', '.');
             $tpl1->LISTA_TIPOPESSOA = $tipopessoa;
@@ -1165,6 +1169,7 @@ if ($passo == 2) {
         }
     }
     $tpl1->TOTAL_GERAL = "R$ " . number_format($total_geral, 2, ',', '.');
+    if ($usavendaporcoes == 1) $tpl1->block("BLOCK_RODAPE_PORCOES");
     $tpl1->block("BLOCK_LISTAGEM");
 
 
@@ -1276,6 +1281,11 @@ $tpl1->block("BLOCK_CAMPOSOCULTOS");
 //Usa Comanda / Indentificador
 $tpl1->CAMPOOCULTO_NOME = "usacomanda";
 $tpl1->CAMPOOCULTO_VALOR = $usacomanda;
+$tpl1->block("BLOCK_CAMPOSOCULTOS");
+
+//Usa Porcoes
+$tpl1->CAMPOOCULTO_NOME = "usavendaporcoes";
+$tpl1->CAMPOOCULTO_VALOR = $usavendaporcoes;
 $tpl1->block("BLOCK_CAMPOSOCULTOS");
 
 $tpl1->show();

@@ -202,6 +202,7 @@ $sql = "
                 $tipo = $array['ent_tipo'];
                 $status = $array['ent_status'];
                 $total = $array['ent_valortotal'];
+                $paravenda = $array['ent_paravenda'];
 
                 /*
                 //Verifica se ja foi efetuado Saídas quaisquer para o lote/entrada em questão
@@ -265,14 +266,18 @@ $sql = "
                         ?>    
                         <img width="15px" src="<?php echo $imagemtip; ?>" title="<?php echo $titulo; ?>" alt="<?php echo $titulo; ?>"/>
                     </td>                    
-                    
+                    <!-- COLUNA FORNECEDOR -->
                     <td>
                         <a href="pessoas_cadastrar.php?codigo=<?php echo $fornecedor; ?>&operacao=ver" class="link">
                             <?php
-                            $sql2 = "SELECT pes_codigo,pes_nome FROM pessoas WHERE pes_codigo=$fornecedor";
-                            $query2 = mysql_query($sql2);
-                            while ($array2 = mysql_fetch_array($query2)) {
-                                echo "$array2[1]";
+                            if ($paravenda==1) {
+                                $sql2 = "SELECT pes_codigo,pes_nome FROM pessoas WHERE pes_codigo=$fornecedor";
+                                $query2 = mysql_query($sql2);
+                                while ($array2 = mysql_fetch_array($query2)) {
+                                    echo "$array2[1]";
+                                }
+                            } else {
+                                echo " --- ";
                             }
                             ?>
                         </a>
@@ -311,7 +316,8 @@ $sql = "
                     <!-- COLUNA TOTAL -->
                     <td align="right"><b><?php
                     $total = number_format($total, 2, ',', '.');
-                    echo "R$ $total";
+                    if ($paravenda==0) echo " ---";
+                    else echo "R$ $total";
                             ?></b>
                     </td>
 

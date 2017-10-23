@@ -185,41 +185,7 @@ function calcula_valor2_unitario() {
 
 }
 
-function calcula_valor_percent() {
-    var custo = $("input[name=valunicusto]").val();
-    var venda = $("input[name=valuni]").val();
-    custo = custo.replace("R$ ", "");
-    custo = custo.replace(".", "");
-    custo = custo.replace(",", ".");
-    custo = parseFloat(custo);
-    venda = venda.replace("R$ ", "");
-    venda = venda.replace(".", "");
-    venda = venda.replace(",", ".");
-    venda = parseFloat(venda);
 
-    //=(venda*100/custo)-100    
-    if ((venda != 0)&&(custo!=0))
-        percent = (venda * 100 / custo) - 100;
-    else
-        percent = 0;
-
-    percent = percent.toFixed(2);
-    var per = String(percent);
-    per = per.replace(".", ",");
-    
-    //alert(custo2);
-    $("input[name=percent2]").val(per);
-
-    if (venda != 0)
-        percent2 = -((custo * 100 / venda) - 100);
-    else
-        percent2 = 0;
-    percent2 = percent2.toFixed(2);
-    percent2 = percent2.replace(".", ",");
-    $("input[name=percent]").val(percent2);
-
-
-}
 
 function calcula_valor_unitario() {
     var desconto = $("input[name=percent]").val();
@@ -322,25 +288,6 @@ function diasentredatas(valor1, valor2) {
     return daysApart
 }
 
-function popula_produtos_pelamarca(valor) {
-
-    if (valor == 'todas') {
-        $.post("entradas_popula_produtos_pelamarca2.php", {
-            tiponeg: $("input[name=tiponegociacao2]").val()
-        }, function(valor2) {
-            $("select[name=produto]").html(valor2);
-        });
-    } else {
-        $.post("entradas_popula_produtos_pelamarca.php", {
-            marca: valor,
-            tiponegociacao: $("input[name=tiponegociacao2]").val()
-
-        }, function(valor2) {
-            //alert(valor2);
-            $("select[name=produto]").html(valor2);
-        });
-    }
-}
 
 
 

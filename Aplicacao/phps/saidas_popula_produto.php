@@ -14,6 +14,7 @@ FROM
     join estoque on (etq_produto=pro_codigo)    
 WHERE
     etq_quiosque=$usuario_quiosque
+     AND pro_evendido=1
 ORDER BY
     pro_referencia, pro_nome , pro_tamanho, pro_cor, pro_descricao
 ";

@@ -5,15 +5,23 @@ require "login_verifica.php";
 $marca = trim($_POST["marca"]);
 $tiponegociacao = $_POST["tiponegociacao"];
 
+if ($tiponegociacao==0) {
+    $filtro_tabela="  ";
+    $filtro_valor=" and pro_evendido=0";
+} else {
+    $filtro_tabela=" join mestre_produtos_tipo on (mesprotip_produto=pro_codigo) ";
+    $filtro_valor=" and mesprotip_tipo=$tiponegociacao AND pro_evendido=1";
+}
+
 $sql = "
 SELECT DISTINCT pro_codigo,pro_nome,prorec_nome,pro_volume,pro_marca,protip_sigla,pro_referencia,pro_tamanho,pro_cor,pro_descricao
 FROM produtos 
-join mestre_produtos_tipo on (mesprotip_produto=pro_codigo)
+$filtro_tabela
 join produtos_tipo on pro_tipocontagem=protip_codigo
 left JOIN produtos_recipientes on (prorec_codigo=pro_recipiente)
 WHERE pro_marca='$marca'
 and pro_cooperativa=$usuario_cooperativa
-and mesprotip_tipo=$tiponegociacao 
+$filtro_valor
 ORDER BY pro_referencia, pro_nome, pro_tamanho, pro_cor, pro_descricao
 ";
 

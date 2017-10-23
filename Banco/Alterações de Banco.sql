@@ -17426,3 +17426,11 @@ INSERT INTO `sgaf_labodega`.`produtos_recipientes` (`prorec_nome`) VALUES ('Poti
 
 UPDATE produtos_recipientes SET prorec_global=1 WHERE prorec_codigo>0;
 
+ALTER TABLE `sgaf_labodega`.`produtos` 
+ADD COLUMN `pro_evendido` INT(1) NOT NULL DEFAULT 0 AFTER `pro_valunivenda`;
+
+
+ALTER TABLE `sgaf_labodega`.`entradas` 
+ADD COLUMN `ent_paravenda` INT(1) NOT NULL DEFAULT 0 AFTER `ent_valortotalcusto`;
+
+
