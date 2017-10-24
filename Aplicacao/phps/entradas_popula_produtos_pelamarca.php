@@ -7,10 +7,12 @@ $tiponegociacao = $_POST["tiponegociacao"];
 
 if ($tiponegociacao==0) {
     $filtro_tabela="  ";
-    $filtro_valor=" and pro_evendido=0";
+    if ($usavendas==1) $filtro=" and pro_evendido=0 ";
+    $filtro_valor=" $filtro";
 } else {
     $filtro_tabela=" join mestre_produtos_tipo on (mesprotip_produto=pro_codigo) ";
-    $filtro_valor=" and mesprotip_tipo=$tiponegociacao AND pro_evendido=1";
+    if ($usavendas==1) $filtro=" AND pro_evendido=1";
+    $filtro_valor=" and mesprotip_tipo=$tiponegociacao $filtro";
 }
 
 $sql = "

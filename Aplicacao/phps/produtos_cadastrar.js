@@ -172,6 +172,14 @@ window.onload = function(){
         
     }
     
+    //Produto vendido sim ou nao
+    var usavendas=$("input[name=usavendas]").val();
+    if (usavendas==1) {
+        $("tr[id=linha_evendido]").show(); 
+    } else {
+        $("tr[id=linha_evendido]").hide(); 
+    }
+
 
     verifica_controlarestoque();
     

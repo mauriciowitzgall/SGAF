@@ -303,7 +303,8 @@ if ($linhas == 0) {
             </td>
         </tr>
 
-        <tr>
+
+        <tr  id="linha_evendido">
             <td align="right" width="200px"><b>É Vendido? <label class="obrigatorio"></label></b></td>
             <td align="left" valign="bottom">
                 <?php 
@@ -631,10 +632,13 @@ if ($linhas == 0) {
         <input type="submit" value="SALVAR" name="submit1" class="botao fonte3"> <a href="produtos.php" class="link">&nbsp;<input type="button" value="CANCELAR" class="botao fonte3"></a> <?php } ?>
     <input type="hidden" name="nome2" value="<?php echo "$nome"; ?>">
     <?php
-    if (($linhas8 > 0) || ($ver == 1)) {
-        ?><input type="hidden" name="tipo" value="<?php echo "$tipo"; ?>"><?php
-}
-    ?>
+    if (($linhas8 > 0) || ($ver == 1)) { ?>
+        <input type="hidden" name="tipo" value="<?php echo "$tipo"; ?>">
+        
+
+        <?php }    ?>
+
+<input type="hidden" name="usavendas" value="<?php echo "$usavendas"; ?>">
 </form>
 
 

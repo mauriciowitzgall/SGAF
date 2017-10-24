@@ -76,6 +76,7 @@ if (($validade2 != "") && ($validade == "")) {
 //echo "validade: $validade validade2: $valid
 //ade2--";
 
+if ($usavendas==0) $paravenda=0;
 
 
 
@@ -116,11 +117,9 @@ if (($operacao == 3) || ($operacao == 2)) {
     $data = $_REQUEST["data1"];
     $hora = $_REQUEST["hora1"];
 }
-
 $tpl->FORNECEDOR = $fornecedor;
 $tpl->TIPOPESSOA = $tipopessoa;
 $tpl->TIPONEGOCIACAO = $tiponegociacao;
-$tpl->PARAVENDA = $paravenda;
 IF ($tiponegociacao == 2)
     $tpl->block(BLOCK_PERCENT);
 
@@ -198,27 +197,30 @@ if ($operacao==1) {
 $tpl->block("BLOCK_DATAHORA");
 
 //Produtos serão vendidos ou nao
-$tpl->SELECT_PARAVENDA_OBRIGATORIO=" required ";
-if ($passo>=2) $tpl->SELECT_PARAVENDA_DESABILITADO=" disabled ";
-if (($operacao==1)&&($paravenda=="")) {
-    if ($usavendas==1) {
-        $tpl->PARAVENDA_SIM_SELECIONADO=" selected ";
-        $tpl->PARAVENDA_NAO_SELECIONADO=" ";   
-    } else {
-        $tpl->PARAVENDA_SIM_SELECIONADO="  ";
-        $tpl->PARAVENDA_NAO_SELECIONADO=" selected ";     
-    }
-} else {
-    if ($paravenda==1) {
-        $tpl->PARAVENDA_SIM_SELECIONADO=" selected ";
-        $tpl->PARAVENDA_NAO_SELECIONADO=" "; 
-    } else {
-        $tpl->PARAVENDA_SIM_SELECIONADO="  ";
-        $tpl->PARAVENDA_NAO_SELECIONADO=" selected ";          
-    }
-}
+if ($usavendas==1) {
+    $tpl->PARAVENDA = $paravenda;    
+    $tpl->SELECT_PARAVENDA_OBRIGATORIO=" required ";
+    if ($passo>=2) $tpl->SELECT_PARAVENDA_DESABILITADO=" disabled ";
 
-$tpl->block("BLOCK_SELECT_PARAVENDA");
+    if (($operacao==1)&&($paravenda=="")) {
+        if ($usavendas==1) {
+            $tpl->PARAVENDA_SIM_SELECIONADO=" selected ";
+            $tpl->PARAVENDA_NAO_SELECIONADO=" ";   
+        } else {
+            $tpl->PARAVENDA_SIM_SELECIONADO="  ";
+            $tpl->PARAVENDA_NAO_SELECIONADO=" selected ";     
+        }
+    } else {
+        if ($paravenda==1) {
+            $tpl->PARAVENDA_SIM_SELECIONADO=" selected ";
+            $tpl->PARAVENDA_NAO_SELECIONADO=" "; 
+        } else {
+            $tpl->PARAVENDA_SIM_SELECIONADO="  ";
+            $tpl->PARAVENDA_NAO_SELECIONADO=" selected ";          
+        }
+    }
+    $tpl->block("BLOCK_SELECT_PARAVENDA");
+}
 
 if ((($operacao=="")||($operacao==1))||(($operacao==2)&&($paravenda==1))) {
 
@@ -378,11 +380,13 @@ if ($passo != "") {
 
     //Marca
     if ($paravenda==1) {
+        if ($usavendas==1) $filtro=" AND pro_evendido=1 ";
         $filtro_marca_tabela=" JOIN mestre_produtos_tipo ON (mesprotip_produto=pro_codigo)";
-        $filtro_marca_valor= " AND mesprotip_tipo=$tiponegociacao AND pro_evendido=1 ";
+        $filtro_marca_valor= " AND mesprotip_tipo=$tiponegociacao $filtro ";
     } else {
+        if ($usavendas==1) $filtro=" AND pro_evendido=0 ";
         $filtro_marca_tabela=" ";
-        $filtro_marca_valor= " AND pro_evendido=0 ";
+        $filtro_marca_valor= " $filtro ";
 
     }
     $sql = "
@@ -421,11 +425,13 @@ if ($passo != "") {
 
     //PRODUTOS
     if ($paravenda==1) {
+        if ($usavendas==1) $filtro= "AND pro_evendido=1 ";
         $filtro_produto_tabela=" JOIN mestre_produtos_tipo ON (mesprotip_produto=pro_codigo) ";
-        $filtro_produto_valor= " AND mesprotip_tipo=$tiponegociacao AND pro_evendido=1 ";
+        $filtro_produto_valor= " AND mesprotip_tipo=$tiponegociacao $filtro";
     } else {
+        if ($usavendas==1) $filtro=" AND pro_evendido=0 ";
         $filtro_produto_tabela=" ";
-        $filtro_produto_valor= " AND pro_evendido=0 ";
+        $filtro_produto_valor= " $filtro ";
 
     }    
     $sql = "
