@@ -3,26 +3,26 @@
 require "login_verifica.php";
 
 $tiponegociacao=$_POST["tiponeg"];
+$paravenda=$_POST["paravenda"];
 
-if ($tiponegociacao==0) {
-    $filtro_tabela="  ";
-    if ($usavendas==1) $filtro=" and pro_evendido=0 ";
-    $filtro_valor="$filtro";
-} else {
-    $filtro_tabela=" join mestre_produtos_tipo on (mesprotip_produto=pro_codigo) ";
-    if ($usavendas==1) $filtro=" and pro_evendido=1 ";
-    $filtro_valor=" and mesprotip_tipo=$tiponegociacao $filtro";
+if ($paravenda==-1) {
+    $filtro=" ";
+} else if ($paravenda==1) {
+    $filtro= " AND pro_evendido=1 ";
+} else if ($paravenda==0) {
+    $filtro= " AND pro_evendido=0 ";           
 }
 
 $sql = "
         SELECT pro_codigo,pro_nome,prorec_nome,pro_volume,pro_marca,protip_sigla,pro_referencia,pro_tamanho,pro_cor,pro_descricao
         FROM produtos 
-        $filtro_tabela
+
         join produtos_tipo on pro_tipocontagem=protip_codigo
         left JOIN produtos_recipientes on (prorec_codigo=pro_recipiente)
         WHERE pro_cooperativa='$usuario_cooperativa' 
-        $filtro_valor
-        ORDER BY pro_referencia, pro_nome, pro_tamanho, pro_cor, pro_descricao
+        AND pro_controlarestoque=1
+        $filtro
+        ORDER BY pro_nome, pro_tamanho, pro_cor, pro_descricao
 ";
 $query = mysql_query($sql);
 if (!$query)
@@ -39,7 +39,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tamanho=$dados["pro_tamanho"];
     $cor=$dados["pro_cor"];
     $descricao=$dados["pro_descricao"];    
-    echo "<option value='$codigo'>$referencia $nome $tamanho $cor $descricao</option>";
+    echo "<option value='$codigo'>$nome $tamanho $cor $descricao</option>";
 }
 
 ?>

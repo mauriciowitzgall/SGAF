@@ -76,7 +76,7 @@ if (($validade2 != "") && ($validade == "")) {
 //echo "validade: $validade validade2: $valid
 //ade2--";
 
-if ($usavendas==0) $paravenda=0;
+if ($usavendas==0) $paravenda=-1;
 
 
 
@@ -379,21 +379,22 @@ if ($passo != "") {
 
 
     //Marca
-    if ($paravenda==1) {
-        if ($usavendas==1) $filtro=" AND pro_evendido=1 ";
-        $filtro_marca_tabela=" JOIN mestre_produtos_tipo ON (mesprotip_produto=pro_codigo)";
-        $filtro_marca_valor= " AND mesprotip_tipo=$tiponegociacao $filtro ";
-    } else {
-        if ($usavendas==1) $filtro=" AND pro_evendido=0 ";
+    if ($paravenda==-1) {
         $filtro_marca_tabela=" ";
-        $filtro_marca_valor= " $filtro ";
-
+        $filtro_marca_valor= " ";
+    } else if ($paravenda==1) {
+        $filtro_marca_tabela=" JOIN mestre_produtos_tipo ON (mesprotip_produto=pro_codigo) ";
+        $filtro_marca_valor= " AND mesprotip_tipo=$tiponegociacao AND pro_evendido=1 ";
+    } else if ($paravenda==0) {
+         $filtro_marca_tabela="  ";
+         $filtro_marca_valor= " AND pro_evendido=0 ";           
     }
     $sql = "
         SELECT DISTINCT TRIM(pro_marca)
         FROM produtos 
         $filtro_marca_tabela
         WHERE pro_cooperativa='$usuario_cooperativa' 
+        AND pro_controlarestoque=1
         $filtro_marca_valor
         ORDER BY TRIM(pro_marca)
     ";
@@ -424,25 +425,26 @@ if ($passo != "") {
 
 
     //PRODUTOS
-    if ($paravenda==1) {
-        if ($usavendas==1) $filtro= "AND pro_evendido=1 ";
-        $filtro_produto_tabela=" JOIN mestre_produtos_tipo ON (mesprotip_produto=pro_codigo) ";
-        $filtro_produto_valor= " AND mesprotip_tipo=$tiponegociacao $filtro";
-    } else {
-        if ($usavendas==1) $filtro=" AND pro_evendido=0 ";
+    if ($paravenda==-1) {
         $filtro_produto_tabela=" ";
-        $filtro_produto_valor= " $filtro ";
-
-    }    
+        $filtro_produto_valor= " ";
+    } else if ($paravenda==1) {
+        $filtro_produto_tabela=" JOIN mestre_produtos_tipo ON (mesprotip_produto=pro_codigo) ";
+        $filtro_produto_valor= " AND mesprotip_tipo=$tiponegociacao AND pro_evendido=1 ";
+    } else if ($paravenda==0) {
+         $filtro_produto_tabela=" ";
+         $filtro_produto_valor= " AND pro_evendido=0 ";           
+    }
     $sql = "
         SELECT *
         FROM produtos 
         $filtro_produto_tabela
         join produtos_tipo on pro_tipocontagem=protip_codigo
         left JOIN produtos_recipientes on (prorec_codigo=pro_recipiente)
-        WHERE pro_cooperativa='$usuario_cooperativa' 
+        WHERE pro_cooperativa='$usuario_cooperativa'
+        AND pro_controlarestoque=1 
         $filtro_produto_valor
-        ORDER BY pro_referencia, pro_nome, pro_tamanho, pro_cor, pro_descricao
+        ORDER BY pro_nome, pro_tamanho, pro_cor, pro_descricao
     ";
     $query = mysql_query($sql);
     if ($query) {
@@ -460,7 +462,7 @@ if ($passo != "") {
             $pro_tamanho=$dados["pro_tamanho"];
             $pro_cor=$dados["pro_cor"];
             $pro_descricao=$dados["pro_descricao"];
-            $pro_nome2="$pro_referencia $pro_nome $pro_tamanho $pro_cor $pro_descricao";
+            $pro_nome2="$pro_nome $pro_tamanho $pro_cor $pro_descricao";
             //pro_codigo,pro_nome,prorec_nome,pro_volume,pro_marca,protip_sigla
             $tpl->OPTION2_TEXTO = "$pro_nome2 $pro_marca $pro_recipiente $pro_volume ($pro_sigla)";
             if (($produto == $pro_codigo) && ($produtomanter == 'on'))

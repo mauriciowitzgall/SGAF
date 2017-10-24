@@ -31,6 +31,67 @@
     };
 
 
+function seleciona_produto(valor) {
+    if(valor.match(/'/)) valor = valor.replace("'","");
+    if(valor.match(/!/)) valor = valor.replace("!","");
+    if(valor.match(/@/)) valor = valor.replace("@","");
+    if(valor.match(/#/)) valor = valor.replace("#","");
+    if(valor.match(/$/)) valor = valor.replace("$","");
+    if(valor.match(/%/)) valor = valor.replace("%","");
+    if(valor.match(/^/)) valor = valor.replace("ˆ","");
+    if(valor.match(/&/)) valor = valor.replace("&","");
+    if(valor.match(/{/)) valor = valor.replace("{","");
+    if(valor.match(/}/)) valor = valor.replace("}","");
+    if(valor.match(/|/)) valor = valor.replace("|","");
+    if(valor.match(/˜/)) valor = valor.replace("˜","");
+    if(valor.match(/`/)) valor = valor.replace("`","");
+    $("input[name=produto_referencia]").val(valor);
+    if (document.forms["form1"].elements["paravenda"]) paravenda=$("select[name=paravenda]").val();
+    else paravenda=-1;
+    if (valor!="") { 
+        $.post("entradas_produto_referencia.php", {
+            referencia: valor,
+            paravenda: paravenda
+        }, function(produtos) {
+            //alert("Produtos encontrados a partir da referencia:"+produtos);
+            //alert(produtos);
+            if (produtos=="PRODUTO_SEM_CONTROLE_DE_ESTOQUE") {
+                alert ("Este produto está configurado para não ter controle de estoque!");
+            } else if (produtos=="PRODUTO_NAO_PARAMETRIZADO_PARA_VENDA") {
+                alert ("Este produto não esta parametrizado para ser vendido!");
+            } else if (produtos=="PRODUTO_PARAMETRIZADO_PARA_VENDA") {
+                alert ("Este produto está parametrizado para ser vendido. E esta entrada está definida aceitar apenas produtos não vendidos!");
+            } else {
+                produtos2=produtos.split("|");
+                produto_codigo=produtos2[0];
+                produto_nome=produtos2[1];
+                if (produtos!=0) { //Se o produto é valido e uma referencia foi encontrada então popular
+                    $("select[name=produto]").html("<option value='"+produto_codigo+"'>"+produto_nome+" </option>");
+                    $("input[name=produto2]").val(produto_codigo);
+                    valida_produto();            
+                } else {
+                    $.post("entradas_popula_produto.php", { paravenda: paravenda}, function(valor) {
+                        $("select[name=produto]").html(valor);
+                        //alert(valor);
+                        document.forms["form1"].produto.disabled = false;
+                    });
+                    valida_produto(); 
+                }
+            }
+
+        });
+    } else {
+        $.post("entradas_popula_produto.php", { paravenda: paravenda }, function(valor) {
+            $("select[name=produto]").html(valor);
+            document.forms["form1"].produto.disabled = false;
+        });
+    }    
+
+}
+
+
+
+
 function verifica_paravenda () {
     paravenda=$("select[name=paravenda]").val();
     //alert(paravenda);
@@ -300,16 +361,20 @@ function popula_produtos_pelamarca(valor) {
         tipneg2=0;
     }
     //alert(tipneg2);
+    if (document.forms["form1"].elements["paravenda"]) paravenda=$("select[name=paravenda]").val();
+    else paravenda=-1;
     if (valor == 'todas') {
         $.post("entradas_popula_produtos_pelamarca2.php", {
-            tiponeg: tipneg2
+            tiponeg: tipneg2,
+            paravenda: paravenda
         }, function(valor2) {
             $("select[name=produto]").html(valor2);
         });
     } else {
         $.post("entradas_popula_produtos_pelamarca.php", {
             marca: valor,
-            tiponegociacao: tipneg2
+            tiponegociacao: tipneg2,
+            paravenda:paravenda
 
         }, function(valor2) {
             //alert(valor2);
@@ -386,7 +451,7 @@ function calcula_valor_percent() {
 
         <!--  BEGIN BLOCK_DATAHORA -->
         <tr>
-            <td align="right"><b>Data: <label class="obrigatorio"></label></b></td>
+            <td align="right"  width="200px"><b>Data: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
                 <input 
                     type="date" 
@@ -421,7 +486,7 @@ function calcula_valor_percent() {
  
         <!--  BEGIN BLOCK_SELECT_PARAVENDA -->
         <tr id="linha_paravenda">
-            <td align="right" width="200px"><b>Produtos serão vendidos? <label class="obrigatorio"></label></b></td>
+            <td align="right"><b>Produtos serão vendidos? <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
                 <select autofocus="1" name="paravenda" onchange="verifica_paravenda();" class="campopadrao campo_tamanho_6" {SELECT_PARAVENDA_OBRIGATORIO} {SELECT_PARAVENDA_DESABILITADO} >
                     <option value="0" {PARAVENDA_NAO_SELECIONADO}>Não</option> 
@@ -531,13 +596,16 @@ function calcula_valor_percent() {
         </tr>
         <tr>
             <td align="right" width="200px"><b>Produto: <label class="obrigatorio"></label></b></td>
+            
             <td class="fundo1" >
+                <input type="text" name="produto_referencia" value="" class="campopadrao campo_tamanho_4 " onkeyup="seleciona_produto(this.value); " size="" align="left">  
                 <select autofocus="2" name="produto" style="width: 250px" onchange=" valida_produto()"   id="{SELECT2_NOME}" class="campopadrao campo_tamanho_6" {SELECT2_OBRIGATORIO} {SELECT2_DESABILITADO} >
                     <option value="">Selecione</option>	
                     <!--  BEGIN BLOCK_OPTIONS_PRODUTO -->
                     <option value="{OPTION2_VALOR}" {OPTION2_SELECIONADO} >{OPTION2_TEXTO}</option>
                     <!--  END BLOCK_OPTIONS_PRODUTO -->
                 </select>
+                <input type="hidden" name="produto2" value="{PRODUTO2}">
                 <input type="checkbox" name="produtomanter" {PRODUTOMANTER_HABILITADO} class="css-checkbox" id="checkbox4"  title="Manter o produto selecionado">
                 <img  width="15px" name="temprodutocompostoicone" id="temprodutocompostoicone" src="../imagens/icones/geral/atencao.png"  title="Informação" alt="Informação" />
                 
