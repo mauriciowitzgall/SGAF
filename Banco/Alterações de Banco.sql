@@ -17434,3 +17434,7 @@ ALTER TABLE `sgaf_labodega`.`entradas`
 ADD COLUMN `ent_paravenda` INT(1) NOT NULL DEFAULT 0 AFTER `ent_valortotalcusto`;
 
 
+ALTER TABLE `sgaf_labodega`.`produtos_categorias` 
+ADD COLUMN `cat_quiosquequecadastrou` INT NOT NULL DEFAULT 0 AFTER `cat_obs`;
+
+

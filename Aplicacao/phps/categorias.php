@@ -24,11 +24,21 @@ $modal=$_GET["modal"];
 <?php //filtro e ordenação
 $filtronome=$_POST['filtronome'];
 $filtroobs=$_POST['filtroobs'];
+$filtroproprio = $_POST['filtroproprio'];
+if ($filtroproprio=="") $filtroproprio=1;
+if ($filtroproprio==1) $sql_filtro.=" and cat_quiosquequecadastrou=$usuario_quiosque ";
 ?>
 <form action="categorias.php" name="form1" method="post">
 <table summary="" class="tabelafiltro" border="0">
 <tr>
 	<td width="245px"><b>&nbsp;Nome:</b><br><input size="25" type="text" name="filtronome" class="campopadrao" value="<?php echo "$filtronome";?>"></td>
+    <td width="15px"></td>
+    <td><b>&nbsp;Próprio:</b><br>
+        <select name="filtroproprio" class="campopadrao" >
+            <option value="1" <?php if (($filtroproprio=="")||($filtroproprio==1)) echo " selected "?>>Sim</option>
+            <option value="0" <?php if ($filtroproprio==0) echo " selected "?>>Todos</option>
+        </select>
+    </td>
 </tr>
 </table>
 <br>
@@ -56,7 +66,7 @@ $filtroobs=$_POST['filtroobs'];
 <?php
  $sql=" SELECT *
 			FROM produtos_categorias
-			WHERE cat_nome like '%$filtronome%' and cat_cooperativa=$usuario_cooperativa
+			WHERE cat_nome like '%$filtronome%' and cat_cooperativa=$usuario_cooperativa $sql_filtro
 			ORDER BY cat_nome";
  
  //Pagina��o
@@ -83,7 +93,7 @@ $linhas = mysql_num_rows($query);
 <tr valign="middle" class="tabelacabecalho1">
 	<td width="">NOME</td>
 	<td width="" align="center">OBSERVAÇÃO</td>
-	<td width="" colspan="3">OPERAÇÕES </td>
+	<td width="" colspan="4">OPERAÇÕES </td>
 </tr>
 
 <?php
@@ -91,12 +101,33 @@ while($array=mysql_fetch_array($query))
 {
 	$codigo= $array['cat_codigo'];
 	$nome= $array['cat_nome'];
-	$obs= $array['cat_obs'];
+    $obs= $array['cat_obs'];
+	$quiosquequecadastrou= $array['cat_quiosquequecadastrou'];
 ?>
 
 <tr class="lin">
    <td><?php echo "$nome";?></td>
    <td><?php echo "$obs";?>	</td>
+   <td align="center" class="fundo1" width="35px">
+        <img   width="15px" src="
+        <?php 
+        if (($quiosquequecadastrou==$usuario_quiosque)) { 
+            echo "$icones\info_desabilitado.png ";
+            $motivo="";
+        } else  if ($quiosquequecadastrou==0) { 
+            echo "$icones\info2.png"; 
+            $motivo="Registrado pelos gestores da cooperativa!";
+        } else {
+            echo "$icones\info.png"; 
+            $sql3="SELECT qui_nome FROM quiosques WHERE qui_codigo=$quiosquequecadastrou";
+            if (!$query3=mysql_query($sql3)) die("Erro SQL3:" . mysql_error());
+            $dados3=  mysql_fetch_assoc($query3);
+            $quiosquequecadastrou_nome=$dados3["qui_nome"];
+            $motivo="Registrado pelo quiosque: $quiosquequecadastrou_nome";
+
+        }?>" 
+        title="<?php echo $motivo; ?>" alt="Atenção"/> </a>
+    </td>
 	<td align="center" class="fundo1" width="35px">
             <?php if ($permissao_categorias_ver == 1) { ?>
             <a href="categorias_cadastrar.php?codigo=<?php echo"$codigo";?>&ver=1" class="link1"><img   width="15px" src="<?php echo $icones;?>detalhes.png" title="Detalhes" alt="Detalhes"/> </a>

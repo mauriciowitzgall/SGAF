@@ -32,8 +32,8 @@ $hora=date ("H:i:s");
 <?php 
 if($codigo=="") //caso seja um cadastro novo fazer isso
 {		
-	$sql = " INSERT INTO produtos_categorias (cat_nome,cat_obs,cat_cooperativa)
-	VALUES ('$nome','$obs','$usuario_cooperativa');	";
+	$sql = " INSERT INTO produtos_categorias (cat_nome,cat_obs,cat_cooperativa, cat_quiosquequecadastrou)
+	VALUES ('$nome','$obs','$usuario_cooperativa','$usuario_quiosque');	";
 	if (mysql_query($sql))	{ }
 	else
 	{
