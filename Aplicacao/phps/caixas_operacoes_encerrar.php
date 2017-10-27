@@ -268,47 +268,7 @@ $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
 
 
-//Total Liquido Vendido
-$tpl->TITULO="Total Liquido Vendido";
-$tpl->block("BLOCK_TITULO");
-$tpl->CAMPO_TIPO="text";
-$tpl->CAMPO_NOME="totalliquido";
-$tpl->CAMPO_VALOR=  "R$ ".number_format($totalliquido,2,",",".");
-$tpl->CAMPO_TAMANHO="";
-$tpl->CAMPO_QTD_CARACTERES="";
-$tpl->block("BLOCK_CAMPO_DESABILITADO");
-$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
-$tpl->block("BLOCK_CAMPO");
-$tpl->block("BLOCK_CONTEUDO");
-$tpl->block("BLOCK_ITEM");
 
-//Total liquido sem cartão
-$tpl->TITULO="Total Liquido Sem Cartão ";
-$tpl->block("BLOCK_TITULO");
-$tpl->CAMPO_TIPO="text";
-$tpl->CAMPO_NOME="totalliquidosemcartao";
-$tpl->CAMPO_VALOR=  "R$ ".number_format($totalliquidosemcartao,2,",",".");
-$tpl->CAMPO_TAMANHO="";
-$tpl->CAMPO_QTD_CARACTERES="";
-$tpl->block("BLOCK_CAMPO_DESABILITADO");
-$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
-$tpl->block("BLOCK_CAMPO");
-$tpl->block("BLOCK_CONTEUDO");
-$tpl->block("BLOCK_ITEM");
-
-//Total liquido no cartão
-$tpl->TITULO="Total Liquido No Cartão ";
-$tpl->block("BLOCK_TITULO");
-$tpl->CAMPO_TIPO="text";
-$tpl->CAMPO_NOME="totalliquidocartao";
-$tpl->CAMPO_VALOR=  "R$ ".number_format($totalliquidocartao,2,",",".");
-$tpl->CAMPO_TAMANHO="";
-$tpl->CAMPO_QTD_CARACTERES="";
-$tpl->block("BLOCK_CAMPO_DESABILITADO");
-$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
-$tpl->block("BLOCK_CAMPO");
-$tpl->block("BLOCK_CONTEUDO");
-$tpl->block("BLOCK_ITEM");
 
 
 //Entradas e Saídas Título
@@ -341,7 +301,7 @@ $tpl->TITULO="Total Saídas";
 $tpl->block("BLOCK_TITULO");
 $tpl->CAMPO_TIPO="text";
 $tpl->CAMPO_NOME="totalsaidas";
-$tpl->CAMPO_VALOR=  "R$ ".number_format($saidatotal,2,",",".");
+$tpl->CAMPO_VALOR=  "R$ -".number_format($saidatotal,2,",",".");
 $tpl->CAMPO_TAMANHO="";
 $tpl->CAMPO_QTD_CARACTERES="";
 $tpl->block("BLOCK_CAMPO_DESABILITADO");
@@ -350,6 +310,7 @@ $tpl->block("BLOCK_CAMPO");
 $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
 
+/*
 //Saldo Entradas/Saídas
 $tpl->TITULO="Saldo Entradas/Saídas";
 $tpl->block("BLOCK_TITULO");
@@ -363,6 +324,7 @@ $tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
 $tpl->block("BLOCK_CAMPO");
 $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
+*/
 
 //Entradas e Saídas Título
 $tpl->TEXTO_ID="";
@@ -388,6 +350,37 @@ $tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
 $tpl->block("BLOCK_CAMPO");
 $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
+
+//Valor esperado em DINHEIRO
+$tpl->TITULO="Total Esperado em DINHEIRO";
+$tpl->block("BLOCK_TITULO");
+$tpl->CAMPO_TIPO="text";
+$tpl->CAMPO_NOME="totalliquido";
+$tpl->CAMPO_VALOR=  "R$ ".number_format($totalliquidosemcartao + $entradatotal - $saidatotal,2,",",".");
+$tpl->CAMPO_TAMANHO="";
+$tpl->CAMPO_QTD_CARACTERES="";
+$tpl->block("BLOCK_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl->block("BLOCK_CAMPO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_ITEM");
+
+
+//Valor esperado em CARTAO
+$tpl->TITULO="Total esperado CARTÃO";
+$tpl->block("BLOCK_TITULO");
+$tpl->CAMPO_TIPO="text";
+$tpl->CAMPO_NOME="totalliquidocartao";
+$tpl->CAMPO_VALOR=  "R$ ".number_format($totalliquidocartao,2,",",".");
+$tpl->CAMPO_TAMANHO="";
+$tpl->CAMPO_QTD_CARACTERES="";
+$tpl->block("BLOCK_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl->block("BLOCK_CAMPO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_ITEM");
+
+
 
 //Valor final do caixa
 $tpl->TITULO="Valor Final Caixa";
