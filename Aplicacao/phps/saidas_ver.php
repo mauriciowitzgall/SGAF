@@ -63,6 +63,7 @@ $numero = $dados["sai_codigo"];
 $status_venda=$dados["sai_status"];
 $totalbruto = $dados["sai_totalbruto"];
 $areceber = $dados["sai_areceber"];
+$numero_comanda = $dados["sai_id"];
 
 
 
@@ -95,6 +96,27 @@ if ($tiposaida == 1) {
     $tpl->block("BLOCK_CONTEUDO");
     $tpl->block("BLOCK_COLUNA");
     $tpl->block("BLOCK_LINHA");
+    
+    //Numero da comanda
+    if ($usacomanda==1) {
+        $tpl->COLUNA_ALINHAMENTO = "right";
+        $tpl->COLUNA_TAMANHO = "200px";
+        $tpl->TITULO = "Nº Comanda/ID";
+        $tpl->block("BLOCK_TITULO");
+        $tpl->block("BLOCK_CONTEUDO");
+        $tpl->block("BLOCK_COLUNA");
+        $tpl->COLUNA_ALINHAMENTO = "left";
+        $tpl->COLUNA_TAMANHO = "";
+        $tpl->CAMPO_TIPO = "text";
+        $tpl->CAMPO_NOME = "numero";
+        $tpl->CAMPO_VALOR = "$numero_comanda";
+        $tpl->block("BLOCK_CAMPO_PADRAO");
+        $tpl->block("BLOCK_CAMPO_DESABILITADO");
+        $tpl->block("BLOCK_CAMPO");
+        $tpl->block("BLOCK_CONTEUDO");
+        $tpl->block("BLOCK_COLUNA");
+        $tpl->block("BLOCK_LINHA");
+    }
 
     //Data e Hora
     $tpl->COLUNA_ALINHAMENTO = "right";
