@@ -1,12 +1,22 @@
 function atualiza_categorias () {
-    $.post("produtos_cadastrar_atualiza_categorias.php",{
+$.post("produtos_cadastrar_atualiza_categorias.php",{
         cooperativa:$("input[name=cooperativa_oculto]").val()
     },function(valor2){
         //alert(valor2);
         $("select[name=categoria]").html(valor2);
     });    
 }
-        
+ 
+function atualiza_recipientes () {
+    $.post("produtos_cadastrar_atualiza_recipientes.php",{
+        cooperativa:$("input[name=cooperativa_oculto]").val()
+    },function(valor2){
+        //alert(valor2);
+        $("select[name=recipiente").html(valor2);
+    });    
+}
+
+
 function pesquisa_ncm (valor) {
     //alert("Pesquisa e popula label NCM: "+valor);
     $.post("produtos_pesquisa_ncm.php",{

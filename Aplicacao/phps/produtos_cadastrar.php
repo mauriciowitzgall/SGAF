@@ -20,6 +20,8 @@ include "includes.php";
 $codigo = $_GET['codigo'];
 $ver = $_GET['ver'];
 $operacao = $_GET['operacao'];
+$modal=$_GET['modal'];
+
 $sql = "SELECT * 
     FROM produtos 
     LEFT JOIN nfe_ncm on (pro_ncm=ncm_codigo)
@@ -157,7 +159,7 @@ if ($linhas == 0) {
     exit;
 }
 ?>
-<form action="produtos_cadastrar2.php?codigo=<?php echo"$codigo"; ?>" method="post" name="form1">
+<form action="produtos_cadastrar2.php?modal=<?php echo $modal; ?>&codigo=<?php echo"$codigo"; ?>" method="post" name="form1">
     <table summary="" border="0" class="tabela1" cellpadding="4">
         <tr>
             <td align="right" width="200px"><b>Nome: <label class="obrigatorio"></label></b></td>
@@ -252,7 +254,7 @@ if ($linhas == 0) {
                         }
                     ?>
                 </select>
-                <a class="link" href="#"><img id="atualizar_recipiente" src="../imagens/icones/geral/atualizar.png" width="12px" onclick="atualiza_recipiente()"></a>
+                <a class="link" href="#"><img id="atualizar_recipiente" src="../imagens/icones/geral/atualizar.png" width="12px" onclick="atualiza_recipientes()"></a>
                 <a href="produtos_recipientes_cadastrar.php?modal=1&operacao=cadastrar" target="_blank" class="link">
                     <img id="atualizar_recipiente" src="../imagens/icones/geral/add.png" width="12px">
                 </a>                
@@ -629,7 +631,7 @@ if ($linhas == 0) {
     if ($ver == 1) {
         ?><a href="<?php echo $link_destino; ?>" class="link">&nbsp;<input type="button" value="VOLTAR" class="botao fonte3"></a> <?php } else {
         ?><input type="hidden" name="link" value="<?php echo $linkanterior; ?>">
-        <input type="submit" value="SALVAR" name="submit1" class="botao fonte3"> <a href="produtos.php" class="link">&nbsp;<input type="button" value="CANCELAR" class="botao fonte3"></a> <?php } ?>
+        <input type="submit" value="SALVAR" name="submit1" class="botao fonte3"> <a href="produtos.php?modal=<?php echo $modal; ?>" class="link">&nbsp;<input type="button" value="CANCELAR" class="botao fonte3"></a> <?php } ?>
     <input type="hidden" name="nome2" value="<?php echo "$nome"; ?>">
     <?php
     if (($linhas8 > 0) || ($ver == 1)) { ?>

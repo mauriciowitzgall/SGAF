@@ -12,6 +12,7 @@ include "includes.php";
 $codigo = $_GET['codigo'];
 $nome = ucwords(strtolower($_POST['nome']));
 $nome2 = ucwords(strtolower($_POST['nome2']));
+$modal=$_GET['modal'];
 
 //print_r($_REQUEST);
 
@@ -68,6 +69,8 @@ $tpl_titulo->SUBTITULO = "CADASTRO/EDIÇÃO";
 $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "produtos.png";
 $tpl_titulo->show();
+
+       
 
 //Verifica se foi selecionado pelo menos um tipo de negociacao
 
@@ -200,16 +203,20 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     }
     $tpl_notificacao = new Template("templates/notificacao.html");
 
-    $tpl_notificacao->BOTAOGERAL_DESTINO="produtos_cadastrar.php";
-    //$tpl_notificacao->block("BLOCK_BOTAOGERAL_NOVAJANELA");
-    $tpl_notificacao->BOTAOGERAL_TIPO="button";
-    $tpl_notificacao->BOTAOGERAL_NOME="CADASTRAR MAIS";
-    $tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
-    $tpl_notificacao->block("BLOCK_BOTAOGERAL");
+    if ($modal==1) $tpl_notificacao->DESTINO = "javascript:window.close(0);";
+    else $tpl_notificacao->DESTINO = "produtos.php"; 
+
+    if ($modal!=1) {
+        $tpl_notificacao->BOTAOGERAL_DESTINO="produtos_cadastrar.php";
+        //$tpl_notificacao->block("BLOCK_BOTAOGERAL_NOVAJANELA");
+        $tpl_notificacao->BOTAOGERAL_TIPO="button";
+        $tpl_notificacao->BOTAOGERAL_NOME="CADASTRAR MAIS";
+        $tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
+        $tpl_notificacao->block("BLOCK_BOTAOGERAL");
+    }
 
     $tpl_notificacao->ICONES = $icones;
     $tpl_notificacao->MOTIVO_COMPLEMENTO = "";
-    $tpl_notificacao->DESTINO = "produtos.php";
     $tpl_notificacao->block("BLOCK_CONFIRMAR");
     $tpl_notificacao->block("BLOCK_CADASTRADO");
     $tpl_notificacao->block("BLOCK_BOTAO");

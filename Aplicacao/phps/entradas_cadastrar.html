@@ -31,6 +31,18 @@
     };
 
 
+function atualiza_produtos_cadastro_direto () {
+    var paravenda=$("select[name=paravenda]").val();
+    var tiponeg=$("select[name=tiponegociacao]").val();
+    $.post("entradas_cadastrar_atualiza_produtos.php",{
+        paravenda:paravenda,
+        tiponegociacao:tiponeg
+    },function(valor2){
+        //alert(valor2);
+        $("select[name=produto").html(valor2);
+    });    
+}
+
 function seleciona_produto(valor) {
     if(valor.match(/'/)) valor = valor.replace("'","");
     if(valor.match(/!/)) valor = valor.replace("!","");
@@ -606,8 +618,13 @@ function calcula_valor_percent() {
                     <!--  END BLOCK_OPTIONS_PRODUTO -->
                 </select>
                 <input type="hidden" name="produto2" value="{PRODUTO2}">
-                <input type="checkbox" name="produtomanter" {PRODUTOMANTER_HABILITADO} class="css-checkbox" id="checkbox4"  title="Manter o produto selecionado">
+                <input type="checkbox" name="produtomanter" {PRODUTOMANTER_HABILITADO} class="css-checkbox" id="checkbox4"  title="Manter o produto selecionado"><span></span>
                 <img  width="15px" name="temprodutocompostoicone" id="temprodutocompostoicone" src="../imagens/icones/geral/atencao.png"  title="Informação" alt="Informação" />
+                <a class="link" href="#"><img id="atualizar_produto" src="../imagens/icones/geral/atualizar.png" width="12px" onclick="atualiza_produtos_cadastro_direto()"></a>
+                <a href="produtos_cadastrar.php?modal=1&operacao=cadastrar" target="_blank" class="link">
+                    <img id="atualizar_produto" src="../imagens/icones/geral/add.png" width="12px">
+                </a> 
+                
                 
             </td>
         </tr>
