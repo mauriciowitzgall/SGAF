@@ -217,16 +217,22 @@ $tpl2->CABECALHO_COLUNA_NOME = "PRODUTO";
 $tpl2->block(BLOCK_LISTA_CABECALHO);
 $tpl2->CABECALHO_COLUNA_TAMANHO = "";
 $tpl2->CABECALHO_COLUNA_COLSPAN = "";
-$tpl2->CABECALHO_COLUNA_NOME = "FORNECEDOR";
-$tpl2->block(BLOCK_LISTA_CABECALHO);
-$tpl2->CABECALHO_COLUNA_TAMANHO = "";
-$tpl2->CABECALHO_COLUNA_COLSPAN = "";
 $tpl2->CABECALHO_COLUNA_NOME = "LOTE";
 $tpl2->block(BLOCK_LISTA_CABECALHO);
 $tpl2->CABECALHO_COLUNA_TAMANHO = "";
 $tpl2->CABECALHO_COLUNA_COLSPAN = "2";
 $tpl2->CABECALHO_COLUNA_NOME = "QUANTIDADE";
 $tpl2->block(BLOCK_LISTA_CABECALHO);
+if ($usavendaporcoes==1) {
+    $tpl2->CABECALHO_COLUNA_TAMANHO = "";
+    $tpl2->CABECALHO_COLUNA_COLSPAN = "";
+    $tpl2->CABECALHO_COLUNA_NOME = "PORÇÃO";
+    $tpl2->block(BLOCK_LISTA_CABECALHO);
+    $tpl2->CABECALHO_COLUNA_TAMANHO = "";
+    $tpl2->CABECALHO_COLUNA_COLSPAN = "";
+    $tpl2->CABECALHO_COLUNA_NOME = "QTD. PORÇÃO";
+    $tpl2->block(BLOCK_LISTA_CABECALHO);
+}
 $tpl2->CABECALHO_COLUNA_TAMANHO = "";
 $tpl2->CABECALHO_COLUNA_COLSPAN = "";
 $tpl2->CABECALHO_COLUNA_NOME = "VALOR UNIT.";
@@ -239,7 +245,7 @@ $tpl2->block(BLOCK_LISTA_CABECALHO);
 //Mostra todos os produtos da saida em quest�o
 $sql2 = "
 SELECT 
-    saipro_codigo,pro_nome,pes_nome,saipro_lote,saipro_quantidade,protip_sigla,protip_codigo,saipro_valorunitario,saipro_valortotal,pro_referencia,pro_tamanho,pro_cor,pro_descricao,pro_codigo,sai_totalcomdesconto,metpag_nome
+    saipro_codigo,pro_nome,pes_nome,saipro_lote,saipro_quantidade,protip_sigla,protip_codigo,saipro_valorunitario,saipro_valortotal,pro_referencia,pro_tamanho,pro_cor,pro_descricao,pro_codigo,sai_totalcomdesconto,metpag_nome,saipro_porcao_quantidade, propor_nome
 FROM 
     saidas
     join saidas_produtos on (saipro_saida=sai_codigo)
@@ -248,6 +254,7 @@ FROM
     join entradas on (saipro_lote=ent_codigo)
     join pessoas on (ent_fornecedor=pes_codigo)
     join metodos_pagamento on (sai_metpag=metpag_codigo)
+    left join produtos_porcoes on (saipro_porcao=propor_codigo)
 WHERE
     sai_codigo=$saida
 ";
@@ -285,11 +292,6 @@ while ($dados2 = mysql_fetch_assoc($query2)) {
     $tpl2->LISTA_COLUNA_CLASSE = "";
     $tpl2->LISTA_COLUNA_VALOR = $nome2;
     $tpl2->block("BLOCK_LISTA_COLUNA");
-    $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
-    $tpl2->LISTA_COLUNA_TAMANHO = "";
-    $tpl2->LISTA_COLUNA_CLASSE = "";
-    $tpl2->LISTA_COLUNA_VALOR = $dados2["pes_nome"];
-    $tpl2->block("BLOCK_LISTA_COLUNA");
 
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "right";
     $tpl2->LISTA_COLUNA_TAMANHO = "";
@@ -312,6 +314,24 @@ while ($dados2 = mysql_fetch_assoc($query2)) {
     $tpl2->LISTA_COLUNA_CLASSE = "";
     $tpl2->LISTA_COLUNA_VALOR = $dados2["protip_sigla"];
     $tpl2->block("BLOCK_LISTA_COLUNA");
+
+
+    if ($usavendaporcoes==1) {
+        //Nome da Porção
+        $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
+        $tpl2->LISTA_COLUNA_TAMANHO = "100px";
+        $tpl2->LISTA_COLUNA_CLASSE = "";
+        $tpl2->LISTA_COLUNA_VALOR = $dados2["propor_nome"];
+        $tpl2->block("BLOCK_LISTA_COLUNA");
+        //Quantidade de Proção
+        $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
+        $tpl2->LISTA_COLUNA_TAMANHO = "50px";
+        $tpl2->LISTA_COLUNA_CLASSE = "";
+        $tpl2->LISTA_COLUNA_VALOR = $dados2["saipro_porcao_quantidade"];
+        $tpl2->block("BLOCK_LISTA_COLUNA");    
+    }
+
+
 
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "right";
     $tpl2->LISTA_COLUNA_TAMANHO = "";
@@ -343,8 +363,12 @@ $tpl2->block("BLOCK_LISTA_COLUNA");
 $tpl2->LISTA_COLUNA_VALOR = " ";
 $tpl2->block("BLOCK_LISTA_COLUNA");
 $tpl2->LISTA_COLUNA_VALOR = " ";
-$tpl2->block("BLOCK_LISTA_COLUNA");
-$tpl2->LISTA_COLUNA_VALOR = " ";
+if ($usavendaporcoes==1) {
+    $tpl2->block("BLOCK_LISTA_COLUNA");
+    $tpl2->LISTA_COLUNA_VALOR = " ";
+    $tpl2->block("BLOCK_LISTA_COLUNA");
+    $tpl2->LISTA_COLUNA_VALOR = " ";
+} 
 $tpl2->block("BLOCK_LISTA_COLUNA");
 $tpl2->LISTA_COLUNA_VALOR = " ";
 $tpl2->block("BLOCK_LISTA_COLUNA");
