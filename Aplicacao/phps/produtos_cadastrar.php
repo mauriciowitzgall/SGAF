@@ -160,6 +160,7 @@ if ($linhas == 0) {
 }
 ?>
 <form action="produtos_cadastrar2.php?modal=<?php echo $modal; ?>&codigo=<?php echo"$codigo"; ?>" method="post" name="form1">
+    <input type="hidden" name="codigo_produto" value="<?php echo $codigo; ?>">
     <table summary="" border="0" class="tabela1" cellpadding="4">
         <tr>
             <td align="right" width="200px"><b>Nome: <label class="obrigatorio"></label></b></td>
@@ -167,7 +168,10 @@ if ($linhas == 0) {
         </tr>
        <tr id="id_referencia">
             <td align="right" width="200px"><b>Referência: <label class="obrigatorio"></label></b></td>
-            <td align="left" width=""><input  onkeyup="referencia_valida_caracteres_especiais(this.value)"  id="referencia" type="text" name="referencia"  size="35" class="campopadrao"  value="<?php echo "$referencia"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"> Ex: numero do pedido/cardápio</span></td>
+            <td align="left" width=""><input  onkeyup="referencia_valida_caracteres_especiais(this.value)"  id="referencia" type="text" name="referencia"  size="35" class="campopadrao" onblur="verifica_referencia_valida(this.value);"  value="<?php echo "$referencia"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""> 
+             <img src="../imagens/icones/geral/confirmar2.png" id="referencia_icone" name="referencia_icone" width="12px" title="" alt="">            
+                
+            <span class="dicacampo"> Ex: numero do pedido/cardápio</span></td>
         </tr>
         <tr>
             <td align="right" width="200px"><b>Produto industrializado <label class="obrigatorio"></label></b></td>

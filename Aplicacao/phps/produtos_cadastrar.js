@@ -133,6 +133,44 @@ function referencia_valida_caracteres_especiais (valor) {
     if(valor.match(/`/)) valor = valor.replace("`","");
     //alert(valor);
     $("input[name=referencia]").val(valor);
+    produto=$("input[name=codigo_produto]").val();
+    if (valor=="") document.getElementById("referencia_icone").src="../imagens/icones/geral/confirmar2.png";
+    else { 
+        $.post("produtos_valida_referencia.php",{
+            ref:valor,
+            produto:produto
+        },function(valor2){
+            //alert(valor2);
+            if (valor2==1) { //Já existe uma referencia igual cadastrada em outro produto
+                document.getElementById("referencia_icone").src="../imagens/icones/geral/erro.png";
+            } else {
+                document.getElementById("referencia_icone").src="../imagens/icones/geral/confirmar.png";
+            }
+        });
+    }
+}
+
+
+function verifica_referencia_valida(valor) {
+    
+    if (valor!="") {
+        $.post("produtos_valida_referencia.php",{
+            ref:valor
+        },function(valor2){
+            //alert(valor2);
+            if (valor2==1) { //Já existe uma referencia igual cadastrada em outro produto
+                alert("Já existe um produto cadastrado com esta referencia!");
+                 $("input[name=referencia]").val("");
+                 $("input[name=referencia]").focus();
+            } else {
+                
+            }
+        });   
+    } else {
+        document.getElementById("referencia_icone").src="../imagens/icones/geral/confirmar2.png";
+    }
+
+
 }
 
 function verifica_controlarestoque () {
