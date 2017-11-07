@@ -30,6 +30,8 @@ $dados = mysql_fetch_assoc($query);
 $fornecedor = $dados["ent_fornecedor"];
 $supervisor = $dados["ent_supervisor"];
 $tiponegociacao = $dados["ent_tiponegociacao"];
+$data = $dados["ent_datacadastro"];
+$hora = $dados["ent_horacadastro"];
 
 if (($usuario_grupo == 5) && ($usuario_codigo != $fornecedor)) {
     header("Location: permissoes_semacesso.php");
@@ -101,6 +103,9 @@ $tpl->block("BLOCK_SUPERVISOR");
 $tpl->block("BLOCK_ENTER");
 $tpl->block("BLOCK_HR");
 
+
+$tpl->ENTRADAS_DATA="$data";
+$tpl->ENTRADAS_HORA="$hora";
 $tpl->block("BLOCK_DATAHORA");
 
 
