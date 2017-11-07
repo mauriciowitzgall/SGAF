@@ -106,6 +106,8 @@ $tpl->block("BLOCK_HR");
 
 $tpl->ENTRADAS_DATA="$data";
 $tpl->ENTRADAS_HORA="$hora";
+$tpl->block("BLOCK_DATA_DESABILITADA");
+$tpl->block("BLOCK_HORA_DESABILITADA");
 $tpl->block("BLOCK_DATAHORA");
 
 
