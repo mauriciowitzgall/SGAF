@@ -345,12 +345,19 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "DESC.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
+$tpl->CABECALHO_COLUNA_TAMANHO = "70px";
+$tpl->CABECALHO_COLUNA_COLSPAN = "";
+$tpl->CABECALHO_COLUNA_NOME = "LIQUIDO";
+$tpl->block("BLOCK_LISTA_CABECALHO");
+
+/*
 if ($usacaixa==1) {
     $tpl->CABECALHO_COLUNA_TAMANHO = "";
     $tpl->CABECALHO_COLUNA_COLSPAN = "3";
     $tpl->CABECALHO_COLUNA_NOME = "CAIXA";
     $tpl->block("BLOCK_LISTA_CABECALHO");
 }
+*/
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "40 px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
@@ -586,17 +593,26 @@ if ($linhas == 0) {
 
         //Desconto
         $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
-        $desconto_mostra = number_format($desconto + $troco_desconto - $troco_acrescimo, 2,",",".");
-        if ($desconto == 0)
+        $descontototal=$desconto + $troco_desconto - $troco_acrescimo;
+        $desconto_mostra = number_format($descontototal, 2,",",".");
+        if ($descontototal == 0)
             $tpl->LISTA_COLUNA_CLASSE = "";
-        else if ($desconto_mostra > 0)
+        else if ($descontototal > 0)
             $tpl->LISTA_COLUNA_CLASSE = "tabelalinhavermelha";
         else
             $tpl->LISTA_COLUNA_CLASSE = "tabelalinhaazul";
-        $tpl->LISTA_COLUNA_VALOR = "$desconto_mostra";
+        $tpl->LISTA_COLUNA_VALOR =  "R$ "."$desconto_mostra";
+        $tpl->block("BLOCK_LISTA_COLUNA");
+
+        //Liquido
+        $tpl->LISTA_COLUNA_CLASSE = "";
+        $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
+        $liq=$valorbruto-($desconto + $troco_desconto - $troco_acrescimo);
+        $tpl->LISTA_COLUNA_VALOR = "R$ ".number_format($liq, 2,",",".");
         $tpl->block("BLOCK_LISTA_COLUNA");
 
         
+        /*
         //Coluna Caixa
         if ($usacaixa==1) {
             $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
@@ -619,7 +635,7 @@ if ($linhas == 0) {
                 $tpl->block("BLOCK_LISTA_COLUNA_ICONE2");
             }
         }
-        
+        */
         
         //Metodo de pagamento
         if ($metodopag == 1) {
