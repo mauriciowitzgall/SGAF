@@ -17444,3 +17444,9 @@ INSERT INTO `metodos_pagamento` (`metpag_codigo`, `metpag_nome`) VALUES ('7', 'D
 ALTER TABLE `sgaf_labodega`.`saidas` 
 ADD COLUMN `sai_recebidodinheiro` FLOAT NULL DEFAULT 0 AFTER `sai_qtdparcelas`,
 ADD COLUMN `sai_recebidocartao` FLOAT NULL DEFAULT 0 AFTER `sai_recebidodinheiro`;
+
+------ FIM ------
+
+------ INICIO v4.0b5 ------
+UPDATE `configuracoes` SET `cnf_versao`='v4.0b5' WHERE `cnf_codigo`='1';
+
