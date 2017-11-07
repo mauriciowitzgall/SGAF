@@ -42,6 +42,9 @@ $total = dinheiro_para_numero($_POST["total2"]);
 $total = number_format($total,2,'.','');
 
 $dinheiro = number_format(dinheiro_para_numero($_POST["dinheiro"]),2,'.','');
+$recebidodinheiro = number_format(dinheiro_para_numero($_POST["recebidodinheiro"]),2,'.','');
+$recebidocartao = number_format(dinheiro_para_numero($_POST["recebidocartao"]),2,'.','');
+if ($dinheiro==0) $dinheiro = $recebidodinheiro + $recebidocartao;
 $troco = number_format($dinheiro - $total,2,'.','');
 $areceber = $_REQUEST["areceber"];
 $metodopag = $_REQUEST["metodopag"];
@@ -73,7 +76,7 @@ if (($dinheiro <= $total) && ($passo == 2)) {
 
     echo "
         <script language='javaScript'>
-            window.location.href='saidas_cadastrar3.php?troco_devolvido=0&passo=2&saida=$saida&total2=$total&descper2=$descper&descval2=$descval&dinheiro2=$dinheiro&troco2=$troco&troco_devolvido=$troco_devolvido&valbru2=$valbru&areceber2=$areceber&metodopag2=$metodopag&tiposai=$tiposai'
+            window.location.href='saidas_cadastrar3.php?troco_devolvido=0&passo=2&saida=$saida&total2=$total&descper2=$descper&descval2=$descval&dinheiro2=$dinheiro&troco2=$troco&troco_devolvido=$troco_devolvido&valbru2=$valbru&areceber2=$areceber&metodopag2=$metodopag&tiposai=$tiposai&recebidodinheiro=$recebidodinheiro&recebidocartao=$recebidocartao'
         </script>";   
 }
 

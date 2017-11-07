@@ -56,7 +56,7 @@ $(document).ready(function() {
                 <b>Método de pagamento:</b>                            
             </td>            
             <td align="left" width="" class="fundo1">                
-                <select name="metodopag" id="metodopag" required class="campopadrao" onchange="metodopagamento(this.value);"  {METPAG_DESABILITADO}>
+                <select name="metodopag" id="metodopag" required class="campopadrao" onchange="metodopagamento();"  {METPAG_DESABILITADO}>
                     <!-- BEGIN BLOCK_METPAG_OPTION -->
                     <option value="{METPAG_OPTION_VALOR}" {METPAG_OPTION_SELECIONADO}>{METPAG_OPTION_TEXTO}</option>
                     <!-- END BLOCK_METPAG_OPTION -->
@@ -71,7 +71,25 @@ $(document).ready(function() {
                 <input type="text" required  name="dinheiro" id="dinheiro" onclick="this.select()" size="15" class="campopadrao" value="{DINHEIRO_VALOR}" onkeyup="mascara_dinheiro()" onkeypress="" placeholder="" autofocus {DINHEIRO_DESABILITADO}>
                        <span class="dicacampo"></span>
             </td>  
+        </tr> 
+        <tr id="tr_recebidodinheiro">  
+            <td align="right" width="">                
+                <b>Recebido no DINHEIRO:</b>                            
+            </td>            
+            <td align="left" width="" class="fundo1">                
+                <input type="text" required  name="recebidodinheiro" id="recebidodinheiro" onclick="this.select()" size="15" class="campopadrao" value="{RECEBIDODINHEIRO_VALOR}" onkeyup="mascara_dinheiro()" onkeypress="" placeholder="" autofocus {RECEBIDODINHEIRO_DESABILITADO}>
+                       <span class="dicacampo"></span>
+            </td>  
         </tr>       
+        <tr id="tr_recebidocartao">  
+            <td align="right" width="">                
+                <b>Recebido no CARTÃO:</b>                            
+            </td>            
+            <td align="left" width="" class="fundo1">                
+                <input type="text" required  name="recebidocartao" id="recebidocartao" onclick="this.select()" size="15" class="campopadrao" value="{RECEBIDOCARTAO_VALOR}" onkeyup="mascara_dinheiro()" onkeypress="" placeholder="" autofocus {RECEBIDOCARTAO_DESABILITADO}>
+                       <span class="dicacampo"></span>
+            </td>  
+        </tr> 
         <!-- BEGIN BLOCK_PASSO2 -->
         <tr>  
             <td align="right" width="">                

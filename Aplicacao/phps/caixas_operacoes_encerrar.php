@@ -65,6 +65,21 @@ if (!$query=mysql_query($sql)) die("Erro SQL 2: " . mysql_error());
 $dados = mysql_fetch_assoc($query);
 $totaareceber=$dados["totalliquido"];
 
+
+//Calcula os valores pagos no cartao e dinheiro quando metodo de pagamento é misto
+$sql="
+SELECT sum(sai_recebidocartao) as totcartao, sum(sai_recebidodinheiro) as totdinheiro
+FROM saidas 
+WHERE sai_caixaoperacaonumero=20
+AND sai_metpag in (6,7)
+AND sai_areceber=0
+";
+if (!$query=mysql_query($sql)) die("Erro SQL 8: " . mysql_error());
+$dados = mysql_fetch_assoc($query);
+$recebidocartaototal=$dados["totcartao"];
+$recebidodinheirototal=$dados["totdinheiro"];
+
+
 //Total liquido no Cartão
 $sql="
 SELECT ROUND(sum(sai_totalliquido),2) as totalliquido
@@ -75,19 +90,20 @@ AND sai_areceber=0
 ";
 if (!$query=mysql_query($sql)) die("Erro SQL 2: " . mysql_error());
 $dados = mysql_fetch_assoc($query);
-$totalliquidocartao=$dados["totalliquido"];
+$totalliquidocartao=$dados["totalliquido"]+$recebidocartaototal;
 
-//Total liquido sem cartão
+//Total liquido no dinheiro apenas
 $sql="
 SELECT ROUND(sum(sai_totalliquido),2) as totalliquido
 FROM saidas 
 WHERE sai_caixaoperacaonumero=$numero
-AND sai_metpag not in (2,3)
+AND sai_metpag  in (1)
 AND sai_areceber=0
 ";
 if (!$query=mysql_query($sql)) die("Erro SQL 2: " . mysql_error());
 $dados = mysql_fetch_assoc($query);
-$totalliquidosemcartao=$dados["totalliquido"];
+$vendasapenasnodinheiro=$dados["totalliquido"];
+$totalliquidosemcartao=$vendasapenasnodinheiro+$recebidodinheirototal;
 
 //Total Entrada
 $sql="
@@ -394,6 +410,11 @@ $tpl->block("BLOCK_CAMPO_OBRIGATORIO");
 $tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
 $tpl->block("BLOCK_CAMPO");
 $tpl->block("BLOCK_CONTEUDO");
+//$tpl->TEXTO="Dinheiro + Cartões";
+//$tpl->block("BLOCK_TEXTO");
+//$tpl->block("BLOCK_CONTEUDO");
+
+
 $tpl->block("BLOCK_ITEM");
 
 //Diferença

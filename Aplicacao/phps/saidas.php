@@ -627,7 +627,7 @@ if ($linhas == 0) {
             $tpl->OPERACAO_NOME = "Dinheiro";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
         } else if ($metodopag == 2) {
-            $tpl->ICONE_ARQUIVO = $icones . "cartao1.png";
+            $tpl->ICONE_ARQUIVO = $icones . "credit_card2.png";
             $tpl->OPERACAO_NOME = "Cartão Crédito";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
         } else if ($metodopag == 3) {
@@ -641,6 +641,14 @@ if ($linhas == 0) {
         } else if ($metodopag==4){
             $tpl->OPERACAO_NOME = "Cheque";
             $tpl->ICONE_ARQUIVO = $icones . "cheque1.png";
+            $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+        } else if ($metodopag==6){
+            $tpl->OPERACAO_NOME = "Dinheiro + Cartão Débito";
+            $tpl->ICONE_ARQUIVO = $icones . "dinheiro_cartao1.png";
+            $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+        } else if ($metodopag==7){
+            $tpl->OPERACAO_NOME = "Dinheiro + Cartão Crédito";
+            $tpl->ICONE_ARQUIVO = $icones . "dinheiro_cartao2.png";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
         } else {
             $tpl->OPERACAO_NOME = "Desconhecido";

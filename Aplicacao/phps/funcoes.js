@@ -779,16 +779,7 @@ function valorareceber (valor) {
         document.form1.dinheiro.disabled = false;
     }
 }
-function metodopagamento(valor) {    
-    var total = $("input[name=total]").val();
-    if ((valor==1)||(valor==4)||(valor==5)) {
-        $("input[name=dinheiro]").val("");
-    } else if (valor==2) {
-        $("input[name=dinheiro]").val(total);
-    } else if (valor==3) {
-        $("input[name=dinheiro]").val(total);
-    }
-}
+
 
 function popula_acertos_dataminmax(valor,valorqui) {
     

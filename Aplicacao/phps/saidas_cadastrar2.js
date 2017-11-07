@@ -1,3 +1,41 @@
+window.onload = function(){
+    metodopagamento();
+
+}
+
+
+function metodopagamento() {  
+    valor=$("select[name=metodopag]").val();
+    //alert(valor);
+    var total = $("input[name=total]").val();
+    $("input[name=dinheiro]").val("R$ 0,00");
+    $("input[name=recebidodinheiro]").val("R$ 0,00");
+    $("input[name=recebidocartao]").val("R$ 0,00");    
+    if ((valor==1)||(valor==4)||(valor==5)) {
+        document.form1.dinheiro.disabled = false;
+        $("input[name=dinheiro]").val("");
+        $("tr[id=tr_recebidodinheiro]").hide();
+        $("tr[id=tr_recebidocartao]").hide();
+    } else if (valor==2) {
+        document.form1.dinheiro.disabled = false;
+        $("input[name=dinheiro]").val(total);
+        $("tr[id=tr_recebidodinheiro]").hide();
+        $("tr[id=tr_recebidocartao]").hide();
+    } else if (valor==3) {
+        document.form1.dinheiro.disabled = false;
+        $("input[name=dinheiro]").val(total);
+        $("tr[id=tr_recebidodinheiro]").hide();
+        $("tr[id=tr_recebidocartao]").hide();
+    } else if ((valor==6)||(valor==7)) {
+        $("tr[id=tr_dinheiro]").hide();
+        $("tr[id=tr_recebidodinheiro]").show();
+        $("tr[id=tr_recebidocartao]").show();
+        $("input[name=recebidodinheiro]").focus();
+
+    }
+}
+
+
 //Campo Desconto Percentagem 
 function desconto(campo) {
     
@@ -118,6 +156,16 @@ function desconto2(campo) {
 function mascara_dinheiro() {
     //Atribuir Mascara de dinheiro
     $('#dinheiro').priceFormat({
+        prefix: 'R$ ',
+        centsSeparator: ',',
+        thousandsSeparator: '.'
+    }); 
+    $('#recebidodinheiro').priceFormat({
+        prefix: 'R$ ',
+        centsSeparator: ',',
+        thousandsSeparator: '.'
+    });
+    $('#recebidocartao').priceFormat({
         prefix: 'R$ ',
         centsSeparator: ',',
         thousandsSeparator: '.'

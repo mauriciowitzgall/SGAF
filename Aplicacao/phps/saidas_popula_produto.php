@@ -16,7 +16,7 @@ WHERE
     etq_quiosque=$usuario_quiosque
      AND pro_evendido=1
 ORDER BY
-    pro_referencia, pro_nome , pro_tamanho, pro_cor, pro_descricao
+    pro_nome , pro_tamanho, pro_cor, pro_descricao
 ";
 $query = mysql_query($sql);
 if (!$query)
@@ -29,7 +29,7 @@ while ($dados = mysql_fetch_array($query)) {
     $tamanho= $dados['pro_tamanho'];
     $cor= $dados['pro_cor'];
     $descricao= $dados['pro_descricao'];
-    $nome2=" $referencia $nome $tamanho $cor $descricao ";
+    $nome2="$nome $tamanho $cor $descricao ($referencia)";
     if ($produto==$codigo) $selecionado=" selected "; else $selecionado="  ";
     echo "<option value='$codigo' $selecionado >$nome2</option>";
 }

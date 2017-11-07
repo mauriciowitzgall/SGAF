@@ -1084,7 +1084,7 @@ if ($passo == 2) {
     $tpl1->LISTA_GET_PASSO = $passo;
     $sql_lista = "
     SELECT 
-        pro_nome, pes_nome, saipro_lote, saipro_quantidade, saipro_valorunitario, saipro_valortotal,saipro_codigo,pro_codigo,saipro_codigo,saipro_porcao,saipro_porcao_quantidade,propor_nome,protip_sigla,pro_tipocontagem, pro_referencia,pro_tamanho,pro_cor,pro_descricao,saipro_produto
+        pro_nome, pes_nome, saipro_lote, saipro_quantidade, saipro_valorunitario, saipro_valortotal,saipro_codigo,pro_codigo,saipro_codigo,saipro_porcao,saipro_porcao_quantidade,propor_nome,protip_sigla,pro_tipocontagem,pro_referencia, pro_tamanho,pro_cor,pro_descricao,saipro_produto,saipro_porcao_quantidade
     FROM 
         saidas_produtos
         JOIN produtos ON (saipro_produto=pro_codigo)    
@@ -1138,11 +1138,15 @@ if ($passo == 2) {
             }
             $tpl1->LISTA_TIPOCONTAGEM = $dados_lista["protip_sigla"];
             $qtdporcao=$dados_lista["saipro_porcao_quantidade"];
-            if ($qtdporcao==0) $qtdporcao="";
+            $porcaonome=$dados_lista["propor_nome"];
+            if ($qtdporcao==0) $qtdporcao="---"; 
+            if ($qtdporcao==0) $porcaonome="---";
             if ($usavendaporcoes==1) {
+                $tpl1->LISTA_PORCAO_NOME = "$porcaonome";
+                $tpl1->LISTA_PORCAO_QTD = "$qtdporcao";
                 $tpl1->block("BLOCK_LISTA_PORCAO_LINHA");
-                $tpl1->LISTA_PORCAO_NOME = $dados_lista["propor_nome"];
-                $tpl1->LISTA_PORCAO_QTD = $qtdporcao;
+            } else {
+                $tpl1->LISTA_PORCAO_QTD=" ";
             }
             $tpl1->LISTA_VALUNI = "R$ " . number_format($dados_lista["saipro_valorunitario"], 2, ',', '.');
             $tpl1->LISTA_VALTOT = "R$ " . number_format($dados_lista["saipro_valortotal"], 2, ',', '.');

@@ -14,7 +14,7 @@ $nome = ucwords(strtolower($_POST['nome']));
 $nome2 = ucwords(strtolower($_POST['nome2']));
 $modal=$_GET['modal'];
 
-//print_r($_REQUEST);
+print_r($_REQUEST);
 
 $tipo = $_POST['tipo'];
 $marca = $_POST['marca'];
@@ -118,8 +118,8 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         $filtro_controlarestoque_campos=", pro_controlarestoque, pro_valunicusto, pro_valunivenda ";
         $filtro_controlarestoque_valor=", 0, '$valunicusto' , '$valunivenda' ";
     } else {
-        $filtro_controlarestoque_campos="";
-        $filtro_controlarestoque_valor="";
+        $filtro_controlarestoque_campos=", pro_controlarestoque ";
+        $filtro_controlarestoque_valor=", $controlarestoque ";
     }
     $sql = "INSERT INTO produtos (
         pro_nome,
@@ -250,7 +250,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     if ($controlarestoque==0) {
         $filtro_controlarestoque_update=", pro_controlarestoque=$controlarestoque , pro_valunicusto='$valunicusto' , pro_valunivenda='$valunivenda'";
     } else {
-        $filtro_controlarestoque_update="";
+        $filtro_controlarestoque_update=", pro_controlarestoque=$controlarestoque ";
     }
     $sql = "UPDATE produtos SET 
     pro_nome='$nome',

@@ -16962,7 +16962,7 @@ CREATE TABLE `quiosques_configuracoes` (
 
 -- Inserir codigo do quiosque e configurações respectivas
  # ESSE DEVE SER INSERIDO MANUALMENTE DENTRO DA TABELA QUIOSQUES_CONFIGURACOES NO ATO DA ATUALIZAÇÃO
- # INSERT INTO `sgaf_labodega`.`quiosques_configuracoes` (`quicnf_quiosque`, `quicnf_usamodulofiscal`) VALUES ('1', '1');
+ # INSERT INTO `quiosques_configuracoes` (`quicnf_quiosque`, `quicnf_usamodulofiscal`) VALUES ('1', '1');
 
 -- Criar código IBGE nos paises
 ALTER TABLE `paises` 
@@ -16974,19 +16974,19 @@ UPDATE `paises` SET `pai_ibge`='1058' WHERE `pai_codigo`='1';
 ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_serienfe` INT(3) ZEROFILL NULL AFTER `quicnf_usamodulofiscal`;
 
-ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_tipoimpressaodanfe` INT(1) NULL AFTER `quicnf_serienfe`,
 ADD COLUMN `quicnf_ultimanfe` INT(9) NULL AFTER `quicnf_tipoimpressaodanfe`;
 
-ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_ambientenfe` INT(1) NULL AFTER `quicnf_ultimanfe`,
 ADD COLUMN `quicnf_crtnfe` INT(1) NULL AFTER `quicnf_ambientenfe`;
 
-ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_versaonfe` VARCHAR(45) NULL AFTER `quicnf_crtnfe`;
 
 
-CREATE TABLE `sgaf_labodega`.`nfe_vendas` (
+CREATE TABLE `nfe_vendas` (
   `nfe_codigo` BIGINT NOT NULL AUTO_INCREMENT,
   `nfe_venda` BIGINT NOT NULL,
   `nfe_xml` BLOB NOT NULL,
@@ -16996,17 +16996,17 @@ CREATE TABLE `sgaf_labodega`.`nfe_vendas` (
   INDEX `fk_nfe_usuario_idx` (`nfe_usuarioemissor` ASC),
   CONSTRAINT `fk_nfe_vendas`
     FOREIGN KEY (`nfe_venda`)
-    REFERENCES `sgaf_labodega`.`saidas` (`sai_codigo`)
+    REFERENCES `saidas` (`sai_codigo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_nfe_usuario`
     FOREIGN KEY (`nfe_usuarioemissor`)
-    REFERENCES `sgaf_labodega`.`pessoas` (`pes_codigo`)
+    REFERENCES `pessoas` (`pes_codigo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
 
-ALTER TABLE `sgaf_labodega`.`produtos` 
+ALTER TABLE `produtos` 
 ADD COLUMN `pro_ncm` INT(8) NULL AFTER `pro_referencia`,
 ADD COLUMN `pro_cfop` INT(4) NULL AFTER `pro_ncm`,
 ADD COLUMN `pro_icms` FLOAT NULL AFTER `pro_cfop`,
@@ -17017,95 +17017,95 @@ ADD COLUMN `pro_cofins` FLOAT NULL AFTER `pro_pis`,
 ADD COLUMN `pro_origem` INT(2) NULL AFTER `pro_cofins`,
 ADD COLUMN `pro_cst` INT(2) NULL AFTER `pro_origem`;
 
-ALTER TABLE `sgaf_labodega`.`produtos` 
+ALTER TABLE `produtos` 
 ADD INDEX `pro_ncm` (`pro_ncm` ASC),
 ADD INDEX `pro_cfop` (`pro_cfop` ASC);
 
-ALTER TABLE `sgaf_labodega`.`produtos` 
+ALTER TABLE `produtos` 
 ENGINE = InnoDB ;
-ALTER TABLE `sgaf_labodega`.`produtos` 
+ALTER TABLE `produtos` 
 ADD CONSTRAINT `fk_nfe_cfop`
   FOREIGN KEY (`pro_cfop`)
-  REFERENCES `sgaf_labodega`.`nfe_cfop` (`cfop_codigo`)
+  REFERENCES `nfe_cfop` (`cfop_codigo`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION,
 ADD CONSTRAINT `fk_nfe_ncm`
   FOREIGN KEY (`pro_ncm`)
-  REFERENCES `sgaf_labodega`.`nfe_ncm` (`ncm_codigo`)
+  REFERENCES `nfe_ncm` (`ncm_codigo`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
-ALTER TABLE `sgaf_labodega`.`produtos` 
+ALTER TABLE `produtos` 
 CHANGE COLUMN `pro_dadosfiscais` `pro_dadosfiscais` TINYINT(1) NOT NULL AFTER `pro_referencia`;
 
-CREATE TABLE `sgaf_labodega`.`nfe_origem` (
+CREATE TABLE `nfe_origem` (
   `ori_codigo` INT NOT NULL,
   `ori_nome` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`ori_codigo`));
 
-INSERT INTO `sgaf_labodega`.`nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('0', 'Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8');
-INSERT INTO `sgaf_labodega`.`nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('1', 'Estrangeira - Importação direta, exceto a indicada no código 6');
-INSERT INTO `sgaf_labodega`.`nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('2', 'Estrangeira - Adquirida no mercado interno, exceto a indicada no código 7');
-INSERT INTO `sgaf_labodega`.`nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('3', 'Nacional, mercadoria ou bem com Conteúdo de Importação superior a 40% e inferior ou igual a 70%');
-INSERT INTO `sgaf_labodega`.`nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('4', 'Nacional, cuja produção tenha sido feita em conformidade com os processos produtivos básicos de que tratam as legislações citadas nos Ajustes');
-INSERT INTO `sgaf_labodega`.`nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('5', 'Nacional, mercadoria ou bem com Conteúdo de Importação inferior ou igual a 40%');
-INSERT INTO `sgaf_labodega`.`nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('6', 'Estrangeira - Importação direta, sem similar nacional, constante em lista da CAMEX e gás natural');
-INSERT INTO `sgaf_labodega`.`nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('7', 'Estrangeira - Adquirida no mercado interno, sem similar nacional, constante em lista da CAMEX e gás natural');
-INSERT INTO `sgaf_labodega`.`nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('8', 'Nacional, mercadoria ou bem com Conteúdo de Importação superior a 70%');
+INSERT INTO `nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('0', 'Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8');
+INSERT INTO `nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('1', 'Estrangeira - Importação direta, exceto a indicada no código 6');
+INSERT INTO `nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('2', 'Estrangeira - Adquirida no mercado interno, exceto a indicada no código 7');
+INSERT INTO `nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('3', 'Nacional, mercadoria ou bem com Conteúdo de Importação superior a 40% e inferior ou igual a 70%');
+INSERT INTO `nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('4', 'Nacional, cuja produção tenha sido feita em conformidade com os processos produtivos básicos de que tratam as legislações citadas nos Ajustes');
+INSERT INTO `nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('5', 'Nacional, mercadoria ou bem com Conteúdo de Importação inferior ou igual a 40%');
+INSERT INTO `nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('6', 'Estrangeira - Importação direta, sem similar nacional, constante em lista da CAMEX e gás natural');
+INSERT INTO `nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('7', 'Estrangeira - Adquirida no mercado interno, sem similar nacional, constante em lista da CAMEX e gás natural');
+INSERT INTO `nfe_origem` (`ori_codigo`, `ori_nome`) VALUES ('8', 'Nacional, mercadoria ou bem com Conteúdo de Importação superior a 70%');
 
 
-CREATE TABLE `sgaf_labodega`.`nfe_cst` (
+CREATE TABLE `nfe_cst` (
   `cst_codigo` INT NOT NULL AUTO_INCREMENT,
   `cst_id` VARCHAR(3) NOT NULL,
   `cst_nome` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`cst_codigo`));
 
-INSERT INTO `sgaf_labodega`.`nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('1', '00', 'Tributada integralmente');
-INSERT INTO `sgaf_labodega`.`nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('2', '10', 'Tributada e com cobrança do ICMS por substituição tributária');
-INSERT INTO `sgaf_labodega`.`nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('3', '20', 'Com redução de base de cálculo');
-INSERT INTO `sgaf_labodega`.`nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('4', '30', 'Isenta ou não tributada e com cobrança do ICMS por substituição tributária');
-INSERT INTO `sgaf_labodega`.`nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('5', '40', 'Isenta');
-INSERT INTO `sgaf_labodega`.`nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('6', '41', 'Não tributada');
-INSERT INTO `sgaf_labodega`.`nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('7', '50', 'Suspensão');
-INSERT INTO `sgaf_labodega`.`nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('8', '51', 'Diferimento');
-INSERT INTO `sgaf_labodega`.`nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('9', '60', 'ICMS cobrado anteriormente por substituição tributária');
-INSERT INTO `sgaf_labodega`.`nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('10', '70', 'Com redução de base de cálculo e cobrança do ICMS por substituição tributária');
-INSERT INTO `sgaf_labodega`.`nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('11', '90', 'Outros');
-INSERT INTO `sgaf_labodega`.`nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('12', 'P10', 'ICMSPart com CST=10');
-INSERT INTO `sgaf_labodega`.`nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('13', 'P90', 'ICMSPart com CST=90');
-INSERT INTO `sgaf_labodega`.`nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('14', 'S41', 'ICMSST');
+INSERT INTO `nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('1', '00', 'Tributada integralmente');
+INSERT INTO `nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('2', '10', 'Tributada e com cobrança do ICMS por substituição tributária');
+INSERT INTO `nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('3', '20', 'Com redução de base de cálculo');
+INSERT INTO `nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('4', '30', 'Isenta ou não tributada e com cobrança do ICMS por substituição tributária');
+INSERT INTO `nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('5', '40', 'Isenta');
+INSERT INTO `nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('6', '41', 'Não tributada');
+INSERT INTO `nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('7', '50', 'Suspensão');
+INSERT INTO `nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('8', '51', 'Diferimento');
+INSERT INTO `nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('9', '60', 'ICMS cobrado anteriormente por substituição tributária');
+INSERT INTO `nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('10', '70', 'Com redução de base de cálculo e cobrança do ICMS por substituição tributária');
+INSERT INTO `nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('11', '90', 'Outros');
+INSERT INTO `nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('12', 'P10', 'ICMSPart com CST=10');
+INSERT INTO `nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('13', 'P90', 'ICMSPart com CST=90');
+INSERT INTO `nfe_cst` (`cst_codigo`, `cst_id`, `cst_nome`) VALUES ('14', 'S41', 'ICMSST');
 
-CREATE TABLE `sgaf_labodega`.`nfe_csosn` (
+CREATE TABLE `nfe_csosn` (
   `csosn_codigo` INT NOT NULL AUTO_INCREMENT,
   `csosn_id` INT(3) UNSIGNED NOT NULL,
   `csosn_nome` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`csosn_codigo`));
 
 
-INSERT INTO `sgaf_labodega`.`nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('1', '101', 'Tributada pelo Simples Nacional com permissão de crédito');
-INSERT INTO `sgaf_labodega`.`nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('2', '102', 'Tributada pelo Simples Nacional sem permissão de crédito');
-INSERT INTO `sgaf_labodega`.`nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('3', '103', 'Isenção do ICMS no Simples Nacional para faixa de receita bruta');
-INSERT INTO `sgaf_labodega`.`nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('4', '201', 'Tributada pelo Simples Nacional com permissão de crédito e com cobrança do ICMS por substituição tributária');
-INSERT INTO `sgaf_labodega`.`nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('5', '202', 'Tributada pelo Simples Nacional sem permissão de crédito e com cobrança do ICMS por substituição tributária');
-INSERT INTO `sgaf_labodega`.`nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('6', '203', 'Isenção do ICMS no Simples Nacional para faixa de receita bruta e com cobrança do ICMS por substituição tributária');
-INSERT INTO `sgaf_labodega`.`nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('7', '300', 'Imune');
-INSERT INTO `sgaf_labodega`.`nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('8', '400', 'Não tributada pelo Simples Nacional');
-INSERT INTO `sgaf_labodega`.`nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('9', '500', 'ICMS cobrado anteriormente por substituição tributária (substituído) ou por antecipação');
-INSERT INTO `sgaf_labodega`.`nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('10', '900', 'Outros');
+INSERT INTO `nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('1', '101', 'Tributada pelo Simples Nacional com permissão de crédito');
+INSERT INTO `nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('2', '102', 'Tributada pelo Simples Nacional sem permissão de crédito');
+INSERT INTO `nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('3', '103', 'Isenção do ICMS no Simples Nacional para faixa de receita bruta');
+INSERT INTO `nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('4', '201', 'Tributada pelo Simples Nacional com permissão de crédito e com cobrança do ICMS por substituição tributária');
+INSERT INTO `nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('5', '202', 'Tributada pelo Simples Nacional sem permissão de crédito e com cobrança do ICMS por substituição tributária');
+INSERT INTO `nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('6', '203', 'Isenção do ICMS no Simples Nacional para faixa de receita bruta e com cobrança do ICMS por substituição tributária');
+INSERT INTO `nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('7', '300', 'Imune');
+INSERT INTO `nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('8', '400', 'Não tributada pelo Simples Nacional');
+INSERT INTO `nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('9', '500', 'ICMS cobrado anteriormente por substituição tributária (substituído) ou por antecipação');
+INSERT INTO `nfe_csosn` (`csosn_codigo`, `csosn_id`, `csosn_nome`) VALUES ('10', '900', 'Outros');
 
-ALTER TABLE `sgaf_labodega`.`produtos` 
+ALTER TABLE `produtos` 
 ADD COLUMN `pro_csosn` TINYINT(2) NULL AFTER `pro_cst`;
 
 
-ALTER TABLE `sgaf_labodega`.`quiosques` 
+ALTER TABLE `quiosques` 
 ADD COLUMN `qui_cnpj` VARCHAR(14) NULL AFTER `qui_longitude`,
 ADD COLUMN `qui_ie` VARCHAR(14) NULL AFTER `qui_cnpj`,
 ADD COLUMN `qui_im` VARCHAR(30) NULL AFTER `qui_ie`;
 
-ALTER TABLE `sgaf_labodega`.`quiosques` 
+ALTER TABLE `quiosques` 
 ADD COLUMN `qui_razaosocial` VARCHAR(128) NULL AFTER `qui_im`;
 
-CREATE TABLE `sgaf_labodega`.`nfe_vendas` (
+CREATE TABLE `nfe_vendas` (
   `nfe_codigo` INT NOT NULL AUTO_INCREMENT,
   `nfe_numero` INT(9) NOT NULL,
   `nfe_dataemissao` TIMESTAMP NOT NULL,
@@ -17115,11 +17115,11 @@ CREATE TABLE `sgaf_labodega`.`nfe_vendas` (
   INDEX `idx_usuario` (`nfe_usuario` ASC),
   CONSTRAINT `fk_nfe_usuario`
     FOREIGN KEY (`nfe_usuario`)
-    REFERENCES `sgaf_labodega`.`pessoas` (`pes_codigo`)
+    REFERENCES `pessoas` (`pes_codigo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
-ALTER TABLE `sgaf_labodega`.`pessoas` 
+ALTER TABLE `pessoas` 
 ADD COLUMN `pes_documentoestrangeiro_numero` VARCHAR(128) NULL AFTER `pes_datanascimento`,
 ADD COLUMN `pes_documentoestrangeiro_nome` VARCHAR(128) NULL AFTER `pes_documentoestrangeiro_numero`,
 ADD COLUMN `pes_contribuinte_icms` TINYINT(1) NULL AFTER `pes_documentoestrangeiro_nome`,
@@ -17127,54 +17127,54 @@ ADD COLUMN `pes_ie` VARCHAR(18) NULL AFTER `pes_contribuinte_icms`,
 ADD COLUMN `pes_im` VARCHAR(30) NULL AFTER `pes_ie`,
 ADD COLUMN `pes_razaosocial` VARCHAR(128) NULL AFTER `pes_im`;
 
-INSERT INTO `sgaf_labodega`.`relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`, `rel_horacadastro`) VALUES ('14', 'Lista de produtos com dados fiscais', 'Utilizado para ver todos os dados fiscais de cada produto cadastrado', '2017-01-02', '18:22:00');
-INSERT INTO `sgaf_labodega`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('14', '1');
-INSERT INTO `sgaf_labodega`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('14', '2');
-INSERT INTO `sgaf_labodega`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('14', '3');
+INSERT INTO `relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`, `rel_horacadastro`) VALUES ('14', 'Lista de produtos com dados fiscais', 'Utilizado para ver todos os dados fiscais de cada produto cadastrado', '2017-01-02', '18:22:00');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('14', '1');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('14', '2');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('14', '3');
 
-INSERT INTO `sgaf_labodega`.`paises` (`pai_codigo`, `pai_sigla`, `pai_nome`) VALUES ('0', '---', 'Outro');
+INSERT INTO `paises` (`pai_codigo`, `pai_sigla`, `pai_nome`) VALUES ('0', '---', 'Outro');
 
 
-CREATE TABLE `sgaf_labodega`.`nfe_danfeimpressao` (
+CREATE TABLE `nfe_danfeimpressao` (
   `danfe_codigo` INT NOT NULL,
   `danfe_id` TINYINT(2) NOT NULL,
   `danfe_nome` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`danfe_codigo`));
 
-INSERT INTO `sgaf_labodega`.`nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('0', '0', 'Sem geração de DANFE');
-INSERT INTO `sgaf_labodega`.`nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('1', '55', 'DANFE Normal');
-INSERT INTO `sgaf_labodega`.`nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('2', '55', 'DANFE Normal Paisagem');
-INSERT INTO `sgaf_labodega`.`nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('3', '55', 'DANFE Simplificado A4');
-INSERT INTO `sgaf_labodega`.`nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('4', '65', 'DANFE NFC-e (Cupom Fiscal)');
-INSERT INTO `sgaf_labodega`.`nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('5', '65', 'DANFE NFC-e Mensagem Eletrônica (E-mail)');
+INSERT INTO `nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('0', '0', 'Sem geração de DANFE');
+INSERT INTO `nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('1', '55', 'DANFE Normal');
+INSERT INTO `nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('2', '55', 'DANFE Normal Paisagem');
+INSERT INTO `nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('3', '55', 'DANFE Simplificado A4');
+INSERT INTO `nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('4', '65', 'DANFE NFC-e (Cupom Fiscal)');
+INSERT INTO `nfe_danfeimpressao` (`danfe_codigo`, `danfe_id`, `danfe_nome`) VALUES ('5', '65', 'DANFE NFC-e Mensagem Eletrônica (E-mail)');
 
-CREATE TABLE `sgaf_labodega`.`nfe_indicador_presenca` (
+CREATE TABLE `nfe_indicador_presenca` (
   `indpre_codigo` INT NOT NULL,
   `indpre_nome` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`indpre_codigo`));
 
-INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('0', 'Não se aplica (por exemplo, Nota Fiscal complementar ou de ajuste)');
-INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('1', 'Operação presencial');
-INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('2', 'Operação não presencial Internet');
-INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('3', 'Operação não presencial Tele-atendimento');
-INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('4', 'NFC-e em operação com entrega a domicílio');
-INSERT INTO `sgaf_labodega`.`nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('9', 'Operação não presencial Outros');
+INSERT INTO `nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('0', 'Não se aplica (por exemplo, Nota Fiscal complementar ou de ajuste)');
+INSERT INTO `nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('1', 'Operação presencial');
+INSERT INTO `nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('2', 'Operação não presencial Internet');
+INSERT INTO `nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('3', 'Operação não presencial Tele-atendimento');
+INSERT INTO `nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('4', 'NFC-e em operação com entrega a domicílio');
+INSERT INTO `nfe_indicador_presenca` (`indpre_codigo`, `indpre_nome`) VALUES ('9', 'Operação não presencial Outros');
 
-ALTER TABLE `sgaf_labodega`.`produtos` 
+ALTER TABLE `produtos` 
 DROP COLUMN `pro_icms`;
 
-ALTER TABLE `sgaf_labodega`.`produtos` 
+ALTER TABLE `produtos` 
 DROP COLUMN `pro_icmsst`;
 
 
-CREATE TABLE `sgaf_labodega`.`nfe_faturamento` (
+CREATE TABLE `nfe_faturamento` (
   `nfefat_codigo` INT NOT NULL AUTO_INCREMENT,
   `nfefat_ano` MEDIUMINT NOT NULL,
   `nfefat_mes` TINYINT NOT NULL,
   `nfefat_valor` FLOAT NOT NULL,
   PRIMARY KEY (`nfefat_codigo`, `nfefat_ano`));
 
-ALTER TABLE `sgaf_labodega`.`nfe_faturamento` 
+ALTER TABLE `nfe_faturamento` 
 CHANGE COLUMN `nfefat_valor` `nfefat_valor` DECIMAL(9,2) NOT NULL ;
 
 
@@ -17198,40 +17198,40 @@ CHANGE COLUMN `nfesnc_icms` `nfesn_icms` DECIMAL(9,2) NULL DEFAULT NULL ,
 CHANGE COLUMN `nfesnc_aliquotafinalcomercio` `nfesn_aliquotafinalcomercio` DECIMAL(5,2) NULL DEFAULT NULL ,
 CHANGE COLUMN `nfesnc_aliquotafinalindustria` `nfesn_aliquotafinalindustria` DECIMAL(5,2) NULL DEFAULT NULL ;
 
-ALTER TABLE `sgaf_labodega`.`nfe_faturamento` 
+ALTER TABLE `nfe_faturamento` 
 ADD COLUMN `nfefat_quiosque` INT(12) NULL AFTER `nfefat_valor`;
 
-ALTER TABLE `sgaf_labodega`.`nfe_faturamento` 
+ALTER TABLE `nfe_faturamento` 
 CHANGE COLUMN `nfefat_quiosque` `nfefat_quiosque` INT(12) NOT NULL ;
 
-ALTER TABLE `sgaf_labodega`.`produtos` 
+ALTER TABLE `produtos` 
 DROP COLUMN `pro_csosn`,
 DROP COLUMN `pro_cst`;
 
-ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_cst` INT(2) NULL AFTER `quicnf_versaonfe`,
 ADD COLUMN `quicnf_csosn` INT(2) NULL AFTER `quicnf_cst`;
 
-ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 CHANGE COLUMN `quicnf_cst` `quicnf_cstnfe` INT(2) NULL DEFAULT NULL ,
 CHANGE COLUMN `quicnf_csosn` `quicnf_csosnnfe` INT(2) NULL DEFAULT NULL ;
 
-ALTER TABLE `sgaf_labodega`.`quiosques` 
+ALTER TABLE `quiosques` 
 ADD COLUMN `qui_cpf` VARCHAR(11) NULL AFTER `qui_razaosocial`,
 ADD COLUMN `qui_tipopessoa` INT(1) NULL AFTER `qui_cpf`;
 
 
-CREATE TABLE `sgaf_labodega`.`nfe_contribuinteicms` (
+CREATE TABLE `nfe_contribuinteicms` (
   `cicms_codigo` INT NOT NULL,
   `cicms_nome` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`cicms_codigo`));
 
-INSERT INTO `sgaf_labodega`.`nfe_contribuinteicms` (`cicms_codigo`, `cicms_nome`) VALUES ('1', 'Contribuinte ICMS');
-INSERT INTO `sgaf_labodega`.`nfe_contribuinteicms` (`cicms_codigo`, `cicms_nome`) VALUES ('2', 'Contribuinte isento de Inscrição no cadastro de Contribuintes do ICMS');
-INSERT INTO `sgaf_labodega`.`nfe_contribuinteicms` (`cicms_codigo`, `cicms_nome`) VALUES ('9', 'Não Contribuinte');
+INSERT INTO `nfe_contribuinteicms` (`cicms_codigo`, `cicms_nome`) VALUES ('1', 'Contribuinte ICMS');
+INSERT INTO `nfe_contribuinteicms` (`cicms_codigo`, `cicms_nome`) VALUES ('2', 'Contribuinte isento de Inscrição no cadastro de Contribuintes do ICMS');
+INSERT INTO `nfe_contribuinteicms` (`cicms_codigo`, `cicms_nome`) VALUES ('9', 'Não Contribuinte');
 
 
-ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 CHANGE COLUMN `quicnf_usamodulofiscal` `quicnf_usamodulofiscal` INT(11) NOT NULL DEFAULT 0 ,
 ADD COLUMN `quicnf_usacomanda` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_csosnnfe`;
 
@@ -17413,28 +17413,34 @@ ADD COLUMN `pro_valunivenda` VARCHAR(45) NULL AFTER `pro_valunicusto`;
 
 ------ INICIO v4.0b4 ------
 
-UPDATE `SGAF_labodega`.`configuracoes` SET `cnf_versao`='v4.0b4' WHERE `cnf_codigo`='1';
+UPDATE `configuracoes` SET `cnf_versao`='v4.0b4' WHERE `cnf_codigo`='1';
 
 
 
-ALTER TABLE `sgaf_labodega`.`produtos_recipientes` 
+ALTER TABLE `produtos_recipientes` 
 ADD COLUMN `prorec_global` INT(1) NOT NULL DEFAULT 0 AFTER `prorec_sigla`;
 
-INSERT INTO `sgaf_labodega`.`produtos_recipientes` (`prorec_nome`) VALUES ('Caixinha');
+INSERT INTO `produtos_recipientes` (`prorec_nome`) VALUES ('Caixinha');
 
-INSERT INTO `sgaf_labodega`.`produtos_recipientes` (`prorec_nome`) VALUES ('Potinho');
+INSERT INTO `produtos_recipientes` (`prorec_nome`) VALUES ('Potinho');
 
 UPDATE produtos_recipientes SET prorec_global=1 WHERE prorec_codigo>0;
 
-ALTER TABLE `sgaf_labodega`.`produtos` 
+ALTER TABLE `produtos` 
 ADD COLUMN `pro_evendido` INT(1) NOT NULL DEFAULT 0 AFTER `pro_valunivenda`;
 
-
-ALTER TABLE `sgaf_labodega`.`entradas` 
+ALTER TABLE `entradas` 
 ADD COLUMN `ent_paravenda` INT(1) NOT NULL DEFAULT 0 AFTER `ent_valortotalcusto`;
 
 
-ALTER TABLE `sgaf_labodega`.`produtos_categorias` 
+ALTER TABLE `produtos_categorias` 
 ADD COLUMN `cat_quiosquequecadastrou` INT NOT NULL DEFAULT 0 AFTER `cat_obs`;
 
 
+INSERT INTO `metodos_pagamento` (`metpag_codigo`, `metpag_nome`) VALUES ('6', 'Dinheiro + Cartão Débito');
+INSERT INTO `metodos_pagamento` (`metpag_codigo`, `metpag_nome`) VALUES ('7', 'Dinheiro + Cartão Crédito');
+
+
+ALTER TABLE `sgaf_labodega`.`saidas` 
+ADD COLUMN `sai_recebidodinheiro` FLOAT NULL DEFAULT 0 AFTER `sai_qtdparcelas`,
+ADD COLUMN `sai_recebidocartao` FLOAT NULL DEFAULT 0 AFTER `sai_recebidodinheiro`;

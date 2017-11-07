@@ -22,6 +22,8 @@ if ($usavendas!=1) {
 }
 
 
+//print_r($_REQUEST);
+
 //Verifica se o usuário é um caixa e não tem caixa aberto, se sim não pode acessar as vendas
 if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
     header("Location: permissoes_semacesso.php");
@@ -50,6 +52,8 @@ $descper = $_REQUEST["descper2"];
 $descval = $_REQUEST["descval2"];
 $total = $_REQUEST["total2"];
 $metodopag = $_REQUEST["metodopag2"];
+$recebidodinheiro = $_REQUEST["recebidodinheiro"];
+$recebidocartao = $_REQUEST["recebidocartao"];
 
 
 $areceber = $_REQUEST["areceber2"];
@@ -106,6 +110,8 @@ if ($tipo == 1) {
        sai_acrescimoforcado='$forcadoacre',
        sai_areceber=$areceber, 
        sai_metpag='$metodopag',
+       sai_recebidodinheiro='$recebidodinheiro',
+       sai_recebidocartao='$recebidocartao',
    ";
 }
 $sql = "
