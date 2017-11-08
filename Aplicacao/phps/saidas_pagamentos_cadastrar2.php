@@ -81,6 +81,35 @@ VALUES (
 if (!$query8= mysql_query($sql8)) die("Erro de SQL:" . mysql_error());
 
 
+
+//Verifica se o total liquido da venda é igual ao total de pagamentos, se sim entao deve quitar a venda a receber
+$sql="SELECT * FROM saidas WHERE sai_codigo=$saida";
+if (!$query = mysql_query($sql)) die("Erro SQL 2:" . mysql_error());
+$dados=mysql_fetch_assoc($query);
+$totalliquido = $dados["sai_totalliquido"];
+$sql="SELECT sum(saipag_valor) as totpag FROM saidas_pagamentos WHERE saipag_saida=$saida";
+if (!$query = mysql_query($sql)) die("Erro SQL 3:" . mysql_error());
+$dados=mysql_fetch_assoc($query);
+$totalpagamentos = $dados["totpag"];
+echo "($totalliquido)[$totalpagamentos]";
+if ($totalliquido==$totalpagamentos) {
+    $sql = "
+        UPDATE saidas
+        SET sai_areceberquitado=1    
+        WHERE sai_codigo=$saida
+    ";
+    if (!mysql_query($sql)) die("Erro: " . mysql_error());
+} else {
+    $sql = "
+        UPDATE saidas
+        SET sai_areceberquitado=0    
+        WHERE sai_codigo=$saida
+    ";
+    if (!mysql_query($sql)) die("Erro: " . mysql_error());    
+}
+
+
+
 $tpl = new Template("templates/notificacao.html");
 $tpl->ICONES = $icones;
 //$tpl->MOTIVO_COMPLEMENTO = "";

@@ -425,7 +425,7 @@ $sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_fil
 
 //SQL Principal das linhas
 $sql = "
-SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo,sai_usuarioquecadastrou,caiopo_operador, (SELECT pes_nome FROM pessoas p WHERE p.pes_codigo=sai_usuarioquecadastrou) as usuarioquecadastrou_nome,sai_id,sai_descontoforcado,sai_acrescimoforcado,sai_descontovalor
+SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo,sai_usuarioquecadastrou,caiopo_operador, (SELECT pes_nome FROM pessoas p WHERE p.pes_codigo=sai_usuarioquecadastrou) as usuarioquecadastrou_nome,sai_id,sai_descontoforcado,sai_acrescimoforcado,sai_descontovalor,sai_areceberquitado
 FROM saidas 
 JOIN saidas_tipo on (sai_tipo=saitip_codigo) 
 left join saidas_produtos on (saipro_saida=sai_codigo)
@@ -483,6 +483,7 @@ if ($linhas == 0) {
         $valorbruto = $dados["sai_totalbruto"];
         $status = $dados["sai_status"];
         $areceber = $dados["sai_areceber"];
+        $areceberquitado = $dados["sai_areceberquitado"];
         $metodopag = $dados["sai_metpag"];
         $areceber = $dados["sai_areceber"];
         $caixa = $dados["cai_codigo"];
@@ -651,9 +652,15 @@ if ($linhas == 0) {
             $tpl->ICONE_ARQUIVO = $icones . "credit_card.png";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
         } else if ($areceber == 1) {
-            $tpl->OPERACAO_NOME = "Caderninho (A Receber)";
-            $tpl->ICONE_ARQUIVO = $icones . "pendente.png";
-            $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+            if ($areceberquitado==0) {
+                $tpl->OPERACAO_NOME = "Caderninho (A Receber)";
+                $tpl->ICONE_ARQUIVO = $icones . "pendente.png";
+                $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+            } else {
+                $tpl->OPERACAO_NOME = "Caderninho (A Receber) Quitado";
+                $tpl->ICONE_ARQUIVO = $icones . "areceberquitado.png";
+                $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+            }
         } else if ($metodopag==4){
             $tpl->OPERACAO_NOME = "Cheque";
             $tpl->ICONE_ARQUIVO = $icones . "cheque1.png";
@@ -751,10 +758,6 @@ if ($linhas == 0) {
                         $tpl->ICONE_ARQUIVO = $icones . "editar_desabilitado.png";
                         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");
                     } else {
-
-
-
-
 
                         //Se foi gerado nota fiscal não pode editar.
                         if ($temnota==1) {

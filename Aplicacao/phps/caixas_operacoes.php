@@ -194,9 +194,10 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $saldovendas= $dados["caiopo_saldovendas"];
     $diferenca= $dados["caiopo_diferenca"];
     $valorfinal= $dados["caiopo_valorfinal"];
+    $datahoraencerramento= $dados["caiopo_valorfinal"];
     if ($valorfinal=="") $situacao_operacao=1; else $situacao_operacao=2;
     
-    if ($cont==0) $tpl->TR_CLASSE = "tab_linhas_vermelho negrito";
+    if ($datahoraencerramento=="") $tpl->TR_CLASSE = "tab_linhas_vermelho negrito";
     else $tpl->TR_CLASSE = "";
 
 
@@ -297,7 +298,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $tpl->LINK="";
     $tpl->IMAGEM_TAMANHO="15px";
     $tpl->IMAGEM_PASTA="$icones";
-    if ($cont==0) {
+    if ($datahoraencerramento=="") {
         $tpl->IMAGEM_NOMEARQUIVO="caixa_aberto3.png";
         $tpl->IMAGEM_TITULO="Aberto";
     } else {

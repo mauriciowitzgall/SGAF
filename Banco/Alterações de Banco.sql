@@ -17450,3 +17450,7 @@ ADD COLUMN `sai_recebidocartao` FLOAT NULL DEFAULT 0 AFTER `sai_recebidodinheiro
 ------ INICIO v4.0b5 ------
 UPDATE `configuracoes` SET `cnf_versao`='v4.0b5' WHERE `cnf_codigo`='1';
 
+
+ALTER TABLE `SGAF_labodega2`.`saidas` 
+ADD COLUMN `sai_areceberquitado` INT(1) NULL DEFAULT 0 AFTER `sai_recebidocartao`;
+
