@@ -48,7 +48,7 @@ $datahoraabertura=$dataini." ".$horaini;
 $tpl_notificacao = new Template("templates/notificacao.html");
 $tpl_notificacao->ICONES = $icones;
 if ($usuario_grupo==4)
-    $tpl_notificacao->DESTINO = "saidas_cadastrar.php?tiposaida=1";
+    $tpl_notificacao->DESTINO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=1";
 else
     $tpl_notificacao->DESTINO = "caixas_operacoes.php?codigo=$caixa";
 

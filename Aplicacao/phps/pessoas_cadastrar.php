@@ -146,6 +146,7 @@ if (($operacao == "editar") || ($operacao == 'ver')) {
         $pessoacontato = $array['pes_pessoacontato'];
         //$categoria = $array['pes_categoria'];
         $datanasc = $array['pes_datanascimento'];
+        if ($datanasc="0000-00-00") $datanasc="";
         $razaosocial = $array['pes_razaosocial'];
         $ie = $array['pes_ie'];
         $im = $array['pes_im'];
