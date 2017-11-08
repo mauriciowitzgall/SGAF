@@ -11,6 +11,8 @@ if (($permissao_saidas_ver <> 1)) {
 $tipopagina = "saidas";
 include "includes.php";
 
+?> <script type="text/javascript" src="saidas.js"></script><?php 
+
 //Verifica se o usuário é um caixa e não tem caixa aberto, se sim não pode acessar as vendas
 if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
     header("Location: permissoes_semacesso.php");
@@ -76,6 +78,11 @@ $filtro_consumidor = $_POST["filtro_consumidor"];
 $filtro_fornecedor = $_POST["filtro_fornecedor"];
 $filtro_tipo = $_POST["filtro_tipo"];
 $filtro_lote = $_REQUEST["filtro_lote"];
+$filtro_valorbruliq = $_REQUEST["filtro_valorbruliq"];
+$filtro_valorbruliq_mostra = $_REQUEST["filtro_valorbruliq"];
+$filtro_valorbruliq = str_replace('.', '', $filtro_valorbruliq);
+$filtro_valorbruliq = str_replace(',', '.', $filtro_valorbruliq);
+$filtro_valorbruliq = str_replace('R$ ', '', $filtro_valorbruliq);
 
 $usacomanda=usacomanda($usuario_quiosque);
 
@@ -286,6 +293,19 @@ if ($usadevolucoessobrevendas==1) {
 }
 
 
+//Filtro Valor da Venda
+$tpl->CAMPO_TITULO = "Valor Bruto/Liquido";
+$tpl->CAMPO_TAMANHO = "18";
+$tpl->CAMPO_NOME = "filtro_valorbruliq";
+$tpl->CAMPO_VALOR = $filtro_valorbruliq_mostra;
+$tpl->CAMPO_QTD_CARACTERES = "";
+$tpl->CAMPO_ONKEYUP = "mascara_filtro_valorbruliq();";
+$tpl->block("BLOCK_FILTRO_CAMPO");
+$tpl->block("BLOCK_FILTRO_ESPACO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
+
+
 $tpl->block("BLOCK_FILTRO");
 
 //Inicio da tabela de listagem
@@ -402,6 +422,8 @@ if ($filtro_caixaoperacao <> "")
     $sql_filtro_caixaoperacao = " and sai_caixaoperacaonumero = $filtro_caixaoperacao ";
 if ($filtro_id <> "")
     $sql_filtro_id = " and sai_id = $filtro_id ";
+if ($filtro_valorbruliq <> "")
+    $sql_filtro_valorbruliq = " and ((sai_totalliquido = $filtro_valorbruliq)||(sai_totalbruto=$filtro_valorbruliq))";
 if ($filtro_status <> "")
     $sql_filtro_status = " and sai_status = $filtro_status ";
 if ($filtro_devolucao <> "")
@@ -420,7 +442,7 @@ if ($filtro_areceber!=1) {
 
 //Se  o for filtrado para mostrar apenas as vendas a receber, o resultado deve mostrar vendas de outros dias e outros caixas.
 if ($filtro_areceber==1) $sql_filtro_caixaoperacao="";
-$sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_fornecedor . " " . $sql_filtro_caixaoperacao." ".$sql_filtro_id." ".$sql_filtro_status. " ".$sql_filtro_areceber." ".$filtro_devolucao;
+$sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_valorbruliq." ".$sql_filtro_fornecedor . " " . $sql_filtro_caixaoperacao." ".$sql_filtro_id." ".$sql_filtro_status. " ".$sql_filtro_areceber." ".$filtro_devolucao;
 
 
 //SQL Principal das linhas

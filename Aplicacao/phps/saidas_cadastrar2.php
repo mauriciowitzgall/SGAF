@@ -49,7 +49,7 @@ $troco = number_format($dinheiro - $total,2,'.','');
 $areceber = $_REQUEST["areceber"];
 $metodopag = $_REQUEST["metodopag"];
 
-print_r($_REQUEST);
+//print_r($_REQUEST);
 
 
 //Valor bruto

@@ -14,7 +14,7 @@ $nome = ucwords(strtolower($_POST['nome']));
 $nome2 = ucwords(strtolower($_POST['nome2']));
 $modal=$_GET['modal'];
 
-print_r($_REQUEST);
+//print_r($_REQUEST);
 
 $tipo = $_POST['tipo'];
 $marca = $_POST['marca'];
