@@ -48,6 +48,7 @@ $sql="SELECT *
      //$usaproducao=$dados["quicnf_usamoduloproducao"];
      $classificacaopadraoestoque=$dados["quicnf_classificacaopadraoestoque"];
      $devolucoessobrevendas=$dados["quicnf_devolucoessobrevendas"];
+     $pagamentosparciais=$dados["quicnf_pagamentosparciais"];
      $tipopessoanfe=$dados["qui_tipopessoa"];
      $cpf=$dados["qui_cpf"];
      $cnpj=$dados["qui_cnpj"];
@@ -201,6 +202,30 @@ $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
+
+//Usa Pagamentos
+$tpl1->TITULO = "Pagamentos Parciais";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_pagamentosparciais";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "pagamentosparciais";
+$tpl1->SELECT_ID = "pagamentosparciais";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($pagamentosparciais=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($pagamentosparciais=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
 
 //Usa devoluções sobre as vendas
 $tpl1->TITULO = "Devoluções";

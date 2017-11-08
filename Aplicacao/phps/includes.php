@@ -42,6 +42,7 @@ $modal=$_GET["modal"];
             $usacaixa=usamodulocaixa($usuario_quiosque);
             $usavendaporcoes=usavendaporcoes($usuario_quiosque);
             $usacomanda=usacomanda($usuario_quiosque);
+            $usapagamentosparciais=usapagamentosparciais($usuario_quiosque);
             //include "conexao_tipo.php";
             if ($modal!=1) {
                 include "cabecalho.php";

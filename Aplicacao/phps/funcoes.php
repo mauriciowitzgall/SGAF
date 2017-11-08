@@ -178,6 +178,15 @@ function usacomanda($quiosque) {
     return $usa;
 }
 
+function usapagamentosparciais($quiosque) {
+    $sql="SELECT quicnf_pagamentosparciais FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
+    if (!$query= mysql_query($sql)) die("Erro SQL Função: usacomanda: " . mysql_error());
+    while ($dados=  mysql_fetch_assoc($query)) {    
+        $usa=$dados["quicnf_pagamentosparciais"];
+    }
+    return $usa;
+}
+
 function permiteedicaoclientenavenda($quiosque) {
     $sql="SELECT quicnf_permiteedicaoclientenavenda FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
     if (!$query= mysql_query($sql)) die("Erro SQL Função: usacomanda: " . mysql_error());

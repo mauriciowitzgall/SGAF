@@ -277,7 +277,7 @@ FROM
     join produtos_tipo on (pro_tipocontagem=protip_codigo)
     join entradas on (saipro_lote=ent_codigo)
     join pessoas on (ent_fornecedor=pes_codigo)
-    join metodos_pagamento on (sai_metpag=metpag_codigo)
+    left join metodos_pagamento on (sai_metpag=metpag_codigo)
     left join produtos_porcoes on (saipro_porcao=propor_codigo)
 WHERE
     sai_codigo=$saida
@@ -1196,7 +1196,7 @@ if ($ope != 4) {
        
     }
     //Pagamentos
-    if (($areceber==1)&&($status_venda==1)) {
+    if (($areceber==1)&&($status_venda==1)&&($usapagamentosparciais==1)) {
         $tpl4->COLUNA_TAMANHO="";
         $tpl4->COLUNA_ALINHAMENTO  ="";                
         $tpl4->COLUNA_LINK_ARQUIVO="saidas_pagamentos.php?saida=$saida";

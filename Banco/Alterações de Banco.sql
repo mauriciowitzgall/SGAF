@@ -17454,3 +17454,5 @@ UPDATE `configuracoes` SET `cnf_versao`='v4.0b5' WHERE `cnf_codigo`='1';
 ALTER TABLE `SGAF_labodega2`.`saidas` 
 ADD COLUMN `sai_areceberquitado` INT(1) NULL DEFAULT 0 AFTER `sai_recebidocartao`;
 
+ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_pagamentosparciais` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_usavendaporcoes`;

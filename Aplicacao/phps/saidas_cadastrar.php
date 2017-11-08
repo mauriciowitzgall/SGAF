@@ -113,6 +113,7 @@ if ($retirar_produto == '1') {
             $tiposaida = $dados["sai_tipo"];
             $motivo = $dados["sai_saidajustificada"];
             $descricao = $dados["sai_descricao"];
+            $areceber = $dados["sai_areceber"];
         }
         
 
@@ -1239,6 +1240,20 @@ if ($passo == 2) {
         $qtd_devolucoes=$dados12["qtd_devolucoes"];
         if ($qtd_devolucoes>0) $tpl1->QTD_DEVOLUCOES=" ($qtd_devolucoes)"; else $tpl1->QTD_DEVOLUCOES="";
         $tpl1->block("BLOCK_BOTOES_RODAPE_DEVOLUCOES");  
+    }
+
+
+    //Botão Pagamentos
+    if (($areceber==1)&&($status_venda==1)&&($usapagamentosparciais==1)) {
+        $tpl1->LINK_PAGAMENTOS = "saidas_pagamentos.php?saida=$saida";
+        $sql12="SELECT count(saipag_codigo) as qtd_pagamentos FROM saidas_pagamentos WHERE saipag_saida=$saida";
+        if (!$query12=mysql_query($sql12)) die("Erro de SQL13:" . mysql_error());
+        $dados12=mysql_fetch_assoc($query12);
+        $qtd_pagamentos=$dados12["qtd_pagamentos"];
+        if ($qtd_pagamentos>0) $tpl1->QTD_PAGAMENTOS=" ($qtd_pagamentos)"; else $tpl1->QTD_PAGAMENTOS="";
+        $tpl1->block("BLOCK_BOTOES_RODAPE_PAGAMENTOS");  
+
+
     }
     
     //Botão Cancelar Nota
