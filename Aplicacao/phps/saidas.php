@@ -600,8 +600,10 @@ if ($linhas == 0) {
             $tpl->LISTA_COLUNA_CLASSE = "";
         else if ($descontototal > 0)
             $tpl->LISTA_COLUNA_CLASSE = "tabelalinhavermelha";
-        else
+        else {
             $tpl->LISTA_COLUNA_CLASSE = "tabelalinhaazul";
+            $desconto_mostra=number_format($desconto_mostra*-1, 2,",",".");
+        }
         $tpl->LISTA_COLUNA_VALOR =  "R$ "."$desconto_mostra";
         $tpl->block("BLOCK_LISTA_COLUNA");
 
@@ -784,7 +786,7 @@ if ($linhas == 0) {
                                         $tempo1 = $data . "_" . $hora;
                                         $tempo2 = $dataatual . "_" . $horaatual;
                                         $total_segundos = diferenca_entre_datahora($tempo1, $tempo2);
-                                        if ($total_segundos < 900) { //O caixa tem 15 minutos ap�s o inicio para editar esta venda j� concluida 
+                                        if ($total_segundos < 1800) { //O caixa tem 30 minutos ap�s o inicio para editar esta venda j� concluida 
                                             $tpl->OPERACAO_NOME = "Editar";
                                             $tpl->LINK = "saidas_cadastrar.php";
 
@@ -792,7 +794,7 @@ if ($linhas == 0) {
                                             $tpl->ICONE_ARQUIVO = $icones . "editar.png";
                                             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
                                         } else {
-                                            $tpl->OPERACAO_NOME = "Você não pode editar sua última venda porque já passou 15 minutos após a finalização da venda!";
+                                            $tpl->OPERACAO_NOME = "Você não pode editar sua última venda porque já passou 30 minutos após a finalização da venda!";
                                             $tpl->ICONE_ARQUIVO = $icones . "editar_desabilitado.png";
                                             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");
                                         }

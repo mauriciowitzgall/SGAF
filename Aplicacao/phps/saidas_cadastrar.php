@@ -266,14 +266,16 @@ if ($tiposaida == "") {
 
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
-$tpl_titulo->TITULO = "SAÍDAS";
 if ($tiposaida == 1) {
-    $tpl_titulo->SUBTITULO = "VENDA";
+    $tpl_titulo->TITULO = "VENDAS";
+    $tpl_titulo->SUBTITULO = "REALIZAÇÃO DE VENDAS";
+    $tpl_titulo->NOME_ARQUIVO_ICONE = "vendas.png";
 } else {
-    $tpl_titulo->SUBTITULO = "AJUSTE";
+    $tpl_titulo->TITULO = "SAÍDAS";
+    $tpl_titulo->SUBTITULO = "RETIRADAS DE ESTOQUE";
+    $tpl_titulo->NOME_ARQUIVO_ICONE = "saidas.png";
 }
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "saidas.png";
 $tpl_titulo->show();
 
 //Verifica se há produtos no estoque

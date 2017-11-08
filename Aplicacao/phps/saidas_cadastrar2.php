@@ -49,7 +49,7 @@ $troco = number_format($dinheiro - $total,2,'.','');
 $areceber = $_REQUEST["areceber"];
 $metodopag = $_REQUEST["metodopag"];
 
-//print_r($_REQUEST);
+print_r($_REQUEST);
 
 
 //Valor bruto
@@ -83,10 +83,16 @@ if (($dinheiro <= $total) && ($passo == 2)) {
 
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
-$tpl_titulo->TITULO = "SAÍDAS";
-$tpl_titulo->SUBTITULO = "CADASTRO/EDIÇÃO";
+if ($tiposai == 1) {
+    $tpl_titulo->TITULO = "VENDAS";
+    $tpl_titulo->SUBTITULO = "REALIZAÇÃO DE VENDAS";
+    $tpl_titulo->NOME_ARQUIVO_ICONE = "vendas.png";
+} else {
+    $tpl_titulo->TITULO = "SAÍDAS";
+    $tpl_titulo->SUBTITULO = "RETIRADAS DE ESTOQUE";
+    $tpl_titulo->NOME_ARQUIVO_ICONE = "saidas.png";
+}
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "saidas.png";
 $tpl_titulo->show();
 
 //Inicio do Template Principal

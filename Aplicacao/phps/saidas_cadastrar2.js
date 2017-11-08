@@ -1,6 +1,5 @@
-window.onload = function(){
+window.onload = function() {
     metodopagamento();
-
 }
 
 
@@ -8,20 +7,29 @@ function metodopagamento() {
     valor=$("select[name=metodopag]").val();
     //alert(valor);
     var total = $("input[name=total]").val();
-    $("input[name=dinheiro]").val("R$ 0,00");
     $("input[name=recebidodinheiro]").val("R$ 0,00");
     $("input[name=recebidocartao]").val("R$ 0,00");    
-    if ((valor==1)||(valor==4)||(valor==5)) {
-        document.form1.dinheiro.disabled = false;
-        $("input[name=dinheiro]").val("");
+    if ((valor==1)||(valor==4)) {
+        $("input[name=dinheiro]").focus();
         $("tr[id=tr_recebidodinheiro]").hide();
         $("tr[id=tr_recebidocartao]").hide();
+        passo=$("input[name=passo]").val();
+        if (passo==1) {
+            $("input[name=dinheiro]").val("R$ 0,00");
+            document.form1.dinheiro.disabled = false;
+            $("input[name=dinheiro]").val("");
+        } else if (passo==2) {
+            //O php desabilita o campo
+        }
+
     } else if (valor==2) {
+        $("input[name=dinheiro]").focus();
         document.form1.dinheiro.disabled = false;
         $("input[name=dinheiro]").val(total);
         $("tr[id=tr_recebidodinheiro]").hide();
         $("tr[id=tr_recebidocartao]").hide();
     } else if (valor==3) {
+        $("input[name=dinheiro]").focus();
         document.form1.dinheiro.disabled = false;
         $("input[name=dinheiro]").val(total);
         $("tr[id=tr_recebidodinheiro]").hide();
