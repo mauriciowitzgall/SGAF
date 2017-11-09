@@ -11,7 +11,7 @@ $paravenda=$_POST["paravenda"];
 
 //Verifica se existe algum produto com esta referencia
 $sql = "
-	SELECT pro_codigo,pro_nome,pro_controlarestoque,pro_evendido
+	SELECT *
 	FROM produtos 
 	WHERE pro_referencia='$referencia'
 
@@ -21,7 +21,12 @@ $linhas = mysql_num_rows($query);
 if ($linhas>0) {
     while ($dados= mysql_fetch_assoc($query)) {
         $codigo=$dados["pro_codigo"];
-        $nome=$dados["pro_nome"];
+	    $nome= $dados['pro_nome'];
+	    $referencia= $dados['pro_referencia'];
+	    $tamanho= $dados['pro_tamanho'];
+	    $cor= $dados['pro_cor'];
+	    $descricao= $dados['pro_descricao'];
+	    $nome2="$nome $tamanho $cor $descricao";
         $controlarestoque=$dados["pro_controlarestoque"];
         $evendido=$dados["pro_evendido"];
 		if ($controlarestoque==0) {
@@ -32,7 +37,7 @@ if ($linhas>0) {
 		        else if (($paravenda==0)&&($evendido==1)) echo "PRODUTO_PARAMETRIZADO_PARA_VENDA";
 		        else echo "$codigo|$nome";
 	    	} else {
-	    		echo "$codigo|$nome";
+	    		echo "$codigo|$nome2";
 	    	}
 		}
     }

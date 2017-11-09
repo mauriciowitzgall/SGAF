@@ -18,7 +18,7 @@ $paravenda=$_POST["paravenda"];
 
 $sql = "
 SELECT DISTINCT
-    pro_codigo,pro_nome,pro_referencia, pro_tamanho, pro_cor, pro_descricao
+    *
 FROM
     produtos
 WHERE
@@ -26,7 +26,7 @@ WHERE
     AND pro_controlarestoque=1
     $filtro
 ORDER BY
-    pro_nome , pro_tamanho, pro_cor, pro_descricao
+    pro_nome, pro_referencia
 ";
 $query = mysql_query($sql);
 if (!$query)
@@ -39,7 +39,7 @@ while ($dados = mysql_fetch_array($query)) {
     $tamanho= $dados['pro_tamanho'];
     $cor= $dados['pro_cor'];
     $descricao= $dados['pro_descricao'];
-    $nome2="$nome $tamanho $cor $descricao ";
+    $nome2="$nome $tamanho $cor $descricao ($referencia)";
     if ($produto==$codigo) $selecionado=" selected "; else $selecionado="  ";
     echo "<option value='$codigo' $selecionado >$nome2</option>";
 }

@@ -443,7 +443,7 @@ if ($passo != "") {
         WHERE pro_cooperativa='$usuario_cooperativa'
         AND pro_controlarestoque=1 
         $filtro_produto_valor
-        ORDER BY pro_nome, pro_tamanho, pro_cor, pro_descricao
+        ORDER BY pro_nome, pro_referencia
     ";
     $query = mysql_query($sql);
     if ($query) {
@@ -463,7 +463,7 @@ if ($passo != "") {
             $pro_descricao=$dados["pro_descricao"];
             $pro_nome2="$pro_nome $pro_tamanho $pro_cor $pro_descricao";
             //pro_codigo,pro_nome,prorec_nome,pro_volume,pro_marca,protip_sigla
-            $tpl->OPTION2_TEXTO = "$pro_nome2 $pro_marca $pro_recipiente $pro_volume ($pro_sigla)";
+            $tpl->OPTION2_TEXTO = "$pro_nome2 $pro_marca $pro_recipiente $pro_volume ($pro_referencia)";
             if (($produto == $pro_codigo) && ($produtomanter == 'on'))
                 $tpl->OPTION2_SELECIONADO = " selected ";
             else

@@ -14,7 +14,7 @@ if ($paravenda==-1) {
 }
 
 $sql = "
-        SELECT pro_codigo,pro_nome,prorec_nome,pro_volume,pro_marca,protip_sigla,pro_referencia,pro_tamanho,pro_cor,pro_descricao
+        SELECT *
         FROM produtos 
 
         join produtos_tipo on pro_tipocontagem=protip_codigo
@@ -22,7 +22,7 @@ $sql = "
         WHERE pro_cooperativa='$usuario_cooperativa' 
         AND pro_controlarestoque=1
         $filtro
-        ORDER BY pro_nome, pro_tamanho, pro_cor, pro_descricao
+        ORDER BY pro_nome, pro_referencia
 ";
 $query = mysql_query($sql);
 if (!$query)
@@ -39,7 +39,7 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tamanho=$dados["pro_tamanho"];
     $cor=$dados["pro_cor"];
     $descricao=$dados["pro_descricao"];    
-    echo "<option value='$codigo'>$nome $tamanho $cor $descricao</option>";
+    echo "<option value='$codigo'>$nome $tamanho $cor $descricao ($referencia)</option>";
 }
 
 ?>
