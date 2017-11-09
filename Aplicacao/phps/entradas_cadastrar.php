@@ -18,9 +18,8 @@ $operacao = $_GET["operacao"]; //Opera��o 1=Cadastras 2=Editar 3=Ver
 $passo = $_POST['passo'];
 
 //print_r($_REQUEST);
-$paravenda = $_POST['paravenda'];
-if ($paravenda=="") $paravenda = $_POST['paravenda2'];
-
+$paravenda = $_REQUEST['paravenda'];
+if ($paravenda=="") $paravenda = $_REQUEST['paravenda2'];
 $entrada = $_POST['entrada'];
 $tiponegociacao = $_POST['tiponegociacao'];
 if ($tiponegociacao == "") { //caso o campo fornecedor fique desabilitado!
@@ -532,6 +531,8 @@ if ($passo != "") {
         //Verifica se será feita um exclusão da lista ou inclusào
         if ($cancelar == 1) {
 
+            $tpl->PARAVENDA = $paravenda;
+
             //Retirar produto do estoque caso ele ja tenha sido incluso no estoque
             $sql1="SELECT * FROM entradas_produtos WHERE entpro_entrada=$entrada and entpro_numero=$item_numero and entpro_status=1";
             $query1 = mysql_query($sql1); if (!$query1)  die("Erro de SQL 12:" . mysql_error());
@@ -879,6 +880,7 @@ if ($passo != "") {
                 } else {                    
                     $tpl->ICONES_TITULO="Remover";
                     $tpl->ICONES_ARQUIVO="remover.png";
+                    $tpl->PARAVENDA="$paravenda";
                     $tpl->block("BLOCK_LISTA_OPERACAO_EXCLUIR_LINK");
                     $tpl->block("BLOCK_LISTA_OPERACAO_EXCLUIR");
                 }                
