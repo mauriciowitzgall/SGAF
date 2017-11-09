@@ -270,6 +270,7 @@ while ($dados = mysql_fetch_array($query)) {
         $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
     $tpl1->block("BLOCK_SELECT_OPTION");
 }
+if ($operacao == 'ver')  $tpl1->block("BLOCK_SELECT_DESABILITADO");
 $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
@@ -1717,8 +1718,9 @@ if (($operacao == "editar") || ($operacao == "cadastrar")) {
         $tpl1->block("BLOCK_BOTAO_CANCELAR");
     }
 } else {
-    //Botão Voltar
-    $tpl1->block("BLOCK_BOTAO_VOLTAR");
+    //Botão Fechar
+    //$tpl1->block("BLOCK_BOTAO_VOLTAR");
+    $tpl1->block("BLOCK_BOTAO_FECHAR");
 }
 $tpl1->block("BLOCK_BOTOES");
 

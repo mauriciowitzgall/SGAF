@@ -565,7 +565,8 @@ while ($dados = mysql_fetch_assoc($query)) {
     //detalhes
     if ($permissao_pessoas_ver == 1) {
         $tpl->LINK = "pessoas_cadastrar.php";
-        $tpl->LINK_COMPLEMENTO = "operacao=ver";
+        $tpl->LINK_COMPLEMENTO = "modal=1&operacao=ver";
+        $tpl->TARGET="_blank";
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DETALHES");
     } else {
         $tpl->LINK = "#";

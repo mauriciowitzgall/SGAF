@@ -303,7 +303,8 @@ $tpl->block("BLOCK_LISTA_NADA_OPERACAO");
 
 
 
-$tpl->block("BLOCK_BOTAO_VOLTAR");
+//$tpl->block("BLOCK_BOTAO_VOLTAR");
+$tpl->block("BLOCK_BOTAO_FECHAR");
 $tpl->block("BLOCK_BOTAO_IMPRIMIR");
 /* if ($tiponegociacao == 2)
   $tpl->block("BLOCK_BOTAO_IMPRIMIR_CUSTO"); */

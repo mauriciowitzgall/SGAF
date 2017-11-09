@@ -325,7 +325,7 @@ $sql = "
                 <!-- COLUNA VER -->                
                 <?php if ($permissao_entradas_ver == 1) { ?>
                     <td align="center" class="fundo1" width="35px">             
-                        <a href="entradas_ver.php?codigo=<?php echo"$codigo"; ?>" class="link1">
+                        <a href="entradas_ver.php?modal=1&codigo=<?php echo"$codigo"; ?>" class="link1" target="_blank">
                             <img   width="15px" src="<?php echo $icones; ?>detalhes.png" title="Detalhes" alt="Detalhes"/> 
                         </a>
                     </td>

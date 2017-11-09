@@ -711,9 +711,10 @@ if ($linhas == 0) {
 
             //detalhes
             $tpl->LINK = "saidas_ver.php";
-            $tpl->LINK_COMPLEMENTO = "ope=3&tiposaida=1&passo=1";
+            $tpl->LINK_COMPLEMENTO = "ope=3&tiposaida=1&passo=1&modal=1";
             $tpl->ICONE_ARQUIVO = $icones . "detalhes.png";
             $tpl->OPERACAO_NOME = "Detalhes";
+            $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_NOVAPAGINA");
             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_TODAS");
         }

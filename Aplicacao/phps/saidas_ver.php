@@ -1143,14 +1143,12 @@ $tpl->show();
 if ($ope != 4) {
     $tpl4 = new Template("templates/botoes1.html");
     
-    //Botão Voltar
+    //Botão Fechar
     $tpl4->block("BLOCK_LINHAHORIZONTAL_EMCIMA");
-    $tpl4->block("BLOCK_COLUNA_LINK_VOLTAR");
-    //$tpl4->COLUNA_LINK_ARQUIVO = "saidas.php";
-    $tpl4->COLUNA_LINK_ARQUIVO = "";
+    $tpl4->block("BLOCK_COLUNA_LINK_FECHAR");
     $tpl4->block("BLOCK_COLUNA_LINK");
     $tpl4->block("BLOCK_BOTAOPADRAO_SIMPLES");
-    $tpl4->block("BLOCK_BOTAOPADRAO_VOLTAR");
+    $tpl4->block("BLOCK_BOTAOPADRAO_FECHAR");
     $tpl4->block("BLOCK_BOTAOPADRAO_AUTOFOCO");
     $tpl4->block("BLOCK_BOTAOPADRAO");
     $tpl->block("BLOCK_CONTEUDO");

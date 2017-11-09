@@ -302,7 +302,9 @@ ORDER BY $sql_ordenacao
                 </td>
             <?php if ($permissao_produtos_ver == 1) { ?>
                 <td align="center" class="fundo1" width="35px">
-                    <a href="produtos_cadastrar.php?codigo=<?php echo"$codigo"; ?>&ver=1" class="link1"><img   width="15px" src="<?php echo $icones; ?>detalhes.png" title="Detalhes" alt="Detalhes"/> </a>
+                    <a href="produtos_cadastrar.php?modal=1&codigo=<?php echo"$codigo"; ?>&ver=1" class="link1" target="_blank">
+                        <img   width="15px" src="<?php echo $icones; ?>detalhes.png" title="Detalhes" alt="Detalhes"/> 
+                    </a>
                 </td>
 <?php } ?>
             <?php if ($permissao_produtos_editar == 1) { ?>                

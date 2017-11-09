@@ -616,7 +616,9 @@ if ($linhas == 0) {
     <br />
     <hr align="left" >
     <?php
-//Verifica o link destino do bot�o voltar
+    
+    /*
+    //Verifica o link destino do bot�o voltar
     $linkanterior = $_GET["link"];
     $fornecedor = $_GET["fornecedor"];
     if ($linkanterior == "") {
@@ -630,10 +632,10 @@ if ($linhas == 0) {
     }
     if ($linkanterior == "estoque_porfornecedor_produto.php") {
         $link_destino = $linkanterior . "?fornecedor=$fornecedor";
-    }
+    }*/
 
     if ($ver == 1) {
-        ?><a href="<?php echo $link_destino; ?>" class="link">&nbsp;<input type="button" value="VOLTAR" class="botao fonte3"></a> <?php } else {
+        ?><a href="javascript:window.close(0);" class="link">&nbsp;<input type="button" value="FECHAR" class="botao fonte3"></a> <?php } else {
         ?><input type="hidden" name="link" value="<?php echo $linkanterior; ?>">
         <input type="submit" value="SALVAR" name="submit1" class="botao fonte3"> <a href="produtos.php?modal=<?php echo $modal; ?>" class="link">&nbsp;<input type="button" value="CANCELAR" class="botao fonte3"></a> <?php } ?>
     <input type="hidden" name="nome2" value="<?php echo "$nome"; ?>">
