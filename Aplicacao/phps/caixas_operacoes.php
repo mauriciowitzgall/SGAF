@@ -141,7 +141,7 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Vendas
 $tpl->CABECALHO_COLUNA_TAMANHO="30px";
-$tpl->CABECALHO_COLUNA_COLSPAN="";
+$tpl->CABECALHO_COLUNA_COLSPAN="2";
 $tpl->CABECALHO_COLUNA_NOME="VENDAS";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
@@ -284,14 +284,17 @@ while ($dados=  mysql_fetch_assoc($query)) {
     
         
     //Vendas
-    $tpl->IMAGEM_ALINHAMENTO="center";
-    $tpl->LINK="saidas.php?filtro_caixaoperacao=$numero&caixa=$caixa";
-    $tpl->IMAGEM_TAMANHO="15px";
+    $sql2="SELECT count(sai_codigo) as qtd_vendas FROM saidas WHERE sai_caixaoperacaonumero=$numero";
+    if (!$query2=mysql_query($sql2)) die("Erro SQL: ".mysql_error());
+    $dados2=mysql_fetch_assoc($query2);
+    $qtd_vendas=$dados2["qtd_vendas"];
+    $tpl->LISTA_COLUNA2_ALINHAMENTO="right";
+    $tpl->LISTA_COLUNA2_VALOR="($qtd_vendas)";
+    $tpl->LISTA_COLUNA2_ALINHAMENTO2="left"; 
+    $tpl->LISTA_COLUNA2_LINK="saidas.php?filtro_caixaoperacao=$numero&caixa=$caixa";
     $tpl->IMAGEM_PASTA="$icones";
-    $tpl->IMAGEM_NOMEARQUIVO="saidas_caixaoperacao.png";
-    $tpl->IMAGEM_TITULO="Ver Vendas relacionadas";
-    $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
-    $tpl->block("BLOCK_LISTA_COLUNA_ICONES"); 
+    $tpl->block("BLOCK_LISTA_COLUNA2"); 
+
     
     //Situacao
     $tpl->IMAGEM_ALINHAMENTO="center";

@@ -109,6 +109,21 @@ $tpl->block("BLOCK_CAMPO");
 $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
 
+//Numero operação de caixa
+$tpl->TITULO="Operação Numero";
+$tpl->block("BLOCK_TITULO");
+$tpl->CAMPO_TIPO="text";
+$tpl->CAMPO_NOME="operacao_numero";
+$tpl->CAMPO_VALOR="$numero";
+$tpl->CAMPO_TAMANHO="30";
+$tpl->CAMPO_QTD_CARACTERES="";
+$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+//$tpl->block("BLOCK_CAMPO_ESTILO");
+$tpl->block("BLOCK_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_CAMPO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_ITEM");
+
 //Data Abertura
 $tpl->TITULO="Data Abertura";
 $tpl->block("BLOCK_TITULO");
