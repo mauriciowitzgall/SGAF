@@ -312,9 +312,50 @@ ORDER BY $sql_ordenacao
                     <a href="produtos_cadastrar.php?codigo=<?php echo"$codigo"; ?>" class="link1"><img   width="15px" src="<?php echo $icones; ?>editar.png" title="Editar"  alt="Editar" /></a> 
                 </td>
 <?php } ?>  
-            <?php if ($permissao_produtos_excluir == 1) { ?>                
+            <?php 
+
+
+            //Vericica se o produto ja foi usando em entradas
+            $sql2 = "
+                SELECT pro_codigo
+                FROM produtos
+                join entradas_produtos on (entpro_produto=pro_codigo)    
+                WHERE pro_codigo=$codigo
+            ";
+            $query2 = mysql_query($sql2);
+            if (!$query2) die("Erro SQL2: " . mysql_error());
+            $linhas2 = mysql_num_rows($query2);
+            if ($linhas2 > 0) {
+                $excluir_icone="excluir_desabilitado.png"; 
+                $excluir_texto="Você não pode excluir este produto porque exitem entradas atribuídas a ele. Se realmente deseja exclui-lo, deve-se excluir primeiramente todas as entradas relacionadas e este produto!";
+                $produtousadonaentrada=1;   
+            }
+
+            //Vericica se o produto ja foi usando em saidas
+            $sql3 = "
+                SELECT pro_codigo
+                FROM produtos
+                join saidas_produtos on (saipro_produto=pro_codigo)    
+                WHERE pro_codigo=$codigo
+            ";
+            $query3 = mysql_query($sql2);
+            if (!$query3)  die("Erro SQL3: " . mysql_error());
+            $linhas3 = mysql_num_rows($query3);
+            if ($linhas3 > 0) {
+                $excluir_icone="excluir_desabilitado.png";
+                $excluir_texto="Você não pode excluir este produto porque exitem saidas atribuídas a ele. Se realmente deseja exclui-lo, deve-se excluir primeiramente todas as saídas relacionadas e este produto!";
+                $produtousadonasaida=1;
+            }
+
+            if (($produtousadonasaida!=1)&&($produtousadonaentrada!=1)) {
+                $excluir_texto="Excluir";
+                $excluir_icone="excluir.png";
+                $podeexcluir=1;
+            }
+
+            if (($permissao_produtos_excluir == 1)) { ?>                
                 <td align="center" class="fundo1" width="35px"> 
-                    <a href="produtos_deletar.php?codigo=<?php echo"$codigo"; ?>" class="link1"><img  width="15px"  src="<?php echo $icones; ?>excluir.png"  title="Excluir" alt="Excluir" /></a> 
+                    <?php if ($podeexcluir==1) { ?><a href="produtos_deletar.php?codigo=<?php echo"$codigo"; ?>" class="link1"><?php } ?><img  width="15px" src="<?php echo "$icones"; echo "$excluir_icone";?>"  title="<?php echo "$excluir_texto";?>" alt="Excluir" /></a> 
                 </td>
                 <?php } ?> 
                 <?php
