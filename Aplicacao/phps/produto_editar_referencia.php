@@ -1,3 +1,4 @@
+<script type="text/javascript" src="produto_editar_referencia.js"></script>
 <?php
 
 //Verifica se o usuário tem permissão para acessar este conteúdo
@@ -94,7 +95,7 @@ $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
 
 
-//Local
+//Referencia nova
 $tpl->TITULO="Referência Nova";
 $tpl->block("BLOCK_TITULO");
 $tpl->CAMPO_TIPO="text";
@@ -102,14 +103,29 @@ $tpl->CAMPO_NOME="referencia_nova";
 $tpl->CAMPO_VALOR="$referencia_nova";
 $tpl->CAMPO_TAMANHO="30";
 $tpl->CAMPO_QTD_CARACTERES="";
+$tpl->CAMPO_ONKEYUP="referencia_valida_caracteres_especiais(this.value);";
+$tpl->CAMPO_ONBLUR="verifica_referencia_valida(this.value);";
 $tpl->block("BLOCK_CAMPO_FOCO");
 $tpl->block("BLOCK_CAMPO_OBRIGATORIO");
 $tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
 //$tpl->CAMPO_ESTILO="";
 //$tpl->block("BLOCK_CAMPO_ESTILO");
 $tpl->block("BLOCK_CAMPO");
+$tpl->COMPLEMENTO_ICONE_ID="referencia_icone";
+$tpl->COMPLEMENTO_ICONE_ARQUIVO="$icones"."confirmar2.png";
+$tpl->COMPLEMENTO_ICONE_MENSAGEM="";
+$tpl->block("BLOCK_COMPLEMENTO_ICONE");
+$tpl->TEXTO_ID="span_ref";
+$tpl->TEXTO_CLASS="dicacampo";
+$tpl->TEXTO="Digite uma nova referencia!";
+$tpl->block("BLOCK_TEXTO");
 $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
+
+
+$tpl->CAMPOOCULTO_NOME="codigo_produto";
+$tpl->CAMPOOCULTO_VALOR="$codigo";
+$tpl->block("BLOCK_CAMPOSOCULTOS");
 
 
 //Botão Salvar

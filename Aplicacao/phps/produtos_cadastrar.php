@@ -171,7 +171,7 @@ if ($linhas == 0) {
             <td align="left" width=""><input  onkeyup="referencia_valida_caracteres_especiais(this.value)"  id="referencia" type="text" name="referencia"  size="35" class="campopadrao" onblur="verifica_referencia_valida(this.value);"  value="<?php echo "$referencia"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""> 
              <img src="../imagens/icones/geral/confirmar2.png" id="referencia_icone" name="referencia_icone" width="12px" title="" alt="">            
                 
-            <span class="dicacampo"> Ex: numero do pedido/cardápio</span></td>
+            <span id="span_ref" class="dicacampo"> Ex: numero do pedido/cardápio</span></td>
         </tr>
         <tr>
             <td align="right" width="200px"><b>Produto industrializado <label class="obrigatorio"></label></b></td>
