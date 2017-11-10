@@ -64,6 +64,7 @@ $sql="SELECT *
      $quiosque_estado=$dados["est_codigo"];
      $quiosque_estado=$dados["est_codigo"];
      $permiteedicaoclientenavenda=$dados["quicnf_permiteedicaoclientenavenda"];
+     $permiteedicaoreferencianavenda=$dados["quicnf_permiteedicaoreferencianavenda"];
  }
 
 //Template de Título e Sub-título
@@ -84,7 +85,7 @@ $tpl1->block("BLOCK_JS");
 
 
 //Usa Módulo Controle de estoque
-$tpl1->TITULO = "1- Módulo Estoque";
+$tpl1->TITULO = "1- MÓDULO ESTOQUE";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->LINHA_ID="";
 $tpl1->block("BLOCK_LINHA_ID");
@@ -107,8 +108,34 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
+//Estoque Classificação Padrão
+$tpl1->TITULO = "Class. Padrão Produtos";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_classificacaopadraoestoque";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "classificacaopadraoestoque";
+$tpl1->SELECT_ID = "classificacaopadraoestoque";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Nome do produto";
+if ($classificacaopadraoestoque=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 2;
+$tpl1->OPTION_NOME = "Referência do produto";
+if ($classificacaopadraoestoque=='2') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+
 //Usa Módulo Produção
-$tpl1->TITULO = "2- Módulo Produção";
+$tpl1->TITULO = "2- MÓDULO PRODUÇÃO";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->LINHA_ID="";
 $tpl1->block("BLOCK_LINHA_ID");
@@ -133,7 +160,7 @@ $tpl1->block("BLOCK_ITEM");
 
 
 //Usa Módulo Vendas
-$tpl1->TITULO = "3- Módulo Vendas";
+$tpl1->TITULO = "3- MÓDULO VENDAS";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->LINHA_ID="";
 $tpl1->block("BLOCK_LINHA_ID");
@@ -279,8 +306,35 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
+
+
+//Permitir edtiar a referencia do produto durante a venda
+$tpl1->TITULO = "Editar Referencia durante venda";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_permiteedicaoreferencianavenda";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "permiteedicaoreferencianavenda";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($permiteedicaoreferencianavenda=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($permiteedicaoreferencianavenda=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+
 //Usa Módulo Fiscal
-$tpl1->TITULO = "Módulo Fiscal";
+$tpl1->TITULO = "Emite nota fiscal";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->LINHA_ID="linha_usamodulofiscal";
 $tpl1->block("BLOCK_LINHA_ID");
@@ -831,7 +885,7 @@ $tpl1->block("BLOCK_ITEM");
 
 
 //Usa Módulo Caixa
-$tpl1->TITULO = "4- Módulo Caixa";
+$tpl1->TITULO = "4- MODULO CAIXA";
 $tpl1->block("BLOCK_TITULO");
 $tpl1->LINHA_ID="";
 $tpl1->block("BLOCK_LINHA_ID");
@@ -878,30 +932,6 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
-
-//Estoque Classificação Padrão
-$tpl1->TITULO = "Class. Padrão Produtos";
-$tpl1->block("BLOCK_TITULO");
-$tpl1->LINHA_ID="linha_classificacaopadraoestoque";
-$tpl1->block("BLOCK_LINHA_ID");
-$tpl1->SELECT_NOME = "classificacaopadraoestoque";
-$tpl1->SELECT_ID = "classificacaopadraoestoque";
-$tpl1->SELECT_TAMANHO = "";
-$tpl1->SELECT_ONCHANGE = "";
-$tpl1->block("BLOCK_SELECT_ONCHANGE");
-$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
-$tpl1->OPTION_VALOR = 1;
-$tpl1->OPTION_NOME = "Nome do produto";
-if ($classificacaopadraoestoque=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-$tpl1->block("BLOCK_SELECT_OPTION");
-$tpl1->OPTION_VALOR = 2;
-$tpl1->OPTION_NOME = "Referência do produto";
-if ($classificacaopadraoestoque=='2') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-$tpl1->block("BLOCK_SELECT_OPTION");
-$tpl1->block("BLOCK_SELECT_NORMAL");
-$tpl1->block("BLOCK_SELECT");
-$tpl1->block("BLOCK_CONTEUDO");
-$tpl1->block("BLOCK_ITEM");
 
 
 //-------------

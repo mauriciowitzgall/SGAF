@@ -883,6 +883,18 @@ if ($passo == 2) {
     $tpl1->SELECT_CLASSE = " width:300px; ";
     $tpl1->block("BLOCK_SELECT");
     $tpl1->block("BLOCK_CONTEUDO");
+    if ($permiteedicaoreferencianavenda==1) {
+        $tpl1->ICONE_AOCLICAR = "atualizar_referencia();";
+        $tpl1->ICONE_DESTINO = "#";
+        $tpl1->ICONE_ID = "atualizareferencia";
+        $tpl1->ICONE_ALTERNATIVO = "atualizareferencia";
+        $tpl1->ICONE_DICA = "Atualizar referencia do produto";
+        $tpl1->ICONE_ARQUIVO = "$icones"."editar.png";
+        $tpl1->ICONE_TAMANHO = "12px";
+        //$tpl1->block("BLOCK_ICONE_TAMANHOPADRAO");
+        $tpl1->block("BLOCK_ICONE");
+        $tpl1->block("BLOCK_CONTEUDO");
+    }
     $tpl1->block("BLOCK_ITEM");
 
     //Fornecedor

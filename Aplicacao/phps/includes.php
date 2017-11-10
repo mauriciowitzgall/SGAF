@@ -47,6 +47,7 @@ $modal=$_GET["modal"];
                 $usacomanda=$dados["quicnf_usacomanda"];
                 $usapagamentosparciais=$dados["quicnf_pagamentosparciais"];
                 $usamulticaixas=$dados["quicnf_multicaixas"];
+                $permiteedicaoreferencianavenda=$dados["quicnf_permiteedicaoreferencianavenda"];
             }
 
             //include "conexao_tipo.php";

@@ -29,6 +29,7 @@ $classificacaopadraoestoque = $_POST['classificacaopadraoestoque'];
 $devolucoessobrevendas = $_POST['devolucoessobrevendas'];
 $pagamentosparciais = $_POST['pagamentosparciais'];
 $permiteedicaoclientenavenda = $_POST['permiteedicaoclientenavenda'];
+$permiteedicaoreferencianavenda = $_POST['permiteedicaoreferencianavenda'];
 $cpf = $_POST['cpf'];
 $cpf = str_replace(".","", $cpf);
 $cpf = str_replace("-","", $cpf);
@@ -89,6 +90,7 @@ SET
     quicnf_devolucoessobrevendas='$devolucoessobrevendas',
     quicnf_pagamentosparciais='$pagamentosparciais',
     quicnf_permiteedicaoclientenavenda=$permiteedicaoclientenavenda,
+    quicnf_permiteedicaoreferencianavenda=$permiteedicaoreferencianavenda,
     quicnf_versaonfe='$versaonfe',
     quicnf_usamodulocaixa='$usacaixa',
     quicnf_usamodulovendas='$usavendas',

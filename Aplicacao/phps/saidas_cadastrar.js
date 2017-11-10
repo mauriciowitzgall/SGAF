@@ -1012,3 +1012,11 @@ function eliminar_zeros_a_esquerda(sStr){
          return sStr.substring(i);
    return sStr;
 }
+
+
+function atualizar_referencia () {
+    produto=$("select[name=produto]").val();
+    destino = "produto_editar_referencia.php?modal=1&codigo="+produto;
+    window.open(destino, '_blank');
+    //alert('Atualizar referencia"' + produto);
+}
