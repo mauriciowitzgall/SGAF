@@ -35,6 +35,8 @@ $sql="SELECT *
  if (!$query= mysql_query($sql)) die("Erro: " . mysql_error());
  while ($dados=  mysql_fetch_assoc($query)) {
      $usamodulofiscal=$dados["quicnf_usamodulofiscal"];
+     $usaestoque=$dados["quicnf_usamoduloestoque"];
+     $multicaixas=$dados["quicnf_multicaixas"];
      $ultimanfe=$dados["quicnf_ultimanfe"];
      $serienfe=$dados["quicnf_serienfe"];
      $crtnfe=$dados["quicnf_crtnfe"];
@@ -851,6 +853,29 @@ $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
+
+//Permitir multiplos caixas ao mesmo tempo por operador
+$tpl1->TITULO = "Múltiplos caixas por operador";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "multicaixas";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($multicaixas=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($multicaixas=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
 
 
 

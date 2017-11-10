@@ -67,7 +67,7 @@ if (!$query2 = mysql_query($sql2)) die ("Erro SQL Quiosque Configuracões: ".mys
 While ($dados2=  mysql_fetch_assoc($query2)) {
     $usamodulofiscal=$dados2["quicnf_usamodulofiscal"];
     $crt=$dados2["quicnf_crtnfe"];
-    $usamoduloestoque=$dados2["quicnf_usamoduloestoque"];
+    $usamoduloestoque=$usaestoque;
 }
 
 //Se estiver parametrizado nas configuracoes do quiosque que ele usa módulo fiscal, logo por padrão os dados fiscais devem ser preenchidos

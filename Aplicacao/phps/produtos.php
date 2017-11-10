@@ -12,8 +12,8 @@ $tipopagina = "produtos";
 ?>
 <?php include "includes.php"; 
 
-$usamoduloproducao=usamoduloproducao($usuario_quiosque); 
-$usavendaporcoes=usavendaporcoes($usuario_quiosque); 
+$usamoduloproducao=$usaproducao;
+$usavendaporcoes=$usavendas; 
 
 
 ?>

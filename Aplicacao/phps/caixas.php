@@ -298,7 +298,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
     
     
     //Abrir Caixa
-    if (($situacao_atual==2)&&($usuario_caixa_operacao=="")) {
+    if ($situacao_atual==2) {
         $tpl->LINK="caixas_operacoes_abrir.php";
         $tpl->CODIGO="$codigo";
         $tpl->LINK_COMPLEMENTO="";

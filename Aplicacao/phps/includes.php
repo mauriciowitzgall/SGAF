@@ -36,13 +36,19 @@ $modal=$_GET["modal"];
             include "controle/conexao.php";
             //include "controle/conexao_tipo.php";
             require_once "funcoes.php";
-            $usaestoque=usamoduloestoque($usuario_quiosque);
-            $usaproducao=usamoduloproducao($usuario_quiosque);
-            $usavendas=usamodulovendas($usuario_quiosque);
-            $usacaixa=usamodulocaixa($usuario_quiosque);
-            $usavendaporcoes=usavendaporcoes($usuario_quiosque);
-            $usacomanda=usacomanda($usuario_quiosque);
-            $usapagamentosparciais=usapagamentosparciais($usuario_quiosque);
+            $sql="SELECT * FROM quiosques_configuracoes WHERE quicnf_quiosque=$usuario_quiosque";
+            if (!$query= mysql_query($sql)) die("Erro SQL INCLUDES: " . mysql_error());
+            while ($dados=  mysql_fetch_assoc($query)) {    
+                $usaestoque=$dados["quicnf_usamoduloestoque"];
+                $usaproducao=$dados["quicnf_usamoduloproducao"];
+                $usavendas=$dados["quicnf_usamodulovendas"];
+                $usacaixa=$dados["quicnf_usamodulocaixa"];
+                $usavendaporcoes=$dados["quicnf_usavendaporcoes"];
+                $usacomanda=$dados["quicnf_usacomanda"];
+                $usapagamentosparciais=$dados["quicnf_pagamentosparciais"];
+                $usamulticaixas=$dados["quicnf_multicaixas"];
+            }
+
             //include "conexao_tipo.php";
             if ($modal!=1) {
                 include "cabecalho.php";

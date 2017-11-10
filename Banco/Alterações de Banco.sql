@@ -17458,3 +17458,6 @@ ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes`
 ADD COLUMN `quicnf_pagamentosparciais` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_usavendaporcoes`;
 
 DELETE FROM `SGAF_labodega2`.`metodos_pagamento` WHERE `metpag_codigo`='5';
+
+ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_multicaixas` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_pagamentosparciais`;

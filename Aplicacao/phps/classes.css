@@ -347,12 +347,14 @@
 
 .titulo1 {
     background-color: transparent;
-    height: 45px;        
+    height: 45px; 
+    font-weight: normal;       
 }
 .titulo2 {
     background-color: #f6f6f6;
     height: 25px;        
 }
+
 
 .tabela_login{
     border: 1px #E5E5E5 solid;   

@@ -83,8 +83,11 @@ if ($usuario_grupo==4) {
         $tpl8->NUMEROOPERACAO="$usuario_caixa_operacao";
         $tpl8->block("BLOCK_CAIXA_FLUXO");
     }
+    if ($usamulticaixas==1) $tpl8->block("BLOCK_CAIXAS");
     
 }
+
+
 
 
 //Troca Unidade
