@@ -940,7 +940,7 @@ if ($passo == 2) {
     $tpl1->SELECT_OBRIGATORIO = "  ";
     $tpl1->SELECT_FOCO = "  ";
     $tpl1->SELECT_DESABILITADO = "  ";
-    $tpl1->SELECT_AOTROCAR = "";
+    $tpl1->SELECT_AOTROCAR = "selecionar_porcoes(this.value);";
     $tpl1->SPAN2_NOME = "porcao_qtd_label";
     $tpl1->SPAN2_VALOR = "";
     $tpl1->block("BLOCK_SPAN2");

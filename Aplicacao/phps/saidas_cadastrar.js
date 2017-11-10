@@ -53,75 +53,90 @@ $(window).load(function() {
     var temp=document.forms["form1"].elements["produto_referencia"]; if (temp) document.forms["form1"].elements["produto_referencia"].focus();
     
     //Ao selecionar porcoes
-    $("select[name=porcao]").change(function() {
-        
-        $("input[name=qtd]").val("");
-        $("input[name=qtd2]").val("");
-        $("input[name=porcao_qtd]").val("");
-        $("input[name=valtot]").val("");
-
-        //Popula a quantidade da porção (campo oculto)
-        $.post("saidas_popula_porcoesqtdoculto.php", {
-            porcao: $("select[name=porcao]").val()
-        }, function(valor1) {
-            //alert(valor);
-            $("input[name=porcao_oculto]").val(valor1);
-            
-            //Popula o valor unitário referencial caso tenha
-            
-            porcao=$("select[name=porcao]").val();
-            if (porcao=="") {
-                porcao=0;
-                $("input[name=porcao_qtd]").val("");
-                var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = false;
-
-            }
-            $.post("saidas_popula_valuniref.php", {
-                porcao: porcao
-            }, function(valor2) {
-                //alert(valor2);
-                if (valor2==0) {
-                    valuni=$("input[name=valuni2]").val();
-                    valuni2=valuni.split(" ");
-                    valuni=valuni2[1];
-                    valuni=valuni.replace(".","");
-                    valuni=valuni.replace(",",".");
-                } else {
-                    valuni=valor2;
-                }
-                
-                $("input[name=valuni]").val(valuni).priceFormat({
-                    prefix: 'R$ ',
-                    centsLimit: 2,
-                    centsSeparator: ',',
-                    thousandsSeparator: '.'
-                });   
-                $("input[name=valuni3]").val(valuni).priceFormat({
-                    prefix: 'R$ ',
-                    centsLimit: 2,
-                    centsSeparator: ',',
-                    thousandsSeparator: '.'
-                });   
-                
-            });      
-        });
-        porcao2=$("select[name=porcao]").val();
-        if (porcao2=="") {
-            document.forms["form1"].porcao_qtd.disabled = true;
-        } else {
-            lote2=$("select[name=lote]").val();
-            //alert("Lote2="+lote2);
-            if ((lote2!="")&&(lote2!= null)&&(lote2!== undefined)&&(lote2!= 0)) {
-                var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = true;
-                var temp=document.forms["form1"].porcao_qtd; if (temp) document.forms["form1"].porcao_qtd.disabled = false;
-            }             
-            else {
-                var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = false;
-                 var temp=document.forms["form1"].porcao_qtd; if (temp) document.forms["form1"].porcao_qtd.disabled = true;
-            } 
-        }
-    });
+    //$("select[name=porcao]").change(function () { selecionar_porcoes(0) });
 });
+
+function selecionar_porcoes(porcao) {
+        
+    $("input[name=qtd]").val("");
+    $("input[name=qtd2]").val("");
+    $("input[name=porcao_qtd]").val("");
+    $("input[name=valtot]").val("");
+
+    if (porcao==0) porcao=$("select[name=porcao]").val();
+    
+
+    //Popula a quantidade da porção (campo oculto)
+    $.post("saidas_popula_porcoesqtdoculto.php", {
+        porcao: porcao
+    }, function(valor1) {
+        //alert(valor);
+        $("input[name=porcao_oculto]").val(valor1);
+        
+
+        //Popula o valor unitário referencial caso tenha
+        if (porcao=="") {
+            porcao=0;
+            $("input[name=porcao_qtd]").val("");
+            var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = false;
+
+        }
+        $.post("saidas_popula_valuniref.php", {
+            porcao: porcao
+        }, function(valor2) {
+            //alert(valor2);
+            if (valor2==0) {
+                valuni=$("input[name=valuni2]").val();
+                valuni2=valuni.split(" ");
+                valuni=valuni2[1];
+                valuni=valuni.replace(".","");
+                valuni=valuni.replace(",",".");
+            } else {
+                valuni=valor2;
+            }
+            
+            $("input[name=valuni]").val(valuni).priceFormat({
+                prefix: 'R$ ',
+                centsLimit: 2,
+                centsSeparator: ',',
+                thousandsSeparator: '.'
+            });   
+            $("input[name=valuni3]").val(valuni).priceFormat({
+                prefix: 'R$ ',
+                centsLimit: 2,
+                centsSeparator: ',',
+                thousandsSeparator: '.'
+            });   
+            
+        });      
+    });
+    porcao2=porcao;
+    if (porcao2=="") {
+        document.forms["form1"].porcao_qtd.disabled = true;
+    } else {
+        lote2=$("select[name=lote]").val();
+        if ((lote2!="")&&(lote2!= null)&&(lote2!== undefined)&&(lote2!= 0)) {
+            var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = true;
+            var temp=document.forms["form1"].porcao_qtd; if (temp) {
+                document.forms["form1"].porcao_qtd.disabled = false;
+                document.forms["form1"].porcao_qtd.focus();
+                //$("input[name=porcao_qtd]").val(1);
+            }
+        }             
+        else {
+            var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = false;
+            var temp=document.forms["form1"].porcao_qtd; if (temp) {
+                document.forms["form1"].porcao_qtd.disabled = true;
+                document.forms["form1"].qtd.focus();
+            }
+        }
+
+        //alert("selecionar a porcao select");
+        select_selecionar("porcao",porcao);
+
+    }
+
+}
 
 function popular_produto (produto) {
     //alert(produto);
@@ -280,10 +295,6 @@ function selecionar_lote (lote,produto,focoqtd) {
     }
     //alert("O focoqtd no selecionar_lote é: "+focoqtd);   
 
-    
-    $("input[name=porcao_qtd]").val("");
-    produtoelote_selecionado(produto,lote,focoqtd);
-
     //Popula porcoes
     $.post("saidas_popula_porcoes.php", {
         produto: $("select[name=produto]").val()
@@ -291,6 +302,11 @@ function selecionar_lote (lote,produto,focoqtd) {
         //alert(valor);
         $("select[name=porcao]").html(valor);
     }); 
+    $("input[name=porcao_qtd]").val("");
+
+
+    produtoelote_selecionado(produto,lote,focoqtd);
+
     
 }
 
@@ -366,10 +382,27 @@ function produtoelote_selecionado(produto,lote,focoqtd) {
                             foco_quantidade();
                     } 
                 }
+                //Verifica se só tem uma porção, se sim auto-seleciona ela
+                $.post("saidas_verifica_porcao_unico.php", {
+                    produto: produto
+                }, function(resposta) {
+                    resposta=resposta.replace("\n","")
+                    if ((resposta=='naotem')||(resposta=='temvarios')) {
+                    //nao faz nada
+                        //console.log("Tem 0 ou várias porcoes: "+resposta);
+                    } else { 
+                        //Só tem uma porção
+                        //console.log("Só tem uma porcao! codigo: "+resposta);
+                        selecionar_porcoes(resposta);
+                    } 
+                });
             });
         });
-    }
+
+                
+    }   
 }
+
 
 function foco_produto_referencia () {
     //alert("saiu do campo");
