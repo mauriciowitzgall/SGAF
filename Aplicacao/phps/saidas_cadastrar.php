@@ -863,10 +863,11 @@ if ($passo == 2) {
     $tpl1->ASTERISCO = "";
     $tpl1->CAMPO_TIPO = "text";
     $tpl1->CAMPO_NOME = "produto_referencia";
-    $tpl1->CAMPO_TAMANHO = "7";
+    $tpl1->CAMPO_TAMANHO = "15";
     $tpl1->CAMPO_VALOR = "";
     $tpl1->CAMPO_FOCO = "";
     $tpl1->CAMPO_DESABILITADO = "";
+    $tpl1->CAMPO_QTD_CARACTERES = "30";
     $tpl1->CAMPO_ONKEYPRESS = "";
     $tpl1->CAMPO_ONKEYUP = "verifica_produto_referencia(this.value);";
     $tpl1->CAMPO_ONKEYDOWN = "";
