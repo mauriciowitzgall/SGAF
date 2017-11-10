@@ -38,6 +38,10 @@ $filtro_categoria = $_POST["filtrocategoria"];
 if (!empty($filtro_categoria)) {
     $sql_filtro= $sql_filtro." and pro_categoria=$filtro_categoria";
 }
+$filtro_marca = $_POST["filtromarca"];
+if (!empty($filtro_marca)) {
+    $sql_filtro= $sql_filtro." and pro_marca like '%$filtro_marca%'";
+}
 if ($usuario_grupo==5) {
     $sql_filtro= $sql_filtro." and etq_fornecedor=$usuario_codigo ";
 }
@@ -46,6 +50,7 @@ if ($usuario_grupo==5) {
 //Filtro produto
 $tpl->PRODUTO_NOME = $filtro_produto_nome;
 $tpl->PRODUTO_TAMANHO = $filtro_produto_tamanho;
+$tpl->PRODUTO_MARCA = $filtro_marca;
 $tpl->PRODUTO_COR = $filtro_produto_cor;
 $tpl->PRODUTO_REFERENCIA = $filtro_produto_referencia;
 $tpl->PRODUTO_DESCRICAO = $filtro_produto_descricao;
