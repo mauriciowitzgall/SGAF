@@ -17448,6 +17448,7 @@ ADD COLUMN `sai_recebidocartao` FLOAT NULL DEFAULT 0 AFTER `sai_recebidodinheiro
 ------ FIM ------
 
 ------ INICIO v4.0b5 ------
+
 UPDATE `configuracoes` SET `cnf_versao`='v4.0b5' WHERE `cnf_codigo`='1';
 
 
@@ -17464,3 +17465,12 @@ ADD COLUMN `quicnf_multicaixas` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_pagament
 
 ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
 ADD COLUMN `quicnf_permiteedicaoreferencianavenda` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_multicaixas`;
+
+
+
+------ FIM ------
+
+------ INICIO v4.0b6 ------
+
+UPDATE `configuracoes` SET `cnf_versao`='v4.0b6' WHERE `cnf_codigo`='1';
+
