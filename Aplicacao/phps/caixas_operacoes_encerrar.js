@@ -1,6 +1,6 @@
 window.onload = function(){
-    $("input[name=valorfinal]").val("R$ 0,00").priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
-    $("input[name=diferenca]").val("").priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
+    
+    //$("input[name=diferenca]").val("").priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
 }
 function popula_diferenca(valorfinal) {
     valorfinal=valorfinal.split(" ");
@@ -16,4 +16,8 @@ function popula_diferenca(valorfinal) {
     //alert(diferenca2);
     diferenca2=diferenca2.replace(".",",");
     $("input[name=diferenca]").val("R$ "+diferenca2);
+}
+
+function mascara_valorfinal (valor) {
+    $("input[name=valorfinal]").val(valor).priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
 }

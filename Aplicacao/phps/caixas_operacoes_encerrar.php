@@ -232,6 +232,7 @@ $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
 
 //Vendas Título
+$tpl->TEXTO_CLASS="";
 $tpl->TEXTO_ID="";
 $tpl->TEXTO="<br> ";
 $tpl->block("BLOCK_TEXTO");
@@ -353,17 +354,16 @@ $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
 
 
-//Total Esperado
-$tpl->TITULO="Total Esperado";
-$tpl->block("BLOCK_TITULO");
-$tpl->CAMPO_TIPO="text";
-$tpl->CAMPO_NOME="totalesperado";
-$tpl->CAMPO_VALOR=  "R$ ".number_format($valoresperado,2,",",".");
-$tpl->CAMPO_TAMANHO="";
-$tpl->CAMPO_QTD_CARACTERES="";
-$tpl->block("BLOCK_CAMPO_DESABILITADO");
-$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
-$tpl->block("BLOCK_CAMPO");
+
+
+
+//Encerramento do Caixa
+$tpl->TEXTO_ID="";
+$tpl->TEXTO="<br> ";
+$tpl->block("BLOCK_TEXTO");
+$tpl->TEXTO_ID="";
+$tpl->TEXTO="<b>Encerramento</b>";
+$tpl->block("BLOCK_TEXTO");
 $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
 
@@ -381,7 +381,6 @@ $tpl->block("BLOCK_CAMPO");
 $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
 
-
 //Valor esperado em CARTAO
 $tpl->TITULO="Total esperado CARTÃO";
 $tpl->block("BLOCK_TITULO");
@@ -396,25 +395,40 @@ $tpl->block("BLOCK_CAMPO");
 $tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
 
+//Total Esperado
+$tpl->TITULO="Total Esperado";
+$tpl->block("BLOCK_TITULO");
+$tpl->CAMPO_TIPO="text";
+$tpl->CAMPO_NOME="totalesperado";
+$tpl->CAMPO_VALOR=  "R$ ".number_format($valoresperado,2,",",".");
+$tpl->CAMPO_TAMANHO="";
+$tpl->CAMPO_QTD_CARACTERES="";
+$tpl->block("BLOCK_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl->block("BLOCK_CAMPO");
+$tpl->block("BLOCK_CONTEUDO");
+$tpl->block("BLOCK_ITEM");
+
 
 
 //Valor final do caixa
-$tpl->TITULO="Valor Final Caixa";
+$tpl->TITULO="Quanto tem no caixa?";
 $tpl->block("BLOCK_TITULO");
 $tpl->CAMPO_TIPO="text";
 $tpl->CAMPO_NOME="valorfinal";
-$tpl->CAMPO_VALOR=  "";
+$tpl->CAMPO_VALOR=  " ";
 $tpl->CAMPO_TAMANHO="";
+$tpl->CAMPO_ONKEYUP="mascara_valorfinal(this.value); popula_diferenca(this.value);";
+$tpl->CAMPO_ONBLUR="popula_diferenca(this.value)";
 $tpl->CAMPO_QTD_CARACTERES="";
 $tpl->block("BLOCK_CAMPO_OBRIGATORIO");
 $tpl->block("BLOCK_CAMPO_NORMAL"); //classe padrao
 $tpl->block("BLOCK_CAMPO");
 $tpl->block("BLOCK_CONTEUDO");
-//$tpl->TEXTO="Dinheiro + Cartões";
-//$tpl->block("BLOCK_TEXTO");
-//$tpl->block("BLOCK_CONTEUDO");
-
-
+$tpl->TEXTO="Dinheiro + Cartões";
+$tpl->TEXTO_CLASS="dicacampo";
+$tpl->block("BLOCK_TEXTO");
+$tpl->block("BLOCK_CONTEUDO");
 $tpl->block("BLOCK_ITEM");
 
 //Diferença
@@ -422,7 +436,8 @@ $tpl->TITULO="Diferença";
 $tpl->block("BLOCK_TITULO");
 $tpl->CAMPO_TIPO="text";
 $tpl->CAMPO_NOME="diferenca";
-$tpl->CAMPO_ONBLUR="popula_diferenca(this.value)";
+$tpl->CAMPO_ONKEYUP="";
+$tpl->CAMPO_ONBLUR="";
 $tpl->CAMPO_VALOR=  "";
 $tpl->CAMPO_TAMANHO="";
 $tpl->CAMPO_QTD_CARACTERES="";

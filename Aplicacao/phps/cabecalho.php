@@ -51,12 +51,6 @@ $tpl8->block("BLOCK_NOME_QUIOSQUE_COOPERATIVA");
 //Configurações Administradores 
 if (($usuario_grupo==1)||($usuario_grupo==7)) {
     $tpl8->block("BLOCK_CONFIGURACOES");
-    if ($usuario_caixa_operacao!="") {
-        $tpl8->CAIXAOPERACAO="$usuario_caixa_operacao";
-        $tpl8->block("BLOCK_FLUXOCAIXA");
-    }
-
-
 }
 
 
@@ -70,53 +64,56 @@ if ($usuario_grupo == 0) {
     $tpl8->USUARIO_GRUPO = $permissao_nome;
 }
 
+if ($usuario_quiosque!='0') {
 
-//Caixa Abrir Encerrar e Vendas
-if ($usuario_grupo==4) {
-    if ($usuario_caixa_operacao=="") {
-        $tpl8->block("BLOCK_CAIXA_ABRIR");
+    //Caixa Abrir Encerrar e Vendas
+    if (($usuario_grupo==4)|| ($usuario_grupo==1)) {
+        if ($usuario_caixa_operacao=="") {
+            $tpl8->block("BLOCK_CAIXA_ABRIR");
+        } else {
+            $tpl8->ENCERRARCAIXA="$usuario_caixa_operacao";
+            $tpl8->block("BLOCK_CAIXA_ENCERRAR");
+            $tpl8->block("BLOCK_VENDAS");
+            $tpl8->NUMEROOPERACAO="$usuario_caixa_operacao";
+            $tpl8->block("BLOCK_CAIXA_FLUXO");
+        }
+        if (($usamulticaixas==1)&&($usuario_grupo==4)) $tpl8->block("BLOCK_CAIXAS");
+        
     }
-    else {
-        $tpl8->ENCERRARCAIXA="$usuario_caixa_operacao";
-        $tpl8->block("BLOCK_CAIXA_ENCERRAR");
-        $tpl8->block("BLOCK_VENDAS");
-        $tpl8->NUMEROOPERACAO="$usuario_caixa_operacao";
-        $tpl8->block("BLOCK_CAIXA_FLUXO");
+
+
+
+
+    //Troca Unidade
+    //Pega todos os quisoque que o usuario é supervisor ou caixa
+    $sql="select distinct qui_codigo
+    from quiosques 
+    join quiosques_supervisores on quisup_quiosque=qui_codigo
+    where quisup_supervisor=$usuario_codigo
+    UNION
+    select distinct cai_quiosque
+    from caixas_operadores
+    join caixas on cai_codigo=caiope_caixa
+    where caiope_operador=$usuario_codigo";
+    $query = mysql_query($sql);
+    if (!$query)
+        die("Erro: " . mysql_error());
+    $qtdquiosques= mysql_num_rows($query);
+
+    if (($usuario_grupo == 1)
+    ||($usuario_grupo == 2)
+    ||(($usuario_grupo == 3)&&($qtdquiosques>1))
+    ||(($usuario_grupo == 4)&&($qtdquiosques>1))
+    ) {
+        $tpl8->QUIOSQUE_COD="";
+        $tpl8->COOPERATIVA_COD="";
+        $tpl8->block("BLOCK_TROCA_QUIOSQUE");
     }
-    if ($usamulticaixas==1) $tpl8->block("BLOCK_CAIXAS");
-    
+
+
 }
 
-
-
-
-//Troca Unidade
-//Pega todos os quisoque que o usuario é supervisor ou caixa
-$sql="select distinct qui_codigo
-from quiosques 
-join quiosques_supervisores on quisup_quiosque=qui_codigo
-where quisup_supervisor=$usuario_codigo
-UNION
-select distinct cai_quiosque
-from caixas_operadores
-join caixas on cai_codigo=caiope_caixa
-where caiope_operador=$usuario_codigo";
-$query = mysql_query($sql);
-if (!$query)
-    die("Erro: " . mysql_error());
-$qtdquiosques= mysql_num_rows($query);
-
-if (($usuario_grupo == 1)
-||($usuario_grupo == 2)
-||(($usuario_grupo == 3)&&($qtdquiosques>1))
-||(($usuario_grupo == 4)&&($qtdquiosques>1))
-) {
-    $tpl8->QUIOSQUE_COD="";
-    $tpl8->COOPERATIVA_COD="";
-    $tpl8->block("BLOCK_TROCA_QUIOSQUE");
-}
-
-//Contato
+//Suporte
 $tpl8->block("BLOCK_SUPORTE");
 
 

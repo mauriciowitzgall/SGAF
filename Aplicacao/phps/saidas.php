@@ -8,8 +8,24 @@ if (($permissao_saidas_ver <> 1)) {
 }
 
 
+
 $tipopagina = "saidas";
 include "includes.php";
+
+
+if ($usuario_quiosque=='0') {
+    $tpl6 = new Template("templates/notificacao.html");
+    $tpl6->block("BLOCK_ERRO");
+    $tpl6->ICONES = $icones;
+    //$tpl6->block("BLOCK_NAOAPAGADO");
+    $tpl6->MOTIVO = "Você não tem um quiosque definido. Peça a um administrador para: <br> <b>EDITAR SEU PERFIL E ESCOLHER UM QUIOSQUE!</b>";
+    $tpl6->block("BLOCK_MOTIVO");
+    $tpl6->block("BLOCK_BOTAO_VOLTAR");
+    $tpl6->show();
+    exit;
+}
+
+
 
 ?> <script type="text/javascript" src="saidas.js"></script><?php 
 
