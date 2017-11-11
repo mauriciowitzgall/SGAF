@@ -17490,3 +17490,7 @@ INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper
 INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('16', '3');
 
 
+ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_fazacertos` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_comandaduplicada`,
+ADD COLUMN `quicnf_fazfechamentos` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_fazacertos`;
+

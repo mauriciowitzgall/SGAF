@@ -25,6 +25,8 @@ $usavendas = $_POST['usavendas'];
 $usaproducao = $_POST['usaproducao'];
 $usaestoque = $_POST['usaestoque'];
 $multicaixas = $_POST['multicaixas'];
+$fazfechamentos = $_POST['fazfechamentos'];
+$fazacertos = $_POST['fazacertos'];
 $usavendaporcoes = $_POST['usavendaporcoes'];
 $classificacaopadraoestoque = $_POST['classificacaopadraoestoque'];
 $devolucoessobrevendas = $_POST['devolucoessobrevendas'];
@@ -99,6 +101,8 @@ SET
     quicnf_usamoduloproducao='$usaproducao',
     quicnf_usamoduloestoque='$usaestoque',
     quicnf_multicaixas='$multicaixas',
+    quicnf_fazfechamentos='$fazfechamentos',
+    quicnf_fazacertos='$fazacertos',
     quicnf_usavendaporcoes='$usavendaporcoes'
     $complemento    
 WHERE

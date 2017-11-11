@@ -132,7 +132,7 @@ if ($usuario_grupo<>4) {
         }
 
         //Consignações
-        if (($quiosque_consignacao==1)&&($usavendas==1)) {
+        if (($quiosque_consignacao==1)&&($usavendas==1)&&($fazacertos==1)) {
             $tpl_menu->IMAGEM_TITULO = "Acertos";
             $tpl_menu->TITULO = "Acertos";
             if ($permissao_acertos_ver == 1) {
@@ -146,7 +146,7 @@ if ($usuario_grupo<>4) {
         }
 
         //Fechamentos de Revendas
-        if (($quiosque_revenda==1)&&($usavendas==1)) {
+        if (($quiosque_revenda==1)&&($usavendas==1)&&($fazfechamentos==1)) {
             $tpl_menu->IMAGEM_TITULO = "Fechamentos";
             $tpl_menu->TITULO = "Fechamentos";
             if ($permissao_acertos_ver == 1) {
