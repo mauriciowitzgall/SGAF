@@ -17441,7 +17441,7 @@ INSERT INTO `metodos_pagamento` (`metpag_codigo`, `metpag_nome`) VALUES ('6', 'D
 INSERT INTO `metodos_pagamento` (`metpag_codigo`, `metpag_nome`) VALUES ('7', 'Dinheiro + Cartão Crédito');
 
 
-ALTER TABLE `sgaf_labodega`.`saidas` 
+ALTER TABLE `saidas` 
 ADD COLUMN `sai_recebidodinheiro` FLOAT NULL DEFAULT 0 AFTER `sai_qtdparcelas`,
 ADD COLUMN `sai_recebidocartao` FLOAT NULL DEFAULT 0 AFTER `sai_recebidodinheiro`;
 
@@ -17452,18 +17452,18 @@ ADD COLUMN `sai_recebidocartao` FLOAT NULL DEFAULT 0 AFTER `sai_recebidodinheiro
 UPDATE `configuracoes` SET `cnf_versao`='v4.0b5' WHERE `cnf_codigo`='1';
 
 
-ALTER TABLE `SGAF_labodega2`.`saidas` 
+ALTER TABLE `saidas` 
 ADD COLUMN `sai_areceberquitado` INT(1) NULL DEFAULT 0 AFTER `sai_recebidocartao`;
 
-ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_pagamentosparciais` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_usavendaporcoes`;
 
-DELETE FROM `SGAF_labodega2`.`metodos_pagamento` WHERE `metpag_codigo`='5';
+DELETE FROM `metodos_pagamento` WHERE `metpag_codigo`='5';
 
-ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_multicaixas` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_pagamentosparciais`;
 
-ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_permiteedicaoreferencianavenda` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_multicaixas`;
 
 
@@ -17474,6 +17474,19 @@ ADD COLUMN `quicnf_permiteedicaoreferencianavenda` INT(1) NOT NULL DEFAULT 1 AFT
 
 UPDATE `configuracoes` SET `cnf_versao`='v4.0b6' WHERE `cnf_codigo`='1';
 
-ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_comandaduplicada` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_permiteedicaoreferencianavenda`;
+
+INSERT INTO `relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`) VALUES ('15', 'Lista de comandas não registradas', 'Mostra todos os numeros de comandas que não foram inseridas no sistema entre 2 numeros.');
+
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('15', '1');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('15', '2');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('15', '3');
+
+INSERT INTO `SGAF_labodega2`.`relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`) VALUES ('16', 'Lista de comandas duplicadas', 'Comandas lanças mais de uma vez');
+
+INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('16', '1');
+INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('16', '2');
+INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('16', '3');
+
 
