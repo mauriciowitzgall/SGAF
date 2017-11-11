@@ -19,6 +19,7 @@ $versaonfe = $_POST['versaonfe'];
 $razaosocial = $_POST['razaosocial'];
 $tipopessoanfe = $_POST['tipopessoanfe'];
 $usacomanda = $_POST['usacomanda'];
+$comandaduplicada = $_POST['comandaduplicada'];
 $usacaixa = $_POST['usacaixa'];
 $usavendas = $_POST['usavendas'];
 $usaproducao = $_POST['usaproducao'];
@@ -86,6 +87,7 @@ SET
     quicnf_tipoimpressaodanfe='$tipoimpressaodanfe',
     quicnf_ambientenfe='$ambientenfe',
     quicnf_usacomanda='$usacomanda',
+    quicnf_comandaduplicada='$comandaduplicada',
     quicnf_classificacaopadraoestoque='$classificacaopadraoestoque',
     quicnf_devolucoessobrevendas='$devolucoessobrevendas',
     quicnf_pagamentosparciais='$pagamentosparciais',

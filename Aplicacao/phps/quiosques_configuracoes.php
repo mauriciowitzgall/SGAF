@@ -46,6 +46,7 @@ $sql="SELECT *
      $ambientenfe=$dados["quicnf_ambientenfe"];
      $versaonfe=$dados["quicnf_versaonfe"];
      $usacomanda=$dados["quicnf_usacomanda"];
+     $comandaduplicada=$dados["quicnf_comandaduplicada"];
      $usavendaporcoes=$dados["quicnf_usavendaporcoes"];
      //$usaproducao=$dados["quicnf_usamoduloproducao"];
      $classificacaopadraoestoque=$dados["quicnf_classificacaopadraoestoque"];
@@ -225,6 +226,30 @@ $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->OPTION_VALOR = 0;
 $tpl1->OPTION_NOME = "Não";
 if ($usacomanda=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//Permite Comanda Duplicada
+$tpl1->TITULO = "Permitir comanda duplicada";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_comandaduplicada";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "comandaduplicada";
+$tpl1->SELECT_ID = "comandaduplicada";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($comandaduplicada=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($comandaduplicada=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
 $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT");

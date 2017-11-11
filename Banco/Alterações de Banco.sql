@@ -17474,3 +17474,6 @@ ADD COLUMN `quicnf_permiteedicaoreferencianavenda` INT(1) NOT NULL DEFAULT 1 AFT
 
 UPDATE `configuracoes` SET `cnf_versao`='v4.0b6' WHERE `cnf_codigo`='1';
 
+ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_comandaduplicada` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_permiteedicaoreferencianavenda`;
+

@@ -1053,3 +1053,47 @@ function atualizar_referencia () {
     window.open(destino, '_blank');
     //alert('Atualizar referencia"' + produto);
 }
+
+function verifica_comanda_duplicada (valor) {
+    //console.log(valor);
+    comanda=valor;
+    if (comanda=="") {
+        document.getElementById("validador_comanda_duplicada").src="../imagens/icones/geral/confirmar2.png";
+        document.forms["form1"].botao_incluir.disabled = false;
+        document.getElementById("texto_comanda_duplicada").classList.remove("correto2");
+        document.getElementById("texto_comanda_duplicada").classList.remove("errado2");
+        $("span[id=texto_comanda_duplicada]").text("");
+
+
+    } else {
+        saida=$("input[name=saida]").val();
+        $.post("saidas_valida_comanda_duplicada.php",{
+            comanda:comanda,
+            saida:saida
+        },function(valor2){
+            console.log(valor2); 
+            if (valor2=="emuso") { 
+                //console.log("Em uso: "+valor);
+                document.forms["form1"].botao_incluir.disabled = true;
+                document.getElementById("validador_comanda_duplicada").src="../imagens/icones/geral/erro.png";
+                document.getElementById("texto_comanda_duplicada").classList.remove("correto2");
+                document.getElementById("texto_comanda_duplicada").classList.add("errado2");
+                $("span[id=texto_comanda_duplicada]").text("Em uso!");
+            } else {
+                //console.log("Liberado: "+valor);
+                document.forms["form1"].botao_incluir.disabled = false;
+                document.getElementById("validador_comanda_duplicada").src="../imagens/icones/geral/confirmar.png";
+                document.getElementById("texto_comanda_duplicada").classList.add("correto2");
+                document.getElementById("texto_comanda_duplicada").classList.remove("errado2");
+                $("span[id=texto_comanda_duplicada]").text("");
+                
+            }
+        });   
+        
+    }
+
+
+
+
+
+}

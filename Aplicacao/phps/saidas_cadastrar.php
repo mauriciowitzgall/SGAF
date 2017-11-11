@@ -559,11 +559,28 @@ if ($tiposaida == 1) {
     } else {
         $tpl1->CAMPO_DESABILITADO = " ";
     }
-    $tpl1->CAMPO_ONKEYUP = "";
+    $tpl1->CAMPO_ONKEYUP = "verifica_comanda_duplicada(this.value)";
     $tpl1->CAMPO_ONKEYDOWN = "";
     $tpl1->CAMPO_ONFOCUS = "";
     $tpl1->block("BLOCK_CAMPO");
     $tpl1->block("BLOCK_CONTEUDO");
+    
+    $tpl1->ICONE_DESTINO="#";;
+    $tpl1->ICONE_ARQUIVO="$icones"."confirmar2.png";;
+    $tpl1->ICONE_DICA="Validador de comanda duplicada";
+    $tpl1->ICONE_ALTERNATIVO="X";
+    $tpl1->ICONE_ID="validador_comanda_duplicada";
+    $tpl1->ICONE_AOCLICAR="";
+    $tpl1->block("BLOCK_ICONE_TAMANHOPADRAO");
+    $tpl1->block("BLOCK_ICONE");
+    $tpl1->block("BLOCK_CONTEUDO");
+
+    $tpl1->TEXTO_NOME="texto_comanda_duplicada";
+    $tpl1->TEXTO_CLASSE="";
+    $tpl1->TEXTO_VALOR="";
+    $tpl1->block("BLOCK_TEXTO");
+    $tpl1->block("BLOCK_CONTEUDO");
+
     $tpl1->block("BLOCK_ITEM");
     
     
