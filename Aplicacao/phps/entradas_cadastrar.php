@@ -16,6 +16,9 @@ $tpl->ICONES_CAMINHO = "$icones";
 $operacao = $_GET["operacao"]; //Opera��o 1=Cadastras 2=Editar 3=Ver
 //Cadastro de uma nova entrada
 $passo = $_POST['passo'];
+$tpl->USAPRATELEIRA="$usaprateleira";
+$tpl->CONTROLAVALIDADE="$controlavalidade";
+
 
 //print_r($_REQUEST);
 $paravenda = $_REQUEST['paravenda'];

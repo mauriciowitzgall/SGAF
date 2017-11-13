@@ -26,8 +26,19 @@
         tipneg= $("select[name=tiponegociacao]").val();
         if (passo<=2) popula_tipopessoa(tipneg);
 
-        
-
+        //Verifica se o quiosque usa validade e prateleira
+        usaprateleira=$("input[name=usaprateleira]").val();
+        controlavalidade=$("input[name=controlavalidade]").val();
+        if (usaprateleira==0) {
+            $("tr[id=linha_prateleira]").hide();
+        } else {
+            $("tr[id=linha_prateleira]").show();
+        }
+        if (controlavalidade==0) {
+            $("tr[id=linha_validade]").hide();
+        } else {
+            $("tr[id=linha_validade]").show();
+        }
     };
 
 
@@ -454,6 +465,10 @@ function calcula_valor_percent() {
 
 <form action="entradas_cadastrar.php" method="post" name="form1">
     <table summary="" border="0" class="tabela1" cellpadding="4">
+       <input type="hidden" name="controlavalidade" value="{CONTROLAVALIDADE}">
+       <input type="hidden" name="usaprateleira" value="{USAPRATELEIRA}">
+        
+
         <!--  BEGIN BLOCK_SELECT_ENTRADA -->
         <tr>
             <td class="fun" align="right" width="200px"><b>Entrada:<label class="obrigatorio"></label></b></td>
@@ -656,7 +671,7 @@ function calcula_valor_percent() {
             </td>
         </tr>
         <!--  END BLOCK_CAMPO_VALVENDA -->
-        <tr>
+        <tr id="linha_validade">
             <td align="right"><b>Validade: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" >
                 <select class="campopadrao" name="validade_item" id="validade_item"  onchange="popula_validade(this.value);">
@@ -681,7 +696,7 @@ function calcula_valor_percent() {
                 <span name="saldovalidade" id="saldovalidade" class="dicacampo" ></span>
             </td>
         </tr>
-        <tr>
+        <tr id="linha_prateleira">
             <td align="right"><b>Local/Prateleira: <label class="obrigatorio"></label></b></td>
             <td class="fundo1" ><input type="text" size="25" maxlength="" name="local" id="local" class="campopadrao campo_tamanho_6"  onclick="this.select()" >
         </tr>

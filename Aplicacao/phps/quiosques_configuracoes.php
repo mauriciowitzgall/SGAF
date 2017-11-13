@@ -36,6 +36,8 @@ $sql="SELECT *
  while ($dados=  mysql_fetch_assoc($query)) {
      $usamodulofiscal=$dados["quicnf_usamodulofiscal"];
      $usaestoque=$dados["quicnf_usamoduloestoque"];
+     $controlavalidade=$dados["quicnf_controlavalidade"];
+     $usaprateleira=$dados["quicnf_usaprateleira"];
      $multicaixas=$dados["quicnf_multicaixas"];
      $ultimanfe=$dados["quicnf_ultimanfe"];
      $serienfe=$dados["quicnf_serienfe"];
@@ -105,6 +107,52 @@ $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->OPTION_VALOR = 1;
 $tpl1->OPTION_NOME = "Sim";
 if ($usaestoque=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//Controla Validade
+$tpl1->TITULO = "Controla Validade Produtos";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "controlavalidade";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($controlavalidade=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($controlavalidade=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//Usa Prateleiras
+$tpl1->TITULO = "Utuliza Local / Prateleiras";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "usaprateleira";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($usaprateleira=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($usaprateleira=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
 $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT");

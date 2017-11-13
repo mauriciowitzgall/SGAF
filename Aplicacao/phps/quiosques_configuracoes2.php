@@ -20,6 +20,8 @@ $razaosocial = $_POST['razaosocial'];
 $tipopessoanfe = $_POST['tipopessoanfe'];
 $usacomanda = $_POST['usacomanda'];
 $comandaduplicada = $_POST['comandaduplicada'];
+$controlavalidade = $_POST['controlavalidade'];
+$usaprateleira = $_POST['usaprateleira'];
 $vendasareceber = $_POST['vendasareceber'];
 $usacaixa = $_POST['usacaixa'];
 $usavendas = $_POST['usavendas'];
@@ -91,6 +93,8 @@ SET
     quicnf_ambientenfe='$ambientenfe',
     quicnf_usacomanda='$usacomanda',
     quicnf_comandaduplicada='$comandaduplicada',
+    quicnf_usaprateleira='$usaprateleira',
+    quicnf_controlavalidade='$controlavalidade',
     quicnf_vendasareceber='$vendasareceber',
     quicnf_classificacaopadraoestoque='$classificacaopadraoestoque',
     quicnf_devolucoessobrevendas='$devolucoessobrevendas',

@@ -52,6 +52,9 @@ $modal=$_GET["modal"];
                 $fazacertos=$dados["quicnf_fazacertos"];
                 $fazfechamentos=$dados["quicnf_fazfechamentos"];
                 $permitevendasareceber=$dados["quicnf_vendasareceber"];
+                $permitevendasareceber=$dados["quicnf_vendasareceber"];
+                $controlavalidade=$dados["quicnf_controlavalidade"];
+                $usaprateleira=$dados["quicnf_usaprateleira"];
             }
 
             //include "conexao_tipo.php";
