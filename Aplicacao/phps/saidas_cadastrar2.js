@@ -7,38 +7,47 @@ function metodopagamento() {
     valor=$("select[name=metodopag]").val();
     //alert(valor);
     var total = $("input[name=total]").val();
-    $("input[name=recebidodinheiro]").val("R$ 0,00");
-    $("input[name=recebidocartao]").val("R$ 0,00");    
     if ((valor==1)||(valor==4)) {
+        document.form1.dinheiro.required=true;
         $("input[name=dinheiro]").focus();
+        document.form1.recebidodinheiro.required=false;
+        document.form1.recebidocartao.required=false;
         $("tr[id=tr_recebidodinheiro]").hide();
         $("tr[id=tr_recebidocartao]").hide();
         passo=$("input[name=passo]").val();
         if (passo==1) {
-            $("input[name=dinheiro]").val("R$ 0,00");
-            document.form1.dinheiro.disabled = false;
             $("input[name=dinheiro]").val("");
+            document.form1.dinheiro.disabled = false;
         } else if (passo==2) {
             //O php desabilita o campo
         }
 
     } else if (valor==2) {
-        $("input[name=dinheiro]").focus();
+        document.form1.dinheiro.required=true;
         document.form1.dinheiro.disabled = false;
+        $("input[name=dinheiro]").focus();
         $("input[name=dinheiro]").val(total);
         $("tr[id=tr_recebidodinheiro]").hide();
         $("tr[id=tr_recebidocartao]").hide();
+        document.form1.recebidodinheiro.required=false;
+        document.form1.recebidocartao.required=false;        
     } else if (valor==3) {
+        document.form1.dinheiro.required=true;
+        document.form1.dinheiro.disabled =false;
         $("input[name=dinheiro]").focus();
-        document.form1.dinheiro.disabled = false;
         $("input[name=dinheiro]").val(total);
         $("tr[id=tr_recebidodinheiro]").hide();
         $("tr[id=tr_recebidocartao]").hide();
+        document.form1.recebidodinheiro.required=false;
+        document.form1.recebidocartao.required=false;        
     } else if ((valor==6)||(valor==7)) {
+        document.form1.dinheiro.required=false;
         $("tr[id=tr_dinheiro]").hide();
         $("tr[id=tr_recebidodinheiro]").show();
         $("tr[id=tr_recebidocartao]").show();
         $("input[name=recebidodinheiro]").focus();
+        document.form1.recebidodinheiro.required=true;
+        document.form1.recebidocartao.required=true;        
 
     }
 }

@@ -70,7 +70,7 @@ $totaareceber=$dados["totalliquido"];
 $sql="
 SELECT sum(sai_recebidocartao) as totcartao, sum(sai_recebidodinheiro) as totdinheiro
 FROM saidas 
-WHERE sai_caixaoperacaonumero=20
+WHERE sai_caixaoperacaonumero=$numero
 AND sai_metpag in (6,7)
 AND sai_areceber=0
 ";
