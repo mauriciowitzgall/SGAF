@@ -166,17 +166,18 @@ $tpl2->block("BLOCK_CABECALHO_LINHA");
 $tpl2->block("BLOCK_CABECALHO");
 
 $sql_filtro = "";
-if (!empty($filtro_numero))
-    $sql_filtro = " and rel_codigo=$filtro_numero ";
-if (!empty($filtro_nome))
-    $sql_filtro = " and rel_nome like '%$filtro_nome%'";
-if (!empty($filtro_descricao))
-    $sql_filtro = " and rel_descricao like '%$filtro_descricao%'";
+if ($filtro_numero!="")
+    $sql_filtro = $sql_filtro . " and rel_codigo=$filtro_numero ";
+if ($filtro_nome!="")
+    $sql_filtro = $sql_filtro. " and rel_nome like '%$filtro_nome%'";
+if ($filtro_descricao!="")
+    $sql_filtro = $sql_filtro. " and rel_descricao like '%$filtro_descricao%'";
 if ($usuario_grupo <> 1) {
     $sql_from = " JOIN relatorios_permissao on (relper_relatorio=rel_codigo) ";
-    $sql_filtro = " and relper_grupo=$usuario_grupo";
+    $sql_filtro = $sql_filtro. " and relper_grupo=$usuario_grupo";
 }
 
+//print_r($_REQUEST);
 
 $sql = "
 SELECT DISTINCT rel_codigo, rel_nome, rel_descricao, rel_datacadastro,rel_horacadastro
