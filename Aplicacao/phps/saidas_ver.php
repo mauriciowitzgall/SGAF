@@ -1144,6 +1144,7 @@ if ($ope != 4) {
     $tpl4 = new Template("templates/botoes1.html");
     
     //Botão Fechar
+    $tpl4->COLUNA_LINK_ARQUIVO = "";
     $tpl4->block("BLOCK_LINHAHORIZONTAL_EMCIMA");
     $tpl4->block("BLOCK_COLUNA_LINK_FECHAR");
     $tpl4->block("BLOCK_COLUNA_LINK");

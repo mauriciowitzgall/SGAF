@@ -17467,7 +17467,6 @@ ALTER TABLE `quiosques_configuracoes`
 ADD COLUMN `quicnf_permiteedicaoreferencianavenda` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_multicaixas`;
 
 
-
 ------ FIM ------
 
 ------ INICIO v4.0b6 ------
@@ -17483,14 +17482,26 @@ INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES (
 INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('15', '2');
 INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('15', '3');
 
-INSERT INTO `SGAF_labodega2`.`relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`) VALUES ('16', 'Lista de comandas duplicadas', 'Comandas lanças mais de uma vez');
+INSERT INTO `relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`) VALUES ('16', 'Lista de comandas duplicadas', 'Comandas lanças mais de uma vez');
 
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('16', '1');
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('16', '2');
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('16', '3');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('16', '1');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('16', '2');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('16', '3');
 
 
-ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_fazacertos` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_comandaduplicada`,
 ADD COLUMN `quicnf_fazfechamentos` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_fazacertos`;
 
+
+------ FIM ------
+
+------ INICIO v4.0b7 ------
+
+INSERT INTO `SGAF_labodega2`.`relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`, `rel_horacadastro`) VALUES ('17', 'Lista de vendas com desconto', 'Mostra todas as vendas que possuem desconto maiores que X%', '2017-11-13', '00:00:00');
+UPDATE `SGAF_labodega2`.`relatorios` SET `rel_datacadastro`='2017-11-11' WHERE `rel_codigo`='16';
+UPDATE `SGAF_labodega2`.`relatorios` SET `rel_datacadastro`='2017-11-11' WHERE `rel_codigo`='15';
+
+INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('17', '1');
+INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('17', '2');
+INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('17', '3');

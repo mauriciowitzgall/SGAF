@@ -91,7 +91,6 @@ $sql="SELECT sum(saipag_valor) as totpag FROM saidas_pagamentos WHERE saipag_sai
 if (!$query = mysql_query($sql)) die("Erro SQL 3:" . mysql_error());
 $dados=mysql_fetch_assoc($query);
 $totalpagamentos = $dados["totpag"];
-echo "($totalliquido)[$totalpagamentos]";
 if ($totalliquido==$totalpagamentos) {
     $sql = "
         UPDATE saidas

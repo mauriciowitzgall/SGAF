@@ -182,7 +182,7 @@ $sql = "
 SELECT DISTINCT rel_codigo, rel_nome, rel_descricao, rel_datacadastro,rel_horacadastro
 FROM relatorios $sql_from 
 WHERE 1 $sql_filtro 
-ORDER BY rel_datacadastro DESC
+ORDER BY rel_codigo DESC
 ";
 //Paginação
 $query = mysql_query($sql);
