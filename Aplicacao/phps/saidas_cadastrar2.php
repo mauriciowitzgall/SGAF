@@ -182,6 +182,7 @@ switch ($passo) {
         break;
 }
 
+$tpl->PERMITEVENDASARECEBER = $permitevendasareceber;
 $tpl->PASSO = $passo;
 $tpl->SAIDA = $saida;
 

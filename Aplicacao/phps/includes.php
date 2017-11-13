@@ -51,6 +51,7 @@ $modal=$_GET["modal"];
                 $permiteedicaoreferencianavenda=$dados["quicnf_permiteedicaoreferencianavenda"];
                 $fazacertos=$dados["quicnf_fazacertos"];
                 $fazfechamentos=$dados["quicnf_fazfechamentos"];
+                $permitevendasareceber=$dados["quicnf_vendasareceber"];
             }
 
             //include "conexao_tipo.php";

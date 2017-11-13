@@ -525,6 +525,9 @@ if (($saida == 0) && ($passo == 2)) {
 }
 
 //Enviar ocultamento o numero da saida
+$tpl1->CAMPOOCULTO_NOME = "permitevendasareceber";
+$tpl1->CAMPOOCULTO_VALOR = $permitevendasareceber;
+$tpl1->block("BLOCK_CAMPOSOCULTOS");
 $tpl1->CAMPOOCULTO_NOME = "saida";
 $tpl1->CAMPOOCULTO_VALOR = $saida;
 $tpl1->block("BLOCK_CAMPOSOCULTOS");

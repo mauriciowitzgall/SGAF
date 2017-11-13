@@ -47,6 +47,7 @@ $sql="SELECT *
      $versaonfe=$dados["quicnf_versaonfe"];
      $usacomanda=$dados["quicnf_usacomanda"];
      $comandaduplicada=$dados["quicnf_comandaduplicada"];
+     $vendasareceber=$dados["quicnf_vendasareceber"];
      $usavendaporcoes=$dados["quicnf_usavendaporcoes"];
      $fazfechamentos = $dados['quicnf_fazfechamentos'];
      $fazacertos = $dados['quicnf_fazacertos'];     
@@ -298,6 +299,31 @@ $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->OPTION_VALOR = 0;
 $tpl1->OPTION_NOME = "Não";
 if ($comandaduplicada=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+//Permite Vendas Fiado /Caderninho / A receber
+$tpl1->TITULO = "Permitir vendas à receber";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_vendasareceber";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "vendasareceber";
+$tpl1->SELECT_ID = "vendasareceber";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($vendasareceber=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($vendasareceber=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
 $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT");

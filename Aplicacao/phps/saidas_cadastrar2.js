@@ -1,5 +1,18 @@
 window.onload = function() {
     metodopagamento();
+
+    //Se estiver parametrizado para nao acetar vendas a receber então ocultar o campo e padronizar a opção Não
+    permitevendasareceber = $("input[name=permitevendasareceber]").val();
+    console.log("permitevendasareceber: "+permitevendasareceber);
+    if (permitevendasareceber==0) {
+        $("tr[id=linha_areceber]").hide();
+        document.form1.areceber.required=false;
+
+    } else {
+        document.form1.areceber.required=true;
+        $("tr[id=linha_areceber]").show();
+    }
+
 }
 
 

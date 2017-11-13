@@ -30,9 +30,6 @@ $(window).load(function() {
         consumidor=$("select[id=consumidor]").val();
         $("input[id=cpf]").val("");
         $("input[id=cnpj]").val("");
-        
-        
-        
     });
     
     $("input[id=cliente_nome]").hide();
@@ -52,8 +49,8 @@ $(window).load(function() {
     //Define o foco padrão
     var temp=document.forms["form1"].elements["produto_referencia"]; if (temp) document.forms["form1"].elements["produto_referencia"].focus();
     
-    //Ao selecionar porcoes
-    //$("select[name=porcao]").change(function () { selecionar_porcoes(0) });
+    //Se estiver parametrizado para nao acetar vendas a receber então ocultar o campo e padronizar a opção Não
+    
 });
 
 function selecionar_porcoes(porcao) {

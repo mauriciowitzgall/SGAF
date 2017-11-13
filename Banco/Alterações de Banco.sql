@@ -17505,3 +17505,6 @@ UPDATE `SGAF_labodega2`.`relatorios` SET `rel_datacadastro`='2017-11-11' WHERE `
 INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('17', '1');
 INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('17', '2');
 INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('17', '3');
+
+ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_vendasareceber` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_fazfechamentos`;
