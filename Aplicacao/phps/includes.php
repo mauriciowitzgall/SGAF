@@ -53,6 +53,8 @@ $modal=$_GET["modal"];
                 $fazfechamentos=$dados["quicnf_fazfechamentos"];
                 $permitevendasareceber=$dados["quicnf_vendasareceber"];
                 $permitevendasareceber=$dados["quicnf_vendasareceber"];
+                $gerirestoqueideal=$dados["quicnf_gerirestoqueideal"];
+                $geririmobilizado=$dados["quicnf_geririmobilizado"];
                 $controlavalidade=$dados["quicnf_controlavalidade"];
                 $usaprateleira=$dados["quicnf_usaprateleira"];
             }

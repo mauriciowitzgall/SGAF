@@ -311,14 +311,16 @@ if ($usuario_grupo<>4) {
                     $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
                     $tpl_menu->block("BLOCK_MENU_ITEM");
 
-                    $tpl_menu->LINK = "estoque_validade.php";
-                    $tpl_menu->IMAGEM_ARQUIVO = "estoque.png";
-                    $tpl_menu->IMAGEM_TITULO = "Validade";
-                    $tpl_menu->TITULO = "Validade";
-                    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-                    $tpl_menu->block("BLOCK_MENU_ITEM");
+                    if ($controlavalidade==1) {
+                        $tpl_menu->LINK = "estoque_validade.php";
+                        $tpl_menu->IMAGEM_ARQUIVO = "estoque.png";
+                        $tpl_menu->IMAGEM_TITULO = "Validade";
+                        $tpl_menu->TITULO = "Validade";
+                        $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                        $tpl_menu->block("BLOCK_MENU_ITEM");
+                    }
 
-                    if ($permissao_estoque_qtdide_definir == 1) {
+                    if (($permissao_estoque_qtdide_definir == 1)&&($gerirestoqueideal)) {
                         $tpl_menu->LINK = "estoque_qtdideal.php";
                         $tpl_menu->IMAGEM_ARQUIVO = "estoque.png";
                         $tpl_menu->IMAGEM_TITULO = "Qtd. Ideal";
@@ -327,12 +329,14 @@ if ($usuario_grupo<>4) {
                         $tpl_menu->block("BLOCK_MENU_ITEM");
                     }
                     
-                    $tpl_menu->LINK = "estoque_imobilizado.php";
-                    $tpl_menu->IMAGEM_ARQUIVO = "estoque.png";
-                    $tpl_menu->IMAGEM_TITULO = "Imobilizado";
-                    $tpl_menu->TITULO = "Imobilizado";
-                    $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-                    $tpl_menu->block("BLOCK_MENU_ITEM");
+                    if ($geririmobilizado==1) {
+                        $tpl_menu->LINK = "estoque_imobilizado.php";
+                        $tpl_menu->IMAGEM_ARQUIVO = "estoque.png";
+                        $tpl_menu->IMAGEM_TITULO = "Imobilizado";
+                        $tpl_menu->TITULO = "Imobilizado";
+                        $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                        $tpl_menu->block("BLOCK_MENU_ITEM");
+                    }
 
                 }
             }
