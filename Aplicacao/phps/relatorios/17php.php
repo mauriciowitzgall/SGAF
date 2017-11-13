@@ -176,7 +176,8 @@ $sql = "
 SELECT *
 FROM saidas
 left join pessoas on (sai_consumidor=pes_codigo)
-WHERE sai_tipo=1
+WHERE sai_quiosque=$usuario_quiosque
+AND sai_tipo=1
 and sai_status=1
 and sai_datacadastro between '$datade' and '$dataate'
 and sai_descontopercentual > $descontomin

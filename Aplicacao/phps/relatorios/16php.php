@@ -33,7 +33,7 @@ $tpl_lista->block("BLOCK_CORPO");
 
 //Linhas da listagem
 $cont=0;
-$sql="  SELECT sai_id, count(sai_id) as qtd_repeticoes FROM saidas GROUP BY sai_id";
+$sql="  SELECT sai_id, count(sai_id) as qtd_repeticoes FROM saidas WHERE sai_quiosque=$usuario_quiosque GROUP BY sai_id";
 if (!$query=mysql_query($sql)) die("Erro 0:" . mysql_error());
 while ($dados=mysql_fetch_assoc($query)) {
     $qtd_repeticoes=$dados["qtd_repeticoes"];

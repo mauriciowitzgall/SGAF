@@ -17508,3 +17508,12 @@ INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper
 
 ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
 ADD COLUMN `quicnf_vendasareceber` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_fazfechamentos`;
+
+INSERT INTO `SGAF_labodega2`.`relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`, `rel_horacadastro`) VALUES ('18', 'Lista de vendas por categoria', 'Mostra o total de  venda por categoria', '2017-11-13', '00:00:00');
+
+
+INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('18', '1');
+INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('18', '2');
+INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('18', '3');
+
+DELETE FROM `SGAF_labodega2`.`relatorios_permissao` WHERE `relper_relatorio`='14' and`relper_grupo`='3';

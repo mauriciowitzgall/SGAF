@@ -89,7 +89,7 @@ $cont=0;
 $contador = $valini;
 while ($contador <= $valfim) {
     //echo "($contador)";
-    $sql="  SELECT sai_id FROM saidas WHERE sai_id = $contador";
+    $sql="  SELECT sai_id FROM saidas WHERE sai_id = $contador AND sai_quiosque=$usuario_quiosque";
     if (!$query=mysql_query($sql)) die("Erro 0:" . mysql_error());
     if ($linha = mysql_num_rows($query) > 0) echo ""; 
     else {
