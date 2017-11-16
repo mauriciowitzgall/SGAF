@@ -1614,3 +1614,7 @@ function mascara_ie(estado_sigla) {
     if (estado_sigla == 'AP') $("#ie").mask("999999999");
 }
 
+function fechar() {
+    alert("teste");
+    javascript:window.close(0);
+}

@@ -130,7 +130,7 @@ while($array=mysql_fetch_array($query))
     </td>
 	<td align="center" class="fundo1" width="35px">
             <?php if ($permissao_categorias_ver == 1) { ?>
-            <a href="categorias_cadastrar.php?codigo=<?php echo"$codigo";?>&ver=1" class="link1"><img   width="15px" src="<?php echo $icones;?>detalhes.png" title="Detalhes" alt="Detalhes"/> </a>
+            <a target="_blank" href="categorias_cadastrar.php?modal=1&codigo=<?php echo"$codigo";?>&ver=1" class="link1"><img   width="15px" src="<?php echo $icones;?>detalhes.png" title="Detalhes" alt="Detalhes"/> </a>
             <?php } else { ?>           
             <img   width="15px" src="<?php echo $icones;?>detalhes_desabilitado.png" title="Detalhes" alt="Detalhes"/> 
             <?php } ?>
