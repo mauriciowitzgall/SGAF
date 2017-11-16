@@ -7,6 +7,8 @@ $datade = $_REQUEST["datade"];
 $dataate = $_REQUEST["dataate"];
 
 
+
+//FILTROS DESABILITADOS
 //Campos de filtro
 $tpl_campos = new Template("../templates/cadastro1.html");
 
@@ -54,10 +56,7 @@ $tpl_campos->block("BLOCK_CONTEUDO");
 $tpl_campos->block("BLOCK_COLUNA");
 $tpl_campos->block("BLOCK_LINHA");
 
-
 $tpl_campos->show();
-
-
 
 //TÃ­tulo Filtro
 $tpl2_tit = new Template("../templates/tituloemlinha_2.html");
@@ -70,7 +69,6 @@ $tpl2_tit->show();
 //Listagem
 $tpl_lista = new Template("../templates/lista2.html");
 $tpl_lista->block("BLOCK_TABELA_CHEIA");
-
 
 //Cabeçalho
 $tpl_lista->TEXTO = "PRODUTO";
@@ -100,12 +98,10 @@ $tpl_lista->block("BLOCK_TEXTO");
 $tpl_lista->block("BLOCK_CONTEUDO");
 $tpl_lista->block("BLOCK_COLUNA");
 
-
 $tpl_lista->LINHA_CLASSE = "tab_cabecalho";
 $tpl_lista->block("BLOCK_LINHA_DINAMICA");
 $tpl_lista->block("BLOCK_LINHA");
 $tpl_lista->block("BLOCK_CORPO");
-
 
 //Linhas da listagem
 $cont=0;
@@ -157,7 +153,6 @@ while ($dados=mysql_fetch_assoc($query)) {
     $tpl_lista->block("BLOCK_LINHA");
 }
     
-
 if (mysql_num_rows($query) == 0) {
     $tpl_lista->LINHA_NADA_COLSPAN = "100";
     $tpl_lista->block("BLOCK_LINHA_NADA");
@@ -171,7 +166,6 @@ if (mysql_num_rows($query) == 0) {
     $tpl_lista->block("BLOCK_TEXTO");
     $tpl_lista->block("BLOCK_CONTEUDO");
     $tpl_lista->block("BLOCK_COLUNA");
-
 
     //Total 
     $tpl_lista->COLUNA_COLSPAN = "";
@@ -193,6 +187,9 @@ $tpl_lista->block("BLOCK_LISTAGEM");
 $tpl_lista->show();
 
 
+
+//VENDAS QUE POSSUEM CORTES DE CABELO COMPLETO SEM CORTESIA
+
 //Título 
 $tpl2_tit = new Template("../templates/tituloemlinha_2.html");
 $tpl2_tit->LISTA_TITULO = "VENDAS QUE POSSUEM CORTES DE CABELO COMPLETO SEM CORTESIA";
@@ -201,12 +198,9 @@ $tpl2_tit->block("BLOCK_TITULO");
 $tpl2_tit->block("BLOCK_QUEBRA2");
 $tpl2_tit->show();
 
-
-
 //Listagem
 $tpl_lista = new Template("../templates/lista2.html");
 $tpl_lista->block("BLOCK_TABELA_CHEIA");
-
 
 //Cabeçalho
 $tpl_lista->TEXTO = "VENDAS SEM CORTESIA";
@@ -227,12 +221,10 @@ $tpl_lista->block("BLOCK_TEXTO");
 $tpl_lista->block("BLOCK_CONTEUDO");
 $tpl_lista->block("BLOCK_COLUNA");
 
-
 $tpl_lista->LINHA_CLASSE = "tab_cabecalho";
 $tpl_lista->block("BLOCK_LINHA_DINAMICA");
 $tpl_lista->block("BLOCK_LINHA");
 $tpl_lista->block("BLOCK_CORPO");
-
 
 //Linhas da listagem
 $cont=0;
@@ -275,6 +267,121 @@ while ($dados=mysql_fetch_assoc($query)) {
     $tpl_lista->COLUNA_COLSPAN = "";
     $tpl_lista->TEXTO = "R$ ". number_format($dados["total_reembolsar"], 2, ',', '.');
     $total_reembolsar=$dados["total_reembolsar"];
+    $tpl_lista->COLUNA_ALINHAMENTO = "center";
+    $tpl_lista->block("BLOCK_COLUNA_PADRAO");
+    $tpl_lista->block("BLOCK_TEXTO");
+    $tpl_lista->block("BLOCK_CONTEUDO");
+    $tpl_lista->block("BLOCK_COLUNA");
+
+
+    $tpl_lista->block("BLOCK_LINHA");
+}
+
+if (mysql_num_rows($query) == 0) {
+    $tpl_lista->LINHA_NADA_COLSPAN = "100";
+    $tpl_lista->block("BLOCK_LINHA_NADA");
+} 
+
+$tpl_lista->block("BLOCK_CORPO");
+
+$tpl_lista->block("BLOCK_LISTAGEM");
+$tpl_lista->show();
+
+
+
+//TOTAL VENDIDO ROUPAS
+
+//TÃ­tulo Filtro
+$tpl2_tit = new Template("../templates/tituloemlinha_2.html");
+$tpl2_tit->LISTA_TITULO = "VENDAS DA CATEGORIA ROUPAS E ASSESSÓRIOS";
+$tpl2_tit->block("BLOCK_QUEBRA1");
+$tpl2_tit->block("BLOCK_TITULO");
+$tpl2_tit->block("BLOCK_QUEBRA2");
+$tpl2_tit->show();
+
+//Listagem
+$tpl_lista = new Template("../templates/lista2.html");
+$tpl_lista->block("BLOCK_TABELA_CHEIA");
+
+
+//Cabeçalho
+$tpl_lista->TEXTO = "PRODUTO";
+$tpl_lista->COLUNA_ALINHAMENTO = "center";
+$tpl_lista->COLUNA_TAMANHO = "";
+$tpl_lista->COLUNA_COLSPAN = "";
+$tpl_lista->block("BLOCK_COLUNA_PADRAO");
+$tpl_lista->block("BLOCK_TEXTO");
+$tpl_lista->block("BLOCK_CONTEUDO");
+$tpl_lista->block("BLOCK_COLUNA");
+
+$tpl_lista->TEXTO = "QUANTIDADE";
+$tpl_lista->COLUNA_ALINHAMENTO = "center";
+$tpl_lista->COLUNA_TAMANHO = "";
+$tpl_lista->COLUNA_COLSPAN = "";
+$tpl_lista->block("BLOCK_COLUNA_PADRAO");
+$tpl_lista->block("BLOCK_TEXTO");
+$tpl_lista->block("BLOCK_CONTEUDO");
+$tpl_lista->block("BLOCK_COLUNA");
+
+$tpl_lista->TEXTO = "TOTAL";
+$tpl_lista->COLUNA_ALINHAMENTO = "center";
+$tpl_lista->COLUNA_TAMANHO = "";
+$tpl_lista->COLUNA_COLSPAN = "";
+$tpl_lista->block("BLOCK_COLUNA_PADRAO");
+$tpl_lista->block("BLOCK_TEXTO");
+$tpl_lista->block("BLOCK_CONTEUDO");
+$tpl_lista->block("BLOCK_COLUNA");
+
+
+$tpl_lista->LINHA_CLASSE = "tab_cabecalho";
+$tpl_lista->block("BLOCK_LINHA_DINAMICA");
+$tpl_lista->block("BLOCK_LINHA");
+$tpl_lista->block("BLOCK_CORPO");
+
+
+//Linhas da listagem
+$cont=0;
+$total_geral_roupas=0;
+$sql=" 
+    SELECT pro_nome, sum(saipro_quantidade) as qtd, sum(saipro_valortotal) as tot, pro_tipocontagem as tipcon, pro_referencia
+    FROM saidas
+    JOIN saidas_produtos on (saipro_saida=sai_codigo)
+    JOIN produtos on (pro_codigo=saipro_produto)
+    WHERE sai_status=1
+    and sai_tipo=1
+    and pro_categoria in (87,89)
+    and sai_datacadastro  > '$datade'
+    and sai_datacadastro < '$dataate'
+    GROUP BY saipro_produto
+    ORDER BY pro_nome
+
+";
+if (!$query=mysql_query($sql)) die("Erro 0:" . mysql_error());
+while ($dados=mysql_fetch_assoc($query)) {
+    $tipcon=$dados["tipcon"];
+    $nome_produto=$dados["pro_nome"]. " (".$dados["pro_referencia"].")";
+        
+    $tpl_lista->COLUNA_COLSPAN = "";
+    $tpl_lista->TEXTO = $nome_produto;
+    $tpl_lista->COLUNA_ALINHAMENTO = "left";
+    $tpl_lista->block("BLOCK_COLUNA_PADRAO");
+    $tpl_lista->block("BLOCK_TEXTO");
+    $tpl_lista->block("BLOCK_CONTEUDO");
+    $tpl_lista->block("BLOCK_COLUNA");
+    
+    $tpl_lista->COLUNA_COLSPAN = "";
+    if (($tipcon==2)||($tipcon==3)) $tpl_lista->TEXTO = number_format($dados["qtd"],3, ',', '.');
+    else $tpl_lista->TEXTO = $dados["qtd"];
+
+    $tpl_lista->COLUNA_ALINHAMENTO = "right";
+    $tpl_lista->block("BLOCK_COLUNA_PADRAO");
+    $tpl_lista->block("BLOCK_TEXTO");
+    $tpl_lista->block("BLOCK_CONTEUDO");
+    $tpl_lista->block("BLOCK_COLUNA");
+
+    $tpl_lista->COLUNA_COLSPAN = "";
+    $tpl_lista->TEXTO = "R$ ". number_format($dados["tot"], 2, ',', '.');
+    $total_geral_roupas+=$dados["tot"];
     $tpl_lista->COLUNA_ALINHAMENTO = "right";
     $tpl_lista->block("BLOCK_COLUNA_PADRAO");
     $tpl_lista->block("BLOCK_TEXTO");
@@ -288,14 +395,44 @@ while ($dados=mysql_fetch_assoc($query)) {
 if (mysql_num_rows($query) == 0) {
     $tpl_lista->LINHA_NADA_COLSPAN = "100";
     $tpl_lista->block("BLOCK_LINHA_NADA");
-} 
+} else {
+
+    //Rodapé
+    $tpl_lista->COLUNA_COLSPAN = "2";
+    $tpl_lista->TEXTO = "";
+    $tpl_lista->COLUNA_ALINHAMENTO = "";
+    $tpl_lista->block("BLOCK_COLUNA_PADRAO");
+    $tpl_lista->block("BLOCK_TEXTO");
+    $tpl_lista->block("BLOCK_CONTEUDO");
+    $tpl_lista->block("BLOCK_COLUNA");
+
+
+    //Total 
+    $tpl_lista->COLUNA_COLSPAN = "";
+    $tpl_lista->TEXTO = "R$ " . number_format($total_geral_roupas, 2, ',', '.');
+    $tpl_lista->COLUNA_ALINHAMENTO = "right";
+    $tpl_lista->block("BLOCK_COLUNA_PADRAO");
+    $tpl_lista->block("BLOCK_TEXTO");
+    $tpl_lista->block("BLOCK_CONTEUDO");
+    $tpl_lista->block("BLOCK_COLUNA");
+    
+    $tpl_lista->LINHA_CLASSE = "tab_cabecalho";
+    $tpl_lista->block("BLOCK_LINHA_DINAMICA");
+    $tpl_lista->block("BLOCK_LINHA");
+}
 
 $tpl_lista->block("BLOCK_CORPO");
 
 $tpl_lista->block("BLOCK_LISTAGEM");
+
+$tpl_lista->block("BLOCK_LINHAHORIZONTAL_EMBAIXO");
+
+
 $tpl_lista->show();
 
 
+
+//TOTAL A SER REEMVOLSADO
 //Listagem
 $tpl_lista = new Template("../templates/lista2.html");
 $tpl_lista->block("BLOCK_TABELA_CHEIA");
@@ -311,7 +448,7 @@ $tpl_lista->block("BLOCK_CONTEUDO");
 $tpl_lista->block("BLOCK_COLUNA");
 
 $tpl_lista->COLUNA_COLSPAN = "";
-$total_final=$total_reembolsar+$total_geral;
+$total_final=$total_reembolsar+$total_geral+$total_geral_roupas;
 $tpl_lista->TEXTO = "R$ ". number_format($total_final, 2, ',', '.');
 $tpl_lista->COLUNA_ALINHAMENTO = "right";
 $tpl_lista->block("BLOCK_COLUNA_PADRAO");
@@ -319,11 +456,14 @@ $tpl_lista->block("BLOCK_TEXTO");
 $tpl_lista->block("BLOCK_CONTEUDO");
 $tpl_lista->block("BLOCK_COLUNA");
 
+$tpl_lista->LINHA_CLASSE = "tab_cabecalho";
+$tpl_lista->block("BLOCK_LINHA_DINAMICA");
 $tpl_lista->block("BLOCK_LINHA");
 
 $tpl_lista->block("BLOCK_CORPO");
-
 $tpl_lista->block("BLOCK_LISTAGEM");
+
+
 $tpl_lista->show();
 
 include "rel_baixo.php";
