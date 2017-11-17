@@ -17531,11 +17531,20 @@ ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes`
 ADD COLUMN `quicnf_gerirestoqueideal` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_controlavalidade`,
 ADD COLUMN `quicnf_geririmobilizado` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_gerirestoqueideal`;
 
-
-
 INSERT INTO `SGAF_labodega2`.`relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`) VALUES ('19', 'Acerto de final de mês La Bodega', 'Calcula quanto o Denilson deverá pagar ao Giovani ao final do mês afim de acertar os produto do BAR', '2017-11-14');
 
 
 INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('19', '1');
 INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('19', '2');
 INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('19', '3');
+
+------ FIM ------
+
+------ INICIO v4.0b8 ------
+
+INSERT INTO `SGAF_labodega2`.`relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`) VALUES ('20', 'Lista de produtos vendidos por categoria', 'Mostra todos os produtos que foram vendidos separados por categoria.', '2017-11-16');
+
+INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('20', '1');
+INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('20', '2');
+INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('20', '3');
+
