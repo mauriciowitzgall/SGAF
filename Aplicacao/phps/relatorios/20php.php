@@ -64,7 +64,7 @@ $tpl_lista->block("BLOCK_TABELA_CHEIA");
 
 //Linhas da listagem
 $sql=" 
-    SELECT cat_nome, cat_codigo, pro_nome, sum(saipro_quantidade) as qtd, sum(saipro_valortotal) as tot, pro_tipocontagem as tipcon
+    SELECT cat_nome, cat_codigo, pro_nome, sum(saipro_quantidade) as qtd, sum(saipro_valortotal) as tot, pro_tipocontagem as tipcon, pro_referencia
     FROM saidas
     JOIN saidas_produtos on (saipro_saida=sai_codigo)
     JOIN produtos on (pro_codigo=saipro_produto)
@@ -176,7 +176,11 @@ while ($dados=mysql_fetch_assoc($query)) {
     
 
     $tpl_lista->COLUNA_COLSPAN = "";
-    $tpl_lista->TEXTO = $dados["pro_nome"];
+    $referencia=$dados["pro_referencia"];
+    $produto_nome=$dados["pro_nome"];
+    if ($referencia!="") $nome2="$produto_nome ($referencia)";
+    else $nome2="$produto_nome";
+    $tpl_lista->TEXTO = $nome2;
     $tpl_lista->COLUNA_ALINHAMENTO = "left";
     $tpl_lista->block("BLOCK_COLUNA_PADRAO");
     $tpl_lista->block("BLOCK_TEXTO");

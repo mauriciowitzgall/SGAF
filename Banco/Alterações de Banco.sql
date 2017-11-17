@@ -17523,10 +17523,6 @@ ADD COLUMN `quicnf_usaprateleira` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_vendas
 ADD COLUMN `quicnf_controlavalidade` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_usaprateleira`;
 
 
------- FIM ------
-
------- INICIO v4.0b7 ------
-
 ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
 ADD COLUMN `quicnf_gerirestoqueideal` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_controlavalidade`,
 ADD COLUMN `quicnf_geririmobilizado` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_gerirestoqueideal`;
