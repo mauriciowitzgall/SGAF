@@ -77,7 +77,7 @@ $(document).ready(function() {
                 <b>Recebido no DINHEIRO:</b>                            
             </td>            
             <td align="left" width="" class="fundo1">                
-                <input type="text" required  name="recebidodinheiro" id="recebidodinheiro" onclick="this.select()" size="15" class="campopadrao" value="{RECEBIDODINHEIRO_VALOR}" onkeyup="mascara_dinheiro()" onkeypress="" placeholder=""  {RECEBIDODINHEIRO_DESABILITADO}>
+                <input type="text"  name="recebidodinheiro" id="recebidodinheiro" onclick="this.select()" size="15" class="campopadrao" value="{RECEBIDODINHEIRO_VALOR}" onkeyup="mascara_dinheiro(); calcula_total_recebido_misto(); " onkeypress="" placeholder=""  {RECEBIDODINHEIRO_DESABILITADO}>
                        <span class="dicacampo"></span>
             </td>  
         </tr>       
@@ -86,7 +86,16 @@ $(document).ready(function() {
                 <b>Recebido no CARTÃO:</b>                            
             </td>            
             <td align="left" width="" class="fundo1">                
-                <input type="text" required  name="recebidocartao" id="recebidocartao" onclick="this.select()" size="15" class="campopadrao" value="{RECEBIDOCARTAO_VALOR}" onkeyup="mascara_dinheiro()" onkeypress="" placeholder=""  {RECEBIDOCARTAO_DESABILITADO}>
+                <input type="text"  name="recebidocartao" id="recebidocartao" onclick="this.select()" size="15" class="campopadrao" value="{RECEBIDOCARTAO_VALOR}" onkeyup="mascara_dinheiro(); calcula_total_recebido_misto();" onkeypress="" placeholder=""  {RECEBIDOCARTAO_DESABILITADO}>
+                       <span class="dicacampo"></span>
+            </td>  
+        </tr> 
+        <tr id="tr_recebidomistototal">  
+            <td align="right" width="">                
+                <b>Recebido:</b>                            
+            </td>            
+            <td align="left" width="" class="fundo1">                
+                <input type="text" required  name="recebidomistototal" id="recebidomistototal" onclick="this.select()" size="15" class="campopadrao" value="" onkeyup="" onkeypress="" placeholder=""  disabled="">
                        <span class="dicacampo"></span>
             </td>  
         </tr> 

@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 require "login_verifica.php";
 if ($permissao_saidas_cadastrar <> 1) {
@@ -72,7 +72,7 @@ echo "dinheiro=$dinheiro<br>";
 echo "troco=$troco<br>";
 */
 
-if (($dinheiro <= $total) && ($passo == 2)) {
+if ((($dinheiro <= $total) && ($passo == 2))||(($metodopag==6)||($metodopag==7))) {
 
     echo "
         <script language='javaScript'>

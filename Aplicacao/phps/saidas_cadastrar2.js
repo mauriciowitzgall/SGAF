@@ -3,7 +3,6 @@ window.onload = function() {
 
     //Se estiver parametrizado para nao acetar vendas a receber então ocultar o campo e padronizar a opção Não
     permitevendasareceber = $("input[name=permitevendasareceber]").val();
-    console.log("permitevendasareceber: "+permitevendasareceber);
     if (permitevendasareceber==0) {
         $("tr[id=linha_areceber]").hide();
         document.form1.areceber.required=false;
@@ -15,18 +14,38 @@ window.onload = function() {
 
 }
 
+function calcula_total_recebido_misto () {
+    recebidocartao=$("input[name=recebidocartao]").val();
+    recebidocartao=recebidocartao.replace("R$","");
+    recebidocartao=recebidocartao.replace(".","");
+    recebidocartao=recebidocartao.replace(",",".");
+    if (recebidocartao=="") recebidocartao=0;
+
+
+    recebidodinheiro=$("input[name=recebidodinheiro]").val();
+    recebidodinheiro=recebidodinheiro.replace("R$", "");
+    recebidodinheiro=recebidodinheiro.replace(".","");
+    recebidodinheiro=recebidodinheiro.replace(",",".");
+    if (recebidodinheiro=="") recebidodinheiro=0;
+
+    totalrecebidomisto=parseFloat(recebidocartao)+parseFloat(recebidodinheiro);
+    $("input[name=recebidomistototal]").val(totalrecebidomisto.toFixed(2)).priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
+}
+
 
 function metodopagamento() {  
     valor=$("select[name=metodopag]").val();
     //alert(valor);
     var total = $("input[name=total]").val();
     if ((valor==1)||(valor==4)) {
+        $("tr[id=tr_dinheiro]").show();
         document.form1.dinheiro.required=true;
         $("input[name=dinheiro]").focus();
         document.form1.recebidodinheiro.required=false;
-        document.form1.recebidocartao.required=false;
         $("tr[id=tr_recebidodinheiro]").hide();
+        document.form1.recebidocartao.required=false;
         $("tr[id=tr_recebidocartao]").hide();
+        $("tr[id=tr_recebidomistototal]").hide();
         passo=$("input[name=passo]").val();
         if (passo==1) {
             $("input[name=dinheiro]").val("");
@@ -36,21 +55,25 @@ function metodopagamento() {
         }
 
     } else if (valor==2) {
+        $("tr[id=tr_dinheiro]").show();
         document.form1.dinheiro.required=true;
         document.form1.dinheiro.disabled = false;
         $("input[name=dinheiro]").focus();
         $("input[name=dinheiro]").val(total);
         $("tr[id=tr_recebidodinheiro]").hide();
         $("tr[id=tr_recebidocartao]").hide();
+        $("tr[id=tr_recebidomistototal]").hide();
         document.form1.recebidodinheiro.required=false;
         document.form1.recebidocartao.required=false;        
     } else if (valor==3) {
+        $("tr[id=tr_dinheiro]").show();
         document.form1.dinheiro.required=true;
         document.form1.dinheiro.disabled =false;
         $("input[name=dinheiro]").focus();
         $("input[name=dinheiro]").val(total);
         $("tr[id=tr_recebidodinheiro]").hide();
         $("tr[id=tr_recebidocartao]").hide();
+        $("tr[id=tr_recebidomistototal]").hide();
         document.form1.recebidodinheiro.required=false;
         document.form1.recebidocartao.required=false;        
     } else if ((valor==6)||(valor==7)) {
@@ -58,10 +81,10 @@ function metodopagamento() {
         $("tr[id=tr_dinheiro]").hide();
         $("tr[id=tr_recebidodinheiro]").show();
         $("tr[id=tr_recebidocartao]").show();
+        $("tr[id=tr_recebidomistototal]").show();
         $("input[name=recebidodinheiro]").focus();
         document.form1.recebidodinheiro.required=true;
-        document.form1.recebidocartao.required=true;        
-
+        document.form1.recebidocartao.required=true;
     }
 }
 
