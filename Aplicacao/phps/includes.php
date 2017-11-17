@@ -48,7 +48,6 @@ $modal=$_GET["modal"];
                 $usapagamentosparciais=$dados["quicnf_pagamentosparciais"];
                 $usamulticaixas=$dados["quicnf_multicaixas"];
                 $permiteedicaoreferencianavenda=$dados["quicnf_permiteedicaoreferencianavenda"];
-                $permiteedicaoreferencianavenda=$dados["quicnf_permiteedicaoreferencianavenda"];
                 $fazacertos=$dados["quicnf_fazacertos"];
                 $fazfechamentos=$dados["quicnf_fazfechamentos"];
                 $permitevendasareceber=$dados["quicnf_vendasareceber"];

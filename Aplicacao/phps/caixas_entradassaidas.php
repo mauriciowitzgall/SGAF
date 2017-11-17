@@ -253,10 +253,12 @@ if (mysql_num_rows($query) == 0) {
 }
 
 //Botão Voltar
-$tpl->LINK_VOLTAR="caixas_operacoes.php?codigo=$caixa";
-$tpl->block("BLOCK_RODAPE_BOTAO_VOLTAR");
-$tpl->block("BLOCK_RODAPE_BOTAO");
-$tpl->block("BLOCK_RODAPE_BOTOES");
+if ($usuario_grupo!=4) {
+    $tpl->LINK_VOLTAR="caixas_operacoes.php?codigo=$caixa";
+    $tpl->block("BLOCK_RODAPE_BOTAO_VOLTAR");
+    $tpl->block("BLOCK_RODAPE_BOTAO");
+    $tpl->block("BLOCK_RODAPE_BOTOES");
+}
 
 
 $tpl->show();
