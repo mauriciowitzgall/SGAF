@@ -198,7 +198,7 @@ function selecionar_produto (produto,focoqtd) {
 
     ignorarlotes=$("input[name=ignorarlotes]").val();
     
-    //Se está parametrizado para ignorar lotes, então o fornecedor e lotes devem ser selecionados automaticamente, pegando o ultimo lote por padrão
+    //Se está parametrizado para ignorar lotes, então o fornecedor e lotes devem ser selecionados automaticamente, pegando o mais antigo lote por padrão
     if (ignorarlotes==1) {
         if (produto!=0) {
             $.post("produto_selecionado_ignorandolotes.php", {
@@ -425,7 +425,7 @@ function produtoelote_selecionado(produto,lote,focoqtd) {
                     if (focoqtd!=0) focoqtd=1; 
                         //alert("O foco agoraaaaaa é:"+focoqtd);
                         if (focoqtd==1) {
-                            foco_quantidade();
+                            //foco_quantidade();
                     } 
                 }
                 //Verifica se só tem uma porção, se sim auto-seleciona ela
