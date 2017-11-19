@@ -18,6 +18,8 @@ $operacao = $_GET["operacao"]; //Opera��o 1=Cadastras 2=Editar 3=Ver
 $passo = $_POST['passo'];
 $tpl->USAPRATELEIRA="$usaprateleira";
 $tpl->CONTROLAVALIDADE="$controlavalidade";
+$tpl->QUIOSQUE_REVENDA="$quiosque_revenda";
+$tpl->QUIOSQUE_CONSIGNACAO="$quiosque_consignacao";
 
 
 //print_r($_REQUEST);

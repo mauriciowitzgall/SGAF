@@ -5,6 +5,7 @@
         verifica_paravenda();
 
 
+        //Mantem o produto selecionado caso o checkbox esteja marcado
         var manter = $("input[name=produtomanter]").val();
         if (manter='undefined') manter=1;
         else manter=0;
@@ -18,13 +19,28 @@
                     document.forms["form1"].qtd.focus();
             }
             verifica_incluir();
-
-            
-        
         }
         
-        tipneg= $("select[name=tiponegociacao]").val();
+
+
+        //Verifica se o quiosque tem apenas um tipo de negociação, se tem, não precisa mostrar o campo na tela
+        revenda=$("input[name=quiosque_revenda]").val();
+        consignacao=$("input[name=quiosque_consignacao]").val();
+        
+        if ((revenda==1)&&(consignacao==0)) { //só tem um tipo de negociação
+            tipneg=2;
+            $("tr[id=linha_tiponeg]").hide();
+        } else if ((revenda==0)&&(consignacao==1)) {
+            tipneg=1;
+            $("tr[id=linha_tiponeg]").hide();
+        } else {
+            $("tr[id=linha_tiponeg]").show();
+            tipneg= $("select[name=tiponegociacao]").val();
+        }
+        
         if (passo<=2) popula_tipopessoa(tipneg);
+
+
 
         //Verifica se o quiosque usa validade e prateleira
         usaprateleira=$("input[name=usaprateleira]").val();
@@ -39,6 +55,10 @@
         } else {
             $("tr[id=linha_validade]").show();
         }
+
+        //Se o quiosque só trabalha com um tipo de negociação já seleciona e oculta
+
+
     };
 
 
@@ -466,6 +486,8 @@ function calcula_valor_percent() {
 <form action="entradas_cadastrar.php" method="post" name="form1">
     <table summary="" border="0" class="tabela1" cellpadding="4">
        <input type="hidden" name="controlavalidade" value="{CONTROLAVALIDADE}">
+       <input type="hidden" name="quiosque_revenda" value="{QUIOSQUE_REVENDA}">
+       <input type="hidden" name="quiosque_consignacao" value="{QUIOSQUE_CONSIGNACAO}">
        <input type="hidden" name="usaprateleira" value="{USAPRATELEIRA}">
         
 
