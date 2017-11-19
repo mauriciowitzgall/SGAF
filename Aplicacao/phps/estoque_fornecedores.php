@@ -94,7 +94,7 @@ while ($dados=  mysql_fetch_array($query))
     $valortot=$valortot+$dados['total'];
     $tpl->block("BLOCK_LISTA");      
 }
-$tpl->QTD_TOTAL=  number_format($qtdtot,2,',','.');
+$tpl->QTD_TOTAL=  number_format($qtdtot,3,',','.');
 $tpl->VALOR_TOTAL="R$ ".number_format($valortot,2,',','.');
 $tpl->show();
 

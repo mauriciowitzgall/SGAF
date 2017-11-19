@@ -28,6 +28,7 @@ $vendasareceber = $_POST['vendasareceber'];
 $usacaixa = $_POST['usacaixa'];
 $usavendas = $_POST['usavendas'];
 $usaproducao = $_POST['usaproducao'];
+$ignorarlotes = $_POST['ignorarlotes'];
 $usaestoque = $_POST['usaestoque'];
 $multicaixas = $_POST['multicaixas'];
 $fazfechamentos = $_POST['fazfechamentos'];
@@ -100,6 +101,7 @@ SET
     quicnf_gerirestoqueideal='$gerirestoqueideal',
     quicnf_geririmobilizado='$geririmobilizado',
     quicnf_vendasareceber='$vendasareceber',
+    quicnf_ignorarlotes='$ignorarlotes',
     quicnf_classificacaopadraoestoque='$classificacaopadraoestoque',
     quicnf_devolucoessobrevendas='$devolucoessobrevendas',
     quicnf_pagamentosparciais='$pagamentosparciais',

@@ -3,10 +3,9 @@
 include "controle/conexao.php";
 $produto = $_POST["produto"];
 $lote = $_POST["lote"];
-$qtd = $_POST["qtd"];
 
 if (($produto <> "") AND ($lote <> "")) {
-    $sql = "
+     $sql = "
 SELECT
     etq_quantidade,protip_sigla,protip_nome
 FROM 

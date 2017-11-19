@@ -114,6 +114,7 @@
     </table>
 
     <input type="hidden" name="codigo" value="{CODIGO}">
+    <input type="hidden" name="ignorarlotes" value="{IGNORARLOTES}">
     <input type="hidden" name="nome2" value="{NOME}">
     <input type="hidden" name="link" value="{LINK_ATUAL}">
     <!-- BEGIN BLOCK_CAMPOSOCULTOS -->
@@ -156,7 +157,7 @@
         <td align="right">{LISTA_QTD}</td>
         <td align="left">{LISTA_TIPOCONTAGEM}</td>
         <!--  BEGIN BLOCK_LISTA_PORCAO_LINHA -->
-        <td align="left">{LISTA_PORCAO_NOME}</td>
+        <td align="left" rowspan="{IGNORARLOTE_ROWSPAN}">{LISTA_PORCAO_NOME}</td>
         <td align="left">{LISTA_PORCAO_QTD}</td>
         <!--  END BLOCK_LISTA_PORCAO_LINHA -->
         <td align="right">{LISTA_VALUNI}</td>
