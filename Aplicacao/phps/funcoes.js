@@ -834,6 +834,26 @@ function select_selecionar(select,option){
     }
 }
 
+function remove_caracteres_especiais (valor) {
+    if(valor.match(/'/)) valor = valor.replace("'","");
+    if(valor.match(/!/)) valor = valor.replace("!","");
+    if(valor.match(/@/)) valor = valor.replace("@","");
+    if(valor.match(/#/)) valor = valor.replace("#","");
+    if(valor.match(/$/)) valor = valor.replace("$","");
+    if(valor.match(/%/)) valor = valor.replace("%","");
+    if(valor.match(/^/)) valor = valor.replace("ˆ","");
+    if(valor.match(/&/)) valor = valor.replace("&","");
+    if(valor.match(/{/)) valor = valor.replace("{","");
+    if(valor.match(/}/)) valor = valor.replace("}","");
+    if(valor.match(/|/)) valor = valor.replace("|","");
+    if(valor.match(/˜/)) valor = valor.replace("˜","");
+    if(valor.match(/`/)) valor = valor.replace("`","");
+    valor=valor.replace("/","");
+    valor=valor.replace("\n","");
+    return valor;
+
+}
+
 
 function strzero(dado,tam) {
     var varTemp=retiraCaracteresInvalidos(dado);

@@ -1068,19 +1068,7 @@ function verifica_cnpj(valor) {
 
 function verifica_produto_referencia(valor) {
     
-    if(valor.match(/'/)) valor = valor.replace("'","");
-    if(valor.match(/!/)) valor = valor.replace("!","");
-    if(valor.match(/@/)) valor = valor.replace("@","");
-    if(valor.match(/#/)) valor = valor.replace("#","");
-    if(valor.match(/$/)) valor = valor.replace("$","");
-    if(valor.match(/%/)) valor = valor.replace("%","");
-    if(valor.match(/^/)) valor = valor.replace("ˆ","");
-    if(valor.match(/&/)) valor = valor.replace("&","");
-    if(valor.match(/{/)) valor = valor.replace("{","");
-    if(valor.match(/}/)) valor = valor.replace("}","");
-    if(valor.match(/|/)) valor = valor.replace("|","");
-    if(valor.match(/˜/)) valor = valor.replace("˜","");
-    if(valor.match(/`/)) valor = valor.replace("`","");
+    valor = remove_caracteres_especiais(valor);
     $("input[name=produto_referencia]").val(valor);
     
     if (valor!="") { //Preenche o campo produto referencia com a referencia do produto

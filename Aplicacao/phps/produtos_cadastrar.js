@@ -118,19 +118,7 @@ function dados_fiscais(valor) {
 }
 
 function referencia_valida_caracteres_especiais (valor) {
-    if(valor.match(/'/)) valor = valor.replace("'","");
-    if(valor.match(/!/)) valor = valor.replace("!","");
-    if(valor.match(/@/)) valor = valor.replace("@","");
-    if(valor.match(/#/)) valor = valor.replace("#","");
-    if(valor.match(/$/)) valor = valor.replace("$","");
-    if(valor.match(/%/)) valor = valor.replace("%","");
-    if(valor.match(/^/)) valor = valor.replace("ˆ","");
-    if(valor.match(/&/)) valor = valor.replace("&","");
-    if(valor.match(/{/)) valor = valor.replace("{","");
-    if(valor.match(/}/)) valor = valor.replace("}","");
-    if(valor.match(/|/)) valor = valor.replace("|","");
-    if(valor.match(/˜/)) valor = valor.replace("˜","");
-    if(valor.match(/`/)) valor = valor.replace("`","");
+    valor = remove_caracteres_especiais(valor);
     //alert(valor);
     $("input[name=referencia]").val(valor);
     produto=$("input[name=codigo_produto]").val();
