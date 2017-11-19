@@ -26,6 +26,8 @@ $gerirestoqueideal = $_POST['gerirestoqueideal'];
 $geririmobilizado = $_POST['geririmobilizado'];
 $vendasareceber = $_POST['vendasareceber'];
 $usacaixa = $_POST['usacaixa'];
+$usaean = $_POST['usaean'];
+$usacodigobarrasinterno = $_POST['usacodigobarrasinterno'];
 $usavendas = $_POST['usavendas'];
 $usaproducao = $_POST['usaproducao'];
 $ignorarlotes = $_POST['ignorarlotes'];
@@ -101,6 +103,8 @@ SET
     quicnf_gerirestoqueideal='$gerirestoqueideal',
     quicnf_geririmobilizado='$geririmobilizado',
     quicnf_vendasareceber='$vendasareceber',
+    quicnf_usaean='$usaean',
+    quicnf_usacodigobarrasinterno='$usacodigobarrasinterno',
     quicnf_ignorarlotes='$ignorarlotes',
     quicnf_classificacaopadraoestoque='$classificacaopadraoestoque',
     quicnf_devolucoessobrevendas='$devolucoessobrevendas',

@@ -1,6 +1,16 @@
 
 $(window).load(function() {
 
+    //Verifica se usa EAN, se não usa, oculta
+    usaean=$("input[name=usaean]").val();
+    if (usaean==1) $("tr[id=linha_ean]").show();
+    else $("tr[id=linha_ean]").hide();
+
+    //Verifica se usa código de barras interno, se não usa, oculta
+    usacodigobarrasinterno=$("input[name=usacodigobarrasinterno]").val();
+    if (usacodigobarrasinterno==1) $("tr[id=linha_codigobarrasinterno]").show();
+    else $("tr[id=linha_codigobarrasinterno]").hide();
+
     //Verifica se usa comanda
     var usacomanda= $("input[name=usacomanda]").val();
     if (usacomanda==1) {

@@ -17566,3 +17566,8 @@ CHANGE COLUMN `saipro_codigo` `saipro_codigo` INT NOT NULL AUTO_INCREMENT ;
 
 UPDATE saidas_produtos   
 SET saipro_itemconjunto=saipro_codigo
+
+
+ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_usaean` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_ignorarlotes`,
+ADD COLUMN `quicnf_usacodigobarrasinterno` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_usaean`;

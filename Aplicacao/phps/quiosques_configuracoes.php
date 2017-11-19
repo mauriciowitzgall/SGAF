@@ -37,6 +37,8 @@ $sql="SELECT *
      $usamodulofiscal=$dados["quicnf_usamodulofiscal"];
      $usaestoque=$dados["quicnf_usamoduloestoque"];
      $controlavalidade=$dados["quicnf_controlavalidade"];
+     $usaean=$dados["quicnf_usaean"];
+     $usacodigobarrasinterno=$dados["quicnf_usacodigobarrasinterno"];
      $usaprateleira=$dados["quicnf_usaprateleira"];
      $multicaixas=$dados["quicnf_multicaixas"];
      $ultimanfe=$dados["quicnf_ultimanfe"];
@@ -138,6 +140,54 @@ $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
+
+//Usa EAN
+$tpl1->TITULO = "Usa EAN";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "usaean";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($usaean=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($usaean=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//Código de barras interno
+$tpl1->TITULO = "Usa Código de barras interno";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "usacodigobarrasinterno";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($usacodigobarrasinterno=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($usacodigobarrasinterno=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
 
 //Usa Prateleiras
 $tpl1->TITULO = "Utuliza Local / Prateleiras";

@@ -668,6 +668,9 @@ if (($saida == 0) && ($passo == 2)) {
 
 //Enviar ocultamento o numero da saida
 $tpl1->IGNORARLOTES = "$ignorarlotes";
+$tpl1->USACODIGOBARRASINTERNO = "$usacodigobarrasinterno";
+$tpl1->USAEAN = "$usaean";
+$tpl1->IGNORARLOTES = "$ignorarlotes";
 $tpl1->CAMPOOCULTO_NOME = "permitevendasareceber";
 $tpl1->CAMPOOCULTO_VALOR = $permitevendasareceber;
 $tpl1->block("BLOCK_CAMPOSOCULTOS");
@@ -978,8 +981,9 @@ if ($passo == 2) {
 
 
     //Etiqueta
+    $tpl1->TR_ID="linha_ean";
     $tpl1->CAMPO_QTD_CARACTERES = "14";
-    $tpl1->TITULO = "Etiqueta";
+    $tpl1->TITULO = "Código de Barras EAN";
     $tpl1->ASTERISCO = "";
     $tpl1->CAMPO_TIPO = "text";
     $tpl1->CAMPO_NOME = "etiqueta";
@@ -997,8 +1001,9 @@ if ($passo == 2) {
     $tpl1->block("BLOCK_ITEM");
 
     //Etiqueta Produto Industrializado
+    $tpl1->TR_ID="linha_codigobarrasinterno";
     $tpl1->CAMPO_QTD_CARACTERES = "13";
-    $tpl1->TITULO = "Etiqueta Código Único";
+    $tpl1->TITULO = "Código de Barras Interno";
     $tpl1->ASTERISCO = "";
     $tpl1->CAMPO_TIPO = "text";
     $tpl1->CAMPO_NOME = "etiqueta2";
