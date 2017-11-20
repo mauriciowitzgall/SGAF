@@ -17,7 +17,7 @@ $valortot=0;
 
 $sql="
 SELECT
-    pro_codigo, pro_nome, pes_codigo, pes_nome, sum(etq_quantidade) as qtd, protip_sigla, count(etq_fornecedor) as lotes, round(sum(etq_quantidade*etq_valorunitario),2) as total,pes_id,protip_codigo,pro_referencia, pro_tamanho, pro_cor, pro_descricao
+    pro_codigo, pro_nome, pes_codigo, pes_nome, sum(etq_quantidade) as qtd, protip_sigla, count(etq_fornecedor) as lotes, round(sum(etq_quantidade*etq_valorunitario),2) as total,pes_id,protip_codigo,pro_referencia, pro_tamanho, pro_cor, pro_descricao,pro_tipocontagem
 FROM
     estoque
     join produtos on (pro_codigo=etq_produto)
@@ -43,8 +43,9 @@ while ($dados= mysql_fetch_assoc($query)) {
     $valor_total_geral=$valor_total_geral+$dados["total"];
     $valor_total_qtd=$valor_total_qtd+$dados["qtd"];
 }
-$tpl->VALOR_TOTAL = "R$ ".number_format($valor_total_geral,2,',','.');            
-$tpl->QTD_TOTAL = number_format($valor_total_qtd,2,',','.');            
+//$tpl->VALOR_TOTAL = "R$ ".number_format($valor_total_geral,2,',','.');            
+
+//$tpl->QTD_TOTAL = number_format($valor_total_qtd,2,',','.');            
 $por_pagina = $usuario_paginacao;
 $paginaatual = $_POST["paginaatual"];
 $paginas = ceil($linhas / $por_pagina);
@@ -78,6 +79,7 @@ while ($dados=  mysql_fetch_array($query))
     $cor= $dados['pro_cor'];
     $descricao= $dados['pro_descricao'];
     $nome2=" $nome $tamanho $cor $descricao ";
+    $tipcon=$dados['pro_tipocontagem'];
     $tpl->PRODUTO_NOME=$nome2;
     $tpl->FORNECEDOR_CODIGO=$dados['pes_codigo'];
     $tpl->FORNECEDOR_ID=$dados['pes_id'];
@@ -94,7 +96,8 @@ while ($dados=  mysql_fetch_array($query))
     $valortot=$valortot+$dados['total'];
     $tpl->block("BLOCK_LISTA");      
 }
-$tpl->QTD_TOTAL=  number_format($qtdtot,3,',','.');
+if ($tipcon==1) $tpl->QTD_TOTAL=  number_format($qtdtot,0,'','.');
+else $tpl->QTD_TOTAL=  number_format($qtdtot,3,',','.');
 $tpl->VALOR_TOTAL="R$ ".number_format($valortot,2,',','.');
 $tpl->show();
 

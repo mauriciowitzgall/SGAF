@@ -29,24 +29,28 @@
 <table border="1" class="tabela1" cellpadding="4" width="100%">
 <tr valign="middle" class="tabelacabecalho1">
 	<td width="100px">LOTE</td>
-        <td width="160px" align="center" colspan="2">DATA ENTRADA</td>		
+    <td width="160px" align="center" colspan="2">DATA ENTRADA</td>		
 	<td colspan="2" align="center">QUANTIDADE</td>        
 	<td width="130px" align="center">VALOR UNIT.</td>	
-        <td width="130px" align="center">VALOR TOT.</td>	
-        <td width="100px" align="center">VALIDADE</td>       
-        <td width="100px" align="center">VAL. SALDO</td>       
+    <td width="130px" align="center">VALOR TOT.</td>	
+    <!--  BEGIN BLOCK_VALIDADE_CABECALHO -->
+    <td width="100px" align="center">VALIDADE</td>       
+    <td width="100px" align="center">VAL. SALDO</td>       
+    <!--  END BLOCK_VALIDADE_CABECALHO -->
 </tr>
 <!-- BEGIN BLOCK_LISTA -->
 <tr class="{VENCEU}">
     <td align="right"><a href="entradas_ver.php?codigo={LOTE}" class="link">{LOTE}</a></td>
-        <td align="right">{DATA}</td>
-        <td align="left">{HORA}</td>
+    <td align="right">{DATA}</td>
+    <td align="left">{HORA}</td>
 	<td align="right">{QUANTIDADE}</td>        
 	<td align="left">{SIGLA}</td>        
-        <td align="right">{VALOR_UNIT}</td>
-        <td align="right">{VALOR_TOT}</td>
-        <td align="right">{VALIDADE}</td>        
-        <td align="right">{VALIDADE_SALDO}</td>        
+    <td align="right">{VALOR_UNIT}</td>
+    <td align="right">{VALOR_TOT}</td>
+    <!--  BEGIN BLOCK_VALIDADE_LISTA -->
+    <td align="right">{VALIDADE}</td>        
+    <td align="right">{VALIDADE_SALDO}</td>        
+    <!--  END BLOCK_VALIDADE_LISTA -->
 </tr>
 <!-- END BLOCK_LISTA -->
 <!-- BEGIN BLOCK_LISTA_NADA -->
@@ -62,9 +66,11 @@
     <td align="right" width="100px"> {QTD_TOTAL}</td>
     <td align="left" width="35px"> {SIGLA}</td>
     <td> </td>    
-    <td align="right"> {VALOR_TOTAL}</td>    
+    <td align="right"> {VALOR_TOTAL}</td>   
+    <!--  BEGIN BLOCK_VALIDADE_RODAPE --> 
     <td> </td>    
     <td> </td>
+    <!--  END BLOCK_VALIDADE_RODAPE --> 
 </tr>
 <!-- END BLOCK_LISTA_RODAPE -->
 </table>

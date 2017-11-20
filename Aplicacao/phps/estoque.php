@@ -114,7 +114,7 @@ SELECT DISTINCT
     protip_codigo,
     pro_cooperativa,
     sum(etq_quantidade*etq_valorunitario) as valortot,    
-    round(avg(etq_valorunitario),2) as valunimedia,
+    sum(etq_quantidade*etq_valorunitario)/sum(etq_quantidade) as valunimedia,
     etq_produto,
     pro_referencia,
     pro_tamanho,

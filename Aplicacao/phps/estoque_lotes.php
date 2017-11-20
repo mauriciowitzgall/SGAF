@@ -26,9 +26,11 @@ $dataatual = date("Y-m-d");
 $qtdtot = 0;
 $valtot = 0;
 
+if ($controlavalidade==1) $tpl->block("BLOCK_VALIDADE_CABECALHO");
+
 $sql = "
 SELECT
-    etq_valorunitario,etq_quantidade,protip_codigo,pro_nome,pes_nome,etq_lote,ent_datacadastro,etq_validade,pro_referencia, pro_tamanho, pro_cor, pro_descricao
+    etq_valorunitario,etq_quantidade,protip_codigo,pro_nome,pes_nome,etq_lote,ent_datacadastro,etq_validade,pro_referencia, pro_tamanho, pro_cor, pro_descricao,protip_sigla
 FROM
     estoque
     join produtos on (pro_codigo=etq_produto)
@@ -75,6 +77,7 @@ $tpl->PASTA_ICONES = "$icones";
 $tpl->block("BLOCK_PAGINACAO");
 $sql = $sql . " LIMIT $comeco,$por_pagina ";
 if ($paginaatual==$paginas) {
+    if ($controlavalidade==1) $tpl->block("BLOCK_VALIDADE_RODAPE");
     $tpl->block("BLOCK_LISTA_RODAPE");
 }
 
@@ -102,10 +105,32 @@ while ($dados = mysql_fetch_array($query)) {
     $tpl->SIGLA = $dados['protip_sigla'];
     $tpl->VALOR_UNIT = "R$ " . number_format($dados['etq_valorunitario'], 2, ',', '.');
     $tpl->VALOR_TOT = "R$ " . number_format($dados['etq_valorunitario'] * $dados['etq_quantidade'], 2, ',', '.');
-    if ($dados['etq_validade'] == "0000-00-00")
-        $tpl->VALIDADE = "";
-    else
-        $tpl->VALIDADE = converte_data($dados['etq_validade']);
+    
+    if ($controlavalidade==1) {
+        if ($dados['etq_validade'] == "0000-00-00") $tpl->VALIDADE = "";
+        else $tpl->VALIDADE = converte_data($dados['etq_validade']);
+
+        //Testa a validade do produto
+        $validade = $dados['etq_validade'];
+        if ($validade == "0000-00-00")  {
+            $tpl->VENCEU = "indefinido";
+            $tpl->VALIDADE_SALDO="indefinido";
+        } else {
+            $saldo = diferenca_data($dataatual, $validade, 'D') . " dias";
+            if ($saldo == 0) {
+                $tpl->VALIDADE_SALDO = "hoje";
+            } else if ($saldo == 1) {
+                $tpl->VALIDADE_SALDO = "amanhã";
+            } else if ($saldo < 0 ) {
+                $tpl->VENCEU = "tabelalinhavermelha";
+                $tpl->VALIDADE_SALDO = $saldo;
+            } else {
+               $tpl->VALIDADE_SALDO = $saldo;    
+            }
+        }
+        $tpl->block("BLOCK_VALIDADE_LISTA");
+    }
+
 
     //Pega os totais que v�o para o rodap�
     $qtdtot = $qtdtot + $dados['etq_quantidade'];
@@ -113,26 +138,6 @@ while ($dados = mysql_fetch_array($query)) {
     $tpl->QTD_TOTAL = number_format($qtdtot, 2, ',', '.');
     $tpl->VALOR_TOTAL = "R$ " . number_format($valtot, 2, ',', '.');
 
-    //Testa a validade do produto
-    $validade = $dados['etq_validade'];
-    //$validade = strtotime($validade);
-    if ($validade == "0000-00-00")  {
-        $tpl->VENCEU = "indefinido";
-        $tpl->VALIDADE_SALDO="indefinido";
-    } else {
-        
-        $saldo = diferenca_data($dataatual, $validade, 'D') . " dias";
-        if ($saldo == 0) {
-            $tpl->VALIDADE_SALDO = "hoje";
-        } else if ($saldo == 1) {
-            $tpl->VALIDADE_SALDO = "amanhã";
-        } else if ($saldo < 0 ) {
-            $tpl->VENCEU = "tabelalinhavermelha";
-            $tpl->VALIDADE_SALDO = $saldo;
-        } else {
-           $tpl->VALIDADE_SALDO = $saldo;    
-        }
-    }
 
     //Pega a data de cadastro do lote que � a data de cadastro da entrada
     $lote = $dados["etq_lote"];
@@ -144,6 +149,7 @@ while ($dados = mysql_fetch_array($query)) {
         $tpl->DATA = converte_data($dados_data['ent_datacadastro']);
         $tpl->HORA = converte_hora($dados_data['ent_horacadastro']);
     }
+
 
     $tpl->block("BLOCK_LISTA");
 }
