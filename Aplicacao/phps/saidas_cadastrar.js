@@ -237,18 +237,25 @@ function selecionar_produto (produto,focoqtd) {
                 qtdnoestoque_geral=valor[0];
                 //console.log ("Produto:"+produto+" Lote:"+lote+ " Qtd estoque:"+qtdnoestoque_geral);
 
-                //Popula porcoes
-                $.post("saidas_popula_porcoes.php", {
-                    produto: produto
-                }, function(valor) {
-                    //alert(valor);
-                    $("select[name=porcao]").html(valor);
-                }); 
-                $("input[name=porcao_qtd]").val("");
+                //Se não há quantidade deste produto no estoque desabilita. Senão segue o fluxo
+                if (qtdnoestoque_geral=="") {
+                    document.forms["form1"].porcao.disabled = true;
+                    alert("Estoque vazio para este produto!");
+                } else {
+                    document.forms["form1"].porcao.disabled = false;
+                    //Popula porcoes
+                    $.post("saidas_popula_porcoes.php", {
+                        produto: produto
+                    }, function(valor) {
+                        //alert(valor);
+                        $("select[name=porcao]").html(valor);
+                    }); 
+                    $("input[name=porcao_qtd]").val("");
 
 
-                produtoelote_selecionado(produto,lote);
-                //$("span[name=tipocontagem]").text(valor);
+                    produtoelote_selecionado(produto,lote);
+                    //$("span[name=tipocontagem]").text(valor);
+                }
             });
         }        
     } else {
@@ -387,6 +394,9 @@ function produtoelote_selecionado(produto,lote,focoqtd) {
         $.post("saidas_verifica_tipocontagem.php", {
             produto: $("select[name=produto]").val()
         }, function(valor) {
+
+            tipocontagem=valor;
+
             //Popula quantidade em estoque
             $.post("saidas_verifica_estoque.php", {
                 lote: lote,
@@ -403,12 +413,19 @@ function produtoelote_selecionado(produto,lote,focoqtd) {
                     document.forms["form1"].botao_incluir.disabled = true;
                     var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = true;
                     var temp=document.forms["form1"].porcao_qtd; if (temp) document.forms["form1"].porcao_qtd.disabled = true;
+
                 } else {
                     var temp=document.forms["form1"].qtd; if (temp) document.forms["form1"].qtd.disabled = false;
                     porcao2=$("select[name=porcao]").val();
                     if ((porcao2!="")&&(porcao2!= null)&&(porcao2!== undefined)&&(porcao2!= 0)) document.forms["form1"].porcao_qtd.disabled = false;
                     else document.forms["form1"].porcao_qtd.disabled = true;
-                    $("span[name=qtdnoestoque]").text("(" + etqatu + " no estoque)");
+                    etqatu_mostra=parseFloat(etqatu);
+                    if ((valor == 2)||(valor==3)) {
+                        etqatu_mostra=etqatu_mostra.toLocaleString('pt-BR', { minimumFractionDigits: 3 } ); //Substituto para o Priceformat
+                    } else {
+                        etqatu_mostra=etqatu_mostra.toLocaleString('pt-BR', { minimumFractionDigits: 0 } ); //Substituto para o Priceformat
+                    }
+                    $("span[name=qtdnoestoque]").text("(" + etqatu_mostra + " no estoque)");
                     if ((valor == 2)||(valor==3)) { //Se o tipo de contagem for 'kg' ou 'lt'
                         $("input[name=qtd]").val("");
                         $("input[name=qtd2]").val("");
