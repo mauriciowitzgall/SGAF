@@ -75,6 +75,16 @@ if (($usuario_grupo==1)||(($usuario_grupo==7))) {
         $sql3 = "DELETE FROM entradas WHERE ent_quiosque in (SELECT qui_codigo FROM quiosques WHERE qui_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL7: " . mysql_error());
 
+        //Pagamentos
+        $sql3 = "DELETE FROM saidas_pagamentos WHERE saipag_saida in (SELECT DISTINCT sai_codigo FROM saidas JOIN quiosques on sai_quiosque=qui_codigo WHERE qui_cooperativa=$codigo)";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL8: " . mysql_error());  
+
+        //Devoluções
+        $sql3 = "DELETE FROM saidas_devolucoes_produtos WHERE saidevpro_saida in (SELECT DISTINCT sai_codigo FROM saidas JOIN quiosques on sai_quiosque=qui_codigo WHERE qui_cooperativa=$codigo)";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL8: " . mysql_error());  
+        $sql3 = "DELETE FROM saidas_devolucoes WHERE saidev_saida in (SELECT DISTINCT sai_codigo FROM saidas JOIN quiosques on sai_quiosque=qui_codigo WHERE qui_cooperativa=$codigo)";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL8: " . mysql_error());       
+
         // Saídas
         $sql3 = "DELETE FROM saidas_produtos WHERE saipro_saida in (SELECT DISTINCT sai_codigo FROM saidas JOIN quiosques on sai_quiosque=qui_codigo WHERE qui_cooperativa=$codigo)";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL8: " . mysql_error());

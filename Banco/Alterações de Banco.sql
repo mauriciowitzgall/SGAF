@@ -17544,30 +17544,33 @@ INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper
 INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('20', '2');
 INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('20', '3');
 
-ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_ignorarlotes` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_geririmobilizado`;
 
-ALTER TABLE `sgaf_labodega`.`saidas_produtos` 
+ALTER TABLE `saidas_produtos` 
 ADD COLUMN `saipro_loteconjunto` BIGINT(20) NULL DEFAULT NULL AFTER `saipro_porcao_quantidade`;
 
-
-ALTER TABLE `sgaf_labodega`.`saidas_produtos` 
+ALTER TABLE `saidas_produtos` 
 CHANGE COLUMN `saipro_codigo` `saipro_codigo` BIGINT(20) NOT NULL ,
 ADD COLUMN `saipro_itemconjunto` VARCHAR(45) NULL DEFAULT NULL AFTER `saipro_loteconjunto`,
 ADD COLUMN `saidas_produtoscol` INT NULL AFTER `saipro_itemconjunto`;
 
 
-ALTER TABLE `sgaf_labodega`.`saidas_produtos` 
+ALTER TABLE `saidas_produtos` 
 DROP COLUMN `saidas_produtoscol`,
 CHANGE COLUMN `saipro_itemconjunto` `saipro_itemconjunto` INT NULL DEFAULT NULL ;
 
-ALTER TABLE `sgaf_labodega`.`saidas_produtos` 
+ALTER TABLE `saidas_produtos` 
 CHANGE COLUMN `saipro_codigo` `saipro_codigo` INT NOT NULL AUTO_INCREMENT ;
 
 UPDATE saidas_produtos   
 SET saipro_itemconjunto=saipro_codigo
 
 
-ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_usaean` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_ignorarlotes`,
 ADD COLUMN `quicnf_usacodigobarrasinterno` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_usaean`;
+
+------ FIM ------
+
+------ INICIO v4.0b9 ------
