@@ -320,7 +320,8 @@ while ($dados2 = mysql_fetch_assoc($query2)) {
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "right";
     $tpl2->LISTA_COLUNA_TAMANHO = "";
     $tpl2->LISTA_COLUNA_CLASSE = "";
-    $tpl2->LISTA_COLUNA_VALOR = $dados2["saipro_lote"];
+    if ($dados2["saipro_lote"]==0) $tpl2->LISTA_COLUNA_VALOR = "---";
+    else $tpl2->LISTA_COLUNA_VALOR = $dados2["saipro_lote"];
     $tpl2->block("BLOCK_LISTA_COLUNA");
 
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "right";

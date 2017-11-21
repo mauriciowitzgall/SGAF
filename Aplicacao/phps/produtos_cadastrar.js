@@ -184,11 +184,25 @@ function verifica_controlarestoque () {
         $("tr[id=valunicusto_linha]").show(); 
         $("tr[id=valunivenda_linha]").show(); 
         document.form1.valunivenda.required=true;
+        $("input[name=valunicusto]").priceFormat({
+            prefix: 'R$ ',
+            centsSeparator: ',',
+            thousandsSeparator: '.'
+        });
+
+        $("input[name=valunivenda]").priceFormat({
+            prefix: 'R$ ',
+            centsSeparator: ',',
+            thousandsSeparator: '.'
+        });        
     } else {
         $("tr[id=valunicusto_linha]").hide(); 
         $("tr[id=valunivenda_linha]").hide(); 
         document.form1.valunivenda.required=false;
     }
+
+
+
 }
 
 function verifica_evendido () {
@@ -251,6 +265,9 @@ window.onload = function(){
     
     verifica_evendido();
 
+
+
     //referencia_valida_caracteres_especiais("");
     
 }   
+

@@ -600,11 +600,11 @@ if ($linhas == 0) {
 
        <tr id="valunicusto_linha">
             <td align="right" width="200px"><b>Valor Unitário Custo: <label class="obrigatorio"></label></b></td>
-            <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="valunicusto"  size="18" class="campopadrao"  value="<?php echo "$valunicusto"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"></span></td>
+            <td align="left" width=""><input  onkeypress="" placeholder="R$ 0,00" id="" type="text" name="valunicusto" id="valunicusto" size="18" class="campopadrao"  value="<?php echo "$valunicusto"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"></span></td>
         </tr>
        <tr id="valunivenda_linha">
             <td align="right" width="200px"><b>Valor Unitário Venda: <label class="obrigatorio"></label></b></td>
-            <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="valunivenda"  size="18" class="campopadrao"  value="<?php echo "$valunivenda"; ?>" <?php if ($ver == 1) echo" disabled "; ?>required  placeholder=""><span class="dicacampo"></span></td>
+            <td align="left" width=""><input  onkeypress=""  placeholder="R$ 0,00" id="" type="text" name="valunivenda" id="valunivenda" size="18" class="campopadrao"  value="<?php echo "$valunivenda"; ?>" <?php if ($ver == 1) echo" disabled "; ?>required  placeholder=""><span class="dicacampo"></span></td>
         </tr>
 
 

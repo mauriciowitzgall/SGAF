@@ -63,7 +63,7 @@ $tpl_lista = new Template("../templates/lista2.html");
 $tpl_lista->block("BLOCK_TABELA_CHEIA");
 
 //Linhas da listagem
-$sql=" 
+echo $sql=" 
     SELECT cat_nome, cat_codigo, pro_nome, sum(saipro_quantidade) as qtd, sum(saipro_valortotal) as tot, pro_tipocontagem as tipcon, pro_referencia
     FROM saidas
     JOIN saidas_produtos on (saipro_saida=sai_codigo)
@@ -71,8 +71,7 @@ $sql="
     JOIN produtos_categorias on (pro_categoria=cat_codigo)
     WHERE sai_status=1
     and sai_tipo=1
-    and sai_datacadastro  > '$datade'
-    and sai_datacadastro < '$dataate'
+    and sai_datacadastro BETWEEN '$datade' and '$dataate'
     GROUP BY saipro_produto
     ORDER BY cat_nome, pro_nome
 
@@ -216,6 +215,31 @@ while ($dados=mysql_fetch_assoc($query)) {
 
     //Chama a listagem apenas se mudou de categoria ou se está no ultimo produto
     if ($ultimo==1) {
+
+        //Rodapé
+        $tpl_lista->COLUNA_COLSPAN = "2";
+        $tpl_lista->TEXTO = "";
+        $tpl_lista->COLUNA_ALINHAMENTO = "";
+        $tpl_lista->block("BLOCK_COLUNA_PADRAO");
+        $tpl_lista->block("BLOCK_TEXTO");
+        $tpl_lista->block("BLOCK_CONTEUDO");
+        $tpl_lista->block("BLOCK_COLUNA");
+
+        //Total 
+        $tpl_lista->COLUNA_COLSPAN = "";
+        $tpl_lista->TEXTO = "R$ " . number_format($total_geral, 2, ',', '.');
+        $tpl_lista->COLUNA_ALINHAMENTO = "right";
+        $tpl_lista->block("BLOCK_COLUNA_PADRAO");
+        $tpl_lista->block("BLOCK_TEXTO");
+        $tpl_lista->block("BLOCK_CONTEUDO");
+        $tpl_lista->block("BLOCK_COLUNA");
+        
+        $tpl_lista->LINHA_CLASSE = "tab_cabecalho";
+        $tpl_lista->block("BLOCK_LINHA_DINAMICA");
+        $tpl_lista->block("BLOCK_LINHA");
+
+        $tpl_lista->block("BLOCK_CORPO");
+
         
         $tpl_lista->block("BLOCK_TABELA_CHEIA");
         $tpl_lista->block("BLOCK_LISTAGEM");

@@ -17501,41 +17501,41 @@ ADD COLUMN `quicnf_fazfechamentos` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_fazac
 UPDATE `configuracoes` SET `cnf_versao`='v4.0b7' WHERE `cnf_codigo`='1';
 
 
-INSERT INTO `SGAF_labodega2`.`relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`, `rel_horacadastro`) VALUES ('17', 'Lista de vendas com desconto', 'Mostra todas as vendas que possuem desconto maiores que X%', '2017-11-13', '00:00:00');
-UPDATE `SGAF_labodega2`.`relatorios` SET `rel_datacadastro`='2017-11-11' WHERE `rel_codigo`='16';
-UPDATE `SGAF_labodega2`.`relatorios` SET `rel_datacadastro`='2017-11-11' WHERE `rel_codigo`='15';
+INSERT INTO `relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`, `rel_horacadastro`) VALUES ('17', 'Lista de vendas com desconto', 'Mostra todas as vendas que possuem desconto maiores que X%', '2017-11-13', '00:00:00');
+UPDATE `relatorios` SET `rel_datacadastro`='2017-11-11' WHERE `rel_codigo`='16';
+UPDATE `relatorios` SET `rel_datacadastro`='2017-11-11' WHERE `rel_codigo`='15';
 
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('17', '1');
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('17', '2');
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('17', '3');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('17', '1');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('17', '2');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('17', '3');
 
-ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_vendasareceber` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_fazfechamentos`;
 
-INSERT INTO `SGAF_labodega2`.`relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`, `rel_horacadastro`) VALUES ('18', 'Lista de vendas por categoria', 'Mostra o total de  venda por categoria', '2017-11-13', '00:00:00');
+INSERT INTO `relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`, `rel_horacadastro`) VALUES ('18', 'Lista de vendas por categoria', 'Mostra o total de  venda por categoria', '2017-11-13', '00:00:00');
 
 
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('18', '1');
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('18', '2');
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('18', '3');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('18', '1');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('18', '2');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('18', '3');
 
-DELETE FROM `SGAF_labodega2`.`relatorios_permissao` WHERE `relper_relatorio`='14' and`relper_grupo`='3';
+DELETE FROM `relatorios_permissao` WHERE `relper_relatorio`='14' and`relper_grupo`='3';
 
-ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_usaprateleira` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_vendasareceber`,
 ADD COLUMN `quicnf_controlavalidade` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_usaprateleira`;
 
 
-ALTER TABLE `SGAF_labodega2`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_gerirestoqueideal` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_controlavalidade`,
 ADD COLUMN `quicnf_geririmobilizado` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_gerirestoqueideal`;
 
-INSERT INTO `SGAF_labodega2`.`relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`) VALUES ('19', 'Acerto de final de mês La Bodega', 'Calcula quanto o Denilson deverá pagar ao Giovani ao final do mês afim de acertar os produto do BAR', '2017-11-14');
+INSERT INTO `relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`) VALUES ('19', 'Acerto de final de mês La Bodega', 'Calcula quanto o Denilson deverá pagar ao Giovani ao final do mês afim de acertar os produto do BAR', '2017-11-14');
 
 
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('19', '1');
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('19', '2');
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('19', '3');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('19', '1');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('19', '2');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('19', '3');
 
 ------ FIM ------
 
@@ -17543,11 +17543,11 @@ INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper
 
 UPDATE `configuracoes` SET `cnf_versao`='v4.0b8' WHERE `cnf_codigo`='1';
 
-INSERT INTO `SGAF_labodega2`.`relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`) VALUES ('20', 'Lista de produtos vendidos por categoria', 'Mostra todos os produtos que foram vendidos separados por categoria.', '2017-11-16');
+INSERT INTO `relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`) VALUES ('20', 'Lista de produtos vendidos por categoria', 'Mostra todos os produtos que foram vendidos separados por categoria.', '2017-11-16');
 
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('20', '1');
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('20', '2');
-INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('20', '3');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('20', '1');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('20', '2');
+INSERT INTO `relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('20', '3');
 
 ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_ignorarlotes` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_geririmobilizado`;

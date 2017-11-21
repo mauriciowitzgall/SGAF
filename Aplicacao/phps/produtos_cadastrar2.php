@@ -14,7 +14,7 @@ $nome = ucwords(strtolower($_POST['nome']));
 $nome2 = ucwords(strtolower($_POST['nome2']));
 $modal=$_GET['modal'];
 
-//print_r($_REQUEST);
+print_r($_REQUEST);
 
 $tipo = $_POST['tipo'];
 $marca = $_POST['marca'];
@@ -34,8 +34,14 @@ $dadosfiscais = $_POST['dadosfiscais'];
 $controlarestoque = $_POST['controlarestoque'];
 $evendido = $_POST['evendido'];
 if ($evendido=="") $evendido=0;
-$valunicusto = $_POST['valunicusto'];
+$valunicusto=$_POST['valunicusto'];
+$valunicusto = str_replace("R$ ", "",$valunicusto);
+$valunicusto = str_replace(".", "",$valunicusto);
+$valunicusto = str_replace( ",", ".",$valunicusto);
 $valunivenda = $_POST['valunivenda'];
+$valunivenda = str_replace( "R$ ", "",$valunivenda);
+$valunivenda = str_replace( ".", "",$valunivenda);
+$valunivenda = str_replace( ",", ".",$valunivenda);
 
 if ($dadosfiscais==1) {
     $ncm = $_POST['nfencm_codigo'];
