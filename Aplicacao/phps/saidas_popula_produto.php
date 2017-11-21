@@ -11,10 +11,9 @@ SELECT DISTINCT
     pro_codigo,pro_nome,pro_referencia, pro_tamanho, pro_cor, pro_descricao
 FROM
     produtos
-    join estoque on (etq_produto=pro_codigo)    
+    left join estoque on (etq_produto=pro_codigo and etq_quiosque=$usuario_quiosque)    
 WHERE
-    etq_quiosque=$usuario_quiosque
-     AND pro_evendido=1
+    pro_evendido=1
 ORDER BY
     pro_nome , pro_tamanho, pro_cor, pro_descricao
 ";

@@ -212,10 +212,11 @@ while ($dados=mysql_fetch_assoc($query)) {
 
     //Verifica se é a ultima vez que o laço está repetindo
     $cont++;
-    if ($row==$cont) $ultimo=1;
+    if ($rows==$cont) $ultimo=1;
 
     //Chama a listagem apenas se mudou de categoria ou se está no ultimo produto
     if ($ultimo==1) {
+        
         $tpl_lista->block("BLOCK_TABELA_CHEIA");
         $tpl_lista->block("BLOCK_LISTAGEM");
     }

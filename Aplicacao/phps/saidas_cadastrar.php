@@ -281,7 +281,7 @@ $query = mysql_query($sql);
 if (!$query)
     die("Erro: " . mysql_error());
 $linhas = mysql_num_rows($query);
-if ($linhas == 0) {
+if (($linhas == 0)&&($usaestoque==1)) {
     $tpl = new Template("templates/notificacao.html");
     $tpl->ICONES = $icones;
     $tpl->MOTIVO_COMPLEMENTO = "Para gerar uma venda ou devolução <b>é necessário que se tenha produtos em seu estoque</b>. <br>Clique no botão abaixo para ir para a tela de cadastro de entradas, que é onde você insere produtos em seu estoque!";
@@ -311,321 +311,364 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
     $sql_f5 = "
         SELECT * 
         FROM saidas_produtos
+        join produtos on (saipro_produto=pro_codigo)
         WHERE saipro_saida=$saida
         AND saipro_codigo=$saipro
     ";
-    $query_f5 = mysql_query($sql_f5);
-    if (!$query_f5) {
-        die("Erro de SQL F5 Remover item:" . mysql_error());
-    }
+    
+    if (!$query_f5 = mysql_query($sql_f5)) die("Erro de SQL F5 Remover item:" . mysql_error());
+    $dados_f5=mysql_fetch_assoc($query_f5);
+    $prod_controlar_estoque=$dados_f5["pro_controlarestoque"];
+
     $linhas_f5 = mysql_num_rows($query_f5);
     if ($linhas_f5 > 0) {
 
-        //Verifica se há itens relacionados que devem ser excluídos juntos. Itens conjuntos.
-        $sql8="
-            SELECT saipro_codigo
-            FROM saidas_produtos 
-            WHERE saipro_itemconjunto=$saipro
-            AND saipro_saida=$saida
-        ";
-        if (!$query8=mysql_query($sql8)) die("Erro de SQL verifica itens conjuntos:" . mysql_error());
-    
+        if ($prod_controlar_estoque==1) {
 
-        while ($dados8=mysql_fetch_assoc($query8)) {
-
-            //Para cada item relacionado realizar o incremento no estoque
-            $item=$dados8["saipro_codigo"];
-            //echo "<br><br>($item)";
-            $sql66="SELECT * FROM saidas_produtos WHERE saipro_saida=$saida and saipro_codigo=$item";            
-            if (!$query66=mysql_query($sql66)) die("Erro 66:" . mysql_error());
-            $dados66=mysql_fetch_assoc($query66);
-            $produto_usar=$dados66["saipro_produto"];
-            $lote_usar=$dados66["saipro_lote"];
-            $qtd_usar=$dados66["saipro_quantidade"];
-
-
-            //Devolver para o estoque, e excluir o produto da saida
-            //Verifica se o produto existe no estoque ou se foi eliminado por ter valor 0
-            $sql9 = "
-            SELECT
-                *
-            FROM
-                estoque
-            WHERE
-                etq_quiosque=$usuario_quiosque and
-                etq_produto=$produto_usar and
-                etq_lote=$lote_usar
+            //Verifica se há itens relacionados que devem ser excluídos juntos. Itens conjuntos.
+            $sql8="
+                SELECT saipro_codigo
+                FROM saidas_produtos 
+                WHERE saipro_itemconjunto=$saipro
+                AND saipro_saida=$saida
             ";
-            if (!$query9 = mysql_query($sql9)) die("Erro de SQL 1:" . mysql_error());
-            
-             $linhas9 = mysql_num_rows($query9);
-            if ($linhas9 > 0) { //O produto existe no estoque
-                //Atualiza a quantidade no estoque            
-                //$qtd = str_replace('.', '', $qtd);
-                //$qtd = str_replace(',', '.', $qtd);
-                $sql_repor = "
-                UPDATE
-                    estoque 
-                SET 
-                    etq_quantidade=(etq_quantidade+$qtd_usar)
+            if (!$query8=mysql_query($sql8)) die("Erro de SQL verifica itens conjuntos:" . mysql_error());
+        
+
+            while ($dados8=mysql_fetch_assoc($query8)) {
+
+                //Para cada item relacionado realizar o incremento no estoque
+                $item=$dados8["saipro_codigo"];
+                //echo "<br><br>($item)";
+                $sql66="SELECT * FROM saidas_produtos WHERE saipro_saida=$saida and saipro_codigo=$item";            
+                if (!$query66=mysql_query($sql66)) die("Erro 66:" . mysql_error());
+                $dados66=mysql_fetch_assoc($query66);
+                $produto_usar=$dados66["saipro_produto"];
+                $lote_usar=$dados66["saipro_lote"];
+                $qtd_usar=$dados66["saipro_quantidade"];
+
+
+
+                //Devolver para o estoque, e excluir o produto da saida
+                //Verifica se o produto existe no estoque ou se foi eliminado por ter valor 0
+                $sql9 = "
+                SELECT
+                    *
+                FROM
+                    estoque
                 WHERE
                     etq_quiosque=$usuario_quiosque and
                     etq_produto=$produto_usar and
                     etq_lote=$lote_usar
                 ";
-                if (!$query_repor = mysql_query($sql_repor)) die("Erro de SQL2:" . mysql_error());
+                if (!$query9 = mysql_query($sql9)) die("Erro de SQL 1:" . mysql_error());
                 
-            } else { //O produto não existe mais no estoque, vamos inserir
-                //Pegar os demais dados necessários para inserir no estoque
-                $sql = "SELECT * FROM `entradas_produtos` join entradas on (entpro_entrada=ent_codigo) WHERE entpro_entrada=$lote_usar";
-                if (!$query = mysql_query($sql))  die("Erro de SQL3:" . mysql_error());
-                
-                while ($dados = mysql_fetch_assoc($query)) {
-                    $validade = $dados["entpro_validade"];
-                    $valuni = $dados["entpro_valorunitario"];
-                    $fornecedor = $dados["ent_fornecedor"];
+                 $linhas9 = mysql_num_rows($query9);
+                if ($linhas9 > 0) { //O produto existe no estoque
+                    //Atualiza a quantidade no estoque            
+                    //$qtd = str_replace('.', '', $qtd);
+                    //$qtd = str_replace(',', '.', $qtd);
+                    $sql_repor = "
+                    UPDATE
+                        estoque 
+                    SET 
+                        etq_quantidade=(etq_quantidade+$qtd_usar)
+                    WHERE
+                        etq_quiosque=$usuario_quiosque and
+                        etq_produto=$produto_usar and
+                        etq_lote=$lote_usar
+                    ";
+                    if (!$query_repor = mysql_query($sql_repor)) die("Erro de SQL2:" . mysql_error());
+                    
+                } else { //O produto não existe mais no estoque, vamos inserir
+                    //Pegar os demais dados necessários para inserir no estoque
+                    $sql = "SELECT * FROM `entradas_produtos` join entradas on (entpro_entrada=ent_codigo) WHERE entpro_entrada=$lote_usar";
+                    if (!$query = mysql_query($sql))  die("Erro de SQL3:" . mysql_error());
+                    
+                    while ($dados = mysql_fetch_assoc($query)) {
+                        $validade = $dados["entpro_validade"];
+                        $valuni = $dados["entpro_valorunitario"];
+                        $fornecedor = $dados["ent_fornecedor"];
+                    }
+                    //Interir o produto no estoque
+                    //echo "<br><br>inseriu no estoque<br><br>";
+                    $sql16 = "INSERT INTO estoque (etq_quiosque,etq_produto,etq_fornecedor,etq_lote,etq_quantidade,etq_valorunitario,etq_validade)
+                    VALUES ('$usuario_quiosque','$produto_usar','$fornecedor','$lote_usar','$qtd_usar','$valuni','$validade')";
+                    if (!$query16 = mysql_query($sql16)) die("Erro de SQL4 (inserir no estoque): " . mysql_error());
+                    
                 }
-                //Interir o produto no estoque
-                //echo "<br><br>inseriu no estoque<br><br>";
-                $sql16 = "INSERT INTO estoque (etq_quiosque,etq_produto,etq_fornecedor,etq_lote,etq_quantidade,etq_valorunitario,etq_validade)
-                VALUES ('$usuario_quiosque','$produto_usar','$fornecedor','$lote_usar','$qtd_usar','$valuni','$validade')";
-                if (!$query16 = mysql_query($sql16)) die("Erro de SQL4 (inserir no estoque): " . mysql_error());
-                
+
+                //Elimina o item (e se houver itens conjuntos tb)
+                $sql_del = "DELETE FROM saidas_produtos WHERE saipro_saida=$saida and saipro_codigo=$item";
+                if (!$query_del = mysql_query($sql_del))  die("Erro de SQL5:" . mysql_error());
+
             }
-
-
+        } else {
             //Elimina o protudo da Saída
-            $sql_del = "DELETE FROM saidas_produtos WHERE saipro_saida=$saida and saipro_codigo=$item";
-            if (!$query_del = mysql_query($sql_del))  die("Erro de SQL5:" . mysql_error());
+            $sql_del = "DELETE FROM saidas_produtos WHERE saipro_saida=$saida and saipro_codigo=$saipro";
+            if (!$query_del = mysql_query($sql_del))  die("Erro de SQL55:" . mysql_error());
 
         }
         
-
         //Atualiza o status para incompleto
          $sql_status = "UPDATE saidas SET sai_status=2 WHERE sai_codigo=$saida";
          if (!$query_status = mysql_query($sql_status)) die("Erro de SQL Status: " . mysql_error());
     }
-} else {
-    //Independente se for cadastrou ou edição, só inserir produto na saida se vier os dados do produto e lote etc. dos campos
-    //print_r($_REQUEST);
-    //echo "<br><br>saida: $saida produto:$produto lote:$lote<br><br>";
-   //echo "$saida / $produto / $lote ";
-    if (($saida != "") && ($produto != "")) {
-        if ($lote!="") { 
-            //Verifica a quantida atual do estoque
-            $sql = "SELECT etq_quantidade FROM estoque WHERE etq_quiosque=$usuario_quiosque and etq_produto=$produto and etq_lote=$lote";
-            if (!$query = mysql_query($sql))  die("Erro de SQL7:" . mysql_error());
-            while ($dados = mysql_fetch_assoc($query)) {
-                $qtdatual = $dados["etq_quantidade"];
-            }
+} else {  //Independente se for cadastrou ou edição, só inserir produto na saida se vier os dados do produto e lote etc. dos campos
+    if (($saida != "") && ($produto != "")) { //Produto selecionado, portanto incluir este na saida
+        
+        $produto_controlar_estoque=$_REQUEST["produto_controlar_estoque"];
+        if ($produto_controlar_estoque==1) { //O produto tem controle de estoque, então deve-se decrementa-lo do estoque.
 
-            //Calculando a quantidade final
-            $qtdfinal = $qtdatual - $qtd;
-            //echo "qtdfinal = $qtdatual - $qtd;";
+        
 
-            //Se a quantidade final do estoque ficar negativa ent�o n�o permitir seja inserido a saida deste produto e nem atualizado o estoque        
-            //(Isso acontece quando o usu�rio inclui um produto na lista e pressiona F5)
-            if ($qtdfinal >= 0) {
-                //Inserindo os produtos na Sa�da
-                $sql_saida_produto = "
-                INSERT INTO saidas_produtos (
-                    saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade
-                )
-                VALUES (
-                    '$saida','$produto','$lote','$qtd','$valunisai','$valtotsai',$porcao,$porcao_qtd
-                )        
-                ";
-                $query_saida_produto = mysql_query($sql_saida_produto);
-                if (!$query_saida_produto) {
-                    die("Erro de SQL61: " . mysql_error());
+            if ($lote!="") { //Quando o cliente não ignora lotes, ou seja, seleciona fornecedor e lote na hora da venda
+
+                //Verifica a quantida atual do estoque
+                $sql = "SELECT etq_quantidade FROM estoque WHERE etq_quiosque=$usuario_quiosque and etq_produto=$produto and etq_lote=$lote";
+                if (!$query = mysql_query($sql))  die("Erro de SQL7:" . mysql_error());
+                while ($dados = mysql_fetch_assoc($query)) {
+                    $qtdatual = $dados["etq_quantidade"];
                 }
 
-                //Atualiza o item relacionado caso o sistema ignore lotes.
-                $sql44="SELECT max(saipro_codigo) as item_maior FROM saidas_produtos WHERE saipro_saida=$saida";
-                if (!$query44 = mysql_query($sql44)) die("Erro de SQL44: " . mysql_error());
-                $dados44=mysql_fetch_assoc($query44);
-                $item_cadastrado=$dados44["item_maior"];
-                $sql45 = "
-                    UPDATE saidas_produtos   
-                    SET saipro_itemconjunto='$item_cadastrado'
-                    WHERE saipro_codigo='$item_cadastrado'
-                    AND saipro_saida=$saida
-                ";
-                if (!$query45 = mysql_query($sql45)) die("Erro SQL: 45" . mysql_error());
+                //Calculando a quantidade final
+                $qtdfinal = $qtdatual - $qtd;
+                //echo "qtdfinal = $qtdatual - $qtd;";
 
-
-                //Atualiza o status para incompleto
-                 $sql_status = "UPDATE saidas SET sai_status=2 WHERE sai_codigo=$saida";
-                $query_status = mysql_query($sql_status);
-                if (!$query_status)
-                    die("Erro de SQL Status: " . mysql_error());
-
-
-                //Retirando do estoque           
-                $sql_retirar = "
-                UPDATE
-                    estoque 
-                SET 
-                    etq_quantidade=$qtdfinal
-                WHERE
-                    etq_quiosque=$usuario_quiosque and
-                    etq_produto=$produto and
-                    etq_lote=$lote 
-                ";
-                $query_retirar = mysql_query($sql_retirar);
-                if (!$query_retirar) {
-                    die("Erro de SQL8:" . mysql_error());
-                }
-
-                //Se a quantidade do etoque zerou ent�o eliminar o produto do estoque
-                if ($qtdfinal == "0") {
-                     $sql = "DELETE FROM estoque WHERE etq_quiosque=$usuario_quiosque and etq_produto=$produto and etq_lote=$lote";
-                    $query = mysql_query($sql);
-                    if (!$query) {
-                        die("Erro de SQL9:" . mysql_error());
-                    }
-                }
-            } 
-        } else { //Não tem lote, portanto provavelmente o quiosque está parametrizado para ignorar lotes.
-            if ($ignorarlotes==1) {
-                //Verifica a quantidade existente em cada lote. Quando encontrar decrementar o ultimo e se faltar descrementar o próximo lote (peneultimo) e assim por diante, até que a quantidade desejada a ser retirada do estoque seja suprida.
-                $sql5="
-                    SELECT etq_lote,etq_quantidade,etq_valorunitario
-                    FROM estoque 
-                    WHERE etq_produto=$produto
-                    AND etq_quiosque=$usuario_quiosque
-                    ORDER BY etq_lote ASC
-                ";
-                if (!$query5 = mysql_query($sql5)) die("Erro de SQL:" . mysql_error());
-                $qtd_aretirar=$qtd;
-                $conta=0;
-                $qtd_porcao_aretirar=0;
-                $valuni=0;
-                while ($dados5 = mysql_fetch_array($query5)) { //Repete enquanto tem não tem quantidade suficiente para registrar a retirada do estoque ignorando o lote.
-                    $conta++;
-                    $valuni_estoque=$dados5["etq_valorunitario"];
-                    $lote_estoque=$dados5["etq_lote"];
-                    $qtd_estoque=$dados5["etq_quantidade"];
-                    $saldo=$qtd_estoque-$qtd_aretirar;
-                    $valuni=$valuni_estoque;
-                    //echo "($porcao_qtd / $valuni3)";
-                    if ($porcao_qtd>0) {
-                        $valuni=$valunisai;
+                //Se a quantidade final do estoque ficar negativa ent�o n�o permitir seja inserido a saida deste produto e nem atualizado o estoque        
+                //(Isso acontece quando o usu�rio inclui um produto na lista e pressiona F5)
+                if ($qtdfinal >= 0) {
+                    //Inserindo os produtos na Saída
+                    $sql_saida_produto = "
+                    INSERT INTO saidas_produtos (
+                        saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade
+                    )
+                    VALUES (
+                        '$saida','$produto','$lote','$qtd','$valunisai','$valtotsai',$porcao,$porcao_qtd
+                    )        
+                    ";
+                    $query_saida_produto = mysql_query($sql_saida_produto);
+                    if (!$query_saida_produto) {
+                        die("Erro de SQL61: " . mysql_error());
                     }
 
-                   
-                    if ($conta==1) {
-                        //$valuni=$valuni_estoque;
-                        $lote_principal=$lote_estoque;
-                    } 
+                    //Atualiza o item relacionado caso o sistema ignore lotes.
+                    $sql44="SELECT max(saipro_codigo) as item_maior FROM saidas_produtos WHERE saipro_saida=$saida";
+                    if (!$query44 = mysql_query($sql44)) die("Erro de SQL44: " . mysql_error());
+                    $dados44=mysql_fetch_assoc($query44);
+                    $item_cadastrado=$dados44["item_maior"];
+                    $sql45 = "
+                        UPDATE saidas_produtos   
+                        SET saipro_itemconjunto='$item_cadastrado'
+                        WHERE saipro_codigo='$item_cadastrado'
+                        AND saipro_saida=$saida
+                    ";
+                    if (!$query45 = mysql_query($sql45)) die("Erro SQL: 45" . mysql_error());
+
 
                     //Atualiza o status para incompleto
-                    $sql_status = "UPDATE saidas SET sai_status=2 WHERE sai_codigo=$saida";
-                    if (!$query_status = mysql_query($sql_status)) die("Erro de SQL Status: " . mysql_error());
+                     $sql_status = "UPDATE saidas SET sai_status=2 WHERE sai_codigo=$saida";
+                    $query_status = mysql_query($sql_status);
+                    if (!$query_status)
+                        die("Erro de SQL Status: " . mysql_error());
 
 
-
-
-                    if ($saldo <=0) { //Tirar toda a quantidade do lote atual, e continuar retirando no próximo lote
-                        //echo "Limpar lote: $lote_estoque ($qtd_aretirar / $qtd_estoque) <br>";
-                        
-
-                        if (($saldo==0)&&($conta==1)) $lote_principal="";
-                        $qtd_porcao_aretirar=($porcao_qtd*$qtd_estoque)/$qtd;
-                        $qtd_porcao_aretirar=number_format($qtd_porcao_aretirar, 2, '.', '');
-                        if ($porcao_qtd>0) $valtot= $valuni * $qtd_porcao_aretirar;
-                        else $valtot= $valuni * $qtd_estoque;
-                        
-                        //Insere o registro nas saídas
-                        $sql_saida_produto = "
-                        INSERT INTO saidas_produtos (
-                            saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade,saipro_loteconjunto
-                        )
-                        VALUES (
-                            '$saida','$produto','$lote_estoque','$qtd_estoque','$valuni','$valtot',$porcao,$qtd_porcao_aretirar,'$lote_principal'
-                        )        
-                        ";
-                        if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL68: " . mysql_error());
-
-                        //Atualiza o item relacionado caso o sistema ignore lotes.
-                        //echo "<br><br>".
-                        $sql44="SELECT max(saipro_codigo) as item_maior FROM saidas_produtos WHERE saipro_saida=$saida";
-                        if (!$query44 = mysql_query($sql44)) die("Erro de SQL44: " . mysql_error());
-                        $dados44=mysql_fetch_assoc($query44);
-                        $item_cadastrado=$dados44["item_maior"];
-                        if ($conta==1) $item_principal=$item_cadastrado;
-                        //echo "<br>".
-                        $sql45 = "
-                            UPDATE saidas_produtos   
-                            SET saipro_itemconjunto='$item_principal'
-                            WHERE saipro_codigo='$item_cadastrado'
-                            AND saipro_saida=$saida
-                        ";
-                        if (!$query45 = mysql_query($sql45)) die("Erro SQL: 45" . mysql_error());
-
-                        //Tirar do estoque todo o lote atual
-                        //Eliminar o produto do estoque pois a quantidade zerou
-                        $sql = "DELETE FROM estoque WHERE etq_quiosque=$usuario_quiosque and etq_produto=$produto and etq_lote=$lote_estoque";
-                        if (!$query = mysql_query($sql)) die("Erro de SQL10:" . mysql_error());
-
-                        //Calcula a quantidade restante para usar no proximo lote   
-                        $qtd_aretirar=$qtd_aretirar - $qtd_estoque;
-
-                    } else { //Atualizar o estoque neste lote com o restante da quantidade a retirar
-                        //echo "Atualziar lote: $lote_estoque ($qtd_aretirar / $qtd_estoque)<br>";
-                        if ($conta==1) {
-                            $lote_principal="";
-                        }
-                        
-                        $qtd_porcao_aretirar=($porcao_qtd*$qtd_aretirar)/$qtd;
-                        $qtd_porcao_aretirar=number_format($qtd_porcao_aretirar, 2, '.', '');
-                        if ($porcao_qtd>0) $valtot= $valuni * $qtd_porcao_aretirar;
-                        else $valtot= $valuni * $qtd_aretirar;                      
-
-
-                        //Insere o registro nas saídas
-                        //echo "<br><br>".
-                        $sql_saida_produto = "
-                        INSERT INTO saidas_produtos (
-                            saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade,saipro_loteconjunto
-                        )
-                        VALUES (
-                            '$saida','$produto','$lote_estoque','$qtd_aretirar','$valuni','$valtot',$porcao,$qtd_porcao_aretirar,'$lote_principal'
-                        )        
-                        ";
-                        if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL64: " . mysql_error());
-
-                        $sql44="SELECT max(saipro_codigo) as item_maior FROM saidas_produtos WHERE saipro_saida=$saida";
-                        if (!$query44 = mysql_query($sql44)) die("Erro de SQL44: " . mysql_error());
-                        $dados44=mysql_fetch_assoc($query44);
-                        $item_cadastrado=$dados44["item_maior"];
-                        if ($conta==1) $item_principal=$item_cadastrado;
-                        //echo "<br>".
-                        $sql45 = "
-                            UPDATE saidas_produtos   
-                            SET saipro_itemconjunto='$item_principal'
-                            WHERE saipro_codigo='$item_cadastrado'
-                            AND saipro_saida=$saida
-                        ";
-                        if (!$query45 = mysql_query($sql45)) die("Erro SQL: 45" . mysql_error());
-
-                        //Retirando do estoque           
-                        $sql_retirar = "
-                        UPDATE
-                            estoque 
-                        SET 
-                            etq_quantidade=etq_quantidade-$qtd_aretirar
-                        WHERE
-                            etq_quiosque=$usuario_quiosque and
-                            etq_produto=$produto and
-                            etq_lote=$lote_estoque
-                        ";
-                        if (!$query_retirar = mysql_query($sql_retirar))  die("Erro de SQL8:" . mysql_error());
+                    //Retirando do estoque           
+                    $sql_retirar = "
+                    UPDATE
+                        estoque 
+                    SET 
+                        etq_quantidade=$qtdfinal
+                    WHERE
+                        etq_quiosque=$usuario_quiosque and
+                        etq_produto=$produto and
+                        etq_lote=$lote 
+                    ";
+                    $query_retirar = mysql_query($sql_retirar);
+                    if (!$query_retirar) {
+                        die("Erro de SQL8:" . mysql_error());
                     }
-                    if ($saldo>=0) break;
 
+                    //Se a quantidade do etoque zerou ent�o eliminar o produto do estoque
+                    if ($qtdfinal == "0") {
+                         $sql = "DELETE FROM estoque WHERE etq_quiosque=$usuario_quiosque and etq_produto=$produto and etq_lote=$lote";
+                        $query = mysql_query($sql);
+                        if (!$query) {
+                            die("Erro de SQL9:" . mysql_error());
+                        }
+                    }
+                } 
+            } else { //Não tem lote, portanto provavelmente o quiosque está parametrizado para ignorar lotes.
+                if ($ignorarlotes==1) {
+                    //Verifica a quantidade existente em cada lote. Quando encontrar decrementar o ultimo e se faltar descrementar o próximo lote (peneultimo) e assim por diante, até que a quantidade desejada a ser retirada do estoque seja suprida.
+                    $sql5="
+                        SELECT etq_lote,etq_quantidade,etq_valorunitario
+                        FROM estoque 
+                        WHERE etq_produto=$produto
+                        AND etq_quiosque=$usuario_quiosque
+                        ORDER BY etq_lote ASC
+                    ";
+                    if (!$query5 = mysql_query($sql5)) die("Erro de SQL:" . mysql_error());
+                    $qtd_aretirar=$qtd;
+                    $conta=0;
+                    $qtd_porcao_aretirar=0;
+                    $valuni=0;
+                    while ($dados5 = mysql_fetch_array($query5)) { //Repete enquanto tem não tem quantidade suficiente para registrar a retirada do estoque ignorando o lote.
+                        $conta++;
+                        $valuni_estoque=$dados5["etq_valorunitario"];
+                        $lote_estoque=$dados5["etq_lote"];
+                        $qtd_estoque=$dados5["etq_quantidade"];
+                        $saldo=$qtd_estoque-$qtd_aretirar;
+                        $valuni=$valuni_estoque;
+                        //echo "($porcao_qtd / $valuni3)";
+                        if ($porcao_qtd>0) {
+                            $valuni=$valunisai;
+                        }
+
+                       
+                        if ($conta==1) {
+                            //$valuni=$valuni_estoque;
+                            $lote_principal=$lote_estoque;
+                        } 
+
+                        //Atualiza o status para incompleto
+                        $sql_status = "UPDATE saidas SET sai_status=2 WHERE sai_codigo=$saida";
+                        if (!$query_status = mysql_query($sql_status)) die("Erro de SQL Status: " . mysql_error());
+
+
+
+
+                        if ($saldo <=0) { //Tirar toda a quantidade do lote atual, e continuar retirando no próximo lote
+                            //echo "Limpar lote: $lote_estoque ($qtd_aretirar / $qtd_estoque) <br>";
+                            
+
+                            if (($saldo==0)&&($conta==1)) $lote_principal="";
+                            $qtd_porcao_aretirar=($porcao_qtd*$qtd_estoque)/$qtd;
+                            $qtd_porcao_aretirar=number_format($qtd_porcao_aretirar, 2, '.', '');
+                            if ($porcao_qtd>0) $valtot= $valuni * $qtd_porcao_aretirar;
+                            else $valtot= $valuni * $qtd_estoque;
+                            
+                            //Insere o registro nas saídas
+                            $sql_saida_produto = "
+                            INSERT INTO saidas_produtos (
+                                saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade,saipro_loteconjunto
+                            )
+                            VALUES (
+                                '$saida','$produto','$lote_estoque','$qtd_estoque','$valuni','$valtot',$porcao,$qtd_porcao_aretirar,'$lote_principal'
+                            )        
+                            ";
+                            if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL68: " . mysql_error());
+
+                            //Atualiza o item relacionado caso o sistema ignore lotes.
+                            //echo "<br><br>".
+                            $sql44="SELECT max(saipro_codigo) as item_maior FROM saidas_produtos WHERE saipro_saida=$saida";
+                            if (!$query44 = mysql_query($sql44)) die("Erro de SQL44: " . mysql_error());
+                            $dados44=mysql_fetch_assoc($query44);
+                            $item_cadastrado=$dados44["item_maior"];
+                            if ($conta==1) $item_principal=$item_cadastrado;
+                            //echo "<br>".
+                            $sql45 = "
+                                UPDATE saidas_produtos   
+                                SET saipro_itemconjunto='$item_principal'
+                                WHERE saipro_codigo='$item_cadastrado'
+                                AND saipro_saida=$saida
+                            ";
+                            if (!$query45 = mysql_query($sql45)) die("Erro SQL: 45" . mysql_error());
+
+                            //Tirar do estoque todo o lote atual
+                            //Eliminar o produto do estoque pois a quantidade zerou
+                            $sql = "DELETE FROM estoque WHERE etq_quiosque=$usuario_quiosque and etq_produto=$produto and etq_lote=$lote_estoque";
+                            if (!$query = mysql_query($sql)) die("Erro de SQL10:" . mysql_error());
+
+                            //Calcula a quantidade restante para usar no proximo lote   
+                            $qtd_aretirar=$qtd_aretirar - $qtd_estoque;
+
+                        } else { //Atualizar o estoque neste lote com o restante da quantidade a retirar
+                            //echo "Atualziar lote: $lote_estoque ($qtd_aretirar / $qtd_estoque)<br>";
+                            if ($conta==1) {
+                                $lote_principal="";
+                            }
+                            
+                            $qtd_porcao_aretirar=($porcao_qtd*$qtd_aretirar)/$qtd;
+                            $qtd_porcao_aretirar=number_format($qtd_porcao_aretirar, 2, '.', '');
+                            if ($porcao_qtd>0) $valtot= $valuni * $qtd_porcao_aretirar;
+                            else $valtot= $valuni * $qtd_aretirar;                      
+
+
+                            //Insere o registro nas saídas
+                            //echo "<br><br>".
+                            $sql_saida_produto = "
+                            INSERT INTO saidas_produtos (
+                                saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade,saipro_loteconjunto
+                            )
+                            VALUES (
+                                '$saida','$produto','$lote_estoque','$qtd_aretirar','$valuni','$valtot',$porcao,$qtd_porcao_aretirar,'$lote_principal'
+                            )        
+                            ";
+                            if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL64: " . mysql_error());
+
+                            $sql44="SELECT max(saipro_codigo) as item_maior FROM saidas_produtos WHERE saipro_saida=$saida";
+                            if (!$query44 = mysql_query($sql44)) die("Erro de SQL44: " . mysql_error());
+                            $dados44=mysql_fetch_assoc($query44);
+                            $item_cadastrado=$dados44["item_maior"];
+                            if ($conta==1) $item_principal=$item_cadastrado;
+                            //echo "<br>".
+                            $sql45 = "
+                                UPDATE saidas_produtos   
+                                SET saipro_itemconjunto='$item_principal'
+                                WHERE saipro_codigo='$item_cadastrado'
+                                AND saipro_saida=$saida
+                            ";
+                            if (!$query45 = mysql_query($sql45)) die("Erro SQL: 45" . mysql_error());
+
+                            //Retirando do estoque           
+                            $sql_retirar = "
+                            UPDATE
+                                estoque 
+                            SET 
+                                etq_quantidade=etq_quantidade-$qtd_aretirar
+                            WHERE
+                                etq_quiosque=$usuario_quiosque and
+                                etq_produto=$produto and
+                                etq_lote=$lote_estoque
+                            ";
+                            if (!$query_retirar = mysql_query($sql_retirar))  die("Erro de SQL8:" . mysql_error());
+                        }
+                        if ($saldo>=0) break;
+
+                    }
                 }
+
             }
+        } else { //O produto não possui controle de estoque, ou seja, é estoque infinito
+            //Inserir nos produtos,  não tem necessidade de atualizar estoque
+            
+            //echo "inserir sem retirar do estoque";
+            echo "<br><br>".$sql_saida_produto = "
+            INSERT INTO saidas_produtos (
+                saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade
+            )
+            VALUES (
+                '$saida','$produto','0','$qtd','$valunisai','$valtotsai',$porcao,$porcao_qtd
+            )        
+            ";
+            if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL68: " . mysql_error());
+
+            //Atualiza o item relacionado caso o sistema ignore lotes.
+            //echo "<br><br>".
+            echo "<br>".$sql44="SELECT max(saipro_codigo) as item_maior FROM saidas_produtos WHERE saipro_saida=$saida";
+            if (!$query44 = mysql_query($sql44)) die("Erro de SQL44: " . mysql_error());
+            $dados44=mysql_fetch_assoc($query44);
+            $item_cadastrado=$dados44["item_maior"];
+            if ($conta==1) $item_principal=$item_cadastrado;
+            //echo "<br>".
+            $sql45 = "
+                UPDATE saidas_produtos   
+                SET saipro_itemconjunto='$item_principal'
+                WHERE saipro_codigo='$item_cadastrado'
+                AND saipro_saida=$saida
+            ";
+            if (!$query45 = mysql_query($sql45)) die("Erro SQL: 45" . mysql_error());
 
         }
     }
@@ -1084,7 +1127,15 @@ if ($passo == 2) {
         $tpl1->block("BLOCK_ICONE");
         $tpl1->block("BLOCK_CONTEUDO");
     }
+    //Campo oculto que informa se o produto selecionado é estoque infinito
     $tpl1->block("BLOCK_ITEM");
+    $tpl1->CAMPO_TIPO = "hidden";
+    $tpl1->CAMPO_NOME = "produto_controlar_estoque";
+    $tpl1->CAMPO_VALOR = "";
+    $tpl1->block("BLOCK_CAMPO");    
+    $tpl1->block("BLOCK_CONTEUDO");    
+
+
 
     //Fornecedor
     $tpl1->TR_ID="linha_fornecedor";
@@ -1290,14 +1341,14 @@ if ($passo == 2) {
     $tpl1->LISTA_GET_PASSO = $passo;
     $sql_lista = "
     SELECT 
-        pro_nome, pes_nome, saipro_lote, saipro_quantidade, saipro_valorunitario, saipro_valortotal,saipro_codigo,pro_codigo,saipro_codigo,saipro_porcao,saipro_porcao_quantidade,propor_nome,protip_sigla,pro_tipocontagem,pro_referencia, pro_tamanho,pro_cor,pro_descricao,saipro_produto,saipro_porcao_quantidade,saipro_loteconjunto,saipro_itemconjunto
+        pro_nome, pes_nome, saipro_lote, saipro_quantidade, saipro_valorunitario, saipro_valortotal,saipro_codigo,pro_codigo,saipro_codigo,saipro_porcao,saipro_porcao_quantidade,propor_nome,protip_sigla,pro_tipocontagem,pro_referencia, pro_tamanho,pro_cor,pro_descricao,saipro_produto,saipro_porcao_quantidade,saipro_loteconjunto,saipro_itemconjunto,pro_controlarestoque
     FROM 
         saidas_produtos
         JOIN produtos ON (saipro_produto=pro_codigo)    
-        JOIN entradas ON (saipro_lote=ent_codigo)
-        JOIN pessoas ON (ent_fornecedor=pes_codigo)
         JOIN produtos_tipo ON (pro_tipocontagem=protip_codigo)
         LEFT JOIN produtos_porcoes ON (saipro_porcao=propor_codigo)
+        left JOIN entradas ON (saipro_lote=ent_codigo)
+        left JOIN pessoas ON (ent_fornecedor=pes_codigo)
     WHERE
         saipro_saida=$saida
     ORDER BY
@@ -1330,6 +1381,7 @@ if ($passo == 2) {
             $lote=$dados_lista["saipro_lote"];
             $produto_codigo=$dados_lista["saipro_produto"];
             $loteconjunto=$dados_lista["saipro_loteconjunto"];
+            $este_produto_controlar_estoque=$dados_lista["pro_controlarestoque"];
             $nome2="$prod_nome $prod_tamanho $prod_cor $prod_descricao";
             $numeroreferencia=$produto_codigo;
             if ($prod_referencia!="") $numeroreferencia.=" ($prod_referencia)";
@@ -1337,7 +1389,8 @@ if ($passo == 2) {
             $tpl1->LISTA_PRODUTO = $nome2;
             $tpl1->LISTA_PRODUTO_COD = $dados_lista["pro_codigo"];
             //$tpl1->LISTA_FORNECEDOR = $dados_lista["pes_nome"];
-            $tpl1->LISTA_LOTE = $dados_lista["saipro_lote"];
+            if ($dados_lista["saipro_lote"]==0) $tpl1->LISTA_LOTE = "---";
+            else $tpl1->LISTA_LOTE = $dados_lista["saipro_lote"];
             $tipocontagem=$dados_lista["pro_tipocontagem"];
             if (($tipocontagem==2)||($tipocontagem==3)) {
                 $tpl1->LISTA_QTD = number_format($dados_lista["saipro_quantidade"], 3, ',', '.');
@@ -1378,7 +1431,7 @@ if ($passo == 2) {
             if ($temdevolucao==1) {
                 $tpl1->EXCLUIR_MOTIVO="Este item possui devoluções vinculados!";
                 $tpl1->block("BLOCK_LISTA_EXCLUIR_DESABILITADO");
-            } else if ($itemvenda!=$itemconjunto) {
+            } else if (($itemvenda!=$itemconjunto)&&($este_produto_controlar_estoque==1)) {
                 $tpl1->EXCLUIR_MOTIVO="Este item não pode ser excluido porque este é um lançamento automático gerado a partir da inclusão de um item anteior que tem uma porcão que precisou tirar um pouco de cada lote para completar a quantidade da porção!";
                 $tpl1->block("BLOCK_LISTA_EXCLUIR_DESABILITADO");
             } else {

@@ -275,8 +275,8 @@ FROM
     join saidas_produtos on (saipro_saida=sai_codigo)
     join produtos on (saipro_produto=pro_codigo)
     join produtos_tipo on (pro_tipocontagem=protip_codigo)
-    join entradas on (saipro_lote=ent_codigo)
-    join pessoas on (ent_fornecedor=pes_codigo)
+    left join entradas on (saipro_lote=ent_codigo)
+    left join pessoas on (ent_fornecedor=pes_codigo)
     left join metodos_pagamento on (sai_metpag=metpag_codigo)
     left join produtos_porcoes on (saipro_porcao=propor_codigo)
 WHERE
