@@ -58,6 +58,7 @@ $modal=$_GET["modal"];
                 $geririmobilizado=$dados["quicnf_geririmobilizado"];
                 $controlavalidade=$dados["quicnf_controlavalidade"];
                 $usaprateleira=$dados["quicnf_usaprateleira"];
+                $identificacaoconsumidorvenda=$dados["quicnf_identificacaoconsumidorvenda"];
             }
             $sql="SELECT * FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$usuario_quiosque";
             if (!$query= mysql_query($sql)) die("Erro SQL INCLUDES: " . mysql_error());

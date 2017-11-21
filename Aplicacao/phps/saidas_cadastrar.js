@@ -11,21 +11,6 @@ $(window).load(function() {
     if (usacodigobarrasinterno==1) $("tr[id=linha_codigobarrasinterno]").show();
     else $("tr[id=linha_codigobarrasinterno]").hide();
 
-    //Verifica se usa comanda
-    var usacomanda= $("input[name=usacomanda]").val();
-    if (usacomanda==1) {
-        document.form1.id.required=true;
-        $("input[id=linha_comanda]").show();
-        //Foco no ID
-        if (document.forms["form1"].elements["id"]) {
-            document.forms["form1"].elements["id"].focus();
-        }
-    } else if (usacomanda==0) {
-        document.form1.id.required=false;
-        $("tr[id=linha_comanda]").hide();
-    } else {
-        alert("Erro Grave, contate o suporte: 44545");
-    }
 
     //Verifica se usa porcoes
     var usavendaporcoes=$("input[name=usavendaporcoes]").val();
@@ -54,14 +39,43 @@ $(window).load(function() {
     } 
 
 
-    //Verifica se ignora lotes
-    ignorarlotes=$("input[name=ignorarlotes]").val();
-    if (ignorarlotes==1) {
-        document.forms["form1"].lote.required = false;
-        $("tr[id=linha_fornecedor]").hide();
-        $("tr[id=linha_lote]").hide();
+    //Verifica se usa comanda
+    var usacomanda= $("input[name=usacomanda]").val();
+    if (usacomanda==1) {
+        document.form1.id.required=true;
+        $("input[id=linha_comanda]").show();
+        //Foco no ID
+        if (document.forms["form1"].elements["id"]) {
+            document.forms["form1"].elements["id"].focus();
+        }
+    } else if (usacomanda==0) {
+        document.form1.id.required=false;
+        $("tr[id=linha_comanda]").hide();
     } else {
+        alert("Erro Grave, contate o suporte: 44545");
+    }  
 
+
+
+    //Verifica qual é a forma de identificação do cliente na venda: CPF/Telefone ou não usa
+    var identificacaoconsumidorvenda=$("input[name=identificacaoconsumidorvenda]").val();
+    console.log(identificacaoconsumidorvenda);
+    if (identificacaoconsumidorvenda==3) {
+        //$("tr[id=linha_comanda]").hide();
+        $("tr[id=linha_consumidor]").hide();
+    }
+
+     
+    //Verifica se ignora lotes
+    passo=$("input[name=passo]").val();
+    //console.log(passo);
+    if (passo>1) {
+        ignorarlotes=$("input[name=ignorarlotes]").val();
+        if (ignorarlotes==1) {
+            document.forms["form1"].lote.required = false;
+            $("tr[id=linha_fornecedor]").hide();
+            $("tr[id=linha_lote]").hide();
+        } 
     }
 
     //Popular Produto    
@@ -1062,6 +1076,7 @@ function verifica_cpf(valor) {
                     $("select[name=consumidor]").hide();
                     $("input[name=cliente_nome]").show();
                     document.forms["form1"].cliente_nome.disabled = false;
+                    document.forms["form1"].cliente_nome.focus();
 
                 } else {
                     //alert("Selecionar");

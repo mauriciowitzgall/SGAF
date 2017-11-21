@@ -51,7 +51,6 @@ if (($passo == 1)&&($linhas!=0)) {
     $tpl->ICONES = $icones;
     //$tpl->MOTIVO_COMPLEMENTO = "";
     $tpl->block("BLOCK_ATENCAO");
-    //$tpl->DESTINO = "saidas_cadastrar.php?operacao=cadastrar";
     //$tpl->block("BLOCK_BOTAO");
     
     

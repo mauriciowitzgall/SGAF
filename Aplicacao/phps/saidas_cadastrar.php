@@ -202,7 +202,7 @@ $passo= $_REQUEST["passo"];
 
 
 //Verificar se é uma edição, se sim então atualiza id e consumidor
-if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&($permiteedicaoclientenavenda==1)) {
+if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&($permiteedicaoclientenavenda==1)&&($identificacaoconsumidorvenda!=3)) {
     //print_r($_REQUEST);
     $id_novo=$_REQUEST["id"];
     if ($id_novo=="") $id_novo=$id;
@@ -232,7 +232,7 @@ if ($produto != "") {
     }
 }
 //Só permite que seja efetuado alguma venda se algum caixa estiver aberto
-if ($produto != "") {
+if (($produto != "")&&($usacaixa==1)) {
     $sql7 = "SELECT sai_codigo FROM saidas WHERE sai_codigo=$saida";
     $query7 = mysql_query($sql7);
     if (!$query7)
@@ -276,20 +276,22 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->show();
 
 //Verifica se há produtos no estoque
-$sql = "SELECT etq_lote FROM estoque JOIN entradas on (etq_lote=ent_codigo) WHERE ent_quiosque=$usuario_quiosque";
-$query = mysql_query($sql);
-if (!$query)
-    die("Erro: " . mysql_error());
-$linhas = mysql_num_rows($query);
-if (($linhas == 0)&&($usaestoque==1)) {
-    $tpl = new Template("templates/notificacao.html");
-    $tpl->ICONES = $icones;
-    $tpl->MOTIVO_COMPLEMENTO = "Para gerar uma venda ou devolução <b>é necessário que se tenha produtos em seu estoque</b>. <br>Clique no botão abaixo para ir para a tela de cadastro de entradas, que é onde você insere produtos em seu estoque!";
-    $tpl->block("BLOCK_ATENCAO");
-    $tpl->DESTINO = "entradas_cadastrar.php?operacao=cadastrar";
-    $tpl->block("BLOCK_BOTAO");
-    $tpl->show();
-    exit;
+if ($usaestoque==1) {
+    $sql = "SELECT etq_lote FROM estoque JOIN entradas on (etq_lote=ent_codigo) WHERE ent_quiosque=$usuario_quiosque";
+    $query = mysql_query($sql);
+    if (!$query)
+        die("Erro: " . mysql_error());
+    $linhas = mysql_num_rows($query);
+    if (($linhas == 0)&&($usaestoque==1)) {
+        $tpl = new Template("templates/notificacao.html");
+        $tpl->ICONES = $icones;
+        $tpl->MOTIVO_COMPLEMENTO = "Para gerar uma venda ou devolução <b>é necessário que se tenha produtos em seu estoque</b>. <br>Clique no botão abaixo para ir para a tela de cadastro de entradas, que é onde você insere produtos em seu estoque!";
+        $tpl->block("BLOCK_ATENCAO");
+        $tpl->DESTINO = "entradas_cadastrar.php?operacao=cadastrar";
+        $tpl->block("BLOCK_BOTAO");
+        $tpl->show();
+        exit;
+    }
 }
 
 //Inicio do formulário de saidas
@@ -302,6 +304,7 @@ $tpl1->JS_CAMINHO = "saidas_cadastrar.js";
 $tpl1->block("BLOCK_JS");
 
 $tpl1->TR_ID="";
+$tpl1->PASSO="$passo";
 
 
 //Se for para deletar uma produto da lista
@@ -361,7 +364,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                     etq_produto=$produto_usar and
                     etq_lote=$lote_usar
                 ";
-                if (!$query9 = mysql_query($sql9)) die("Erro de SQL 1:" . mysql_error());
+                if (!$query9 = mysql_query($sql9)) die("Erro de SQL 109:" . mysql_error());
                 
                  $linhas9 = mysql_num_rows($query9);
                 if ($linhas9 > 0) { //O produto existe no estoque
@@ -644,7 +647,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
             //Inserir nos produtos,  não tem necessidade de atualizar estoque
             
             //echo "inserir sem retirar do estoque";
-            echo "<br><br>".$sql_saida_produto = "
+            $sql_saida_produto = "
             INSERT INTO saidas_produtos (
                 saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade
             )
@@ -656,7 +659,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
 
             //Atualiza o item relacionado caso o sistema ignore lotes.
             //echo "<br><br>".
-            echo "<br>".$sql44="SELECT max(saipro_codigo) as item_maior FROM saidas_produtos WHERE saipro_saida=$saida";
+            $sql44="SELECT max(saipro_codigo) as item_maior FROM saidas_produtos WHERE saipro_saida=$saida";
             if (!$query44 = mysql_query($sql44)) die("Erro de SQL44: " . mysql_error());
             $dados44=mysql_fetch_assoc($query44);
             $item_cadastrado=$dados44["item_maior"];
@@ -678,6 +681,8 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
 //Inserir saida principal com o status incompleto. Esse processo � feito uma unica vez, antes de come�ar 
 //a inserção dos produtos dentro dessa saida
 if (($saida == 0) && ($passo == 2)) {
+    $dataatual = date("Y-m-d");
+    $horaatual = date("H:i:s");
     $datahoracadastro=$dataatual." ".$horaatual;
     
     //Se for cliente novo, cadastrar ele antes de cadastrar a saida
@@ -700,11 +705,11 @@ if (($saida == 0) && ($passo == 2)) {
         //echo "<br><br>cadastrou pessoa<br><br>";
         $sql1 = "
             INSERT INTO
-                pessoas (pes_id,pes_nome,pes_cnpj,pes_cpf,pes_tipopessoa,pes_cidade,pes_datacadastro,pes_horacadastro,pes_cooperativa,pes_possuiacesso,pes_categoria,pes_usuarioquecadastrou,pes_quiosquequecadastrou)
+                pessoas (pes_id,pes_nome,pes_cnpj,pes_cpf,pes_tipopessoa,pes_cidade,pes_datacadastro,pes_horacadastro,pes_cooperativa,pes_possuiacesso,pes_usuarioquecadastrou,pes_quiosquequecadastrou)
             VALUES
-                ($id,'$cliente_nome','$consumidor_cnpj2','$consumidor_cpf2',$tipopessoa,0,'$dataatual','$horaatual',$usuario_cooperativa,0,0,$usuario_codigo,$usuario_quiosque)        
+                ($id,'$cliente_nome','$consumidor_cnpj2','$consumidor_cpf2',$tipopessoa,0,'$dataatual','$horaatual',$usuario_cooperativa,0,$usuario_codigo,$usuario_quiosque)        
         ";
-        $query1 = mysql_query($sql1); if (!$query1) die("Erro de SQL1: " . mysql_error());
+        $query1 = mysql_query($sql1); if (!$query1) die("Erro de SQL108: " . mysql_error());
         $consumidor = mysql_insert_id();
         $sql2="INSERT INTO mestre_pessoas_tipo (mespestip_pessoa,mespestip_tipo) VALUES ($consumidor,6)";
         $query2 = mysql_query($sql2); if (!$query2) die("Erro de SQL2: " . mysql_error());
@@ -721,7 +726,7 @@ if (($saida == 0) && ($passo == 2)) {
     ";
     $query_saida = mysql_query($sql_saida);
     if (!$query_saida)
-        die("Erro de SQL10: " . mysql_error());
+        die("Erro de SQL107: " . mysql_error());
     $saida = mysql_insert_id();
     
     $operacao=1;
@@ -730,6 +735,7 @@ if (($saida == 0) && ($passo == 2)) {
 
 //Enviar ocultamento o numero da saida
 $tpl1->IGNORARLOTES = "$ignorarlotes";
+$tpl1->IDENTIFICACAOCONSUMIDORVENDA = "$identificacaoconsumidorvenda";
 $tpl1->USACODIGOBARRASINTERNO = "$usacodigobarrasinterno";
 $tpl1->USAEAN = "$usaean";
 $tpl1->IGNORARLOTES = "$ignorarlotes";
@@ -796,7 +802,7 @@ if ($tiposaida == 1) {
     
     
     //Consumidor Cliente
-    $tpl1->TR_ID="";
+    $tpl1->TR_ID="linha_consumidor";
     $tpl1->CAMPO_QTD_CARACTERES = "14";
     $tpl1->TITULO = "Consumidor";
     $tpl1->ASTERISCO = "";
@@ -841,6 +847,7 @@ if ($tiposaida == 1) {
     }
     $tpl1->CAMPO_OBRIGATORIO = "  ";
     $tpl1->CAMPO_ONKEYPRESS = "";
+    $tpl1->CAMPO_DICA = "CPF";
     $tpl1->CAMPO_ONKEYUP = "verifica_cpf(this.value)";
     $tpl1->CAMPO_ONKEYDOWN = "";
     $tpl1->CAMPO_ONBLUR = ""; 
@@ -850,6 +857,7 @@ if ($tiposaida == 1) {
     $tpl1->CAMPO_ESTILO = "width:155px;";
     $tpl1->CAMPO_TIPO = "text";
     $tpl1->CAMPO_NOME = "cnpj";
+    $tpl1->CAMPO_DICA = "CNPJ";
     $tpl1->CAMPO_TAMANHO = "70";
     $tpl1->CAMPO_FOCO = " ";
     $tpl1->CAMPO_VALOR = "$consumidor_cnpj";
@@ -865,6 +873,7 @@ if ($tiposaida == 1) {
     $tpl1->block("BLOCK_CAMPO");
     
     //Nome do cliente para cadastro
+    $tpl1->CAMPO_DICA = "Nome ";
     $tpl1->CAMPO_TIPO = "text";
     $tpl1->CAMPO_NOME = "cliente_nome";
     $tpl1->CAMPO_TAMANHO = "";
@@ -941,6 +950,7 @@ if ($tiposaida == 1) {
 if ($tiposaida == 3) {
 
     //Motivo
+    $tpl1->TR_ID="linha_motivo";
     $tpl1->TITULO = "Motivo";
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
@@ -974,6 +984,7 @@ if ($tiposaida == 3) {
     $tpl1->block("BLOCK_ITEM");
 
     //Descri��o
+    $tpl1->TR_ID="linha_descricao";
     $tpl1->TITULO = "Descrição";
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
@@ -1003,8 +1014,10 @@ if ($tiposaida == 3) {
 
 if ($passo == 2) {
     
+    $tpl1->TR_ID="";
    
     //Verifica se o consumidor possui vendas incompleta
+    if (($identificacaoconsumidorvenda==1)||($identificacaoconsumidorvenda==2))
     if (($passo==2)&&($ignorar_vendas_incompletas!=1)&&($tiposaida!=3)&&($produto=="")) { // Se for uma devolução, então não realizar essa verificação
         $sql4="SELECT * from saidas  WHERE sai_status=2 and sai_consumidor= $consumidor and sai_codigo not in ($saida)";
         if (!$query4 = mysql_query($sql4)) die("Erro 4:" . mysql_error());
@@ -1044,6 +1057,7 @@ if ($passo == 2) {
 
     //Etiqueta
     $tpl1->TR_ID="linha_ean";
+    $tpl1->CAMPO_DICA = "";
     $tpl1->CAMPO_QTD_CARACTERES = "14";
     $tpl1->TITULO = "Código de Barras EAN";
     $tpl1->ASTERISCO = "";
@@ -1538,6 +1552,7 @@ if ($passo == 2) {
 }
 
 //Botão Continuar
+$tpl1->TR_ID="";
 $tpl1->BOTAO_TIPO = "submit";
 if ($passo == 2) {
     $tpl1->BOTAO_DESABILITADO = " disabled ";

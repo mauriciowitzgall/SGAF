@@ -848,7 +848,6 @@ function remove_caracteres_especiais (valor) {
     if(valor.match(/|/)) valor = valor.replace("|","");
     if(valor.match(/˜/)) valor = valor.replace("˜","");
     if(valor.match(/`/)) valor = valor.replace("`","");
-    if(valor.match(/\/)) valor = valor.replace("`","");
     valor=valor.replace("/","");
     valor=valor.replace("\n","");
     valor=valor.replace("\\","");

@@ -55,11 +55,6 @@ shortcut.add("Shift+Ctrl+0", function() {
    window.location = "contato.php"
 });
 
-//Saidas Cadastrar
-shortcut.add("Shift+Ctrl+S", function() {
-   window.location = "saidas_cadastrar.php"
-});
-
 //Entradas Cadastrar
 shortcut.add("Shift+Ctrl+E", function() {
    window.location = "entradas_cadastrar.php"

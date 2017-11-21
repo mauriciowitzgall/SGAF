@@ -161,8 +161,8 @@ if (($consumidor==0)&&($areceber==1)) {
   //$tpl6->block("BLOCK_CADASTRADO");    
   $tpl6->MOTIVO = "Não é permitido realizar vendas A RECEBER sem identificação do consumidor!<br><br>Você deve Editar esta venda e <b>IDENTIFICAR o CONSUMIDOR! </b><br>";
   $tpl6->block("BLOCK_MOTIVO");
-  
-  $tpl6->DESTINO = "saidas_cadastrar.php?codigo=$saida&operacao=2&tiposaida=1&passo=1&editarconsumidor=1";
+  if (($identificacaoconsumidorvenda==3)&&($usacomanda==0)) $tpl6->DESTINO = "saidas_cadastrar.php?codigo=$saida&operacao=2&tiposaida=1&passo=2&editarconsumidor=1";
+  else $tpl6->DESTINO = "saidas_cadastrar.php?codigo=$saida&operacao=2&tiposaida=1&passo=1&editarconsumidor=1";
   $tpl6->PERGUNTA = "";
   $tpl6->block("BLOCK_BOTAO");
   
@@ -216,7 +216,8 @@ if ($usamodulofiscal==1) {
     $tpl_notificacao->block("BLOCK_BOTAO");
 
     //Botão cadastrar mais
-    $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar.php?tiposaida=$tiposai&operacao=1&passo=1";
+if (($identificacaoconsumidorvenda==3)&&($usacomanda==0)) $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar.php?tiposaida=$tiposai&operacao=1&passo=2";
+    else $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar.php?tiposaida=$tiposai&operacao=1&passo=1";
     //$tpl->block("BLOCK_BOTAOGERAL_NOVAJANELA");
     $tpl_notificacao->BOTAOGERAL_TIPO="button";
     $tpl_notificacao->BOTAOGERAL_NOME="REALIZAR NOVA SAIDA";

@@ -85,7 +85,8 @@ if ($linhas == 0) {
         $tpl->block("BLOCK_BOTAO_VOLTAR");       
     } else {
         $tpl->MOTIVO_COMPLEMENTO = "Para que você faça acertos com os fornecedores, é necessário que existam vendas. <b>Você não efetuou nenhuma venda até agora!</b> <br>Clique no botão abaixo para ir para a tela de cadastro de saídas, que é onde você realiza vendas!";
-        $tpl->DESTINO = "saidas_cadastrar.php?operacao=cadastrar";
+        if (($identificacaoconsumidorvenda==3)&&($usacomanda==0)) $tpl->DESTINO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=2";
+        else $tpl->DESTINO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=1";        
         $tpl->block("BLOCK_BOTAO");
     }
     $tpl->show();
@@ -103,7 +104,6 @@ if ($linhas == 0) {
         $tpl->ICONES = $icones;
         //$tpl->MOTIVO_COMPLEMENTO = "";
         $tpl->block("BLOCK_ATENCAO");
-        //$tpl->DESTINO = "saidas_cadastrar.php?operacao=cadastrar";
         //$tpl->block("BLOCK_BOTAO");
         $tpl->LINK = "acertos_cadastrar.php?passa=1";
         $tpl->MOTIVO = "Seu quiosque não possui taxas vinculadas! Se continuar, este acerto não efetuará nenhum desconto sobre o valor de venda!";

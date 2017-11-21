@@ -828,8 +828,8 @@ if ($linhas == 0) {
                                         if ($total_segundos < 1800) { //O caixa tem 30 minutos ap�s o inicio para editar esta venda j� concluida 
                                             $tpl->OPERACAO_NOME = "Editar";
                                             $tpl->LINK = "saidas_cadastrar.php";
-
-                                            $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=$passo";
+                                            if (($identificacaoconsumidorvenda==3)&&($usacomanda==0))  $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=2";
+                                            else $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=$passo";
                                             $tpl->ICONE_ARQUIVO = $icones . "editar.png";
                                             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
                                         } else {
@@ -840,7 +840,8 @@ if ($linhas == 0) {
                                     } else { //Se for incompleta permitir que o caixa possa continuar a venda
                                         $tpl->OPERACAO_NOME = "Editar";
                                         $tpl->LINK = "saidas_cadastrar.php";
-                                        $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=$passo";
+                                        if (($identificacaoconsumidorvenda==3)&&($usacomanda==0)) $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=2";
+                                        else $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=$passo";
                                         $tpl->ICONE_ARQUIVO = $icones . "editar.png";
                                         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
                                     }
@@ -853,7 +854,8 @@ if ($linhas == 0) {
                             } else {
                                 $tpl->OPERACAO_NOME = "Editar";
                                 $tpl->LINK = "saidas_cadastrar.php";
-                                $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=$passo";
+                                if (($identificacaoconsumidorvenda==3)&&($usacomanda==0)) $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=2";
+                                else $tpl->LINK_COMPLEMENTO = "operacao=2&tiposaida=1&passo=$passo";                                
                                 $tpl->ICONE_ARQUIVO = $icones . "editar.png";
                                 $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
                             }
@@ -897,7 +899,8 @@ if ($tipopagina == "saidas") {
                 $tpl->block("BLOCK_RODAPE_BOTOES_DICA");*/
             } else {
                 $tpl->CADASTRAR_NOME = "REALIZAR VENDA";
-                $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=1";
+                if (($identificacaoconsumidorvenda==3)&&($usacomanda==0)) $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=2";
+                else $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=1";
                 $tpl->block("BLOCK_RODAPE_BOTOES");
             }
         } else if (($usacaixa==1)&&($usuario_caixa=="")) {
@@ -911,7 +914,8 @@ if ($tipopagina == "saidas") {
             $tpl->block("BLOCK_RODAPE_BOTOES_DICA");*/
         } else {
             $tpl->CADASTRAR_NOME = "REALIZAR VENDA";
-            $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=1";
+            if (($identificacaoconsumidorvenda==3)&&($usacomanda==0)) $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=2";
+            else $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=1";
             $tpl->block("BLOCK_RODAPE_BOTOES");
         }
     }

@@ -17581,3 +17581,6 @@ ADD COLUMN `quicnf_usacodigobarrasinterno` INT(1) NOT NULL DEFAULT 1 AFTER `quic
 ------ INICIO v4.0b9 ------
 
 UPDATE `configuracoes` SET `cnf_versao`='v4.0b9' WHERE `cnf_codigo`='1';
+
+ALTER TABLE `quiosques_configuracoes` 
+ADD COLUMN `quicnf_identificacaoconsumidorvenda` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_usacodigobarrasinterno`;
