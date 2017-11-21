@@ -17498,6 +17498,9 @@ ADD COLUMN `quicnf_fazfechamentos` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_fazac
 
 ------ INICIO v4.0b7 ------
 
+UPDATE `configuracoes` SET `cnf_versao`='v4.0b7' WHERE `cnf_codigo`='1';
+
+
 INSERT INTO `SGAF_labodega2`.`relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`, `rel_horacadastro`) VALUES ('17', 'Lista de vendas com desconto', 'Mostra todas as vendas que possuem desconto maiores que X%', '2017-11-13', '00:00:00');
 UPDATE `SGAF_labodega2`.`relatorios` SET `rel_datacadastro`='2017-11-11' WHERE `rel_codigo`='16';
 UPDATE `SGAF_labodega2`.`relatorios` SET `rel_datacadastro`='2017-11-11' WHERE `rel_codigo`='15';
@@ -17538,6 +17541,8 @@ INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper
 
 ------ INICIO v4.0b8 ------
 
+UPDATE `configuracoes` SET `cnf_versao`='v4.0b8' WHERE `cnf_codigo`='1';
+
 INSERT INTO `SGAF_labodega2`.`relatorios` (`rel_codigo`, `rel_nome`, `rel_descricao`, `rel_datacadastro`) VALUES ('20', 'Lista de produtos vendidos por categoria', 'Mostra todos os produtos que foram vendidos separados por categoria.', '2017-11-16');
 
 INSERT INTO `SGAF_labodega2`.`relatorios_permissao` (`relper_relatorio`, `relper_grupo`) VALUES ('20', '1');
@@ -17574,3 +17579,5 @@ ADD COLUMN `quicnf_usacodigobarrasinterno` INT(1) NOT NULL DEFAULT 1 AFTER `quic
 ------ FIM ------
 
 ------ INICIO v4.0b9 ------
+
+UPDATE `configuracoes` SET `cnf_versao`='v4.0b9' WHERE `cnf_codigo`='1';
