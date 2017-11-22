@@ -17584,3 +17584,7 @@ UPDATE `configuracoes` SET `cnf_versao`='v4.0b9' WHERE `cnf_codigo`='1';
 
 ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_identificacaoconsumidorvenda` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_usacodigobarrasinterno`;
+
+ALTER TABLE `sgaf_labodega`.`pessoas` 
+CHANGE COLUMN `pes_fone1` `pes_fone1` VARCHAR(14) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
+CHANGE COLUMN `pes_fone2` `pes_fone2` VARCHAR(14) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ;

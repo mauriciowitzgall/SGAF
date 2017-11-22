@@ -108,6 +108,7 @@ if ($retirar_produto == '1') {
             $consumidor = $dados["sai_consumidor"];
             $consumidor_cpf = $dados["pes_cpf"];
             $consumidor_cnpj = $dados["pes_cnpj"];
+            $consumidor_fone = $dados["pes_fone1"];
             $tipopessoa = $dados["pes_tipopessoa"];
             $id = $dados["sai_id"];
             $tiposaida = $dados["sai_tipo"];
@@ -129,6 +130,7 @@ if ($retirar_produto == '1') {
         $tipopessoa = $_POST["tipopessoa"];
         $consumidor_cpf=$_POST["cpf"];
         $consumidor_cnpj=$_POST["cnpj"];
+        $consumidor_fone=$_POST["fone"];
 
         if (($consumidor!="")&&($consumidor!=0)) { //foi selecionado uma pessoa
             $sql0="SELECT pes_cpf, pes_cnpj,pes_tipopessoa FROM pessoas WHERE pes_codigo=$consumidor";
@@ -136,6 +138,7 @@ if ($retirar_produto == '1') {
             $dados0=  mysql_fetch_assoc($query0);
             $consumidor_cpf=$dados0["pes_cpf"];
             $consumidor_cnpj=$dados0["pes_cnpj"];
+            $consumidor_fone=$dados0["pes_fone1"];
             $tipopessoa = $dados0["pes_tipopessoa"];
         } 
         if ($tipopessoa=="") { //Pro padrão a pessoa é fisica, cpf
@@ -705,9 +708,9 @@ if (($saida == 0) && ($passo == 2)) {
         //echo "<br><br>cadastrou pessoa<br><br>";
         $sql1 = "
             INSERT INTO
-                pessoas (pes_id,pes_nome,pes_cnpj,pes_cpf,pes_tipopessoa,pes_cidade,pes_datacadastro,pes_horacadastro,pes_cooperativa,pes_possuiacesso,pes_usuarioquecadastrou,pes_quiosquequecadastrou)
+                pessoas (pes_id,pes_nome,pes_cnpj,pes_cpf,pes_tipopessoa,pes_cidade,pes_datacadastro,pes_horacadastro,pes_cooperativa,pes_possuiacesso,pes_usuarioquecadastrou,pes_quiosquequecadastrou,pes_fone1)
             VALUES
-                ($id,'$cliente_nome','$consumidor_cnpj2','$consumidor_cpf2',$tipopessoa,0,'$dataatual','$horaatual',$usuario_cooperativa,0,$usuario_codigo,$usuario_quiosque)        
+                ($id,'$cliente_nome','$consumidor_cnpj2','$consumidor_cpf2',$tipopessoa,0,'$dataatual','$horaatual',$usuario_cooperativa,0,$usuario_codigo,$usuario_quiosque, '$consumidor_fone')        
         ";
         $query1 = mysql_query($sql1); if (!$query1) die("Erro de SQL108: " . mysql_error());
         $consumidor = mysql_insert_id();
@@ -803,7 +806,7 @@ if ($tiposaida == 1) {
     
     //Consumidor Cliente
     $tpl1->TR_ID="linha_consumidor";
-    $tpl1->CAMPO_QTD_CARACTERES = "14";
+    $tpl1->CAMPO_QTD_CARACTERES = "";
     $tpl1->TITULO = "Consumidor";
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
@@ -839,7 +842,7 @@ if ($tiposaida == 1) {
     $tpl1->CAMPO_ESTILO = "width:120px;";
     $tpl1->CAMPO_NOME = "cpf";
     $tpl1->CAMPO_TAMANHO = "14";
-    $tpl1->CAMPO_QTD_CARACTERES = "70";
+    $tpl1->CAMPO_QTD_CARACTERES = "14";
     $tpl1->CAMPO_FOCO = " ";
     $tpl1->CAMPO_VALOR = "$consumidor_cpf";
     if ($passo==2) {
@@ -871,6 +874,28 @@ if ($tiposaida == 1) {
     $tpl1->CAMPO_ONBLUR = "";
     $tpl1->CAMPO_ONFOCUS = "";
     $tpl1->block("BLOCK_CAMPO");
+
+
+    //Telefone para cadastro de novos clientes
+    $tpl1->CAMPO_TIPO = "text";
+    $tpl1->CAMPO_ESTILO = "width:120px;";
+    $tpl1->CAMPO_NOME = "fone";
+    $tpl1->CAMPO_TAMANHO = "20";
+    $tpl1->CAMPO_QTD_CARACTERES = "14";
+    $tpl1->CAMPO_FOCO = " ";
+    $tpl1->CAMPO_VALOR = "$consumidor_fone";
+    if ($passo==2) {
+        $tpl1->CAMPO_DESABILITADO = " disabled ";
+    }
+    $tpl1->CAMPO_OBRIGATORIO = "  ";
+    $tpl1->CAMPO_ONKEYPRESS = "";
+    $tpl1->CAMPO_DICA = "Telefone";
+    $tpl1->CAMPO_ONKEYUP = "verifica_fone_botao_incluir(this.value);";
+    $tpl1->CAMPO_ONKEYDOWN = "";
+    $tpl1->CAMPO_ONBLUR = "verifica_fone(this.value);"; 
+    $tpl1->CAMPO_ONFOCUS = "";
+    $tpl1->block("BLOCK_CAMPO");
+
     
     //Nome do cliente para cadastro
     $tpl1->CAMPO_DICA = "Nome ";
@@ -879,9 +904,11 @@ if ($tiposaida == 1) {
     $tpl1->CAMPO_TAMANHO = "";
     $tpl1->CAMPO_ESTILO = "width:180px;";
     $tpl1->CAMPO_FOCO = " ";
+    $tpl1->CAMPO_QTD_CARACTERES = "70";
     $tpl1->CAMPO_VALOR = "$cliente_nome";
     $tpl1->CAMPO_DESABILITADO = " disabled ";
     $tpl1->CAMPO_OBRIGATORIO = " required ";
+    $tpl1->CAMPO_ONBLUR = ""; 
     $tpl1->CAMPO_ONKEYUP = "";
     $tpl1->CAMPO_ONKEYDOWN = "";
     $tpl1->CAMPO_ONFOCUS = "";
@@ -1030,7 +1057,7 @@ if ($passo == 2) {
             $tpl->ICONES = $icones;
             //$tpl->MOTIVO_COMPLEMENTO = "";
             $tpl->block("BLOCK_ATENCAO");
-            $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=$operacao&tiposaida=1&id=$id&consumidor=$consumidor&passo=2&usacomanda=$usacomanda&ignorar_vendas_incompletas=1";
+            $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=$operacao&tiposaida=1&id=$id&consumidor=$consumidor&passo=2&usacomanda=$usacomanda&ignorar_vendas_incompletas=1&fone=$consumidor_fone";
             $vendas_incompletas="<br> <i>";
             while ($dados4=  mysql_fetch_assoc($query4)) {
                 $vendainc_codigo=$dados4["sai_codigo"];

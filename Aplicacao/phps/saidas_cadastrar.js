@@ -60,9 +60,21 @@ $(window).load(function() {
     //Verifica qual é a forma de identificação do cliente na venda: CPF/Telefone ou não usa
     var identificacaoconsumidorvenda=$("input[name=identificacaoconsumidorvenda]").val();
     console.log(identificacaoconsumidorvenda);
-    if (identificacaoconsumidorvenda==3) {
+    if (identificacaoconsumidorvenda==3) { //Não identifica consumidor
         //$("tr[id=linha_comanda]").hide();
         $("tr[id=linha_consumidor]").hide();
+    } else if (identificacaoconsumidorvenda==2) { //Identifica por Telefone
+        $("input[name=cpf]").hide();
+        $("input[name=fone]").show();
+        $("select[name=tipopessoa]").hide();
+        document.forms["form1"].elements["fone"].focus();
+    } else if (identificacaoconsumidorvenda==1) { //Identifica por CPF
+        $("input[name=cpf]").show();
+        document.forms["form1"].elements["cpf"].focus();
+        $("input[name=fone]").hide();
+        $("select[name=tipopessoa]").show();
+    } else {
+        alert("Há algo estranho, chamar o suporte!");
     }
 
      
@@ -77,6 +89,8 @@ $(window).load(function() {
             $("tr[id=linha_lote]").hide();
         } 
     }
+
+
 
     //Popular Produto    
     popular_produto();
@@ -1152,6 +1166,63 @@ function verifica_cnpj(valor) {
         document.forms["form1"].cliente_nome.disabled = true;
     }
 }
+
+
+function verifica_fone(valor) {
+
+    //valor = valor.replace("-", "");
+    //valor = valor.replace(".", "");
+    //valor = valor.replace(".", "");
+    if ((valor.length == 14 )||(valor.length == 13)) {
+        $.post("saidas_verifica_fone.php", {
+            fone: valor            
+        }, function(valor3) {
+            codigo_pessoa=valor3;
+            //alert(valor3);
+            if (valor3=="naocadastrado") {
+                //alert("Cadastrar");
+                $("select[name=consumidor]").hide();
+                $("input[name=cliente_nome]").show();
+                document.forms["form1"].cliente_nome.disabled = false;
+                document.forms["form1"].cliente_nome.focus();
+                document.forms["form1"].botao_incluir.disabled = false;
+
+            } else {
+                //alert("Selecionar");
+                $("select[id=consumidor]").show();
+                $("select[id=cliente_nome]").hide();
+                document.forms["form1"].cliente_nome.disabled = true;
+                select_selecionar("consumidor",codigo_pessoa);
+                document.forms["form1"].botao_incluir.disabled = false;
+                $("input[name=botao_incluir]").focus();
+            }
+        });
+    } else {
+        $("select[id=consumidor]").show();
+        $("input[id=cliente_nome]").hide();
+        document.forms["form1"].cliente_nome.disabled = true;
+        if (valor.length != 0 ) {
+            document.forms["form1"].botao_incluir.disabled = true;
+            alert("Telefone inválido!");
+            $("input[id=fone]").val("");
+            document.forms["form1"].fone.focus();
+        } else {
+            document.forms["form1"].botao_incluir.disabled = false;
+        }
+    }
+}
+
+function verifica_fone_botao_incluir (valor) {
+    if ((valor.length==0)) {
+        document.forms["form1"].botao_incluir.disabled = false;
+    } else {
+        document.forms["form1"].botao_incluir.disabled = true;
+    }
+
+    if (valor.length<=13)  $("#fone").mask("(00)0000-00009");
+    else $("#fone").mask("(00)00000-0000");
+}
+
 
 function verifica_produto_referencia(valor) {
     
