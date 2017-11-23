@@ -4,62 +4,35 @@ shortcut.add("Esc",function()
 	javascript:window.history.go(-1);
 });
 
-//Quiosques
-shortcut.add("Shift+Ctrl+1", function() {
-   window.location = "quiosques.php"
-});
-
-//Locais
-shortcut.add("Shift+Ctrl+2", function() {
-   window.location = "cidades.php"
-});
-
-
 //Pessoas
-shortcut.add("Shift+Ctrl+3", function() {
+shortcut.add("Ctrl+P", function() {
    window.location = "pessoas.php"
 });
 
 //Produtos
-shortcut.add("Shift+Ctrl+4", function() {
+shortcut.add("Ctrl+R", function() {
    window.location = "produtos.php"
 });
 
 //Estoque
-shortcut.add("Shift+Ctrl+5", function() {
+shortcut.add("Ctrl+S", function() {
    window.location = "estoque.php"
 });
 
 //Entradas
-shortcut.add("Shift+Ctrl+6", function() {
+shortcut.add("Ctrl+E", function() {
    window.location = "entradas.php"
 });
 
 //Saidas
-shortcut.add("Shift+Ctrl+7", function() {
+shortcut.add("Ctrl+V", function() {
    window.location = "saidas.php"
 });
 
 //Acertos
-shortcut.add("Shift+Ctrl+8", function() {
+shortcut.add("Ctrl+A", function() {
    window.location = "acertos.php"
 });
-
-//Relatórios
-shortcut.add("Shift+Ctrl+9", function() {
-   window.location = "relatorios.php"
-});
-
-//Contato
-shortcut.add("Shift+Ctrl+0", function() {
-   window.location = "contato.php"
-});
-
-//Entradas Cadastrar
-shortcut.add("Shift+Ctrl+E", function() {
-   window.location = "entradas_cadastrar.php"
-});
-
 
 
 

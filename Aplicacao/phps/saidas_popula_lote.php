@@ -1,6 +1,5 @@
 <?php
 include "controle/conexao.php";
-include "conexao_tipo.php";
 include "funcoes.php";
 require "login_verifica.php";
 

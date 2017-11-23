@@ -8,5 +8,9 @@ function mascara_filtro_valorbruliq() {
     });
 }
 
+shortcut.add("Ctrl+N", function() {
+    link=document.getElementById("link_nova_venda").href;
+    window.location = link;
+});
 
 

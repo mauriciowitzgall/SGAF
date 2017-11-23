@@ -1083,10 +1083,10 @@ if ($passo == 2) {
 
 
     //Etiqueta
-    $tpl1->TR_ID="linha_ean";
+    $tpl1->TR_ID="linha_codigobarrasinterno";
     $tpl1->CAMPO_DICA = "";
     $tpl1->CAMPO_QTD_CARACTERES = "14";
-    $tpl1->TITULO = "Código de Barras EAN";
+    $tpl1->TITULO = "Código de Barras Interno";
     $tpl1->ASTERISCO = "";
     $tpl1->CAMPO_TIPO = "text";
     $tpl1->CAMPO_NOME = "etiqueta";
@@ -1103,10 +1103,10 @@ if ($passo == 2) {
     $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
 
-    //Etiqueta Produto Industrializado
-    $tpl1->TR_ID="linha_codigobarrasinterno";
+    //Etiqueta EAN
+    $tpl1->TR_ID="linha_ean";
     $tpl1->CAMPO_QTD_CARACTERES = "13";
-    $tpl1->TITULO = "Código de Barras Interno";
+    $tpl1->TITULO = "Código de Barras EAN";
     $tpl1->ASTERISCO = "";
     $tpl1->CAMPO_TIPO = "text";
     $tpl1->CAMPO_NOME = "etiqueta2";
@@ -1141,7 +1141,7 @@ if ($passo == 2) {
     $tpl1->CAMPO_DESABILITADO = "";
     $tpl1->CAMPO_QTD_CARACTERES = "30";
     $tpl1->CAMPO_ONKEYPRESS = "";
-    $tpl1->CAMPO_ONKEYUP = "verifica_produto_referencia(this.value);";
+    $tpl1->CAMPO_ONKEYUP = "";
     $tpl1->CAMPO_ONKEYDOWN = "";
     $tpl1->CAMPO_ONBLUR = "foco_produto_referencia()";
     $tpl1->CAMPO_ESTILO = " ";
@@ -1403,6 +1403,8 @@ if ($passo == 2) {
         if ($usavendaporcoes==1) $tpl1->block("BLOCK_LISTA_PORCAO_CABECALHO");
         $tpl1->block("BLOCK_LISTA_NADA");
         $tpl1->SALVAR_DESABILIDADO = " disabled ";
+        $tpl1->FORM_LINK = "";
+
     } else {
         $num = 0;
         $total_geral = 0;
@@ -1500,6 +1502,7 @@ if ($passo == 2) {
     }
     if ($temdevolucoes==1) {
         $tpl1->SALVAR_DESABILIDADO=" disabled ";
+        $tpl1->FORM_LINK = "";
         $tpl1->TITULO="Não é possível editar a venda quando se tem devoluções!";
     }
     $tpl1->block("BLOCK_BOTOES_RODAPE_SALVAR");

@@ -899,12 +899,14 @@ if ($tipopagina == "saidas") {
                 $tpl->block("BLOCK_RODAPE_BOTOES_DICA");*/
             } else {
                 $tpl->CADASTRAR_NOME = "REALIZAR VENDA";
+                $tpl->LINK_ID="link_nova_venda";
                 if (($identificacaoconsumidorvenda==3)&&($usacomanda==0)) $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=2";
                 else $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=1";
                 $tpl->block("BLOCK_RODAPE_BOTOES");
             }
         } else if (($usacaixa==1)&&($usuario_caixa=="")) {
             $tpl->CADASTRAR_NOME = "REALIZAR VENDA";
+            $tpl->LINK_ID="link_nova_venda";
             $dica="Para realizar vendas é necessário definir um caixa aberto padrão!";
             $tpl->TITULO="$dica";
             $tpl->block("BLOCK_RODAPE_BOTOES_DESABILITADOS");
@@ -914,6 +916,7 @@ if ($tipopagina == "saidas") {
             $tpl->block("BLOCK_RODAPE_BOTOES_DICA");*/
         } else {
             $tpl->CADASTRAR_NOME = "REALIZAR VENDA";
+            $tpl->LINK_ID="link_nova_venda";
             if (($identificacaoconsumidorvenda==3)&&($usacomanda==0)) $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=2";
             else $tpl->LINK_CADASTRO = "saidas_cadastrar.php?tiposaida=1&operacao=1&passo=1";
             $tpl->block("BLOCK_RODAPE_BOTOES");
