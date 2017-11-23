@@ -582,15 +582,80 @@ while ($dados = mysql_fetch_assoc($query)) {
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EDITAR_DESABILITADO");
     }
     //excluir
+
+
     if ($permissao_pessoas_excluir == 1) {
-        $tpl->LINK = "pessoas_deletar.php";
-        $tpl->LINK_COMPLEMENTO = "operacao=excluir";
-        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR");
+
+        //Verifica se ele é gestor
+        $sql9 = "SELECT * FROM cooperativa_gestores WHERE cooges_gestor=$codigo";
+        $query9 = mysql_query($sql9); if (!$query9) die("Erro SQL: " . mysql_error());
+        $linhas9 = mysql_num_rows($query9);
+        if ($linhas9 > 0) {
+                $tpl->NAOEXCLUIR_MOTIVO = "Esta pessoa está atribuida como gestor/gerente de sua cooperativa. Se deseja realmente excluí-la deve-se retirá-la do cardo de gestor na tela de 'Cadastro/Edição de Cooperativas'";
+                $tpl->LINK = "#";
+                $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR_DESABILITADO");
+        } else {
+            //Verifica se o esta pessoa é supervisor de algum quiosque
+            $sql3 = "SELECT DISTINCT qui_nome FROM quiosques join quiosques_supervisores on (qui_codigo=quisup_quiosque) WHERE quisup_supervisor=$codigo";
+            $query3 = mysql_query($sql3);
+            if (!$query3) die("Erro: 2" . mysql_error());
+            $linhas3 = mysql_num_rows($query3);
+            if ($linhas3 > 0) {
+                $tpl->NAOEXCLUIR_MOTIVO = "Esta pessoa está atribuida como supervisora de algum quiosque. Se realmente deseja excluí-la, deve-se retirar ela do cargo de supervisora na tela de 'Supervisores do Quiosque'";
+                $tpl->LINK = "#";
+                $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR_DESABILITADO");
+            } else {
+                //Verifica se o esta pessoa é caixa de algum quiosque
+                $sql2 = "SELECT * FROM caixas_operadores WHERE caiope_operador=$codigo";
+                $query2 = mysql_query($sql2);
+                if (!$query2) die("Erro: 1" . mysql_error());
+                $linhas2 = mysql_num_rows($query2);
+                if ($linhas2 > 0) {
+                    $tpl->NAOEXCLUIR_MOTIVO = "Esta pessoa está atribuida como caixa de algum quiosque. Se realmente deseja excluí-la, deve-se retirar ela do cargo de caixa na tela de 'Caixas do Quiosque'";
+                    $tpl->LINK = "#";
+                    $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR_DESABILITADO");
+                } else {
+                    //Verifica se o esta pessoa é fornecedor de algum quiosque
+                    $sql4 = "SELECT DISTINCT qui_nome FROM quiosques join entradas on (ent_quiosque=qui_codigo) WHERE ent_fornecedor=$codigo";
+                    $query4 = mysql_query($sql4); if (!$query4) die("Erro: 4" . mysql_error());
+                    $linhas4 = mysql_num_rows($query4);
+                    if ($linhas4 > 0) {
+                        $tpl->NAOEXCLUIR_MOTIVO = "Esta pessoa é fornecedora de algum quiosque porque possui entradas. Se realmente deseja excluí-la, é necessário delete todas as entradas (desta pessoa) primeiro!";
+                        $tpl->LINK = "#";
+                        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR_DESABILITADO");
+                    } else {
+                        //Verifica se ele ja participou de entradas como fornecedor ou caixa
+                        $sql8 = "SELECT * FROM entradas WHERE ent_supervisor=$codigo OR ent_fornecedor=$codigo";
+                        $query8 = mysql_query($sql8); if (!$query8) die("Erro SQL: " . mysql_error());
+                        $linhas8 = mysql_num_rows($query8);
+                        if ($linhas8 > 0) {
+                            $tpl->NAOEXCLUIR_MOTIVO = "Esta pessoa já realizou operações como caixa ou fornecedor de algum quiosque";
+                            $tpl->LINK = "#";
+                            $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR_DESABILITADO");
+                        } else {
+
+                            //Verifica se ele � ja participou de saidas como consumidor ou caixa
+                            $sql7 = "SELECT * FROM saidas JOIN caixas_operacoes on (sai_caixaoperacaonumero=caiopo_numero) WHERE caiopo_operador=$codigo OR sai_consumidor=$codigo";
+                            $query7 = mysql_query($sql7); if (!$query7) die("Erro SQL: " . mysql_error());
+                            $linhas7 = mysql_num_rows($query7);
+                            if ($linhas7 > 0) {
+                                $tpl->NAOEXCLUIR_MOTIVO = "Esta pessoa já participou de alguma Saída como caixa ou consumidor de algum quiosque!";
+                                $tpl->LINK = "#";
+                                $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR_DESABILITADO");
+                            } else {
+                                $tpl->LINK = "pessoas_deletar.php";
+                                $tpl->LINK_COMPLEMENTO = "operacao=excluir";
+                                $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR");
+                            }
+                        }
+                    }
+                }
+            }
+        }
     } else {
         $tpl->LINK = "#";
-        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR_DESABILITADO");
+        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_EXCLUIR_DESABILITADO");       
     }
-
 
 
     $tpl->block("BLOCK_LISTA");
