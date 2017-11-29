@@ -278,19 +278,17 @@ if ($tiposaida == 1) {
 $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->show();
 
-//Verifica se há produtos no estoque
+//Verifica se há produtos cadastrados para poder fazer uma saida
 if ($usaestoque==1) {
-    $sql = "SELECT etq_lote FROM estoque JOIN entradas on (etq_lote=ent_codigo) WHERE ent_quiosque=$usuario_quiosque";
-    $query = mysql_query($sql);
-    if (!$query)
-        die("Erro: " . mysql_error());
+    $sql = "SELECT pro_codigo FROM produtos WHERE pro_cooperativa=$usuario_cooperativa";
+    $query = mysql_query($sql); if (!$query) die("Erro: " . mysql_error());
     $linhas = mysql_num_rows($query);
-    if (($linhas == 0)&&($usaestoque==1)) {
+    if ($linhas == 0) {
         $tpl = new Template("templates/notificacao.html");
         $tpl->ICONES = $icones;
-        $tpl->MOTIVO_COMPLEMENTO = "Para gerar uma venda ou devolução <b>é necessário que se tenha produtos em seu estoque</b>. <br>Clique no botão abaixo para ir para a tela de cadastro de entradas, que é onde você insere produtos em seu estoque!";
+        $tpl->MOTIVO_COMPLEMENTO = "Para gerar uma venda ou devolução <b>é necessário que se tenha produtos cadastrados</b>. <br>Clique no botão abaixo para ir para a tela de cadastro de produtos";
         $tpl->block("BLOCK_ATENCAO");
-        $tpl->DESTINO = "entradas_cadastrar.php?operacao=cadastrar";
+        $tpl->DESTINO = "produtos_cadastrar.php?operacao=cadastrar";
         $tpl->block("BLOCK_BOTAO");
         $tpl->show();
         exit;

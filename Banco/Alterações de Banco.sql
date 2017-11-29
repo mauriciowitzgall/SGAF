@@ -17597,3 +17597,6 @@ CHANGE COLUMN `pes_fone2` `pes_fone2` VARCHAR(14) CHARACTER SET 'utf8' COLLATE '
 UPDATE `configuracoes` SET `cnf_versao`='v4.1' WHERE `cnf_codigo`='1';
 
 
+UPDATE `sgaf_labodega`.`saidas_motivo` SET `saimot_nome`='Correção de estoque' WHERE `saimot_codigo`='5';
+
+DELETE FROM `sgaf_labodega`.`saidas_motivo` WHERE `saimot_codigo`='4';

@@ -115,7 +115,7 @@ $tpl1->block("BLOCK_SELECT_ONCHANGE");
 $tpl1->block("BLOCK_SELECT_NORMAL"); 
 if ($operacao=="cadastrar") $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
 else $tpl1->block("BLOCK_SELECT_DESABILITADO");
-$sql="SELECT * FROM produtos left join produtos_recipientes on pro_recipiente=prorec_codigo WHERE pro_podesersubproduto=1 ORDER BY pro_nome";
+$sql="SELECT * FROM produtos left join produtos_recipientes on pro_recipiente=prorec_codigo WHERE pro_podesersubproduto=1 and pro_cooperativa=$usuario_cooperativa ORDER BY pro_nome";
 if (!$query=mysql_query($sql)) die("Erro SQL 3: " . mysql_error());
 $tpl1->block("BLOCK_SELECT_OPTION_PADRAO"); //Selecione
 while ($dados = mysql_fetch_assoc($query)) {

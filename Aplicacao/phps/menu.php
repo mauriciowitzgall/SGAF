@@ -32,7 +32,7 @@ if ($usuario_grupo<>4) {
         $tpl_menu->IMAGEM_TITULO = "Quiosque";
         $tpl_menu->TITULO = "Quiosque";
         if ($permissao_quiosque_ver == 1) {
-            $tpl_menu->IMAGEM_ARQUIVO = "quiosques.png";
+            $tpl_menu->IMAGEM_ARQUIVO = "quiosques_configuracoes.png";
             $tpl_menu->LINK = "quiosques_configuracoes.php";
             $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
             $tpl_menu->block("BLOCK_MENU_ITEM");
@@ -187,8 +187,8 @@ if ($usuario_grupo<>4) {
         //Sub-menu Quiosque
         if ($tipopagina == "quiosques") {
 
-            //Taxas
-            if ($usavendas==1) {
+            //Taxas  
+            if (($usavendas==1)&&(($fazfechamentos==1)||($fazacertos==1))) {
                 if ($permissao_quiosque_ver == 1) {
                     $tpl_menu->IMAGEM_TITULO = "Taxas";
                     $tpl_menu->TITULO = "Taxas";
@@ -199,18 +199,8 @@ if ($usuario_grupo<>4) {
                 }
             }
 
-            //Supervisores
-            if ($permissao_quiosque_ver == 1) {
-                $tpl_menu->IMAGEM_TITULO = "Supervisores";
-                $tpl_menu->TITULO = "Supervisores";
-                $tpl_menu->IMAGEM_ARQUIVO = "quiosque_supervisores.png";
-                $tpl_menu->LINK = "supervisores.php?quiosque=$usuario_quiosque";
-                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-                $tpl_menu->block("BLOCK_MENU_ITEM");
-            }
-
             //Taxas Quiosque
-            if ($usavendas==1) {                
+            if (($usavendas==1)&&($fazacertos==1)) {                
                 if ($permissao_taxas_ver == 1) {
                     $tpl_menu->IMAGEM_TITULO = "Taxas Quiosque";
                     $tpl_menu->TITULO = "Taxas Quiosque";
@@ -221,17 +211,18 @@ if ($usuario_grupo<>4) {
                 }
             }
             
-            //Configurações
-            if ($permissao_quiosque_editar == 1) {
-                $tpl_menu->IMAGEM_TITULO = "Configurações";
-                $tpl_menu->TITULO = "Configurações";
-                $tpl_menu->IMAGEM_ARQUIVO = "quiosques_configuracoes.png";
-                $tpl_menu->LINK = "quiosques_configuracoes.php";
+            //Supervisores
+            if ($permissao_quiosque_ver == 1) {
+                $tpl_menu->IMAGEM_TITULO = "Supervisores";
+                $tpl_menu->TITULO = "Supervisores";
+                $tpl_menu->IMAGEM_ARQUIVO = "quiosque_supervisores.png";
+                $tpl_menu->LINK = "supervisores.php?quiosque=$usuario_quiosque";
                 $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
                 $tpl_menu->block("BLOCK_MENU_ITEM");
             }
+
             
-            //Quiosque
+            //Quiosque Editar
             if ($permissao_quiosque_editar == 1) {
                 $tpl_menu->IMAGEM_TITULO = "Quiosque";
                 $tpl_menu->TITULO = "Quiosque";
@@ -241,6 +232,18 @@ if ($usuario_grupo<>4) {
                 $tpl_menu->block("BLOCK_MENU_ITEM");
             }
 
+
+            
+            //Configurações
+            if ($permissao_quiosque_editar == 1) {
+                $tpl_menu->IMAGEM_TITULO = "Configurações";
+                $tpl_menu->TITULO = "Configurações";
+                $tpl_menu->IMAGEM_ARQUIVO = "quiosques_configuracoes.png";
+                $tpl_menu->LINK = "quiosques_configuracoes.php";
+                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                $tpl_menu->block("BLOCK_MENU_ITEM");
+            }
+        
         }
 
 

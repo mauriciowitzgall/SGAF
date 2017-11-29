@@ -14,6 +14,7 @@ FROM
     left join estoque on (etq_produto=pro_codigo and etq_quiosque=$usuario_quiosque)    
 WHERE
     pro_evendido=1
+    and pro_cooperativa=$usuario_cooperativa
 ORDER BY
     pro_nome , pro_tamanho, pro_cor, pro_descricao
 ";
@@ -28,7 +29,8 @@ while ($dados = mysql_fetch_array($query)) {
     $tamanho= $dados['pro_tamanho'];
     $cor= $dados['pro_cor'];
     $descricao= $dados['pro_descricao'];
-    $nome2="$nome $tamanho $cor $descricao ($referencia)";
+    if ($referencia!="") $ref="($referencia)";
+    $nome2="$nome $ref";
     if ($produto==$codigo) $selecionado=" selected "; else $selecionado="  ";
     echo "<option value='$codigo' $selecionado >$nome2</option>";
 }
