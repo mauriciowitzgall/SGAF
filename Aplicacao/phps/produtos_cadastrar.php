@@ -98,7 +98,26 @@ if ($usamodulofiscal==1) {
     if ($fatanual<=3600000) {    
         //Verifica qual é o valor do ICMS a partir da tabela de calculo pronta 
         $sql_simplesnacional = "SELECT nfesn_icms FROM nfe_simplesnacional WHERE nfesn_de <= $fatanual AND nfesn_ate >= $fatanual";
-        if (!$query_simplesnacional = mysql_query($sql_simplesnacional)) die(" Você está utilizando o módulo fiscal, é necessário que iformar ao sistema o faturamento de sua empresa dos utlimos 12 meses. Solicitie a um administrador para inserir estas informações no banco de dados antes de iniciar o cadastro de produtos. ");
+        if (!$query_simplesnacional = mysql_query($sql_simplesnacional)) {
+
+          
+            echo "<br><br><br><br>";
+            $tpl_notificacao = new Template("templates/notificacao.html");
+
+            if ($modal==1) $tpl_notificacao->DESTINO = "javascript:window.close(0);";
+            else $tpl_notificacao->DESTINO = "#"; 
+
+            $tpl_notificacao->ICONES = $icones;
+            $tpl_notificacao->MOTIVO = "<br>Você está utilizando o <b>módulo fiscal</b> <br><br> É necessário que informar ao sistema o <b>faturamento</b> de sua empresa dos <b>utlimos 12 meses</b>. <br><br>Entre em contato com o suporte.<br><br>";
+            $tpl_notificacao->block("BLOCK_MOTIVO");
+            $tpl_notificacao->MOTIVO_COMPLEMENTO = "";
+            //$tpl_notificacao->block("BLOCK_CONFIRMAR");
+            $tpl_notificacao->block("BLOCK_ATENCAO");
+            $tpl_notificacao->block("BLOCK_BOTAO");
+            $tpl_notificacao->show();
+            exit;
+        }
+
         $dados_simplesnacional=  mysql_fetch_assoc($query_simplesnacional);
         $icms_atual=$dados_simplesnacional["nfesn_icms"];
         $simplesnacional=1;

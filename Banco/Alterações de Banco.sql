@@ -18120,3 +18120,17 @@ INSERT INTO `nfe_erros` (`nfeerr_numero`, `nfeerr_descricao`, `nfeerr_tipodocume
 INSERT INTO `nfe_erros` (`nfeerr_numero`, `nfeerr_descricao`, `nfeerr_tipodocumento`) VALUES ('814', 'Rejeição: Nota Fiscal com grupo de comércio exterior', '3');
 INSERT INTO `nfe_erros` (`nfeerr_numero`, `nfeerr_descricao`, `nfeerr_tipodocumento`) VALUES ('872', 'Rejeição: A SEFAZ do destinatário não permite Contribuinte Isento de Inscrição Estadual em operações internas', '2');
 INSERT INTO `nfe_erros` (`nfeerr_numero`, `nfeerr_descricao`, `nfeerr_tipodocumento`) VALUES ('999', 'Rejeição: Erro não catalogado', '3');
+
+
+ALTER TABLE `sgaf`.`quiosques` 
+CHANGE COLUMN `qui_disponivelnobusca` `qui_disponivelnobusca` TINYINT(4) NOT NULL DEFAULT 0 ;
+
+ALTER TABLE `sgaf`.`quiosques` 
+CHANGE COLUMN `qui_latitude` `qui_latitude` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL ,
+CHANGE COLUMN `qui_longitude` `qui_longitude` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL ;
+
+
+ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_csctoken` VARCHAR(36) NULL AFTER `quicnf_identificacaoconsumidorvenda`,
+ADD COLUMN `quicnf_csctokenid` INT(6) NULL AFTER `quicnf_csctoken`,
+ADD COLUMN `quicnf_prx` BLOB NULL AFTER `quicnf_csctokenid`;
