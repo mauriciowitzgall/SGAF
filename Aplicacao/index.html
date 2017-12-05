@@ -23,12 +23,17 @@
                         senha: $("input[name=senha]").val(),
                         tipopessoa: tipopessoa
                     }, function(valor) {
-                        var validado = valor;
+                        var validado = valor.replace("\n","");
+                        var validado = validado.replace("\n","");
+                        var validado = validado.replace("\n","");
+                        var validado = validado.replace("\n","");
+                        var validado = validado.replace("\n","");
+
                         if (validado == 'vai') {
                             ///alert("LOGA");
                             window.location.href = "phps/inicio.php";
                         } else {
-                            alert(valor);
+                            alert("("+valor+")");
                         }
                     });
                 }

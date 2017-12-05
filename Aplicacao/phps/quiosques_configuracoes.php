@@ -74,7 +74,7 @@ $sql="SELECT *
      $bairro=$dados["qui_bairro"];
      $cep=$dados["qui_cep"];
      $quiosque_estado=$dados["est_codigo"];
-     $quiosque_estado=$dados["est_codigo"];
+     $quiosque_estado_sigla=$dados["est_sigla"];
      $permiteedicaoclientenavenda=$dados["quicnf_permiteedicaoclientenavenda"];
      $permiteedicaoreferencianavenda=$dados["quicnf_permiteedicaoreferencianavenda"];
  }

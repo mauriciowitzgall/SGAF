@@ -5,32 +5,32 @@ shortcut.add("Esc",function()
 });
 
 //Pessoas
-shortcut.add("Ctrl+P", function() {
+shortcut.add("Ctrl+Alt+P", function() {
    window.location = "pessoas.php"
 });
 
 //Produtos
-shortcut.add("Ctrl+R", function() {
+shortcut.add("Ctrl+Alt+R", function() {
    window.location = "produtos.php"
 });
 
 //Estoque
-shortcut.add("Ctrl+S", function() {
+shortcut.add("Ctrl+Alt+S", function() {
    window.location = "estoque.php"
 });
 
 //Entradas
-shortcut.add("Ctrl+E", function() {
+shortcut.add("Ctrl+Alt+E", function() {
    window.location = "entradas.php"
 });
 
 //Saidas
-shortcut.add("Ctrl+V", function() {
+shortcut.add("Ctrl+Alt+V", function() {
    window.location = "saidas.php"
 });
 
 //Acertos
-shortcut.add("Ctrl+A", function() {
+shortcut.add("Ctrl+Alt+A", function() {
    window.location = "acertos.php"
 });
 

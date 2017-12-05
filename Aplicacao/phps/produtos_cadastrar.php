@@ -54,7 +54,7 @@ while ($array = mysql_fetch_array($query)) {
     $origem_codigo=$array['pro_origem'];
     $dadosfiscais=$array['pro_dadosfiscais'];
     $controlarestoque=$array['pro_controlarestoque'];
-    $evendido=$array['pro_evendido'];
+    $evendido=$array['pro_evendpido'];
     $valunicusto=$array['pro_valunicusto'];
     $valunivenda=$array['pro_valunivenda'];
     if ($subproduto=="") $subproduto=0;
@@ -161,6 +161,9 @@ if ($linhas == 0) {
 ?>
 <form action="produtos_cadastrar2.php?modal=<?php echo $modal; ?>&codigo=<?php echo"$codigo"; ?>" method="post" name="form1">
     <input type="hidden" name="codigo_produto" value="<?php echo $codigo; ?>">
+    <input type="hidden" name="usaestoque" value="<?php echo $usaestoque; ?>">
+    
+
     <table summary="" border="0" class="tabela1" cellpadding="4">
         <tr>
             <td align="right" width="200px"><b>Nome: <label class="obrigatorio"></label></b></td>
@@ -578,7 +581,7 @@ if ($linhas == 0) {
         </tr> 
 
         
-        <tr>
+        <tr id="linha_controlarestoque">
             <td align="right" width="200px"><b>Controlar Estoque <label class="obrigatorio"></label></b></td>
             <td align="left" valign="bottom">
                 <?php 

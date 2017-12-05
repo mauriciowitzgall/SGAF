@@ -29,7 +29,7 @@ while ($dados = mysql_fetch_array($query)) {
     $tamanho= $dados['pro_tamanho'];
     $cor= $dados['pro_cor'];
     $descricao= $dados['pro_descricao'];
-    if ($referencia!="") $ref="($referencia)";
+    if ($referencia!="") $ref="($referencia)"; else $ref="";
     $nome2="$nome $ref";
     if ($produto==$codigo) $selecionado=" selected "; else $selecionado="  ";
     echo "<option value='$codigo' $selecionado >$nome2</option>";

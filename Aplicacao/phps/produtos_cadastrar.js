@@ -266,6 +266,12 @@ window.onload = function(){
     verifica_evendido();
 
 
+    usaestoque=$("input[name=usaestoque]").val();
+    if (usaestoque==1) {
+        $("tr[id=linha_controlarestoque]").show();
+    } else {
+        $("tr[id=linha_controlarestoque]").hide();
+    }
 
     //referencia_valida_caracteres_especiais("");
     

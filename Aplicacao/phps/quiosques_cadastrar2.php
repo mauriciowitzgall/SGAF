@@ -104,7 +104,7 @@ if ($codigo == "") {
 	VALUES ('$nome','$cidade','$cep','$bairro','$vila','$endereco','$numero','$complemento','$referencia','$fone1','$fone2','$email','$obs','$datacadastro','$horacadastro','$cooperativa','$usuario_codigo','$idunico','$cnpj','$ie','$im','$razaosocial');";
     $query = mysql_query($sql);
     if (!$query)
-        die("Erro SQL");    
+        die("Erro SQL 8".mysql_error());    
     $ultimo = mysql_insert_id();
     $quiosque = $ultimo;
     foreach ($tiponegociacao as $tiponegociacao) {

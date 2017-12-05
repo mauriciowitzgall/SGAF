@@ -32,6 +32,7 @@ $tiponegociacao = $_POST['box'];
 $codigounico = $_POST['codigounico'];
 $dadosfiscais = $_POST['dadosfiscais'];
 $controlarestoque = $_POST['controlarestoque'];
+if ($usaestoque==0) $controlarestoque=0;
 $evendido = $_POST['evendido'];
 if ($evendido=="") $evendido=0;
 $valunicusto=$_POST['valunicusto'];

@@ -67,18 +67,23 @@ if ($usuario_grupo == 0) {
 
 //Caixa Abrir Encerrar e Vendas
 if ((($usuario_grupo==4)|| ($usuario_grupo==1))&&($usuario_quiosque!='0')) {
-    if ($usuario_caixa_operacao=="") {
-        $tpl8->block("BLOCK_CAIXA_ABRIR");
-    } else {
-        $tpl8->ENCERRARCAIXA="$usuario_caixa_operacao";
-        $tpl8->block("BLOCK_CAIXA_ENCERRAR");
-        $tpl8->block("BLOCK_VENDAS");
-        $tpl8->NUMEROOPERACAO="$usuario_caixa_operacao";
-        $tpl8->block("BLOCK_CAIXA_FLUXO");
+    if (($usacaixa==1)) {
+        if (($usuario_caixa_operacao=="")) {
+            $tpl8->block("BLOCK_CAIXA_ABRIR");
+        } else {
+            $tpl8->ENCERRARCAIXA="$usuario_caixa_operacao";
+            $tpl8->block("BLOCK_CAIXA_ENCERRAR");
+            $tpl8->NUMEROOPERACAO="$usuario_caixa_operacao";
+            $tpl8->block("BLOCK_CAIXA_FLUXO");
+        
+        }
+        if (($usamulticaixas==1)&&($usuario_grupo==4)) $tpl8->block("BLOCK_CAIXAS");
     }
-    if (($usamulticaixas==1)&&($usuario_grupo==4)) $tpl8->block("BLOCK_CAIXAS");
-    
+
 }
+
+//Vendas
+if (($usavendas==1)&&($usuario_grupo==4)) $tpl8->block("BLOCK_VENDAS");
 
 
 
