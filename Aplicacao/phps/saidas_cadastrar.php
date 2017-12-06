@@ -553,7 +553,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                             else $valtot= $valuni * $qtd_estoque;
                             
                             //Insere o registro nas saídas
-                            $sql_saida_produto = "
+                            echo $sql_saida_produto = "
                             INSERT INTO saidas_produtos (
                                 saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade,saipro_loteconjunto
                             )
@@ -648,6 +648,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
             //Inserir nos produtos,  não tem necessidade de atualizar estoque
             
             //echo "inserir sem retirar do estoque";
+            $produto=trim($produto);
             $sql_saida_produto = "
             INSERT INTO saidas_produtos (
                 saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade
@@ -759,6 +760,7 @@ if ($tiposaida == 1) {
     $tpl1->TITULO = "Comanda / Ident.";
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
+    $tpl1->CAMPO_DICA="";
     $tpl1->CAMPO_TIPO = "number";
     $tpl1->CAMPO_NOME = "id";
     $tpl1->CAMPO_TAMANHO = "8";

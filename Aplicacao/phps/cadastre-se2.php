@@ -193,6 +193,13 @@
             if (!mysql_query($sql4))
                 die("Erro Quiosque Tipo Negociação Revenda: " . mysql_error());            
 
+
+             //Deve-se definir uma configuração padrão inicial para o quiosque cadastrado 
+            $sql7 = "INSERT INTO quiosques_configuracoes (quicnf_quiosque)
+            VALUES ($quiosque_ultimo);";
+            if (!$query7= mysql_query($sql7))  die("Erro SQL Configuração quiosque".mysql_error());    
+
+
             //Inserir pessoa
             $senha = md5($senha);
             $sql = "

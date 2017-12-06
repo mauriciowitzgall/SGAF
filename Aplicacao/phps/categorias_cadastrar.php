@@ -53,7 +53,6 @@ $linkanterior=$_GET["link"];
 if ($linkanterior=="") { $link_destino="categorias.php"; } else {
     $link_destino=$linkanterior;
 }
-echo "($linkanterior) e ($link_destino)";
 
 if ($ver==1){ ?>
 <a href="#" class="link">&nbsp;

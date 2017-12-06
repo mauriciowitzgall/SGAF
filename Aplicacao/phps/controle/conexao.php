@@ -1,8 +1,8 @@
 <?php 
 $hostname = "localhost";
-$db = "sgaf_labodega";
+$db = "sgaf";
 $user = "root";
-$pass = "";
+$pass = "mautito";
 
 $link = mysql_connect($hostname, $user, $pass);
 if (!$link) {
@@ -16,11 +16,6 @@ mysql_query('SET character_set_client=utf8');
 mysql_query('SET character_set_results=utf8');
 mysql_query("SET GLOBAL sql_mode = ''");
 mysql_query("SET SESSION sql_mode = ''");
-
-
-
-
-
 
 
  ?>

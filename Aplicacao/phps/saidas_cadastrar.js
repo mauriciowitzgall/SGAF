@@ -1258,7 +1258,7 @@ function verifica_fone_botao_incluir (valor) {
 
 
 function verifica_produto_referencia(valor) {
-    console.log(valor);
+    //console.log(valor);
     
     valor = remove_caracteres_especiais(valor);
     $("input[name=produto_referencia]").val(valor);
