@@ -33,6 +33,7 @@ if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
 $tiposai = $_REQUEST["tiposai"];
 $passo = $_REQUEST["passo"];
 $saida = $_REQUEST["saida"];
+
 //Verifica tipo da entrada, se é devolução ou venda
 $sql_f = "SELECT sai_tipo FROM saidas WHERE sai_codigo=$saida";
 if (!$query_f = mysql_query($sql_f))
@@ -40,20 +41,14 @@ if (!$query_f = mysql_query($sql_f))
 $dados_f = mysql_fetch_array($query_f);
 $tipo = $dados_f["sai_tipo"];
 
-
 $valbru=$_REQUEST["valbru2"];
-//$valbru = str_replace("R$ ","",$valbru);
-//$valbru = str_replace(".","",$valbru);
-//$valbru = str_replace(",",".",$valbru);
-
-
-
 $descper = $_REQUEST["descper2"];
 $descval = $_REQUEST["descval2"];
 $total = $_REQUEST["total2"];
 $metodopag = $_REQUEST["metodopag2"];
 $recebidodinheiro = $_REQUEST["recebidodinheiro"];
 $recebidocartao = $_REQUEST["recebidocartao"];
+$cartaobandeira = $_REQUEST["cartaobandeira"];
 
 
 $areceber = $_REQUEST["areceber2"];
@@ -112,6 +107,7 @@ if ($tipo == 1) {
        sai_metpag='$metodopag',
        sai_recebidodinheiro='$recebidodinheiro',
        sai_recebidocartao='$recebidocartao',
+       sai_cartaobandeira='$cartaobandeira',
    ";
 }
 $sql = "

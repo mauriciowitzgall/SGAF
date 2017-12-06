@@ -18134,3 +18134,30 @@ ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes`
 ADD COLUMN `quicnf_csctoken` VARCHAR(36) NULL AFTER `quicnf_identificacaoconsumidorvenda`,
 ADD COLUMN `quicnf_csctokenid` INT(6) NULL AFTER `quicnf_csctoken`,
 ADD COLUMN `quicnf_pfx` BLOB NULL AFTER `quicnf_csctokenid`;
+
+ALTER TABLE `sgaf_labodega`.`saidas` 
+ADD COLUMN `sai_cartaobandeira` INT(2) NULL AFTER `sai_areceberquitado`;
+
+CREATE TABLE `sgaf_labodega`.`cartoes_bandeira` (
+  `carban_codigo` INT NOT NULL,
+  `carban_nome` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`carban_codigo`));
+
+INSERT INTO `sgaf_labodega`.`cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('01', 'Mastercard');
+INSERT INTO `sgaf_labodega`.`cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('03', 'American Express');
+INSERT INTO `sgaf_labodega`.`cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('04', 'Sorocred');
+INSERT INTO `sgaf_labodega`.`cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('99', 'Outros');
+
+
+UPDATE `sgaf_labodega`.`cartoes_bandeira` SET `carban_nome`='Visa' WHERE `carban_codigo`='1';
+INSERT INTO `sgaf_labodega`.`cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('2', 'Mastercard');
+
+ALTER TABLE `sgaf_labodega`.`metodos_pagamento` 
+ADD COLUMN `metpag_nfecodigo` VARCHAR(45) NOT NULL AFTER `metpag_nome`;
+
+UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='2' WHERE `metpag_codigo`='4';
+UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='1' WHERE `metpag_codigo`='1';
+UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='3' WHERE `metpag_codigo`='2';
+UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='4' WHERE `metpag_codigo`='3';
+UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='99' WHERE `metpag_codigo`='7';
+UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='99' WHERE `metpag_codigo`='6';

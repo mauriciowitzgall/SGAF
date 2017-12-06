@@ -62,7 +62,19 @@ $(document).ready(function() {
                     <!-- END BLOCK_METPAG_OPTION -->
                 </select>                
             </td>  
-        </tr>       
+        </tr>  
+        <tr class="" id="tr_cartaobandeira">  
+            <td align="right" width="">                
+                <b>Bandeira:</b>                            
+            </td>            
+            <td align="left" width="" class="fundo1">                
+                <select name="cartaobandeira" id="cartaobandeira" class="campopadrao" onchange=""  {CARTAOBANDEIRA_DESABILITADO}>
+                    <!-- BEGIN BLOCK_CARTAOBANDEIRA_OPTION -->
+                    <option value="{CARTAOBANDEIRA_OPTION_VALOR}" {CARTAOBANDEIRA_OPTION_SELECIONADO}>{CARTAOBANDEIRA_OPTION_TEXTO}</option>
+                    <!-- END BLOCK_CARTAOBANDEIRA_OPTION -->
+                </select>                
+            </td>  
+        </tr> 
         <tr id="tr_dinheiro">  
             <td align="right" width="">                
                 <b>Dinheiro Recebido:</b>                            

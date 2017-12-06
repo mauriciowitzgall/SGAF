@@ -37,7 +37,7 @@ function metodopagamento() {
     valor=$("select[name=metodopag]").val();
     //alert(valor);
     var total = $("input[name=total]").val();
-    if ((valor==1)||(valor==4)) {
+    if ((valor==1)||(valor==4)) { //Dinheiro ou Cheque
         $("tr[id=tr_dinheiro]").show();
         document.form1.dinheiro.required=true;
         $("input[name=dinheiro]").focus();
@@ -46,6 +46,7 @@ function metodopagamento() {
         document.form1.recebidocartao.required=false;
         $("tr[id=tr_recebidocartao]").hide();
         $("tr[id=tr_recebidomistototal]").hide();
+        $("tr[id=tr_cartaobandeira]").hide();
         passo=$("input[name=passo]").val();
         if (passo==1) {
             $("input[name=dinheiro]").val("");
@@ -53,38 +54,47 @@ function metodopagamento() {
         } else if (passo==2) {
             //O php desabilita o campo
         }
+        document.form1.cartaobandeira.required=false;        
 
-    } else if (valor==2) {
+    } else if (valor==2) { //Cartão de Crédito
         $("tr[id=tr_dinheiro]").show();
         document.form1.dinheiro.required=true;
         document.form1.dinheiro.disabled = false;
-        $("input[name=dinheiro]").focus();
+        $("select[name=cartaobandeira]").focus();
         $("input[name=dinheiro]").val(total);
         $("tr[id=tr_recebidodinheiro]").hide();
         $("tr[id=tr_recebidocartao]").hide();
         $("tr[id=tr_recebidomistototal]").hide();
+        $("tr[id=tr_cartaobandeira]").show();
         document.form1.recebidodinheiro.required=false;
         document.form1.recebidocartao.required=false;        
-    } else if (valor==3) {
+        document.form1.cartaobandeira.required=true;        
+    } else if (valor==3) {  //Cartão de Débito  
         $("tr[id=tr_dinheiro]").show();
         document.form1.dinheiro.required=true;
         document.form1.dinheiro.disabled =false;
-        $("input[name=dinheiro]").focus();
+        $("select[name=cartaobandeira]").focus();
         $("input[name=dinheiro]").val(total);
         $("tr[id=tr_recebidodinheiro]").hide();
         $("tr[id=tr_recebidocartao]").hide();
         $("tr[id=tr_recebidomistototal]").hide();
+        $("tr[id=tr_cartaobandeira]").show();
         document.form1.recebidodinheiro.required=false;
-        document.form1.recebidocartao.required=false;        
-    } else if ((valor==6)||(valor==7)) {
+        document.form1.recebidocartao.required=false; 
+        document.form1.cartaobandeira.required=true;        
+
+    } else if ((valor==6)||(valor==7)) { //6=Dinheiro + Cartão Débito / 7=Dinheiro + Cartão Crédito
         document.form1.dinheiro.required=false;
         $("tr[id=tr_dinheiro]").hide();
         $("tr[id=tr_recebidodinheiro]").show();
         $("tr[id=tr_recebidocartao]").show();
         $("tr[id=tr_recebidomistototal]").show();
-        $("input[name=recebidodinheiro]").focus();
+        $("select[name=cartaobandeira]").focus();
+        $("tr[id=tr_cartaobandeira]").show();
         document.form1.recebidodinheiro.required=true;
         document.form1.recebidocartao.required=true;
+        document.form1.cartaobandeira.required=true;        
+
     }
 }
 

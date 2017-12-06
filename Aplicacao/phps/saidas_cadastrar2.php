@@ -44,6 +44,7 @@ $total = number_format($total,2,'.','');
 $dinheiro = number_format(dinheiro_para_numero($_POST["dinheiro"]),2,'.','');
 $recebidodinheiro = number_format(dinheiro_para_numero($_POST["recebidodinheiro"]),2,'.','');
 $recebidocartao = number_format(dinheiro_para_numero($_POST["recebidocartao"]),2,'.','');
+$cartaobandeira = $_POST["cartaobandeira"];
 if ($dinheiro==0) $dinheiro = $recebidodinheiro + $recebidocartao;
 $troco = number_format($dinheiro - $total,2,'.','');
 $areceber = $_REQUEST["areceber"];
@@ -76,7 +77,7 @@ if ((($dinheiro <= $total) && ($passo == 2))||(($metodopag==6)||($metodopag==7))
 
     echo "
         <script language='javaScript'>
-            window.location.href='saidas_cadastrar3.php?troco_devolvido=0&passo=2&saida=$saida&total2=$total&descper2=$descper&descval2=$descval&dinheiro2=$dinheiro&troco2=$troco&troco_devolvido=$troco_devolvido&valbru2=$valbru&areceber2=$areceber&metodopag2=$metodopag&tiposai=$tiposai&recebidodinheiro=$recebidodinheiro&recebidocartao=$recebidocartao'
+            window.location.href='saidas_cadastrar3.php?troco_devolvido=0&passo=2&saida=$saida&total2=$total&descper2=$descper&descval2=$descval&dinheiro2=$dinheiro&troco2=$troco&troco_devolvido=$troco_devolvido&valbru2=$valbru&areceber2=$areceber&metodopag2=$metodopag&tiposai=$tiposai&recebidodinheiro=$recebidodinheiro&recebidocartao=$recebidocartao&cartaobandeira=$cartaobandeira'
         </script>";   
 }
 
@@ -122,18 +123,35 @@ $tpl->block("BLOCK_AREC_OPTION");
 
 //Método de pagamento
 $sql = "SELECT * FROM metodos_pagamento ORDER BY metpag_codigo";
-$query = mysql_query($sql);
-if (!$query)
-    die("Erro de SQL: " . mysql_error());
+$query = mysql_query($sql); if (!$query)  die("Erro de SQL: " . mysql_error());
 while ($dados = mysql_fetch_array($query)) {
     $tpl->METPAG_OPTION_VALOR = $dados[0];
     $tpl->METPAG_OPTION_TEXTO = $dados[1];
-    if ($metodopag == $dados[0])
-        $tpl->METPAG_OPTION_SELECIONADO = " selected ";
-    else
-        $tpl->METPAG_OPTION_SELECIONADO = "  ";
+    if ($metodopag == $dados[0]) $tpl->METPAG_OPTION_SELECIONADO = " selected ";
+    else $tpl->METPAG_OPTION_SELECIONADO = "  ";
     $tpl->block("BLOCK_METPAG_OPTION");
 }
+
+
+
+//Cartão Bandeira
+$sql = "SELECT * FROM cartoes_bandeira ORDER BY carban_codigo";
+$query = mysql_query($sql);
+if (!$query) die("Erro de SQL Cartão Bandeira: " . mysql_error());
+$tpl->CARTAOBANDEIRA_OPTION_VALOR = "";
+$tpl->CARTAOBANDEIRA_OPTION_TEXTO = "Selecione";  
+$tpl->block("BLOCK_CARTAOBANDEIRA_OPTION");
+while ($dados = mysql_fetch_array($query)) {
+    $tpl->CARTAOBANDEIRA_OPTION_VALOR = $dados[0];
+    $tpl->CARTAOBANDEIRA_OPTION_TEXTO = $dados[1];
+    if ($cartaobandeira == $dados[0])
+        $tpl->CARTAOBANDEIRA_OPTION_SELECIONADO = " selected ";
+    else
+        $tpl->CARTAOBANDEIRA_OPTION_SELECIONADO = "  ";
+    $tpl->block("BLOCK_CARTAOBANDEIRA_OPTION");
+}
+
+
 
 
 
