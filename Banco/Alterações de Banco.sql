@@ -18133,4 +18133,4 @@ CHANGE COLUMN `qui_longitude` `qui_longitude` VARCHAR(45) CHARACTER SET 'utf8' C
 ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
 ADD COLUMN `quicnf_csctoken` VARCHAR(36) NULL AFTER `quicnf_identificacaoconsumidorvenda`,
 ADD COLUMN `quicnf_csctokenid` INT(6) NULL AFTER `quicnf_csctoken`,
-ADD COLUMN `quicnf_prx` BLOB NULL AFTER `quicnf_csctokenid`;
+ADD COLUMN `quicnf_pfx` BLOB NULL AFTER `quicnf_csctokenid`;

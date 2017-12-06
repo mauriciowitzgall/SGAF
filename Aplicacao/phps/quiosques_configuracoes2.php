@@ -42,6 +42,22 @@ $devolucoessobrevendas = $_POST['devolucoessobrevendas'];
 $pagamentosparciais = $_POST['pagamentosparciais'];
 $permiteedicaoclientenavenda = $_POST['permiteedicaoclientenavenda'];
 $permiteedicaoreferencianavenda = $_POST['permiteedicaoreferencianavenda'];
+if ($usamodulofiscal==1) {
+    
+$certificadodigital = $_FILES['certificadodigital'];
+    if($certificadodigital != NULL) { 
+        $nomeFinal = time().'.pfx';
+        if (move_uploaded_file($certificadodigital['tmp_name'], $nomeFinal)) {
+            $tamanhoUp = filesize($nomeFinal); 
+            $mysqlUpload = addslashes(fread(fopen($nomeFinal, "r"), $tamanhoUp)); 
+            unlink($nomeFinal);
+        }
+    } 
+    else { 
+        echo" <br><br>Você não realizou o upload do certificado digital de forma satisfatória.<br><br>"; 
+    } 
+}
+
 $cpf = $_POST['cpf'];
 $cpf = str_replace(".","", $cpf);
 $cpf = str_replace("-","", $cpf);
@@ -121,7 +137,8 @@ SET
     quicnf_multicaixas='$multicaixas',
     quicnf_fazfechamentos='$fazfechamentos',
     quicnf_fazacertos='$fazacertos',
-    quicnf_usavendaporcoes='$usavendaporcoes'
+    quicnf_usavendaporcoes='$usavendaporcoes',
+    quicnf_pfx=('$mysqlUpload')
     $complemento    
 WHERE
     quicnf_quiosque=$quiosque

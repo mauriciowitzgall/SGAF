@@ -75,12 +75,12 @@
                 <!-- END BLOCK_CAMPO_FOCO -->
                 
                 <!-- BEGIN BLOCK_CAMPO_OBRIGATORIO -->
-                class="campopadrao  " 
+                class="campopadrao {CLASSE_COMPLEMENTO} " 
                 required 
                 <!-- END BLOCK_CAMPO_OBRIGATORIO -->                
                 
                 <!-- BEGIN BLOCK_CAMPO_NORMAL -->
-                class="campopadrao"
+                class="campopadrao {CLASSE_COMPLEMENTO}"
                 <!-- END BLOCK_CAMPO_NORMAL -->                
                 
                 <!-- BEGIN BLOCK_CAMPO_NORMAL_OCULTO -->
@@ -94,7 +94,11 @@
                 <!-- BEGIN BLOCK_CAMPO_PASSWORD_OBRIGATORIO -->
                 class="campopadrao password " 
                 required 
-                <!-- END BLOCK_CAMPO_PASSWORD_OBRIGATORIO -->                
+                <!-- END BLOCK_CAMPO_PASSWORD_OBRIGATORIO --> 
+
+                <!-- BEGIN BLOCK_CAMPO_PERSONALIZADO -->
+                class="{CLASSE_PERSONALIZADA}" 
+                <!-- END BLOCK_CAMPO_PERSONALIZADO -->                       
                 
                 <!-- BEGIN BLOCK_CAMPO_DESABILITADO -->
                 disabled                 
@@ -102,6 +106,11 @@
                 <!-- BEGIN BLOCK_CAMPO_SOMENTELEITURA -->
                 readonly
                 <!-- END BLOCK_CAMPO_SOMENTELEITURA -->
+                <!-- BEGIN BLOCK_CAMPO_OBRIGAT -->
+                required 
+                <!-- END BLOCK_CAMPO_OBRIGAT -->
+
+
                 
                 <!-- BEGIN BLOCK_CAMPO_ESTILO -->
                 style="{CAMPO_ESTILO}"                 

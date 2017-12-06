@@ -41,6 +41,7 @@ $modal=$_GET["modal"];
             if (!$query= mysql_query($sql)) die("Erro SQL INCLUDES: " . mysql_error());
             while ($dados=  mysql_fetch_assoc($query)) {    
                 $usaestoque=$dados["quicnf_usamoduloestoque"];
+                $usamodulofiscal=$dados["quicnf_usamodulofiscal"];
                 $usaproducao=$dados["quicnf_usamoduloproducao"];
                 $usavendas=$dados["quicnf_usamodulovendas"];
                 $usacaixa=$dados["quicnf_usamodulocaixa"];

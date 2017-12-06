@@ -13,6 +13,7 @@ function usa_modulo_fiscal (valor) {
         document.form1.endereco_numero.required=true;
         document.form1.bairro.required=true;
         document.form1.cep.required=true;
+        document.form1.certificadodigital.required=true;
         tipopessoa=$("select[name=tipopessoanfe]").val();
         if(tipopessoa==1) {
             document.form1.cpf.required=true;
@@ -38,6 +39,7 @@ function usa_modulo_fiscal (valor) {
         $("tr[id=linha_ambientenfe]").show();
         $("tr[id=linha_ultimanfe]").show();
         $("tr[id=linha_versaonfe]").show();
+        $("tr[id=linha_certificadodigital]").show();
         $("tr[id=linha_ie]").show();
         $("tr[id=linha_tipopessoanfe]").show(); 
         if (tipopessoa==1) {
@@ -61,6 +63,7 @@ function usa_modulo_fiscal (valor) {
         document.form1.cstnfe.required=false;
         document.form1.csosnnfe.required=false;
         document.form1.serienfe.required=false;
+        document.form1.certificadodigital.required=false;
         document.form1.tipoimpressaodanfe.required=false;
         document.form1.ambientenfe.required=false;
         document.form1.endereco.required=false;
@@ -83,6 +86,7 @@ function usa_modulo_fiscal (valor) {
         $("tr[id=linha_ambientenfe]").hide(); 
         $("tr[id=linha_ultimanfe]").hide();
         $("tr[id=linha_endereco]").hide(); 
+        $("tr[id=linha_certificadodigital]").hide(); 
         $("tr[id=linha_bairro]").hide(); 
         $("tr[id=linha_cep]").hide();         
         $("tr[id=linha_versaonfe]").hide(); 

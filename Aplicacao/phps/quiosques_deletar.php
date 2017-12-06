@@ -180,11 +180,11 @@ if ($usuario_grupo==2) {
 
 
         //Itens de devolução
-        echo $sql3 = "DELETE FROM saidas_devolucoes_produtos WHERE saidevpro_saida in (SELECT saidev_saida FROM saidas_devolucoes JOIN saidas on (saidev_saida=sai_codigo) WHERE sai_quiosque=$codigo)";
+        $sql3 = "DELETE FROM saidas_devolucoes_produtos WHERE saidevpro_saida in (SELECT saidev_saida FROM saidas_devolucoes JOIN saidas on (saidev_saida=sai_codigo) WHERE sai_quiosque=$codigo)";
         if (!$query3 = mysql_query($sql3)) die("Erro SQL 88: " . mysql_error());
         
         //Devoluções
-        echo $sql3 = "DELETE FROM saidas_devolucoes WHERE saidev_saida in (SELECT sai_codigo FROM saidas WHERE sai_quiosque=$codigo)";
+        $sql3 = "DELETE FROM saidas_devolucoes WHERE saidev_saida in (SELECT sai_codigo FROM saidas WHERE sai_quiosque=$codigo)";
         if (!$query3 = mysql_query($sql3)) die("Erro SQL 89: " . mysql_error());
         
 

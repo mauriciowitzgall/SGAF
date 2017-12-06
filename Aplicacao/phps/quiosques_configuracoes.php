@@ -692,6 +692,37 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
+//Certificado Digital
+$tpl1->TITULO = "Certificado Digital";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_certificadodigital";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->CAMPO_TIPO="file";
+$tpl1->CAMPO_NOME="certificadodigital";
+$tpl1->CAMPO_ID="certificadodigital";
+$tpl1->CAMPO_TAMANHO="";
+$tpl1->CAMPO_VALOR="$certificadodigital";
+$tpl1->CAMPO_QTD_CARACTERES="";
+if ($usamodulofiscal=='1') $tpl1->block("BLOCK_CAMPO_OBRIGAT");
+//$tpl1->CAMPO_ONKEYUP="";
+//$tpl1->CAMPO_ONKEYDOWN="";
+//$tpl1->CAMPO_ONKEYPRESS="";
+//$tpl1->CAMPO_ONBLUR="";
+//$tpl1->CAMPO_ONCLICK="";
+$tpl1->CAMPO_DICA="";
+//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR"); //Clicou seleciona conteudo
+//$tpl1->block("BLOCK_CAMPO_HISTORICO_DESATIVADO"); //autocomplete do navegador desligado
+//$tpl1->block("BLOCK_CAMPO_FOCO");
+$tpl1->CLASSE_PERSONALIZADA="botao_upload";
+$tpl1->block("BLOCK_CAMPO_PERSONALIZADO"); //classe padrao
+//$tpl1->CAMPO_ESTILO="";
+//$tpl1->block("BLOCK_CAMPO_ESTILO");
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+
 //CRT
 $tpl1->TITULO = "CRT";
 $tpl1->block("BLOCK_TITULO");

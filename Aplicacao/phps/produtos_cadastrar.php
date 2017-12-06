@@ -84,52 +84,6 @@ if ($pis=="") $pis="0,00";
 if ($cofins=="") $cofins="0,00";
 
 
-//Se utiliza módulo fiscal calcula o valor do ICMS
-if ($usamodulofiscal==1) {
-
-    //Verifica qual é o faturamento dos ultimos 12 meses
-    $sql="SELECT sum(nfefat_valor) as fatanual FROM (SELECT nfefat_valor FROM nfe_faturamento WHERE nfefat_quiosque=$usuario_quiosque ORDER BY nfefat_codigo DESC LIMIT 12) as subt;";
-    if (!$query = mysql_query($sql)) die("Erro SQL Faturamento Anual: ".mysql_error());
-    $dados=mysql_fetch_assoc($query);
-    $fatanual=$dados["fatanual"];
-    //echo "Faturamento Anual: ($fatanual)";
-
-    //Verifica se é do Simples Nacional
-    if ($fatanual<=3600000) {    
-        //Verifica qual é o valor do ICMS a partir da tabela de calculo pronta 
-        $sql_simplesnacional = "SELECT nfesn_icms FROM nfe_simplesnacional WHERE nfesn_de <= $fatanual AND nfesn_ate >= $fatanual";
-        if (!$query_simplesnacional = mysql_query($sql_simplesnacional)) {
-
-          
-            echo "<br><br><br><br>";
-            $tpl_notificacao = new Template("templates/notificacao.html");
-
-            if ($modal==1) $tpl_notificacao->DESTINO = "javascript:window.close(0);";
-            else $tpl_notificacao->DESTINO = "#"; 
-
-            $tpl_notificacao->ICONES = $icones;
-            $tpl_notificacao->MOTIVO = "<br>Você está utilizando o <b>módulo fiscal</b> <br><br> É necessário que informar ao sistema o <b>faturamento</b> de sua empresa dos <b>utlimos 12 meses</b>. <br><br>Entre em contato com o suporte.<br><br>";
-            $tpl_notificacao->block("BLOCK_MOTIVO");
-            $tpl_notificacao->MOTIVO_COMPLEMENTO = "";
-            //$tpl_notificacao->block("BLOCK_CONFIRMAR");
-            $tpl_notificacao->block("BLOCK_ATENCAO");
-            $tpl_notificacao->block("BLOCK_BOTAO");
-            $tpl_notificacao->show();
-            exit;
-        }
-
-        $dados_simplesnacional=  mysql_fetch_assoc($query_simplesnacional);
-        $icms_atual=$dados_simplesnacional["nfesn_icms"];
-        $simplesnacional=1;
-    } else {
-        $icms_atual="???";
-        $simplesnacional=0;
-    }
-
-}
-
-
-
 $sql2="SELECT quitipneg_tipo FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$usuario_quiosque";
 if (!$query2 = mysql_query($sql2)) die("Erro SQL2: ".mysql_error());
 $tiponegquicon=0;
