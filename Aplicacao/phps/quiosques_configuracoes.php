@@ -42,6 +42,8 @@ $sql="SELECT *
      $usaprateleira=$dados["quicnf_usaprateleira"];
      $multicaixas=$dados["quicnf_multicaixas"];
      $ultimanfe=$dados["quicnf_ultimanfe"];
+     $csctoken=$dados["quicnf_csctoken"];
+     $csctokenid=$dados["quicnf_csctokenid"];
      $serienfe=$dados["quicnf_serienfe"];
      $crtnfe=$dados["quicnf_crtnfe"];
      $cstnfe=$dados["quicnf_cstnfe"];
@@ -721,6 +723,54 @@ $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
+
+
+//CSC Token
+$tpl1->TITULO = "CSC Token (do certificado digital)";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_csctoken";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->CAMPO_TIPO="text";
+$tpl1->CAMPO_NOME="csctoken";
+$tpl1->CAMPO_ID="csctoken";
+$tpl1->CAMPO_TAMANHO="45";
+$tpl1->CAMPO_VALOR="$csctoken";
+$tpl1->CAMPO_QTD_CARACTERES="36";
+//$tpl1->CAMPO_ONKEYUP="";
+//$tpl1->CAMPO_ONKEYDOWN="";
+//$tpl1->CAMPO_ONKEYPRESS="";
+//$tpl1->CAMPO_ONBLUR="";
+//$tpl1->CAMPO_ONCLICK="";
+$tpl1->CAMPO_DICA="Ex: F8D212EF-0106-46CA-9B70-48BA1707D335";
+if ($usamodulofiscal=='1') $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+//CSC Token ID
+$tpl1->TITULO = "CSC Token ID (do certificado digital)";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_csctokenid";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->CAMPO_TIPO="text";
+$tpl1->CAMPO_NOME="csctokenid";
+$tpl1->CAMPO_ID="csctokenid";
+$tpl1->CAMPO_TAMANHO="11";
+$tpl1->CAMPO_VALOR="$csctokenid";
+$tpl1->CAMPO_QTD_CARACTERES="6";
+//$tpl1->CAMPO_ONKEYUP="";
+//$tpl1->CAMPO_ONKEYDOWN="";
+//$tpl1->CAMPO_ONKEYPRESS="";
+//$tpl1->CAMPO_ONBLUR="";
+//$tpl1->CAMPO_ONCLICK="";
+$tpl1->CAMPO_DICA="Ex: 000001";
+if ($usamodulofiscal=='1') $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+$tpl1->block("BLOCK_CAMPO_NORMAL"); //classe padrao
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
 
 
 //CRT

@@ -13,6 +13,8 @@ $crtnfe = $_POST['crtnfe'];
 $cstnfe = $_POST['cstnfe'];
 $csosnnfe = $_POST['csosnnfe'];
 $serienfe = $_POST['serienfe'];
+$csctoken = $_POST['csctoken'];
+$csctokenid = $_POST['csctokenid'];
 $tipoimpressaodanfe = $_POST['tipoimpressaodanfe'];
 $ambientenfe = $_POST['ambientenfe'];
 $versaonfe = $_POST['versaonfe'];
@@ -111,6 +113,8 @@ SET
     quicnf_cstnfe='$cstnfe',
     quicnf_csosnnfe='$csosnnfe',
     quicnf_serienfe='$serienfe',
+    quicnf_csctoken='$csctoken',
+    quicnf_csctokenid='$csctokenid',
     quicnf_tipoimpressaodanfe='$tipoimpressaodanfe',
     quicnf_ambientenfe='$ambientenfe',
     quicnf_usacomanda='$usacomanda',

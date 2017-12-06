@@ -26,6 +26,9 @@ $(document).ready(function(){
     if (document.getElementById('data_5')) $("#data_5").mask("99/99/9999");
     if (document.getElementById('calendario'))  $("#calendario").mask("99/99/9999");
     if (document.getElementById('cnpj')) $("#cnpj").mask("99.999.999/9999-99");
+    if (document.getElementById('csctoken')) $("#csctoken").mask("AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA");
+    if (document.getElementById('csctokenid')) $("#csctokenid").mask("999999");
+
     
 });
 

@@ -7,6 +7,8 @@ function usa_modulo_fiscal (valor) {
         document.form1.tipoimpressaodanfe.required=true;
         document.form1.ambientenfe.required=true;
         document.form1.versaonfe.required=true;
+        document.form1.csctoken.required=true;
+        document.form1.csctokenid.required=true;
         document.form1.ie.required=true;
         document.form1.tipopessoanfe.required=true;
         document.form1.endereco.required=true;
@@ -31,6 +33,8 @@ function usa_modulo_fiscal (valor) {
         $("tr[id=linha_csosnnfe]").show(); 
         $("tr[id=linha_faturamentoanualatual]").show(); 
         $("tr[id=linha_icmsatual]").show(); 
+        $("tr[id=linha_csctoken]").show(); 
+        $("tr[id=linha_csctokenid]").show(); 
         $("tr[id=linha_serienfe]").show(); 
         $("tr[id=linha_endereco]").show(); 
         $("tr[id=linha_bairro]").show(); 
@@ -63,6 +67,8 @@ function usa_modulo_fiscal (valor) {
         document.form1.cstnfe.required=false;
         document.form1.csosnnfe.required=false;
         document.form1.serienfe.required=false;
+        document.form1.csctoken.required=false;
+        document.form1.csctokenid.required=false;
         document.form1.certificadodigital.required=false;
         document.form1.tipoimpressaodanfe.required=false;
         document.form1.ambientenfe.required=false;
@@ -82,6 +88,8 @@ function usa_modulo_fiscal (valor) {
         $("tr[id=linha_faturamentoanualatual]").hide(); 
         $("tr[id=linha_icmsatual]").hide(); 
         $("tr[id=linha_serienfe]").hide(); 
+        $("tr[id=linha_csctoken]").hide(); 
+        $("tr[id=linha_csctokenid]").hide(); 
         $("tr[id=linha_tipoimpressaodanfe]").hide(); 
         $("tr[id=linha_ambientenfe]").hide(); 
         $("tr[id=linha_ultimanfe]").hide();

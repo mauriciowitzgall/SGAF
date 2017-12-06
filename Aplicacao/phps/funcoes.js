@@ -1636,6 +1636,6 @@ function mascara_ie(estado_sigla) {
 }
 
 function fechar() {
-    alert("teste");
+    //alert("teste");
     javascript:window.close(0);
 }
