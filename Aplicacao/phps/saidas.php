@@ -404,10 +404,14 @@ $tpl->block("BLOCK_LISTA_CABECALHO");
 $oper = 0;
 $oper_tamanho = 0;
 if ($permissao_saidas_ver == 1) {
-    $oper = $oper + 1;
+    $oper++;
     $oper_tamanho = $oper_tamanho + 50;
 }
 if ($permissao_saidas_editar == 1) {
+    $oper++;
+    $oper_tamanho = $oper_tamanho + 50;
+}
+if ($usamodulofiscal == 1) {
     $oper++;
     $oper_tamanho = $oper_tamanho + 50;
 }
@@ -764,11 +768,27 @@ if ($linhas == 0) {
         if ($linhas17>0) $tempagamentos=1;
 
 
-        //Verificar se foi emitido nota nesta venda
-        $sql9="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
-        if (!$query9 = mysql_query($sql9)) die("Erro Tem Nota: (((" . mysql_error().")))");
-        $linhas9 = mysql_num_rows($query9);    
-        if ($linhas9>0) $temnota=1; else $temnota=0;    
+        //Icone EMITIR NOTA
+        if ($usamodulofiscal==1) {
+            //Verificar se foi emitido nota nesta venda
+            $sql9="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
+            if (!$query9 = mysql_query($sql9)) die("Erro Tem Nota: (((" . mysql_error().")))");
+            $linhas9 = mysql_num_rows($query9);    
+            if ($linhas9>0) $temnota=1; else $temnota=0;    
+            if ($temnota==1) {
+                $tpl->OPERACAO_NOME = "Ver NFE";
+                $tpl->LINK = "saidas_cadastrar_nfe_ver.php?saida=$saida&operacao=ver";
+                $tpl->LINK_COMPLEMENTO = "";                                
+                $tpl->ICONE_ARQUIVO = $icones . "nfe_ver3.png";
+                $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");            
+            } else {
+                $tpl->OPERACAO_NOME = "Gerar NFE";
+                $tpl->LINK = "saidas_cadastrar_nfe.php?saida=$saida";
+                $tpl->LINK_COMPLEMENTO = "";                                
+                $tpl->ICONE_ARQUIVO = $icones . "nfe_gerar3.png";
+                $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");   
+            }
+        }
 
 
         //editar 
