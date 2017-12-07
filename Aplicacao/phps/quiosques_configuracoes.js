@@ -143,4 +143,12 @@ function tipo_pessoa(valor) {
 
 }
 
+function valida_crt(valor) {
+
+    if ((valor!=1)&&(valor!="")) {
+        alert("Esta versão do sistema aceita apenas empresas do SIMPLES NACIONAL. Para informações sobre outras versões, entre em contato pelo endereço de e-mail contato@titotec.com.br ");
+        if (valor!="")select_selecionar("crtnfe","1");
+    }
+
+}
 

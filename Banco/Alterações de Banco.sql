@@ -17580,6 +17580,8 @@ ADD COLUMN `quicnf_usacodigobarrasinterno` INT(1) NOT NULL DEFAULT 1 AFTER `quic
 
 ------ INICIO v4.0b9 ------
 
+UPDATE `sgaf_labodega`.`configuracoes` SET `cnf_versao`='v4.0b9dev', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
+
 UPDATE `configuracoes` SET `cnf_versao`='v4.0b9' WHERE `cnf_codigo`='1';
 
 ALTER TABLE `quiosques_configuracoes` 
@@ -17589,13 +17591,13 @@ ALTER TABLE `pessoas`
 CHANGE COLUMN `pes_fone1` `pes_fone1` VARCHAR(14) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
 CHANGE COLUMN `pes_fone2` `pes_fone2` VARCHAR(14) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ;
 
+UPDATE `sgaf_labodega`.`configuracoes` SET `cnf_versao`='v4.0b9', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
 
 ------ FIM ------
 
 ------ INICIO v4.1 ------ Módulo fiscal funcionanado
 
-UPDATE `configuracoes` SET `cnf_versao`='v4.1' WHERE `cnf_codigo`='1';
-
+UPDATE `sgaf_labodega`.`configuracoes` SET `cnf_versao`='v4.1dev', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
 
 UPDATE `saidas_motivo` SET `saimot_nome`='Correção de estoque' WHERE `saimot_codigo`='5';
 
@@ -18161,3 +18163,7 @@ UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='3' WHERE `met
 UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='4' WHERE `metpag_codigo`='3';
 UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='99' WHERE `metpag_codigo`='7';
 UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='99' WHERE `metpag_codigo`='6';
+
+ALTER TABLE `sgaf_labodega`.`configuracoes` 
+CHANGE COLUMN `cnf_versao` `cnf_versao` VARCHAR(45) NOT NULL ,
+ADD COLUMN `cnf_dataversao` DATETIME NOT NULL AFTER `cnf_versao`;

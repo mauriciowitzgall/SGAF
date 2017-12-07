@@ -781,8 +781,8 @@ $tpl1->block("BLOCK_LINHA_ID");
 $tpl1->SELECT_NOME = "crtnfe";
 $tpl1->SELECT_ID = "crtnfe";
 $tpl1->SELECT_TAMANHO = "";
-//$tpl1->SELECT_ONCHANGE = "";
-//$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->SELECT_ONCHANGE = "valida_crt(this.value)";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
 if ($usamodulofiscal=='1') $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
 $tpl1->block("BLOCK_SELECT_OPTION_PADRAO"); //Selecione
 $tpl1->OPTION_VALOR = 1;
