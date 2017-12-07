@@ -705,7 +705,7 @@ $tpl1->CAMPO_ID="certificadodigital";
 $tpl1->CAMPO_TAMANHO="";
 $tpl1->CAMPO_VALOR="$certificadodigital";
 $tpl1->CAMPO_QTD_CARACTERES="";
-if ($usamodulofiscal=='1') $tpl1->block("BLOCK_CAMPO_OBRIGAT");
+//if ($usamodulofiscal=='1') $tpl1->block("BLOCK_CAMPO_OBRIGAT");
 //$tpl1->CAMPO_ONKEYUP="";
 //$tpl1->CAMPO_ONKEYDOWN="";
 //$tpl1->CAMPO_ONKEYPRESS="";

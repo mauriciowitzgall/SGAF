@@ -15,7 +15,7 @@ function usa_modulo_fiscal (valor) {
         document.form1.endereco_numero.required=true;
         document.form1.bairro.required=true;
         document.form1.cep.required=true;
-        document.form1.certificadodigital.required=true;
+        //document.form1.certificadodigital.required=true;
         tipopessoa=$("select[name=tipopessoanfe]").val();
         if(tipopessoa==1) {
             document.form1.cpf.required=true;

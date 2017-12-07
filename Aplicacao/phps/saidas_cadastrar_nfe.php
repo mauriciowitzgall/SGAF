@@ -5,10 +5,12 @@
 //Verifica se o usuário pode acessar a tela
 require "login_verifica.php";
 $saida = $_GET["codigo"];
+if ($saida=="") $saida=$_GET["saida"];
 
 $tipopagina = "saidas";
 include "includes.php";
 
+//Pega dados do banco para popular os campos da tela
 $sql="SELECT * 
     FROM quiosques_configuracoes 
     WHERE quicnf_quiosque=$usuario_quiosque
@@ -18,7 +20,16 @@ $sql="SELECT *
      $tipoimpressaodanfe=$dados["quicnf_tipoimpressaodanfe"];
  }
 
+//Verifica dados adicionais necessários para realizar as validações
+$sql="SELECT * FROM saidas WHERE sai_codigo=$saida";
+if (!$query= mysql_query($sql)) die("Erro PEGA DADOS PARA VALIDACOES: " . mysql_error());
+$dados= mysql_fetch_assoc($query);
+$consumidor=$dados["sai_consumidor"];
 
+
+
+
+//Verifica tem o módulo fiscal ativo
 if (($usavendas!=1)||($usamodulofiscal!=1)) {
     $tpl6 = new Template("templates/notificacao.html");
     $tpl6->block("BLOCK_ERRO");
@@ -32,6 +43,25 @@ if (($usavendas!=1)||($usamodulofiscal!=1)) {
     exit;
 }
 
+
+//Verifica se o consumidor pessoa jurídica tem o campo contribuinteicms preenchido
+//Isso acontece na seguinte situação: digamos que o quiosque não usa módulo fiscal, ele cadastrar várias pessoas, depois parametriza para usar. Assim os que já estão cadastrados não tem essa informação definida em seus cadastros.
+$sql="SELECT * FROM pessoas WHERE pes_codigo=$consumidor";
+if (!$query= mysql_query($sql)) die("Erro contribuinteicms: " . mysql_error());
+$dados= mysql_fetch_assoc($query);
+$contribuinteicms=$dados["pes_contribuinte_icms"];
+$tipopessoa=$dados["pes_tipopessoa"];
+if (($contribuinteicms==0)&&($tipopessoa==2)) { //É pessoa jurídica e não tem a informação se é contribuindo ou não
+    $tpl6 = new Template("templates/notificacao.html");
+    $tpl6->block("BLOCK_ATENCAO");
+    $tpl6->ICONES = $icones;
+    $tpl6->MOTIVO = "<Br>Consumidor sem a informação: <b>Contribuinte ICMS</b>. <br> É obrigatório quando o consumidor for uma pessoa jurídica). <br><br>";
+    $tpl6->block("BLOCK_MOTIVO");
+    $tpl6->block("BLOCK_BOTAO_VOLTAR");
+    $tpl6->show();
+    $naopodegerar=1;
+    exit;
+}
 
 //Se utiliza módulo fiscal calcula o valor do ICMS
 

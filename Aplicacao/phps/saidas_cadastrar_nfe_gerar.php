@@ -1,6 +1,6 @@
 <?php
 
-print_r($_REQUEST);
+//print_r($_REQUEST);
 
 //Verifica se o usuário pode acessar a tela
 require "login_verifica.php";
@@ -82,6 +82,10 @@ $sql="
 SELECT * 
 FROM saidas
 JOIN metodos_pagamento on (sai_metpag=metpag_codigo) 
+left join pessoas on (sai_consumidor=pes_codigo)
+left join cidades on (pes_cidade=cid_codigo)
+left join estados on (cid_estado=est_codigo)
+left join paises on (est_pais=pai_codigo)
 WHERE sai_codigo= $saida ";
 if (!$query = mysql_query($sql)) die("<br>Erro SQL SAIDA: ".mysql_error());
 $dados=mysql_fetch_assoc($query);
@@ -94,6 +98,23 @@ $troco_desconto = $dados["sai_descontoforcado"];
 $troco_acrescimo = $dados["sai_acrescimoforcado"];
 $nfe_venda_descontototal=$desconto + $troco_desconto - $troco_acrescimo;
 $nfe_venda_totalliquido = $dados["sai_totalliquido"];
+$nfe_venda_consumidor_nome = $dados["pes_nome"];
+$nfe_venda_consumidor_ie = $dados["pes_ie"];
+$nfe_venda_consumidor_im = $dados["pes_im"];
+$nfe_venda_consumidor_endereco = $dados["pes_endereco"];
+$nfe_venda_consumidor_endereco_numero = $dados["pes_endereco"];
+$nfe_venda_consumidor_endereco_complemento = $dados["pes_numero"];
+$nfe_venda_consumidor_bairro = $dados["pes_bairro"];
+$nfe_venda_consumidor_cidade = $dados["cid_ibge"];
+$nfe_venda_consumidor_cidade_nome = $dados["cid_nome"];
+$nfe_venda_consumidor_estado = $dados["est_sigla"];
+$nfe_venda_consumidor_pais = $dados["pai_ibge"];
+$nfe_venda_consumidor_pais_nome = $dados["pai_nome"];
+$nfe_venda_consumidor_telefone = $dados["pes_fone1"];
+$nfe_venda_consumidor_cep = $dados["pes_cep"];
+$nfe_venda_consumidor_cep=str_replace('-', '', $nfe_venda_consumidor_cep);
+$nfe_venda_consumidor_email = $dados["pes_email"];
+$nfe_venda_troco = null; //Eu não sei se é troco a dever ou troco devolvido?!
 $nfe_venda_metodopagamento = $dados["metpag_nfecodigo"]; // // 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
 if ($consumidor==0) { //Se for sem identificação do cliente, ou seja, cliente geral
     $nfe_venda_indicadorcliente=1; // 0: Normal / 1: Consumidor final 
@@ -110,14 +131,43 @@ $nfe_venda_finalidade=1; // 1:NFe normal / 2: NFe complementar / 3: NFe de ajust
 $nfe_venda_frete=1; //0=Por conta do emitente; 1=Por conta do destinatário/remetente; 2=Por conta de terceiros; 9=Sem frete. (V2.0)
 $nfe_venda_presencial=$indicadorpresenca;  // 0=Não se aplica (por exemplo, Nota Fiscal complementar ou de ajuste);  1=Operação presencial;  2=Operação não presencial, pela Internet;  3=Operação não presencial, Teleatendimento;  4=NFC-e em operação com entrega a domicílio; 9=Operação não presencial, outros.
 $nfe_venda_tipointegracaopagamento=2; // 1=Pagamento integrado com o sistema de automação da empresa (Ex.: equipamento TEF, Comércio Eletrônico); 2= Pagamento não integrado com o sistema de automação da empresa (Ex.: equipamento POS);
+$tipopessoa=$dados["pes_tipopessoa"];
+if ($tipopessoa==1) {
+  $nfe_venda_consumidor_tipopessoa="CPF";
+  $nfe_venda_consumidor_cpf=$dados["pes_cpf"];
+  $nfe_venda_consumidor_cnpj=null;
+} else {
+  $nfe_venda_consumidor_tipopessoa="CNPJ";
+  $nfe_venda_consumidor_cnpj=$dados["pes_cnpj"];
+  $nfe_venda_consumidor_cpf=null;
+}
+if (($dados["metpag_nfecodigo"]==2)||($dados["metpag_nfecodigo"]==3)||($dados["metpag_nfecodigo"]==6)||($dados["metpag_nfecodigo"]==7)) {
+  $nfe_venda_usacartao = true;
+  $nfe_venda_usacartao_bandeira=$dados["sai_cartaobandeira"]; //1:VISA 2:Mastercard 3:American Express 4:Sorocred 99:Outros
+  if ($nfe_venda_usacartao_bandeira==1) $nfe_venda_usacartao_cnpj="31551765000143";
+  if ($nfe_venda_usacartao_bandeira==2) $nfe_venda_usacartao_cnpj="05577343000137";
+  if ($nfe_venda_usacartao_bandeira==3) $nfe_venda_usacartao_cnpj="59438325000101";
+  if ($nfe_venda_usacartao_bandeira==4) $nfe_venda_usacartao_cnpj="04814563000174";
+  if ($nfe_venda_usacartao_bandeira==9) $nfe_venda_usacartao_cnpj=null;
+  $nfe_venda_usacartao_caut="";
+} else {
+  $nfe_venda_usacartao = false;
+}
+if (($nfe_geral_danfeoucupom==65)||($nfe_operacaodestino==3)) { //Cupom fiscal
+  $nfe_venda_indiedest="9";
+  $nfe_venda_indiedest_ie=null;
+} else {
+  $nfe_venda_indiedest=$dados["pes_contribuinte_icms"];
+  if ($nfe_venda_indiedest==2) $nfe_venda_indiedest_ie=null;
+  else $nfe_venda_indiedest_ie=$nfe_venda_consumidor_ie;
+}
+
+
 
 //tanto o config.json como o certificado.pfx podem estar
 //armazenados em uma base de dados, então não é necessário
 ///trabalhar com arquivos, este script abaixo serve apenas como
 //exemplo durante a fase de desenvolvimento e testes.
-
-
-
 
 //EMITENTE
 $arr = [
@@ -204,54 +254,54 @@ $dadosNfe = [
     "tPag" => "$nfe_venda_metodopagamento", // 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
     "vPag" => $nfe_venda_totalliquido, ////Obs: deve ser o informado o valor total da Nota Fiscal (vPag = vNF), caso contrário a a SEFAZ irá retornar "Rejeição 767"
     "tpIntegra" => $nfe_venda_tipointegracaopagamento, // 1=Pagamento integrado com o sistema de automação da empresa (Ex.: equipamento TEF, Comércio Eletrônico); 2= Pagamento não integrado com o sistema de automação da empresa (Ex.: equipamento POS);
-    "vTroco" => null,
+    "vTroco" => $nfe_venda_troco,
     "doctoNfe" => [
-      "doc" => "CNPJ", //Escrever se é CPF ou CNPJ conforme tipo de pessoa fisica ou juridica
-      "CNPJ" => "21996226000164",
-      "CPF" => null,
+      "doc" => "$nfe_venda_consumidor_tipopessoa", //Escrever se é CPF ou CNPJ conforme tipo de pessoa fisica ou juridica
+      "CNPJ" => "$nfe_venda_consumidor_cnpj",
+      "CPF" => "$nfe_venda_consumidor_cpf",
     ],
     "usaNfeCartaoCredito" => [ 
-      "Cartao" => false,
-      "CNPJ" => null,
-      "tBand" => "02",
-      "cAut" => null,
+      "Cartao" => $nfe_venda_usacartao, //true ou false
+      "CNPJ" => "$nfe_venda_usacartao_cnpj",
+      "tBand" => "$nfe_venda_usacartao_bandeira",
+      "cAut" => "$nfe_venda_usacartao_caut",
     ],
     "destinatario" => [
-      "xNome" => "Guilherme Afonso Madalozzo",
-      "indIEDest" => "9",
-      "IE" => null,
+      "xNome" => "$nfe_venda_consumidor_nome",
+      "indIEDest" => "$nfe_venda_indiedest",
+      "IE" => "$nfe_venda_indiedest_ie",
       "ISUF" => null,
-      "IM" => null,
-      "email" => "guimadalozzo@gmail.com",
+      "IM" => "$nfe_venda_consumidor_im",
+      "email" => "$nfe_venda_consumidor_email",
       "idEstrangeiro" => null,
-      "xLgr" => "Rua João Paulo I",
-      "nro" => 585,
-      "xCpl" => null,
-      "xBairro" => "Três Vendas",
-      "cMun" => "4307005",
-      "xMun" => "Erechim",
-      "UF" => "RS",
-      "CEP" => "99713220",
-      "cPais" => "1058",
-      "xPais" => "BRASIL",
-      "fone" => "54996227898",
+      "xLgr" => "$nfe_venda_consumidor_endereco",
+      "nro" => $nfe_venda_consumidor_endereco_numero,
+      "xCpl" => "$nfe_venda_consumidor_endereco_complemento",
+      "xBairro" => "$nfe_venda_consumidor_bairro",
+      "cMun" => "$nfe_venda_consumidor_cidade", //ibge
+      "xMun" => "$nfe_venda_consumidor_cidade_nome",
+      "UF" => "$nfe_venda_consumidor_estado",
+      "CEP" => "$nfe_venda_consumidor_cep",
+      "cPais" => "$nfe_venda_consumidor_pais",
+      "xPais" => "$nfe_venda_consumidor_pais_nome",
+      "fone" => "$nfe_venda_consumidor_telefone",
       "doctoNfe" => [
-        "doc" => "CPF",
-        "CNPJ" => null,
-        "CPF" => "01852675055",
+        "doc" => "$nfe_venda_consumidor_tipopessoa",
+        "CNPJ" => "$nfe_venda_consumidor_cnpj",
+        "CPF" => "$nfe_venda_consumidor_cpf",
       ],
       "endEntrega" => [
-        "xLgr" => "Rua João Paulo I",
-        "nro" => 585,
-        "xCpl" => null,
-        "xBairro" => "Três Vendas",
-        "cMun" => "4307005",
-        "xMun" => "Erechim",
-        "UF" => "RS",
+        "xLgr" => "$nfe_venda_consumidor_endereco",
+        "nro" => $nfe_venda_consumidor_endereco_numero,
+        "xCpl" => "$nfe_venda_consumidor_endereco_complemento",
+        "xBairro" => "$nfe_venda_consumidor_bairro",
+        "cMun" => "$nfe_venda_consumidor_cidade",
+        "xMun" => "$nfe_venda_consumidor_cidade_nome",
+        "UF" => "$nfe_venda_consumidor_estado",
         "doctoNfe" => [
-          "doc" => "CPF",
-          "CNPJ" => null,
-          "CPF" => "01852675055",
+          "doc" => "nfe_venda_consumidor_tipopessoa",
+          "CNPJ" => "$nfe_venda_consumidor_cnpj",
+          "CPF" => "$nfe_venda_consumidor_cpf",
         ],
       ],
       "endRetirada" => [
@@ -270,19 +320,19 @@ $dadosNfe = [
         ],
       ],
     ],
-    "usaNfContingencia" => [
+    "usaNfContingencia" => [ //Avaliar se tem relação com devoluÇào e cancelamento 
       "contingencia" => false,
-      "dhCont" => "2015-02-19T13:48:00-02:00",
-      "xJust" => "Justificativa da contingencuia",
+      "dhCont" => null, //2015-02-19T13:48:00-02:00
+      "xJust" => null, //Justificativa
     ],
-    "usaNfReferenciada" => [
+    "usaNfReferenciada" => [ //Quando for devolução ou cancelamento
       "referenciada" => false,
-      "refNFe" => "35150271780456000160550010000253101000253101",
+      "refNFe" => null, //35150271780456000160550010000253101000253101
     ],
-    "usaNfISSQN" => [
+    "usaNfISSQN" => [ //Imposto sobre Serviços de Qualquer Natureza
       "ISSQN" => false,
     ],
-    "usaNfRetTributos" => [
+    "usaNfRetTributos" => [ //Retenção de tributos
       "RetTributos" => false,
     ],
     "usaNfTransportadora" => [
@@ -331,35 +381,76 @@ $dadosNfe = [
     ],
     "infAdFisco" => null,
     "infCpl" => null,
-    "qtdItens" => "1",
+    "qtdItens" => "$nfe_venda_qtditens",
 ];
 
-$dadosNfeItens = [
-  1 => [
-    "item" => 1,
-    "cProd" => 1,
-    "cEAN" => null,
-    "xProd" => "Vanguard Plus 1DS",
-    "NCM" => "30023090",
+
+//Itens da Venda
+$sql="
+SELECT * 
+FROM saidas_produtos 
+join produtos on (saipro_produto=pro_codigo)
+WHERE saipro_saida=$saida
+";
+if (!$query = mysql_query($sql)) die("<br>Erro SQL SAIDA PRODUTOS: ".mysql_error());
+$nfe_venda_qtditens=mysql_num_rows($query);
+$dadosNfeItens = array();
+while ($dados=mysql_fetch_assoc($query)) {
+  $numero=$dados["saipro_codigo"];
+  $nfe_venda_item_numero=$numero;
+  $nfe_venda_item_produto_codigo=$dados["saipro_produto"]; //Código do produto no sistema SGAF
+  $nfe_venda_item_produto_ean=$dados["pro_codigounico"];
+  $nfe_venda_item_produto_nome=$dados["pro_nome"];
+  $nfe_venda_item_ncm=$dados["pro_ncm"];
+  $nfe_venda_item_cfop=$dados["pro_cfop"];
+  if ($tipocontagem==1) $nfe_venda_item_tipocontagem="UN"; //UN KG LT
+  if ($tipocontagem==2) $nfe_venda_item_tipocontagem="KG"; //UN KG LT
+  if ($tipocontagem==3) $nfe_venda_item_tipocontagem="LT"; //UN KG LT
+  $nfe_venda_item_quantidade=$dados["saipro_quantidade"];
+  $nfe_venda_item_valuni=$dados["saipro_valorunitario"];
+  $nfe_venda_item_valtot=$dados["saipro_valortotal"]; //bruto
+  $nfe_venda_item_totalcompoenfe=1; //Indica se o valor total compoe ou nao na NFe // 0: Valor do Item não compoe o valor total da NFe / 1: Valor do item compoes o valor total da NFe
+  $nfe_venda_item_origem=$dados["pro_origem"]; // 0 - Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8;  1 - Estrangeira - Importação direta, exceto a indicada no código 6;  2 - Estrangeira - Adquirida no mercado interno, exceto a indicada no código 7; 3 - Nacional, mercadoria ou bem com Conteúdo de Importação superior a 40% e inferior ou igual a 70%; 4 - Nacional, cuja produção tenha sido feita em conformidade com os processos produtivos básicos de que tratam as legislações citadas nos Ajustes; 5 - Nacional, mercadoria ou bem com Conteúdo de Importação inferior ou igual a 40%;  6 - Estrangeira - Importação direta, sem similar nacional, constante em lista da CAMEX e gás natural; 7 - Estrangeira - Adquirida no mercado interno, sem similar nacional, constante lista CAMEX e gás natural. 8 - Nacional, mercadoria ou bem com Conteúdo de Importação superior a 70%;
+  $nfe_venda_item_cst=40; 
+  //Tabela A: 0 - Nacional, 1 - Importação Direta, 2 - Estrangeira Adquirida no Mercado Interno 
+  //Tabela B: 00 Tributada integralmente, 10 Tributada e com cobrança do ICMS por substituição tributária, 20 Com redução de base de cálculo, 30 Isenta ou não tributada e com cobrança do ICMS por substituição tributária, 40 Isenta, 41 Não tributada, 50 Suspensão, 51 Diferimento, 60 ICMS cobrado anteriormente por substituição tributária, 70 Com redução de base de cálculo e cobrança do ICMS por substituição tributária, 90 Outras
+  $nfe_venda_item_csosn=440;
+  //101 – Tributada pelo Simples Nacional com permissão de crédito – Classificam-se neste código as operações que permitem a indicação da alíquota do ICMS devido no Simples Nacional e o valor do crédito correspondente.
+  //102 – Tributada pelo Simples Nacional sem permissão de crédito – Classificam-se neste código as operações que não permitem a indicação da alíquota do ICMS devido pelo Simples Nacional e do valor do crédito, e não estejam abrangidas nas hipóteses dos códigos 103, 203, 300, 400, 500 e 900.
+  //103 – Isenção do ICMS no Simples Nacional para faixa de receita bruta – Classificam-se neste código as operações praticadas por optantes pelo Simples Nacional contemplados com isenção concedida para faixa de receita bruta nos termos da Lei Complementar nº 123, de 2006.
+  //201 – Tributada pelo Simples Nacional com permissão de crédito e com cobrança do ICMS por substituição tributária – Classificam-se neste código as operações que permitem a indicação da alíquota do ICMS devido pelo Simples Nacional e do valor do crédito, e com cobrança do ICMS por substituição tributária. 
+  //202 – Tributada pelo Simples Nacional sem permissão de crédito e com cobrança do ICMS por substituição tributária – Classificam-se neste código as operações que não permitem a indicação da alíquota do ICMS devido pelo Simples Nacional e do valor do crédito, e não estejam abrangidas nas hipóteses dos códigos 103, 203, 300, 400, 500 e 900, e com cobrança do ICMS por substituição tributária. 
+  //203 – Isenção do ICMS no Simples Nacional para faixa de receita bruta e com cobrança do ICMS por substituição tributária – Classificam-se neste código as operações praticadas por optantes pelo Simples Nacional contemplados com isenção para faixa de receita bruta nos termos da Lei Complementar nº 123, de 2006, e com cobrança do ICMS por substituição tributária. 
+  //300 – Imune – Classificam-se neste código as operações praticadas por optantes pelo Simples Nacional contempladas com imunidade do ICMS. 
+  //400 – Não tributada pelo Simples Nacional – Classificam-se neste código as operações praticadas por optantes pelo Simples Nacional não sujeitas à tributação pelo ICMS dentro do Simples Nacional. 
+  //500 – ICMS cobrado anteriormente por substituição tributária (substituído) ou por antecipação – Classificam-se neste código as operações sujeitas exclusivamente ao regime de substituição tributária na condição de substituído tributário ou no caso de antecipações.
+  //900 – Outros – Classificam-se neste código as demais operações que não se enquadrem nos códigos 101, 102, 103, 201, 202, 203, 300, 400 e 500.
+    
+  $prod[$numero] = array(
+    "item" => $nfe_venda_item_numero,
+    "cProd" => $nfe_venda_item_produto_codigo, //Código do produto no sistema SGAF
+    "cEAN" => $nfe_venda_item_produto_ean,
+    "xProd" => "$nfe_venda_item_produto_nome",
+    "NCM" => "$nfe_venda_item_ncm",
     "EXTIPI" => null,
-    "CFOP" => "5102",
-    "uCom" => "UN",
-    "qCom" => 1,
-    "vUnCom" => 55.00,
-    "vProd" => 55.00,
+    "CFOP" => "$nfe_venda_item_cfop",
+    "uCom" => "$nfe_venda_item_tipocontagem", //UN KG LT
+    "qCom" => $nfe_venda_item_quantidade,
+    "vUnCom" => $nfe_venda_item_valuni,
+    "vProd" => $nfe_venda_item_valtot, //bruto
     "cEANTrib" => null,
-    "uTrib" => "UN",
-    "qTrib" => 1,
-    "vUnTrib" => 55.00,
+    "uTrib" => "$nfe_venda_item_tipocontagem",
+    "qTrib" => $nfe_venda_item_quantidade,
+    "vUnTrib" => $nfe_venda_item_valuni,
     "vFrete" => null,
     "vSeg" => null,
     "vDesc" => null,
     "vOutro" => null,
-    "indTot" => 1,
+    "indTot" => $nfe_venda_item_totalcompoenfe, //Indica se o valor total compoe ou nao na NFe // 0: Valor do Item não compoe o valor total da NFe / 1: Valor do item compoes o valor total da NFe
     "xPed" => null,
     "nItemPed" => null,
     "nFCI" => null,
-    "infAdProd" => "Informações adicionais do produto.",
+    "infAdProd" => null,
     "CEST" => null,
     "indEscala" => null,
     "CNPJFab" => null,
@@ -368,9 +459,9 @@ $dadosNfeItens = [
     "dFab" => null,
     "dVal" => null,
     "cAgreg" => null,
-    "vTotTrib" => 0.00,
-    "orig" => "0",
-    "CST" => "40",
+    "vTotTrib" => 0.00, //avaliar
+    "orig" => "$nfe_venda_item_origem", // 0 - Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8;  1 - Estrangeira - Importação direta, exceto a indicada no código 6;  2 - Estrangeira - Adquirida no mercado interno, exceto a indicada no código 7; 3 - Nacional, mercadoria ou bem com Conteúdo de Importação superior a 40% e inferior ou igual a 70%; 4 - Nacional, cuja produção tenha sido feita em conformidade com os processos produtivos básicos de que tratam as legislações citadas nos Ajustes; 5 - Nacional, mercadoria ou bem com Conteúdo de Importação inferior ou igual a 40%;  6 - Estrangeira - Importação direta, sem similar nacional, constante em lista da CAMEX e gás natural; 7 - Estrangeira - Adquirida no mercado interno, sem similar nacional, constante lista CAMEX e gás natural. 8 - Nacional, mercadoria ou bem com Conteúdo de Importação superior a 70%;
+    "CST" => "$nfe_venda_item_cst", //40
     "modBC" => null,
     "vBC" => null,
     "pICMS" => null,
@@ -403,7 +494,7 @@ $dadosNfeItens = [
     "UFST" => null,
     "vBCSTDest" => null,
     "vICMSSTDest" => null,
-    "CSOSN" => "400",
+    "CSOSN" => "$nfe_venda_item_csosn", //400
     "pCredSN" => null,
     "vCredICMSSN" => null,
     "vBCUFDest" => null,
@@ -488,10 +579,15 @@ $dadosNfeItens = [
     "usaNfCombustivel" => [
       "Combustivel" => false,
     ],
-  ],
-];
+  );
 
-echo $dadosNfeJson = json_encode($dadosNfe);
+  array_push($dadosNfeItens, $prod[$numero]);
+
+}
+
+echo json_encode($dadosNfe)."<br><br>";
+echo json_encode($arr)."<br><br>";
+echo json_encode($dadosNfeItens)."<br><br>";
 
 // AQUI VAMOS CHAMAR O METODO DE GERACAO DA NOTA DO SERVIDOR DO SPED NFE
 // VAI RETORNAR UM OUTRO JSON CONTENDO MENSAGENS DE SUCESSO OU ERRO
