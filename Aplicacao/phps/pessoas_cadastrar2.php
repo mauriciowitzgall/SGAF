@@ -43,13 +43,15 @@ $email = $_POST['email'];
 $chat = $_POST['chat'];
 $tipo = $_POST['box'];
 $cooperativa = $_POST['cooperativa'];
+if ($cooperativa=="") $cooperativa=$usuario_cooperativa;
 $obs = $_POST['obs'];
 $possuiacesso = $_POST['possuiacesso'];
 $senhaatual = $_POST['senhaatual'];
 $senha1 = $_POST['senha'];
 $senha2 = $_POST['senha2'];
 $grupopermissoes = $_POST['grupopermissoes'];
-$quiosqueusuario = $_POST['quiosqueusuario'];
+$quiosqueusuario = $usuario_quiosque;
+
 $data = date("Y/m/d");
 $hora = date("H:i:s");
 $cnpj = $_POST['cnpj'];

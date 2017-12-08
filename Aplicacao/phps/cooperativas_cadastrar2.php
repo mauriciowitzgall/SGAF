@@ -26,7 +26,11 @@ $erro = 0;
 //Estrutura da notificação
 $tpl_notificacao = new Template("templates/notificacao.html");
 $tpl_notificacao->ICONES = $icones;
-$tpl_notificacao->DESTINO = "cooperativas.php";
+if ($usuario_cooperativa==0) {
+    $tpl_notificacao->DESTINO = "troca_unidade.php";
+} else {
+    $tpl_notificacao->DESTINO = "cooperativas.php";
+}
 
 
 //VALIDA��ES

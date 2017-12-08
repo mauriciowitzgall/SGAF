@@ -1227,46 +1227,32 @@ $tpl1->block("BLOCK_ITEM");
 
 
 //Cooperativa
-$tpl1->CAMPO_ONBLUR="";
-$tpl1->TITULO = "Cooperativa";
-$tpl1->block("BLOCK_TITULO");
-$tpl1->SELECT_NOME = "cooperativa";
-$tpl1->SELECT_ID = "cooperativa";
-$tpl1->SELECT_TAMANHO = "";
-$tpl1->SELECT_ONCHANGE = "popula_quiosques();";
-$tpl1->block("BLOCK_SELECT_ONCHANGE");
-$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+if ($usuario_grupo==7) {
 
-if ($codigo != "") {
-    //Verifica se a pessoa � administrador ou root
-    $sql8 = "SELECT * FROM mestre_pessoas_tipo WHERE mespestip_tipo=1 and mespestip_pessoa=$codigo";
-    $query8 = mysql_query($sql8);
-    if (!$query8)
-        die("Erro 40:" . mysql_error());
-    $linhas8 = mysql_num_rows($query8);
-}
-
-if (($linhas8 > 0) || ($usuario_grupo == 7))
+    $tpl1->CAMPO_ONBLUR="";
+    $tpl1->TITULO = "Cooperativa";
+    $tpl1->block("BLOCK_TITULO");
+    $tpl1->SELECT_NOME = "cooperativa";
+    $tpl1->SELECT_ID = "cooperativa";
+    $tpl1->SELECT_TAMANHO = "";
+    $tpl1->SELECT_ONCHANGE = "popula_quiosques();";
+    $tpl1->block("BLOCK_SELECT_ONCHANGE");
+    $tpl1->block("BLOCK_SELECT_OBRIGATORIO");
     $sql = "SELECT * FROM cooperativas ORDER BY coo_abreviacao";
-else
-    $sql = "SELECT * FROM cooperativas WHERE coo_codigo=$usuario_cooperativa";
-$query = mysql_query($sql);
-if (!$query)
-    die("Erro: 0" . mysql_error());
-while ($dados = mysql_fetch_assoc($query)) {
-    $tpl1->OPTION_VALOR = $dados["coo_codigo"];
-    $tpl1->OPTION_NOME = $dados["coo_abreviacao"];
-    $coo = $dados["coo_codigo"];
-    if ($coo == $usuario_cooperativa)
-        $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-    $tpl1->block("BLOCK_SELECT_OPTION");
+    $query = mysql_query($sql); if (!$query) die("Erro: 0" . mysql_error());
+    while ($dados = mysql_fetch_assoc($query)) {
+        $tpl1->OPTION_VALOR = $dados["coo_codigo"];
+        $tpl1->OPTION_NOME = $dados["coo_abreviacao"];
+        $coo = $dados["coo_codigo"];
+        if ($coo == $usuario_cooperativa)
+            $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+        $tpl1->block("BLOCK_SELECT_OPTION");
+    }
+    if ($operacao == 'ver') $tpl1->block("BLOCK_SELECT_DESABILITADO");
+    $tpl1->block("BLOCK_SELECT");
+    $tpl1->block("BLOCK_CONTEUDO");
+    $tpl1->block("BLOCK_ITEM");
 }
-if ($operacao == 'ver')
-    $tpl1->block("BLOCK_SELECT_DESABILITADO");
-$tpl1->block("BLOCK_SELECT");
-$tpl1->block("BLOCK_CONTEUDO");
-$tpl1->block("BLOCK_ITEM");
-
 
 //Tipo de negociação
 if (($usuario_grupo==1)||($usuario_grupo==2)||($usuario_grupo==3)) {
@@ -1429,7 +1415,7 @@ if ($operacao == "editar") {
         if ($linhas5 == 0) {
             $tpl1->block("BLOCK_SELECT_DESABILITADO");
             $tpl1->COMPLEMENTO_ICONE_ARQUIVO = "../imagens/icones/geral/info.png";
-            $tpl1->COMPLEMENTO_ICONE_MENSAGEM = "Esta pessoa não pode ter acesso ao sistema porque ela não é gestor, supervisora, caixa ou fornecedora de algum quiosque de sua cooperativa. Para ser considerado um fornecedor, não basta apenas marcar o tipo 'Fornecedor' nesta tela, é necessário ter pelo menos uma entrada! Para ser Supervisor ou caixa de um quiosque, esta pessoa deve ser vinculadas a um quiosque na tela de 'Quiosques'! E para ser um gestor contatar um administrador! :)";
+            $tpl1->COMPLEMENTO_ICONE_MENSAGEM = "Esta pessoa não pode ter acesso ao sistema porque ela não é gestor, supervisor, caixa ou fornecedor de algum quiosque de sua cooperativa. Para ser considerado um fornecedor, não basta apenas marcar o tipo 'Fornecedor' nesta tela, é necessário ter pelo menos uma entrada! Para ser Supervisor ou caixa de um quiosque, esta pessoa deve ser vinculadas a um quiosque na tela de 'Quiosques'! E para ser um gestor contatar um administrador! :)";
             $tpl1->block("BLOCK_COMPLEMENTO_ICONE");
             $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
         }
@@ -1619,66 +1605,38 @@ if ($operacao == "editar") {
             $tpl1->block("BLOCK_CONTEUDO");
             $tpl1->block("BLOCK_ITEM");
 
+            
             //Quiosque do Usuário
-            $tpl1->CAMPO_ONBLUR="";
-            $tpl1->TITULO = "Quiosque do Usuário";
-            $tpl1->TITULO_ID = "span_quiosqueusuario";
-            $tpl1->block("BLOCK_TITULO_ID");
-            $tpl1->block("BLOCK_TITULO");
-            $tpl1->SELECT_NOME = "quiosqueusuario";
-            $tpl1->SELECT_ID = "quiosqueusuario";
-            $tpl1->SELECT_TAMANHO = "";
-            $tpl1->block("BLOCK_SELECT_NORMAL");
+            if ($usuario_grupo==7) {
 
-
-            if (($usuario_grupo == 1) || ($usuario_grupo == 2)) {
-                $tpl1->OPTION_VALOR = "";
-                $tpl1->OPTION_NOME = "Todos";
-                $tpl1->block("BLOCK_SELECT_OPTION");
+                $tpl1->CAMPO_ONBLUR="";
+                $tpl1->TITULO = "Quiosque do Usuário";
+                $tpl1->TITULO_ID = "span_quiosqueusuario";
+                $tpl1->block("BLOCK_TITULO_ID");
+                $tpl1->block("BLOCK_TITULO");
+                $tpl1->SELECT_NOME = "quiosqueusuario";
+                $tpl1->SELECT_ID = "quiosqueusuario";
+                $tpl1->SELECT_TAMANHO = "";
+                $tpl1->block("BLOCK_SELECT_NORMAL");
+            
+            
                 $sql = "SELECT qui_codigo,qui_nome FROM quiosques WHERE qui_cooperativa=$cooperativa";
-            } else if ($usuario_grupo == 3) {
-                $sql = "
-            SELECT qui_codigo,qui_nome 
-            FROM quiosques 
-            join quiosques_supervisores on (quisup_quiosque=qui_codigo)
-            WHERE qui_cooperativa=$cooperativa
-            AND quisup_supervisor=$codigo
-        ";
-            } else IF ($usuario_grupo == 4) {
-                $sql = "
-            SELECT qui_codigo,qui_nome 
-            FROM quiosques 
-            join caixas on (qui_codigo=cai_quiosque)
-            join caixas_operadores on (caiope_caixa=cai_codigo)
-            WHERE qui_cooperativa=$cooperativa
-            AND caiope_operador=$codigo
-        ";
-            } else IF ($usuario_grupo == 5) {
-                $sql = "
-                SELECT qui_codigo,qui_nome 
-                FROM entradas 
-                join quiosques on (ent_quiosque=qui_codigo)
-                WHERE qui_cooperativa=$cooperativa
-                AND ent_fornecedor=$codigo
-        ";
+                $query = mysql_query($sql);
+                if (!$query)
+                    die("Erro: 83" . mysql_error());
+
+                while ($dados = mysql_fetch_assoc($query)) {
+                    if ($quiosqueusuario == $dados['qui_codigo'])
+                        $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+                    $tpl1->OPTION_VALOR = $dados["qui_codigo"];
+                    $tpl1->OPTION_NOME = $dados["qui_nome"];
+                    $tpl1->block("BLOCK_SELECT_OPTION");
+                }
+
+                $tpl1->block("BLOCK_SELECT");
+                $tpl1->block("BLOCK_CONTEUDO");
+                $tpl1->block("BLOCK_ITEM");
             }
-
-
-            $query = mysql_query($sql);
-            if (!$query)
-                die("Erro: 83" . mysql_error());
-
-            while ($dados = mysql_fetch_assoc($query)) {
-                if ($quiosqueusuario == $dados['qui_codigo'])
-                    $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-                $tpl1->OPTION_VALOR = $dados["qui_codigo"];
-                $tpl1->OPTION_NOME = $dados["qui_nome"];
-                $tpl1->block("BLOCK_SELECT_OPTION");
-            }
-
-            $tpl1->block("BLOCK_SELECT");
-            $tpl1->block("BLOCK_CONTEUDO");
-            $tpl1->block("BLOCK_ITEM");
         }
     }
 }

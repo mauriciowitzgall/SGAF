@@ -635,7 +635,7 @@ while ($dados = mysql_fetch_assoc($query)) {
                         } else {
 
                             //Verifica se ele � ja participou de saidas como consumidor ou caixa
-                            $sql7 = "SELECT * FROM saidas JOIN caixas_operacoes on (sai_caixaoperacaonumero=caiopo_numero) WHERE caiopo_operador=$codigo OR sai_consumidor=$codigo";
+                            $sql7 = "SELECT * FROM saidas left JOIN caixas_operacoes on (sai_caixaoperacaonumero=caiopo_numero) WHERE caiopo_operador=$codigo OR sai_consumidor=$codigo";
                             $query7 = mysql_query($sql7); if (!$query7) die("Erro SQL: " . mysql_error());
                             $linhas7 = mysql_num_rows($query7);
                             if ($linhas7 > 0) {
