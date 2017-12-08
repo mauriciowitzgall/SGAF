@@ -1111,13 +1111,16 @@ function verifica_cpf(valor) {
     valor = valor.replace(".", "");
     valor = valor.replace(".", "");
     valor = valor.replace(".", "");
+
     if (valor.length == 11) {
         if (valida_cpf(valor)) {
             $.post("saidas_verifica_cpf.php", {
                 cpf: valor            
             }, function(valor3) {
-                codigo_pessoa=valor3;
-                //alert(valor3);
+                valor3=valor3.replace("\n","");
+                valor3=valor3.replace("\n","");
+                valor3=valor3.replace("\n","");
+                valor3=valor3.replace("\n","");
                 if (valor3=="naocadastrado") {
                     //alert("Cadastrar");
                     $("select[name=consumidor]").hide();
@@ -1126,6 +1129,8 @@ function verifica_cpf(valor) {
                     document.forms["form1"].cliente_nome.focus();
 
                 } else {
+                    valor3=parseInt(valor3);
+                    codigo_pessoa=valor3;
                     //alert("Selecionar");
                     $("select[id=consumidor]").show();
                     $("select[id=cliente_nome]").hide();
