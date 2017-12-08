@@ -14,6 +14,7 @@ $modal=$_GET["modal"];
 ?>
 <html>
     <head>
+        <link rel="icon" type="imagem/ico" href="../imagens/icones/sgaf.ico" />
         <title><?php $titulopagina ?></title>         
         <link rel="stylesheet" type="text/css" href="classes.css" />
         <link rel="stylesheet" type="text/css" href="templates/geral.css">        

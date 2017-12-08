@@ -91,11 +91,11 @@ if ($total) {
         $_SESSION["usuario_cooperativaabreviacao"] = $dados3["coo_abreviacao"];
         $_SESSION["usuario_cooperativanomecompleto"] = $dados3["coo_nomecompleto"];
 
-        echo "vai";
+        echo "1"; //Tudo certo login e senha corretos
     } else {
-        echo "Senha Errada!";
+        echo "2"; //A senha está errada
     }
 } else {
-    echo "CPF não encontrado!";
+    echo "3"; //CPF não foi encontrado
 }
 ?>
