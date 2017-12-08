@@ -54,25 +54,27 @@ if (($usavendas!=1)&&($tiposaida!=3)) {
 }
 
 //Verifica se tem devoluções
-$sql18="
-    SELECT * 
-    FROM saidas_devolucoes_produtos
-    JOIN saidas_devolucoes on saidevpro_numerodev=saidev_numero
-    WHERE saidev_saida=$saida
-    ";
-if (!$query18 = mysql_query($sql18)) die("Erro CONSULTA DEVOLUCOES:" . mysql_error()."");
-$linhas18=mysql_num_rows($query18);
-if ($linhas18>0) $temdevolucoes=1; else $temdevolucoes=0;
-if (($usadevolucoes==1)&&($temdevolucoes==1)) {
-    $tpl6 = new Template("templates/notificacao.html");
-    $tpl6->block("BLOCK_ERRO");
-    $tpl6->ICONES = $icones;
-    //$tpl6->block("BLOCK_NAOAPAGADO");
-    $tpl6->MOTIVO = "Esta venda possui DEVOLUÇÕES<br>Portanto não pode ser alterada<br>";
-    $tpl6->block("BLOCK_MOTIVO");
-    $tpl6->block("BLOCK_BOTAO_FECHAR");
-    $tpl6->show();
-    exit;
+if (($usadevolucoes==1)&&($operacao==2)) {
+    $sql18="
+        SELECT * 
+        FROM saidas_devolucoes_produtos
+        JOIN saidas_devolucoes on saidevpro_numerodev=saidev_numero
+        WHERE saidev_saida=$saida
+        ";
+    if (!$query18 = mysql_query($sql18)) die("Erro CONSULTA DEVOLUCOES 2:" . mysql_error()."");
+    $linhas18=mysql_num_rows($query18);
+    if ($linhas18>0) $temdevolucoes=1; else $temdevolucoes=0;
+    if (($usadevolucoes==1)&&($temdevolucoes==1)) {
+        $tpl6 = new Template("templates/notificacao.html");
+        $tpl6->block("BLOCK_ERRO");
+        $tpl6->ICONES = $icones;
+        //$tpl6->block("BLOCK_NAOAPAGADO");
+        $tpl6->MOTIVO = "Esta venda possui DEVOLUÇÕES<br>Portanto não pode ser alterada<br>";
+        $tpl6->block("BLOCK_MOTIVO");
+        $tpl6->block("BLOCK_BOTAO_FECHAR");
+        $tpl6->show();
+        exit;
+    }
 }
 
 

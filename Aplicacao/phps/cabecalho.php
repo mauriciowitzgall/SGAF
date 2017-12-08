@@ -37,12 +37,14 @@ if ($usuario_grupo == 7) {
     $tpl8->CODIGO_USUARIO = $usuario_codigo;
 }
 
-if ($usuario_caixa<>0) {
-    if (($usuario_grupo==1)||($usuario_grupo==3)) {
-        //$tpl8->block("BLOCK_DESASSOCIAR_CAIXA");
+if ($usacaixa==1) {
+    if ($usuario_caixa<>0) {
+        if (($usuario_grupo==1)||($usuario_grupo==3)) {
+            //$tpl8->block("BLOCK_DESASSOCIAR_CAIXA");
+        }
+        $tpl8->CAIXAUSUARIO="$usuario_caixa_nome";
+        $tpl8->block("BLOCK_NOME_CAIXA");
     }
-    $tpl8->CAIXAUSUARIO="$usuario_caixa_nome";
-    $tpl8->block("BLOCK_NOME_CAIXA");
 }
 
 $tpl8->block("BLOCK_NOME_QUIOSQUE_COOPERATIVA");

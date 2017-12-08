@@ -18176,3 +18176,5 @@ ADD COLUMN `nfe_notareferenciada` INT(11) NULL AFTER `nfe_finalidade`;
 
 ALTER TABLE `sgaf_labodega`.`nfe_vendas` 
 ADD COLUMN `nfe_devolucao` BIGINT(20) NULL DEFAULT NULL AFTER `nfe_notareferenciada`;
+
+INSERT INTO `sgaf_labodega`.`metodos_pagamento` (`metpag_codigo`, `metpag_nome`) VALUES ('5', 'Desconhecido');

@@ -214,7 +214,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     else $tpl_notificacao->DESTINO = "produtos.php"; 
 
     if ($modal!=1) {
-        $tpl_notificacao->BOTAOGERAL_DESTINO="produtos_cadastrar.php";
+        $tpl_notificacao->BOTAOGERAL_DESTINO="produtos_cadastrar.php?operacao=1";
         //$tpl_notificacao->block("BLOCK_BOTAOGERAL_NOVAJANELA");
         $tpl_notificacao->BOTAOGERAL_TIPO="button";
         $tpl_notificacao->BOTAOGERAL_NOME="CADASTRAR MAIS";

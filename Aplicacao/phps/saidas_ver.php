@@ -28,10 +28,16 @@ if ($ope == 4) {
 
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
-$tpl_titulo->TITULO = "SAIDAS  ";
-$tpl_titulo->SUBTITULO = "DETALHES";
+if ($tiposaida == 1) {
+    $tpl_titulo->TITULO = "VENDAS";
+    $tpl_titulo->SUBTITULO = "DETALHES DA VENDA";
+    $tpl_titulo->NOME_ARQUIVO_ICONE = "vendas.png";
+} else {
+    $tpl_titulo->TITULO = "SAÍDAS";
+    $tpl_titulo->SUBTITULO = "DETALHES DO AJUSTE";
+    $tpl_titulo->NOME_ARQUIVO_ICONE = "saidas.png";
+}
 $tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "saidas.png";
 $tpl_titulo->show();
 
 //Pega valores
@@ -67,6 +73,7 @@ $areceber = $dados["sai_areceber"];
 $numero_comanda = $dados["sai_id"];
 $metpaga_nome=$dados["metpag_nome"];
 $metpaga=$dados["metpag_codigo"];
+$caixaoperacao=$dados["sai_caixaoperacaonumero"];
 
 
 //DADOS GERAIS DA VENDA
@@ -149,23 +156,46 @@ if ($tiposaida == 1) {
     $tpl->block("BLOCK_LINHA");
 
     //Consumidor
-    $tpl->COLUNA_ALINHAMENTO = "right";
-    $tpl->COLUNA_TAMANHO = "200px";
-    $tpl->TITULO = "Consumidor";
-    $tpl->block("BLOCK_TITULO");
-    $tpl->block("BLOCK_CONTEUDO");
-    $tpl->block("BLOCK_COLUNA");
-    $tpl->COLUNA_ALINHAMENTO = "left";
-    $tpl->COLUNA_TAMANHO = "";
-    $tpl->CAMPO_TIPO = "text";
-    $tpl->CAMPO_NOME = "consumidor";
-    $tpl->CAMPO_VALOR = "$consumidor_nome";
-    $tpl->block("BLOCK_CAMPO_PADRAO");
-    $tpl->block("BLOCK_CAMPO_DESABILITADO");
-    $tpl->block("BLOCK_CAMPO");
-    $tpl->block("BLOCK_CONTEUDO");
-    $tpl->block("BLOCK_COLUNA");
-    $tpl->block("BLOCK_LINHA");
+    if ($identificacaoconsumidorvenda!=3) {
+        $tpl->COLUNA_ALINHAMENTO = "right";
+        $tpl->COLUNA_TAMANHO = "200px";
+        $tpl->TITULO = "Consumidor";
+        $tpl->block("BLOCK_TITULO");
+        $tpl->block("BLOCK_CONTEUDO");
+        $tpl->block("BLOCK_COLUNA");
+        $tpl->COLUNA_ALINHAMENTO = "left";
+        $tpl->COLUNA_TAMANHO = "";
+        $tpl->CAMPO_TIPO = "text";
+        $tpl->CAMPO_NOME = "consumidor";
+        $tpl->CAMPO_VALOR = "$consumidor_nome";
+        $tpl->block("BLOCK_CAMPO_PADRAO");
+        $tpl->block("BLOCK_CAMPO_DESABILITADO");
+        $tpl->block("BLOCK_CAMPO");
+        $tpl->block("BLOCK_CONTEUDO");
+        $tpl->block("BLOCK_COLUNA");
+        $tpl->block("BLOCK_LINHA");
+    }
+
+    //Numero Caixa Operação
+    if ($usacaixa==1) {
+        $tpl->COLUNA_ALINHAMENTO = "right";
+        $tpl->COLUNA_TAMANHO = "200px";
+        $tpl->TITULO = "Operação de caixa";
+        $tpl->block("BLOCK_TITULO");
+        $tpl->block("BLOCK_CONTEUDO");
+        $tpl->block("BLOCK_COLUNA");
+        $tpl->COLUNA_ALINHAMENTO = "left";
+        $tpl->COLUNA_TAMANHO = "";
+        $tpl->CAMPO_TIPO = "text";
+        $tpl->CAMPO_NOME = "caixaoperacao";
+        $tpl->CAMPO_VALOR = "$caixaoperacao";
+        $tpl->block("BLOCK_CAMPO_PADRAO");
+        $tpl->block("BLOCK_CAMPO_DESABILITADO");
+        $tpl->block("BLOCK_CAMPO");
+        $tpl->block("BLOCK_CONTEUDO");
+        $tpl->block("BLOCK_COLUNA");
+        $tpl->block("BLOCK_LINHA");
+    }
 }
 
 if ($tiposaida == 3) {
