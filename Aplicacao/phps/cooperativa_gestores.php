@@ -7,7 +7,7 @@ if ($permissao_cooperativa_gestores_ver <> 1) {
     exit;
 }
 
-$tipopagina = "quiosques";
+$tipopagina = "cooperativa";
 include "includes.php";
 
 //Template de Título e Sub-título

@@ -29,13 +29,16 @@ if ($usuario_grupo<>4) {
         
         
         //Quiosques
-        $tpl_menu->IMAGEM_TITULO = "Quiosque";
-        $tpl_menu->TITULO = "Quiosque";
-        if ($permissao_quiosque_ver == 1) {
-            $tpl_menu->IMAGEM_ARQUIVO = "quiosques_configuracoes.png";
-            $tpl_menu->LINK = "quiosques_configuracoes.php";
-            $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-            $tpl_menu->block("BLOCK_MENU_ITEM");
+        if ($usuario_quiosque!=0) {
+
+            $tpl_menu->IMAGEM_TITULO = "Quiosque";
+            $tpl_menu->TITULO = "Quiosque";
+            if ($permissao_quiosque_ver == 1) {
+                $tpl_menu->IMAGEM_ARQUIVO = "quiosques_configuracoes.png";
+                $tpl_menu->LINK = "quiosques_configuracoes.php";
+                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                $tpl_menu->block("BLOCK_MENU_ITEM");
+            }
         }
         
 
@@ -50,7 +53,7 @@ if ($usuario_grupo<>4) {
         }
 
         //Produtos
-        if (($usavendas==1)||($usaproducao==1)||($usaestoque==1)) {
+        if (($usavendas==1)||($usaproducao==1)||($usaestoque==1)||($usuario_quiosque==0)) {
             $tpl_menu->IMAGEM_TITULO = "Produtos";
             $tpl_menu->TITULO = "Produtos";
             if ($permissao_produtos_ver == 1) {
@@ -159,14 +162,18 @@ if ($usuario_grupo<>4) {
         }
 
         //Relatórios
-        $tpl_menu->IMAGEM_TITULO = "Relatórios";
-        $tpl_menu->TITULO = "Relatórios";
-        if ($permissao_relatorios_ver == 1) {
-            $tpl_menu->IMAGEM_ARQUIVO = "relatorios.png";
-            $tpl_menu->LINK = "relatorios.php";
-            $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
-            $tpl_menu->block("BLOCK_MENU_ITEM");
+            if ($usuario_quiosque!=0) {
+
+            $tpl_menu->IMAGEM_TITULO = "Relatórios";
+            $tpl_menu->TITULO = "Relatórios";
+            if ($permissao_relatorios_ver == 1) {
+                $tpl_menu->IMAGEM_ARQUIVO = "relatorios.png";
+                $tpl_menu->LINK = "relatorios.php";
+                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                $tpl_menu->block("BLOCK_MENU_ITEM");
+            }
         }
+
 
         $tpl_menu->block("BLOCK_MENU");
 
@@ -397,7 +404,7 @@ if ($usuario_grupo<>4) {
         //$tpl_menu->TABELA_ALINHAMENTO = "right";
 
         //Celula em branco na esquerda para que as demais celular fiquem alinhadas a direita
-         $tpl_menu->TD_LARGURA = "";
+        $tpl_menu->TD_LARGURA = "";
         $tpl_menu->block("BLOCK_MENU_ITEM");
 
 
@@ -463,6 +470,14 @@ if ($usuario_grupo<>4) {
 
         //Sub-menu Cooperativas
         if ($tipopagina=="cooperativa") {
+            $tpl_menu->TABELA_TAMANHO = "";
+            $tpl_menu->TABELA_ALINHAMENTO = "right";
+            $tpl_menu->TD_ALTURA = "52px";
+            $tpl_menu->TD_LARGURA = "110px";
+            $tpl_menu->IMAGEM_TAMANHO = "25px";
+            $tpl_menu->TD_ALINHAMENTO_VERTICAL = "bottom";
+            $tpl_menu->IMAGEM_PASTA = $icones;
+            $tpl_menu->IMAGEM_ALTURA2 = 1.3;
             //Gestores
             if ($permissao_cooperativa_gestores_ver == 1) {
                 $tpl_menu->IMAGEM_TITULO = "Gestores";

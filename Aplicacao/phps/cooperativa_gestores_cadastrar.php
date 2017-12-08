@@ -7,7 +7,7 @@ if ($permissao_cooperativa_gestores_gerir <> 1) {
     exit;
 }
 
-$tipopagina = "quiosques";
+$tipopagina = "cooperativa";
 include "includes.php";
 
 
