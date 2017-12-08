@@ -8,7 +8,7 @@ require "login_verifica.php";
 $saida = $_GET["saida"];
 $indicadorpresenca = $_POST["indicadorpresenca"];
 $tipoimpressaodanfe = $_POST["tipoimpressaodanfe"];
-
+$ope=""; //1=normal 2=cancelamento 3=devolucao
 
 
 $tipopagina = "saidas";
@@ -596,6 +596,7 @@ echo json_encode($dadosNfeItens)."<br><br>";
 //Atualiza a última NFE gerada
 
 
+//Quando se trata de um cancelamento, pergunta ao cliente se ele deseja gerar uma nova venda com os mesmo produto (duplicar a venda). Isto facilita para o usuário quando trata-se de uma venda com muitos itens, ele não precisa fazer uma nova venda tudo do zero caso só deseje editar um ou outro item
 
 
 ?>

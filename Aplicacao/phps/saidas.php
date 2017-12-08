@@ -295,8 +295,8 @@ $tpl->block("BLOCK_FILTRO_ESPACO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
 //Filtro Nº Devolução
-$usadevolucoessobrevendas=usadevolucoessobrevendas($usuario_quiosque);
-if ($usadevolucoessobrevendas==1) {
+
+if ($usadevolucoes==1) {
     $tpl->CAMPO_TITULO = "Nº Devolução";
     $tpl->CAMPO_TAMANHO = "10";
     $tpl->CAMPO_NOME = "filtro_devolucao";
@@ -722,7 +722,7 @@ if ($linhas == 0) {
             $tpl->ICONE_ARQUIVO = $icones . "nada.png";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
         }
-        ;
+        
 
         //Coluna Operações    
         $tpl->CODIGO = $numero;
@@ -733,20 +733,23 @@ if ($linhas == 0) {
             if ($status==1) { //Se a venda estiver completa
 
                 //Verificar se foi emitido nota nesta venda
-                $sql9="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
+                $sql9="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida AND nfe_finalidade=1";
                 if (!$query9 = mysql_query($sql9)) die("Erro Tem Nota: (((" . mysql_error().")))");
-                $linhas9 = mysql_num_rows($query9);    
+                $linhas9 = mysql_num_rows($query9);  
+                $dados9=mysql_fetch_assoc($query9);
+                $numero_nota=$dados9["nfe_codigo"];
                 if ($linhas9>0) $temnota=1; else $temnota=0;    
                 if ($temnota==1) {
                     $tpl->OPERACAO_NOME = "Ver NFE";
-                    $tpl->LINK = "saidas_cadastrar_nfe_ver.php?saida=$saida&operacao=ver";
-                    $tpl->LINK_COMPLEMENTO = "";                                
+                    $tpl->LINK = "saidas_cadastrar_nfe_ver.php";
+                    $tpl->LINK_COMPLEMENTO = "numero_nota=$numero_nota";                                
                     $tpl->ICONE_ARQUIVO = $icones . "nfe_ver3.png";
+                    $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_NOVAPAGINA");            
                     $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");            
                 } else {
                     $tpl->OPERACAO_NOME = "Gerar NFE";
                     $tpl->LINK = "saidas_cadastrar_nfe.php";
-                    $tpl->LINK_COMPLEMENTO = "";                                
+                    $tpl->LINK_COMPLEMENTO = "ope=1";                                
                     $tpl->ICONE_ARQUIVO = $icones . "nfe_gerar3.png";
                     $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");   
                 }
@@ -806,8 +809,7 @@ if ($linhas == 0) {
         
 
         //editar 
-        $permiteedicaoclientenavenda=permiteedicaoclientenavenda($usuario_quiosque);
-        if ($permiteedicaoclientenavenda==1) $passo=1; else $passo=2;
+        if (($usacomanda==1)||($identificacaoconsumidorvenda!=3)) $passo=1; else $passo=2;
 
         if ($permissao_saidas_editar == 1) {
             //Se algum produto ja foi acertado não pode editar

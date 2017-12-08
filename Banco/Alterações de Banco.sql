@@ -18167,3 +18167,12 @@ UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='99' WHERE `me
 ALTER TABLE `sgaf_labodega`.`configuracoes` 
 CHANGE COLUMN `cnf_versao` `cnf_versao` VARCHAR(45) NOT NULL ,
 ADD COLUMN `cnf_dataversao` DATETIME NOT NULL AFTER `cnf_versao`;
+
+ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+DROP COLUMN `quicnf_permiteedicaoclientenavenda`;
+
+ALTER TABLE `sgaf_labodega`.`nfe_vendas` 
+ADD COLUMN `nfe_notareferenciada` INT(11) NULL AFTER `nfe_finalidade`;
+
+ALTER TABLE `sgaf_labodega`.`nfe_vendas` 
+ADD COLUMN `nfe_devolucao` BIGINT(20) NULL DEFAULT NULL AFTER `nfe_notareferenciada`;

@@ -5,6 +5,7 @@
 //Verifica se o usuário pode acessar a tela
 require "login_verifica.php";
 $saida = $_GET["codigo"];
+$ope = $_GET["ope"];
 if ($saida=="") $saida=$_GET["saida"];
 
 $tipopagina = "saidas";
@@ -62,6 +63,13 @@ if (($contribuinteicms==0)&&($tipopessoa==2)) { //É pessoa jurídica e não tem
     $naopodegerar=1;
     exit;
 }
+
+//Para emitir nota fiscal de cancelamento ou devolução é necessário que tenha sido gerado uma nota normal para a venda em questão.
+//Isso acontece quando o usuário ativa o módulo fiscal e nao tem ainda nota gerada para a venda em questão.
+//FAZER VALIDACAO
+
+
+
 
 //Se utiliza módulo fiscal calcula o valor do ICMS
 

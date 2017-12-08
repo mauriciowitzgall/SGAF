@@ -31,6 +31,7 @@ $datavenda=$dados["sai_datacadastro"];
 $horavenda=$dados["sai_horacadastro"];
 $descper=$dados["sai_descontopercentual"];
 $totalbruto=$dados["sai_totalbruto"];
+$tiposaida=$dados["sai_tipo"];
 
 //Campo Filtro Código da venda
 $tpl->CAMPO_TITULO = "Venda";
@@ -118,7 +119,6 @@ $tpl->CABECALHO_COLUNA_NOME="QTD. ITENS DEVOLVIDOS";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Nota Fiscal Emitida
-$usamodulofiscal= usamodulofiscal($usuario_quiosque);
 if ($usamodulofiscal==1) {
     $tpl->CABECALHO_COLUNA_TAMANHO="";
     $tpl->CABECALHO_COLUNA_COLSPAN="";
@@ -215,23 +215,27 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
     $tpl->block("BLOCK_LISTA_COLUNA_ICONES"); 
         
-    //NFE Emitida
+    //NFE 
     if ($usamodulofiscal==1) {
         $tpl->IMAGEM_ALINHAMENTO="center";
-        $tpl->LINK="";
-        $tpl->IMAGEM_TAMANHO="12px";
+        $tpl->IMAGEM_TAMANHO="18px";
         $tpl->IMAGEM_PASTA="$icones";
         $tpl->IMAGEM_TITULO="Nota Fiscal";
         //Verificar se foi emitido nota
-        $sql3="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
+        $sql3="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida  AND nfe_devolucao=$numero";
         if (!$query3 = mysql_query($sql3)) die("Erro NFE Emitida: (((" . mysql_error().")))");
         $linhas3 = mysql_num_rows($query3);
-        if ($linhas3==0) $temnota=0; 
-        else  $temnota=1;
+        $dados3=mysql_fetch_assoc($query3);
+        $numero_nota=$dados3["nfe_codigo"];
+        if ($linhas3==0) $temnota=0; else  $temnota=1;
         if ($temnota==1) {
-            $tpl->IMAGEM_NOMEARQUIVO="nfe_xml.png";
+            $tpl->LINK="saidas_cadastrar_nfe_ver.php?numero_nota=$numero_nota";
+            $tpl->LINK_TARGET="_blank";
+            $tpl->IMAGEM_NOMEARQUIVO="nfe_ver3.png";
         } else {
-            $tpl->IMAGEM_NOMEARQUIVO="nfe_xml2.png";
+            $tpl->LINK_TARGET="";
+            $tpl->LINK="saidas_cadastrar_nfe.php?codigo=$saida&ope=3";
+            $tpl->IMAGEM_NOMEARQUIVO="nfe_gerar3.png";
         }
         $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM");
         $tpl->block("BLOCK_LISTA_COLUNA_ICONES"); 
@@ -244,7 +248,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $tpl->IMAGEM_PASTA="$icones";
     $tpl->IMAGEM_TITULO="Remover";
     //Verificar se foi emitido nota
-    $sql3="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
+    $sql3="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida  AND nfe_devolucao=$numero";
     if (!$query3 = mysql_query($sql3)) die("Erro Botão remover devolucao: (((" . mysql_error().")))");
     $linhas3 = mysql_num_rows($query3);
     if ($linhas3==0) $temnota=0; else  $temnota=1;
@@ -268,7 +272,7 @@ if (mysql_num_rows($query) == 0) {
 }
 
 //Botão Voltar
-$tpl->LINK_VOLTAR="saidas.php";
+$tpl->LINK_VOLTAR="saidas_ver.php?codigo=$saida&ope=3&tiposaida=$tiposaida&passo=1";
 $tpl->block("BLOCK_RODAPE_BOTAO_VOLTAR");
 $tpl->block("BLOCK_RODAPE_BOTAO");
 $tpl->block("BLOCK_RODAPE_BOTOES");

@@ -45,6 +45,7 @@ $modal=$_GET["modal"];
                 $usaproducao=$dados["quicnf_usamoduloproducao"];
                 $usavendas=$dados["quicnf_usamodulovendas"];
                 $usacaixa=$dados["quicnf_usamodulocaixa"];
+                $usadevolucoes=$dados["quicnf_devolucoessobrevendas"];
                 $usavendaporcoes=$dados["quicnf_usavendaporcoes"];
                 $usacomanda=$dados["quicnf_usacomanda"];
                 $usapagamentosparciais=$dados["quicnf_pagamentosparciais"];

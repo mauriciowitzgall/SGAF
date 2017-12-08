@@ -110,58 +110,62 @@ while ($dados2=mysql_fetch_assoc($query2)) {
 
         //Inserir no estoque o item devolvidos
         //Verifica se o produto existe no estoque ou se foi eliminado por ter valor 0
-        $sql9 = "
-        SELECT
-            *
-        FROM
-            estoque
-        WHERE
-            etq_quiosque=$usuario_quiosque and
-            etq_produto=$produto and
-            etq_lote=$lote
-        ";
-        $query9 = mysql_query($sql9);
-        if (!$query9) {
-            die("Erro de SQL 1:" . mysql_error());
-        }
-        $linhas9 = mysql_num_rows($query9);
-        if ($linhas9 > 0) { //O produto existe no estoque
-            //Atualiza a quantidade no estoque            
-            $sql_repor = "
-            UPDATE
-                estoque 
-            SET 
-                etq_quantidade=(etq_quantidade+$qtddigitada)
+        if ($usaestoque==1) {
+
+
+            $sql9 = "
+            SELECT
+                *
+            FROM
+                estoque
             WHERE
                 etq_quiosque=$usuario_quiosque and
                 etq_produto=$produto and
-                etq_lote=$lote 
+                etq_lote=$lote
             ";
-            
-            if (!$query_repor = mysql_query($sql_repor)) die("Erro de SQL2:" . mysql_error());
-            
+            $query9 = mysql_query($sql9);
+            if (!$query9) {
+                die("Erro de SQL 1:" . mysql_error());
+            }
+            $linhas9 = mysql_num_rows($query9);
+            if ($linhas9 > 0) { //O produto existe no estoque
+                //Atualiza a quantidade no estoque            
+                $sql_repor = "
+                UPDATE
+                    estoque 
+                SET 
+                    etq_quantidade=(etq_quantidade+$qtddigitada)
+                WHERE
+                    etq_quiosque=$usuario_quiosque and
+                    etq_produto=$produto and
+                    etq_lote=$lote 
+                ";
+                
+                if (!$query_repor = mysql_query($sql_repor)) die("Erro de SQL2:" . mysql_error());
+                
 
 
-        // echo "<br><br>ATUALIZADO ESTOQUE DE PRODUTO EXISTENTE NO ESTOQUE<br><br>";
-        } else { //O produto não existe mais no estoque, vamos inserir
-            //Pegar os demais dados necessários para inserir no estoque
-            $sql = "SELECT * FROM `entradas_produtos` join entradas on (entpro_entrada=ent_codigo) WHERE entpro_entrada=$lote AND entpro_produto=$produto";
-            $query = mysql_query($sql);
-            if (!$query) {
-                die("Erro de SQL 9:" . mysql_error());
+            // echo "<br><br>ATUALIZADO ESTOQUE DE PRODUTO EXISTENTE NO ESTOQUE<br><br>";
+            } else { //O produto não existe mais no estoque, vamos inserir
+                //Pegar os demais dados necessários para inserir no estoque
+                $sql = "SELECT * FROM `entradas_produtos` join entradas on (entpro_entrada=ent_codigo) WHERE entpro_entrada=$lote AND entpro_produto=$produto";
+                $query = mysql_query($sql);
+                if (!$query) {
+                    die("Erro de SQL 9:" . mysql_error());
+                }
+                while ($dados = mysql_fetch_assoc($query)) {
+                    $validade = $dados["entpro_validade"];
+                    $valuni = $dados["entpro_valorunitario"];
+                    $fornecedor = $dados["ent_fornecedor"];
+                }
+                //Interir o produto no estoque
+                //echo "<br><br>inseriu no estoque<br><br>";
+                $sql16 = "INSERT INTO estoque (etq_quiosque,etq_produto,etq_fornecedor,etq_lote,etq_quantidade,etq_valorunitario,etq_validade)
+                VALUES ('$usuario_quiosque','$produto','$fornecedor','$lote','$qtddigitada','$valuni','$validade')";
+                if (!$query16 = mysql_query($sql16)) die("Erro de SQL4 (inserir no estoque): " . mysql_error());
+                
+                //echo "<br><br>INSERIDO NO ESTOQUE COMO NOVO PRODUTO<br><br>";
             }
-            while ($dados = mysql_fetch_assoc($query)) {
-                $validade = $dados["entpro_validade"];
-                $valuni = $dados["entpro_valorunitario"];
-                $fornecedor = $dados["ent_fornecedor"];
-            }
-            //Interir o produto no estoque
-            //echo "<br><br>inseriu no estoque<br><br>";
-            $sql16 = "INSERT INTO estoque (etq_quiosque,etq_produto,etq_fornecedor,etq_lote,etq_quantidade,etq_valorunitario,etq_validade)
-            VALUES ('$usuario_quiosque','$produto','$fornecedor','$lote','$qtddigitada','$valuni','$validade')";
-            if (!$query16 = mysql_query($sql16)) die("Erro de SQL4 (inserir no estoque): " . mysql_error());
-            
-            //echo "<br><br>INSERIDO NO ESTOQUE COMO NOVO PRODUTO<br><br>";
         }
 
     } 
@@ -176,7 +180,7 @@ while ($dados2=mysql_fetch_assoc($query2)) {
 
 
 //Verifica qual é o numero da operação de caixa do cliente logado
-if ($usamodulocaixa==1) {
+if ($usacaixa==1) {
     $sql="
         SELECT cai_codigo,cai_nome,caiopo_numero
         FROM pessoas 
@@ -278,7 +282,8 @@ if ($pendente>0) {
     $pag_ultimo=mysql_insert_id();
     //echo "<br><br>FOI GERADO UM PAGAMENTO NO VALOR DEVOLVIDO PARA ABATER O SALDO DEVEDOR.<br><br>";
     $abatido_mostra="R$ ".number_format($abatido, 2, ',', '.');
-    $filtro_pagamento="<br>- Foi gerado um <b>PAGAMENTO</b> no valor de <b>$abatido_mostra </b>para abatimento do saldo devedor!<br>";
+    if ($usapagamentosparciais==1) $filtro_pagamento="<br>- Foi gerado um <b>PAGAMENTO</b> no valor de <b>$abatido_mostra </b>para abatimento do saldo devedor!<br>";
+    else $filtro_pagamento="";
 
 
     //Atualiza devolução registrando o numero do pagamento, isso é necessário para quando excluir a devolução excluir também o pagamento
@@ -287,7 +292,7 @@ if ($pendente>0) {
 
 
     //Gera entrada de caixa a partir do pagamento abatido
-    if ($usamodulocaixa==1) {
+    if ($usacaixa==1) {
         $sql8 = "
         INSERT INTO 
             caixas_entradassaidas (
@@ -335,7 +340,7 @@ if ($saldo> 0) {
 
 
 //Sempre deve ser gerado uma saída de caixa no valor da devolução. 
-if ($usamodulocaixa==1) {
+if ($usacaixa==1) {
     $sql8 = "
     INSERT INTO 
         caixas_entradassaidas (
@@ -369,10 +374,6 @@ $tpl->ICONES = $icones;
 //$tpl->MOTIVO_COMPLEMENTO = "";
 $tpl->block("BLOCK_CONFIRMAR");
 $tpl->LINK = "saidas_devolucoes.php?codigo=$saida";
-
-
-
-
 
 $total_venda_bruto_mostra="R$ ".number_format($total_venda_bruto, 2, ',', '.');
 $venda_descontovalor_mostra=number_format($venda_descontovalor, 2, ',', '.');
@@ -409,6 +410,10 @@ if ($areceber==1) {
 }
 
 
+if ($usaestoque==1) {
+    $filtro_estoque="- Os itens devolvidos foram <b>ADICIONADOS AO ESTOQUE</b> novamente<br>";
+} else $filtro_estoque="";
+
 $tpl->MOTIVO = "
     Devolução registrada com sucesso! <br>
     
@@ -422,17 +427,22 @@ $tpl->MOTIVO = "
     $filtro_caixa_entrada
     $filtro_pagar
     $filtro_caixa_saida
-    - Os itens devolvidos foram <b>ADICIONADOS AO ESTOQUE</b> novamente<br>
+    $filtro_estoque
     <br>
 ";
 $tpl->block("BLOCK_MOTIVO");
-//$tpl->PERGUNTA = "Deseja gerar nota fiscal?";
-//$tpl->block("BLOCK_PERGUNTA");
-//$tpl->NAO_LINK = "saidas.php";
-//$tpl->block("BLOCK_BOTAO_NAO_LINK");
-//$tpl->block("BLOCK_BOTAO_SIMNAO");
-$tpl->DESTINO="saidas_devolucoes.php?codigo=$saida";
-$tpl->block("BLOCK_BOTAO");
+if ($usamodulofiscal==1) {
+    $tpl->LINK="saidas_cadastrar_nfe.php?codigo=$saida&ope=3";
+    $tpl->LINK_TARGET="";
+    $tpl->PERGUNTA = "Deseja gerar nota fiscal?";
+    $tpl->block("BLOCK_PERGUNTA");
+    $tpl->NAO_LINK = "saidas_devolucoes.php?codigo=$saida";
+    $tpl->block("BLOCK_BOTAO_NAO_LINK");
+    $tpl->block("BLOCK_BOTAO_SIMNAO");
+} else {
+    $tpl->DESTINO="saidas_devolucoes.php?codigo=$saida";
+    $tpl->block("BLOCK_BOTAO");
+}
 $tpl->show();
 
 

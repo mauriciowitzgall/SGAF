@@ -19,7 +19,7 @@ $tpl_rel->SELECT_CLASSE = " campo_tamanho_6 ";
 $tpl_rel->block("BLOCK_SELECT_PADRAO");
 
 $sql2 = "
-    SELECT sai_id,sai_codigo
+    SELECT DISTINCT sai_id
     FROM saidas
     WHERE sai_quiosque=$usuario_quiosque
     ORDER BY sai_id 
@@ -54,7 +54,7 @@ $tpl_rel->SELECT_CLASSE = " campo_tamanho_6 ";
 $tpl_rel->block("BLOCK_SELECT_PADRAO");
 
 $sql2 = "
-    SELECT sai_id,sai_codigo
+    SELECT DISTINCT sai_id
     FROM saidas
     WHERE sai_quiosque=$usuario_quiosque
     ORDER BY sai_id 

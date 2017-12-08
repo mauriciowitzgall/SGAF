@@ -38,7 +38,6 @@ $tpl_titulo->NOME_ARQUIVO_ICONE = "quiosques.png";
 $tpl_titulo->show();
 
 //Pega todos os dados da tabela (Necessário caso seja uma edi��o ou visuliza��o de detalhes)
-$usamodulofiscal=usamodulofiscal($usuario_quiosque);
 $sql = "SELECT * FROM quiosques WHERE qui_codigo='$codigo'";
 $query = mysql_query($sql);
 if (!$query)

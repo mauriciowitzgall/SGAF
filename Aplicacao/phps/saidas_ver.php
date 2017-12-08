@@ -1167,8 +1167,7 @@ if ($ope != 4) {
     $tpl4->block("BLOCK_COLUNA");
 
     //Botão Devoluções
-    $usadevolucoessobrevendas=usadevolucoessobrevendas($usuario_quiosque);
-    if (($usadevolucoessobrevendas==1)&&($status_venda==1)) {
+    if (($usadevolucoes==1)&&($status_venda==1)) {
         $sql12="SELECT count(saidev_numero) as qtd_devolucoes FROM saidas_devolucoes WHERE saidev_saida=$saida";
         if (!$query12=mysql_query($sql12)) die("Erro de SQL12:" . mysql_error());
         $dados12=mysql_fetch_assoc($query12);
@@ -1193,9 +1192,9 @@ if ($ope != 4) {
         $tpl4->block(BLOCK_BOTAO);         
         $tpl4->ONCLICK="";
         $tpl4->block(BLOCK_COLUNA);
-       
     }
-    //Pagamentos
+
+    //Botão Pagamentos
     if (($areceber==1)&&($status_venda==1)&&($usapagamentosparciais==1)) {
         $tpl4->COLUNA_TAMANHO="";
         $tpl4->COLUNA_ALINHAMENTO  ="";                
@@ -1224,6 +1223,40 @@ if ($ope != 4) {
         $tpl4->block(BLOCK_LINHA);
         $tpl4->block(BLOCK_BOTOES);
     }
+
+
+    //Botão Cancelar Nota
+    //Verificar se foi emitido nota
+    $sql="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
+    if (!$query = mysql_query($sql)) die("Erro BOTÃO Cancelar Nota: (((" . mysql_error().")))");
+    $linhas = mysql_num_rows($query);
+    if ($linhas==0) $temnota=0; else $temnota=1;
+    if (($temnota==1)&&($usamodulofiscal==1)) {
+        $tpl4->COLUNA_TAMANHO="";
+        $tpl4->COLUNA_ALINHAMENTO  ="";                
+        $tpl4->COLUNA_LINK_ARQUIVO="saidas_cadastrar_nfe.php?codigo=$saida&ope=2";
+        $tpl4->COLUNA_LINK_CLASSE="";
+        $tpl4->COLUNA_LINK_TARGET="";
+        $tpl4->block(BLOCK_COLUNA_LINK);  
+        $tpl4->BOTAO_CLASSE="botao botaovermelho fonte3";
+        $tpl4->block(BLOCK_BOTAO_DINAMICO); 
+        $tpl4->BOTAO_TECLA="";
+        $tpl4->BOTAO_TIPO="button"; 
+        $tpl4->BOTAO_VALOR ="CANCELAR NOTA";
+        $tpl4->BOTAO_NOME="cancelarnota";
+        $tpl4->BOTAO_ID="";
+        $tpl4->BOTAO_DICA="";
+        $tpl4->BOTAO_ONCLICK="";
+        $tpl4->BOTAOPADRAO_CLASSE="botao botaoamarelo fonte3";
+        $tpl4->block(BLOCK_BOTAO);         
+        $tpl4->ONCLICK="";
+        $tpl4->block(BLOCK_COLUNA);
+        $tpl4->block(BLOCK_LINHA);
+        $tpl4->block(BLOCK_BOTOES);
+    }
+
+
+
     $tpl4->block(BLOCK_LINHA);
     $tpl4->block(BLOCK_BOTOES);
     $tpl4->block("BLOCK_LINHA");

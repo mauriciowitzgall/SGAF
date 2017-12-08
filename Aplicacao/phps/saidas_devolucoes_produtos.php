@@ -106,10 +106,12 @@ $tpl->CABECALHO_COLUNA_NOME="PRODUTO";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //PRODUTO LOTE
-$tpl->CABECALHO_COLUNA_TAMANHO="";
-$tpl->CABECALHO_COLUNA_COLSPAN="";
-$tpl->CABECALHO_COLUNA_NOME="LOTE";
-$tpl->block("BLOCK_LISTA_CABECALHO");
+if ($usaestoque==1) {
+    $tpl->CABECALHO_COLUNA_TAMANHO="";
+    $tpl->CABECALHO_COLUNA_COLSPAN="";
+    $tpl->CABECALHO_COLUNA_NOME="LOTE";
+    $tpl->block("BLOCK_LISTA_CABECALHO");
+}
 
 //QTD DEVOLVIDA
 $tpl->CABECALHO_COLUNA_TAMANHO="";
@@ -205,11 +207,13 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $tpl->block("BLOCK_LISTA_COLUNA");
     
     //Lote
-    $tpl->LISTA_COLUNA_ALINHAMENTO="right";
-    $tpl->LISTA_COLUNA_CLASSE="";
-    $tpl->LISTA_COLUNA_TAMANHO="";
-    $tpl->LISTA_COLUNA_VALOR=  $lote;
-    $tpl->block("BLOCK_LISTA_COLUNA");
+    if ($usaestoque==1) {
+        $tpl->LISTA_COLUNA_ALINHAMENTO="right";
+        $tpl->LISTA_COLUNA_CLASSE="";
+        $tpl->LISTA_COLUNA_TAMANHO="";
+        $tpl->LISTA_COLUNA_VALOR=  $lote;
+        $tpl->block("BLOCK_LISTA_COLUNA");
+    }
     
     //Quantidade devolvida
     $tpl->LISTA_COLUNA_ALINHAMENTO="right";
@@ -266,9 +270,11 @@ $tpl->RODAPE_COLUNA_NOME=" ";
 $tpl->block("BLOCK_RODAPE_CONTEUDO");
 $tpl->block("BLOCK_RODAPE_COLUNA");
 //4
-$tpl->RODAPE_COLUNA_NOME=" ";
-$tpl->block("BLOCK_RODAPE_CONTEUDO");
-$tpl->block("BLOCK_RODAPE_COLUNA");
+if ($usaestoque==1) {
+    $tpl->RODAPE_COLUNA_NOME=" ";
+    $tpl->block("BLOCK_RODAPE_CONTEUDO");
+    $tpl->block("BLOCK_RODAPE_COLUNA");
+}
 //5
 $tpl->RODAPE_COLUNA_NOME=" ";
 $tpl->block("BLOCK_RODAPE_CONTEUDO");

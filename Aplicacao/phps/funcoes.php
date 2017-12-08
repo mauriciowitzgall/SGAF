@@ -142,23 +142,7 @@ function limpa_cnpj($valor) {
     return $valor;
 }
 
-function usamodulofiscal($quiosque){
-    $sql="SELECT quicnf_usamodulofiscal FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
-    if (!$query= mysql_query($sql)) die("Erro função pega configuração usa módulo fiscal: " . mysql_error());
-    while ($dados=  mysql_fetch_assoc($query)) {    
-        $usa=$dados["quicnf_usamodulofiscal"];
-    }
-    return $usa;
-}
 
-function usadevolucoessobrevendas($quiosque){
-    $sql="SELECT quicnf_devolucoessobrevendas FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
-    if (!$query= mysql_query($sql)) die("Erro função pega configuração usa devoluções sobre vendas: " . mysql_error());
-    while ($dados=  mysql_fetch_assoc($query)) {    
-        $usa=$dados["quicnf_devolucoessobrevendas"];
-    }
-    return $usa;
-}
 
 function usamodulofiscal_tipopessoa($quiosque){
     $sql="SELECT qui_tipopessoa FROM quiosques WHERE qui_codigo=$quiosque";
@@ -187,23 +171,6 @@ function usapagamentosparciais($quiosque) {
     return $usa;
 }
 
-function permiteedicaoclientenavenda($quiosque) {
-    $sql="SELECT quicnf_permiteedicaoclientenavenda FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
-    if (!$query= mysql_query($sql)) die("Erro SQL Função: usacomanda: " . mysql_error());
-    while ($dados=  mysql_fetch_assoc($query)) {    
-        $permite=$dados["quicnf_permiteedicaoclientenavenda"];
-    }
-    return $permite;
-}
-
-function usamodulocaixa($quiosque) {
-    $sql="SELECT quicnf_usamodulocaixa FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";
-    if (!$query= mysql_query($sql)) die("Erro SQL Função: usamodulovendas: " . mysql_error());
-    while ($dados=  mysql_fetch_assoc($query)) {    
-        $usa=$dados["quicnf_usamodulocaixa"];
-    }
-    return $usa;
-}
 
 function usamodulovendas($quiosque) {
     $sql="SELECT quicnf_usamodulovendas FROM quiosques_configuracoes WHERE quicnf_quiosque=$quiosque";

@@ -183,7 +183,7 @@ if ($usamodulofiscal==1) {
     $tpl_notificacao->block("BLOCK_CONFIRMAR");
     $tpl_notificacao->block("BLOCK_CADASTRADO");
     //Botão gerar nota fiscal AGORA
-    $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar_nfe.php?saida=$saida";
+    $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar_nfe.php?saida=$saida&ope=1";
     //$tpl->block("BLOCK_BOTAOGERAL_NOVAJANELA");
     $tpl_notificacao->BOTAOGERAL_TIPO="button";
     $tpl_notificacao->BOTAOGERAL_NOME="GERAR NOTA";

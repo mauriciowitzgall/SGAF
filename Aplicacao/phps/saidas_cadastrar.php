@@ -40,6 +40,7 @@ if ($saida != "") {
 $tipopagina = "saidas";
 include "includes.php";
 
+//Verifica se usa módulo de vendas
 if (($usavendas!=1)&&($tiposaida!=3)) {
     $tpl6 = new Template("templates/notificacao.html");
     $tpl6->block("BLOCK_ERRO");
@@ -51,6 +52,29 @@ if (($usavendas!=1)&&($tiposaida!=3)) {
     $tpl6->show();
     exit;
 }
+
+//Verifica se tem devoluções
+$sql18="
+    SELECT * 
+    FROM saidas_devolucoes_produtos
+    JOIN saidas_devolucoes on saidevpro_numerodev=saidev_numero
+    WHERE saidev_saida=$saida
+    ";
+if (!$query18 = mysql_query($sql18)) die("Erro CONSULTA DEVOLUCOES:" . mysql_error()."");
+$linhas18=mysql_num_rows($query18);
+if ($linhas18>0) $temdevolucoes=1; else $temdevolucoes=0;
+if (($usadevolucoes==1)&&($temdevolucoes==1)) {
+    $tpl6 = new Template("templates/notificacao.html");
+    $tpl6->block("BLOCK_ERRO");
+    $tpl6->ICONES = $icones;
+    //$tpl6->block("BLOCK_NAOAPAGADO");
+    $tpl6->MOTIVO = "Esta venda possui DEVOLUÇÕES<br>Portanto não pode ser alterada<br>";
+    $tpl6->block("BLOCK_MOTIVO");
+    $tpl6->block("BLOCK_BOTAO_FECHAR");
+    $tpl6->show();
+    exit;
+}
+
 
 
 
@@ -67,11 +91,10 @@ $operacao = $_GET["operacao"]; //Operação 1=Cadastrar 2=Editar 3=Ver
 
 
 //Verifica se permite edicão de cliente na venda
-$permiteedicaoclientenavenda=permiteedicaoclientenavenda($usuario_quiosque);
 //Só existe uma excessão que permite editar o cliente sem que esteja parametrizado para isso, que é quando é feita uma venda a receber sem identificar o consumidor, ao final da venda é sugerido para editar a venda e alterar o consumidor!
 $editarconsumidor=$_GET["editarconsumidor"];
 if ($editarconsumidor==1) {
-    $permiteedicaoclientenavenda=1;
+    $identificacaoconsumidorvenda=1; //Por CPF
 }
 
 
@@ -205,7 +228,7 @@ $passo= $_REQUEST["passo"];
 
 
 //Verificar se é uma edição, se sim então atualiza id e consumidor
-if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&($permiteedicaoclientenavenda==1)&&($identificacaoconsumidorvenda!=3)) {
+if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&(($usacomanda==1)||($identificacaoconsumidorvenda!=3))) {
     //print_r($_REQUEST);
     $id_novo=$_REQUEST["id"];
     if ($id_novo=="") $id_novo=$id;
@@ -1519,16 +1542,21 @@ if ($passo == 2) {
     
     //Botão Eliminar Venda
     //Verificar se foi emitido nota e se possui devolucoes,  se sim então não permitir a eliminação da venda
-    $sql="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
-    if (!$query = mysql_query($sql)) die("Erro BOTÃO ELIMINAR VENDA 1: (((" . mysql_error().")))");
-    $linhas = mysql_num_rows($query);
-    if ($linhas==0) $temnota=0; else $temnota=1;
+    if ($usamodulofiscal==1) {
+        $sql="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
+        if (!$query = mysql_query($sql)) die("Erro BOTÃO ELIMINAR VENDA 1: (((" . mysql_error().")))");
+        $linhas = mysql_num_rows($query);
+        if ($linhas==0) $temnota=0; else $temnota=1;
+    }  else $temnota=0;
     //Verifica se há devoluções
-    $sql="SELECT * FROM saidas_devolucoes WHERE saidev_saida=$saida";
-    if (!$query = mysql_query($sql)) die("Erro BOTÃO ELIMINAR VENDA 2: (((" . mysql_error().")))");
-    $linhas = mysql_num_rows($query);
-    if ($linhas>0) $temdevolucao=1; else $temdevolucao=0;
-    if (($temdevolucao==0)&&($temnota==0)) {
+    if ($usadevolucoes==1) {
+        $sql="SELECT * FROM saidas_devolucoes WHERE saidev_saida=$saida";
+        if (!$query = mysql_query($sql)) die("Erro BOTÃO ELIMINAR VENDA 2: (((" . mysql_error().")))");
+        $linhas = mysql_num_rows($query);
+        if ($linhas>0) $temdevolucao=1; else $temdevolucao=0;
+    } else $temdevolucao=0;
+    
+    if ((($temdevolucao==0))&&($temnota==0)) {
         $tpl1->block("BLOCK_BOTOES_RODAPE_ELIMINAR");
         $tpl1->LINK_ELIMINAR = "saidas_deletar.php?codigo=$saida&tiposaida=$tiposaida";
     
@@ -1543,8 +1571,8 @@ if ($passo == 2) {
     
     
     //Botão Devoluções
-    $usadevolucoessobrevendas=usadevolucoessobrevendas($usuario_quiosque);
-    if (($usadevolucoessobrevendas==1)&&($status_venda==1)) {
+    /*
+    if (($usadevolucoes==1)&&($status_venda==1)) {
         $tpl1->LINK_DEVOLUCOES = "saidas_devolucoes.php?codigo=$saida";
         $sql12="SELECT count(saidev_numero) as qtd_devolucoes FROM saidas_devolucoes WHERE saidev_saida=$saida";
         if (!$query12=mysql_query($sql12)) die("Erro de SQL12:" . mysql_error());
@@ -1553,9 +1581,11 @@ if ($passo == 2) {
         if ($qtd_devolucoes>0) $tpl1->QTD_DEVOLUCOES=" ($qtd_devolucoes)"; else $tpl1->QTD_DEVOLUCOES="";
         $tpl1->block("BLOCK_BOTOES_RODAPE_DEVOLUCOES");  
     }
+    */
 
 
     //Botão Pagamentos
+    /*
     if (($areceber==1)&&($status_venda==1)&&($usapagamentosparciais==1)) {
         $tpl1->LINK_PAGAMENTOS = "saidas_pagamentos.php?saida=$saida";
         $sql12="SELECT count(saipag_codigo) as qtd_pagamentos FROM saidas_pagamentos WHERE saipag_saida=$saida";
@@ -1564,18 +1594,17 @@ if ($passo == 2) {
         $qtd_pagamentos=$dados12["qtd_pagamentos"];
         if ($qtd_pagamentos>0) $tpl1->QTD_PAGAMENTOS=" ($qtd_pagamentos)"; else $tpl1->QTD_PAGAMENTOS="";
         $tpl1->block("BLOCK_BOTOES_RODAPE_PAGAMENTOS");  
-
-
     }
+    */
     
     //Botão Cancelar Nota
+    /*
     //Se foi emitido nota fiscal e o usuário usa módulo fisca então pode cancelar a nota
-    $usamodulofiscal=usamodulofiscal($usuario_quiosque);
-    //echo "[$usadevolucoessobrevendas]";
     if (($temnota==1)&&($usamodulofiscal==1)) {
         $tpl1->LINK_CANCELARNOTA = "saidas_cancelarnota.php?codigo=$saida";
         $tpl1->block("BLOCK_BOTOES_RODAPE_CANCELARNOTA");  
     }
+    */
     
     
     $tpl1->block("BLOCK_BOTOES_RODAPE");

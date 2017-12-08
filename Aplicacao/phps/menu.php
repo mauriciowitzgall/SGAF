@@ -118,7 +118,6 @@ if ($usuario_grupo<>4) {
         }
 
          //Caixas
-        $usacaixa=usamodulocaixa($usuario_quiosque);
         if (($permissao_caixas_ver==1)&&($usacaixa==1)) {
             if ($usuario_quiosque != 0) {
                 $tpl_menu->TD_LARGURA = "110px";

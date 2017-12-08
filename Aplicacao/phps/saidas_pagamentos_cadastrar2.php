@@ -58,28 +58,31 @@ $pag_ultimo=mysql_insert_id();
 
 
 //Gerar saída de caixa
-$sql8 = "
-INSERT INTO 
-    caixas_entradassaidas (
-        caientsai_tipo,
-        caientsai_valor,
-        caientsai_datacadastro,
-        caientsai_descricao,
-        caientsai_usuarioquecadastrou,
-        caientsai_numerooperacao,
-        caientsai_saidapagamento
-    )
-VALUES (
-    '1',
-    '$valor',
-    '$datahoraatual',
-    'Gerado automaticamente a partir do PAGAMENTO nº $pag_ultimo da venda nº $saida',  
-    '$usuario_codigo',    
-    '$caixaoperacao',
-    $pag_ultimo    
-)";
-if (!$query8= mysql_query($sql8)) die("Erro de SQL:" . mysql_error());
+if ($usacaixa==1) {
 
+
+    $sql8 = "
+    INSERT INTO 
+        caixas_entradassaidas (
+            caientsai_tipo,
+            caientsai_valor,
+            caientsai_datacadastro,
+            caientsai_descricao,
+            caientsai_usuarioquecadastrou,
+            caientsai_numerooperacao,
+            caientsai_saidapagamento
+        )
+    VALUES (
+        '1',
+        '$valor',
+        '$datahoraatual',
+        'Gerado automaticamente a partir do PAGAMENTO nº $pag_ultimo da venda nº $saida',  
+        '$usuario_codigo',    
+        '$caixaoperacao',
+        $pag_ultimo    
+    )";
+    if (!$query8= mysql_query($sql8)) die("Erro de SQL:" . mysql_error());
+}
 
 
 //Verifica se o total liquido da venda é igual ao total de pagamentos, se sim entao deve quitar a venda a receber
@@ -107,7 +110,8 @@ if ($totalliquido==$totalpagamentos) {
     if (!mysql_query($sql)) die("Erro: " . mysql_error());    
 }
 
-
+if ($usacaixa==1) $filtro_caixa="Foi <b>gerado uma entrada de caixa</b> no valor pago.<br>";
+else $filtro_caixa="";
 
 $tpl = new Template("templates/notificacao.html");
 $tpl->ICONES = $icones;
@@ -116,7 +120,7 @@ $tpl->block("BLOCK_CONFIRMAR");
 $tpl->LINK = "saidas_pagamentos.php?saida=$saida";
 $tpl->MOTIVO = "
     <br>Pagamento registrado com sucesso! <br><br>
-    Foi <b>gerado uma entrada de caixa</b> no valor pago.<br>
+    $filtro_caixa
 ";
 $tpl->block("BLOCK_MOTIVO");
 //$tpl->PERGUNTA = "bla bla?";

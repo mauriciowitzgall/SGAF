@@ -42,7 +42,6 @@ $usavendaporcoes = $_POST['usavendaporcoes'];
 $classificacaopadraoestoque = $_POST['classificacaopadraoestoque'];
 $devolucoessobrevendas = $_POST['devolucoessobrevendas'];
 $pagamentosparciais = $_POST['pagamentosparciais'];
-$permiteedicaoclientenavenda = $_POST['permiteedicaoclientenavenda'];
 $permiteedicaoreferencianavenda = $_POST['permiteedicaoreferencianavenda'];
 if ($usamodulofiscal==1) {
     
@@ -131,7 +130,6 @@ SET
     quicnf_classificacaopadraoestoque='$classificacaopadraoestoque',
     quicnf_devolucoessobrevendas='$devolucoessobrevendas',
     quicnf_pagamentosparciais='$pagamentosparciais',
-    quicnf_permiteedicaoclientenavenda=$permiteedicaoclientenavenda,
     quicnf_permiteedicaoreferencianavenda=$permiteedicaoreferencianavenda,
     quicnf_versaonfe='$versaonfe',
     quicnf_usamodulocaixa='$usacaixa',
