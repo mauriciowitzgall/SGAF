@@ -1426,6 +1426,7 @@ if ($passo == 2) {
     $linhas_lista = mysql_num_rows($query_lista);
     if ($linhas_lista == 0) {
         if ($usavendaporcoes==1) $tpl1->block("BLOCK_LISTA_PORCAO_CABECALHO");
+        if ($usaestoque==1) $tpl1->block("BLOCK_LISTA_CABECALHO_LOTE");
         $tpl1->block("BLOCK_LISTA_NADA");
         $tpl1->SALVAR_DESABILIDADO = " disabled ";
         $tpl1->FORM_LINK = "";
@@ -1457,8 +1458,11 @@ if ($passo == 2) {
             $tpl1->LISTA_PRODUTO = $nome2;
             $tpl1->LISTA_PRODUTO_COD = $dados_lista["pro_codigo"];
             //$tpl1->LISTA_FORNECEDOR = $dados_lista["pes_nome"];
-            if ($dados_lista["saipro_lote"]==0) $tpl1->LISTA_LOTE = "---";
-            else $tpl1->LISTA_LOTE = $dados_lista["saipro_lote"];
+            if ($usaestoque==1) {
+                if ($dados_lista["saipro_lote"]==0) $tpl1->LISTA_LOTE = "---";
+                else $tpl1->LISTA_LOTE = $dados_lista["saipro_lote"];
+                $tpl1->block("BLOCK_LISTA_LOTE");
+            }
             $tipocontagem=$dados_lista["pro_tipocontagem"];
             if (($tipocontagem==2)||($tipocontagem==3)) {
                 $tpl1->LISTA_QTD = number_format($dados_lista["saipro_quantidade"], 3, ',', '.');
@@ -1511,6 +1515,7 @@ if ($passo == 2) {
     }
     $tpl1->TOTAL_GERAL = "R$ " . number_format($total_geral, 2, ',', '.');
     if ($usavendaporcoes == 1) $tpl1->block("BLOCK_RODAPE_PORCOES");
+    if ($usaestoque == 1) $tpl1->block("BLOCK_RODAPE_LOTE");
     $tpl1->block("BLOCK_LISTAGEM");
 
 
