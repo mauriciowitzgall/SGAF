@@ -69,7 +69,7 @@ $(window).load(function() {
         document.forms["form1"].elements["fone"].focus();
     } else if (identificacaoconsumidorvenda==1) { //Identifica por CPF
         $("input[name=cpf]").show();
-        document.forms["form1"].elements["cpf"].focus();
+        if (document.forms["form1"].elements["cpf"]) document.forms["form1"].elements["cpf"].focus();
         $("input[name=fone]").hide();
         $("select[name=tipopessoa]").show();
     } else {
@@ -149,6 +149,18 @@ function selecionar_porcoes(porcao) {
     $.post("saidas_popula_porcoesqtdoculto.php", {
         porcao: porcao
     }, function(valor1) {
+        valor = valor1.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor1 = valor.replace("\n", "");        
         //alert(valor);
         $("input[name=porcao_oculto]").val(valor1);
         
@@ -163,6 +175,18 @@ function selecionar_porcoes(porcao) {
         $.post("saidas_popula_valuniref.php", {
             porcao: porcao
         }, function(valor2) {
+            valor = valor2.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor2 = valor.replace("\n", "");            
             //alert(valor2);
             if (valor2==0) {
                 valuni=$("input[name=valuni2]").val();
@@ -189,8 +213,20 @@ function selecionar_porcoes(porcao) {
 
             //alert("selecionar a porcao select");
             select_selecionar("porcao",porcao);
-
-            if (porcao=="") { //Se não tem nenhuma porção
+            porcao = porcao.replace("\r", ""); 
+            porcao = porcao.replace("\r", ""); 
+            porcao = porcao.replace("\r", ""); 
+            porcao = porcao.replace("\r", ""); 
+            porcao = porcao.replace("\t", "");
+            porcao = porcao.replace("\t", "");
+            porcao = porcao.replace("\t", "");
+            porcao = porcao.replace("\t", "");
+            porcao = porcao.replace("\n", "");
+            porcao = porcao.replace("\n", "");
+            porcao = porcao.replace("\n", "");
+            porcao = porcao.replace("\n", "");
+            console.log("("+porcao+")");
+            if (porcao=="naotem") { //Se não tem nenhuma porção
                 document.forms["form1"].porcao_qtd.disabled = true;
             } else { //Caso tenho pelo menos uma porção
                 lote2=$("select[name=lote]").val();
@@ -249,6 +285,18 @@ function selecionar_produto (produto,focoqtd) {
     $.post("saidas_verifica_tipocontagem_nome.php", {
         produto: $("select[name=produto]").val()
     }, function(valor) {
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");           
         $("span[name=tipocontagem]").text(valor);
 
         //Desabilita o campo quantidade e o botão de incluir
@@ -268,6 +316,18 @@ function selecionar_produto (produto,focoqtd) {
         $.post("produto_verifica_estoque_infinito.php", {
             produto: produto
         }, function(valor) {  
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");             
 
             valor=valor.split("|");
             produto_controlar_estoque=valor[0];
@@ -300,6 +360,18 @@ function selecionar_produto (produto,focoqtd) {
                             produto: produto
                         }, function(valor) {
                             //console.log(valor);
+                            valor = valor.replace("\r", ""); 
+                            valor = valor.replace("\r", ""); 
+                            valor = valor.replace("\r", ""); 
+                            valor = valor.replace("\r", ""); 
+                            valor = valor.replace("\t", "");
+                            valor = valor.replace("\t", "");
+                            valor = valor.replace("\t", "");
+                            valor = valor.replace("\t", "");
+                            valor = valor.replace("\n", "");
+                            valor = valor.replace("\n", "");
+                            valor = valor.replace("\n", "");
+                            valor = valor.replace("\n", "");                             
 
                             $("input[name=valuni]").val("");
                             $("input[name=valuni3]").val("");
@@ -364,6 +436,18 @@ function popular_fornecedor (produto,focoqtd) {
     $.post("saidas_popula_fornecedor.php", {
         produto: produto
     }, function(valor) {
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");         
         //alert(valor);
         if (valor==0) {
             $("select[name=fornecedor]").html("<option value=''>Não há registros</option>");
@@ -417,11 +501,35 @@ function popular_lote (produto,fornecedor,focoqtd) {
         produto: produto,
         fornecedor: fornecedor
     }, function(valor) {
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");         
         $("select[name=lote]").html(valor);
             $.post("saidas_verifica_lote_unico.php", {
             produto: produto,
             fornec: fornecedor
         }, function(lote) {
+            valor = lote.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            lote = valor.replace("\n", "");             
             lote=lote.replace(/(\r\n|\n|\r)/gm,"");
             if (lote!=0) { //Só tem um lote
                 selecionar_lote(lote,produto,focoqtd);
@@ -470,6 +578,18 @@ function produtoelote_selecionado(produto,lote,focoqtd) {
             lote: lote,
             produto: produto
         }, function(valor) {
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");            
             //alert(valor);
             //alert("entrou");
             $("input[name=valuni]").val(valor);
@@ -482,15 +602,38 @@ function produtoelote_selecionado(produto,lote,focoqtd) {
         $.post("saidas_verifica_tipocontagem.php", {
             produto: $("select[name=produto]").val()
         }, function(valor) {
-
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
             tipocontagem=valor;
 
-            //Popula quantidade em estoque
+            //Popula LABEL quantidade atual em estoque
             $.post("saidas_verifica_estoque.php", {
                 lote: lote,
                 produto: produto,
                 ignorarlotes: $("input[name=ignorarlotes]").val()
             }, function(valor2) {
+                valor2 = valor2.replace("\r", ""); 
+                valor2 = valor2.replace("\r", ""); 
+                valor2 = valor2.replace("\r", ""); 
+                valor2 = valor2.replace("\r", ""); 
+                valor2 = valor2.replace("\t", "");
+                valor2 = valor2.replace("\t", "");
+                valor2 = valor2.replace("\t", "");
+                valor2 = valor2.replace("\t", "");
+                valor2 = valor2.replace("\n", "");
+                valor2 = valor2.replace("\n", "");
+                valor2 = valor2.replace("\n", "");
+                valor2 = valor2.replace("\n", "");                
                 var etqatu = valor2;
                 var estoqueatual = etqatu.replace(".", "");
                 estoqueatual = estoqueatual.replace(",", ".");
@@ -547,7 +690,18 @@ function produtoelote_selecionado(produto,lote,focoqtd) {
                 $.post("saidas_verifica_porcao_unico.php", {
                     produto: produto
                 }, function(resposta) {
-                    resposta=resposta.replace("\n","")
+                    valor = resposta.replace("\r", ""); 
+                    valor = valor.replace("\r", ""); 
+                    valor = valor.replace("\r", ""); 
+                    valor = valor.replace("\r", ""); 
+                    valor = valor.replace("\t", "");
+                    valor = valor.replace("\t", "");
+                    valor = valor.replace("\t", "");
+                    valor = valor.replace("\t", "");
+                    valor = valor.replace("\n", "");
+                    valor = valor.replace("\n", "");
+                    valor = valor.replace("\n", "");
+                    resposta = valor.replace("\n", "");
                     if ((resposta=='naotem')||(resposta=='temvarios')) {
                     //nao faz nada
                         //console.log("Tem 0 ou várias porcoes: "+resposta);
@@ -558,7 +712,7 @@ function produtoelote_selecionado(produto,lote,focoqtd) {
                 });
             });
         });
-
+    
                 
     }   
 }
@@ -591,6 +745,18 @@ function pesoqtd() {
     $.post("saidas_verifica_tipocontagem.php", {
         produto: $("select[name=produto]").val()
     }, function(valor) {
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");        
         if ((valor == 2)||(valor==3)) {
             $('#qtd').priceFormat({
                 prefix: '',
@@ -633,7 +799,19 @@ function saidas_qtd(lote) {
         ignorarlotes: $("input[name=ignorarlotes]").val()
     }, function(valor) {
         //alert(valor);
-        
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+
         produto_controlar_estoque=$("input[name=produto_controlar_estoque]").val();
         qtddigitada = $("input[name=qtd]").val();
         if (produto_controlar_estoque==1) {
@@ -775,6 +953,18 @@ function valida_etiqueta(campo) {
         $.post("saidas_valida_etiqueta.php", {
             etiqueta: $("input[name=etiqueta]").val()
         }, function(valor) {
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");            
             var x = valor;
             //Caso o numero da etiqueta n�o corresponta a um produto ou lote n�o existente no banco
             if (x == "invalida") {
@@ -795,6 +985,18 @@ function valida_etiqueta(campo) {
                 $.post("saidas_etiqueta_produto.php", {
                     etiqueta: $("input[name=etiqueta]").val()
                 }, function(valor) {
+                    valor = valor.replace("\r", ""); 
+                    valor = valor.replace("\r", ""); 
+                    valor = valor.replace("\r", ""); 
+                    valor = valor.replace("\r", ""); 
+                    valor = valor.replace("\t", "");
+                    valor = valor.replace("\t", "");
+                    valor = valor.replace("\t", "");
+                    valor = valor.replace("\t", "");
+                    valor = valor.replace("\n", "");
+                    valor = valor.replace("\n", "");
+                    valor = valor.replace("\n", "");
+                    valor = valor.replace("\n", "");                    
                     $("select[name=produto]").html(valor);
                     //Preenche o campo oculto do produto com o codigo dele
                     $.post("saidas_etiqueta_produto_codigo.php", {
@@ -984,6 +1186,18 @@ function porcoesqtd() {
     $.post("saidas_verifica_tipocontagem.php", {
         produto: $("select[name=produto]").val()
     }, function(valor) {
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");        
         tipocontagem=valor; 
         qtd=$("input[name=porcao_qtd]").val();
         qtd=parseInt(qtd);
@@ -1050,6 +1264,18 @@ function porcoesqtd() {
             produto:  $("select[name=produto]").val(),
             ignorarlotes: $("input[name=ignorarlotes]").val()
         }, function(valor2) {
+            valor = valor2.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor2 = valor.replace("\n", "");            
             //alert(valor2);
             qtd_estoque=valor2.replace("\n","");
             qtd_estoque=parseFloat(qtd_estoque);
@@ -1117,10 +1343,18 @@ function verifica_cpf(valor) {
             $.post("saidas_verifica_cpf.php", {
                 cpf: valor            
             }, function(valor3) {
-                valor3=valor3.replace("\n","");
-                valor3=valor3.replace("\n","");
-                valor3=valor3.replace("\n","");
-                valor3=valor3.replace("\n","");
+                valor = valor3.replace("\r", ""); 
+                valor = valor.replace("\r", ""); 
+                valor = valor.replace("\r", ""); 
+                valor = valor.replace("\r", ""); 
+                valor = valor.replace("\t", "");
+                valor = valor.replace("\t", "");
+                valor = valor.replace("\t", "");
+                valor = valor.replace("\t", "");
+                valor = valor.replace("\n", "");
+                valor = valor.replace("\n", "");
+                valor = valor.replace("\n", "");
+                valor3 = valor.replace("\n", "");
                 if (valor3=="naocadastrado") {
                     //alert("Cadastrar");
                     $("select[name=consumidor]").hide();
@@ -1175,6 +1409,18 @@ function verifica_cnpj(valor) {
             $.post("saidas_verifica_cnpj.php", {
                 cnpj: valor            
             }, function(valor3) {
+                valor = valor3.replace("\r", ""); 
+                valor = valor.replace("\r", ""); 
+                valor = valor.replace("\r", ""); 
+                valor = valor.replace("\r", ""); 
+                valor = valor.replace("\t", "");
+                valor = valor.replace("\t", "");
+                valor = valor.replace("\t", "");
+                valor = valor.replace("\t", "");
+                valor = valor.replace("\n", "");
+                valor = valor.replace("\n", "");
+                valor = valor.replace("\n", "");
+                valor3 = valor.replace("\n", "");                
                 codigo_pessoa=valor3;
                 //alert(valor3);
                 if (valor3=="naocadastrado") {
@@ -1215,6 +1461,18 @@ function verifica_fone(valor) {
         $.post("saidas_verifica_fone.php", {
             fone: valor            
         }, function(valor3) {
+            valor = valor3.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor3 = valor.replace("\n", "");            
             codigo_pessoa=valor3;
             //alert(valor3);
             if (valor3=="naocadastrado") {
@@ -1272,6 +1530,18 @@ function verifica_produto_referencia(valor) {
         $.post("saidas_produto_referencia.php",  {
             referencia: valor
         }, function(produtos) {
+            valor = produtos.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            produtos = valor.replace("\n", "");            
             //alert("Produtos encontrados a partir da referencia:"+produtos);
             produtos2=produtos.split("|");
             produto_codigo=produtos2[0];
@@ -1334,6 +1604,18 @@ function verifica_comanda_duplicada (valor) {
             comanda:comanda,
             saida:saida
         },function(valor2){
+            valor = valor2.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\r", ""); 
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\t", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor = valor.replace("\n", "");
+            valor2 = valor.replace("\n", "");            
             //console.log(valor2); 
             if (valor2=="emuso") { 
                 //console.log("Em uso: "+valor);

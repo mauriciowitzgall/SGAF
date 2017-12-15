@@ -17,6 +17,7 @@ $operacao = $_GET["operacao"]; //Opera��o 1=Cadastras 2=Editar 3=Ver
 //Cadastro de uma nova entrada
 $passo = $_POST['passo'];
 $tpl->USAPRATELEIRA="$usaprateleira";
+$tpl->VALORVENDAZERO="$valorvendazero";
 $tpl->CONTROLAVALIDADE="$controlavalidade";
 $tpl->QUIOSQUE_REVENDA="$quiosque_revenda";
 $tpl->QUIOSQUE_CONSIGNACAO="$quiosque_consignacao";
@@ -466,9 +467,10 @@ if ($passo != "") {
             $pro_tamanho=$dados["pro_tamanho"];
             $pro_cor=$dados["pro_cor"];
             $pro_descricao=$dados["pro_descricao"];
-            $pro_nome2="$pro_nome $pro_tamanho $pro_cor $pro_descricao";
+            if ($pro_referencia!="")  $pro_nome2="$pro_nome ($pro_referencia)";
+            else $pro_nome2="$pro_nome";
             //pro_codigo,pro_nome,prorec_nome,pro_volume,pro_marca,protip_sigla
-            $tpl->OPTION2_TEXTO = "$pro_nome2 $pro_marca $pro_recipiente $pro_volume ($pro_referencia)";
+            $tpl->OPTION2_TEXTO = "$pro_nome2";
             if (($produto == $pro_codigo) && ($produtomanter == 'on'))
                 $tpl->OPTION2_SELECIONADO = " selected ";
             else

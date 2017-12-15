@@ -264,32 +264,36 @@ $saldo=$valtot_comdesconto-$pendente; //-$dev_total_comdesconto;
 //Sendo assim, é necessário  realizar o pagamento por parte do cliente para registrar o valor abatido.
 if ($pendente>0) {
     if ($saldo<0) $abatido=$valtot_comdesconto; else $abatido=$pendente;
-    $sql="
-        INSERT INTO saidas_pagamentos (
-            saipag_saida,
-            saipag_valor,
-            saipag_obs,
-            saipag_metpagamento
-        ) VALUES (
-            $saida,
-            $abatido,
-            'Registro Automático para ABATIMENTO da DEVOLUÇÃO: $devolucao',
-            '5'
-        )
-    ";
-
-    if (!$query = mysql_query($sql)) die("Erro SQL 1:" . mysql_error());
-    $pag_ultimo=mysql_insert_id();
-    //echo "<br><br>FOI GERADO UM PAGAMENTO NO VALOR DEVOLVIDO PARA ABATER O SALDO DEVEDOR.<br><br>";
-    $abatido_mostra="R$ ".number_format($abatido, 2, ',', '.');
-    if ($usapagamentosparciais==1) $filtro_pagamento="<br>- Foi gerado um <b>PAGAMENTO</b> no valor de <b>$abatido_mostra </b>para abatimento do saldo devedor!<br>";
-    else $filtro_pagamento="";
+    
+    if ($usapagamentosparciais==1) {
 
 
-    //Atualiza devolução registrando o numero do pagamento, isso é necessário para quando excluir a devolução excluir também o pagamento
-    $sql="UPDATE saidas_devolucoes SET saidev_pagamento='$pag_ultimo' WHERE saidev_numero=$devolucao";
-    if (!$query = mysql_query($sql)) die("Erro SQL 2:" . mysql_error());
+        $sql="
+            INSERT INTO saidas_pagamentos (
+                saipag_saida,
+                saipag_valor,
+                saipag_obs,
+                saipag_metpagamento
+            ) VALUES (
+                $saida,
+                $abatido,
+                'Registro Automático para ABATIMENTO da DEVOLUÇÃO: $devolucao',
+                '5'
+            )
+        ";
 
+        if (!$query = mysql_query($sql)) die("Erro SQL 1:" . mysql_error());
+        $pag_ultimo=mysql_insert_id();
+        //echo "<br><br>FOI GERADO UM PAGAMENTO NO VALOR DEVOLVIDO PARA ABATER O SALDO DEVEDOR.<br><br>";
+        $abatido_mostra="R$ ".number_format($abatido, 2, ',', '.');
+        if ($usapagamentosparciais==1) $filtro_pagamento="<br>Foi gerado um <b>PAGAMENTO</b> no valor de <b>$abatido_mostra </b><br>para abatimento do saldo devedor!<br><br>";
+        else $filtro_pagamento="";
+
+
+        //Atualiza devolução registrando o numero do pagamento, isso é necessário para quando excluir a devolução excluir também o pagamento
+        $sql="UPDATE saidas_devolucoes SET saidev_pagamento='$pag_ultimo' WHERE saidev_numero=$devolucao";
+        if (!$query = mysql_query($sql)) die("Erro SQL 2:" . mysql_error());
+    }
 
     //Gera entrada de caixa a partir do pagamento abatido
     if ($usacaixa==1) {
@@ -401,9 +405,9 @@ if ($venda_descontovalor>0) {
 if ($areceber==1) {
     $filtro_areceber="
     Total Já Pago: $pag_total_mostra <br>
-    Saldo Devedor Pendente: $pendente_mostra <br>
+    Saldo Devedor Pendente: $pendente_mostra <br><br>
     Total a Receber Atual: $total_areceber_mostra <br>
-    Total a Devolver: $total_adevolver_mostra <br>    
+    Total a Devolver: $total_adevolver_mostra <br><br>    
     ";
 } else {
     $filtro_areceber="";
@@ -411,7 +415,7 @@ if ($areceber==1) {
 
 
 if ($usaestoque==1) {
-    $filtro_estoque="- Os itens devolvidos foram <b>ADICIONADOS AO ESTOQUE</b> novamente<br>";
+    //$filtro_estoque="Os itens devolvidos foram <b>ADICIONADOS AO ESTOQUE</b> novamente<br>";
 } else $filtro_estoque="";
 
 $tpl->MOTIVO = "

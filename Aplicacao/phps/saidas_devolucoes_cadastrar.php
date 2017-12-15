@@ -350,6 +350,9 @@ $tpl->block("BLOCK_RODAPE");
 
 
 //botão oculto valor total da devolucao
+$tpl->CAMPOOCULTO_NOME="valorvendazero";
+$tpl->CAMPOOCULTO_VALOR="$valorvendazero";
+$tpl->block("BLOCK_CAMPOSOCULTOS");
 $tpl->CAMPOOCULTO_NOME="campooculto_valtot";
 $tpl->CAMPOOCULTO_VALOR="";
 $tpl->block("BLOCK_CAMPOSOCULTOS");

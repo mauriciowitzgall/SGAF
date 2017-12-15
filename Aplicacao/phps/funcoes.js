@@ -217,35 +217,6 @@ function calcula_valor_unitario() {
 
 }
 
-function calcula_valor_venda() {
-    var percent2 = $("input[name=percent2]").val();
-    percent2 = percent2.replace(",", ".");
-    var custo = $("input[name=valunicusto]").val();
-    custo = custo.replace("R$ ", "");
-    custo = custo.replace(".", "");
-    custo = custo.replace(",", ".");
-    custo = parseFloat(custo);
-    var venda = 0;
-    venda = parseFloat(venda);
-    percent2 = parseFloat(percent2);
-    venda = (custo * (100 + percent2)) / 100;
-    venda = venda.toFixed(2);
-    var venda2 = String(venda);
-    venda2 = venda2.replace(".", ",");
-    venda2 = "R$ " + venda2;
-    //alert(custo2);
-    $("input[name=valuni]").val(venda2);
-
-    //(200/260*100)-100
-    var percent = parseFloat(0);
-    if ((custo != 0) && (venda != 0))
-        percent = -((custo / venda * 100) - 100);
-    else
-        percent = 0;
-    percent = percent.toFixed(2);
-    percent = percent.replace(".", ",");
-    $("input[name=percent]").val(percent);
-}
 
 function calcula_saldovalidade(valor) {
 

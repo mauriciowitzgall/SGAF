@@ -1,4 +1,3 @@
-
 <?php
 
 session_cache_expire(180);
@@ -177,5 +176,4 @@ while ($dados11 = mysql_fetch_array($query11)) {
     IF ($tipon == 2)
         $quiosque_revenda = 1;
 }
-
 ?>

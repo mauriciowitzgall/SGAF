@@ -746,7 +746,7 @@ $tpl3->show();
 
 //Se for venda A RECEBER, mostrar todas as entradas de caixa relacionada a esta venda
 
-if ($areceber==1) {
+if (($areceber==1)&&($usapagamentosparciais==1)) {
 
 
     //PAGAMENTOS PARCIAIS 

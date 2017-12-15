@@ -26,7 +26,8 @@ if ($linhas>0) {
 	    $tamanho= $dados['pro_tamanho'];
 	    $cor= $dados['pro_cor'];
 	    $descricao= $dados['pro_descricao'];
-	    $nome2="$nome $tamanho $cor $descricao";
+	    if ($referencia!="") { $nome2="$nome ($referencia)"; }
+    	else { $nome2="$nome"; }
         $controlarestoque=$dados["pro_controlarestoque"];
         $evendido=$dados["pro_evendido"];
 		if ($controlarestoque==0) {

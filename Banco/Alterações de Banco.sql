@@ -18178,3 +18178,6 @@ ALTER TABLE `sgaf_labodega`.`nfe_vendas`
 ADD COLUMN `nfe_devolucao` BIGINT(20) NULL DEFAULT NULL AFTER `nfe_notareferenciada`;
 
 INSERT INTO `sgaf_labodega`.`metodos_pagamento` (`metpag_codigo`, `metpag_nome`) VALUES ('5', 'Desconhecido');
+
+ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_valorvendazero` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_pfx`;

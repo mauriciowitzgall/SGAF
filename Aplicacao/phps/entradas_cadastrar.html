@@ -1,65 +1,98 @@
 
 <script type="text/javascript">
-    window.onload = function() {
-        
-        verifica_paravenda();
+
+window.onload = function() {
+    
+    verifica_paravenda();
 
 
-        //Mantem o produto selecionado caso o checkbox esteja marcado
-        var manter = $("input[name=produtomanter]").val();
-        if (manter='undefined') manter=1;
-        else manter=0;
-        var passo = $("input[name=passo]").val();
-        //alert(passo);
-        if (passo>2) {
-            desabilita_campos();
-            if (manter = 'on') {
-                valida_produto();
-                if (document.forms["form1"].qtd)
-                    document.forms["form1"].qtd.focus();
-            }
-            verifica_incluir();
+    //Mantem o produto selecionado caso o checkbox esteja marcado
+    var manter = $("input[name=produtomanter]").val();
+    if (manter='undefined') manter=1;
+    else manter=0;
+    var passo = $("input[name=passo]").val();
+    //alert(passo);
+    if (passo>2) {
+        desabilita_campos();
+        if (manter = 'on') {
+            valida_produto();
+            if (document.forms["form1"].qtd)
+                document.forms["form1"].qtd.focus();
         }
-        
+        verifica_incluir();
+    }
+    
 
 
-        //Verifica se o quiosque tem apenas um tipo de negociação, se tem, não precisa mostrar o campo na tela
-        revenda=$("input[name=quiosque_revenda]").val();
-        consignacao=$("input[name=quiosque_consignacao]").val();
-        
-        if ((revenda==1)&&(consignacao==0)) { //só tem um tipo de negociação
-            tipneg=2;
-            $("tr[id=linha_tiponeg]").hide();
-        } else if ((revenda==0)&&(consignacao==1)) {
-            tipneg=1;
-            $("tr[id=linha_tiponeg]").hide();
-        } else {
-            $("tr[id=linha_tiponeg]").show();
-            tipneg= $("select[name=tiponegociacao]").val();
-        }
-        
-        if (passo<=2) popula_tipopessoa(tipneg);
+    //Verifica se o quiosque tem apenas um tipo de negociação, se tem, não precisa mostrar o campo na tela
+    revenda=$("input[name=quiosque_revenda]").val();
+    consignacao=$("input[name=quiosque_consignacao]").val();
+    
+    if ((revenda==1)&&(consignacao==0)) { //só tem um tipo de negociação
+        tipneg=2;
+        $("tr[id=linha_tiponeg]").hide();
+    } else if ((revenda==0)&&(consignacao==1)) {
+        tipneg=1;
+        $("tr[id=linha_tiponeg]").hide();
+    } else {
+        $("tr[id=linha_tiponeg]").show();
+        tipneg= $("select[name=tiponegociacao]").val();
+    }
+    
+    if (passo<=2) popula_tipopessoa(tipneg);
 
 
 
-        //Verifica se o quiosque usa validade e prateleira
-        usaprateleira=$("input[name=usaprateleira]").val();
-        controlavalidade=$("input[name=controlavalidade]").val();
-        if (usaprateleira==0) {
-            $("tr[id=linha_prateleira]").hide();
-        } else {
-            $("tr[id=linha_prateleira]").show();
-        }
-        if (controlavalidade==0) {
-            $("tr[id=linha_validade]").hide();
-        } else {
-            $("tr[id=linha_validade]").show();
-        }
+    //Verifica se o quiosque usa validade e prateleira
+    usaprateleira=$("input[name=usaprateleira]").val();
+    controlavalidade=$("input[name=controlavalidade]").val();
+    if (usaprateleira==0) {
+        $("tr[id=linha_prateleira]").hide();
+    } else {
+        $("tr[id=linha_prateleira]").show();
+    }
+    if (controlavalidade==0) {
+        $("tr[id=linha_validade]").hide();
+    } else {
+        $("tr[id=linha_validade]").show();
+    }
 
-        //Se o quiosque só trabalha com um tipo de negociação já seleciona e oculta
+    //Se o quiosque só trabalha com um tipo de negociação já seleciona e oculta
 
 
-    };
+};
+
+
+
+function calcula_valor_venda() {
+    var percent2 = $("input[name=percent2]").val();
+    percent2 = percent2.replace(",", ".");
+    var custo = $("input[name=valunicusto]").val();
+    custo = custo.replace("R$ ", "");
+    custo = custo.replace(".", "");
+    custo = custo.replace(",", ".");
+    custo = parseFloat(custo);
+    var venda = 0;
+    venda = parseFloat(venda);
+    percent2 = parseFloat(percent2);
+    venda = (custo * (100 + percent2)) / 100;
+    venda = venda.toFixed(2);
+    var venda2 = String(venda);
+    venda2 = venda2.replace(".", ",");
+    venda2 = "R$ " + venda2;
+    //alert(custo2);
+    if (venda2>=0) $("input[name=valuni]").val(venda2);
+
+    //(200/260*100)-100
+    var percent = parseFloat(0);
+    if ((custo != 0) && (venda != 0))
+        percent = -((custo / venda * 100) - 100);
+    else
+        percent = 0;
+    percent = percent.toFixed(2);
+    percent = percent.replace(".", ",");
+    if (percent>=0) $("input[name=percent]").val(percent);
+}
 
 
 function atualiza_produtos_cadastro_direto () {
@@ -120,6 +153,7 @@ function seleciona_produto(valor) {
                     });
                     valida_produto(); 
                 }
+
             }
 
         });
@@ -174,9 +208,10 @@ function mascara_percent() {
 }
 
 function valida_produto() {
-    verifica_incluir();
-
     
+    verifica_incluir();
+    
+
     $("input[name=valuni]").val("").priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
     $("input[name=valuni]").disabled = true;
     $("input[name=valunicusto]").val("").priceFormat({prefix: 'R$ ', centsSeparator: ',', thousandsSeparator: '.'});
@@ -198,6 +233,18 @@ function valida_produto() {
         entrada: $("input[name=entrada2]").val(),
         paravenda: $("select[name=paravenda]").val()
     }, function(valor) {
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
         //alert(valor);
         if (valor == "naoestanalista") {
             if (document.forms["form1"].elements["valuni"]) document.forms["form1"].valuni.disabled = false;
@@ -321,10 +368,13 @@ function desabilita_campos() {
 function verifica_incluir() {
     var valoruni = $("input[name=valuni]").val();
     var quant = $("input[name=qtd]").val();
-    //alert (quant);
-    //alert (valoruni);
-
-    if ((valoruni == "") || (valoruni == 'R$ 0,00') || (valoruni == 'R$ 0,0') || (quant == '0') || (quant == '') || (quant == '0,00')) {
+    valorvendazero=$("input[name=valorvendazero]").val();
+    valoruni=valoruni.replace("R$ ","");
+    valoruni=valoruni.replace(".","");
+    valoruni=valoruni.replace(",",".");
+    if (valoruni) valoruni=parseFloat(valoruni);
+    //console.log(valoruni);
+    if ((valorvendazero==0)&&((valoruni == "") || (valoruni == 'R$ 0,00') || (valoruni == '0') || (valoruni == 'R$ 0,0') || (quant == '0') || (quant == '') || (quant == '0,00'))) {
         document.forms["form1"].incluir.disabled = true;
         //alert('desabilita');
     } else {
@@ -370,8 +420,17 @@ function mascara_pesoqtd() {
         produto: $("select[name=produto]").val()
     }, function(valor) {
         $("span[name=qtdtipconcod]").html(valor);
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\r", ""); 
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\t", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
+        valor = valor.replace("\n", "");
         //alert (valor);
-        if (valor == "<b>por un.</b>") {
+        if (valor == 1) {
             $('#qtd').priceFormat({
                 prefix: '',
                 centsSeparator: '',
@@ -454,7 +513,7 @@ function calcula_valor_percent() {
         per = per.replace(".", ",");
         
         //alert(custo2);
-        $("input[name=percent2]").val(per);
+        if (per>=0) $("input[name=percent2]").val(per);
 
         if (venda != 0)
             percent2 = -((custo * 100 / venda) - 100);
@@ -462,7 +521,7 @@ function calcula_valor_percent() {
             percent2 = 0;
         percent2 = percent2.toFixed(2);
         percent2 = percent2.replace(".", ",");
-        $("input[name=percent]").val(percent2);
+        if (percent2>=0) $("input[name=percent]").val(percent2);
 
     }
 
@@ -486,6 +545,7 @@ function calcula_valor_percent() {
 <form action="entradas_cadastrar.php" method="post" name="form1">
     <table summary="" border="0" class="tabela1" cellpadding="4">
        <input type="hidden" name="controlavalidade" value="{CONTROLAVALIDADE}">
+       <input type="hidden" name="valorvendazero" value="{VALORVENDAZERO}">
        <input type="hidden" name="quiosque_revenda" value="{QUIOSQUE_REVENDA}">
        <input type="hidden" name="quiosque_consignacao" value="{QUIOSQUE_CONSIGNACAO}">
        <input type="hidden" name="usaprateleira" value="{USAPRATELEIRA}">

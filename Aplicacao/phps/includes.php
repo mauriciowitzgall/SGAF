@@ -1,7 +1,4 @@
-
 <?php
-
-  
 include "acentuacao.html";
 require("templates/Template.class.php");
 
@@ -31,7 +28,6 @@ $modal=$_GET["modal"];
         <script type="text/javascript" src="login_atualizarsessao.js"></script>
         <script type="text/javascript" src="js/jquery.mask.min.js"></script>
     </head>
-    
     <body bgcolor="">        
         <div class="pagina" >
             <?php
@@ -61,6 +57,7 @@ $modal=$_GET["modal"];
                 $ignorarlotes=$dados["quicnf_ignorarlotes"];
                 $geririmobilizado=$dados["quicnf_geririmobilizado"];
                 $controlavalidade=$dados["quicnf_controlavalidade"];
+                $valorvendazero=$dados["quicnf_valorvendazero"];
                 $usaprateleira=$dados["quicnf_usaprateleira"];
                 $identificacaoconsumidorvenda=$dados["quicnf_identificacaoconsumidorvenda"];
             }
@@ -81,7 +78,5 @@ $modal=$_GET["modal"];
             }
             include "js/mascaras.php";
 
-
-            
             ?>
             <div class="corpo">

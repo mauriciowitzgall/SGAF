@@ -57,9 +57,9 @@ function atualiza_continuar() {
     $("#tabela1 .tab_linhas td:nth-last-child(2)").each(function() {
         total += parseFloat($(this).text().replace('R$ ', '').replace('.','').replace(',', '.')) || 0;
     });
-    console.log(total);
-    
-    if ( total > 0 ) {
+    //console.log(total);
+    valorvendazero=$("input[name=valorvendazero]").val();
+    if (( total > 0 )||(valorvendazero==1)) {
         $('#CONTINUAR').removeAttr('disabled');
         $('#valtot').text("R$ "+total.formatMoney(2, ',', '.'));
         $('#campooculto_valtot').val(total.toFixed(2));

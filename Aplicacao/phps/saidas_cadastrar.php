@@ -1424,9 +1424,13 @@ if ($passo == 2) {
     if (!$query_lista)
         die("Erro: " . mysql_error());
     $linhas_lista = mysql_num_rows($query_lista);
+    
+    //CABECALHO
+    if ($usavendaporcoes==1) $tpl1->block("BLOCK_LISTA_PORCAO_CABECALHO");
+    if ($usaestoque==1) $tpl1->block("BLOCK_LISTA_CABECALHO_LOTE");
+
+
     if ($linhas_lista == 0) {
-        if ($usavendaporcoes==1) $tpl1->block("BLOCK_LISTA_PORCAO_CABECALHO");
-        if ($usaestoque==1) $tpl1->block("BLOCK_LISTA_CABECALHO_LOTE");
         $tpl1->block("BLOCK_LISTA_NADA");
         $tpl1->SALVAR_DESABILIDADO = " disabled ";
         $tpl1->FORM_LINK = "";
@@ -1435,7 +1439,6 @@ if ($passo == 2) {
         $num = 0;
         $total_geral = 0;
         $temdevolucoes=0;
-        if ($usavendaporcoes==1)  $tpl1->block("BLOCK_LISTA_PORCAO_CABECALHO");
         while ($dados_lista = mysql_fetch_array($query_lista)) {
             $num++;
             $tpl1->LISTA_GET_SAIPRO = $dados_lista["saipro_codigo"];

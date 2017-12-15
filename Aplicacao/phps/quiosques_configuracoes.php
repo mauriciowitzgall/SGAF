@@ -37,6 +37,7 @@ $sql="SELECT *
      $usamodulofiscal=$dados["quicnf_usamodulofiscal"];
      $usaestoque=$dados["quicnf_usamoduloestoque"];
      $controlavalidade=$dados["quicnf_controlavalidade"];
+     $valorvendazero=$dados["quicnf_valorvendazero"];
      $usaean=$dados["quicnf_usaean"];
      $usacodigobarrasinterno=$dados["quicnf_usacodigobarrasinterno"];
      $usaprateleira=$dados["quicnf_usaprateleira"];
@@ -137,6 +138,29 @@ $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->OPTION_VALOR = 1;
 $tpl1->OPTION_NOME = "Sim";
 if ($controlavalidade=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//Permite Valor de Venda Zero
+$tpl1->TITULO = "Permite valor de venda zero";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "valorvendazero";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($valorvendazero=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($valorvendazero=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
 $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT");

@@ -55,11 +55,8 @@ $datacadastro = date("Y-m-d");
 $horacadastro = date("H:i:s");
 $dataedicao = date("Y-m-d");
 $horaedicao = date("H:i:s");
-if ($usuario_quiosque==0) {
-    $paginadestino = "troca_unidade.php";
-} else {
-    $paginadestino = "quiosques.php";
-}
+$paginadestino = "troca_unidade.php";
+
 $tiponegociacao = $_POST["box"];
 if ($permissao_quiosque_definircooperativa == 1) {
     $cooperativa = $_POST['cooperativa'];
