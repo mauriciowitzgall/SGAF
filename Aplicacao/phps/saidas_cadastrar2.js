@@ -12,6 +12,8 @@ window.onload = function() {
         $("tr[id=linha_areceber]").show();
     }
 
+
+
 }
 
 function calcula_total_recebido_misto () {

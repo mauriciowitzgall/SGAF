@@ -50,8 +50,6 @@ $troco = number_format($dinheiro - $total,2,'.','');
 $areceber = $_REQUEST["areceber"];
 $metodopag = $_REQUEST["metodopag"];
 
-//print_r($_REQUEST);
-
 
 //Valor bruto
 $sql = "SELECT * FROM saidas JOIN saidas_produtos ON (saipro_saida=sai_codigo) WHERE sai_codigo=$saida";
@@ -64,6 +62,21 @@ while ($dados = mysql_fetch_assoc($query)) {
     $total_item = $dados["saipro_valortotal"];
     $valbru = $valbru + $total_item;
 }
+
+//Pega dados de desconto para popular
+if ($saida!="") {
+
+    $sql = "SELECT * FROM saidas WHERE sai_codigo=$saida";
+    if (!$query= mysql_query($sql)) die("Erro de SQL: " . mysql_error());
+    $dados = mysql_fetch_assoc($query);
+    $descper = $dados["sai_descontopercentual"];
+    $descval = $dados["sai_descontovalor"];
+    $areceber = $dados["sai_areceber"];
+    $total = $dados["sai_totalcomdesconto"];
+}
+
+
+
 /*
 echo "<br>valbru=$valbru<br>";
 echo "descper=$descper<br>";
@@ -158,12 +171,21 @@ while ($dados = mysql_fetch_array($query)) {
 switch ($passo) {
     case '1':
         $tpl->LINK = "saidas_cadastrar2.php?tiposai=$tiposai";
-        $tpl->DESCPER_VALOR = "0,00";
-        $tpl->DESCPER2_VALOR = "0";
-        $tpl->DESCVAL_VALOR = "R$ 0,00";
-        $tpl->DESCVAL2_VALOR = "0";
-        $tpl->TOTAL_VALOR = "R$ " . number_format($valbru, 2, ',', '.');
-        $tpl->TOTAL2_VALOR = number_format($valbru, 2, '.', '');
+        
+  
+        $tpl->DESCPER_VALOR = number_format($descper,2,',','');
+        $tpl->DESCPER2_VALOR = $descper;
+        $tpl->DESCVAL_VALOR = "R$ ".number_format($descval,2,',','.');
+        $tpl->DESCVAL2_VALOR = $descval;
+        $tpl->TOTAL_VALOR = "R$ " . number_format($total, 2, ',', '.');
+        $tpl->TOTAL2_VALOR = $total;
+        $tpl->DINHEIRO_VALOR = "R$ " . number_format($dinheiro, 2, ',', '.');
+        $tpl->DINHEIRO2_VALOR = $dinheiro;            
+      
+        if ($total=="") {
+            $tpl->TOTAL_VALOR = "R$ " . number_format($valbru, 2, ',', '.');
+            $tpl->TOTAL2_VALOR = number_format($valbru, 2, '.', '');
+        }
         
         $tpl->DINHEIRO_VALOR = "";
         $passo = 2;
