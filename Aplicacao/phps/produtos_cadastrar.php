@@ -132,9 +132,10 @@ if ($linhas == 0) {
     exit;
 }
 ?>
-<form action="produtos_cadastrar2.php?modal=<?php echo $modal; ?>&codigo=<?php echo"$codigo"; ?>" method="post" name="form1">
+<form action="produtos_cadastrar2.php?modal=<?php echo $modal; ?>&codigo=<?php echo"$codigo"; ?>" method="post" name="form1" id="form1">
     <input type="hidden" name="codigo_produto" value="<?php echo $codigo; ?>">
     <input type="hidden" name="usaestoque" value="<?php echo $usaestoque; ?>">
+    <input type="hidden" name="valorvendazero" value="<?php echo $valorvendazero; ?>">
     
 
     <table summary="" border="0" class="tabela1" cellpadding="4">
@@ -580,7 +581,7 @@ if ($linhas == 0) {
         </tr>
        <tr id="valunivenda_linha">
             <td align="right" width="200px"><b>Valor Unitário Venda: <label class="obrigatorio"></label></b></td>
-            <td align="left" width=""><input  onkeypress=""  placeholder="R$ 0,00" id="" type="text" name="valunivenda" id="valunivenda" size="18" class="campopadrao"  value="<?php echo "$valunivenda"; ?>" <?php if ($ver == 1) echo" disabled "; ?>required  placeholder=""><span class="dicacampo"></span></td>
+            <td align="left" width=""><input  onkeypress="" onkeyup="" placeholder="R$ 0,00" id="" type="text" name="valunivenda" id="valunivenda" size="18" class="campopadrao"  value="<?php echo "$valunivenda"; ?>" <?php if ($ver == 1) echo" disabled "; ?>required  placeholder=""><span class="dicacampo"></span></td>
         </tr>
 
 

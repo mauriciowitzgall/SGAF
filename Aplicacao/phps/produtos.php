@@ -329,29 +329,25 @@ ORDER BY $sql_ordenacao
                 $excluir_icone="excluir_desabilitado.png"; 
                 $excluir_texto="Você não pode excluir este produto porque exitem entradas atribuídas a ele. Se realmente deseja exclui-lo, deve-se excluir primeiramente todas as entradas relacionadas e este produto!";
                 $produtousadonaentrada=1;   
-            }
+            } else $produtousadonaentrada=0; 
 
             //Vericica se o produto ja foi usando em saidas
             $sql3 = "
-                SELECT pro_codigo
-                FROM produtos
-                join saidas_produtos on (saipro_produto=pro_codigo)    
-                WHERE pro_codigo=$codigo
+                SELECT saipro_produto FROM saidas_produtos WHERE saipro_produto=$codigo
             ";
-            $query3 = mysql_query($sql2);
+            $query3 = mysql_query($sql3);
             if (!$query3)  die("Erro SQL3: " . mysql_error());
             $linhas3 = mysql_num_rows($query3);
             if ($linhas3 > 0) {
                 $excluir_icone="excluir_desabilitado.png";
                 $excluir_texto="Você não pode excluir este produto porque exitem saidas atribuídas a ele. Se realmente deseja exclui-lo, deve-se excluir primeiramente todas as saídas relacionadas e este produto!";
                 $produtousadonasaida=1;
-            }
-
+            } else $produtousadonasaida=0;
             if (($produtousadonasaida!=1)&&($produtousadonaentrada!=1)) {
                 $excluir_texto="Excluir";
                 $excluir_icone="excluir.png";
                 $podeexcluir=1;
-            }
+            } 
 
             if (($permissao_produtos_excluir == 1)) { ?>                
                 <td align="center" class="fundo1" width="35px"> 

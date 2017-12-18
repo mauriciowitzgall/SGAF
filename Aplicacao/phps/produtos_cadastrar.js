@@ -274,6 +274,32 @@ window.onload = function(){
     }
 
     //referencia_valida_caracteres_especiais("");
+
+
+
+    $('#form1').submit(function() {
+        permitevalorvendazero=$("input[name=valorvendazero]").val();
+        valvenda=$("input[name=valunivenda]").val();
+        valvenda = valvenda.replace("R$ ", "");
+        valvenda = valvenda.replace(".", "");
+        valvenda = valvenda.replace(",", ".");
+        valvenda = parseFloat(valvenda);
+        if ((permitevalorvendazero==0)&&(valvenda==0)) {
+            alert("O seu quiosque esta parametrizado para não aceitar valor de venda ZERO.");
+            $("input[name=valunivenda]").val("");
+            $("input[name=valunivenda]").focus();
+            return false;
+
+        } else {
+            //alert("Pode eviar");
+            return true; // return false to cancel form action
+        }
+    });
+
     
 }   
+
+
+
+
 
