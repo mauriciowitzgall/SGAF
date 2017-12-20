@@ -18181,3 +18181,12 @@ INSERT INTO `sgaf_labodega`.`metodos_pagamento` (`metpag_codigo`, `metpag_nome`)
 
 ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
 ADD COLUMN `quicnf_valorvendazero` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_pfx`;
+
+
+UPDATE `sgaf_labodega`.`configuracoes` SET `cnf_versao`='v4.1', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
+
+------ FIM ------
+
+------ INICIO v4.1.1 ------ 
+
+UPDATE `sgaf_labodega`.`configuracoes` SET `cnf_versao`='v4.1.1', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
