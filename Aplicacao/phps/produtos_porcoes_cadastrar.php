@@ -81,6 +81,7 @@ $tpl1->block("BLOCK_TITULO");
 $tpl1->CAMPO_TIPO = "text";
 $tpl1->CAMPO_QTD_CARACTERES = "";
 $tpl1->CAMPO_NOME = "porcao_nome";
+$tpl1->CAMPO_ONCLICK="";
 $tpl1->CAMPO_DICA = "";
 $tpl1->CAMPO_ID = "";
 $tpl1->CAMPO_VALOR = "$porcao_nome";

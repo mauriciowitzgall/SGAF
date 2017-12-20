@@ -198,21 +198,28 @@ if ($usamodulofiscal==1) {
     $tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
     $tpl_notificacao->block("BLOCK_BOTAOGERAL");      
     
-} else {
-    
-    //Venda padrão ou devolução sem usar módulo fiscal
-    if ($tiposai == "3")
-        $tpl_notificacao->DESTINO = "saidas_devolucao.php";
-    else
-        $tpl_notificacao->DESTINO = "saidas.php";
+} else { //Venda padrão ou devolução sem usar módulo fiscal
     
     //Botão continuar
+    if ($tiposai == "3") $tpl_notificacao->DESTINO = "saidas_devolucao.php";
+    else $tpl_notificacao->DESTINO = "saidas.php";
     $tpl_notificacao->block("BLOCK_CONFIRMAR");
     $tpl_notificacao->block("BLOCK_CADASTRADO");
     $tpl_notificacao->block("BLOCK_BOTAO");
 
+
+    //Botão Imprimir
+    $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_ver.php?codigo=$saida&tiposaida=$tiposaida&ope=4";
+    $tpl_notificacao->block("BLOCK_BOTAOGERAL_NOVAJANELA");
+    $tpl_notificacao->BOTAOGERAL_TIPO="button";
+    $tpl_notificacao->BOTAOGERAL_NOME="IMPRIMIR";
+    //$tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
+    $tpl_notificacao->block("BLOCK_BOTAOGERAL");
+
+
+
     //Botão cadastrar mais
-if (($identificacaoconsumidorvenda==3)&&($usacomanda==0)) $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar.php?tiposaida=$tiposai&operacao=1&passo=2";
+    if (($identificacaoconsumidorvenda==3)&&($usacomanda==0)) $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar.php?tiposaida=$tiposai&operacao=1&passo=2";
     else $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar.php?tiposaida=$tiposai&operacao=1&passo=1";
     //$tpl->block("BLOCK_BOTAOGERAL_NOVAJANELA");
     $tpl_notificacao->BOTAOGERAL_TIPO="button";
