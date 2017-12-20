@@ -127,7 +127,7 @@ function atualiza_produtos_cadastro_direto () {
 }
 
 function seleciona_produto(valor) {
-    console.log(valor);
+    //console.log(valor);
     if(valor.match(/'/)) valor = valor.replace("'","");
     if(valor.match(/!/)) valor = valor.replace("!","");
     if(valor.match(/@/)) valor = valor.replace("@","");
@@ -983,11 +983,14 @@ function calcula_valor_percent() {
                 <input type="button" class="botao fonte3 {EXCLUIR_CLASSE}" value="ELIMINAR ENTRADA" {ELIMINAR_ENTRADA_DESABILITADO} title="{EXCLUIR_TITULO}">
                 </a>    
             </td>
+            
+            <!-- BEGIN BLOCK_IMPRIMIR_TODAS_ETIQUETAS -->
             <td>
                 <a class="link" target="_blank" href="entradas_etiquetas_massa.php?lote={ENTRADA}">
                     <input type="button" class="botao fonte3" value="IMPRIMIR TODAS ETIQUETAS">
                 </a>        
             </td>
+            <!-- END BLOCK_IMPRIMIR_TODAS_ETIQUETAS -->
             <td>
                 <a class="link" href="entradas.php" target="">
                     <input type="button" class="botao fonte3" value="{INTERROMPER}">

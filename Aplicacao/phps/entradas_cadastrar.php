@@ -945,6 +945,9 @@ if ($passo != "") {
             $tpl->ELIMINAR_ENTRADA_DESABILITADO="";            
             $tpl->block("BLOCK_BOTOES_EXCLUIR_LINK");
         }
+
+        if ($usacodigobarrasinterno==1) $tpl->block("BLOCK_IMPRIMIR_TODAS_ETIQUETAS");
+
         $tpl->block("BLOCK_BOTOES");
         $tpl->block("BLOCK_PASSO3");
     } else {
