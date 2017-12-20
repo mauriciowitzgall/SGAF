@@ -18197,3 +18197,10 @@ ADD COLUMN `quicnf_obsnavenda` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_valorvend
 ALTER TABLE `sgaf_labodega`.`saidas` 
 ADD COLUMN `sai_obs` TEXT NULL AFTER `sai_cartaobandeira`;
 
+ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_obsnaentrada` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_obsnavenda`;
+
+
+ALTER TABLE `sgaf_labodega`.`entradas` 
+ADD COLUMN `ent_obs` TEXT NULL AFTER `ent_paravenda`;
+

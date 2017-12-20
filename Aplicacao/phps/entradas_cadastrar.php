@@ -25,6 +25,7 @@ $tpl->QUIOSQUE_CONSIGNACAO="$quiosque_consignacao";
 
 //print_r($_REQUEST);
 $paravenda = $_REQUEST['paravenda'];
+$obs = $_REQUEST['obs'];
 if ($paravenda=="") $paravenda = $_REQUEST['paravenda2'];
 $entrada = $_POST['entrada'];
 $tiponegociacao = $_POST['tiponegociacao'];
@@ -118,6 +119,7 @@ if (($operacao == 3) || ($operacao == 2)) {
     $data = $dados["ent_datacadastro"];
     $hora = $dados["ent_horacadastro"];
     $paravenda = $dados["ent_paravenda"];
+    $obs = $dados["ent_obs"];
 } else {
     $data = $_REQUEST["data1"];
     $hora = $_REQUEST["hora1"];
@@ -350,6 +352,17 @@ if ((($operacao=="")||($operacao==1))||(($operacao==2)&&($paravenda==1))) {
     }
     $tpl->block("BLOCK_SELECT_FORNECEDOR");
 
+
+
+    //Observação
+    if ($obsnaentrada==1) {
+        $tpl->OBS="$obs";
+        if ($entrada!="") $tpl->block("BLOCK_OBS_DESABILITADA");
+        $tpl->block("BLOCK_OBS");
+    }
+
+
+
 }
 
 if ($passo == "") {
@@ -370,9 +383,9 @@ if ($passo != "") {
     if ($entrada == "") {
         $sql = "
 		INSERT INTO entradas 
-			(ent_quiosque,ent_fornecedor,ent_supervisor,ent_datacadastro,ent_horacadastro,ent_tipo,ent_status,ent_tiponegociacao,ent_paravenda )
+			(ent_quiosque,ent_fornecedor,ent_supervisor,ent_datacadastro,ent_horacadastro,ent_tipo,ent_status,ent_tiponegociacao,ent_paravenda,ent_obs )
 		VALUES
-			('$usuario_quiosque','$fornecedor','$usuario_codigo','$data','$hora','$tipo',2,'$tiponegociacao', $paravenda);";
+			('$usuario_quiosque','$fornecedor','$usuario_codigo','$data','$hora','$tipo',2,'$tiponegociacao', $paravenda, '$obs');";
         if (mysql_query($sql)) {
             
         } else {
