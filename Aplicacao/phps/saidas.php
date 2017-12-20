@@ -7,7 +7,7 @@ if (($permissao_saidas_ver <> 1)) {
     exit;
 }
 
-
+//print_r($_REQUEST);
 
 $tipopagina = "saidas";
 include "includes.php";
@@ -94,6 +94,8 @@ $filtro_consumidor = $_POST["filtro_consumidor"];
 $filtro_fornecedor = $_POST["filtro_fornecedor"];
 $filtro_tipo = $_POST["filtro_tipo"];
 $filtro_lote = $_REQUEST["filtro_lote"];
+$filtro_data = $_REQUEST["filtro_data"];
+$filtro_data = $_REQUEST["filtro_data"];
 $filtro_valorbruliq = $_REQUEST["filtro_valorbruliq"];
 $filtro_valorbruliq_mostra = $_REQUEST["filtro_valorbruliq"];
 $filtro_valorbruliq = str_replace('.', '', $filtro_valorbruliq);
@@ -209,6 +211,18 @@ $tpl->CAMPO_VALOR = $filtro_lote;
 $tpl->CAMPO_QTD_CARACTERES = "";
 $tpl->CAMPO_ONKEYUP = "";
 $tpl->block("BLOCK_FILTRO_CAMPO");
+$tpl->block("BLOCK_FILTRO_ESPACO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
+//Filtro Data da venda
+$tpl->CAMPO2_TITULO = "Data da Venda";
+$tpl->CAMPO2_TAMANHO = "";
+$tpl->CAMPO2_TIPO = "date";
+$tpl->CAMPO2_NOME = "filtro_data";
+$tpl->CAMPO2_VALOR = $filtro_data;
+$tpl->CAMPO2_QTD_CARACTERES = "";
+$tpl->CAMPO2_ONKEYUP = "";
+$tpl->block("BLOCK_FILTRO_CAMPO2");
 $tpl->block("BLOCK_FILTRO_ESPACO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
@@ -430,6 +444,8 @@ if ($filtro_produto <> "")
     $sql_filtro_produto = " and ((pro_nome like '%$filtro_produto%')or(pro_referencia like '%$filtro_produto%')or(pro_tamanho like '%$filtro_produto%')or(pro_cor like '%$filtro_produto%')or(pro_descricao like '%$filtro_produto%')or (pro_codigo like '%$filtro_produto%'))";
 if ($filtro_lote <> "")
     $sql_filtro_lote = " and saipro_lote = $filtro_lote ";
+if ($filtro_data <> "")
+    $sql_filtro_data = " and sai_datacadastro like '$filtro_data' ";
 if ($filtro_consumidor <> "")
     $sql_filtro_consumidor = " and sai_consumidor = $filtro_consumidor ";
 if ($filtro_caixa <> "")
@@ -462,7 +478,7 @@ if ($filtro_areceber!=1) {
 
 //Se  o for filtrado para mostrar apenas as vendas a receber, o resultado deve mostrar vendas de outros dias e outros caixas.
 if ($filtro_areceber==1) $sql_filtro_caixaoperacao="";
-$sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_valorbruliq." ".$sql_filtro_fornecedor . " " . $sql_filtro_caixaoperacao." ".$sql_filtro_id." ".$sql_filtro_status. " ".$sql_filtro_areceber." ".$filtro_devolucao;
+$sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_valorbruliq." ".$sql_filtro_fornecedor . " " . $sql_filtro_caixaoperacao." ".$sql_filtro_id." ".$sql_filtro_status. " ".$sql_filtro_areceber." ".$filtro_devolucao." ".$sql_filtro_data;
 
 
 //SQL Principal das linhas
