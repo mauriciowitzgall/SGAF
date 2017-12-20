@@ -100,10 +100,6 @@ if ($editarconsumidor==1) {
 }
 
 
-//Verifica se usa comanda
-$usacomanda=usacomanda($usuario_quiosque);
-
-
 $retirar_produto = $_GET["retirar_produto"];
 //Se for eliminação de um produto ja da lista então pegar por get
 if ($retirar_produto == '1') {
@@ -140,12 +136,9 @@ if ($retirar_produto == '1') {
             $motivo = $dados["sai_saidajustificada"];
             $descricao = $dados["sai_descricao"];
             $areceber = $dados["sai_areceber"];
+            $obs=$dados["sai_obs"];
         }
         
-
-        
-        
-  
     } else { //Caso seja uma venda nova, cadastro
         $operacao=1;
         $saida = $_POST["saida"];
@@ -156,7 +149,7 @@ if ($retirar_produto == '1') {
         $consumidor_cpf=$_POST["cpf"];
         $consumidor_cnpj=$_POST["cnpj"];
         $consumidor_fone=$_POST["fone"];
-
+        $obs=$_POST["obs"];
         if (($consumidor!="")&&($consumidor!=0)) { //foi selecionado uma pessoa
             $sql0="SELECT pes_cpf, pes_cnpj,pes_tipopessoa FROM pessoas WHERE pes_codigo=$consumidor";
             if (!$query0 = mysql_query($sql0)) die("Erro 0: " . mysql_error());
@@ -230,12 +223,13 @@ $passo= $_REQUEST["passo"];
 
 
 //Verificar se é uma edição, se sim então atualiza id e consumidor
-if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&(($usacomanda==1)||($identificacaoconsumidorvenda!=3))) {
+if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&(($usacomanda==1)||($identificacaoconsumidorvenda!=3)||($obsnavenda==1))) {
     //print_r($_REQUEST);
     $id_novo=$_REQUEST["id"];
     if ($id_novo=="") $id_novo=$id;
+    $obs=$_POST["obs"];
     $consumidor=$_REQUEST["consumidor"];
-    $sql11= "UPDATE saidas SET sai_consumidor=$consumidor, sai_id=$id_novo WHERE sai_codigo=$saida";
+    $sql11= "UPDATE saidas SET sai_consumidor=$consumidor, sai_id=$id_novo, sai_obs='$obs' WHERE sai_codigo=$saida";
     if (!$query11 = mysql_query($sql11)) die("<br>Erro11:" . mysql_error());
 }
 //echo "valunietq:$valunietq valunisai:$valunisai valtotsai:$valtotsai";
@@ -747,9 +741,9 @@ if (($saida == 0) && ($passo == 2)) {
     
     $sql_saida = "
     INSERT INTO
-        saidas (sai_quiosque, sai_caixaoperacaonumero, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro,sai_usuarioquecadastrou, sai_id)
+        saidas (sai_quiosque, sai_caixaoperacaonumero, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro,sai_usuarioquecadastrou, sai_id,sai_obs)
     VALUES
-        ('$usuario_quiosque','$usuario_caixa_operacao','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2,'$datahoracadastro',$usuario_codigo, $id)        
+        ('$usuario_quiosque','$usuario_caixa_operacao','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2,'$datahoracadastro',$usuario_codigo, $id, '$obs')        
     ";
     $query_saida = mysql_query($sql_saida);
     if (!$query_saida)
@@ -991,8 +985,39 @@ if ($tiposaida == 1) {
         $tpl1->block("BLOCK_SELECT2_OPTION");
     }
     $tpl1->block("BLOCK_SELECT2");
-    
-    
+
+
+    $tpl1->block("BLOCK_CONTEUDO");
+    $tpl1->block("BLOCK_ITEM");
+
+    // OBS
+    if ($obsnavenda==1) {
+        $tpl1->TR_ID="linha_obs";
+        $tpl1->CAMPO_QTD_CARACTERES = "8";
+        $tpl1->TITULO = "Observação";
+        $tpl1->ASTERISCO = "";
+        $tpl1->block("BLOCK_TITULO");
+        $tpl1->CAMPO_DESABILITADO = "  ";
+        $tpl1->CAMPO_OBRIGATORIO = "  ";
+        $tpl1->CAMPO_TIPO = "text";
+        $tpl1->CAMPO_ESTILO = "width:520px;";
+        $tpl1->CAMPO_NOME = "obs";
+        $tpl1->CAMPO_TAMANHO = "";
+        $tpl1->CAMPO_QTD_CARACTERES = "";
+        $tpl1->CAMPO_FOCO = " ";
+        $tpl1->CAMPO_VALOR = "$obs";
+        if ($passo==2) {
+            $tpl1->CAMPO_DESABILITADO = " disabled ";
+        }
+        $tpl1->CAMPO_OBRIGATORIO = "  ";
+        $tpl1->CAMPO_ONKEYPRESS = "";
+        $tpl1->CAMPO_DICA = "";
+        $tpl1->CAMPO_ONKEYUP = "";
+        $tpl1->CAMPO_ONKEYDOWN = "";
+        $tpl1->CAMPO_ONBLUR = ""; 
+        $tpl1->CAMPO_ONFOCUS = "";
+        $tpl1->block("BLOCK_CAMPO");
+    }
     $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
 }

@@ -25,6 +25,7 @@ $identificacaoconsumidorvenda = $_POST['identificacaoconsumidorvenda'];
 $comandaduplicada = $_POST['comandaduplicada'];
 $controlavalidade = $_POST['controlavalidade'];
 $valorvendazero = $_POST['valorvendazero'];
+$obsnavenda = $_POST['obsnavenda'];
 $usaprateleira = $_POST['usaprateleira'];
 $gerirestoqueideal = $_POST['gerirestoqueideal'];
 $geririmobilizado = $_POST['geririmobilizado'];
@@ -123,6 +124,7 @@ SET
     quicnf_usaprateleira='$usaprateleira',
     quicnf_controlavalidade='$controlavalidade',
     quicnf_valorvendazero='$valorvendazero',
+    quicnf_obsnavenda='$obsnavenda',
     quicnf_gerirestoqueideal='$gerirestoqueideal',
     quicnf_geririmobilizado='$geririmobilizado',
     quicnf_vendasareceber='$vendasareceber',

@@ -17322,7 +17322,7 @@ ALTER TABLE `sgaf_v4.0b1`.`quiosques_configuracoes`
 ADD COLUMN `quicnf_permiteedicaoclientenavenda` INT(1) NOT NULL DEFAULT '1' AFTER `quicnf_devolucoessobrevendas`;
 
 
-CREATE TABLE `sgaf`.`saidas_pagamentos` (
+CREATE TABLE `saidas_pagamentos` (
   `saipag_codigo` INT NOT NULL AUTO_INCREMENT,
   `saipag_saida` BIGINT NOT NULL,
   `saipag_qtdparcelas` INT NOT NULL DEFAULT 1,
@@ -17335,76 +17335,76 @@ CREATE TABLE `sgaf`.`saidas_pagamentos` (
 ENGINE = MyISAM;
 
 
-ALTER TABLE `sgaf`.`saidas_pagamentos` 
+ALTER TABLE `saidas_pagamentos` 
 DROP COLUMN `saipag_qtdparcelas`;
 
-ALTER TABLE `sgaf`.`saidas_pagamentos` 
+ALTER TABLE `saidas_pagamentos` 
 ADD COLUMN `saipag_metpagamento` TINYINT NOT NULL AFTER `saipag_caixaoperacao`;
 
-ALTER TABLE `sgaf`.`saidas` 
+ALTER TABLE `saidas` 
 ADD COLUMN `sai_qtdparcelas` INT NOT NULL DEFAULT 1 AFTER `sai_id`;
 
-ALTER TABLE `sgaf`.`saidas` 
+ALTER TABLE `saidas` 
 CHANGE COLUMN `sai_qtdparcelas` `sai_qtdparcelas` TINYINT NOT NULL DEFAULT '1' ;
 
 
-ALTER TABLE `sgaf`.`saidas_pagamentos` 
+ALTER TABLE `saidas_pagamentos` 
 ADD COLUMN `saipag_data` TIMESTAMP NOT NULL AFTER `saipag_codigo`;
 
 
-ALTER TABLE `sgaf`.`caixas_entradassaidas` 
+ALTER TABLE `caixas_entradassaidas` 
 DROP COLUMN `caientsai_venda`,
 DROP COLUMN `caientsai_areceber`;
 
 
-ALTER TABLE `sgaf`.`saidas_pagamentos` 
+ALTER TABLE `saidas_pagamentos` 
 DROP COLUMN `saipag_caixaoperacao`,
 DROP INDEX `caixaoperacao` ;
 
-ALTER TABLE `sgaf`.`caixas_entradassaidas` 
+ALTER TABLE `caixas_entradassaidas` 
 ADD COLUMN `caientsai_saidapagamento` INT NOT NULL DEFAULT 0 AFTER `caientsai_numerooperacao`,
 ADD COLUMN `caientsai_saidadevolucao` INT NOT NULL DEFAULT 0 AFTER `caientsai_saidapagamento`;
 
 
-ALTER TABLE `sgaf`.`saidas_devolucoes` 
+ALTER TABLE `saidas_devolucoes` 
 ADD COLUMN `saidev_pagamento` INT NULL AFTER `saidev_valtot`;
 
 
-ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_usamodulocaixa` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_permiteedicaoclientenavenda`;
 
-ALTER TABLE `sgaf`.`saidas_devolucoes` 
+ALTER TABLE `saidas_devolucoes` 
 ADD COLUMN `saidev_valliq` FLOAT NULL AFTER `saidev_pagamento`;
 
-ALTER TABLE `sgaf`.`saidas_devolucoes_produtos` 
+ALTER TABLE `saidas_devolucoes_produtos` 
 ADD COLUMN `saidevpro_valtotliq` FLOAT NOT NULL AFTER `saidevpro_valtot`;
 
-ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_usamodulovendas` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_usamodulocaixa`;
 
 
-ALTER TABLE `sgaf`.`pessoas` 
+ALTER TABLE `pessoas` 
 DROP COLUMN `pes_categoria`,
 DROP INDEX `pes_categoria` ,
 ADD INDEX `pes_categoria` (`pes_tipopessoa` ASC);
 
 DROP TABLE IF EXISTS `pessoas_categoria`;
 
-ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_usamoduloproducao` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_usamodulovendas`;
 
 
-ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_usamoduloestoque` INT(1) NOT NULL DEFAULT 1 AFTER `quicnf_usamoduloproducao`;
 
-ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_usavendaporcoes` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_usamoduloestoque`;
 
-ALTER TABLE `sgaf`.`produtos` 
+ALTER TABLE `produtos` 
 ADD COLUMN `pro_controlarestoque` INT(1) NOT NULL DEFAULT 1 AFTER `pro_origem`;
 
 
-ALTER TABLE `sgaf`.`produtos` 
+ALTER TABLE `produtos` 
 ADD COLUMN `pro_valunicusto` VARCHAR(45) NULL AFTER `pro_controlarestoque`,
 ADD COLUMN `pro_valunivenda` VARCHAR(45) NULL AFTER `pro_valunicusto`;
 
@@ -17580,7 +17580,7 @@ ADD COLUMN `quicnf_usacodigobarrasinterno` INT(1) NOT NULL DEFAULT 1 AFTER `quic
 
 ------ INICIO v4.0b9 ------
 
-UPDATE `sgaf_labodega`.`configuracoes` SET `cnf_versao`='v4.0b9dev', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
+UPDATE `configuracoes` SET `cnf_versao`='v4.0b9dev', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
 
 UPDATE `configuracoes` SET `cnf_versao`='v4.0b9' WHERE `cnf_codigo`='1';
 
@@ -17591,13 +17591,13 @@ ALTER TABLE `pessoas`
 CHANGE COLUMN `pes_fone1` `pes_fone1` VARCHAR(14) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
 CHANGE COLUMN `pes_fone2` `pes_fone2` VARCHAR(14) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ;
 
-UPDATE `sgaf_labodega`.`configuracoes` SET `cnf_versao`='v4.0b9', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
+UPDATE `configuracoes` SET `cnf_versao`='v4.0b9', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
 
 ------ FIM ------
 
 ------ INICIO v4.1 ------ Módulo fiscal funcionanado
 
-UPDATE `sgaf_labodega`.`configuracoes` SET `cnf_versao`='v4.1dev', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
+UPDATE `configuracoes` SET `cnf_versao`='v4.1dev', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
 
 UPDATE `saidas_motivo` SET `saimot_nome`='Correção de estoque' WHERE `saimot_codigo`='5';
 
@@ -18124,72 +18124,76 @@ INSERT INTO `nfe_erros` (`nfeerr_numero`, `nfeerr_descricao`, `nfeerr_tipodocume
 INSERT INTO `nfe_erros` (`nfeerr_numero`, `nfeerr_descricao`, `nfeerr_tipodocumento`) VALUES ('999', 'Rejeição: Erro não catalogado', '3');
 
 
-ALTER TABLE `sgaf`.`quiosques` 
+ALTER TABLE `quiosques` 
 CHANGE COLUMN `qui_disponivelnobusca` `qui_disponivelnobusca` TINYINT(4) NOT NULL DEFAULT 0 ;
 
-ALTER TABLE `sgaf`.`quiosques` 
+ALTER TABLE `quiosques` 
 CHANGE COLUMN `qui_latitude` `qui_latitude` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL ,
 CHANGE COLUMN `qui_longitude` `qui_longitude` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL ;
 
 
-ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_csctoken` VARCHAR(36) NULL AFTER `quicnf_identificacaoconsumidorvenda`,
 ADD COLUMN `quicnf_csctokenid` INT(6) NULL AFTER `quicnf_csctoken`,
 ADD COLUMN `quicnf_pfx` BLOB NULL AFTER `quicnf_csctokenid`;
 
-ALTER TABLE `sgaf_labodega`.`saidas` 
+ALTER TABLE `saidas` 
 ADD COLUMN `sai_cartaobandeira` INT(2) NULL AFTER `sai_areceberquitado`;
 
-CREATE TABLE `sgaf_labodega`.`cartoes_bandeira` (
+CREATE TABLE `cartoes_bandeira` (
   `carban_codigo` INT NOT NULL,
   `carban_nome` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`carban_codigo`));
 
-INSERT INTO `sgaf_labodega`.`cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('01', 'Mastercard');
-INSERT INTO `sgaf_labodega`.`cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('03', 'American Express');
-INSERT INTO `sgaf_labodega`.`cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('04', 'Sorocred');
-INSERT INTO `sgaf_labodega`.`cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('99', 'Outros');
+INSERT INTO `cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('01', 'Mastercard');
+INSERT INTO `cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('03', 'American Express');
+INSERT INTO `cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('04', 'Sorocred');
+INSERT INTO `cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('99', 'Outros');
 
 
-UPDATE `sgaf_labodega`.`cartoes_bandeira` SET `carban_nome`='Visa' WHERE `carban_codigo`='1';
-INSERT INTO `sgaf_labodega`.`cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('2', 'Mastercard');
+UPDATE `cartoes_bandeira` SET `carban_nome`='Visa' WHERE `carban_codigo`='1';
+INSERT INTO `cartoes_bandeira` (`carban_codigo`, `carban_nome`) VALUES ('2', 'Mastercard');
 
-ALTER TABLE `sgaf_labodega`.`metodos_pagamento` 
+ALTER TABLE `metodos_pagamento` 
 ADD COLUMN `metpag_nfecodigo` VARCHAR(45) NOT NULL AFTER `metpag_nome`;
 
-UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='2' WHERE `metpag_codigo`='4';
-UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='1' WHERE `metpag_codigo`='1';
-UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='3' WHERE `metpag_codigo`='2';
-UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='4' WHERE `metpag_codigo`='3';
-UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='99' WHERE `metpag_codigo`='7';
-UPDATE `sgaf_labodega`.`metodos_pagamento` SET `metpag_nfecodigo`='99' WHERE `metpag_codigo`='6';
+UPDATE `metodos_pagamento` SET `metpag_nfecodigo`='2' WHERE `metpag_codigo`='4';
+UPDATE `metodos_pagamento` SET `metpag_nfecodigo`='1' WHERE `metpag_codigo`='1';
+UPDATE `metodos_pagamento` SET `metpag_nfecodigo`='3' WHERE `metpag_codigo`='2';
+UPDATE `metodos_pagamento` SET `metpag_nfecodigo`='4' WHERE `metpag_codigo`='3';
+UPDATE `metodos_pagamento` SET `metpag_nfecodigo`='99' WHERE `metpag_codigo`='7';
+UPDATE `metodos_pagamento` SET `metpag_nfecodigo`='99' WHERE `metpag_codigo`='6';
 
-ALTER TABLE `sgaf_labodega`.`configuracoes` 
+ALTER TABLE `configuracoes` 
 CHANGE COLUMN `cnf_versao` `cnf_versao` VARCHAR(45) NOT NULL ,
 ADD COLUMN `cnf_dataversao` DATETIME NOT NULL AFTER `cnf_versao`;
 
-ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 DROP COLUMN `quicnf_permiteedicaoclientenavenda`;
 
-ALTER TABLE `sgaf_labodega`.`nfe_vendas` 
+ALTER TABLE `nfe_vendas` 
 ADD COLUMN `nfe_notareferenciada` INT(11) NULL AFTER `nfe_finalidade`;
 
-ALTER TABLE `sgaf_labodega`.`nfe_vendas` 
+ALTER TABLE `nfe_vendas` 
 ADD COLUMN `nfe_devolucao` BIGINT(20) NULL DEFAULT NULL AFTER `nfe_notareferenciada`;
 
-INSERT INTO `sgaf_labodega`.`metodos_pagamento` (`metpag_codigo`, `metpag_nome`) VALUES ('5', 'Desconhecido');
+INSERT INTO `metodos_pagamento` (`metpag_codigo`, `metpag_nome`) VALUES ('5', 'Desconhecido');
 
-ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_valorvendazero` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_pfx`;
 
 
-UPDATE `sgaf_labodega`.`configuracoes` SET `cnf_versao`='v4.1', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
+UPDATE `configuracoes` SET `cnf_versao`='v4.1', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
 
 ------ FIM ------
 
 ------ INICIO v4.1.1 ------ 
 
-UPDATE `sgaf_labodega`.`configuracoes` SET `cnf_versao`='v4.1.1', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
+UPDATE `configuracoes` SET `cnf_versao`='v4.1.1', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
 
+ALTER TABLE `quiosques_configuracoes` 
+ADD COLUMN `quicnf_obsnavenda` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_valorvendazero`;
 
+ALTER TABLE `sgaf_labodega`.`saidas` 
+ADD COLUMN `sai_obs` TEXT NULL AFTER `sai_cartaobandeira`;
 

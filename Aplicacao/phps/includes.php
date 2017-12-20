@@ -58,6 +58,7 @@ $modal=$_GET["modal"];
                 $geririmobilizado=$dados["quicnf_geririmobilizado"];
                 $controlavalidade=$dados["quicnf_controlavalidade"];
                 $valorvendazero=$dados["quicnf_valorvendazero"];
+                $obsnavenda=$dados["quicnf_obsnavenda"];
                 $usaprateleira=$dados["quicnf_usaprateleira"];
                 $identificacaoconsumidorvenda=$dados["quicnf_identificacaoconsumidorvenda"];
             }
