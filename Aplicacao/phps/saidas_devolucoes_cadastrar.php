@@ -77,55 +77,55 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 $tpl->block("BLOCK_FILTRO");
 
 //Item
-$tpl->CABECALHO_COLUNA_TAMANHO="";
+$tpl->CABECALHO_COLUNA_TAMANHO="60px";
 $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="ITEM DA VENDA";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Produto
-$tpl->CABECALHO_COLUNA_TAMANHO="";
-$tpl->CABECALHO_COLUNA_COLSPAN="";
+$tpl->CABECALHO_COLUNA_TAMANHO="250px";
+$tpl->CABECALHO_COLUNA_COLSPAN="2";
 $tpl->CABECALHO_COLUNA_NOME="PRODUTO";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Lote
-$tpl->CABECALHO_COLUNA_TAMANHO="";
+$tpl->CABECALHO_COLUNA_TAMANHO="60px";
 $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="LOTE";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Quantidade Venda
-$tpl->CABECALHO_COLUNA_TAMANHO="";
+$tpl->CABECALHO_COLUNA_TAMANHO="60px";
 $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="QTD ORIG. VENDA";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Quantidade Devolvida
-$tpl->CABECALHO_COLUNA_TAMANHO="";
+$tpl->CABECALHO_COLUNA_TAMANHO="60px";
 $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="QTD JÁ DEVOLVIDA";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Quantidade a devolver
-$tpl->CABECALHO_COLUNA_TAMANHO="";
+$tpl->CABECALHO_COLUNA_TAMANHO="80px";
 $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="QTD Á DEVOLVER";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Valor Unitário
-$tpl->CABECALHO_COLUNA_TAMANHO="";
+$tpl->CABECALHO_COLUNA_TAMANHO="60px";
 $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="VALOR UNIT.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Valor Total
-$tpl->CABECALHO_COLUNA_TAMANHO="";
+$tpl->CABECALHO_COLUNA_TAMANHO="60px";
 $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="VALOR TOT.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 //Valor Total com Desconto
-$tpl->CABECALHO_COLUNA_TAMANHO="";
+$tpl->CABECALHO_COLUNA_TAMANHO="60px";
 $tpl->CABECALHO_COLUNA_COLSPAN="";
 $tpl->CABECALHO_COLUNA_NOME="VAL. TOT. COM DESC.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
@@ -147,6 +147,7 @@ if (!$query3) die("Erro3:" . mysql_error());
 $cont=0;
 while ($dados3=  mysql_fetch_assoc($query3)) {
     $produto_nome=$dados3["pro_nome"];
+    $produto_referencia=$dados3["pro_referencia"];
     $itemvenda=$dados3["saipro_codigo"];
     $qtdvenda=$dados3["saipro_quantidade"];
     $produto_tipocontagem_sigla=$dados3["protip_sigla"];
@@ -167,7 +168,7 @@ while ($dados3=  mysql_fetch_assoc($query3)) {
     $tpl->LISTA_COLUNA_COLSPAN="";
     $tpl->LISTA_COLUNA_ROWSPAN="";
     $tpl->LISTA_COLUNA_CLASSE="";
-    $tpl->LISTA_COLUNA_TAMANHO="20px";
+    $tpl->LISTA_COLUNA_TAMANHO="";
     $tpl->LISTA_COLUNA_VALOR= "$itemvenda ";
     $tpl->block("BLOCK_LISTA_COLUNA");
 
@@ -177,9 +178,17 @@ while ($dados3=  mysql_fetch_assoc($query3)) {
     $tpl->LISTA_COLUNA_ROWSPAN="";
     $tpl->LISTA_COLUNA_CLASSE="";
     $tpl->LISTA_COLUNA_TAMANHO="";
+    $tpl->LISTA_COLUNA_VALOR= "$produto_referencia";
+    $tpl->block("BLOCK_LISTA_COLUNA");
+    $tpl->LISTA_COLUNA_ALINHAMENTO="left";
+    $tpl->LISTA_COLUNA_COLSPAN="";
+    $tpl->LISTA_COLUNA_ROWSPAN="";
+    $tpl->LISTA_COLUNA_CLASSE="";
+    $tpl->LISTA_COLUNA_TAMANHO="";
     $tpl->LISTA_COLUNA_VALOR= "$produto_nome";
     $tpl->block("BLOCK_LISTA_COLUNA");
-    //Produto
+    
+    //Lote
     $tpl->LISTA_COLUNA_ALINHAMENTO="right";
     $tpl->LISTA_COLUNA_COLSPAN="";
     $tpl->LISTA_COLUNA_ROWSPAN="";
@@ -217,7 +226,7 @@ while ($dados3=  mysql_fetch_assoc($query3)) {
     $tpl->LISTA_COLUNA_COLSPAN="";
     $tpl->LISTA_COLUNA_ROWSPAN="";
     $tpl->LISTA_COLUNA_CLASSE="";
-    $tpl->LISTA_COLUNA_TAMANHO="95px";
+    $tpl->LISTA_COLUNA_TAMANHO="";
     $nome="qtddigitada_"."$itemvenda";
     $id=$nome;
     $qtdlimite=$qtdvenda - $qtddevolvida;
@@ -307,6 +316,15 @@ $tpl->RODAPE_SPAN_NOME="";
 $tpl->block("BLOCK_RODAPE_CONTEUDO");
 $tpl->block("BLOCK_RODAPE_COLUNA");       
 //6
+$tpl->RODAPE_COLUNA_TAMANHO="";
+$tpl->RODAPE_COLUNA_COLSPAN="";
+$tpl->RODAPE_COLUNA_ROWSPAN="";
+$tpl->RODAPE_COLUNA_ALINHAMENTO="";
+$tpl->RODAPE_COLUNA_NOME=" ";
+$tpl->RODAPE_SPAN_NOME="";
+$tpl->block("BLOCK_RODAPE_CONTEUDO");
+$tpl->block("BLOCK_RODAPE_COLUNA");  
+//6.1
 $tpl->RODAPE_COLUNA_TAMANHO="";
 $tpl->RODAPE_COLUNA_COLSPAN="";
 $tpl->RODAPE_COLUNA_ROWSPAN="";

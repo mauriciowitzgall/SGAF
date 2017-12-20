@@ -887,7 +887,7 @@ if ($temdevolucoes==1) {
     $tpl2->CABECALHO_COLUNA_NOME = "ITEM";
     $tpl2->block(BLOCK_LISTA_CABECALHO);
     $tpl2->CABECALHO_COLUNA_TAMANHO = "";
-    $tpl2->CABECALHO_COLUNA_COLSPAN = "";
+    $tpl2->CABECALHO_COLUNA_COLSPAN = "2";
     $tpl2->CABECALHO_COLUNA_NOME = "PRODUTO";
     $tpl2->block(BLOCK_LISTA_CABECALHO);
     $tpl2->CABECALHO_COLUNA_TAMANHO = "";
@@ -919,6 +919,8 @@ if ($temdevolucoes==1) {
         $item= $dados18["saidevpro_itemdev"];
         $item_venda= $dados18["saidevpro_itemsaida"];
         $produto= $dados18["pro_nome"];
+        $produto_codigo= $dados18["pro_codigo"];
+        $produto_referencia= $dados18["pro_referencia"];
         $lote= $dados18["saidevpro_lote"];
         $qtddevolvida= $dados18["saidevpro_qtddevolvida"];
         $valuni= $dados18["saidevpro_valuni"];
@@ -951,6 +953,13 @@ if ($temdevolucoes==1) {
         $tpl2->block("BLOCK_LISTA_COLUNA");
 
         //Produto
+        $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
+        $tpl2->LISTA_COLUNA_TAMANHO = "";
+        $tpl2->LISTA_COLUNA_CLASSE = "";
+        if ($produto_referencia=="") $codref="$produto_codigo";
+        else  $codref="$produto_codigo ($produto_referencia)";
+        $tpl2->LISTA_COLUNA_VALOR = "$codref";
+        $tpl2->block("BLOCK_LISTA_COLUNA");
         $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
         $tpl2->LISTA_COLUNA_TAMANHO = "";
         $tpl2->LISTA_COLUNA_CLASSE = "";
@@ -1003,7 +1012,7 @@ if ($temdevolucoes==1) {
     //Rodapé
     $tpl2->LISTA_CLASSE = "tabelarodape1";
     $tpl2->block("BLOCK_LISTA_CLASSE");
-    $tpl2->LISTA_COLUNA_COLSPAN = "8";
+    $tpl2->LISTA_COLUNA_COLSPAN = "9";
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
     $tpl2->LISTA_COLUNA_VALOR = "TOTAL DEVOLVIDO";
     $tpl2->block("BLOCK_LISTA_COLUNA");
