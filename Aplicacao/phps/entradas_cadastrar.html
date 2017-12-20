@@ -57,7 +57,26 @@ window.onload = function() {
         $("tr[id=linha_validade]").show();
     }
 
-    //Se o quiosque só trabalha com um tipo de negociação já seleciona e oculta
+
+
+    //Cria uma delay entre uma tecla e outra ao digitar a referencia do produto.
+    //Isso é necessário para não executar AJAX a cada tecla sobrecarrengando o servidor.
+    //Mas o principal é que as vezes o usuário digita tão rápido que a chamado onkeyup falha algumas teclas, enviando apenas parte da palavra digitada
+    var delay = (function(){
+      var timer = 0;
+      return function(callback, ms){
+        clearTimeout (timer);
+        timer = setTimeout(callback, ms);
+      };
+    })();
+    Usage:
+    $("input[name=produto_referencia]").keyup(function() {
+        delay(function(){
+          //alert('Time elapsed!');
+          referencia=$("input[name=produto_referencia]").val();
+          seleciona_produto(referencia); 
+        }, 200 );
+    });
 
 
 };
@@ -108,6 +127,7 @@ function atualiza_produtos_cadastro_direto () {
 }
 
 function seleciona_produto(valor) {
+    console.log(valor);
     if(valor.match(/'/)) valor = valor.replace("'","");
     if(valor.match(/!/)) valor = valor.replace("!","");
     if(valor.match(/@/)) valor = valor.replace("@","");
@@ -707,7 +727,7 @@ function calcula_valor_percent() {
             <td align="right" width="200px"><b>Produto: <label class="obrigatorio"></label></b></td>
             
             <td class="fundo1" >
-                <input type="text" name="produto_referencia" value="" class="campopadrao campo_tamanho_4 " onkeyup="seleciona_produto(this.value); " size="" align="left">  
+                <input type="text" name="produto_referencia" value="" class="campopadrao campo_tamanho_4 " onkeyup="" size="" align="left">  
                 <select autofocus="2" name="produto" style="width: 250px" onchange=" valida_produto()"   id="{SELECT2_NOME}" class="campopadrao campo_tamanho_6" {SELECT2_OBRIGATORIO} {SELECT2_DESABILITADO} >
                     <option value="">Selecione</option>	
                     <!--  BEGIN BLOCK_OPTIONS_PRODUTO -->
