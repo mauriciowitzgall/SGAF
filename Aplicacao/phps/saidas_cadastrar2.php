@@ -64,7 +64,7 @@ while ($dados = mysql_fetch_assoc($query)) {
 }
 
 //Pega dados de desconto para popular
-if ($saida!="") {
+if ($passo==1) {
 
     $sql = "SELECT * FROM saidas WHERE sai_codigo=$saida";
     if (!$query= mysql_query($sql)) die("Erro de SQL: " . mysql_error());

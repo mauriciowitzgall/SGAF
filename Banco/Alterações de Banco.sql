@@ -18190,3 +18190,6 @@ UPDATE `sgaf_labodega`.`configuracoes` SET `cnf_versao`='v4.1', `cnf_dataversao`
 ------ INICIO v4.1.1 ------ 
 
 UPDATE `sgaf_labodega`.`configuracoes` SET `cnf_versao`='v4.1.1', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
+
+
+

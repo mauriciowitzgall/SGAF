@@ -12,6 +12,7 @@ window.onload = function() {
         $("tr[id=linha_areceber]").show();
     }
 
+    valorareceber($("select[name=areceber]").val());
 
 
 }

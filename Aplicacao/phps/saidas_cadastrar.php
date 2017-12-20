@@ -578,7 +578,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                             else $valtot= $valuni * $qtd_estoque;
                             
                             //Insere o registro nas saídas
-                            echo $sql_saida_produto = "
+                            $sql_saida_produto = "
                             INSERT INTO saidas_produtos (
                                 saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade,saipro_loteconjunto
                             )
