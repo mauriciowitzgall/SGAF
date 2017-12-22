@@ -5,7 +5,7 @@ require "login_verifica.php";
 
 $operacao = $_POST["operacao"];
 $codigo = $_POST["codigo"];
-
+$modal=$_GET['modal'];
 
 //Se o usuario estiver alterando seu pr�prio cadastro passa caso contr�rio verifica se tem permiss�o para alterar dados de pessoas
 if ($usuario_codigo != $codigo) {
@@ -94,7 +94,10 @@ $tpl_titulo->show();
 $tpl_notificacao = new Template("templates/notificacao.html");
 $tpl_notificacao->ICONES = $icones;
 if ($codigo != $usuario_codigo)
-    $tpl_notificacao->DESTINO = "pessoas.php";
+    
+    if ($modal==1) $tpl_notificacao->DESTINO = "javascript:window.close(0);";
+    else $tpl_notificacao->DESTINO = "pessoas.php"; 
+
 else
     $tpl_notificacao->DESTINO = "login_sair.php";
 

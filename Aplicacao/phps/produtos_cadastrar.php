@@ -612,9 +612,15 @@ if ($linhas == 0) {
     }*/
 
     if ($ver == 1) {
-        ?><a href="javascript:window.close(0);" class="link">&nbsp;<input type="button" value="FECHAR" class="botao fonte3"></a> <?php } else {
-        ?><input type="hidden" name="link" value="<?php echo $linkanterior; ?>">
-        <input type="submit" value="SALVAR" name="submit1" class="botao fonte3"> <a href="produtos.php?modal=<?php echo $modal; ?>" class="link">&nbsp;<input type="button" value="CANCELAR" class="botao fonte3"></a> <?php } ?>
+            ?><a href="javascript:window.close(0);" class="link">&nbsp;<input type="button" value="FECHAR" class="botao fonte3"></a>
+        <?php } else {
+            ?><input type="hidden" name="link" value="<?php echo $linkanterior; ?>">
+            <input type="submit" value="SALVAR" name="submit1" class="botao fonte3"> 
+            <?php if ($modal==1) { ?><a href="javascript:window.close(0);" class="link">&nbsp; <input type="button" value="FECHAR" class="botao fonte3"><?php } else { ?>  <a href="produtos.php?modal=<?php echo $modal; ?>" class="link">&nbsp;  <input type="button" value="CANCELAR" class="botao fonte3"> <?php }?>
+            
+            
+            </a> 
+    <?php } ?>
     <input type="hidden" name="nome2" value="<?php echo "$nome"; ?>">
     <?php
     if (($linhas8 > 0) || ($ver == 1)) { ?>

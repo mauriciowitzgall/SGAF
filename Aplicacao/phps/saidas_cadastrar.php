@@ -991,10 +991,37 @@ if ($tiposaida == 1) {
         $tpl1->block("BLOCK_SELECT2_OPTION");
     }
     $tpl1->block("BLOCK_SELECT2");
-
-
     $tpl1->block("BLOCK_CONTEUDO");
+    
+    //Icone para CADASTRAR CONSUMIDOR em NOVA JANELA
+    //Atualizar
+    $tpl1->ICONE_DESTINO="#";
+    $tpl1->ICONE_ALVO="";
+    $tpl1->ICONE_ARQUIVO="../imagens/icones/geral/atualizar.png";
+    $tpl1->ICONE_DICA="Atualizar cadastro de consumidores";
+    $tpl1->ICONE_ALTERNATIVO="ATU";
+    $tpl1->ICONE_ID="atu_consumidor";
+    $tpl1->ICONE_AOCLICAR="atualiza_consumidor()";
+    $tpl1->block("BLOCK_ICONE_TAMANHOPADRAO");
+    $tpl1->block("BLOCK_ICONE");
+    $tpl1->block("BLOCK_CONTEUDO");
+    //Cadastrar
+    $tpl1->ICONE_DESTINO="pessoas_cadastrar.php?modal=1&operacao=cadastrar";
+    $tpl1->ICONE_ALVO="_blank";
+    $tpl1->ICONE_ARQUIVO="../imagens/icones/geral/add.png";
+    $tpl1->ICONE_DICA="Cadastrar novo consumidor ";
+    $tpl1->ICONE_ALTERNATIVO="CAD";
+    $tpl1->ICONE_ID="cad_consumidor";
+    $tpl1->ICONE_AOCLICAR="";
+    $tpl1->block("BLOCK_ICONE_TAMANHOPADRAO");
+    $tpl1->block("BLOCK_ICONE");
+    $tpl1->block("BLOCK_CONTEUDO");
+
     $tpl1->block("BLOCK_ITEM");
+
+
+
+
 
     // OBS
     if ($obsnavenda==1) {

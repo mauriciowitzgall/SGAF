@@ -11,6 +11,7 @@ require "login_verifica.php";
 
 $codigo = $_GET["codigo"];
 $operacao = $_GET["operacao"];
+$modal = $_GET["modal"];
 if ($operacao == "cadastrar")
     $oper_num = 1;
 if ($operacao == "editar")
@@ -89,7 +90,7 @@ if ($linhas == 0) {
     $tpl->ICONES = $icones;
     $tpl->MOTIVO_COMPLEMENTO = "Você deve cadastrar uma cooperativas antes de cadastrar um administrador!";
     $tpl->block("BLOCK_ATENCAO");
-    $tpl->DESTINO = "cooperativas_cadastrar.php?operacao=cadastrar";
+    $tpl->DESTINO = "cooperativas_cadastrar.php?operacao=cadastrar&modal=$modal";
     $tpl->block("BLOCK_BOTAO");
     $tpl->show();
     exit;
@@ -177,7 +178,7 @@ if (($operacao == "editar") || ($operacao == 'ver')) {
 
 //Estrutura dos campos de cadastro
 $tpl1 = new Template("templates/cadastro_edicao_detalhes_2.html");
-$tpl1->LINK_DESTINO = "pessoas_cadastrar2.php";
+$tpl1->LINK_DESTINO = "pessoas_cadastrar2.php?modal=$modal";
 
 
 $tpl1->JS_CAMINHO = "pessoas_cadastrar.js";
@@ -1672,8 +1673,13 @@ if (($operacao == "editar") || ($operacao == "cadastrar")) {
 
     //Botão Cancelar
     if ($codigo != $usuario_codigo) {
-        $tpl1->BOTAO_LINK = "pessoas.php";
-        $tpl1->block("BLOCK_BOTAO_CANCELAR");
+        if ($modal==1) {
+            $tpl1->BOTAO_LINK = "";
+            $tpl1->block("BLOCK_BOTAO_FECHAR");
+        } else {
+            $tpl1->BOTAO_LINK = "pessoas.php";
+            $tpl1->block("BLOCK_BOTAO_CANCELAR");
+        }
     }
 } else {
     //Botão Fechar

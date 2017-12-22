@@ -135,6 +135,15 @@ $(window).load(function() {
 
 });
 
+
+function atualiza_consumidor () {
+$.post("saidas_cadastrar_atualiza_consumidor.php",{
+    },function(valor2){
+        //alert(valor2);
+        $("select[name=consumidor]").html(valor2);
+    });    
+}
+
 function selecionar_porcoes(porcao) {
         
     $("input[name=qtd]").val("");
