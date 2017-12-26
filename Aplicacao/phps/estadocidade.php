@@ -5,6 +5,7 @@ include "controle/conexao_tipo.php";
 
 
 $estado = $_POST["estado"];
+$cidade = $_POST["cidade"];
 
 //Se a variavel veio nula ent�o mostrar a op��o padr�o
 if ($estado == "") {
@@ -32,7 +33,8 @@ if ($estado == "") {
         while ($dados = mysql_fetch_array($query)) {
             $codigo = $dados["cid_codigo"];
             $nome = $dados["cid_nome"];
-            echo "<option value='$codigo'>$nome</option>";
+            if ($cidade==$codigo) $selecionado=" selected "; else $selecionado=" "; 
+            echo "<option $selecionado value='$codigo'>$nome</option>";
         }
     }
 }

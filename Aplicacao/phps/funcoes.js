@@ -480,11 +480,13 @@ function valida_cnpj(cnpj) {
 }
 
 
-function popula_estados() {
+function popula_estados(pais,estado) {
+    if (pais=="") pais=$("select[name=pais]").val();
     $("select[name=estado]").html('<option>Carregando</option>');
     $("select[name=cidade]").html('<option>Selecione</option>');
     $.post("paisestado.php", {
-        pais: $("select[name=pais]").val()
+        pais: pais,
+        estado: estado
     }, function(valor) {
         $("select[name=estado]").html(valor);
             $("input[name=ie]").val("");
@@ -493,10 +495,12 @@ function popula_estados() {
     });
 }
 
-function popula_cidades() {
+function popula_cidades(estado,cidade) {
+    if (estado=="") estado=$("select[name=estado]").val()
     $("select[name=cidade]").html('<option>Carregando</option>');
     $.post("estadocidade.php", {
-        estado: $("select[name=estado]").val()
+        estado: estado,
+        cidade: cidade
     }, function(valor) {
         $("select[name=cidade]").html(valor);
     });
@@ -1609,4 +1613,9 @@ function mascara_ie(estado_sigla) {
 function fechar() {
     //alert("teste");
     javascript:window.close(0);
+}
+
+function mascara_telefone (fone) {
+    if (fone.length<=13)  $("#fone").mask("(00)0000-00009");
+    else $("#fone").mask("(00)00000-0000");
 }

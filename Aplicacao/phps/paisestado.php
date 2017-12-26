@@ -4,6 +4,8 @@ include "controle/conexao.php";
 include "conexao_tipo.php";
 
 $pais = $_POST["pais"];
+$estado = $_POST["estado"];
+
 if ($pais == "") {
     echo "<option value=''>Selecione</option>";
 } else {
@@ -26,7 +28,8 @@ if ($pais == "") {
         while ($dados = mysql_fetch_array($query)) {
             $codigo = $dados["est_codigo"];
             $nome = $dados["est_sigla"];
-            echo "<option value='$codigo'>$nome</option>";
+            if ($estado==$codigo) $selecionado=" selected "; else $selecionado="";
+            echo "<option $selecionado value='$codigo'>$nome</option>";
         }
     } else {
         echo "<option value=''>Não há registros</option>";

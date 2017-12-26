@@ -34,9 +34,19 @@ $modal=$_GET["modal"];
             include "controle/conexao.php";
             //include "controle/conexao_tipo.php";
             require_once "funcoes.php";
-            $sql="SELECT * FROM quiosques_configuracoes WHERE quicnf_quiosque=$usuario_quiosque";
+            $sql="
+                SELECT * 
+                FROM quiosques_configuracoes 
+                JOIN quiosques on (quicnf_quiosque=qui_codigo)
+                JOIN cidades on (qui_cidade=cid_codigo)
+                JOIN estados on (cid_estado=est_codigo) 
+                WHERE quicnf_quiosque=$usuario_quiosque
+            ";
             if (!$query= mysql_query($sql)) die("Erro SQL INCLUDES: " . mysql_error());
             while ($dados=  mysql_fetch_assoc($query)) {    
+                $usuario_quiosque_pais=$dados["est_pais"];
+                $usuario_quiosque_estado=$dados["cid_estado"];
+                $usuario_quiosque_cidade=$dados["qui_cidade"];
                 $usaestoque=$dados["quicnf_usamoduloestoque"];
                 $usamodulofiscal=$dados["quicnf_usamodulofiscal"];
                 $usaproducao=$dados["quicnf_usamoduloproducao"];
@@ -60,6 +70,7 @@ $modal=$_GET["modal"];
                 $valorvendazero=$dados["quicnf_valorvendazero"];
                 $obsnavenda=$dados["quicnf_obsnavenda"];
                 $obsnaentrada=$dados["quicnf_obsnaentrada"];
+                $fazentregas=$dados["quicnf_fazentregas"];
                 $usaprateleira=$dados["quicnf_usaprateleira"];
                 $identificacaoconsumidorvenda=$dados["quicnf_identificacaoconsumidorvenda"];
             }
@@ -81,4 +92,7 @@ $modal=$_GET["modal"];
             include "js/mascaras.php";
 
             ?>
+            <input name="usuario_quiosque_pais" id="usuario_quiosque_pais" type="hidden" value="<?php echo $usuario_quiosque_pais; ?>">
+            <input name="usuario_quiosque_estado" id="usuario_quiosque_estado" type="hidden" value="<?php echo $usuario_quiosque_estado; ?>">
+            <input name="usuario_quiosque_cidade" id="usuario_quiosque_cidade" type="hidden" value="<?php echo $usuario_quiosque_cidade; ?>">
             <div class="corpo">

@@ -39,6 +39,7 @@ $sql="SELECT *
      $controlavalidade=$dados["quicnf_controlavalidade"];
      $valorvendazero=$dados["quicnf_valorvendazero"];
      $obsnavenda=$dados["quicnf_obsnavenda"];
+     $fazentregas=$dados["quicnf_fazentregas"];
      $obsnaentrada=$dados["quicnf_obsnaentrada"];
      $usaean=$dados["quicnf_usaean"];
      $usacodigobarrasinterno=$dados["quicnf_usacodigobarrasinterno"];
@@ -408,6 +409,29 @@ $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->OPTION_VALOR = 1;
 $tpl1->OPTION_NOME = "Sim";
 if ($obsnaentrada=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//Faz entregas
+$tpl1->TITULO = "Faz entregas";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "fazentregas";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($fazentregas=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($fazentregas=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
 $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT");

@@ -80,7 +80,6 @@ if (($usadevolucoes==1)&&($operacao==2)) {
 
 
 
-
 //Verifica se o usuário é um caixa e não tem caixa aberto, se sim não pode acessar as vendas
 if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
     header("Location: permissoes_semacesso.php");
@@ -92,19 +91,38 @@ $dataatual = date("Y/m/d");
 $horaatual = date("H:i:s");
 $operacao = $_GET["operacao"]; //Operação 1=Cadastrar 2=Editar 3=Ver
 
-
 //Verifica se permite edicão de cliente na venda
 //Só existe uma excessão que permite editar o cliente sem que esteja parametrizado para isso, que é quando é feita uma venda a receber sem identificar o consumidor, ao final da venda é sugerido para editar a venda e alterar o consumidor!
 $editarconsumidor=$_GET["editarconsumidor"];
 if ($editarconsumidor==1) {
     $identificacaoconsumidorvenda=1; //Por CPF
 }
+$pega_dados_do_banco=0;
+
+
+//Se a venda possui entrega, então atualizar o endereço atual como endereçodo consumidor
+if ($_REQUEST["entrega"]==1) {
+    $consumidor=$_POST["consumidor"];
+    if (($consumidor>0)&&($fazentregas==1)) {
+        $entrega_endereco_2=$_POST["endereco"];
+        $entrega_endereco_numero_2=$_POST["endereco_numero"];
+        $entrega_bairro_2=$_POST["bairro"];
+        $entrega_fone1_2=$_POST["fone1"];
+        $entrega_fone2_2=$_POST["fone2"];
+        $entrega_cidade_2=$_POST["cidade"];
+        $sql12= "UPDATE pessoas SET pes_endereco='$entrega_endereco_2', pes_numero='$entrega_endereco_numero_2', pes_bairro='$entrega_bairro_2', pes_fone1='$entrega_fone1_2', pes_fone2='$entrega_fone2_2', pes_cidade=$entrega_cidade_2 WHERE pes_codigo=$consumidor";
+        if (!$query12 = mysql_query($sql12)) die("<br>Erro12:" . mysql_error());
+    }
+
+}
+
 
 
 $retirar_produto = $_GET["retirar_produto"];
 //Se for eliminação de um produto ja da lista então pegar por get
 if ($retirar_produto == '1') {
     $consumidor = $_GET["consumidor"];
+    $entrega = $_GET["entrega"];
     $id = $_GET["id"];
     $tiposaida = $_GET["tiposaida"];
     $saida = $_GET["saida"];
@@ -114,6 +132,9 @@ if ($retirar_produto == '1') {
     $qtd = $_GET["qtd"];
     $produto = $_GET["produto"];
     $tipopessoa = $_GET["tipopessoa"];
+
+    $pega_dados_do_banco=1;
+
 } else { 
     if ($operacao == 2) { // Se for edição pega os dados principais da venda para popular campos
         $saida = $_GET["codigo"];
@@ -121,6 +142,8 @@ if ($retirar_produto == '1') {
             SELECT * 
             FROM saidas 
             left join pessoas on (sai_consumidor=pes_codigo)
+            left join cidades on (pes_cidade=cid_codigo)
+            left join estados on (cid_estado=est_codigo)
             WHERE sai_codigo=$saida
         ";
         $query = mysql_query($sql);
@@ -138,8 +161,8 @@ if ($retirar_produto == '1') {
             $descricao = $dados["sai_descricao"];
             $areceber = $dados["sai_areceber"];
             $obs=$dados["sai_obs"];
+            $pega_dados_do_banco=1;
         }
-        
     } else { //Caso seja uma venda nova, cadastro
         $operacao=1;
         $saida = $_POST["saida"];
@@ -163,8 +186,31 @@ if ($retirar_produto == '1') {
         if ($tipopessoa=="") { //Pro padrão a pessoa é fisica, cpf
             $tipopessoa=1;
         }
-        
+
+        //Se ja tem saida, significa que ja passou cadastrou o consumidor e as vendas.
+        if (($saida>0)) {
+            $pega_dados_do_banco=1;
+        } else {
+            $entrega=$_REQUEST["entrega"];
+            $entrega_dataentrega=$_POST["dataentrega"];
+            $entrega_endereco=$_POST["endereco"];
+            $entrega_endereco_numero=$_POST["endereco_numero"];
+            $entrega_bairro=$_POST["bairro"];
+            $entrega_cidade=$_POST["cidade"];
+            $entrega_estado=$_POST["estado"];
+            $entrega_pais=$_POST["pais"];
+            $entrega_fone1=$_POST["fone1"];
+            $entrega_fone2=$_POST["fone2"];
+            if ($entrega_pais=="") $entrega_pais=$usuario_quiosque_pais;
+            if ($entrega_estado=="") $entrega_estado=$usuario_quiosque_estado;
+            if ($entrega_cidade=="") $entrega_cidade=$usuario_quiosque_cidade;  
+
+
+        }
+         
     }
+    
+
     $id = $_REQUEST["id"];
     $tiposaida = $_GET["tiposaida"];
     if ($operacao==1) $motivo = $_REQUEST["motivo"];
@@ -182,8 +228,6 @@ if ($retirar_produto == '1') {
     if ($lote2 != "") {
         $lote = $lote2;
     }
-
-
     //Quantidade de porcoes
     $porcao_qtd = $_POST["porcao_qtd"];
     if ($porcao_qtd=="") $porcao_qtd=0;
@@ -220,11 +264,39 @@ if ($retirar_produto == '1') {
 }
 
 
+//Se a saida tiver algum valor significa que já foi registrada a mesma, e portanto não há mais a necessidade de pegar os dados por post para poder gravar a mesma, pegamos do banco, pois já temos um consumidor vinculado a venda e estes não serão modificados.
+if ($pega_dados_do_banco==1) {
+    $sql = "
+        SELECT * 
+        FROM saidas 
+        left join pessoas on (sai_consumidor=pes_codigo)
+        left join cidades on (pes_cidade=cid_codigo)
+        left join estados on (cid_estado=est_codigo)
+        WHERE sai_codigo=$saida
+    ";
+    $query = mysql_query($sql); if (!$query) die("Erro de SQL98:" . mysql_error());
+    while ($dados = mysql_fetch_assoc($query)) {
+        $entrega=$dados["sai_entrega"];
+        $entrega_dataentrega=$dados["sai_dataentrega"];
+        $entrega_endereco=$dados["sai_entrega_endereco"];
+        $entrega_endereco_numero=$dados["sai_entrega_endereco_numero"];
+        $entrega_bairro=$dados["sai_entrega_bairro"];
+        $entrega_cidade=$dados["sai_entrega_cidade"];
+        $entrega_estado=$dados["cid_estado"];
+        $entrega_pais=$dados["est_pais"];
+        $entrega_fone1=$dados["sai_entrega_fone1"];
+        $entrega_fone2=$dados["sai_entrega_fone2"];
+
+    }
+}
+
+
+
 $passo= $_REQUEST["passo"];
 
 
 //Verificar se é uma edição, se sim então atualiza id e consumidor
-if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&(($usacomanda==1)||($identificacaoconsumidorvenda!=3)||($obsnavenda==1))) {
+if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&(($usacomanda==1)||($identificacaoconsumidorvenda!=3)||($obsnavenda==1)||($fazentregas==1))) {
     //print_r($_REQUEST);
     $id_novo=$_REQUEST["id"];
     if ($id_novo=="") $id_novo=$id;
@@ -233,6 +305,9 @@ if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&(($usacomanda==1)||($identific
     $sql11= "UPDATE saidas SET sai_consumidor=$consumidor, sai_id=$id_novo, sai_obs='$obs' WHERE sai_codigo=$saida";
     if (!$query11 = mysql_query($sql11)) die("<br>Erro11:" . mysql_error());
 }
+
+
+
 //echo "valunietq:$valunietq valunisai:$valunisai valtotsai:$valtotsai";
 
 
@@ -725,11 +800,12 @@ if (($saida == 0) && ($passo == 2)) {
         $consumidor_cnpj2 =  str_replace("_", "", $consumidor_cnpj2);
         
         //echo "<br><br>cadastrou pessoa<br><br>";
+        if ($fazentregas==1) $consumidor_fone=$entrega_fone1;
         $sql1 = "
             INSERT INTO
-                pessoas (pes_id,pes_nome,pes_cnpj,pes_cpf,pes_tipopessoa,pes_cidade,pes_datacadastro,pes_horacadastro,pes_cooperativa,pes_possuiacesso,pes_usuarioquecadastrou,pes_quiosquequecadastrou,pes_fone1)
+                pessoas (pes_id,pes_nome,pes_cnpj,pes_cpf,pes_tipopessoa,pes_datacadastro,pes_horacadastro,pes_cooperativa,pes_possuiacesso,pes_usuarioquecadastrou,pes_quiosquequecadastrou,pes_fone1,pes_fone2,pes_endereco,pes_numero,pes_bairro, pes_cidade)
             VALUES
-                ($id,'$cliente_nome','$consumidor_cnpj2','$consumidor_cpf2',$tipopessoa,0,'$dataatual','$horaatual',$usuario_cooperativa,0,$usuario_codigo,$usuario_quiosque, '$consumidor_fone')        
+                ($id,'$cliente_nome','$consumidor_cnpj2','$consumidor_cpf2',$tipopessoa,'$dataatual','$horaatual',$usuario_cooperativa,0,$usuario_codigo,$usuario_quiosque, '$consumidor_fone','$entrega_fone2','$entrega_endereco','$entrega_endereco_numero','$entrega_bairro', $entrega_cidade)        
         ";
         $query1 = mysql_query($sql1); if (!$query1) die("Erro de SQL108: " . mysql_error());
         $consumidor = mysql_insert_id();
@@ -744,9 +820,9 @@ if (($saida == 0) && ($passo == 2)) {
 
         $sql_saida = "
         INSERT INTO
-            saidas (sai_quiosque, sai_caixaoperacaonumero, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro,sai_usuarioquecadastrou, sai_id,sai_obs)
+            saidas (sai_quiosque, sai_caixaoperacaonumero, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro,sai_usuarioquecadastrou, sai_id,sai_obs, sai_entrega, sai_dataentrega,sai_entrega_fone1, sai_entrega_fone2, sai_entrega_endereco, sai_entrega_endereco_numero, sai_entrega_bairro, sai_entrega_cidade )
         VALUES
-            ('$usuario_quiosque','$usuario_caixa_operacao','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2,'$datahoracadastro',$usuario_codigo, $id, '$obs')        
+            ('$usuario_quiosque','$usuario_caixa_operacao','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2,'$datahoracadastro',$usuario_codigo, $id, '$obs','$entrega','$entrega_dataentrega','$entrega_fone1','$entrega_fone2','$entrega_endereco','$entrega_endereco_numero','$entrega_bairro',$entrega_cidade )        
         ";
         $query_saida = mysql_query($sql_saida);
         if (!$query_saida)
@@ -943,6 +1019,7 @@ if ($tiposaida == 1) {
     $tpl1->SELECT2_NOME = "consumidor";
     $tpl1->SELECT2_DESABILITADO = "";
     $tpl1->SELECT2_OBRIGATORIO = " required ";
+    $tpl1->SELECT2_AOTROCAR = "";
     $tpl1->SELECT2_FOCO = "";
     if ($passo != 1) {
         $tpl1->SELECT2_DESABILITADO = " disabled ";
@@ -990,6 +1067,7 @@ if ($tiposaida == 1) {
         }
         $tpl1->block("BLOCK_SELECT2_OPTION");
     }
+    $tpl1->SELECT2_AOTROCAR = "consumidor_selecionado(this.value);";
     $tpl1->block("BLOCK_SELECT2");
     $tpl1->block("BLOCK_CONTEUDO");
     
@@ -1021,17 +1099,316 @@ if ($tiposaida == 1) {
 
 
 
+    //Entragar no Cliente
+    if ($fazentregas==1) {
 
 
-    // OBS
+        $tpl1->TR_ID="linha_entrega";
+        $tpl1->CAMPO_QTD_CARACTERES = "";
+        $tpl1->TITULO = "Entregar no cliente";
+        $tpl1->ASTERISCO = "";
+        $tpl1->block("BLOCK_TITULO");
+
+        $tpl1->SELECT2_NOME = "entrega";
+        $tpl1->SELECT2_DESABILITADO = "";
+        $tpl1->SELECT2_OBRIGATORIO = " required ";
+        $tpl1->SELECT2_FOCO = "";
+        if ($passo==2) $tpl1->SELECT2_DESABILITADO = " disabled ";
+        else $tpl1->SELECT2_DESABILITADO = "  ";
+        $tpl1->SELECT2_AOTROCAR = "verifica_entrega(this.value)";
+        $tpl1->OPTION2_VALOR = "";
+        $tpl1->OPTION2_NOME = "Selecione";
+        if ($entrega=="") $tpl1->OPTION2_SELECIONADO = " selected "; else  $tpl1->OPTION2_SELECIONADO = "  ";
+        $tpl1->block("BLOCK_SELECT2_OPTION");
+        $tpl1->OPTION2_VALOR = "0";
+        $tpl1->OPTION2_NOME = "Não";
+        if ($entrega==0) $tpl1->OPTION2_SELECIONADO = " selected "; else  $tpl1->OPTION2_SELECIONADO = "  ";
+        $tpl1->block("BLOCK_SELECT2_OPTION");
+        $tpl1->OPTION2_VALOR = "1";
+        $tpl1->OPTION2_NOME = "Sim";
+        if ($entrega==1) $tpl1->OPTION2_SELECIONADO = " selected "; else  $tpl1->OPTION2_SELECIONADO = "  ";
+        $tpl1->block("BLOCK_SELECT2_OPTION");
+        $tpl1->block("BLOCK_SELECT2");
+        $tpl1->block("BLOCK_CONTEUDO");
+
+        $tpl1->block("BLOCK_ITEM");
+
+        //Data da entrega
+        $tpl1->TR_ID="linha_dataentrega";
+        $tpl1->TITULO = "Data da entrega";
+        $tpl1->ASTERISCO = "";
+        $tpl1->block("BLOCK_TITULO");
+        $tpl1->CAMPO_OBRIGATORIO = " required ";
+        $tpl1->CAMPO_TIPO = "date";
+        $tpl1->CAMPO_ESTILO = "width:140px;";
+        $tpl1->CAMPO_NOME = "dataentrega";
+        $tpl1->CAMPO_TAMANHO = "";
+        $tpl1->CAMPO_QTD_CARACTERES = "";
+        $tpl1->CAMPO_FOCO = " ";
+        $tpl1->CAMPO_VALOR = "$entrega_dataentrega";
+        if ($passo==2) {
+            $tpl1->CAMPO_DESABILITADO = " disabled ";
+        } else {
+            $tpl1->CAMPO_DESABILITADO = "  ";
+        }
+        $tpl1->CAMPO_ONKEYPRESS = "";
+        $tpl1->CAMPO_DICA = "";
+        $tpl1->CAMPO_ONKEYUP = "";
+        $tpl1->CAMPO_ONKEYDOWN = "";
+        $tpl1->CAMPO_ONBLUR = ""; 
+        $tpl1->CAMPO_ONFOCUS = "";
+        $tpl1->block("BLOCK_CAMPO");
+        $tpl1->block("BLOCK_CONTEUDO");
+        $tpl1->block("BLOCK_ITEM");      
+
+       
+        //Endereço
+        $tpl1->TR_ID="linha_endereco";
+        $tpl1->TITULO = "Endereço";
+        $tpl1->ASTERISCO = "";
+        $tpl1->block("BLOCK_TITULO");
+        //endereco
+        $tpl1->CAMPO_OBRIGATORIO = "  ";
+        $tpl1->CAMPO_TIPO = "text";
+        $tpl1->CAMPO_ESTILO = "width:320px;";
+        $tpl1->CAMPO_NOME = "endereco";
+        $tpl1->CAMPO_TAMANHO = "";
+        $tpl1->CAMPO_QTD_CARACTERES = "";
+        $tpl1->CAMPO_FOCO = " ";
+        $tpl1->CAMPO_VALOR = "$entrega_endereco";
+        if ($passo==2) {
+            $tpl1->CAMPO_DESABILITADO = " disabled ";
+        } else {
+            $tpl1->CAMPO_DESABILITADO = "  ";
+        }
+        $tpl1->CAMPO_ONKEYPRESS = "";
+        $tpl1->CAMPO_DICA = "";
+        $tpl1->CAMPO_ONKEYUP = "";
+        $tpl1->CAMPO_ONKEYDOWN = "";
+        $tpl1->CAMPO_ONBLUR = ""; 
+        $tpl1->CAMPO_ONFOCUS = "";
+        $tpl1->block("BLOCK_CAMPO");
+        //endereco numero
+        $tpl1->CAMPO_OBRIGATORIO = "  ";
+        $tpl1->CAMPO_TIPO = "text";
+        $tpl1->CAMPO_ESTILO = "width:70px;";
+        $tpl1->CAMPO_NOME = "endereco_numero";
+        $tpl1->CAMPO_TAMANHO = "";
+        $tpl1->CAMPO_QTD_CARACTERES = "";
+        $tpl1->CAMPO_FOCO = " ";
+        $tpl1->CAMPO_VALOR = "$entrega_endereco_numero";
+        if ($passo==2) {
+            $tpl1->CAMPO_DESABILITADO = " disabled ";
+        } else {
+            $tpl1->CAMPO_DESABILITADO = "  ";
+        }
+        $tpl1->CAMPO_ONKEYPRESS = "";
+        $tpl1->CAMPO_DICA = "nº";
+        $tpl1->CAMPO_ONKEYUP = "";
+        $tpl1->CAMPO_ONKEYDOWN = "";
+        $tpl1->CAMPO_ONBLUR = ""; 
+        $tpl1->CAMPO_ONFOCUS = "";
+        $tpl1->block("BLOCK_CAMPO");
+        $tpl1->block("BLOCK_CONTEUDO");
+        $tpl1->block("BLOCK_CONTEUDO");
+        $tpl1->block("BLOCK_ITEM");
+
+        //Bairro
+        $tpl1->TR_ID="linha_bairro";
+        $tpl1->TITULO = "Bairro";
+        $tpl1->ASTERISCO = "";
+        $tpl1->block("BLOCK_TITULO");
+        $tpl1->CAMPO_OBRIGATORIO = "  ";
+        $tpl1->CAMPO_TIPO = "text";
+        $tpl1->CAMPO_ESTILO = "width:220px;";
+        $tpl1->CAMPO_NOME = "bairro";
+        $tpl1->CAMPO_TAMANHO = "";
+        $tpl1->CAMPO_QTD_CARACTERES = "";
+        $tpl1->CAMPO_FOCO = " ";
+        $tpl1->CAMPO_VALOR = "$entrega_bairro";
+        if ($passo==2) {
+            $tpl1->CAMPO_DESABILITADO = " disabled ";
+        } else {
+            $tpl1->CAMPO_DESABILITADO = "  ";
+        }
+        $tpl1->CAMPO_ONKEYPRESS = "";
+        $tpl1->CAMPO_DICA = "";
+        $tpl1->CAMPO_ONKEYUP = "";
+        $tpl1->CAMPO_ONKEYDOWN = "";
+        $tpl1->CAMPO_ONBLUR = ""; 
+        $tpl1->CAMPO_ONFOCUS = "";
+        $tpl1->block("BLOCK_CAMPO");
+        $tpl1->block("BLOCK_CONTEUDO");
+        $tpl1->block("BLOCK_ITEM");
+
+
+        //Cidade
+        //pais
+        $tpl1->TR_ID="linha_cidade";
+        $tpl1->TITULO = "Cidade";
+        $tpl1->ASTERISCO = "";
+        $tpl1->block("BLOCK_TITULO");
+        $tpl1->SELECT2_NOME = "pais";
+        $tpl1->SELECT2_DESABILITADO = "";
+        $tpl1->SELECT2_OBRIGATORIO = " required ";
+        $tpl1->SELECT2_FOCO = "";
+        if ($passo != 1) {
+            $tpl1->SELECT2_DESABILITADO = " disabled ";
+        } else {
+            $tpl1->SELECT2_DESABILITADO = " ";
+        }
+        $sql = "SELECT * from paises";
+        $pais=1; //Brasil
+        if (!$query = mysql_query($sql)) die("Erro PAIS: " . mysql_error());
+        while ($dados = mysql_fetch_array($query)) {
+            $tpl1->OPTION2_VALOR = $dados["pai_codigo"];
+            $tpl1->OPTION2_NOME = $dados["pai_nome"];
+            if ($operacao==2) { //Se for edição pega do banco o pais
+                if ($pais == $dados["pai_codigo"]) $tpl1->OPTION2_SELECIONADO = " selected ";
+                else $tpl1->OPTION2_SELECIONADO = " ";
+            } else { //Se for um consumidor novo durante uma nova venda
+                if ($dados["pai_codigo"]==1) $tpl1->OPTION2_SELECIONADO = " selected ";
+                else $tpl1->OPTION2_SELECIONADO = "  ";
+
+            }
+            $tpl1->block("BLOCK_SELECT2_OPTION");
+        }
+
+        $tpl1->SELECT2_AOTROCAR = "pupula_estados()";
+        $tpl1->block("BLOCK_SELECT2");
+        $tpl1->block("BLOCK_CONTEUDO");
+        //estado
+        $tpl1->SELECT2_NOME = "estado";
+        $tpl1->SELECT2_DESABILITADO = "";
+        $tpl1->SELECT2_OBRIGATORIO = " required ";
+        $tpl1->SELECT2_FOCO = "";
+        if ($passo != 1) {
+            $tpl1->SELECT2_DESABILITADO = " disabled ";
+        } else {
+            $tpl1->SELECT2_DESABILITADO = " ";
+        }
+        if ($entrega==1) {
+            $sql = "SELECT * from estados WHERE est_pais=$entrega_pais";
+        } else {
+            $sql = "SELECT * from estados WHERE est_pais=$usuario_quiosque_pais";
+        }
+        if (!$query = mysql_query($sql)) die("Erro ESTADO: " . mysql_error());
+        while ($dados = mysql_fetch_array($query)) {
+            $tpl1->OPTION2_VALOR = $dados["est_codigo"];
+            $tpl1->OPTION2_NOME = $dados["est_sigla"];
+            if ($operacao==2) { //Se for edição pega do banco o estado
+                if ($entrega_estado == $dados["est_codigo"]) $tpl1->OPTION2_SELECIONADO = " selected ";
+                else $tpl1->OPTION2_SELECIONADO = " ";
+            } else { //Se for um consumidor novo durante uma nova venda
+                if ($dados["est_codigo"]==$usuario_quiosque_estado) $tpl1->OPTION2_SELECIONADO = " selected ";
+                else $tpl1->OPTION2_SELECIONADO = "  ";
+                $estado=$usuario_quiosque_estado; 
+            }            
+            $tpl1->block("BLOCK_SELECT2_OPTION");
+        }
+        $tpl1->SELECT2_AOTROCAR = "popula_cidades(this.value)";
+        $tpl1->block("BLOCK_SELECT2");
+        $tpl1->block("BLOCK_CONTEUDO");
+        //cidade
+        $tpl1->SELECT2_NOME = "cidade";
+        $tpl1->SELECT2_DESABILITADO = "";
+        $tpl1->SELECT2_OBRIGATORIO = " required ";
+        $tpl1->SELECT2_FOCO = "";
+        if ($passo != 1) {
+            $tpl1->SELECT2_DESABILITADO = " disabled ";
+        } else {
+            $tpl1->SELECT2_DESABILITADO = " ";
+        }
+        if ($entrega==1) {
+            $sql = "SELECT * from cidades WHERE cid_estado=$entrega_estado";
+            
+        } else {
+            $sql = "SELECT * from cidades WHERE cid_estado=$usuario_quiosque_estado";
+        }
+        if (!$query = mysql_query($sql)) die("Erro CIDADE: " . mysql_error());
+        while ($dados = mysql_fetch_array($query)) {
+            $tpl1->OPTION2_VALOR = $dados["cid_codigo"];
+            $tpl1->OPTION2_NOME = $dados["cid_nome"];
+            if ($operacao==2) { //Se for edição pega do banco o estado
+                if ($entrega_cidade == $dados["cid_codigo"]) $tpl1->OPTION2_SELECIONADO = " selected ";
+                else $tpl1->OPTION2_SELECIONADO = " ";
+            } else { //Se for um consumidor novo durante uma nova venda
+                if ($dados["cid_codigo"]==$usuario_quiosque_cidade) $tpl1->OPTION2_SELECIONADO = " selected ";
+                else $tpl1->OPTION2_SELECIONADO = "  ";
+                $cidade=$usuario_quiosque_cidade;
+            }            
+            $tpl1->block("BLOCK_SELECT2_OPTION");
+        }
+         $tpl1->SELECT2_AOTROCAR = "";
+        $tpl1->block("BLOCK_SELECT2");
+        $tpl1->block("BLOCK_CONTEUDO");
+        $tpl1->block("BLOCK_ITEM");
+
+
+        //Telefone 1
+        $tpl1->TR_ID="linha_fone1";
+        $tpl1->TITULO = "Telefone 1";
+        $tpl1->ASTERISCO = "";
+        $tpl1->block("BLOCK_TITULO");
+        $tpl1->CAMPO_OBRIGATORIO = "  ";
+        $tpl1->CAMPO_TIPO = "text";
+        $tpl1->CAMPO_ESTILO = "width:120px;";
+        $tpl1->CAMPO_NOME = "fone1";
+        $tpl1->CAMPO_TAMANHO = "";
+        $tpl1->CAMPO_QTD_CARACTERES = "";
+        $tpl1->CAMPO_FOCO = " ";
+        $tpl1->CAMPO_VALOR = "$entrega_fone1";
+        if ($passo==2) {
+            $tpl1->CAMPO_DESABILITADO = " disabled ";
+        } else {
+            $tpl1->CAMPO_DESABILITADO = "  ";
+        }
+        $tpl1->CAMPO_ONKEYPRESS = "";
+        $tpl1->CAMPO_DICA = "";
+        $tpl1->CAMPO_ONKEYUP = "mascara_telefone1(this.value)";
+        $tpl1->CAMPO_ONKEYDOWN = "";
+        $tpl1->CAMPO_ONBLUR = "verifica_telefone1(this.value)"; 
+        $tpl1->CAMPO_ONFOCUS = "";
+        $tpl1->block("BLOCK_CAMPO");
+        $tpl1->block("BLOCK_CONTEUDO");
+        $tpl1->block("BLOCK_ITEM");  
+
+        //Telefone 2
+        $tpl1->TR_ID="linha_fone2";
+        $tpl1->TITULO = "Telefone 2";
+        $tpl1->ASTERISCO = "";
+        $tpl1->block("BLOCK_TITULO");
+        $tpl1->CAMPO_OBRIGATORIO = "  ";
+        $tpl1->CAMPO_TIPO = "text";
+        $tpl1->CAMPO_ESTILO = "width:120px;";
+        $tpl1->CAMPO_NOME = "fone2";
+        $tpl1->CAMPO_TAMANHO = "";
+        $tpl1->CAMPO_QTD_CARACTERES = "";
+        $tpl1->CAMPO_FOCO = " ";
+        $tpl1->CAMPO_VALOR = "$entrega_fone2";
+        if ($passo==2) {
+            $tpl1->CAMPO_DESABILITADO = " disabled ";
+        } else {
+            $tpl1->CAMPO_DESABILITADO = "  ";
+        }
+        $tpl1->CAMPO_ONKEYPRESS = "";
+        $tpl1->CAMPO_DICA = "";
+        $tpl1->CAMPO_ONKEYUP = "mascara_telefone2(this.value)";
+        $tpl1->CAMPO_ONKEYDOWN = "";
+        $tpl1->CAMPO_ONBLUR = "verifica_telefone2(this.value)"; 
+        $tpl1->CAMPO_ONFOCUS = "";
+        $tpl1->block("BLOCK_CAMPO");
+        $tpl1->block("BLOCK_CONTEUDO");
+        $tpl1->block("BLOCK_ITEM");        
+
+    }
+
+    //OBS
     if ($obsnavenda==1) {
         $tpl1->TR_ID="linha_obs";
-        $tpl1->CAMPO_QTD_CARACTERES = "8";
         $tpl1->TITULO = "Observação";
         $tpl1->ASTERISCO = "";
         $tpl1->block("BLOCK_TITULO");
-        $tpl1->CAMPO_DESABILITADO = "  ";
-        $tpl1->CAMPO_OBRIGATORIO = "  ";
         $tpl1->CAMPO_TIPO = "text";
         $tpl1->CAMPO_ESTILO = "width:520px;";
         $tpl1->CAMPO_NOME = "obs";
@@ -1041,6 +1418,8 @@ if ($tiposaida == 1) {
         $tpl1->CAMPO_VALOR = "$obs";
         if ($passo==2) {
             $tpl1->CAMPO_DESABILITADO = " disabled ";
+        } else {
+            $tpl1->CAMPO_DESABILITADO = "  ";
         }
         $tpl1->CAMPO_OBRIGATORIO = "  ";
         $tpl1->CAMPO_ONKEYPRESS = "";
@@ -1053,6 +1432,8 @@ if ($tiposaida == 1) {
     }
     $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
+
+
 }
 
 
@@ -1142,7 +1523,7 @@ if ($passo == 2) {
                 $tpl->ICONES = $icones;
                 //$tpl->MOTIVO_COMPLEMENTO = "";
                 $tpl->block("BLOCK_ATENCAO");
-                $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=$operacao&tiposaida=1&id=$id&consumidor=$consumidor&passo=2&usacomanda=$usacomanda&ignorar_vendas_incompletas=1&fone=$consumidor_fone&ignorar_vendas_areceber=$ignorar_vendas_areceber";
+                $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=$operacao&tiposaida=1&id=$id&consumidor=$consumidor&passo=2&usacomanda=$usacomanda&ignorar_vendas_incompletas=1&fone=$consumidor_fone&ignorar_vendas_areceber=$ignorar_vendas_areceber&entrega=$entrega";
                 $vendas_incompletas="<br> <i>";
                 while ($dados4=  mysql_fetch_assoc($query4)) {
                     $vendainc_codigo=$dados4["sai_codigo"];
@@ -1179,7 +1560,7 @@ if ($passo == 2) {
                 $tpl->ICONES = $icones;
                 //$tpl->MOTIVO_COMPLEMENTO = "";
                 $tpl->block("BLOCK_ATENCAO");
-                $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=$operacao&tiposaida=1&id=$id&consumidor=$consumidor&passo=2&usacomanda=$usacomanda&ignorar_vendas_incompletas=1&fone=$consumidor_fone&ignorar_vendas_areceber=1";
+                $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=$operacao&tiposaida=1&id=$id&consumidor=$consumidor&passo=2&usacomanda=$usacomanda&ignorar_vendas_incompletas=1&fone=$consumidor_fone&ignorar_vendas_areceber=1&entrega=$entrega";
                 $listinha="<br> <i>";
                 while ($dados4=  mysql_fetch_assoc($query4)) {
                     $listinha_codigo=$dados4["sai_codigo"];
