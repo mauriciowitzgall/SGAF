@@ -2,6 +2,7 @@
 
 //--------------------------FICOU NO ESTOQUE -------------------------------------
     $tpl3 = new Template("templates/lista1.html");
+    $tpl3->TABELA_BORDA="1";
 
     //Título
     $tpl3_tit = new Template("templates/tituloemlinha_1.html");

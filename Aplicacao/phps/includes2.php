@@ -28,5 +28,6 @@ require("templates/Template.class.php");
             include "controle/conexao.php";
             include "controle/conexao_tipo.php";
             include "funcoes.php";
+            include "includes_dadosglobais.php";  
             ?>
             <div class="relcorpo">

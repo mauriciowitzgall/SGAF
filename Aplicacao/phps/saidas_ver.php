@@ -49,6 +49,8 @@ FROM
     join saidas_tipo on (saitip_codigo=sai_tipo)
     left join saidas_motivo on (saimot_codigo=sai_saidajustificada)
     left join pessoas on (sai_consumidor=pes_codigo)
+    left join cidades on (cid_codigo=pes_cidade)
+    left join estados on (cid_estado=est_codigo)
     LEFT JOIN saidas_pagamentos on (sai_codigo=saipag_saida)
     left join metodos_pagamento on (sai_metpag=metpag_codigo)
 WHERE       
@@ -74,7 +76,17 @@ $numero_comanda = $dados["sai_id"];
 $metpaga_nome=$dados["metpag_nome"];
 $metpaga=$dados["metpag_codigo"];
 $caixaoperacao=$dados["sai_caixaoperacaonumero"];
-
+$entrega=$dados["sai_entrega"];
+$entrega_dataentrega=$dados["sai_dataentrega"];
+$entrega_conluida=$dados["sai_entrega_concluida"];
+$obs=$dados["sai_obs"];
+$endereco=$dados["sai_entrega_endereco"];
+$endereco_numero=$dados["sai_entrega_endereco_numero"];
+$bairro=$dados["sai_entrega_bairro"];
+$fone1=$dados["sai_entrega_fone1"];
+$fone2=$dados["sai_entrega_fone2"];
+$cidade=$dados["cid_nome"];
+$estado=$dados["est_sigla"];
 
 //DADOS GERAIS DA VENDA
 $tpl1_tit = new Template("templates/tituloemlinha_1.html");
@@ -258,6 +270,7 @@ $tpl2_tit->show();
 
 
 $tpl2 = new Template("templates/lista1.html");
+$tpl2->TABELA_BORDA="1";
 $tpl2->block(BLOCK_TABELA_CHEIA);
 
 //Cabecalho
@@ -756,6 +769,7 @@ if (($areceber==1)&&($usapagamentosparciais==1)) {
     $tpl2_tit->block("BLOCK_TITULO");
     $tpl2_tit->show();
     $tpl2 = new Template("templates/lista1.html");
+    $tpl2->TABELA_BORDA="1";
     $tpl2->block(BLOCK_TABELA_CHEIA);
     $tpl2->CABECALHO_COLUNA_TAMANHO = "";
     $tpl2->CABECALHO_COLUNA_COLSPAN = "";
@@ -873,6 +887,7 @@ if ($temdevolucoes==1) {
 
     
     $tpl2 = new Template("templates/lista1.html");
+    $tpl2->TABELA_BORDA="1";
     $tpl2->block(BLOCK_TABELA_CHEIA);
     $tpl2->CABECALHO_COLUNA_TAMANHO = "120px";
     $tpl2->CABECALHO_COLUNA_COLSPAN = "";
@@ -1026,6 +1041,190 @@ if ($temdevolucoes==1) {
     $tpl2->show();
 }
 
+
+
+
+
+//Se houver ENTREGAS mostrar
+if ($entrega==1) {
+
+    $tpl3_tit = new Template("templates/tituloemlinha_1.html");
+    $tpl3_tit->LISTA_TITULO = "DETALHES DA ENTREGA";
+    $tpl3_tit->block("BLOCK_QUEBRA1");
+    $tpl3_tit->block("BLOCK_TITULO");
+    $tpl3_tit->show();
+
+    $tpl3 = new Template("templates/cadastro1.html");
+
+    //Data da Entrega
+    $tpl3->COLUNA_ALINHAMENTO = "right";
+    $tpl3->COLUNA_TAMANHO = "200px";
+    $tpl3->TITULO = "Data da entrega";
+    $tpl3->block("BLOCK_TITULO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "";
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_TAMANHO = "15";
+    $tpl3->CAMPO_NOME = "dataentrega";
+    $tpl3->CAMPO_VALOR = converte_data($entrega_dataentrega);
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->block("BLOCK_LINHA");
+
+    //Situação
+    $tpl3->COLUNA_ALINHAMENTO = "right";
+    $tpl3->COLUNA_TAMANHO = "200px";
+    $tpl3->TITULO = "Situação";
+    $tpl3->block("BLOCK_TITULO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "   ";
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_TAMANHO = "20";
+    $tpl3->CAMPO_NOME = "entrega_situacao";
+    if ($entrega_conluida==1) $tpl3->CAMPO_VALOR = "Entrega concluída";
+    else $tpl3->CAMPO_VALOR = "Entrega pendente";
+    $descontopercentual=str_replace(",", "." , $descontopercentual);
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->block("BLOCK_LINHA");
+
+
+    //Endereço
+    $tpl3->COLUNA_ALINHAMENTO = "right";
+    $tpl3->COLUNA_TAMANHO = "200px";
+    $tpl3->TITULO = "Endereço";
+    $tpl3->block("BLOCK_TITULO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "";
+    $tpl3->COLUNA_TAMANHO = "";
+    $tpl3->CAMPO_TAMANHO = "40";
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_NOME = "endereco";
+    $tpl3->CAMPO_VALOR = "$endereco, $endereco_numero";
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->block("BLOCK_LINHA");
+
+
+    //Bairro
+    $tpl3->COLUNA_ALINHAMENTO = "right";
+    $tpl3->COLUNA_TAMANHO = "200px";
+    $tpl3->TITULO = "Bairro";
+    $tpl3->block("BLOCK_TITULO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "";
+    $tpl3->COLUNA_TAMANHO = "";
+    $tpl3->CAMPO_TAMANHO = "40";
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_NOME = "bairro";
+    $tpl3->CAMPO_VALOR = "$bairro";
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->block("BLOCK_LINHA");
+
+
+    //Cidade
+    $tpl3->COLUNA_ALINHAMENTO = "right";
+    $tpl3->COLUNA_TAMANHO = "200px";
+    $tpl3->TITULO = "Cidade";
+    $tpl3->block("BLOCK_TITULO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "";
+    $tpl3->COLUNA_TAMANHO = "";
+    $tpl3->CAMPO_TAMANHO = "40";
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_NOME = "cidade";
+    $tpl3->CAMPO_VALOR = "$cidade, $estado";
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->block("BLOCK_LINHA");
+
+
+    //Telefone 1
+    $tpl3->COLUNA_ALINHAMENTO = "right";
+    $tpl3->COLUNA_TAMANHO = "200px";
+    $tpl3->TITULO = "Telefone 1";
+    $tpl3->block("BLOCK_TITULO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "";
+    $tpl3->COLUNA_TAMANHO = "";
+    $tpl3->CAMPO_TAMANHO = "15";
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_NOME = "fone1";
+    $tpl3->CAMPO_VALOR = "$fone1";
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->block("BLOCK_LINHA");
+
+
+    //Telefone 2
+    $tpl3->COLUNA_ALINHAMENTO = "right";
+    $tpl3->COLUNA_TAMANHO = "200px";
+    $tpl3->TITULO = "Telefone 2";
+    $tpl3->block("BLOCK_TITULO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "";
+    $tpl3->COLUNA_TAMANHO = "";
+    $tpl3->CAMPO_TAMANHO = "15";
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_NOME = "fone2";
+    $tpl3->CAMPO_VALOR = "$fone2";
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->block("BLOCK_LINHA");
+
+
+    //Observação
+    $tpl3->COLUNA_ALINHAMENTO = "right";
+    $tpl3->COLUNA_TAMANHO = "200px";
+    $tpl3->TITULO = "Observação";
+    $tpl3->block("BLOCK_TITULO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "";
+    $tpl3->COLUNA_TAMANHO = "";
+    $tpl3->CAMPO_TAMANHO = "50";
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_NOME = "obs";
+    $tpl3->CAMPO_VALOR = "$obs";
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->block("BLOCK_LINHA");
+
+    $tpl3->show();
+    
+}
 
 
 /*
@@ -1259,8 +1458,6 @@ if ($ope != 4) {
         $tpl4->block(BLOCK_BOTAO);         
         $tpl4->ONCLICK="";
         $tpl4->block(BLOCK_COLUNA);
-        $tpl4->block(BLOCK_LINHA);
-        $tpl4->block(BLOCK_BOTOES);
     }
 
 
@@ -1290,8 +1487,33 @@ if ($ope != 4) {
         $tpl4->block(BLOCK_BOTAO);         
         $tpl4->ONCLICK="";
         $tpl4->block(BLOCK_COLUNA);
-        $tpl4->block(BLOCK_LINHA);
-        $tpl4->block(BLOCK_BOTOES);
+    }
+
+    //Botão Entregas
+    if ($entrega==1) {
+        $tpl4->COLUNA_TAMANHO="";
+        $tpl4->COLUNA_ALINHAMENTO  ="";                
+        $tpl4->COLUNA_LINK_ARQUIVO="saidas_entrega.php?saida=$saida";
+        $tpl4->COLUNA_LINK_CLASSE="";
+        $tpl4->COLUNA_LINK_TARGET="";
+        $tpl4->block(BLOCK_COLUNA_LINK); 
+        if ($entrega_conluida==1) {
+            $tpl4->BOTAO_CLASSE="botao botaovermelho fonte3";
+            $tpl4->BOTAO_VALOR ="CANCELAR ENTREGA";
+        } else {
+            $tpl4->BOTAO_VALOR ="CONFIRMAR ENTREGA";
+            $tpl4->BOTAO_CLASSE="botao botaoverde fonte3";
+        }
+        $tpl4->block(BLOCK_BOTAO_DINAMICO); 
+        $tpl4->BOTAO_TECLA="";
+        $tpl4->BOTAO_TIPO="button";
+        $tpl4->BOTAO_NOME="entrega";
+        $tpl4->BOTAO_ID="";
+        $tpl4->BOTAO_DICA="";
+        $tpl4->BOTAO_ONCLICK="";
+        $tpl4->block(BLOCK_BOTAO);         
+        $tpl4->ONCLICK="";
+        $tpl4->block(BLOCK_COLUNA);
     }
 
 

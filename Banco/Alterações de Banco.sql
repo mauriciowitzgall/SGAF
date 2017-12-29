@@ -18225,3 +18225,7 @@ ADD COLUMN `sai_entrega_cidade` INT NULL AFTER `sai_entrega_bairro`;
 ALTER TABLE `sgaf_labodega`.`saidas` 
 ADD COLUMN `sai_entrega_fone1` VARCHAR(14) NULL AFTER `sai_entrega_cidade`,
 ADD COLUMN `sai_entrega_fone2` VARCHAR(14) NULL AFTER `sai_entrega_fone1`;
+
+ALTER TABLE `sgaf_labodega`.`saidas` 
+ADD COLUMN `sai_entrega_concluida` INT(1) NULL AFTER `sai_entrega_fone2`;
+

@@ -221,3 +221,8 @@
     background-color: #FBEFEF;
 }
 
+.linha_pontilhada {
+      border: 1px dashed gray;
+      
+}
+

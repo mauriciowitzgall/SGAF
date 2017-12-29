@@ -820,9 +820,9 @@ if (($saida == 0) && ($passo == 2)) {
 
         $sql_saida = "
         INSERT INTO
-            saidas (sai_quiosque, sai_caixaoperacaonumero, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro,sai_usuarioquecadastrou, sai_id,sai_obs, sai_entrega, sai_dataentrega,sai_entrega_fone1, sai_entrega_fone2, sai_entrega_endereco, sai_entrega_endereco_numero, sai_entrega_bairro, sai_entrega_cidade )
+            saidas (sai_quiosque, sai_caixaoperacaonumero, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro,sai_usuarioquecadastrou, sai_id,sai_obs, sai_entrega, sai_dataentrega,sai_entrega_fone1, sai_entrega_fone2, sai_entrega_endereco, sai_entrega_endereco_numero, sai_entrega_bairro, sai_entrega_cidade, sai_entrega_concluida )
         VALUES
-            ('$usuario_quiosque','$usuario_caixa_operacao','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2,'$datahoracadastro',$usuario_codigo, $id, '$obs','$entrega','$entrega_dataentrega','$entrega_fone1','$entrega_fone2','$entrega_endereco','$entrega_endereco_numero','$entrega_bairro',$entrega_cidade )        
+            ('$usuario_quiosque','$usuario_caixa_operacao','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2,'$datahoracadastro',$usuario_codigo, $id, '$obs','$entrega','$entrega_dataentrega','$entrega_fone1','$entrega_fone2','$entrega_endereco','$entrega_endereco_numero','$entrega_bairro',$entrega_cidade, 0 )        
         ";
         $query_saida = mysql_query($sql_saida);
         if (!$query_saida)

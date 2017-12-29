@@ -18,7 +18,7 @@ $fornecedor = $_GET["codigo"];
 
 //--------------------------FICOU NO ESTOQUE -------------------------------------
 $tpl3 = new Template("templates/lista1.html");
-
+$tpl2->TABELA_BORDA="1";
 //Título
 $tpl3_tit = new Template("templates/tituloemlinha_1.html");
 $tpl3_tit->LISTA_TITULO = "FICOU NO ESTOQUE";

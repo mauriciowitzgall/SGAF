@@ -325,7 +325,7 @@ if ($passo == 2) {
 
         //--------------------------TOTAL VENDIDO-------------------------------------
         $tpl2 = new Template("templates/lista1.html");
-
+        $tpl2->TABELA_BORDA="1";
         //Título
         $tpl2_tit = new Template("templates/tituloemlinha_1.html");
         $tpl2_tit->LISTA_TITULO = "VENDAS";
@@ -433,7 +433,7 @@ if ($passo == 2) {
 
         //--------------------------TAXAS-------------------------------------
         $tpl5 = new Template("templates/lista1.html");
-
+        $tpl5->TABELA_BORDA="1";
         //Título
         $tpl5_tit = new Template("templates/tituloemlinha_1.html");
         $tpl5_tit->LISTA_TITULO = "TAXAS";

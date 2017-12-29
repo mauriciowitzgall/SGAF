@@ -112,6 +112,8 @@ $filtro_caixaoperacao = $_REQUEST["filtro_caixaoperacao"];
 $filtro_id = $_REQUEST["filtro_id"];
 $filtro_status = $_REQUEST["filtro_status"];
 $filtro_areceber = $_REQUEST["filtro_areceber"];
+$filtro_classificacao = $_REQUEST["filtro_classificacao"];
+if ($filtro_classificacao=="") $filtro_classificacao=1;
 $filtro_devolucao = $_REQUEST["filtro_devolucao"];
 $tpl->LINK_FILTRO = "saidas.php";
 $tpl->FORM_ONLOAD = "valida_filtro_saidas_numero()";
@@ -336,6 +338,25 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 
 
 
+//Filtro Classificação
+$tpl->SELECT_TITULO = "Classificar por";
+$tpl->SELECT_NOME = "filtro_classificacao";
+$tpl->SELECT_OBRIGATORIO = "";
+$tpl->SELECT_OPTION_CODIGO = "1";
+$tpl->SELECT_OPTION_NOME = "Data de cadastro";
+if ($filtro_classificacao == 1)  $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+else  $tpl->SELECT_OPTION_SELECIONADO = "";
+$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+$tpl->SELECT_OPTION_CODIGO = "2";
+$tpl->SELECT_OPTION_NOME = "Data da entrega";
+if ($filtro_classificacao == 2)  $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+else $tpl->SELECT_OPTION_SELECIONADO = "";
+$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+$tpl->block("BLOCK_FILTRO_SELECT");
+$tpl->block("BLOCK_FILTRO_ESPACO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
+
 $tpl->block("BLOCK_FILTRO");
 
 //Inicio da tabela de listagem
@@ -367,13 +388,6 @@ $tpl->CABECALHO_COLUNA_TAMANHO = "";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "CONSUMIDOR";
 $tpl->block("BLOCK_LISTA_CABECALHO");
-
-/*
-$tpl->CABECALHO_COLUNA_TAMANHO = "50px";
-$tpl->CABECALHO_COLUNA_COLSPAN = "";
-$tpl->CABECALHO_COLUNA_NOME = "QTD. PROD.";
-$tpl->block("BLOCK_LISTA_CABECALHO");
-*/
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "50px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
@@ -408,6 +422,13 @@ if ($usacaixa==1) {
     $tpl->block("BLOCK_LISTA_CABECALHO");
 }
 */
+
+if ($fazentregas==1) {
+    $tpl->CABECALHO_COLUNA_TAMANHO = "";
+    $tpl->CABECALHO_COLUNA_COLSPAN = "3";
+    $tpl->CABECALHO_COLUNA_NOME = "ENTREGA";
+    $tpl->block("BLOCK_LISTA_CABECALHO");
+}
 
 $tpl->CABECALHO_COLUNA_TAMANHO = "40 px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
@@ -466,6 +487,12 @@ if ($filtro_devolucao <> "")
     $filtro_devolucao = " and saidev_numero = $filtro_devolucao ";
 if ($filtro_areceber <> "")
     $sql_filtro_areceber = " and sai_areceber = $filtro_areceber ";
+if ($fazentregas==1) {
+    if ($filtro_classificacao == 1) $sql_filtro_classificacao = " order by sai_codigo desc ";
+    else $sql_filtro_classificacao = " order by sai_entrega=1 desc, sai_entrega_concluida=0 desc, sai_dataentrega ";
+} else {
+    $sql_filtro_classificacao=" order by sai_codigo desc";
+}
 //Se o usuário logado possui um caixa definido para vendas, então mostrar apenas as vendas realizadas nesta operação de caixa
 //Se o usuario filtrar por A RECEBER então deve ignorar a validação anterior para mostar todas vendas a receber de outros caixas e operações.
 if ($filtro_areceber!=1) {
@@ -483,7 +510,7 @@ $sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_fil
 
 //SQL Principal das linhas
 $sql = "
-SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo,sai_usuarioquecadastrou,caiopo_operador, (SELECT pes_nome FROM pessoas p WHERE p.pes_codigo=sai_usuarioquecadastrou) as usuarioquecadastrou_nome,sai_id,sai_descontoforcado,sai_acrescimoforcado,sai_descontovalor,sai_areceberquitado
+SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo,sai_usuarioquecadastrou,caiopo_operador, (SELECT pes_nome FROM pessoas p WHERE p.pes_codigo=sai_usuarioquecadastrou) as usuarioquecadastrou_nome,sai_id,sai_descontoforcado,sai_acrescimoforcado,sai_descontovalor,sai_areceberquitado,sai_entrega,sai_dataentrega,sai_entrega_concluida
 FROM saidas 
 JOIN saidas_tipo on (sai_tipo=saitip_codigo) 
 left join saidas_produtos on (saipro_saida=sai_codigo)
@@ -495,7 +522,7 @@ left join pessoas on (pes_codigo=caiopo_operador)
 LEFT JOIN saidas_devolucoes on (sai_codigo=saidev_saida)
 WHERE sai_quiosque=$usuario_quiosque and
 sai_tipo=1 $sql_filtro 
-ORDER BY sai_codigo DESC
+$sql_filtro_classificacao
 ";
 //Paginação
 $query = mysql_query($sql);
@@ -554,6 +581,9 @@ if ($linhas == 0) {
         $desconto = $dados["sai_descontovalor"];
         $troco_desconto = $dados["sai_descontoforcado"];
         $troco_acrescimo = $dados["sai_acrescimoforcado"];
+        $entrega = $dados["sai_entrega"];
+        $dataentrega = $dados["sai_dataentrega"];
+        $sitentrega = $dados["sai_entrega_concluida"];
         $id = $dados["sai_id"];
 
         //Cor de fundo da linha
@@ -620,17 +650,10 @@ if ($linhas == 0) {
         }
         $tpl->block("BLOCK_LISTA_COLUNA");
 
-        /*
-        //Coluna Quantidade Produtos
-        $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
-        $tpl->LISTA_COLUNA_CLASSE = "";
-        $sql3 = "SELECT DISTINCT saipro_produto as qtd FROM saidas_produtos WHERE saipro_saida=$numero";
-        $query3 = mysql_query($sql3);
-        if (!$query3)
-            die("Erro: " . mysql_error());
-        $tpl->LISTA_COLUNA_VALOR = "(" . mysql_num_rows($query3) . ")";
-        $tpl->block("BLOCK_LISTA_COLUNA");
-        */
+
+        
+
+
 
         //Coluna Quantidade Itens
         $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
@@ -697,6 +720,89 @@ if ($linhas == 0) {
             }
         }
         */
+
+        //Coluna Entregas 
+        if ($fazentregas==1) {
+
+
+            $diasemana = array(
+                "0" => "Domingo",
+                "1" => "Segunda",
+                "2" => "Terça",
+                "3" => "Quarta",
+                "4" => "Quinta",
+                "5" => "Sexta",
+                "6" => "Sábado",
+            );
+            $dataatual = date("Y-m-d");
+            $diasemana_numero = date('w', strtotime($dataentrega));
+            $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
+            $tpl->LISTA_COLUNA_CLASSE = "";
+            $saldo = diferenca_data($dataatual, $dataentrega, 'D');
+            if ($saldo==0) { 
+                $dataentrega2="Hoje"; 
+            } else if ($saldo==-1) { 
+                $dataentrega2="Ontem"; 
+            } else if ($saldo==1) {
+                $dataentrega2="Amanhã"; 
+            } else if (($saldo==2)||($saldo==3)) {
+                $dataentrega2=$diasemana[$diasemana_numero];
+            } else if (($saldo==-2)||($saldo==-3)) {
+                $dataentrega2=$diasemana[$diasemana_numero];
+            } else if (($dataentrega=="")||($entrega==0)) {
+                $dataentrega2="---";
+            } else if ($saldo>3) {
+                $dataentrega2= converte_data($dataentrega);
+            } else if ($saldo<-3) {
+                $dataentrega2= converte_data($dataentrega);
+            } 
+            //Icone Entrega
+            if ($entrega==0) {
+                $tpl->ICONE_ARQUIVO = $icones . "erro.png";
+                $tpl->OPERACAO_NOME = "Esta venda não possui entregas";
+                $tpl->LISTA_COLUNA_CLASSE = "";
+                $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+            } else {
+                if ($sitentrega == 0) {
+                    if (($saldo<0)&&($sitentrega==0)) {
+                        $tpl->ICONE_ARQUIVO = $icones . "entrega_atrasada.png";
+                        $tpl->OPERACAO_NOME = "Entrega ATRASADA";
+                        $tpl->LISTA_COLUNA_CLASSE = "tabelalinhavermelha";
+                        $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+                    } else {
+                        $tpl->ICONE_ARQUIVO = $icones . "entrega_aguardando.png";
+                        $tpl->OPERACAO_NOME = "Aguardando a entrega";
+                        $tpl->LISTA_COLUNA_CLASSE = "tabelalinhaamarelo";
+                        $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+                    }
+                } else if ($sitentrega == 1) {
+                    $tpl->ICONE_ARQUIVO = $icones . "entrega_realizada.png";
+                    $tpl->OPERACAO_NOME = "A entrega já foi realizada";
+                    $tpl->LISTA_COLUNA_CLASSE = "tabelalinhaverde";
+                    $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+                } 
+            }
+            $tpl->LISTA_COLUNA_VALOR = $dataentrega2;
+            $tpl->block("BLOCK_LISTA_COLUNA");
+            //Icone Imprimir Ordem de entrega
+            $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
+            $tpl->LISTA_COLUNA_CLASSE = "";
+            if (($entrega==1)&&($sitentrega==0)) {
+                $tpl->ICONE_LINK="saidas_ordemdeentrega.php?codigo=$saida&tiposaida=1&ope=4";
+                $tpl->ICONE_TARGET="_blank";
+                $tpl->block("BLOCK_LISTA_COLUNA_ICONE_LINK");
+                $tpl->ICONE_ARQUIVO = $icones . "imprimir.png";
+                $tpl->OPERACAO_NOME = "Imprimir ordem de entrega";
+                $tpl->LISTA_COLUNA_CLASSE = "";
+                $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+            } else {
+                $tpl->ICONE_ARQUIVO = $icones . "imprimir_desabilitado.png";
+                $tpl->OPERACAO_NOME = "Imprimir ordem de entrega";
+                $tpl->LISTA_COLUNA_CLASSE = "";
+                $tpl->block("BLOCK_LISTA_COLUNA_ICONE");                
+            }
+        }
+
         
         //Metodo de pagamento
         if ($metodopag == 1) {

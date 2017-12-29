@@ -118,7 +118,7 @@
         </tr>
         <!-- BEGIN BLOCK_LISTA -->
         <tr class="{LISTA_LINHA_CLASSE} lin">
-                        
+            
             
             <!-- BEGIN BLOCK_LISTA_COLUNA -->
             <td align="{LISTA_COLUNA_ALINHAMENTO}" class="{LISTA_COLUNA_CLASSE}">
@@ -153,8 +153,14 @@
 
             <!-- BEGIN BLOCK_LISTA_COLUNA_ICONE -->
             <td align="center" class="" width="">                                
+                <!-- BEGIN BLOCK_LISTA_COLUNA_ICONE_LINK -->
+                <a href="{ICONE_LINK}" class=" " target="{ICONE_TARGET}">    
+                <!-- END BLOCK_LISTA_COLUNA_ICONE_LINK -->              
                 <img   width="18px" src="{ICONE_ARQUIVO}" title="{OPERACAO_NOME}"  alt="{OPERACAO_NOME}" />
-            </td>            
+                </a>
+            </td>
+            
+
             <!-- END BLOCK_LISTA_COLUNA_ICONE -->  
 
             <!-- BEGIN BLOCK_LISTA_COLUNA_OPERACAO_TODAS -->
@@ -178,7 +184,7 @@
             <!-- END BLOCK_LISTA_COLUNA_OPERACAO_TODAS -->
             </td>
             
-            
+        </a>   
         </tr>
         <!-- END BLOCK_LISTA -->
 
