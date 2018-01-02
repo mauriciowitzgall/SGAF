@@ -7,7 +7,7 @@ if (($permissao_saidas_ver <> 1)) {
     exit;
 }
 
-//print_r($_REQUEST);
+print_r($_REQUEST);
 
 $tipopagina = "saidas";
 include "includes.php";
@@ -112,6 +112,7 @@ $filtro_caixaoperacao = $_REQUEST["filtro_caixaoperacao"];
 $filtro_id = $_REQUEST["filtro_id"];
 $filtro_status = $_REQUEST["filtro_status"];
 $filtro_areceber = $_REQUEST["filtro_areceber"];
+$filtro_areceber_quitado = $_REQUEST["filtro_areceber_quitado"];
 $filtro_classificacao = $_REQUEST["filtro_classificacao"];
 if ($filtro_classificacao=="") $filtro_classificacao=1;
 $filtro_devolucao = $_REQUEST["filtro_devolucao"];
@@ -310,8 +311,30 @@ $tpl->block("BLOCK_FILTRO_SELECT");
 $tpl->block("BLOCK_FILTRO_ESPACO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
-//Filtro Nº Devolução
 
+//Filtro A receber Caderninho Quitado
+$tpl->SELECT_TITULO = "À receber quitado";
+$tpl->SELECT_NOME = "filtro_areceber_quitado";
+$tpl->SELECT_OBRIGATORIO = "";
+if ($filtro_areceber_quitado=="") $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+else $tpl->SELECT_OPTION_SELECIONADO = "";
+$tpl->block("BLOCK_FILTRO_SELECT_OPTIONPADRAO");
+$tpl->SELECT_OPTION_CODIGO = "1";
+$tpl->SELECT_OPTION_NOME = "Sim";
+if ($filtro_areceber_quitado == 1)    $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+else $tpl->SELECT_OPTION_SELECIONADO = "";
+$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+$tpl->SELECT_OPTION_CODIGO = "0";
+$tpl->SELECT_OPTION_NOME = "Não";
+if ($filtro_areceber_quitado == 0) $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+else $tpl->SELECT_OPTION_SELECIONADO = "";
+$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+$tpl->block("BLOCK_FILTRO_SELECT");
+$tpl->block("BLOCK_FILTRO_ESPACO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
+
+//Filtro Nº Devolução
 if ($usadevolucoes==1) {
     $tpl->CAMPO_TITULO = "Nº Devolução";
     $tpl->CAMPO_TAMANHO = "10";

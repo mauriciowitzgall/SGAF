@@ -265,7 +265,7 @@ $saldo=$valtot_comdesconto-$pendente; //-$dev_total_comdesconto;
 if ($pendente>0) {
     if ($saldo<0) $abatido=$valtot_comdesconto; else $abatido=$pendente;
     
-    if ($usapagamentosparciais==1) {
+    if (($usapagamentosparciais==1)&&($abatido>0)) {
 
 
         $sql="
@@ -296,7 +296,7 @@ if ($pendente>0) {
     }
 
     //Gera entrada de caixa a partir do pagamento abatido
-    if ($usacaixa==1) {
+    if (($usacaixa==1)&&($abatido>0)) {
         $sql8 = "
         INSERT INTO 
             caixas_entradassaidas (
@@ -344,7 +344,7 @@ if ($saldo> 0) {
 
 
 //Sempre deve ser gerado uma saída de caixa no valor da devolução. 
-if ($usacaixa==1) {
+if (($usacaixa==1)&&($valtot_comdesconto>0)) {
     $sql8 = "
     INSERT INTO 
         caixas_entradassaidas (

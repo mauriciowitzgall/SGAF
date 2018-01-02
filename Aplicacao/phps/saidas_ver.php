@@ -889,11 +889,11 @@ if ($temdevolucoes==1) {
     $tpl2 = new Template("templates/lista1.html");
     $tpl2->TABELA_BORDA="1";
     $tpl2->block(BLOCK_TABELA_CHEIA);
-    $tpl2->CABECALHO_COLUNA_TAMANHO = "120px";
+    $tpl2->CABECALHO_COLUNA_TAMANHO = "";
     $tpl2->CABECALHO_COLUNA_COLSPAN = "";
     $tpl2->CABECALHO_COLUNA_NOME = "Nº DEV.";
     $tpl2->block(BLOCK_LISTA_CABECALHO);
-    $tpl2->CABECALHO_COLUNA_TAMANHO = "100px";
+    $tpl2->CABECALHO_COLUNA_TAMANHO = "";
     $tpl2->CABECALHO_COLUNA_COLSPAN = "";
     $tpl2->CABECALHO_COLUNA_NOME = "DATA ";
     $tpl2->block(BLOCK_LISTA_CABECALHO);
