@@ -21,11 +21,12 @@ while ($dados = mysql_fetch_array($query)) {
     $fone1= $dados['pes_fone1'];
     $fone2= $dados['pes_fone2'];
     $endereco= $dados['pes_endereco'];
+    $endereco_numero= $dados['pes_numero'];
     $bairro= $dados['pes_bairro'];
     $cidade= $dados['pes_cidade'];
     $estado= $dados['cid_estado'];
     $pais= $dados['est_pais'];
 
-    echo "$codigo|$nome|$fone1|$fone2|$endereco|$bairro|$cidade|$estado|$pais";
+    echo "$codigo|$nome|$fone1|$fone2|$endereco|$bairro|$cidade|$estado|$pais|$endereco_numero";
 }
 ?>

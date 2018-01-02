@@ -212,6 +212,7 @@ function verifica_entrega (valor) {
                     consumidor_fone1=valor2[2];
                     consumidor_fone2=valor2[3];
                     consumidor_endereco=valor2[4];
+                    consumidor_endereco_numero=valor2[9];
                     consumidor_bairro=valor2[5];
                     consumidor_cidade=parseInt(valor2[6]);
                     consumidor_estado=parseInt(valor2[7]);
@@ -219,6 +220,7 @@ function verifica_entrega (valor) {
                     $("input[name=fone1]").val(consumidor_fone1);
                     $("input[name=fone2]").val(consumidor_fone2);
                     $("input[name=endereco]").val(consumidor_endereco);
+                    $("input[name=endereco_numero]").val(consumidor_endereco_numero);
                     $("input[name=bairro]").val(consumidor_bairro);
                     popula_estados(consumidor_pais,consumidor_estado); 
                     popula_cidades(consumidor_estado,consumidor_cidade);

@@ -167,29 +167,17 @@ if ($retirar_produto == '1') {
         }
     } else { //Caso seja uma venda nova, cadastro
 
-        $operacao=1;
-        $saida = $_POST["saida"];
-        $passo = $_POST["passo"];  
+        $consumidor = $_REQUEST["consumidor"];
+        $saida = $_REQUEST["saida"];
 
-        if (($consumidor!="")&&($consumidor!=0)) { //foi selecionado uma pessoa
-            $sql0="SELECT pes_cpf, pes_cnpj,pes_tipopessoa FROM pessoas WHERE pes_codigo=$consumidor";
-            if (!$query0 = mysql_query($sql0)) die("Erro 0: " . mysql_error());
-            $dados0=  mysql_fetch_assoc($query0);
-            $consumidor_cpf=$dados0["pes_cpf"];
-            $consumidor_cnpj=$dados0["pes_cnpj"];
-            $consumidor_fone=$dados0["pes_fone1"];
-            $tipopessoa = $dados0["pes_tipopessoa"];
-        } 
-        if ($tipopessoa=="") { //Pro padrão a pessoa é fisica, cpf
-            $tipopessoa=1;
-        }
+        $operacao=1;
+        $passo = $_REQUEST["passo"];  
 
         //Se ja tem saida, significa que ja passou o cadastro do consumidor, comandas ou entregas, ou seja, passo 2.
         if (($saida>0)) {
             $pega_dados_do_banco=1;
-                    echo "($obs)";  
         } else {
-            $consumidor = $_REQUEST["consumidor"];
+            
             $cliente_nome = $_POST["cliente_nome"];
             $tipopessoa = $_POST["tipopessoa"];
             $consumidor_cpf=$_POST["cpf"];
@@ -211,6 +199,19 @@ if ($retirar_produto == '1') {
             if ($entrega_cidade=="") $entrega_cidade=$usuario_quiosque_cidade;  
 
 
+        }
+
+        if (($consumidor!="")&&($consumidor!=0)) { //foi selecionado uma pessoa
+            $sql0="SELECT pes_cpf, pes_cnpj,pes_tipopessoa FROM pessoas WHERE pes_codigo=$consumidor";
+            if (!$query0 = mysql_query($sql0)) die("Erro 0: " . mysql_error());
+            $dados0=  mysql_fetch_assoc($query0);
+            $consumidor_cpf=$dados0["pes_cpf"];
+            $consumidor_cnpj=$dados0["pes_cnpj"];
+            $consumidor_fone=$dados0["pes_fone1"];
+            $tipopessoa = $dados0["pes_tipopessoa"];
+        } 
+        if ($tipopessoa=="") { //Pro padrão a pessoa é fisica, cpf
+            $tipopessoa=1;
         }
          
     }
@@ -267,7 +268,6 @@ if ($retirar_produto == '1') {
     $qtdnoestoque = $_POST["qtdnoestoque"];
     
 }
-
 
 //Se a saida tiver algum valor significa que já foi registrada a mesma, e portanto não há mais a necessidade de pegar os dados por post para poder gravar a mesma, pegamos do banco, pois já temos um consumidor vinculado a venda e estes não serão modificados.
 if ($pega_dados_do_banco==1) {
@@ -1529,7 +1529,7 @@ if ($passo == 2) {
                 $tpl->ICONES = $icones;
                 //$tpl->MOTIVO_COMPLEMENTO = "";
                 $tpl->block("BLOCK_ATENCAO");
-                $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=$operacao&tiposaida=1&id=$id&consumidor=$consumidor&passo=2&usacomanda=$usacomanda&ignorar_vendas_incompletas=1&fone=$consumidor_fone&ignorar_vendas_areceber=$ignorar_vendas_areceber&entrega=$entrega";
+                $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=$operacao&tiposaida=1&id=$id&consumidor=$consumidor&passo=2&usacomanda=$usacomanda&ignorar_vendas_incompletas=1&fone=$consumidor_fone&ignorar_vendas_areceber=$ignorar_vendas_areceber&entrega=$entrega&saida=$saida";
                 $vendas_incompletas="<br> <i>";
                 while ($dados4=  mysql_fetch_assoc($query4)) {
                     $vendainc_codigo=$dados4["sai_codigo"];
@@ -1566,7 +1566,7 @@ if ($passo == 2) {
                 $tpl->ICONES = $icones;
                 //$tpl->MOTIVO_COMPLEMENTO = "";
                 $tpl->block("BLOCK_ATENCAO");
-                $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=$operacao&tiposaida=1&id=$id&consumidor=$consumidor&passo=2&usacomanda=$usacomanda&ignorar_vendas_incompletas=1&fone=$consumidor_fone&ignorar_vendas_areceber=1&entrega=$entrega";
+                $tpl->LINK = "saidas_cadastrar.php?codigo=$saida&operacao=$operacao&tiposaida=1&id=$id&consumidor=$consumidor&passo=2&usacomanda=$usacomanda&ignorar_vendas_incompletas=1&fone=$consumidor_fone&ignorar_vendas_areceber=1&entrega=$entrega&saida=$saida";
                 $listinha="<br> <i>";
                 while ($dados4=  mysql_fetch_assoc($query4)) {
                     $listinha_codigo=$dados4["sai_codigo"];
