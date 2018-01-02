@@ -40,7 +40,7 @@ function metodopagamento() {
     valor=$("select[name=metodopag]").val();
     //alert(valor);
     var total = $("input[name=total]").val();
-    if ((valor==1)||(valor==4)) { //Dinheiro ou Cheque
+    if ((valor==1)||(valor==4)||(valor==5)) { //Dinheiro ou Cheque, ou Desconhecido
         $("tr[id=tr_dinheiro]").show();
         document.form1.dinheiro.required=true;
         $("input[name=dinheiro]").focus();

@@ -1,6 +1,6 @@
 <?php
 
-//print_r($_REQUEST);
+print_r($_REQUEST);
 
 //Verifica se o usuário pode acessar a tela
 require "login_verifica.php";
@@ -132,8 +132,10 @@ if ($retirar_produto == '1') {
     $qtd = $_GET["qtd"];
     $produto = $_GET["produto"];
     $tipopessoa = $_GET["tipopessoa"];
+    $obs = $_GET["obs"];
 
     $pega_dados_do_banco=1;
+
 
 } else { 
     if ($operacao == 2) { // Se for edição pega os dados principais da venda para popular campos
@@ -164,16 +166,11 @@ if ($retirar_produto == '1') {
             $pega_dados_do_banco=1;
         }
     } else { //Caso seja uma venda nova, cadastro
+
         $operacao=1;
         $saida = $_POST["saida"];
-        $passo = $_POST["passo"];
-        $consumidor = $_REQUEST["consumidor"];
-        $cliente_nome = $_POST["cliente_nome"];
-        $tipopessoa = $_POST["tipopessoa"];
-        $consumidor_cpf=$_POST["cpf"];
-        $consumidor_cnpj=$_POST["cnpj"];
-        $consumidor_fone=$_POST["fone"];
-        $obs=$_POST["obs"];
+        $passo = $_POST["passo"];  
+
         if (($consumidor!="")&&($consumidor!=0)) { //foi selecionado uma pessoa
             $sql0="SELECT pes_cpf, pes_cnpj,pes_tipopessoa FROM pessoas WHERE pes_codigo=$consumidor";
             if (!$query0 = mysql_query($sql0)) die("Erro 0: " . mysql_error());
@@ -187,11 +184,19 @@ if ($retirar_produto == '1') {
             $tipopessoa=1;
         }
 
-        //Se ja tem saida, significa que ja passou cadastrou o consumidor e as vendas.
+        //Se ja tem saida, significa que ja passou o cadastro do consumidor, comandas ou entregas, ou seja, passo 2.
         if (($saida>0)) {
             $pega_dados_do_banco=1;
+                    echo "($obs)";  
         } else {
+            $consumidor = $_REQUEST["consumidor"];
+            $cliente_nome = $_POST["cliente_nome"];
+            $tipopessoa = $_POST["tipopessoa"];
+            $consumidor_cpf=$_POST["cpf"];
+            $consumidor_cnpj=$_POST["cnpj"];
+            $consumidor_fone=$_POST["fone"];
             $entrega=$_REQUEST["entrega"];
+            $obs=$_REQUEST["obs"];
             $entrega_dataentrega=$_POST["dataentrega"];
             $entrega_endereco=$_POST["endereco"];
             $entrega_endereco_numero=$_POST["endereco_numero"];
@@ -286,6 +291,7 @@ if ($pega_dados_do_banco==1) {
         $entrega_pais=$dados["est_pais"];
         $entrega_fone1=$dados["sai_entrega_fone1"];
         $entrega_fone2=$dados["sai_entrega_fone2"];
+        $obs=$dados["sai_obs"];
 
     }
 }
@@ -295,7 +301,7 @@ if ($pega_dados_do_banco==1) {
 $passo= $_REQUEST["passo"];
 
 
-//Verificar se é uma edição, se sim então atualiza id e consumidor
+//Verificar se é uma edição, se sim então atualiza comanda e consumidor
 if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&(($usacomanda==1)||($identificacaoconsumidorvenda!=3)||($obsnavenda==1)||($fazentregas==1))) {
     //print_r($_REQUEST);
     $id_novo=$_REQUEST["id"];
