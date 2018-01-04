@@ -18194,26 +18194,26 @@ UPDATE `configuracoes` SET `cnf_versao`='v4.1.1', `cnf_dataversao`=now() WHERE `
 ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_obsnavenda` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_valorvendazero`;
 
-ALTER TABLE `sgaf_labodega`.`saidas` 
+ALTER TABLE `sgaf`.`saidas` 
 ADD COLUMN `sai_obs` TEXT NULL AFTER `sai_cartaobandeira`;
 
-ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ALTER TABLE `sgaf`.`quiosques_configuracoes` 
 ADD COLUMN `quicnf_obsnaentrada` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_obsnavenda`;
 
 
-ALTER TABLE `sgaf_labodega`.`entradas` 
+ALTER TABLE `sgaf`.`entradas` 
 ADD COLUMN `ent_obs` TEXT NULL AFTER `ent_paravenda`;
 
 
-ALTER TABLE `sgaf_labodega`.`quiosques_configuracoes` 
+ALTER TABLE `sgaf`.`quiosques_configuracoes` 
 ADD COLUMN `quicnf_fazentregas` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_obsnaentrada`;
 
-DELETE FROM `sgaf_labodega`.`paises` WHERE `pai_codigo`='13';
-DELETE FROM `sgaf_labodega`.`paises` WHERE `pai_codigo`='12';
-DELETE FROM `sgaf_labodega`.`paises` WHERE `pai_codigo`='11';
-DELETE FROM `sgaf_labodega`.`paises` WHERE `pai_codigo`='14';
+DELETE FROM `sgaf`.`paises` WHERE `pai_codigo`='13';
+DELETE FROM `sgaf`.`paises` WHERE `pai_codigo`='12';
+DELETE FROM `sgaf`.`paises` WHERE `pai_codigo`='11';
+DELETE FROM `sgaf`.`paises` WHERE `pai_codigo`='14';
 
-ALTER TABLE `sgaf_labodega`.`saidas` 
+ALTER TABLE `sgaf`.`saidas` 
 ADD COLUMN `sai_entrega` INT(1) NULL AFTER `sai_obs`,
 ADD COLUMN `sai_dataentrega` DATE NULL AFTER `sai_entrega`,
 ADD COLUMN `sai_entrega_endereco` VARCHAR(70) NULL AFTER `sai_dataentrega`,
@@ -18222,10 +18222,23 @@ ADD COLUMN `sai_entrega_bairro` VARCHAR(70) NULL AFTER `sai_entrega_endereco_num
 ADD COLUMN `sai_entrega_cidade` INT NULL AFTER `sai_entrega_bairro`;
 
 
-ALTER TABLE `sgaf_labodega`.`saidas` 
+ALTER TABLE `sgaf`.`saidas` 
 ADD COLUMN `sai_entrega_fone1` VARCHAR(14) NULL AFTER `sai_entrega_cidade`,
 ADD COLUMN `sai_entrega_fone2` VARCHAR(14) NULL AFTER `sai_entrega_fone1`;
 
-ALTER TABLE `sgaf_labodega`.`saidas` 
+ALTER TABLE `sgaf`.`saidas` 
 ADD COLUMN `sai_entrega_concluida` INT(1) NULL AFTER `sai_entrega_fone2`;
+
+
+UPDATE `configuracoes` SET `cnf_versao`='v4.1' WHERE `cnf_codigo`='1';
+
+------ FIM ------
+
+------ INICIO v4.1.2 ------ 
+
+ALTER TABLE `sgaf_labodega`.`configuracoes` 
+ADD COLUMN `cnf_dataversao` DATETIME NOT NULL AFTER `cnf_versao`;
+
+UPDATE `configuracoes` SET `cnf_versao`='v4.1.2', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
+
 
