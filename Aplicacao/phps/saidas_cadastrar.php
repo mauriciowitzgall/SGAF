@@ -1504,6 +1504,9 @@ if ($tiposaida == 3) {
     $tpl1->CAMPOOCULTO_NOME = "tiposaida";
     $tpl1->CAMPOOCULTO_VALOR = "$tiposaida";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
+    $tpl1->CAMPOOCULTO_NOME = "tiposaida";
+    $tpl1->CAMPOOCULTO_VALOR = "$tiposaida";
+    $tpl1->block("BLOCK_CAMPOSOCULTOS");
     $tpl1->CAMPOOCULTO_NOME = "id2";
     $tpl1->CAMPOOCULTO_VALOR = "$id";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");

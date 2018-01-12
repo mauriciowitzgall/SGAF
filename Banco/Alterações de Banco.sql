@@ -18242,3 +18242,9 @@ ADD COLUMN `cnf_dataversao` DATETIME NOT NULL AFTER `cnf_versao`;
 UPDATE `configuracoes` SET `cnf_versao`='v4.1.2', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
 
 
+ALTER TABLE `sgaf_labodega`.`produtos` 
+DROP FOREIGN KEY `fk_nfe_ncm`;
+ALTER TABLE `sgaf_labodega`.`produtos` 
+ENGINE = MyISAM ,
+DROP INDEX `pro_ncm` ;
+

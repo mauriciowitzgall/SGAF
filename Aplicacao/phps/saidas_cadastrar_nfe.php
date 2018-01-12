@@ -1,15 +1,17 @@
 <?php
 
-//print_r($_REQUEST);
 
 //Verifica se o usuário pode acessar a tela
 require "login_verifica.php";
-$saida = $_GET["codigo"];
+$saida = $_GET["saida"];
 $ope = $_GET["ope"];
-if ($saida=="") $saida=$_GET["saida"];
+
 
 $tipopagina = "saidas";
 include "includes.php";
+
+
+//print_r($_REQUEST);
 
 //Pega dados do banco para popular os campos da tela
 $sql="SELECT * 
@@ -130,7 +132,7 @@ $tpl_titulo->ICONES_CAMINHO = "$icones";
 $tpl_titulo->NOME_ARQUIVO_ICONE = "nfe_gerar3.png";
 $tpl_titulo->show();
 
-$saida = $_GET['codigo'];
+
  
 //Estrutura dos campos de cadastro
 $tpl1 = new Template("templates/cadastro_edicao_detalhes_2.html");

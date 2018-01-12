@@ -9,7 +9,7 @@ if ($permissao_entradas_cadastrar <> 1) {
 
 include "includes.php";
 
-//print_r($_REQUEST);
+print_r($_REQUEST);
 
 $tpl = new Template("entradas_cadastrar.html");
 $tpl->ICONES_CAMINHO = "$icones";
@@ -43,7 +43,6 @@ if ($tipopessoa == "") { //caso o campo fornecedor fique desabilitado!
 $produto = $_POST['produto'];
 $marca = $_POST['marca'];
 $item_numero = $_POST['item_numero'];
-
 
 
 $qtd = $_POST['qtd'];
@@ -355,9 +354,10 @@ if ((($operacao=="")||($operacao==1))||(($operacao==2)&&($paravenda==1))) {
 
 
     //Observação
+    echo "($obsnaentrada / $entrada)";
     if ($obsnaentrada==1) {
         $tpl->OBS="$obs";
-        if ($entrada!="") $tpl->block("BLOCK_OBS_DESABILITADA");
+        if (($passo==2)||($operacao==2)) $tpl->block("BLOCK_OBS_DESABILITADA");
         $tpl->block("BLOCK_OBS");
     }
 

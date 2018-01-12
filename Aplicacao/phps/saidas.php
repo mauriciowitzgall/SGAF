@@ -459,7 +459,7 @@ $tpl->CABECALHO_COLUNA_NOME = "PAG.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
 
-$oper = 0;
+$oper = 1; //começa em 1 porque tem o icone que faz apenas o financeiro da venda
 $oper_tamanho = 0;
 if ($permissao_saidas_ver == 1) {
     $oper++;
@@ -908,6 +908,9 @@ if ($linhas == 0) {
         }
 
 
+    
+
+
 
 
         if ($permissao_saidas_ver == 1) {
@@ -921,6 +924,14 @@ if ($linhas == 0) {
             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_TODAS");
         }
+
+        //Financeiro/Pagamento da venda
+        $tpl->OPERACAO_NOME = "Pagamento";
+        $tpl->LINK = "saidas_cadastrar2.php";
+        $tpl->LINK_COMPLEMENTO = "saida=$saida&tiposai=1&passo=1";                                
+        $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento.png";
+        //$tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_NOVAPAGINA");            
+        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");        
 
         //Verifica se algum produto desta saida foi acertado
         $sql22 = "SELECT saipro_acertado FROM `saidas_produtos` WHERE saipro_saida=$numero and saipro_acertado !=0";

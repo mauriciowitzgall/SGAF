@@ -5,6 +5,13 @@
 //Verifica se o usuário pode acessar a tela
 require "login_verifica.php";
 
+//NFE
+error_reporting(E_ALL);
+ini_set('display_errors', 'On');
+require_once 'spednferest/bootstrap.php';
+require_once 'spednferest/EmissorNFe.php';
+
+
 $saida = $_GET["saida"];
 $indicadorpresenca = $_POST["indicadorpresenca"];
 $tipoimpressaodanfe = $_POST["tipoimpressaodanfe"];
@@ -591,6 +598,9 @@ echo json_encode($dadosNfeItens)."<br><br>";
 
 // AQUI VAMOS CHAMAR O METODO DE GERACAO DA NOTA DO SERVIDOR DO SPED NFE
 // VAI RETORNAR UM OUTRO JSON CONTENDO MENSAGENS DE SUCESSO OU ERRO
+$emissor = new EmissorNFe($configJson, $dadosNfeJson, $dadosNfeItensJson);
+$emissor->emiteNfe();
+
 
 
 //Atualiza a última NFE gerada

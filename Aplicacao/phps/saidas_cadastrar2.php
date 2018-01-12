@@ -8,6 +8,8 @@ if ($permissao_saidas_cadastrar <> 1) {
 
 $tipopagina = "saidas";
 
+print_r($_REQUEST);
+
 include "includes.php";
 //include "funcoes.php";
 
@@ -30,8 +32,8 @@ if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
     exit;
 }
 
-$saida = $_POST["saida"];
-$passo = $_POST["passo"];
+$saida = $_REQUEST["saida"];
+$passo = $_REQUEST["passo"];
 $tiposai = $_REQUEST["tiposai"];
 $descper=$_POST["descper"];
 $descper = str_replace('.', '', $descper);
@@ -55,7 +57,7 @@ $metodopag = $_REQUEST["metodopag"];
 $sql = "SELECT * FROM saidas JOIN saidas_produtos ON (saipro_saida=sai_codigo) WHERE sai_codigo=$saida";
 $query = mysql_query($sql);
 if (!$query) {
-    die("Erro de SQL: " . mysql_error());
+    die("Erro de SQL 1: " . mysql_error());
 }
 $valbru = 0;
 while ($dados = mysql_fetch_assoc($query)) {

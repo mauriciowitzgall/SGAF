@@ -22,7 +22,7 @@ if ($usavendas!=1) {
 }
 
 
-//print_r($_REQUEST);
+print_r($_REQUEST);
 
 //Verifica se o usuário é um caixa e não tem caixa aberto, se sim não pode acessar as vendas
 if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
@@ -209,7 +209,7 @@ if ($usamodulofiscal==1) {
 
 
     //Botão Imprimir
-    $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_ver.php?codigo=$saida&tiposaida=$tiposaida&ope=4";
+    $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_ver.php?codigo=$saida&tiposaida=$tiposai&ope=4";
     $tpl_notificacao->block("BLOCK_BOTAOGERAL_NOVAJANELA");
     $tpl_notificacao->BOTAOGERAL_TIPO="button";
     $tpl_notificacao->BOTAOGERAL_NOME="IMPRIMIR";

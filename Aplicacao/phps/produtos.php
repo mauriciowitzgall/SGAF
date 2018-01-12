@@ -229,7 +229,7 @@ ORDER BY $sql_ordenacao
             $tamanho = $array['pro_tamanho'];
             $cor = $array['pro_cor'];
             $descricao = $array['pro_descricao'];
-            $nome2="$nome $tamanho $cor $descricao";
+            $nome2="$nome";
             $data = converte_data($array['pro_datacriacao']);
             $hora = converte_hora($array['pro_horacriacao']);
             $usuarioquecadastrou=$array['pro_usuarioquecadastrou'];

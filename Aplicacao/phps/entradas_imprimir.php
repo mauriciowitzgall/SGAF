@@ -104,6 +104,9 @@ $tpl->block("BLOCK_SUPERVISOR");
 $tpl->block("BLOCK_ENTER");
 //$tpl->block("BLOCK_HR");
 
+
+$tpl->block("BLOCK_DATA_DESABILITADA");
+$tpl->block("BLOCK_HORA_DESABILITADA");
 $tpl->block("BLOCK_DATAHORA");
 
 //Cabeçalho
