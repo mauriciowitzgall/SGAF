@@ -7,8 +7,9 @@ if ($permissao_saidas_cadastrar <> 1) {
     exit;
 }
 $tipopagina = "devolucoes";
-include "includes.php";
+include "includes2.php";
 
+//print_r($_REQUEST);
 
 //Template de Título e Sub-título
 $tpl_titulo = new Template("templates/titulos.html");
@@ -21,7 +22,6 @@ $tpl_titulo->show();
 $datahoraatual=date("Y-m-d H:i:s");
 
 //Pegar todos os dados digitados
-//print_r($_REQUEST);
 $saida=$_GET["saida"];
 $valtot=$_REQUEST["campooculto_valtot"];
 $valtot_comdesconto=$_REQUEST["campooculto_valtot_comdesconto"];
@@ -75,7 +75,18 @@ while ($dados2=mysql_fetch_assoc($query2)) {
     $qtddigitada=$_POST["$nome"];
     $produto=$dados2["saipro_produto"];
     $lote=$dados2["saipro_lote"];
+    $porcao=$dados2["saipro_porcao"];
     $valuniitem=$dados2["saipro_valorunitario"];
+    if ($porcao>0) {
+        $sql1="SELECT * FROM produtos_porcoes WHERE propor_codigo=$porcao";
+        if (!$query1 = mysql_query($sql1)) die("Erro1:" . mysql_error());
+        $dados1=  mysql_fetch_assoc($query1);
+        $porcao_qtdref=$dados1["propor_quantidade"];
+        $porcao_valuniref=$dados1["propor_valuniref"];
+        $valuniitem=$porcao_valuniref/$porcao_qtdref;
+        //echo "$porcao_qtdref / $porcao_valuniref";
+    }  
+
     $valtotitem=$valuniitem*$qtddigitada;
     $valtotliq=$valtotitem*(100-$venda_descontopercentual)/100;
 

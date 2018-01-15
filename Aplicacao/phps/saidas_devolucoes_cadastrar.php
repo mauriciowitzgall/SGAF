@@ -9,7 +9,7 @@ if ($permissao_saidas_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
-include "includes.php";
+include "includes2.php";
 
 $saida=$_GET["codigo"];
 
@@ -148,12 +148,14 @@ $cont=0;
 while ($dados3=  mysql_fetch_assoc($query3)) {
     $produto_nome=$dados3["pro_nome"];
     $produto_referencia=$dados3["pro_referencia"];
+    $produto_tipocontagem=$dados3["pro_tipocontagem"];
     $itemvenda=$dados3["saipro_codigo"];
     $qtdvenda=$dados3["saipro_quantidade"];
     $produto_tipocontagem_sigla=$dados3["protip_sigla"];
     $valuni=$dados3["saipro_valorunitario"];
     $lote=$dados3["saipro_lote"];
     $descper=$dados3["sai_descontopercentual"];
+    $porcao=$dados3["saipro_porcao"];
     
 
     /*if ($qtd_emestoque==0) {
@@ -234,7 +236,7 @@ while ($dados3=  mysql_fetch_assoc($query3)) {
     $nome_valuni="valuni_"."$itemvenda";
     $nome_valtot="valtot_"."$itemvenda";
     $nome_valtot_comdesconto="valtot_comdesconto_"."$itemvenda";
-    $tpl->LISTA_COLUNA_VALOR= "<input type='number' pattern='[0-9]+$' min='0' max='$qtdlimite' name='$nome' id='$id' $desabilita class='campopadrao' style='width:70px' onblur='verifica_qtd_digitada(this, $itemvenda)' > / $qtdlimite $produto_tipocontagem_sigla";
+    $tpl->LISTA_COLUNA_VALOR= "<input type='number' pattern='[0-9]+$' min='0' max='$qtdlimite' name='$nome' id='$id' $desabilita class='campopadrao' style='width:70px' onblur='verifica_qtd_digitada(this, $itemvenda)' onkeyup='mascara_qtd(this.name,$produto_tipocontagem)'> / $qtdlimite $produto_tipocontagem_sigla";
     $tpl->block("BLOCK_LISTA_COLUNA");
 
 
@@ -244,6 +246,15 @@ while ($dados3=  mysql_fetch_assoc($query3)) {
     $tpl->LISTA_COLUNA_ROWSPAN="";
     $tpl->LISTA_COLUNA_CLASSE="";
     $tpl->LISTA_COLUNA_TAMANHO="";
+    if ($porcao>0) { //Se o valor unitário mostrado é o valor da porcão, então mostrar o valor unitário da unidade de porção (quilo/litro)
+        $sql1="SELECT * FROM produtos_porcoes WHERE propor_codigo=$porcao";
+        if (!$query1 = mysql_query($sql1)) die("Erro1:" . mysql_error());
+        $dados1=  mysql_fetch_assoc($query1);
+        $porcao_qtdref=$dados1["propor_quantidade"];
+        $porcao_valuniref=$dados1["propor_valuniref"];
+        $valuni=$porcao_valuniref/$porcao_qtdref;
+        //echo "$porcao_qtdref / $porcao_valuniref";
+    } 
     $tpl->LISTA_COLUNA_VALOR= "<span name='$nome_valuni' id='$nome_valuni'> R$ " . number_format($valuni, 2, ',', '.')."</span>";
     $tpl->block("BLOCK_LISTA_COLUNA");
 

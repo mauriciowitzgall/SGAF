@@ -7,7 +7,7 @@ if ($permissao_saidas_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
-include "includes.php";
+include "includes2.php";
 
 $saida=$_GET["codigo"];
 

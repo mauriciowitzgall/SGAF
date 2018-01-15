@@ -7,7 +7,7 @@ if ($permissao_saidas_excluir <> 1) {
 }
 
 $tipopagina = "saidas";
-include "includes.php";
+include "includes2.php";
 
 $devolucao = $_GET["devolucao"];
 $saida = $_GET["saida"];

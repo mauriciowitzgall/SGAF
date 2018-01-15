@@ -939,11 +939,25 @@ if ($temdevolucoes==1) {
         $lote= $dados18["saidevpro_lote"];
         $qtddevolvida= $dados18["saidevpro_qtddevolvida"];
         $valuni= $dados18["saidevpro_valuni"];
+        $sql0="SELECT saipro_porcao FROM saidas_produtos WHERE saipro_saida=$saida AND saipro_codigo=$item_venda";
+        if (!$query0 = mysql_query($sql0)) die("Erro 0:" . mysql_error()."");
+        $dados0=mysql_fetch_assoc($query0);
+        $porcao=$dados0["saipro_porcao"];
+        if ($porcao>0) {
+            $sql1="SELECT * FROM produtos_porcoes WHERE propor_codigo=$porcao";
+            if (!$query1 = mysql_query($sql1)) die("Erro1:" . mysql_error());
+            $dados1=  mysql_fetch_assoc($query1);
+            $porcao_qtdref=$dados1["propor_quantidade"];
+            $porcao_valuniref=$dados1["propor_valuniref"];
+            $valuni=$porcao_valuniref/$porcao_qtdref;
+            //echo "$porcao_qtdref / $porcao_valuniref";
+        }  
         $valtot= $dados18["saidevpro_valtot"];
         $usuario= $dados18["saidev_usuario"];
         $usuario_nome= $dados18["pes_nome"];
         $valtot_comdesconto=$valtot*(100-$descontopercentual)/100;
         $total_devolvido+=$valtot_comdesconto;
+
 
         //Nº Devolução
         $tpl2->LISTA_COLUNA_COLSPAN = "";
@@ -998,7 +1012,7 @@ if ($temdevolucoes==1) {
         //Valor Unitário
         $tpl2->LISTA_COLUNA_ALINHAMENTO = "right";
         $tpl2->LISTA_COLUNA_TAMANHO = "";
-        $tpl2->LISTA_COLUNA_CLASSE = "";
+        $tpl2->LISTA_COLUNA_CLASSE = "";       
         $tpl2->LISTA_COLUNA_VALOR = "R$ " . number_format($valuni, 2, ',', '.');
         $tpl2->block("BLOCK_LISTA_COLUNA");
 

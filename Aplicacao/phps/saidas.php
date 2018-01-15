@@ -7,7 +7,7 @@ if (($permissao_saidas_ver <> 1)) {
     exit;
 }
 
-print_r($_REQUEST);
+//print_r($_REQUEST);
 
 $tipopagina = "saidas";
 include "includes.php";

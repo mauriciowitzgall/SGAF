@@ -118,7 +118,8 @@ function desconto(campo) {
     total=total3[1];
     total=total.replace(".","");
     total=total.replace(",",".");
-    
+    console.log(total);
+
     descper=$("#descper").val();
     descper=descper.replace(".","");
     descper=descper.replace(",",".");
@@ -148,8 +149,9 @@ function desconto(campo) {
     
     //Recalcula o total final com desconto
     valorfinal=total-descval;
+    //console.log(total+"/"+descval+"="+valorfinal);
     $("input[name=total]").val("R$ "+valorfinal.formatMoney(2, ',', '.'));//alimenta o input desabilitado
-    $("input[name=total2]").val("R$ "+valorfinal);//alimenta o input hidden
+    $("input[name=total2]").val(valorfinal);//alimenta o input hidden
 
     
     

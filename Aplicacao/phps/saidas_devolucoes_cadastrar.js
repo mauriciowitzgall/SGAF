@@ -1,6 +1,32 @@
 window.onload = function(){
     //alert("ui");
+
+
+
+
 };
+
+
+function mascara_qtd (campo, tipocontagem) {
+    //console.log(campo);
+
+    if (tipocontagem==1) {
+        $('#'+campo).priceFormat({
+            prefix: '',
+            centsSeparator: '',
+            centsLimit: 0,
+            thousandsSeparator: ''
+        });
+    } else {
+        $('#'+campo).priceFormat({
+            prefix: '',
+            centsLimit: 3,
+            centsSeparator: '.',
+            thousandsSeparator: ''
+        });
+    }
+
+}
 
 function verifica_qtd_digitada (campo, itemvenda) {
     
@@ -8,8 +34,12 @@ function verifica_qtd_digitada (campo, itemvenda) {
     nomevaltot="valtot_"+itemvenda;
     nomevaltot_comdesconto="valtot_comdesconto_"+itemvenda;
   
+    //console.log(campo.value + " e "+ campo.max );
+    teste=parseFloat(campo.value);
+    //console.log(teste + " e "+ parseFloat(campo.max) );
+
     //Verifica se a quantidade digitada é maior que o limite máximo possivel de itens a ser devolvido
-    if ( parseInt(campo.value) > parseInt(campo.max) ) {
+    if ( parseFloat(campo.value) > parseFloat(campo.max) ) {
         alert("Quantidade Inválida. Você pode devolver no máximo: "+campo.max);
         campo.value = '';
         $("span[name="+nomevaltot+"]").text(" - ");
@@ -17,7 +47,7 @@ function verifica_qtd_digitada (campo, itemvenda) {
     } else {
 
         //Calcula o Valor total
-        if( ! parseInt(campo.value) ) {
+        if( ! parseFloat(campo.value) ) {
             $("span[name="+nomevaltot+"]").text(" - ");
             $("span[name="+nomevaltot_comdesconto+"]").text(" - ");
         } else {
@@ -26,11 +56,12 @@ function verifica_qtd_digitada (campo, itemvenda) {
             valuni=valuni[2];
             valuni=valuni.replace(".","");
             valuni=valuni.replace(",",".");
-            var valtot=valuni * campo.value;
+            campo_valor=parseFloat(campo.value);
+            var valtot=valuni * campo_valor;
+            console.log(valuni + "e"+campo_valor);
             descper=$("input[name=descper]").val();
             descper=descper.replace("%","");
             descper=descper.replace(",",".");
-            console.log(descper);
             var valtot_comdesconto= valtot * (100-descper)/100;
             valtotmostra="R$ "+valtot.formatMoney(2, ',', '.');
             valtotmostra_comdesconto="R$ "+valtot_comdesconto.formatMoney(2, ',', '.');
