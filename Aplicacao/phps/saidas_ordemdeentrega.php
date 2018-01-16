@@ -46,6 +46,13 @@ $valbru=$dados["sai_totalbruto"];
 $desconto=$dados["sai_descontovalor"];
 $valliq=$dados["sai_totalcomdesconto"];
 $consumidor_nome=$dados["pes_nome"];
+$consumidor_cpf=$dados["pes_cpf"];
+$consumidor_cnpj=$dados["pes_cnpj"];
+$consumidor_tipopessoa=$dados["pes_tipopessoa"];
+if ($consumidor_tipopessoa==1) $consumidor_documento=mask($consumidor_cpf,"###.###.###-##");
+else $consumidor_documento=mask($consumidor_cnpj,"##.###.###/####-##");
+
+$consumidor_documento="($consumidor_documento)";
 $entrega_endereco=$dados["sai_entrega_endereco"];
 $entrega_endereco_numero=$dados["sai_entrega_endereco_numero"];
 $entrega_bairro=$dados["sai_entrega_bairro"];
@@ -79,7 +86,7 @@ while ($cont<=2) {
     
     $tpl2->CABECALHO_COLUNA_TAMANHO = "";
     $tpl2->CABECALHO_COLUNA_COLSPAN = "8";
-    $tpl2->CABECALHO_COLUNA_NOME = "<b>$usuario_quiosque_nome</b>";
+    $tpl2->CABECALHO_COLUNA_NOME = "<b>$usuario_quiosque_nome</b> $usuario_quiosque_fone1 / $usuario_quiosque_fone2";
     $tpl2->block("BLOCK_LISTA_CABECALHO");
     $tpl2->block("BLOCK_LISTA");
 
@@ -256,6 +263,23 @@ while ($cont<=2) {
     $tpl2->block("BLOCK_LISTA_COLUNA");
     $tpl2->block("BLOCK_LISTA");
 
+    $tpl2->block("BLOCK_LISTA1");
+    $tpl2->show();
+
+
+    //Termos de responsabilidade
+    $tpl2 = new Template("templates/lista1.html");
+    $tpl2->TABELA_BORDA="0";
+    $tpl2->block(BLOCK_TABELA_CHEIA);
+    $tpl2->LISTA_CLASSE = "tab_linhas2";
+    $tpl2->block("BLOCK_LISTA_CLASSE");
+    $tpl2->LISTA_COLUNA_COLSPAN = "";
+    $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
+    $tpl2->LISTA_COLUNA_CLASSE = "";
+    $tpl2->LISTA_COLUNA_TAMANHO = "";
+    $tpl2->LISTA_COLUNA_VALOR = "<b>TERMO DE COMPROMISSO:</b> Reconheço por este pedido que possuo a título de emprestimo os equipamentos listados abaixo da empresa <b>$usuario_quiosque_razaosocial </b>situada em <b>$usuario_quiosque_endereco, $usuario_quiosque_endereco_numero</b> na cidade de <b>$usuario_quiosque_cidade_nome </b>";
+    $tpl2->block("BLOCK_LISTA_COLUNA");  
+    $tpl2->block("BLOCK_LISTA");
     $tpl2->block("BLOCK_LISTA1");
     $tpl2->show();
 
@@ -437,22 +461,65 @@ while ($cont<=2) {
     $tpl2->LISTA_COLUNA_VALOR = "R$ " . number_format($total, 2, ",", ".");
     $tpl2->block("BLOCK_LISTA_COLUNA");
     $tpl2->block("BLOCK_LISTA");
+    $tpl2->block("BLOCK_LISTA1");
+    $tpl2->show();
+
+    
+
+    //Assinaturas
+    $tpl2 = new Template("templates/lista1.html");
+    $tpl2->TABELA_BORDA="0";
+    $tpl2->block(BLOCK_TABELA_CHEIA);
+    $tpl2->LISTA_CLASSE = "tab_linhas";
+    $tpl2->block("BLOCK_LISTA_CLASSE");
+    $tpl2->LISTA_COLUNA_COLSPAN = "2";
+    $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
+    $tpl2->LISTA_COLUNA_CLASSE = "";
+    $tpl2->LISTA_COLUNA_TAMANHO = "";
+    $tpl2->LISTA_COLUNA_VALOR = "Sendo de minha total responsabilidade a manutenção e entrega no mesmo estado de conservação que recebi.<br> CIENTE DO TERMO, FIRMO ABAIXO:";
+    $tpl2->block("BLOCK_LISTA_COLUNA");
+    $tpl2->block("BLOCK_LISTA");
+
+
+    $tpl2->LISTA_COLUNA_COLSPAN = "";
+    $tpl2->LISTA_COLUNA_ALINHAMENTO = "center";
+    $tpl2->LISTA_COLUNA_CLASSE = "";
+    $tpl2->LISTA_COLUNA_TAMANHO = "";
+    $tpl2->LISTA_COLUNA_VALOR = "<br>____________________________ <br> Entregador";
+    $tpl2->block("BLOCK_LISTA_COLUNA");
+    $tpl2->LISTA_COLUNA_COLSPAN = "";
+    $tpl2->LISTA_COLUNA_ALINHAMENTO = "center";
+    $tpl2->LISTA_COLUNA_CLASSE = "";
+    $tpl2->LISTA_COLUNA_TAMANHO = "";
+    $tpl2->LISTA_COLUNA_VALOR = "<br>____________________________ <br> Consumidor $consumidor_documento";
+    $tpl2->block("BLOCK_LISTA_COLUNA");    
+    $tpl2->block("BLOCK_LISTA");
+    $tpl2->block("BLOCK_LISTA1");
+    $tpl2->show();
 
 
     //LINHA PONTINHADA
+    $tpl2 = new Template("templates/lista1.html");
+    $tpl2->TABELA_BORDA="1";
+    $tpl2->block(BLOCK_TABELA_CHEIA);
     if ($cont==1) {
-            $tpl2->LINHAHORINZONTAL_ALINHAMENTO="";
+        $tpl2->LINHAHORINZONTAL_ALINHAMENTO="";
         $tpl2->LINHAHORINZONTAL_CLASSE="linha_pontilhada";
         $tpl2->block("BLOCK_LINHAHORIZONTAL_EMBAIXO");
-        $tpl2->block("BLOCK_QUEBRA1");
+        //$tpl2->block("BLOCK_QUEBRA1");
     }
     $tpl2->block("BLOCK_LISTA1");
     $tpl2->show();
 
+
     $cont++;
 
 
+
 }
+
+
+
 
 
 ?>
