@@ -1,6 +1,6 @@
 <?php 
 $hostname = "localhost";
-$db = "sgaf_agape";
+$db = "sgaf";
 $user = "root";
 $pass = "";
 

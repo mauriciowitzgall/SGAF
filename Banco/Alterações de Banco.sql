@@ -18236,15 +18236,29 @@ UPDATE `configuracoes` SET `cnf_versao`='v4.1' WHERE `cnf_codigo`='1';
 
 ------ INICIO v4.1.2 ------ 
 
-ALTER TABLE `sgaf_labodega`.`configuracoes` 
+UPDATE `configuracoes` SET `cnf_versao`='v4.1.2b' WHERE `cnf_codigo`='1';
+
+ALTER TABLE `sgaf`.`configuracoes` 
 ADD COLUMN `cnf_dataversao` DATETIME NOT NULL AFTER `cnf_versao`;
 
 UPDATE `configuracoes` SET `cnf_versao`='v4.1.2', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
 
 
-ALTER TABLE `sgaf_labodega`.`produtos` 
+ALTER TABLE `sgaf`.`produtos` 
 DROP FOREIGN KEY `fk_nfe_ncm`;
-ALTER TABLE `sgaf_labodega`.`produtos` 
+ALTER TABLE `sgaf`.`produtos` 
 ENGINE = MyISAM ,
 DROP INDEX `pro_ncm` ;
+
+UPDATE `configuracoes` SET `cnf_versao`='v4.1.2' WHERE `cnf_codigo`='1';
+
+------ FIM ------
+
+------ INICIO v4.1.2 ------ 
+
+UPDATE `configuracoes` SET `cnf_versao`='v4.1.3b' WHERE `cnf_codigo`='1';
+
+
+
+
 
