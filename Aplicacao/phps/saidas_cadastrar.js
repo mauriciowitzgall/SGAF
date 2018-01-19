@@ -178,6 +178,7 @@ function verifica_entrega (valor) {
             $("tr[id=linha_fone1]").hide();
             $("tr[id=linha_fone2]").hide();
             document.form1.dataentrega.required=false;
+            document.form1.horaentrega.required=false;
             document.form1.cidade.required=false;
             document.form1.estado.required=false;
             document.form1.pais.required=false;
@@ -208,6 +209,7 @@ function verifica_entrega (valor) {
                 $("tr[id=linha_fone1]").show();
                 $("tr[id=linha_fone2]").show();
                 document.form1.dataentrega.required=true;
+                document.form1.horaentrega.required=true;
                 document.form1.cidade.required=true;
                 document.form1.estado.required=true;
                 document.form1.pais.required=true; 
@@ -254,6 +256,7 @@ function verifica_entrega (valor) {
                 $("tr[id=linha_fone1]").hide();
                 $("tr[id=linha_fone2]").hide();
                 document.form1.dataentrega.required=false;
+                document.form1.horaentrega.required=false;
                 document.form1.cidade.required=false;
                 document.form1.estado.required=false;
                 document.form1.pais.required=false;

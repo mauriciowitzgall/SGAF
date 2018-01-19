@@ -512,7 +512,7 @@ if ($filtro_areceber <> "")
     $sql_filtro_areceber = " and sai_areceber = $filtro_areceber ";
 if ($fazentregas==1) {
     if ($filtro_classificacao == 1) $sql_filtro_classificacao = " order by sai_codigo desc ";
-    else $sql_filtro_classificacao = " order by sai_entrega=1 desc, sai_entrega_concluida=0 desc, sai_dataentrega ";
+    else $sql_filtro_classificacao = " order by sai_entrega=1 desc, sai_entrega_concluida=0 desc, sai_dataentrega, sai_horaentrega ";
 } else {
     $sql_filtro_classificacao=" order by sai_codigo desc";
 }
@@ -533,7 +533,7 @@ $sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_fil
 
 //SQL Principal das linhas
 $sql = "
-SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo,sai_usuarioquecadastrou,caiopo_operador, (SELECT pes_nome FROM pessoas p WHERE p.pes_codigo=sai_usuarioquecadastrou) as usuarioquecadastrou_nome,sai_id,sai_descontoforcado,sai_acrescimoforcado,sai_descontovalor,sai_areceberquitado,sai_entrega,sai_dataentrega,sai_entrega_concluida
+SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo,sai_usuarioquecadastrou,caiopo_operador, (SELECT pes_nome FROM pessoas p WHERE p.pes_codigo=sai_usuarioquecadastrou) as usuarioquecadastrou_nome,sai_id,sai_descontoforcado,sai_acrescimoforcado,sai_descontovalor,sai_areceberquitado,sai_entrega,sai_dataentrega,sai_entrega_concluida,sai_horaentrega
 FROM saidas 
 JOIN saidas_tipo on (sai_tipo=saitip_codigo) 
 left join saidas_produtos on (saipro_saida=sai_codigo)
@@ -606,6 +606,8 @@ if ($linhas == 0) {
         $troco_acrescimo = $dados["sai_acrescimoforcado"];
         $entrega = $dados["sai_entrega"];
         $dataentrega = $dados["sai_dataentrega"];
+        $horaentrega = $dados["sai_horaentrega"];
+        $horaentrega = $horaentrega[0].$horaentrega[1].$horaentrega[2].$horaentrega[3].$horaentrega[4];
         $sitentrega = $dados["sai_entrega_concluida"];
         $id = $dados["sai_id"];
 
@@ -805,7 +807,8 @@ if ($linhas == 0) {
                     $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
                 } 
             }
-            $tpl->LISTA_COLUNA_VALOR = $dataentrega2;
+            echo "($horaentrega)";
+            $tpl->LISTA_COLUNA_VALOR = "$dataentrega2 $horaentrega";
             $tpl->block("BLOCK_LISTA_COLUNA");
             //Icone Imprimir Ordem de entrega
             $tpl->LISTA_COLUNA_ALINHAMENTO = "right";

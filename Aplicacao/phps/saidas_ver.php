@@ -78,6 +78,9 @@ $metpaga=$dados["metpag_codigo"];
 $caixaoperacao=$dados["sai_caixaoperacaonumero"];
 $entrega=$dados["sai_entrega"];
 $entrega_dataentrega=$dados["sai_dataentrega"];
+$horaentrega=$dados["sai_horaentrega"];
+$horaentrega = $horaentrega[0].$horaentrega[1].$horaentrega[2].$horaentrega[3].$horaentrega[4];
+$entrega_horaentrega=$horaentrega;
 $entrega_conluida=$dados["sai_entrega_concluida"];
 $obs=$dados["sai_obs"];
 $endereco=$dados["sai_entrega_endereco"];
@@ -1085,7 +1088,16 @@ if ($entrega==1) {
     $tpl3->block("BLOCK_CAMPO_DESABILITADO");
     $tpl3->block("BLOCK_CAMPO");
     $tpl3->block("BLOCK_CONTEUDO");
-    $tpl3->block("BLOCK_COLUNA");
+    $tpl3->COLUNA_ALINHAMENTO = "";
+    $tpl3->CAMPO_TIPO = "text";
+    $tpl3->CAMPO_TAMANHO = "15";
+    $tpl3->CAMPO_NOME = "horaentrega";
+    $tpl3->CAMPO_VALOR = $entrega_horaentrega;
+    $tpl3->block("BLOCK_CAMPO_PADRAO");
+    $tpl3->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl3->block("BLOCK_CAMPO");
+    $tpl3->block("BLOCK_CONTEUDO");
+    $tpl3->block("BLOCK_COLUNA");    
     $tpl3->block("BLOCK_LINHA");
 
     //Situação

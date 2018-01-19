@@ -18258,6 +18258,8 @@ UPDATE `configuracoes` SET `cnf_versao`='v4.1.2' WHERE `cnf_codigo`='1';
 
 UPDATE `configuracoes` SET `cnf_versao`='v4.1.3b' WHERE `cnf_codigo`='1';
 
+ALTER TABLE `sgaf`.`saidas` 
+ADD COLUMN `sai_horaentrega` TIME NULL DEFAULT NULL AFTER `sai_entrega_concluida`;
 
 
 
