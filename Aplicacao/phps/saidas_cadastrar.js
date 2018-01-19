@@ -64,12 +64,21 @@ $(window).load(function() {
         $("tr[id=linha_consumidor]").hide();
     } else if (identificacaoconsumidorvenda==2) { //Identifica por Telefone
         $("input[name=cpf]").hide();
+        $("input[name=cnpj]").hide();
         $("input[name=fone]").show();
         $("select[name=tipopessoa]").hide();
         document.forms["form1"].elements["fone"].focus();
     } else if (identificacaoconsumidorvenda==1) { //Identifica por CPF
-        $("input[name=cpf]").show();
-        if (document.forms["form1"].elements["cpf"]) document.forms["form1"].elements["cpf"].focus();
+        tipopessoa=$("select[name=tipopessoa]").val();
+        if (tipopessoa==1) {
+            $("input[name=cpf]").show();
+            $("input[name=cnpj]").hide();
+            if (document.forms["form1"].elements["cpf"]) document.forms["form1"].elements["cpf"].focus();
+        } else {
+            $("input[name=cpf]").hide();
+            $("input[name=cnpj]").show();
+            if (document.forms["form1"].elements["cnpj"]) document.forms["form1"].elements["cnpj"].focus();
+        }
         $("input[name=fone]").hide();
         $("select[name=tipopessoa]").show();
     } else {
@@ -132,7 +141,6 @@ $(window).load(function() {
     });
 
     entrega=$("select[name=entrega]").val();
-    console.log(entrega);
     verifica_entrega (entrega);
 
 });
@@ -188,11 +196,10 @@ function verifica_entrega (valor) {
             //Verifica se foi selecionado um consumidor, ou se está sendo cadastrado um novo cliente, se identificado consumidor então pode entregar.
             consumidor_novo_nome=$("input[name=cliente_nome]").val();
             consumidor=$("select[name=consumidor]").val();
-            console.log(consumidor);
             permitir_entrega=0;
             consumidor_existente=0;
             if ((consumidor_novo_nome!="")&&(consumidor_novo_nome!=undefined)) permitir_entrega=1; 
-            if ((consumidor!=0)&&(consumidor!=undefined)) { console.log("entrou"); permitir_entrega=1; consumidor_existente=1;}
+            if ((consumidor!=0)&&(consumidor!=undefined)) {  permitir_entrega=1; consumidor_existente=1;}
             if (permitir_entrega==1) { //o consumidor foi identificado
                 $("tr[id=linha_endereco]").show();
                 $("tr[id=linha_bairro]").show();
@@ -391,7 +398,6 @@ function selecionar_porcoes(porcao) {
             porcao = porcao.replace("\n", "");
             porcao = porcao.replace("\n", "");
             porcao = porcao.replace("\n", "");
-            console.log("("+porcao+")");
             if (porcao=="naotem") { //Se não tem nenhuma porção
                 document.forms["form1"].porcao_qtd.disabled = true;
             } else { //Caso tenho pelo menos uma porção

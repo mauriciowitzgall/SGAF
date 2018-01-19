@@ -1,6 +1,6 @@
 <?php
 
-print_r($_REQUEST);
+//print_r($_REQUEST);
 
 //Verifica se o usuário pode acessar a tela
 require "login_verifica.php";
@@ -116,6 +116,9 @@ if ($_REQUEST["entrega"]==1) {
 
 }
 
+//Atualiza dados de entrega
+
+
 
 
 $retirar_produto = $_GET["retirar_produto"];
@@ -163,6 +166,7 @@ if ($retirar_produto == '1') {
             $descricao = $dados["sai_descricao"];
             $areceber = $dados["sai_areceber"];
             $obs=$dados["sai_obs"];
+            //Pega dados da entrega do banco
             $pega_dados_do_banco=1;
         }
     } else { //Caso seja uma venda nova, cadastro
@@ -303,13 +307,27 @@ $passo= $_REQUEST["passo"];
 
 //Verificar se é uma edição, se sim então atualiza comanda e consumidor
 if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&(($usacomanda==1)||($identificacaoconsumidorvenda!=3)||($obsnavenda==1)||($fazentregas==1))) {
-    //print_r($_REQUEST);
     $id_novo=$_REQUEST["id"];
     if ($id_novo=="") $id_novo=$id;
     $obs=$_POST["obs"];
     $consumidor=$_REQUEST["consumidor"];
+
+    //Atualiza consumidor e obs
     $sql11= "UPDATE saidas SET sai_consumidor=$consumidor, sai_id=$id_novo, sai_obs='$obs' WHERE sai_codigo=$saida";
     if (!$query11 = mysql_query($sql11)) die("<br>Erro11:" . mysql_error());
+
+
+    //Atualiza dados de entrega
+    if ( $fazentregas==1 ) {
+        if ( $_REQUEST["entrega"] != $entrega ) $entrega=$_REQUEST["entrega"];
+        if ( $_REQUEST["dataentrega"] != $entrega_dataentrega ) $entrega_dataentrega=$_REQUEST["dataentrega"];
+        if ($entrega==0) $entrega_dataentrega="0000-00-00";
+        
+        $sql11= "UPDATE saidas SET sai_dataentrega=$entrega_dataentrega, sai_entrega=$entrega WHERE sai_codigo=$saida";
+        if (!$query11 = mysql_query($sql11)) die("<br>Erro12:" . mysql_error());       
+
+
+    }
 }
 
 
