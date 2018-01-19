@@ -4,6 +4,7 @@ include "controle/conexao_tipo.php";
 include "funcoes.php";
 require "login_verifica.php";
 
+$tipopessoa=$_POST["tipopessoa"];
 
 $sql = "
     SELECT *
@@ -12,6 +13,7 @@ $sql = "
     join pessoas_tipo on (mespestip_tipo=pestip_codigo)
     WHERE mespestip_tipo=6 
     and pes_cooperativa=$usuario_cooperativa
+    and pes_tipopessoa=$tipopessoa
     ORDER BY pes_nome
 ";
 $query = mysql_query($sql); if (!$query) die("Erro: " . mysql_error());

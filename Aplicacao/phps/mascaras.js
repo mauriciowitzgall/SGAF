@@ -13,8 +13,8 @@ $(document).ready(function(){
     );
     */
 
-    if (document.getElementById('telefone1')) $("#telefone1").mask("(99)9999-9999");
-    if (document.getElementById('telefone2')) $("#telefone2").mask("(99)9999-9999");
+    //if (document.getElementById('telefone1')) $("#telefone1").mask("(99)9999-9999");
+    //if (document.getElementById('telefone2')) $("#telefone2").mask("(99)9999-9999");
     if (document.getElementById('telefone1pv')) $("#telefone1pv").mask("(99)9999-9999");
     if (document.getElementById('telefone2pv')) $("#telefone2pv").mask("(99)9999-9999");
     if (document.getElementById('cpf')) $("#cpf").mask("999.999.999-99");

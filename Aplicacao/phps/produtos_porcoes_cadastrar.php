@@ -85,7 +85,7 @@ $tpl1->CAMPO_ONCLICK="";
 $tpl1->CAMPO_DICA = "";
 $tpl1->CAMPO_ID = "";
 $tpl1->CAMPO_VALOR = "$porcao_nome";
-$tpl1->CAMPO_ESTILO="width:200px";
+$tpl1->CAMPO_ESTILO="width:400px";
 $tpl1->block("BLOCK_CAMPO_ESTILO");
 if ($operacao=="ver") $tpl1->block("BLOCK_CAMPO_DESABILITADO");
 $tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");

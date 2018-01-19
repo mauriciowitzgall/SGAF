@@ -49,10 +49,15 @@ $consumidor_nome=$dados["pes_nome"];
 $consumidor_cpf=$dados["pes_cpf"];
 $consumidor_cnpj=$dados["pes_cnpj"];
 $consumidor_tipopessoa=$dados["pes_tipopessoa"];
-if ($consumidor_tipopessoa==1) $consumidor_documento=mask($consumidor_cpf,"###.###.###-##");
-else $consumidor_documento=mask($consumidor_cnpj,"##.###.###/####-##");
+if ($consumidor_tipopessoa==1) {
+    if ($consumidor_cpf!="") $consumidor_documento=mask($consumidor_cpf,"###.###.###-##");
+    else $consumidor_documento="";
+} else {
+    if ($consumidor_cnpj!="") $consumidor_documento=mask($consumidor_cnpj,"##.###.###/####-##");
+    else $consumidor_documento="";
+}
 
-$consumidor_documento="($consumidor_documento)";
+if ($consumidor_documento!="") $consumidor_documento="($consumidor_documento)";
 $entrega_endereco=$dados["sai_entrega_endereco"];
 $entrega_endereco_numero=$dados["sai_entrega_endereco_numero"];
 $entrega_bairro=$dados["sai_entrega_bairro"];
@@ -61,6 +66,7 @@ $entrega_fone1=$dados["sai_entrega_fone1"];
 $entrega_fone2=$dados["sai_entrega_fone2"];
 $obs=$dados["sai_obs"];
 $entrega_cidade=$dados["cid_nome"];
+$dataatual=date("d/m/Y");
 
 /*
 //Template de Título e Sub-título
@@ -83,10 +89,9 @@ while ($cont<=2) {
 
     $tpl2->LISTA_CLASSE = "tab_linhas2";
     $tpl2->block("BLOCK_LISTA_CLASSE");
-    
     $tpl2->CABECALHO_COLUNA_TAMANHO = "";
     $tpl2->CABECALHO_COLUNA_COLSPAN = "8";
-    $tpl2->CABECALHO_COLUNA_NOME = "<b>$usuario_quiosque_nome</b> $usuario_quiosque_fone1 / $usuario_quiosque_fone2";
+    $tpl2->CABECALHO_COLUNA_NOME = "<b>$usuario_quiosque_nome</b> $usuario_quiosque_fone1 / $usuario_quiosque_fone2 ";
     $tpl2->block("BLOCK_LISTA_CABECALHO");
     $tpl2->block("BLOCK_LISTA");
 
@@ -476,7 +481,7 @@ while ($cont<=2) {
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
     $tpl2->LISTA_COLUNA_CLASSE = "";
     $tpl2->LISTA_COLUNA_TAMANHO = "";
-    $tpl2->LISTA_COLUNA_VALOR = "Sendo de minha total responsabilidade a manutenção e entrega no mesmo estado de conservação que recebi.<br> CIENTE DO TERMO, FIRMO ABAIXO:";
+    $tpl2->LISTA_COLUNA_VALOR = "Sendo de minha total responsabilidade a manutenção e entrega dos equipamentos no mesmo estado de conservação que recebi. Estes devem ser entregues até 4 dias após a data deste documento. Será cobrado uma multa de R$ 100,00 a cada dia de atraso.<br> CIENTE DO TERMO, E DATA ATUAL $dataatual, FIRMO ABAIXO: <Br>";
     $tpl2->block("BLOCK_LISTA_COLUNA");
     $tpl2->block("BLOCK_LISTA");
 

@@ -111,7 +111,7 @@ if ($_REQUEST["entrega"]==1) {
         $entrega_fone2_2=$_POST["fone2"];
         $entrega_cidade_2=$_POST["cidade"];
         $sql12= "UPDATE pessoas SET pes_endereco='$entrega_endereco_2', pes_numero='$entrega_endereco_numero_2', pes_bairro='$entrega_bairro_2', pes_fone1='$entrega_fone1_2', pes_fone2='$entrega_fone2_2', pes_cidade=$entrega_cidade_2 WHERE pes_codigo=$consumidor";
-        if (!$query12 = mysql_query($sql12)) die("<br>Erro12:" . mysql_error());
+        if (!$query12 = mysql_query($sql12)) die("<br>Erro121:" . mysql_error());
     }
 
 }
@@ -305,7 +305,7 @@ if ($pega_dados_do_banco==1) {
 $passo= $_REQUEST["passo"];
 
 
-//Verificar se é uma edição, se sim então atualiza comanda e consumidor
+//Verificar se é uma edição, se sim então avalia se precisa atualiza algum dado alterado no passo 1
 if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&(($usacomanda==1)||($identificacaoconsumidorvenda!=3)||($obsnavenda==1)||($fazentregas==1))) {
     $id_novo=$_REQUEST["id"];
     if ($id_novo=="") $id_novo=$id;
@@ -319,15 +319,32 @@ if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&(($usacomanda==1)||($identific
 
     //Atualiza dados de entrega
     if ( $fazentregas==1 ) {
-        if ( $_REQUEST["entrega"] != $entrega ) $entrega=$_REQUEST["entrega"];
-        if ( $_REQUEST["dataentrega"] != $entrega_dataentrega ) $entrega_dataentrega=$_REQUEST["dataentrega"];
-        if ($entrega==0) $entrega_dataentrega="0000-00-00";
-        
-        $sql11= "UPDATE saidas SET sai_dataentrega=$entrega_dataentrega, sai_entrega=$entrega WHERE sai_codigo=$saida";
-        if (!$query11 = mysql_query($sql11)) die("<br>Erro12:" . mysql_error());       
+
+        $entrega2=$_REQUEST["entrega"];
+        if ($entrega2!="") {
+            if ( $entrega2 != $entrega ) $entrega=$_REQUEST["entrega"];
+        } 
+
+        $entrega_dataentrega2=$_REQUEST["dataentrega"];       
+        if ($entrega_dataentrega2!="") {
+            if ( $entrega_dataentrega2 != $entrega_dataentrega ) $entrega_dataentrega=$entrega_dataentrega2;
+            if ($entrega==0) $entrega_dataentrega="0000-00-00";
+        }
+
+        $sql11= "UPDATE saidas SET sai_dataentrega='$entrega_dataentrega', sai_entrega=$entrega WHERE sai_codigo=$saida";
+        if (!$query11 = mysql_query($sql11)) die("<br>Erro122:" . mysql_error());       
 
 
     }
+}
+
+if (($operacao==2)&&($passo==2)&&($tiposaida==3)) {
+    //Atualiza Descrição ou observaçãodo ajuste
+    if ($_REQUEST["descricao"]!=$descricao) $descricao=$_REQUEST["descricao"];
+    echo $sql11= "UPDATE saidas SET sai_descricao='$descricao', sai_saidajustificada=$motivo WHERE sai_codigo=$saida";
+    if (!$query11 = mysql_query($sql11)) die("<br>Erro8:" . mysql_error());
+
+
 }
 
 

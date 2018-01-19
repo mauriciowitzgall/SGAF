@@ -177,3 +177,39 @@ function contribuinte_icms(valor) {
         $("input[name=ie]").attr("required", false); 
     }
 }
+
+
+
+function mascara_telefone1 (fone) {
+    if (fone.length<=13)  $("#telefone1").mask("(00)0000-00009");
+    else $("#telefone1").mask("(00)00000-0000");
+}
+
+function verifica_telefone1 (fone) {
+    if (fone!="") {
+        if ((fone.length==13)||(fone.length==14)) {
+            //Telefone digitado corretamente
+        } else {
+            alert("Número de telefone incorreto!");
+            $("input[name=fone1]").val("");
+            $("input[name=fone1]").focus();
+        }
+    }
+}
+
+function mascara_telefone2 (fone) {
+    if (fone.length<=13)  $("#telefone2").mask("(00)0000-00009");
+    else $("#telefone2").mask("(00)00000-0000");
+}
+
+function verifica_telefone2 (fone) {
+    if (fone!="") {
+        if ((fone.length==13)||(fone.length==14)) {
+            //Telefone digitado corretamente
+        } else {
+            alert("Número de telefone incorreto!");
+            $("input[name=fone2]").val("");
+            $("input[name=fone2]").focus();
+        }
+    }
+}

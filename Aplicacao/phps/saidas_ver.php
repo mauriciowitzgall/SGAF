@@ -214,9 +214,9 @@ if ($tiposaida == 1) {
 if ($tiposaida == 3) {
 
     if ($dados["sai_saidajustificada"] != 0) {
+        
         //Motivo
         $motivo = $dados["saimot_nome"];
-        //Titulo
         $tpl->COLUNA_ALINHAMENTO = "right";
         $tpl->COLUNA_TAMANHO = "200px";
         $tpl->TITULO = "Motivo";
@@ -225,7 +225,6 @@ if ($tiposaida == 3) {
         $tpl->block("BLOCK_COLUNA");
         $tpl->COLUNA_ALINHAMENTO = "left";
         $tpl->COLUNA_TAMANHO = "";
-        //Campo
         $tpl->CAMPO_TIPO = "text";
         $tpl->CAMPO_NOME = "motivo";
         $tpl->CAMPO_VALOR = "$motivo";
@@ -236,9 +235,7 @@ if ($tiposaida == 3) {
         $tpl->block("BLOCK_COLUNA");
         $tpl->block("BLOCK_LINHA");
 
-
-        //Descri��o
-        //Titulo
+        //Descrição ou Observação
         $tpl->COLUNA_ALINHAMENTO = "right";
         $tpl->COLUNA_TAMANHO = "200px";
         $tpl->TITULO = "Descrição";
@@ -248,9 +245,11 @@ if ($tiposaida == 3) {
         $tpl->COLUNA_ALINHAMENTO = "left";
         $tpl->COLUNA_TAMANHO = "";
         $tpl->TEXTAREA_TAMANHO = "60";
+        $descricao_linhas=strlen($descricao)-strlen(str_replace("\n", "", $descricao))+1;
+        $tpl->TEXTAREA_LINHAS = "$descricao_linhas";
         $tpl->TEXTAREA_NOME = "descricao";
         $tpl->TEXTAREA_TEXTO = "$descricao";
-        $tpl->block("BLOCK_TEXTAREA_PADRAO");
+        //$tpl->block("BLOCK_TEXTAREA_PADRAO");
         $tpl->block("BLOCK_TEXTAREA_DESABILITADO");
         $tpl->block("BLOCK_TEXTAREA");
         $tpl->block("BLOCK_CONTEUDO");

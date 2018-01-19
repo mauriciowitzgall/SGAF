@@ -9,7 +9,7 @@ if ($permissao_entradas_cadastrar <> 1) {
 
 include "includes.php";
 
-print_r($_REQUEST);
+//print_r($_REQUEST);
 
 $tpl = new Template("entradas_cadastrar.html");
 $tpl->ICONES_CAMINHO = "$icones";

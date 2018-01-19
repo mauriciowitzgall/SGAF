@@ -225,6 +225,10 @@ function verifica_entrega (valor) {
                         consumidor_cidade=parseInt(valor2[6]);
                         consumidor_estado=parseInt(valor2[7]);
                         consumidor_pais=parseInt(valor2[8]);
+                        if (consumidor_cidade=='0') {
+                            consumidor_pais="";
+                            consumidor_estado="";
+                        }
                         $("input[name=fone1]").val(consumidor_fone1);
                         $("input[name=fone2]").val(consumidor_fone2);
                         $("input[name=endereco]").val(consumidor_endereco);
@@ -301,7 +305,9 @@ function verifica_telefone2 (fone) {
 
 
 function atualiza_consumidor () {
-$.post("saidas_cadastrar_atualiza_consumidor.php",{
+    tipopessoa=$("select[name=tipopessoa]").val();
+    $.post("saidas_cadastrar_atualiza_consumidor.php",{
+        tipopessoa:tipopessoa
     },function(valor2){
         //alert(valor2);
         $("select[name=consumidor]").html(valor2);
@@ -361,15 +367,7 @@ function selecionar_porcoes(porcao) {
             valor = valor.replace("\n", "");
             valor2 = valor.replace("\n", "");            
             //alert(valor2);
-            if (valor2==0) {
-                valuni=$("input[name=valuni2]").val();
-                valuni2=valuni.split(" ");
-                valuni=valuni2[1];
-                valuni=valuni.replace(".","");
-                valuni=valuni.replace(",",".");
-            } else {
-                valuni=valor2;
-            }
+            valuni=valor2;
             
             $("input[name=valuni]").val(valuni).priceFormat({
                 prefix: 'R$ ',
