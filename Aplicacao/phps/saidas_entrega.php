@@ -6,7 +6,7 @@ require "login_verifica.php";
 
 //Menu
 $tipopagina = "";
-include "includes2.php";
+include "includes.php";
 
 
 //Pega dados
@@ -26,33 +26,50 @@ if (!$query = mysql_query($sql)) die("Erro SQL 1: " . mysql_error()."");
 $dados=mysql_fetch_assoc($query);
 $entrega=$dados["sai_entrega"];
 $situacao_atual=$dados["sai_entrega_concluida"];
-if ($situacao_atual==1) $situacao_nova=0;
-if ($situacao_atual==0) $situacao_nova=1;
-if (($fazentregas==1)&&($entrega==1)) {
-	
-	//Atualiza situação
-	$sql="UPDATE saidas SET sai_entrega_concluida=$situacao_nova WHERE sai_codigo=$saida";
-	if (!$query = mysql_query($sql)) die("Erro SQL 2: " . mysql_error()."");	
+$dataentrega=$dados["sai_dataentrega"];
+$dataatual = date("Y-m-d");
+$saldo = diferenca_data($dataatual, $dataentrega, 'D');
+//echo "$dataatual / $dataentrega = $saldo";
 
-	//Notificação
-	$tpl6 = new Template("templates/notificacao.html");
-	$tpl6->COLUNA_TAMANHO="100%";
-	$tpl6->ICONE_ALINHAMENTO="center";
-	$tpl6->PASTA="$icones";
-	if ($situacao_nova==0) $tpl6->ARQUIVO="entrega_atrasada.png";
-	else $tpl6->ARQUIVO="entrega_realizada.png";
-	$tpl6->TITULO="	";
-	$tpl6->block("BLOCK_ICONE_PERSONALIZADO");
-	$tpl6->ICONES = $icones;
-	//$tpl6->block("BLOCK_NAOAPAGADO");
-	if ($situacao_nova==0) $tpl6->MOTIVO = "<br>Esta entrega foi <b>CANCELADA</b>!<br><br>";
-	else $tpl6->MOTIVO = "<br>Entrega <b>CONCLUÍDA</b>!<br><br>";
-	$tpl6->block("BLOCK_MOTIVO");
-	$tpl6->block("BLOCK_BOTAO_FECHAR");
-	$tpl6->show();
 
-		
+
+$tpl = new Template("templates/notificacao.html");
+$tpl->ICONES = $icones;
+//$tpl->MOTIVO_COMPLEMENTO = "";
+$tpl->COLUNA_TAMANHO="100%";
+$tpl->ICONE_ALINHAMENTO="center";
+$tpl->PASTA="$icones";
+
+if (($situacao_atual == 0)&&($saldo<0)) { //Entrega atrasada > concluida
+	$tpl->ARQUIVO="entrega_atrasada_para_concluida.png";
+	$tpl->MOTIVO = "A entrega ainda não foi realizada! <br>";
+	$tpl->PERGUNTA = "<br> CONFIRMAR ENTREGA?";     
+} else if (($situacao_atual == 0)&&($saldo>=0)) { //Entrega pendente > concluida
+	$tpl->ARQUIVO="entrega_pendente_para_concluida.png";
+	$tpl->MOTIVO = "A entrega ainda não foi realizada! <br>";
+	$tpl->PERGUNTA = "<br> CONFIRMAR ENTREGA?";
+} else if (($situacao_atual == 1)&&($saldo<0)) { //entrega concluida > atrasada
+	$tpl->ARQUIVO="entrega_concluida_para_atrasada.png";
+	$tpl->MOTIVO = "A entrega já está concluída! <br>";
+	$tpl->PERGUNTA = "<br> CANCELAR ENTREGA?";	
+} else if (($situacao_atual == 1)&&($saldo>=0)) { //entrega concluida > pendente
+	$tpl->ARQUIVO="entrega_concluida_para_pendente.png";
+	$tpl->MOTIVO = "A entrega já está concluída! <br>";
+	$tpl->PERGUNTA = "<br> CANCELAR ENTREGA?";
 }
+     
+
+$tpl->TITULO="";
+$tpl->block("BLOCK_MOTIVO");
+$tpl->block("BLOCK_ICONE_PERSONALIZADO");
+$tpl->LINK = "saidas_entrega2.php?saida=$saida";
+$tpl->block("BLOCK_PERGUNTA");
+$tpl->NAO_LINK = "saidas.php";
+$tpl->block("BLOCK_BOTAO_NAO_LINK");
+$tpl->block("BLOCK_BOTAO_SIMNAO");
+$tpl->show();
+exit;
+            
 
 
 

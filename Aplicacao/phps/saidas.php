@@ -417,6 +417,7 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "ITENS";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
+
 $tpl->CABECALHO_COLUNA_TAMANHO = "70px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "TOTAL";
@@ -432,10 +433,29 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "DESC.";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
+
 $tpl->CABECALHO_COLUNA_TAMANHO = "70px";
 $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "LIQUIDO";
 $tpl->block("BLOCK_LISTA_CABECALHO");
+
+if ($usadevolucoes==1) {
+    /*
+    $tpl->CABECALHO_COLUNA_TAMANHO = "50px";
+    $tpl->CABECALHO_COLUNA_COLSPAN = "";
+    $tpl->CABECALHO_COLUNA_NOME = "DEV.";
+    $tpl->block("BLOCK_LISTA_CABECALHO");
+    */
+}
+
+if ($usapagamentosparciais) {
+    /*
+    $tpl->CABECALHO_COLUNA_TAMANHO = "50px";
+    $tpl->CABECALHO_COLUNA_COLSPAN = "";
+    $tpl->CABECALHO_COLUNA_NOME = "PAG. P.";
+    $tpl->block("BLOCK_LISTA_CABECALHO");
+    */
+}
 
 /*
 if ($usacaixa==1) {
@@ -636,6 +656,7 @@ if ($linhas == 0) {
         $tpl->LISTA_COLUNA_CLASSE = "";
         $tpl->LISTA_COLUNA_VALOR = $numero;
         $tpl->block("BLOCK_LISTA_COLUNA");
+        $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
 
         //Coluna ID
         $usacomanda=usacomanda($usuario_quiosque);
@@ -644,6 +665,7 @@ if ($linhas == 0) {
             $tpl->LISTA_COLUNA_CLASSE = "";
             $tpl->LISTA_COLUNA_VALOR = $id;
             $tpl->block("BLOCK_LISTA_COLUNA");
+            $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
         }
         
         //Coluna Data    
@@ -651,12 +673,14 @@ if ($linhas == 0) {
         $tpl->LISTA_COLUNA_VALOR = converte_data($data);
         $tpl->LISTA_COLUNA_CLASSE = "";
         $tpl->block("BLOCK_LISTA_COLUNA");
+        $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
 
         //Coluna Hora
         $tpl->LISTA_COLUNA_ALINHAMENTO = "";
         $tpl->LISTA_COLUNA_CLASSE = "";
         $tpl->LISTA_COLUNA_VALOR = converte_hora($hora);
         $tpl->block("BLOCK_LISTA_COLUNA");
+        $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
 
         //Coluna Consumidor
         $tpl->LISTA_COLUNA_ALINHAMENTO = "";
@@ -674,6 +698,7 @@ if ($linhas == 0) {
             }
         }
         $tpl->block("BLOCK_LISTA_COLUNA");
+        $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
 
 
         
@@ -689,6 +714,7 @@ if ($linhas == 0) {
             die("Erro: " . mysql_error());
         $tpl->LISTA_COLUNA_VALOR = "(" . mysql_num_rows($query3) . ")";
         $tpl->block("BLOCK_LISTA_COLUNA");
+        $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
 
 
         //Total
@@ -696,6 +722,7 @@ if ($linhas == 0) {
         $tpl->LISTA_COLUNA_CLASSE = "";
         $tpl->LISTA_COLUNA_VALOR = "R$ " . number_format($valorbruto,2, ',', '.');
         $tpl->block("BLOCK_LISTA_COLUNA");
+        $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
 
 
         //Desconto
@@ -712,6 +739,8 @@ if ($linhas == 0) {
         }
         $tpl->LISTA_COLUNA_VALOR =  "R$ "."$desconto_mostra";
         $tpl->block("BLOCK_LISTA_COLUNA");
+        $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
+
 
         //Liquido
         $tpl->LISTA_COLUNA_CLASSE = "";
@@ -719,8 +748,65 @@ if ($linhas == 0) {
         $liq=$valorbruto-($desconto + $troco_desconto - $troco_acrescimo);
         $tpl->LISTA_COLUNA_VALOR = "R$ ".number_format($liq, 2,",",".");
         $tpl->block("BLOCK_LISTA_COLUNA");
+        $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
 
-        
+        //Devoluções
+        if ($usadevolucoes==1) {
+            /*
+            $tpl->LISTA_COLUNA2_ALINHAMENTO = "right";
+            $tpl->LISTA_COLUNA2_ALINHAMENTO2 = "left";
+            $sqltot = "SELECT * FROM saidas_devolucoes WHERE saidev_saida=$saida";
+            $querytot = mysql_query($sqltot); if (!$querytot) die("Erro: " . mysql_error());
+            $devolucoes = mysql_num_rows($querytot);
+            $tpl->LISTA_COLUNA2_LINK = "saidas_devolucoes.php?codigo=$saida";
+            $tpl->DESABILITADO = "";
+            $tpl->LISTA_COLUNA2_VALOR = "($devolucoes)";
+            $tpl->block("BLOCK_LISTA_COLUNA2");
+            $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
+            
+
+            $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
+            $tpl->LISTA_COLUNA_CLASSE = "";
+            $tpl->ICONE_LINK="saidas_devolucoes.php?codigo=$saida";
+            $tpl->ICONE_TARGET="_blank";
+            $tpl->block("BLOCK_LISTA_COLUNA_ICONE_LINK");
+            $tpl->ICONE_ARQUIVO = $icones . "devolucoes.png";
+            $tpl->OPERACAO_NOME = "Ver devolucoes";
+            $tpl->LISTA_COLUNA_CLASSE = "";
+            $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+            $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
+            */
+
+        }
+
+        if ($usapagamentosparciais==1) {
+
+            /*
+            $tpl->IMAGEM_PASTA = "$icones";
+            $tpl->LISTA_COLUNA2_ALINHAMENTO = "right";
+            $tpl->LISTA_COLUNA2_ALINHAMENTO2 = "left";
+            $sqltot = "SELECT * FROM saidas_pagamentos WHERE saipag_saida=$saida";
+            $querytot = mysql_query($sqltot); if (!$querytot) die("Erro: " . mysql_error());
+            $pagamentos = mysql_num_rows($querytot);
+            $tpl->LISTA_COLUNA2_LINK = "saidas_pagamentos.php?codigo=$saida";
+            $tpl->DESABILITADO = "";
+            $tpl->LISTA_COLUNA2_VALOR = "($pagamentos)";
+            $tpl->block("BLOCK_LISTA_COLUNA2");
+            $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
+
+            $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
+            $tpl->LISTA_COLUNA_CLASSE = "";
+            $tpl->ICONE_LINK="saidas_pagamentos.php?codigo=$saida";
+            $tpl->ICONE_TARGET="_blank";
+            $tpl->block("BLOCK_LISTA_COLUNA_ICONE_LINK");
+            $tpl->ICONE_ARQUIVO = $icones . "saidas_pagamentos3.png";
+            $tpl->OPERACAO_NOME = "Ver Pagamentos";
+            $tpl->LISTA_COLUNA_CLASSE = "";
+            $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+            $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
+            */
+        }
+
         /*
         //Coluna Caixa
         if ($usacaixa==1) {
@@ -782,6 +868,9 @@ if ($linhas == 0) {
                 $dataentrega2= converte_data($dataentrega);
             } 
             //Icone Entrega
+            $tpl->ICONE_LINK = "saidas_entrega.php?saida=$saida";
+            $tpl->ICONE_TARGET = "";
+            $tpl->block("BLOCK_LISTA_COLUNA_ICONE_LINK");
             if ($entrega==0) {
                 $tpl->ICONE_ARQUIVO = $icones . "erro.png";
                 $tpl->OPERACAO_NOME = "Esta venda não possui entregas";
@@ -807,9 +896,11 @@ if ($linhas == 0) {
                     $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
                 } 
             }
-            echo "($horaentrega)";
-            $tpl->LISTA_COLUNA_VALOR = "$dataentrega2 $horaentrega";
+            $tpl->LISTA_COLUNA_VALOR = "$dataentrega2<br>$horaentrega";
             $tpl->block("BLOCK_LISTA_COLUNA");
+            $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
+
+
             //Icone Imprimir Ordem de entrega
             $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
             $tpl->LISTA_COLUNA_CLASSE = "";
@@ -827,6 +918,7 @@ if ($linhas == 0) {
                 $tpl->LISTA_COLUNA_CLASSE = "";
                 $tpl->block("BLOCK_LISTA_COLUNA_ICONE");                
             }
+            $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
         }
 
         
@@ -870,6 +962,7 @@ if ($linhas == 0) {
             $tpl->ICONE_ARQUIVO = $icones . "nada.png";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
         }
+        $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
         
 
         //Coluna Operações    
@@ -893,13 +986,15 @@ if ($linhas == 0) {
                     $tpl->LINK_COMPLEMENTO = "numero_nota=$numero_nota";                                
                     $tpl->ICONE_ARQUIVO = $icones . "nfe_ver3.png";
                     $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_NOVAPAGINA");            
-                    $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");            
+                    $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");  
+                    $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");          
                 } else {
                     $tpl->OPERACAO_NOME = "Gerar NFE";
                     $tpl->LINK = "saidas_cadastrar_nfe.php";
                     $tpl->LINK_COMPLEMENTO = "ope=1";                                
                     $tpl->ICONE_ARQUIVO = $icones . "nfe_gerar3.png";
-                    $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");   
+                    $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO"); 
+                    $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");  
                 }
             } else {
                     $tpl->OPERACAO_NOME = "Não é possivel emitir nota para vendas incompletas";
@@ -907,6 +1002,7 @@ if ($linhas == 0) {
                     $tpl->LINK_COMPLEMENTO = "";                                
                     $tpl->ICONE_ARQUIVO = $icones . "nfe_negado.png";
                     $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
+                    $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
             }
         }
 
@@ -926,6 +1022,7 @@ if ($linhas == 0) {
             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_NOVAPAGINA");
             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");
             $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_TODAS");
+            $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
         }
 
         //Financeiro/Pagamento da venda
@@ -934,7 +1031,8 @@ if ($linhas == 0) {
         $tpl->LINK_COMPLEMENTO = "saida=$saida&tiposai=1&passo=1";                                
         $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento.png";
         //$tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_NOVAPAGINA");            
-        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");        
+        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");   
+        $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");     
 
         //Verifica se algum produto desta saida foi acertado
         $sql22 = "SELECT saipro_acertado FROM `saidas_produtos` WHERE saipro_saida=$numero and saipro_acertado !=0";
@@ -1060,6 +1158,7 @@ if ($linhas == 0) {
             }
         }
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_TODAS");
+        $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
 
 
         $tpl->block("BLOCK_LISTA");

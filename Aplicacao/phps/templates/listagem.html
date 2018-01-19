@@ -119,6 +119,7 @@
         <!-- BEGIN BLOCK_LISTA -->
         <tr class="{LISTA_LINHA_CLASSE} lin">
             
+            <!-- BEGIN BLOCK_LISTA_COLUNA_CONTEUDO -->
             
             <!-- BEGIN BLOCK_LISTA_COLUNA -->
             <td align="{LISTA_COLUNA_ALINHAMENTO}" class="{LISTA_COLUNA_CLASSE}">
@@ -141,7 +142,19 @@
                     <img src="{IMAGEM_PASTA}procurar{DESABILITADO}.png" title="Ver" width="15px">
                 </a>
             </td> 
-            <!-- END BLOCK_LISTA_COLUNA2 -->              
+            <!-- END BLOCK_LISTA_COLUNA2 -->       
+
+           <!-- BEGIN BLOCK_LISTA_COLUNA3 -->
+            <td align="{LISTA_COLUNA3_ALINHAMENTO}" class="{LISTA_COLUNA3_CLASSE}">
+                <!-- BEGIN BLOCK_LISTA_COLUNA3_LINK -->
+                <a href="{COLUNA3_LINK}" class="link">
+                <!-- END BLOCK_LISTA_COLUNA3_LINK -->
+                    {LISTA_COLUNA3_VALOR}
+                <!-- BEGIN BLOCK_LISTA_COLUNA3_LINK_FIM -->
+                </a>
+                <!-- END BLOCK_LISTA_COLUNA3_LINK_FIM -->                    
+            </td> 
+            <!-- END BLOCK_LISTA_COLUNA3 -->  
             
             
             <!-- BEGIN BLOCK_LISTA_COLUNA_ICONE2 -->
@@ -183,6 +196,8 @@
             <!-- END BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO -->            
             <!-- END BLOCK_LISTA_COLUNA_OPERACAO_TODAS -->
             </td>
+
+            <!-- END BLOCK_LISTA_COLUNA_CONTEUDO -->
             
         </a>   
         </tr>
