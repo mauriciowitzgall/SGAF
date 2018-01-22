@@ -9,7 +9,7 @@ if ($permissao_saidas_cadastrar <> 1) {
     header("Location: permissoes_semacesso.php");
     exit;
 }
-include "includes.php";
+include "includes2.php";
 
 ?> 
 <script type="text/javascript" src="saidas_pagamentos_cadastrar.js"></script> 

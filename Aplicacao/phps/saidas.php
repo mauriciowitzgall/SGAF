@@ -872,11 +872,17 @@ if ($linhas == 0) {
             $tpl->ICONE_TARGET = "";
             $tpl->block("BLOCK_LISTA_COLUNA_ICONE_LINK");
             if ($entrega==0) {
-                $tpl->ICONE_ARQUIVO = $icones . "erro.png";
+                $tpl->ICONE_LINK = "#";
+                $tpl->ICONE_TARGET = "";
+                $tpl->block("BLOCK_LISTA_COLUNA_ICONE_LINK");
+                $tpl->ICONE_ARQUIVO = $icones . "erro_desabilitado.png";
                 $tpl->OPERACAO_NOME = "Esta venda não possui entregas";
                 $tpl->LISTA_COLUNA_CLASSE = "";
                 $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
             } else {
+                $tpl->ICONE_LINK = "saidas_entrega.php?saida=$saida";
+                $tpl->ICONE_TARGET = "";
+                $tpl->block("BLOCK_LISTA_COLUNA_ICONE_LINK");
                 if ($sitentrega == 0) {
                     if (($saldo<0)&&($sitentrega==0)) {
                         $tpl->ICONE_ARQUIVO = $icones . "entrega_atrasada.png";
@@ -1006,14 +1012,7 @@ if ($linhas == 0) {
             }
         }
 
-
-    
-
-
-
-
         if ($permissao_saidas_ver == 1) {
-
             //detalhes
             $tpl->LINK = "saidas_ver.php";
             $tpl->LINK_COMPLEMENTO = "ope=3&tiposaida=1&passo=1&modal=1";
@@ -1026,10 +1025,20 @@ if ($linhas == 0) {
         }
 
         //Financeiro/Pagamento da venda
-        $tpl->OPERACAO_NOME = "Pagamento";
-        $tpl->LINK = "saidas_cadastrar2.php";
-        $tpl->LINK_COMPLEMENTO = "saida=$saida&tiposai=1&passo=1";                                
-        $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento.png";
+        $sql1="SELECT saipag_saida FROM saidas_pagamentos WHERE saipag_saida=$saida";
+        $query1 = mysql_query($sql1); if (!$query1) die("Erro de SQL (1):" . mysql_error());
+        $linhas1 = mysql_num_rows($query1);
+        if ($linhas1>0) {
+            $tpl->LINK = "#";
+            $tpl->OPERACAO_NOME = "Você não pode editar pagamento unico se houver pagamentos parciais";
+            $tpl->LINK_COMPLEMENTO = "";              
+            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento_desabilitado.png";
+        } else {
+            $tpl->LINK = "saidas_cadastrar2.php";
+            $tpl->OPERACAO_NOME = "Pagamento/Financeiro";
+            $tpl->LINK_COMPLEMENTO = "saida=$saida&tiposai=1&passo=1";                                    
+            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento.png";
+        }
         //$tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_NOVAPAGINA");            
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");   
         $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");     

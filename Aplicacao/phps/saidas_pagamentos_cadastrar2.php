@@ -7,7 +7,7 @@ if ($permissao_saidas_cadastrar <> 1) {
     exit;
 }
 $tipopagina = "pagamentos";
-include "includes.php";
+include "includes2.php";
 
 
 //Template de Título e Sub-título
