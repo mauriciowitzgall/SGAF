@@ -709,10 +709,9 @@ if ($linhas == 0) {
         $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
         $tpl->LISTA_COLUNA_CLASSE = "";
         $sql3 = "SELECT DISTINCT saipro_codigo FROM saidas_produtos WHERE saipro_saida=$numero";
-        $query3 = mysql_query($sql3);
-        if (!$query3)
-            die("Erro: " . mysql_error());
-        $tpl->LISTA_COLUNA_VALOR = "(" . mysql_num_rows($query3) . ")";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro: " . mysql_error());
+        $qtd_itens=mysql_num_rows($query3);
+        $tpl->LISTA_COLUNA_VALOR = "(" . $qtd_itens . ")";
         $tpl->block("BLOCK_LISTA_COLUNA");
         $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
 
@@ -1028,9 +1027,15 @@ if ($linhas == 0) {
         $sql1="SELECT saipag_saida FROM saidas_pagamentos WHERE saipag_saida=$saida";
         $query1 = mysql_query($sql1); if (!$query1) die("Erro de SQL (1):" . mysql_error());
         $linhas1 = mysql_num_rows($query1);
-        if ($linhas1>0) {
+        $qtd_pagamentos = $linhas1;
+        if ($qtd_pagamentos>0) {
             $tpl->LINK = "#";
             $tpl->OPERACAO_NOME = "Você não pode editar pagamento unico se houver pagamentos parciais";
+            $tpl->LINK_COMPLEMENTO = "";              
+            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento_desabilitado.png";
+        } else if ($qtd_itens==0) {
+            $tpl->LINK = "#";
+            $tpl->OPERACAO_NOME = "Não há itens nesta venda, ela está vazia. Não há o que ser acertado.";
             $tpl->LINK_COMPLEMENTO = "";              
             $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento_desabilitado.png";
         } else {

@@ -1762,7 +1762,7 @@ if ($passo == 2) {
     $tpl1->SELECT_OBRIGATORIO = " required ";
     $tpl1->SELECT_FOCO = "  ";
     $tpl1->SELECT_DESABILITADO = "  ";
-    $tpl1->SELECT_CLASSE = " width:300px; ";
+    $tpl1->SELECT_CLASSE = " width:350px; ";
     $tpl1->block("BLOCK_SELECT");
     $tpl1->block("BLOCK_CONTEUDO");
     if ($permiteedicaoreferencianavenda==1) {
@@ -1827,7 +1827,7 @@ if ($passo == 2) {
     $tpl1->TITULO = "Porção";
     $tpl1->ASTERISCO = "";
     $tpl1->block("BLOCK_TITULO");
-    $tpl1->SELECT_CLASSE = " width:180px; ";
+    $tpl1->SELECT_CLASSE = " width:300px; ";
     $tpl1->SELECT_NOME = "porcao";
     $tpl1->SELECT_OBRIGATORIO = "  ";
     $tpl1->SELECT_FOCO = "  ";
