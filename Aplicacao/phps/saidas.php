@@ -901,7 +901,9 @@ if ($linhas == 0) {
                     $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
                 } 
             }
-            $tpl->LISTA_COLUNA_VALOR = "$dataentrega2<br>$horaentrega";
+            if ($horaentrega=="00:00") $horaentrega = "";
+            else $horaentrega="<br>$horaentrega";
+            $tpl->LISTA_COLUNA_VALOR = "$dataentrega2 $horaentrega";
             $tpl->block("BLOCK_LISTA_COLUNA");
             $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
 
