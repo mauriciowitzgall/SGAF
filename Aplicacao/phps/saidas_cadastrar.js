@@ -325,7 +325,12 @@ function selecionar_porcoes(porcao) {
     $("input[name=valtot]").val("");
 
     if (porcao==0) porcao=$("select[name=porcao]").val();
-    
+    produto=$("select[name=produto]").val();
+
+    if (porcao=="") {
+        selecionar_produto(produto,1);
+        exit;
+    }
 
     //Popula a quantidade da porção (campo oculto)
     $.post("saidas_popula_porcoesqtdoculto.php", {
@@ -343,7 +348,6 @@ function selecionar_porcoes(porcao) {
         valor = valor.replace("\n", "");
         valor = valor.replace("\n", "");
         valor1 = valor.replace("\n", "");        
-        //alert(valor);
         $("input[name=porcao_oculto]").val(valor1);
         
 

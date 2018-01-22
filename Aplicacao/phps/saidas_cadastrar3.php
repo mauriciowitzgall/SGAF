@@ -22,7 +22,7 @@ if ($usavendas!=1) {
 }
 
 
-print_r($_REQUEST);
+//print_r($_REQUEST);
 
 //Verifica se o usuário é um caixa e não tem caixa aberto, se sim não pode acessar as vendas
 if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
