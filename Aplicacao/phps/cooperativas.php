@@ -142,6 +142,7 @@ while ($dados = mysql_fetch_array($query)) {
 
     //Coluna Abreviação
     $tpl->LISTA_COLUNA_VALOR = $abreviacao;
+    $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
     $tpl->block("BLOCK_LISTA_COLUNA");
 
     //Coluna Quantidade de quiosques
@@ -153,6 +154,7 @@ while ($dados = mysql_fetch_array($query)) {
     $qtdquiosques=$dados2[0];
     $tpl->LISTA_COLUNA_VALOR = $qtdquiosques;
     $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
+    $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
     $tpl->block("BLOCK_LISTA_COLUNA");
 
     //Coluna Quantidade de pessoas
@@ -164,6 +166,7 @@ while ($dados = mysql_fetch_array($query)) {
     $qtdpessoas=$dados2[0];
     $tpl->LISTA_COLUNA_VALOR = $qtdpessoas;
     $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
+    $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
     $tpl->block("BLOCK_LISTA_COLUNA");
     
 
@@ -176,6 +179,7 @@ while ($dados = mysql_fetch_array($query)) {
     $qtdprodutos=$dados2[0];
     $tpl->LISTA_COLUNA_VALOR = $qtdprodutos;
     $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
+    $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
     $tpl->block("BLOCK_LISTA_COLUNA");
 
     //Coluna Quantidade de Entradas
@@ -191,6 +195,7 @@ while ($dados = mysql_fetch_array($query)) {
     $qtdentradas=$dados2[0];
     $tpl->LISTA_COLUNA_VALOR = $qtdentradas;
     $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
+    $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
     $tpl->block("BLOCK_LISTA_COLUNA");
 
     
@@ -207,6 +212,7 @@ while ($dados = mysql_fetch_array($query)) {
     $qtdsaidas=$dados2[0];
     $tpl->LISTA_COLUNA_VALOR = "$qtdsaidas";
     $tpl->LISTA_COLUNA_ALINHAMENTO = "center";
+    $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
     $tpl->block("BLOCK_LISTA_COLUNA");
   
     
@@ -268,6 +274,7 @@ while ($dados = mysql_fetch_array($query)) {
     $tpl->block("BLOCK_LISTA_COLUNA");
     $tpl->LISTA_COLUNA_ALINHAMENTO="left";
     $tpl->LISTA_COLUNA_VALOR = $hora;
+    $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
     $tpl->block("BLOCK_LISTA_COLUNA");
     
     //Coluna Gestores
@@ -287,6 +294,7 @@ while ($dados = mysql_fetch_array($query)) {
         $tpl->DESABILITADO = "_desabilitado";
     }
     $tpl->LISTA_COLUNA2_VALOR = "($gestores)";
+    $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
     $tpl->block("BLOCK_LISTA_COLUNA2");
     
     
@@ -318,6 +326,7 @@ while ($dados = mysql_fetch_array($query)) {
         $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_DESABILITADO");
     }
     $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_TODAS");
+    $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
 
 
     $tpl->block("BLOCK_LISTA");

@@ -411,7 +411,7 @@ if ($linhas == 0) {
                     placeholder=""
                     <?php if ($dadosfiscais==1) echo " required ";   ?>
                 >
-                <a class="link" href="produtos_ncm.php" target="_blank">
+                <a class="link" href="ncm.pdf" target="_blank">
                     <img width="12px" src="<?php echo $icones; ?>procurar.png" alt="" >
                 </a>
                 <label id="label_ncm"></label>

@@ -165,90 +165,16 @@ function consumidor_selecionado(consumidor) {
 
 function verifica_entrega (valor) {
 
-    usuario_quiosque_pais=$("input[name=usuario_quiosque_pais]").val();
-    usuario_quiosque_estado=$("input[name=usuario_quiosque_estado]").val();
-    usuario_quiosque_cidade=$("input[name=usuario_quiosque_cidade]").val();
-    tiposaida=$("input[name=tiposaida]").val();
-    if (tiposaida!=3) { //Não pode ser saida de ajuste, tem que ser venda
-        if ((valor=="")||(valor==0)) { //nao tem entrega
-            $("tr[id=linha_endereco]").hide();
-            $("tr[id=linha_bairro]").hide();
-            $("tr[id=linha_cidade]").hide();
-            $("tr[id=linha_dataentrega]").hide();
-            $("tr[id=linha_fone1]").hide();
-            $("tr[id=linha_fone2]").hide();
-            document.form1.dataentrega.required=false;
-            document.form1.horaentrega.required=false;
-            document.form1.cidade.required=false;
-            document.form1.estado.required=false;
-            document.form1.pais.required=false;
-            $("input[name=endereco]").val("");
-            $("input[name=endereco_numero]").val("");
-            $("input[name=bairro]").val("");
-            $("input[name=fone1]").val("");
-            $("input[name=fone2]").val("");
-
-            popula_estados(usuario_quiosque_pais,usuario_quiosque_estado); 
-            popula_cidades(usuario_quiosque_estado,usuario_quiosque_cidade); 
+    fazentregas=$("input[name=configuracao_fazentregas]").val();
+    if (fazentregas==1) {
 
 
-        } else { //sim tem entrega
-
-            //Verifica se foi selecionado um consumidor, ou se está sendo cadastrado um novo cliente, se identificado consumidor então pode entregar.
-            consumidor_novo_nome=$("input[name=cliente_nome]").val();
-            consumidor=$("select[name=consumidor]").val();
-            permitir_entrega=0;
-            consumidor_existente=0;
-            if ((consumidor_novo_nome!="")&&(consumidor_novo_nome!=undefined)) permitir_entrega=1; 
-            if ((consumidor!=0)&&(consumidor!=undefined)) {  permitir_entrega=1; consumidor_existente=1;}
-            if (permitir_entrega==1) { //o consumidor foi identificado
-                $("tr[id=linha_endereco]").show();
-                $("tr[id=linha_bairro]").show();
-                $("tr[id=linha_cidade]").show();
-                $("tr[id=linha_dataentrega]").show();
-                $("tr[id=linha_fone1]").show();
-                $("tr[id=linha_fone2]").show();
-                document.form1.dataentrega.required=true;
-                document.form1.horaentrega.required=true;
-                document.form1.cidade.required=true;
-                document.form1.estado.required=true;
-                document.form1.pais.required=true; 
-                if (consumidor_existente==1) { //Trata-se de um consumidor já cadastrado 
-                    //Pegar dados do banco e popular os campos de endereço da tela.
-                    $.post("saidas_consumidor_existente_comentrega.php", { consumidor: consumidor }, function(valor2) {
-                        valor2=valor2.split("|");
-                        consumidor_codigo=valor2[0];
-                        consumidor_nome=valor2[1];
-                        consumidor_fone1=valor2[2];
-                        consumidor_fone2=valor2[3];
-                        consumidor_endereco=valor2[4];
-                        consumidor_endereco_numero=valor2[9];
-                        consumidor_bairro=valor2[5];
-                        consumidor_cidade=parseInt(valor2[6]);
-                        consumidor_estado=parseInt(valor2[7]);
-                        consumidor_pais=parseInt(valor2[8]);
-                        if (consumidor_cidade=='0') {
-                            consumidor_pais="";
-                            consumidor_estado="";
-                        }
-                        $("input[name=fone1]").val(consumidor_fone1);
-                        $("input[name=fone2]").val(consumidor_fone2);
-                        $("input[name=endereco]").val(consumidor_endereco);
-                        $("input[name=endereco_numero]").val(consumidor_endereco_numero);
-                        $("input[name=bairro]").val(consumidor_bairro);
-                        popula_estados(consumidor_pais,consumidor_estado); 
-                        popula_cidades(consumidor_estado,consumidor_cidade);
-
-                    });
-                } else { //é um consumidor novo
-                    //Se o método de identificão do consumidor for por telefone, então popula o campo telefone1 com o mesmo numero
-                    if ($("input[name=fone]")) {
-                        fone=$("input[name=fone]").val();
-                        $("input[name=fone1]").val(fone);
-                    }
-                }
-            } else { //consumidor nao identificado, nao pode fazer entrega
-                alert("Para realizar uma entrega é necessário identificar o consumidor!");
+        usuario_quiosque_pais=$("input[name=usuario_quiosque_pais]").val();
+        usuario_quiosque_estado=$("input[name=usuario_quiosque_estado]").val();
+        usuario_quiosque_cidade=$("input[name=usuario_quiosque_cidade]").val();
+        tiposaida=$("input[name=tiposaida]").val();
+        if (tiposaida!=3) { //Não pode ser saida de ajuste, tem que ser venda
+            if ((valor=="")||(valor==0)) { //nao tem entrega
                 $("tr[id=linha_endereco]").hide();
                 $("tr[id=linha_bairro]").hide();
                 $("tr[id=linha_cidade]").hide();
@@ -260,11 +186,90 @@ function verifica_entrega (valor) {
                 document.form1.cidade.required=false;
                 document.form1.estado.required=false;
                 document.form1.pais.required=false;
-                select_selecionar("entrega",'0');
+                $("input[name=endereco]").val("");
+                $("input[name=endereco_numero]").val("");
+                $("input[name=bairro]").val("");
+                $("input[name=fone1]").val("");
+                $("input[name=fone2]").val("");
 
-              
                 popula_estados(usuario_quiosque_pais,usuario_quiosque_estado); 
-                popula_cidades(usuario_quiosque_estado,usuario_quiosque_cidade);           
+                popula_cidades(usuario_quiosque_estado,usuario_quiosque_cidade); 
+
+
+            } else { //sim tem entrega
+
+                //Verifica se foi selecionado um consumidor, ou se está sendo cadastrado um novo cliente, se identificado consumidor então pode entregar.
+                consumidor_novo_nome=$("input[name=cliente_nome]").val();
+                consumidor=$("select[name=consumidor]").val();
+                permitir_entrega=0;
+                consumidor_existente=0;
+                if ((consumidor_novo_nome!="")&&(consumidor_novo_nome!=undefined)) permitir_entrega=1; 
+                if ((consumidor!=0)&&(consumidor!=undefined)) {  permitir_entrega=1; consumidor_existente=1;}
+                if (permitir_entrega==1) { //o consumidor foi identificado
+                    $("tr[id=linha_endereco]").show();
+                    $("tr[id=linha_bairro]").show();
+                    $("tr[id=linha_cidade]").show();
+                    $("tr[id=linha_dataentrega]").show();
+                    $("tr[id=linha_fone1]").show();
+                    $("tr[id=linha_fone2]").show();
+                    document.form1.dataentrega.required=true;
+                    document.form1.horaentrega.required=true;
+                    document.form1.cidade.required=true;
+                    document.form1.estado.required=true;
+                    document.form1.pais.required=true; 
+                    if (consumidor_existente==1) { //Trata-se de um consumidor já cadastrado 
+                        //Pegar dados do banco e popular os campos de endereço da tela.
+                        $.post("saidas_consumidor_existente_comentrega.php", { consumidor: consumidor }, function(valor2) {
+                            valor2=valor2.split("|");
+                            consumidor_codigo=valor2[0];
+                            consumidor_nome=valor2[1];
+                            consumidor_fone1=valor2[2];
+                            consumidor_fone2=valor2[3];
+                            consumidor_endereco=valor2[4];
+                            consumidor_endereco_numero=valor2[9];
+                            consumidor_bairro=valor2[5];
+                            consumidor_cidade=parseInt(valor2[6]);
+                            consumidor_estado=parseInt(valor2[7]);
+                            consumidor_pais=parseInt(valor2[8]);
+                            if (consumidor_cidade=='0') {
+                                consumidor_pais="";
+                                consumidor_estado="";
+                            }
+                            $("input[name=fone1]").val(consumidor_fone1);
+                            $("input[name=fone2]").val(consumidor_fone2);
+                            $("input[name=endereco]").val(consumidor_endereco);
+                            $("input[name=endereco_numero]").val(consumidor_endereco_numero);
+                            $("input[name=bairro]").val(consumidor_bairro);
+                            popula_estados(consumidor_pais,consumidor_estado); 
+                            popula_cidades(consumidor_estado,consumidor_cidade);
+
+                        });
+                    } else { //é um consumidor novo
+                        //Se o método de identificão do consumidor for por telefone, então popula o campo telefone1 com o mesmo numero
+                        if ($("input[name=fone]")) {
+                            fone=$("input[name=fone]").val();
+                            $("input[name=fone1]").val(fone);
+                        }
+                    }
+                } else { //consumidor nao identificado, nao pode fazer entrega
+                    alert("Para realizar uma entrega é necessário identificar o consumidor!");
+                    $("tr[id=linha_endereco]").hide();
+                    $("tr[id=linha_bairro]").hide();
+                    $("tr[id=linha_cidade]").hide();
+                    $("tr[id=linha_dataentrega]").hide();
+                    $("tr[id=linha_fone1]").hide();
+                    $("tr[id=linha_fone2]").hide();
+                    document.form1.dataentrega.required=false;
+                    document.form1.horaentrega.required=false;
+                    document.form1.cidade.required=false;
+                    document.form1.estado.required=false;
+                    document.form1.pais.required=false;
+                    select_selecionar("entrega",'0');
+
+                  
+                    popula_estados(usuario_quiosque_pais,usuario_quiosque_estado); 
+                    popula_cidades(usuario_quiosque_estado,usuario_quiosque_cidade);           
+                }
             }
         }
     }
