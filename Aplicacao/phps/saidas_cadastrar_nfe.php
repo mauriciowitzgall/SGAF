@@ -3,7 +3,9 @@
 
 //Verifica se o usuário pode acessar a tela
 require "login_verifica.php";
-$saida = $_GET["saida"];
+$saida = $_GET["codigo"];
+if ($saida=="") $saida = $_GET["saida"];
+
 $ope = $_GET["ope"];
 
 

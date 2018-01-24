@@ -24,6 +24,7 @@ include "includes.php";
 
 
 
+
 //Pega dados para montagem do ARRAY que emitirá a NFE
 
 //Configurações do SISTEMA
@@ -106,6 +107,7 @@ $troco_acrescimo = $dados["sai_acrescimoforcado"];
 $nfe_venda_descontototal=$desconto + $troco_desconto - $troco_acrescimo;
 $nfe_venda_totalliquido = $dados["sai_totalliquido"];
 $nfe_venda_consumidor_nome = $dados["pes_nome"];
+if ($nfe_venda_consumidor_nome=="Cliente Geral");
 $nfe_venda_consumidor_ie = $dados["pes_ie"];
 $nfe_venda_consumidor_im = $dados["pes_im"];
 $nfe_venda_consumidor_endereco = $dados["pes_endereco"];
@@ -171,6 +173,36 @@ if (($nfe_geral_danfeoucupom==65)||($nfe_operacaodestino==3)) { //Cupom fiscal
 
 
 
+//Verifica se não for cupom fiscal é necessário que o endereço do cliente esteja preenchido
+if (($tipoimpressaodanfe!=4)&&($tipoimpressaodanfe!=5)) {
+  echo "$nfe_consumidor_endereco / $nfe_consumidor_endereco_numero / $nfe_consumidor_bairro";
+  if ($nfe_consumidor_endereco=="") {
+    $msg=$msg . " Preencher <b>endereço</b> do consumidor. <br>";
+    $semendereco="1";
+  }
+  if ($nfe_consumidor_endereco_numero=="") {
+    $msg=$msg . " Preencher <b>número do endereço</b> do consumidor. <Br>";
+    $semendereco="1";
+  }
+  if ($nfe_consumidor_bairro=="") {
+    $msg=$msg . " Preencher <b>bairro</b> do consumidor. <br>";
+    $semendereco=1;
+  }
+  if ($semendereco==1) {
+      $tpl6 = new Template("templates/notificacao.html");
+      $tpl6->block("BLOCK_ATENCAO");
+      $tpl6->ICONES = $icones;
+      $tpl6->MOTIVO = "<Br>Consumidor sem a informação: <b>ENDEREÇO</b>. <br><br> $msg <br><br>";
+      $tpl6->block("BLOCK_MOTIVO");
+      $tpl6->block("BLOCK_BOTAO_VOLTAR");
+      $tpl6->show();
+      exit;
+  }
+}
+
+
+
+
 //tanto o config.json como o certificado.pfx podem estar
 //armazenados em uma base de dados, então não é necessário
 ///trabalhar com arquivos, este script abaixo serve apenas como
@@ -179,7 +211,7 @@ if (($nfe_geral_danfeoucupom==65)||($nfe_operacaodestino==3)) { //Cupom fiscal
 //EMITENTE
 $arr = [
     "atualizacao" => "$nfe_dataversaosistema", //data da versão do SGAF 
-    "tpAmb" => $nfe_geral_ambiente,
+    "tpAmb" => (int)$nfe_geral_ambiente,
     "razaosocial" => "$nfe_emitente_razaosocial",
     "cnpj" => "$nfe_emitente_cnpj",
     "siglaUF" => "$nfe_emitente_estado",
@@ -197,7 +229,7 @@ $arr = [
 ];
 
 $dadosNfe = [
-    "tpAmb" => "$nfe_geral_ambiente",
+    "tpAmb" => (int)$nfe_geral_ambiente,
     "cDV" => "",
     "id" => "", // Se deixar nulo ele gerar automatico um numero
     "mod" => "$nfe_geral_danfeoucupom", // 55: NFe / 65: NFCe
@@ -238,7 +270,7 @@ $dadosNfe = [
     "xPais" => "$nfe_emitente_pais_nome",
     "fone" => "$nfe_emitente_telefone", //só numeros, sem caracteres especiais
     "vBC" => null,
-    "vICMS" => null,
+    "vICMS" => "",
     "vICMSDesonv" => null,
     "vBCST" => null,
     "vST" => null,
@@ -397,6 +429,8 @@ $sql="
 SELECT * 
 FROM saidas_produtos 
 join produtos on (saipro_produto=pro_codigo)
+left join nfe_cfop on (pro_cfop=cfop_codigo)
+left join nfe_ncm on (pro_ncm=ncm_codigo)
 WHERE saipro_saida=$saida
 ";
 if (!$query = mysql_query($sql)) die("<br>Erro SQL SAIDA PRODUTOS: ".mysql_error());
@@ -408,8 +442,9 @@ while ($dados=mysql_fetch_assoc($query)) {
   $nfe_venda_item_produto_codigo=$dados["saipro_produto"]; //Código do produto no sistema SGAF
   $nfe_venda_item_produto_ean=$dados["pro_codigounico"];
   $nfe_venda_item_produto_nome=$dados["pro_nome"];
-  $nfe_venda_item_ncm=$dados["pro_ncm"];
-  $nfe_venda_item_cfop=$dados["pro_cfop"];
+  $nfe_venda_item_ncm=$dados["ncm_id"];
+  $nfe_venda_item_cfop=str_replace(".","",$dados["cfop_id"]);
+  $tipocontagem=$dados["pro_tipocontagem"];
   if ($tipocontagem==1) $nfe_venda_item_tipocontagem="UN"; //UN KG LT
   if ($tipocontagem==2) $nfe_venda_item_tipocontagem="KG"; //UN KG LT
   if ($tipocontagem==3) $nfe_venda_item_tipocontagem="LT"; //UN KG LT
@@ -598,9 +633,11 @@ echo json_encode($dadosNfeItens)."<br><br>";
 
 // AQUI VAMOS CHAMAR O METODO DE GERACAO DA NOTA DO SERVIDOR DO SPED NFE
 // VAI RETORNAR UM OUTRO JSON CONTENDO MENSAGENS DE SUCESSO OU ERRO
+$configJson = json_encode($arr);
+$dadosNfeJson = json_encode($dadosNfe);
+$dadosNfeItensJson = json_encode($dadosNfeItens);
 $emissor = new EmissorNFe($configJson, $dadosNfeJson, $dadosNfeItensJson);
 $emissor->emiteNfe();
-
 
 
 //Atualiza a última NFE gerada

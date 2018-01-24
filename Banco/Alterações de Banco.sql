@@ -18262,5 +18262,7 @@ ALTER TABLE `sgaf`.`saidas`
 ADD COLUMN `sai_horaentrega` TIME NULL DEFAULT NULL AFTER `sai_entrega_concluida`;
 
 
+ALTER TABLE `sgaf_agape3`.`quiosques_configuracoes` 
+CHANGE COLUMN `quicnf_serienfe` `quicnf_serienfe` INT(3) NULL DEFAULT NULL ;
 
 
