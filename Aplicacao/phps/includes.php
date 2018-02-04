@@ -43,9 +43,10 @@ $modal=$_GET["modal"];
                 include "menu.php";
             }
             include "js/mascaras.php";
+    
             ?>
             <input name="usuario_quiosque_pais" id="usuario_quiosque_pais" type="hidden" value="<?php echo $usuario_quiosque_pais; ?>">
             <input name="usuario_quiosque_estado" id="usuario_quiosque_estado" type="hidden" value="<?php echo $usuario_quiosque_estado; ?>">
             <input name="usuario_quiosque_cidade" id="usuario_quiosque_cidade" type="hidden" value="<?php echo $usuario_quiosque_cidade; ?>">
-            <input name="configuracao_fazentregas" id="configuracao_fazentregas" type="hidden" value="<?php echo $fazentrega; ?>">
+            <input name="configuracao_fazentregas" id="configuracao_fazentregas" type="hidden" value="<?php echo $fazentregas; ?>">
             <div class="corpo">

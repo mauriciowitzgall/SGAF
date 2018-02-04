@@ -911,20 +911,15 @@ if ($linhas == 0) {
             //Icone Imprimir Ordem de entrega
             $tpl->LISTA_COLUNA_ALINHAMENTO = "right";
             $tpl->LISTA_COLUNA_CLASSE = "";
-            if (($entrega==1)&&($sitentrega==0)) {
-                $tpl->ICONE_LINK="saidas_ordemdeentrega.php?codigo=$saida&tiposaida=1&ope=4";
-                $tpl->ICONE_TARGET="_blank";
-                $tpl->block("BLOCK_LISTA_COLUNA_ICONE_LINK");
-                $tpl->ICONE_ARQUIVO = $icones . "imprimir.png";
-                $tpl->OPERACAO_NOME = "Imprimir ordem de entrega";
-                $tpl->LISTA_COLUNA_CLASSE = "";
-                $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
-            } else {
-                $tpl->ICONE_ARQUIVO = $icones . "imprimir_desabilitado.png";
-                $tpl->OPERACAO_NOME = "Imprimir ordem de entrega";
-                $tpl->LISTA_COLUNA_CLASSE = "";
-                $tpl->block("BLOCK_LISTA_COLUNA_ICONE");                
-            }
+        
+            $tpl->ICONE_LINK="saidas_ordemdeentrega.php?codigo=$saida&tiposaida=1&ope=4";
+            $tpl->ICONE_TARGET="_blank";
+            $tpl->block("BLOCK_LISTA_COLUNA_ICONE_LINK");
+            $tpl->ICONE_ARQUIVO = $icones . "imprimir.png";
+            $tpl->OPERACAO_NOME = "Imprimir ordem de entrega";
+            $tpl->LISTA_COLUNA_CLASSE = "";
+            $tpl->block("BLOCK_LISTA_COLUNA_ICONE");
+            
             $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
         }
 

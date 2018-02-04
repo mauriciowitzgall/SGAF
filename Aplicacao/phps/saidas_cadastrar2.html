@@ -33,12 +33,32 @@ $(document).ready(function() {
         </tr>
         <tr class="">  
             <td align="right" width="">                
-                <b>Total:</b>                            
+                <b>Total com desconto:</b>                            
             </td>            
             <td align="left" width="" class="fundo1">                
                 <input type="text" name="total" id="total"s ize="15" class="campopadrao negrito" value="{TOTAL_VALOR}" disabled>                                                                 
             </td>  
+        </tr> 
+        <!-- BEGIN BLOCK_FRETE -->
+        <tr>  
+            <td align="right" width="200px">                
+                <b>Frete:</b>                            
+            </td>            
+            <td align="left" width="" class="fundo1">                
+                <input type="text" name="frete" id="frete" size="15" class="campopadrao" value="{FRETE}" disabled="disabeld" >                                                                 
+            </td>  
         </tr>        
+        <!-- END BLOCK_FRETE -->   
+        <!-- BEGIN BLOCK_TOTALCOMFRETE -->
+        <tr>  
+            <td align="right" width="200px">                
+                <b>Total com frete:</b>                            
+            </td>            
+            <td align="left" width="" class="fundo1">                
+                <input type="text" name="totalcomfrete" id="totalcomfrete" size="15" class="campopadrao" value="{TOTALCOMFRETE}" disabled="disabeld" >                                                                 
+            </td>  
+        </tr>        
+        <!-- END BLOCK_TOTALCOMFRETE -->  
         <tr class="" id="linha_areceber">  
             <td align="right" width="">                
                 <b>Á receber:</b>                            
@@ -136,6 +156,7 @@ $(document).ready(function() {
                 <input type="hidden" name="permitevendasareceber" value="{PERMITEVENDASARECEBER}">
                 <input type="hidden" name="saida" value="{SAIDA}">                
                 <input type="hidden" name="total2" value="{TOTAL2_VALOR}">                                            
+                <input type="hidden" name="totalcomfrete2" value="{TOTALCOMFRETE2_VALOR}">                                            
                 
                 <!-- BEGIN BLOCK_OCULTOS2 -->
                 <input type="hidden" name="valbru2" value="{VALBRU2_VALOR}">                                                                 

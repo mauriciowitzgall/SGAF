@@ -197,6 +197,10 @@ if ($retirar_produto == '1') {
             $entrega_bairro=$_POST["bairro"];
             $entrega_cidade=$_POST["cidade"];
             $entrega_estado=$_POST["estado"];
+            $entrega_frete=$_POST["frete"];
+            $entrega_frete=str_replace("R$ ", "", $entrega_frete);
+            $entrega_frete=str_replace(".", "", $entrega_frete);
+            $entrega_frete=str_replace(",", ".", $entrega_frete);
             $entrega_pais=$_POST["pais"];
             $entrega_fone1=$_POST["fone1"];
             $entrega_fone2=$_POST["fone2"];
@@ -291,6 +295,7 @@ if ($pega_dados_do_banco==1) {
         $entrega_dataentrega=$dados["sai_dataentrega"];
         $entrega_horaentrega=$dados["sai_horaentrega"];
         $entrega_endereco=$dados["sai_entrega_endereco"];
+        $entrega_frete=$dados["sai_entrega_frete"];
         $entrega_endereco_numero=$dados["sai_entrega_endereco_numero"];
         $entrega_bairro=$dados["sai_entrega_bairro"];
         $entrega_cidade=$dados["sai_entrega_cidade"];
@@ -333,6 +338,16 @@ if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&(($usacomanda==1)||($identific
             if ( $entrega_endereco2 != $entrega_endereco ) $entrega_endereco=$_REQUEST["endereco"];
         } 
 
+        $entrega_frete2=$_REQUEST["frete"];
+        if ($entrega_frete2!="") {
+            if ( $entrega_frete2 != $entrega_frete ) {
+                $entrega_frete=$_REQUEST["frete"];
+                $entrega_frete=str_replace("R$ ", "", $entrega_frete);
+                $entrega_frete=str_replace(".", "", $entrega_frete);
+                $entrega_frete=str_replace(",", ".", $entrega_frete);
+            }
+        } 
+
         $entrega_endereco_numero2=$_REQUEST["endereco_numero"];
         if ($entrega_endereco_numero2!="") {
             if ( $entrega_endereco_numero2 != $entrega_endereco_numero ) $entrega_endereco_numero=$_REQUEST["endereco_numero"];
@@ -370,7 +385,7 @@ if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&(($usacomanda==1)||($identific
             if ($entrega==0) $entrega_horaentrega="0000-00-00";
         }
 
-        $sql11= "UPDATE saidas SET sai_dataentrega='$entrega_dataentrega', sai_horaentrega='$entrega_horaentrega', sai_entrega=$entrega, sai_entrega_endereco='$entrega_endereco', sai_entrega_endereco_numero='$entrega_endereco_numero', sai_entrega_bairro='$entrega_bairro', sai_entrega_cidade='$entrega_cidade', sai_entrega_fone1='$entrega_fone1', sai_entrega_fone2='$entrega_fone2' WHERE sai_codigo=$saida";
+        $sql11= "UPDATE saidas SET sai_dataentrega='$entrega_dataentrega', sai_horaentrega='$entrega_horaentrega', sai_entrega=$entrega, sai_entrega_endereco='$entrega_endereco', sai_entrega_endereco_numero='$entrega_endereco_numero', sai_entrega_bairro='$entrega_bairro', sai_entrega_cidade='$entrega_cidade', sai_entrega_fone1='$entrega_fone1', sai_entrega_fone2='$entrega_fone2', sai_entrega_frete='$entrega_frete' WHERE sai_codigo=$saida";
         if (!$query11 = mysql_query($sql11)) die("<br>Erro122:" . mysql_error());       
 
 
@@ -900,9 +915,9 @@ if (($saida == 0) && ($passo == 2)) {
 
         $sql_saida = "
         INSERT INTO
-            saidas (sai_quiosque, sai_caixaoperacaonumero, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro,sai_usuarioquecadastrou, sai_id,sai_obs, sai_entrega, sai_dataentrega,sai_entrega_fone1, sai_entrega_fone2, sai_entrega_endereco, sai_entrega_endereco_numero, sai_entrega_bairro, sai_entrega_cidade, sai_entrega_concluida, sai_horaentrega )
+            saidas (sai_quiosque, sai_caixaoperacaonumero, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro,sai_usuarioquecadastrou, sai_id,sai_obs, sai_entrega, sai_dataentrega,sai_entrega_fone1, sai_entrega_fone2, sai_entrega_endereco, sai_entrega_endereco_numero, sai_entrega_bairro, sai_entrega_cidade, sai_entrega_concluida, sai_horaentrega, sai_entrega_frete )
         VALUES
-            ('$usuario_quiosque','$usuario_caixa_operacao','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2,'$datahoracadastro',$usuario_codigo, $id, '$obs','$entrega','$entrega_dataentrega','$entrega_fone1','$entrega_fone2','$entrega_endereco','$entrega_endereco_numero','$entrega_bairro',$entrega_cidade, 0 , '$entrega_horaentrega')        
+            ('$usuario_quiosque','$usuario_caixa_operacao','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2,'$datahoracadastro',$usuario_codigo, $id, '$obs','$entrega','$entrega_dataentrega','$entrega_fone1','$entrega_fone2','$entrega_endereco','$entrega_endereco_numero','$entrega_bairro',$entrega_cidade, 0 , '$entrega_horaentrega', '$entrega_frete')        
         ";
         $query_saida = mysql_query($sql_saida);
         if (!$query_saida)
@@ -1445,6 +1460,34 @@ if ($tiposaida == 1) {
         $tpl1->block("BLOCK_SELECT2");
         $tpl1->block("BLOCK_CONTEUDO");
         $tpl1->block("BLOCK_ITEM");
+
+        //Frete
+        $tpl1->TR_ID="linha_frete";
+        $tpl1->TITULO = "Frete";
+        $tpl1->ASTERISCO = "";
+        $tpl1->block("BLOCK_TITULO");
+        $tpl1->CAMPO_OBRIGATORIO = "  ";
+        $tpl1->CAMPO_TIPO = "text";
+        $tpl1->CAMPO_ESTILO = "width:120px;";
+        $tpl1->CAMPO_NOME = "frete";
+        $tpl1->CAMPO_TAMANHO = "";
+        $tpl1->CAMPO_QTD_CARACTERES = "";
+        $tpl1->CAMPO_FOCO = " ";
+        $tpl1->CAMPO_VALOR = number_format($entrega_frete,2); 
+        if ($passo==2) {
+            $tpl1->CAMPO_DESABILITADO = " disabled ";
+        } else {
+            $tpl1->CAMPO_DESABILITADO = "  ";
+        }
+        $tpl1->CAMPO_ONKEYPRESS = "";
+        $tpl1->CAMPO_DICA = "R$ 0,00";
+        $tpl1->CAMPO_ONKEYUP = "";
+        $tpl1->CAMPO_ONKEYDOWN = "";
+        $tpl1->CAMPO_ONBLUR = ""; 
+        $tpl1->CAMPO_ONFOCUS = "";
+        $tpl1->block("BLOCK_CAMPO");
+        $tpl1->block("BLOCK_CONTEUDO");
+        $tpl1->block("BLOCK_ITEM");           
 
 
         //Telefone 1

@@ -141,7 +141,14 @@ $(window).load(function() {
     });
 
     entrega=$("select[name=entrega]").val();
-    verifica_entrega (entrega);
+    verifica_entrega(entrega);
+
+    $("input[name=frete]").priceFormat({
+        prefix: 'R$ ',
+        centsLimit: 2,
+        centsSeparator: ',',
+        thousandsSeparator: '.'
+    });
 
 });
 
@@ -166,6 +173,7 @@ function consumidor_selecionado(consumidor) {
 function verifica_entrega (valor) {
 
     fazentregas=$("input[name=configuracao_fazentregas]").val();
+    console.log(fazentregas+"/");
     if (fazentregas==1) {
 
 
@@ -175,12 +183,14 @@ function verifica_entrega (valor) {
         tiposaida=$("input[name=tiposaida]").val();
         if (tiposaida!=3) { //Não pode ser saida de ajuste, tem que ser venda
             if ((valor=="")||(valor==0)) { //nao tem entrega
+
                 $("tr[id=linha_endereco]").hide();
                 $("tr[id=linha_bairro]").hide();
                 $("tr[id=linha_cidade]").hide();
                 $("tr[id=linha_dataentrega]").hide();
                 $("tr[id=linha_fone1]").hide();
                 $("tr[id=linha_fone2]").hide();
+                $("tr[id=linha_frete]").hide();
                 document.form1.dataentrega.required=false;
                 document.form1.horaentrega.required=false;
                 document.form1.cidade.required=false;
@@ -191,6 +201,7 @@ function verifica_entrega (valor) {
                 $("input[name=bairro]").val("");
                 $("input[name=fone1]").val("");
                 $("input[name=fone2]").val("");
+                $("input[name=frete]").val("");
 
                 popula_estados(usuario_quiosque_pais,usuario_quiosque_estado); 
                 popula_cidades(usuario_quiosque_estado,usuario_quiosque_cidade); 
@@ -212,6 +223,7 @@ function verifica_entrega (valor) {
                     $("tr[id=linha_dataentrega]").show();
                     $("tr[id=linha_fone1]").show();
                     $("tr[id=linha_fone2]").show();
+                    $("tr[id=linha_frete]").show();
                     document.form1.dataentrega.required=true;
                     document.form1.horaentrega.required=true;
                     document.form1.cidade.required=true;
@@ -259,6 +271,7 @@ function verifica_entrega (valor) {
                     $("tr[id=linha_dataentrega]").hide();
                     $("tr[id=linha_fone1]").hide();
                     $("tr[id=linha_fone2]").hide();
+                    $("tr[id=linha_frete]").hide();
                     document.form1.dataentrega.required=false;
                     document.form1.horaentrega.required=false;
                     document.form1.cidade.required=false;

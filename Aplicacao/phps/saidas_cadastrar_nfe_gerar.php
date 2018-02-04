@@ -66,6 +66,10 @@ if (date('I')==1) $gmt="-02:00"; //Se estiver no horário de verão
 else $gmt="-03:00";
 $nfe_geral_dataemissao=$data."T".$hora.$gmt;
 $nfe_emitente_razaosocial=$dados["qui_razaosocial"];
+if ($dados["qui_tipopessoa"] == 2)
+  $nfe_emitente_tipopessoa="CNPJ";
+else
+  $nfe_emitente_tipopessoa="CPF";
 $nfe_emitente_nomefantasia=$dados["qui_nome"];
 $nfe_emitente_uf=$dados["est_codigo2"]; //IBGE
 $nfe_emitente_cnpj=$dados["qui_cnpj"];
@@ -175,7 +179,7 @@ if (($nfe_geral_danfeoucupom==65)||($nfe_operacaodestino==3)) { //Cupom fiscal
 
 //Verifica se não for cupom fiscal é necessário que o endereço do cliente esteja preenchido
 if (($tipoimpressaodanfe!=4)&&($tipoimpressaodanfe!=5)) {
-  echo "$nfe_consumidor_endereco / $nfe_consumidor_endereco_numero / $nfe_consumidor_bairro";
+  // echo "$nfe_consumidor_endereco / $nfe_consumidor_endereco_numero / $nfe_consumidor_bairro";
   if ($nfe_consumidor_endereco=="") {
     $msg=$msg . " Preencher <b>endereço</b> do consumidor. <br>";
     $semendereco="1";
@@ -231,10 +235,10 @@ $arr = [
 $dadosNfe = [
     "tpAmb" => (int)$nfe_geral_ambiente,
     "cDV" => "",
-    "id" => "", // Se deixar nulo ele gerar automatico um numero
+    "id" => null, // Se deixar nulo ele gerar automatico um numero
     "mod" => "$nfe_geral_danfeoucupom", // 55: NFe / 65: NFCe
-    "cNF" => "$nfe_venda_numero", //Numero da venda 
-    "cUF" => "$nfe_emitente_uf", //Código IBGE do estado
+    "cNF" => "$nfe_venda_numero", // Numero da venda 
+    "cUF" => "$nfe_emitente_uf", // Código IBGE do estado
     "natOp" => "$nfe_venda_naturezaoperacao", //Venda ou Devolução ou Cancelamento
     "indPag" => "$nfe_venda_indicadorpagamento", //NÃO EXISTE MAIS NA VERSÃO 4.00 --- Versao 3.10= 0: a vista / 1: a prazo / 2: outros
     "serie" => "$nfe_geral_serie",
@@ -295,9 +299,9 @@ $dadosNfe = [
     "tpIntegra" => $nfe_venda_tipointegracaopagamento, // 1=Pagamento integrado com o sistema de automação da empresa (Ex.: equipamento TEF, Comércio Eletrônico); 2= Pagamento não integrado com o sistema de automação da empresa (Ex.: equipamento POS);
     "vTroco" => $nfe_venda_troco,
     "doctoNfe" => [
-      "doc" => "$nfe_venda_consumidor_tipopessoa", //Escrever se é CPF ou CNPJ conforme tipo de pessoa fisica ou juridica
-      "CNPJ" => "$nfe_venda_consumidor_cnpj",
-      "CPF" => "$nfe_venda_consumidor_cpf",
+      "doc" => "$nfe_emitente_tipopessoa", //Escrever se é CPF ou CNPJ conforme tipo de pessoa fisica ou juridica
+      "CNPJ" => "$nfe_emitente_cnpj",
+      "CPF" => "$nfe_emitente_cpf",
     ],
     "usaNfeCartaoCredito" => [ 
       "Cartao" => $nfe_venda_usacartao, //true ou false
@@ -456,7 +460,7 @@ while ($dados=mysql_fetch_assoc($query)) {
   $nfe_venda_item_cst=40; 
   //Tabela A: 0 - Nacional, 1 - Importação Direta, 2 - Estrangeira Adquirida no Mercado Interno 
   //Tabela B: 00 Tributada integralmente, 10 Tributada e com cobrança do ICMS por substituição tributária, 20 Com redução de base de cálculo, 30 Isenta ou não tributada e com cobrança do ICMS por substituição tributária, 40 Isenta, 41 Não tributada, 50 Suspensão, 51 Diferimento, 60 ICMS cobrado anteriormente por substituição tributária, 70 Com redução de base de cálculo e cobrança do ICMS por substituição tributária, 90 Outras
-  $nfe_venda_item_csosn=440;
+  $nfe_venda_item_csosn=400;
   //101 – Tributada pelo Simples Nacional com permissão de crédito – Classificam-se neste código as operações que permitem a indicação da alíquota do ICMS devido no Simples Nacional e o valor do crédito correspondente.
   //102 – Tributada pelo Simples Nacional sem permissão de crédito – Classificam-se neste código as operações que não permitem a indicação da alíquota do ICMS devido pelo Simples Nacional e do valor do crédito, e não estejam abrangidas nas hipóteses dos códigos 103, 203, 300, 400, 500 e 900.
   //103 – Isenção do ICMS no Simples Nacional para faixa de receita bruta – Classificam-se neste código as operações praticadas por optantes pelo Simples Nacional contemplados com isenção concedida para faixa de receita bruta nos termos da Lei Complementar nº 123, de 2006.

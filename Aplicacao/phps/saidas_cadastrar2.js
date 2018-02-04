@@ -118,7 +118,13 @@ function desconto(campo) {
     total=total3[1];
     total=total.replace(".","");
     total=total.replace(",",".");
-    console.log(total);
+    frete=$("#frete").val();
+    frete=frete.split(" ");
+    frete=frete[1];
+    frete=frete.replace(".","");
+    frete=frete.replace(",",".");
+    frete=parseFloat(frete);
+    frete=frete.toFixed(2);
 
     descper=$("#descper").val();
     descper=descper.replace(".","");
@@ -149,9 +155,12 @@ function desconto(campo) {
     
     //Recalcula o total final com desconto
     valorfinal=total-descval;
+
+    valorfinalcomfrete=parseFloat(total)-parseFloat(descval)+parseFloat(frete);
     //console.log(total+"/"+descval+"="+valorfinal);
     $("input[name=total]").val("R$ "+valorfinal.formatMoney(2, ',', '.'));//alimenta o input desabilitado
     $("input[name=total2]").val(valorfinal);//alimenta o input hidden
+    $("input[name=totalcomfrete]").val("R$ "+valorfinalcomfrete.formatMoney(2, ',', '.'));
 
     
     
@@ -166,6 +175,15 @@ function desconto2(campo) {
         centsSeparator: ',',
         thousandsSeparator: '.'
     });
+
+
+    frete=$("#frete").val();
+    frete=frete.split(" ");
+    frete=frete[1];
+    frete=frete.replace(".","");
+    frete=frete.replace(",",".");
+    frete=parseFloat(frete);
+    frete=frete.toFixed(2);
 
     //Atualiza percentual de desconto conforme o valor digitado
     total2=$("#valbru").val();
@@ -205,12 +223,15 @@ function desconto2(campo) {
     
 
     //Recalcula o total
+    console.log(total+"/"+descval+"/"+frete);
+    valorfinalcomfrete=parseFloat(total)-parseFloat(descval)+parseFloat(frete);
     $.post("saidas_totalcomdesconto2.php",{
         valbru:$("input[name=valbru]").val(),
         descval:$("input[name=descval]").val()
     }, function(valor) {
         $("input[name=total]").val("R$ "+valor);//alimenta o input desabilitado
         $("input[name=total2]").val("R$ "+valor);//alimenta o input hidden
+        $("input[name=totalcomfrete]").val("R$ "+valorfinalcomfrete.formatMoney(2, ',', '.'));
     });
     
     //Zera o Desconto Percentagem e Dinheiro

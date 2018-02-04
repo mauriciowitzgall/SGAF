@@ -8,7 +8,7 @@ if ($permissao_saidas_cadastrar <> 1) {
 
 $tipopagina = "saidas";
 
-//print_r($_REQUEST);
+print_r($_REQUEST);
 
 include "includes.php";
 //include "funcoes.php";
@@ -42,6 +42,8 @@ $descper = number_format($descper,2,'.','');
 $descval = number_format(dinheiro_para_numero($_POST["descval"]),2,'.','');
 $total = dinheiro_para_numero($_POST["total2"]);
 $total = number_format($total,2,'.','');
+$totalcomfrete = dinheiro_para_numero($_POST["totalcomfrete2"]);
+$totalcomfrete = number_format($totalcomfrete,2,'.','');
 
 $dinheiro = number_format(dinheiro_para_numero($_POST["dinheiro"]),2,'.','');
 $recebidodinheiro = number_format(dinheiro_para_numero($_POST["recebidodinheiro"]),2,'.','');
@@ -75,6 +77,7 @@ if ($passo==1) {
     $descval = $dados["sai_descontovalor"];
     $areceber = $dados["sai_areceber"];
     $total = $dados["sai_totalcomdesconto"];
+    $frete = $dados["sai_entrega_frete"];
 }
 
 
@@ -92,7 +95,7 @@ if ((($dinheiro <= $total) && ($passo == 2))||(($metodopag==6)||($metodopag==7))
 
     echo "
         <script language='javaScript'>
-            window.location.href='saidas_cadastrar3.php?troco_devolvido=0&passo=2&saida=$saida&total2=$total&descper2=$descper&descval2=$descval&dinheiro2=$dinheiro&troco2=$troco&troco_devolvido=$troco_devolvido&valbru2=$valbru&areceber2=$areceber&metodopag2=$metodopag&tiposai=$tiposai&recebidodinheiro=$recebidodinheiro&recebidocartao=$recebidocartao&cartaobandeira=$cartaobandeira'
+            window.location.href='saidas_cadastrar3.php?troco_devolvido=0&passo=2&saida=$saida&total2=$total&descper2=$descper&descval2=$descval&dinheiro2=$dinheiro&troco2=$troco&troco_devolvido=$troco_devolvido&valbru2=$valbru&areceber2=$areceber&metodopag2=$metodopag&tiposai=$tiposai&recebidodinheiro=$recebidodinheiro&recebidocartao=$recebidocartao&frete=$frete&cartaobandeira=$cartaobandeira&totalcomfrete2=$totalcomfrete2'
         </script>";   
 }
 
@@ -118,6 +121,15 @@ $tpl = new Template("saidas_cadastrar2.html");
 $tpl->VALBRU_VALOR = "R$ " . number_format($valbru, 2, ',', '.');
 $tpl->VALBRU2_VALOR = $valbru;
 
+//Frete
+if ($fazentregas==1) {
+    $tpl->FRETE = "R$ " . number_format($frete, 2, ',', '.');
+    $tpl->block("BLOCK_FRETE");
+    $totalcomfrete=$valbru+$frete;
+    $tpl->TOTALCOMFRETE = "R$ " . number_format($totalcomfrete, 2, ',', '.');
+    $tpl->block("BLOCK_TOTALCOMFRETE");
+
+}
 
 //A receber
 $tpl->AREC_OPTION_VALOR = "1";
