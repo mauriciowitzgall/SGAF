@@ -77,7 +77,11 @@ if ($passo==1) {
     $descval = $dados["sai_descontovalor"];
     $areceber = $dados["sai_areceber"];
     $total = $dados["sai_totalcomdesconto"];
-    $frete = $dados["sai_entrega_frete"];
+    $metodopag=$dados["sai_metpag"];
+    $cartaobandeira=$dados["sai_cartaobandeira"];
+    $recebidodinheiro=$dados["sai_recebidodinheiro"];
+    $recebidocartao=$dados["sai_recebidocartao"];
+    $dinheiro=$dados["sai_dinheiro"];
 }
 
 
@@ -95,7 +99,7 @@ if ((($dinheiro <= $total) && ($passo == 2))||(($metodopag==6)||($metodopag==7))
 
     echo "
         <script language='javaScript'>
-            window.location.href='saidas_cadastrar3.php?troco_devolvido=0&passo=2&saida=$saida&total2=$total&descper2=$descper&descval2=$descval&dinheiro2=$dinheiro&troco2=$troco&troco_devolvido=$troco_devolvido&valbru2=$valbru&areceber2=$areceber&metodopag2=$metodopag&tiposai=$tiposai&recebidodinheiro=$recebidodinheiro&recebidocartao=$recebidocartao&frete=$frete&cartaobandeira=$cartaobandeira&totalcomfrete2=$totalcomfrete2'
+            window.location.href='saidas_cadastrar3.php?troco_devolvido=0&passo=2&saida=$saida&total2=$total&descper2=$descper&descval2=$descval&dinheiro2=$dinheiro&troco2=$troco&troco_devolvido=$troco_devolvido&valbru2=$valbru&areceber2=$areceber&metodopag2=$metodopag&tiposai=$tiposai&recebidodinheiro=$recebidodinheiro&recebidocartao=$recebidocartao&frete=$frete&cartaobandeira=$cartaobandeira'
         </script>";   
 }
 
@@ -122,7 +126,7 @@ $tpl->VALBRU_VALOR = "R$ " . number_format($valbru, 2, ',', '.');
 $tpl->VALBRU2_VALOR = $valbru;
 
 //Frete
-if ($fazentregas==1) {
+if ($cobrarfrete==1) {
     $tpl->FRETE = "R$ " . number_format($frete, 2, ',', '.');
     $tpl->block("BLOCK_FRETE");
     $totalcomfrete=$valbru+$frete;

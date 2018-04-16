@@ -23,6 +23,9 @@ $sql="SELECT *
  if (!$query= mysql_query($sql)) die("Erro: " . mysql_error());
  while ($dados=  mysql_fetch_assoc($query)) {
      $tipoimpressaodanfe=$dados["quicnf_tipoimpressaodanfe"];
+     $ambiente=$dados["quicnf_ambientenfe"];
+     if ($ambiente==1) $ambiente_nome="Produção";
+     else $ambiente_nome="Homologação";
  }
 
 //Verifica dados adicionais necessários para realizar as validações
@@ -31,6 +34,57 @@ if (!$query= mysql_query($sql)) die("Erro PEGA DADOS PARA VALIDACOES: " . mysql_
 $dados= mysql_fetch_assoc($query);
 $consumidor=$dados["sai_consumidor"];
 
+
+
+if ($nfe_finalidade==1) { // 1:NFe normal / 2: NFe complementar / 3: NFe de ajsute / 4: Devolução de mercadoria
+    //Verifica se já foi gerado nota fiscal para esta venda
+    $sql="SELECT sai_nfe,nfe_numero FROM saidas LEFT JOIN nfe on (sai_nfe=nfe_codigo) WHERE sai_codigo=$saida";
+    if (!$query = mysql_query($sql)) die("<br>Erro SQL saida consulta: ".mysql_error());
+    $dados=mysql_fetch_assoc($query);
+    $nfe_da_venda=$dados["sai_nfe"];
+    $nfe_numero=$dados["nfe_numero"];
+    if ($nfe_da_venda!="") {
+        $tpl6 = new Template("templates/notificacao.html");
+        $tpl6->ICONES = $icones;
+        $tpl6->block("BLOCK_ERRO");            
+        $tpl6->block("BLOCK_NFENAOEMITIDA");
+        $tpl6->MOTIVO_COMPLEMENTO = "<b>Motivo:</b> <br> Já existe uma nota fiscal emitida para esta venda! <Br>Número: $nfe_numero <br><br>";
+        //$tpl6->block("BLOCK_MOTIVO");
+        $tpl6->BOTAOGERAL_DESTINO="saidas_cadastrar_nfe_ver.php?nfe_numero=$nfe_numero";
+        $tpl6->BOTAOGERAL_TIPO="button";
+        $tpl6->BOTAOGERAL_NOME="Ver Nota";
+        $tpl6->BOTAOGERAL_CLASSE="";
+        $tpl6->block("BLOCK_BOTAOGERAL_NOVAJANELA");            
+        $tpl6->block("BLOCK_BOTAOGERAL"); 
+        $tpl6->block("BLOCK_BOTAO_VOLTAR");
+        $tpl6->show();
+        exit;  
+    } 
+} else if ($nfe_finalidade==4) {
+    $sql="SELECT saidev_nfe,nfe_numero FROM saidas_devolucoes LEFT JOIN nfe on (saidev_nfe=nfe_codigo) WHERE saidev_saida=$saida";
+    if (!$query = mysql_query($sql)) die("<br>Erro SQL saida consulta: ".mysql_error());
+    $dados=mysql_fetch_assoc($query);
+    $nfe_da_devolucao=$dados["saidev_nfe"];
+    $nfe_numero_devolucao=$dados["nfe_numero"];
+    if ($nfe_da_devolucao!="") $temnota=1; else $temnota=0;
+    if ($temnota==1) {
+        $tpl6 = new Template("templates/notificacao.html");
+        $tpl6->ICONES = $icones;
+        $tpl6->block("BLOCK_ERRO");            
+        $tpl6->block("BLOCK_NFENAOEMITIDA");
+        $tpl6->MOTIVO_COMPLEMENTO = "<b>Motivo:</b> <br> Já existe uma nota fiscal emitida para esta devolução! <Br>Número: $nfe_numero <br><br>";
+        //$tpl6->block("BLOCK_MOTIVO");
+        $tpl6->BOTAOGERAL_DESTINO="saidas_cadastrar_nfe_ver.php?nfe_numero=$nfe_numero";
+        $tpl6->BOTAOGERAL_TIPO="button";
+        $tpl6->BOTAOGERAL_NOME="Ver Nota";
+        $tpl6->BOTAOGERAL_CLASSE="";
+        $tpl6->block("BLOCK_BOTAOGERAL_NOVAJANELA");            
+        $tpl6->block("BLOCK_BOTAOGERAL"); 
+        $tpl6->block("BLOCK_BOTAO_VOLTAR");
+        $tpl6->show();
+        exit;         
+    }
+}
 
 
 
@@ -135,7 +189,6 @@ $tpl_titulo->NOME_ARQUIVO_ICONE = "nfe_gerar3.png";
 $tpl_titulo->show();
 
 
- 
 //Estrutura dos campos de cadastro
 $tpl1 = new Template("templates/cadastro_edicao_detalhes_2.html");
 $tpl1->LINK_DESTINO = "saidas_cadastrar_nfe_gerar.php?saida=$saida";
@@ -157,6 +210,24 @@ $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
+//Ambiente
+if ($ambiente==2) {
+    $tpl1->TITULO = "Ambiente";
+    $tpl1->block("BLOCK_TITULO");
+    $tpl1->CAMPO_TIPO = "text";
+    $tpl1->CAMPO_QTD_CARACTERES = "";
+    $tpl1->CAMPO_NOME = "ambiente";
+    $tpl1->CAMPO_DICA = "";
+    $tpl1->CAMPO_ID = "";
+    $tpl1->CAMPO_TAMANHO = "";
+    $tpl1->CAMPO_VALOR = "$ambiente_nome";
+    $tpl1->CAMPO_QTD_CARACTERES = "";
+    $tpl1->block("BLOCK_CAMPO_NORMAL");
+    $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+    $tpl1->block("BLOCK_CAMPO");
+    $tpl1->block("BLOCK_CONTEUDO");
+    $tpl1->block("BLOCK_ITEM");
+}
 
 $tpl1->TITULO = "Indicador de Presença";
 $tpl1->block("BLOCK_TITULO");
@@ -221,8 +292,13 @@ $tpl1->block("BLOCK_ITEM");
 //BOTOES
 if ($naopodegerar!=1) {
     $tpl1->BOTAO_TIPO = "submit";
-    $tpl1->BOTAO_VALOR = "GERAR NOTA";
-    $tpl1->BOTAO_NOME = "GERAR NOTA";
+    if ($ambiente==1) {
+        $tpl1->BOTAO_VALOR = "GERAR NOTA";
+        $tpl1->BOTAO_NOME = "GERAR NOTA";
+    } else {
+        $tpl1->BOTAO_VALOR = "HOMOLOGAÇÃO - Gerar nota TESTE";
+        $tpl1->BOTAO_NOME = "HOMOLOGAÇÃO - Gerar nota TESTE";        
+    }
     $tpl1->BOTAO_FOCO = "";
     $tpl1->block("BLOCK_BOTAO1_SEMLINK");
     $tpl1->block("BLOCK_BOTAO1");

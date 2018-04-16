@@ -18,7 +18,7 @@ $arr = [
     "schemes" => "PL008i2",
     "versao" => '3.10',
     "tokenIBPT" => "",
-    "CSC" => "F8D212EF010646CA9B7048BA1707D335",
+    "CSC" => "58E0883A-CFE4-45B6-8249-5BD63D8F6832", //58E0883A-CFE4-45B6-8249-5BD63D8F6832 Homologação
     "CSCid" => "000001",
     "proxyConf" => [
         "proxyIp" => "",
@@ -31,15 +31,15 @@ $arr = [
 $dadosNfe = [
     "tpAmb" => "2",
     "cDV" => "",
-    "id" => "NFe35150271780456000160550010000000021800700082",
+    "id" => null,
     "mod" => "65",
     "cNF" => "12346789",
     "cUF" => "43",
     "natOp" => "VENDA",
     "indPag" => "1",
     "serie" => "1",
-    "nNF" => "123",
-    "dhEmi" => "2018-04-11T09:43:00-03:00",
+    "nNF" => "1003",
+    "dhEmi" => "2018-04-15T11:52:00-03:00",
     "dhSaiEnt" => null,
     "tpNF" => "1",
     "idDest" => "1",
@@ -381,20 +381,21 @@ $dadosNfeItens = [
 ];
 
 try { 
-  $configJson = json_encode($arr);
-  $dadosNfeJson = json_encode($dadosNfe);
-  $dadosNfeItensJson = json_encode($dadosNfeItens);
+   $configJson = json_encode($arr);
+   $dadosNfeJson = json_encode($dadosNfe);
+   $dadosNfeItensJson = json_encode($dadosNfeItens);
   $emissor = new EmissorNFe($configJson, $dadosNfeJson, $dadosNfeItensJson);
   $emissor->emiteNfe();
 
   $retorno = $emissor->geraXML();
 
   if (isset($retorno["chave"])) {
-    $venda = Nfe::find($idNFe)->update(['chave_nfe' => $retorno["chave"],'xml' => $retorno["xml"]]);
-    echo "Nota Gerada com Sucesso: ".$retorno["chave"];
+    //$venda = Nfe::find($idNFe)->update(['chave_nfe' => $retorno["chave"],'xml' => $retorno["xml"]]);
+    $emissor->geraPDF('1002');
+    //echo "Nota Gerada com Sucesso: ".$retorno["chave"];
   }
   else {
-    echo $retorno["error"];
+    echo "<br><br>".$retorno["error"];
   }
 } catch (Exception $ex) {
     echo "ERROR: $ex";

@@ -54,10 +54,12 @@ if ($usadevolucoes!=1) {
 //Se Foi emitido nota fiscal não pode excluir a devolucão
 //Verificar se foi emitido nota
 if ($usamodulofiscal==1) {
-    $sql3="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
-    if (!$query3 = mysql_query($sql3)) die("Erro remover devolucao: (((" . mysql_error().")))");
-    $linhas3 = mysql_num_rows($query3);
-    if ($linhas3==0) $temnota=0; else  $temnota=1;
+    $sql="SELECT saidev_nfe,nfe_numero FROM saidas_devolucoes LEFT JOIN nfe on (saidev_nfe=nfe_codigo) WHERE saidev_saida=$saida";
+    if (!$query = mysql_query($sql)) die("<br>Erro SQL saida consulta: ".mysql_error());
+    $dados=mysql_fetch_assoc($query);
+    $nfe_da_devolucao=$dados["saidev_nfe"];
+    $nfe_numero=$dados["nfe_numero"];
+    if ($nfe_da_devolucao!="") $temnota=1; else $temnota=0;
     if ($temnota==1) {
         $excluir=0;
         $tpl6 = new Template("templates/notificacao.html");

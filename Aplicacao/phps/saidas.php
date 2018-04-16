@@ -553,7 +553,7 @@ $sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_fil
 
 //SQL Principal das linhas
 $sql = "
-SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo,sai_usuarioquecadastrou,caiopo_operador, (SELECT pes_nome FROM pessoas p WHERE p.pes_codigo=sai_usuarioquecadastrou) as usuarioquecadastrou_nome,sai_id,sai_descontoforcado,sai_acrescimoforcado,sai_descontovalor,sai_areceberquitado,sai_entrega,sai_dataentrega,sai_entrega_concluida,sai_horaentrega
+SELECT DISTINCT sai_codigo,sai_datacadastro,sai_horacadastro,sai_consumidor,sai_tipo,sai_totalliquido,sai_totalbruto,sai_status,sai_metpag,sai_areceber,sai_caixaoperacaonumero,pes_nome,cai_nome,pes_codigo,sai_usuarioquecadastrou,caiopo_operador, (SELECT pes_nome FROM pessoas p WHERE p.pes_codigo=sai_usuarioquecadastrou) as usuarioquecadastrou_nome,sai_id,sai_descontoforcado,sai_acrescimoforcado,sai_descontovalor,sai_areceberquitado,sai_entrega,sai_dataentrega,sai_entrega_concluida,sai_horaentrega,sai_nfe,nfe_numero
 FROM saidas 
 JOIN saidas_tipo on (sai_tipo=saitip_codigo) 
 left join saidas_produtos on (saipro_saida=sai_codigo)
@@ -563,6 +563,7 @@ left join caixas_operacoes on (sai_caixaoperacaonumero=caiopo_numero)
 left join caixas on (caiopo_caixa=cai_codigo)
 left join pessoas on (pes_codigo=caiopo_operador)
 LEFT JOIN saidas_devolucoes on (sai_codigo=saidev_saida)
+LEFT JOIN nfe on (sai_nfe=nfe_codigo)
 WHERE sai_quiosque=$usuario_quiosque and
 sai_tipo=1 $sql_filtro 
 $sql_filtro_classificacao
@@ -630,6 +631,8 @@ if ($linhas == 0) {
         $horaentrega = $horaentrega[0].$horaentrega[1].$horaentrega[2].$horaentrega[3].$horaentrega[4];
         $sitentrega = $dados["sai_entrega_concluida"];
         $id = $dados["sai_id"];
+        $nfe_da_venda = $dados["sai_nfe"];
+        $nfe_numero = $dados["nfe_numero"];
 
         //Cor de fundo da linha
         if ($status == 2) {
@@ -976,16 +979,11 @@ if ($linhas == 0) {
             if ($status==1) { //Se a venda estiver completa
 
                 //Verificar se foi emitido nota nesta venda
-                $sql9="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida AND nfe_finalidade=1";
-                if (!$query9 = mysql_query($sql9)) die("Erro Tem Nota: (((" . mysql_error().")))");
-                $linhas9 = mysql_num_rows($query9);  
-                $dados9=mysql_fetch_assoc($query9);
-                $numero_nota=$dados9["nfe_codigo"];
-                if ($linhas9>0) $temnota=1; else $temnota=0;    
+                if ($nfe_da_venda!="") $temnota=1; else $temnota=0;    
                 if ($temnota==1) {
                     $tpl->OPERACAO_NOME = "Ver NFE";
                     $tpl->LINK = "saidas_cadastrar_nfe_ver.php";
-                    $tpl->LINK_COMPLEMENTO = "numero_nota=$numero_nota";                                
+                    $tpl->LINK_COMPLEMENTO = "nfe_numero=$nfe_numero";                                
                     $tpl->ICONE_ARQUIVO = $icones . "nfe_ver3.png";
                     $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_NOVAPAGINA");            
                     $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");  
@@ -1025,6 +1023,7 @@ if ($linhas == 0) {
         $query1 = mysql_query($sql1); if (!$query1) die("Erro de SQL (1):" . mysql_error());
         $linhas1 = mysql_num_rows($query1);
         $qtd_pagamentos = $linhas1;
+        if ($nfe_da_venda!="") $temnota=1; else $temnota=0;  
         if ($qtd_pagamentos>0) {
             $tpl->LINK = "#";
             $tpl->OPERACAO_NOME = "Você não pode editar pagamento unico se houver pagamentos parciais";
@@ -1035,6 +1034,11 @@ if ($linhas == 0) {
             $tpl->OPERACAO_NOME = "Não há itens nesta venda, ela está vazia. Não há o que ser acertado.";
             $tpl->LINK_COMPLEMENTO = "";              
             $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento_desabilitado.png";
+        } else if ($temnota==1) {
+            $tpl->LINK = "#";
+            $tpl->OPERACAO_NOME = "Não é possivel editar vendas com Nota Fiscal emitida!";
+            $tpl->LINK_COMPLEMENTO = "";              
+            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento_desabilitado.png";            
         } else {
             $tpl->LINK = "saidas_cadastrar2.php";
             $tpl->OPERACAO_NOME = "Pagamento/Financeiro";

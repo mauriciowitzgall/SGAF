@@ -63,6 +63,7 @@ $sql="SELECT *
      $gerirestoqueideal=$dados["quicnf_gerirestoqueideal"];
      $usavendaporcoes=$dados["quicnf_usavendaporcoes"];
      $fazfechamentos = $dados['quicnf_fazfechamentos'];
+     $fazfrete = $dados['quicnf_fazfrete'];
      $fazacertos = $dados['quicnf_fazacertos'];     
      $usaproducao=$dados["quicnf_usamoduloproducao"];
      $classificacaopadraoestoque=$dados["quicnf_classificacaopadraoestoque"];
@@ -95,6 +96,7 @@ $tpl_titulo->show();
 //Estrutura dos campos de cadastro
 $tpl1 = new Template("templates/cadastro_edicao_detalhes_2.html");
 $tpl1->LINK_DESTINO = "quiosques_configuracoes2.php";
+$tpl1->FORM_ENCTYPE = "multipart/form-data";
 
 $tpl1->JS_CAMINHO = "quiosques_configuracoes.js";
 $tpl1->block("BLOCK_JS");
@@ -440,6 +442,30 @@ $tpl1->block("BLOCK_ITEM");
 
 
 
+//Faz Fretes
+$tpl1->TITULO = "Faz Fretes";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "fazfrete";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($fazfrete=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($fazfrete=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
 //Usa Venda em porções
 $tpl1->TITULO = "Venda Porções";
 $tpl1->block("BLOCK_TITULO");
@@ -531,6 +557,8 @@ $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
+
+
 
 //Usa Comanda
 $tpl1->TITULO = "Comanda";

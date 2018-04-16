@@ -41,28 +41,15 @@ $ignorarlotes = $_POST['ignorarlotes'];
 $usaestoque = $_POST['usaestoque'];
 $multicaixas = $_POST['multicaixas'];
 $fazfechamentos = $_POST['fazfechamentos'];
+$fazfrete = $_POST['fazfrete'];
 $fazacertos = $_POST['fazacertos'];
 $usavendaporcoes = $_POST['usavendaporcoes'];
 $classificacaopadraoestoque = $_POST['classificacaopadraoestoque'];
 $devolucoessobrevendas = $_POST['devolucoessobrevendas'];
 $pagamentosparciais = $_POST['pagamentosparciais'];
 $permiteedicaoreferencianavenda = $_POST['permiteedicaoreferencianavenda'];
-if ($usamodulofiscal==1) {
-    
-$certificadodigital = $_FILES['certificadodigital'];
-    if($certificadodigital != NULL) { 
-        $nomeFinal = time().'.pfx';
-        if (move_uploaded_file($certificadodigital['tmp_name'], $nomeFinal)) {
-            $tamanhoUp = filesize($nomeFinal); 
-            $mysqlUpload = addslashes(fread(fopen($nomeFinal, "r"), $tamanhoUp)); 
-            unlink($nomeFinal);
-        }
-    } 
-    else { 
-        echo" <br><br>Você não realizou o upload do certificado digital de forma satisfatória.<br><br>"; 
-    } 
-}
 
+    
 $cpf = $_POST['cpf'];
 $cpf = str_replace(".","", $cpf);
 $cpf = str_replace("-","", $cpf);
@@ -107,7 +94,7 @@ $tpl_notificacao = new Template("templates/notificacao.html");
 $tpl_notificacao->ICONES = $icones;
 $tpl_notificacao->DESTINO = "quiosques_configuracoes.php";
 
-$sql = "
+ $sql = "
 UPDATE
     quiosques_configuracoes
 SET            
@@ -146,9 +133,9 @@ SET
     quicnf_usamoduloestoque='$usaestoque',
     quicnf_multicaixas='$multicaixas',
     quicnf_fazfechamentos='$fazfechamentos',
+    quicnf_fazfrete='$fazfrete',
     quicnf_fazacertos='$fazacertos',
-    quicnf_usavendaporcoes='$usavendaporcoes',
-    quicnf_pfx=('$mysqlUpload')
+    quicnf_usavendaporcoes='$usavendaporcoes'
     $complemento    
 WHERE
     quicnf_quiosque=$quiosque
@@ -175,11 +162,51 @@ WHERE
 if (!mysql_query($sql2)) die("Erro SQL quiosques: " . mysql_error());
 
 
+//Upload do certificado digital
+if ($usamodulofiscal==1) {
+    //echo json_encode($_FILES['certificadodigital']);
+    if(isset($_FILES['certificadodigital'])) {
+        date_default_timezone_set("Brazil/East"); //Definindo timezone padrão
+        $ext = strtolower(substr($_FILES['certificadodigital']['name'],-4)); //Pegando extensão do arquivo
+        $new_name = date("Y.m.d-H.i.s") . $ext; //Definindo um novo nome para o arquivo
+        
+        //Upload para uma pasta
+        $dir = 'uploads/'; 
+        move_uploaded_file($_FILES['certificadodigital']['tmp_name'], $dir.$new_name); //Fazer upload do arquivo
+    
+        $arquivo = $_FILES['certificadodigital']['tmp_name']; 
+        $tamanho = $_FILES['certificadodigital']['size'];
+        $tipo = $_FILES['certificadodigital']['type'];
+        $nome = $ext;
+        
+        //Upload para o banco de dados
+        echo "$arquivo";
+        if ( $arquivo != "none" ) {
+            $fp = fopen($arquivo, "rb");
+            $conteudo = fread($fp, $tamanho);
+            $conteudo = addslashes($conteudo);
+            fclose($fp); 
+
+            echo "( $conteudo )";
+
+            $sql = "UPDATE quiosques_configuracoes SET quicnf_pfx='$conteudo', quicnf_pfx_tipo='$tipo' WHERE quicnf_quiosque=$usuario_quiosque";
+            if (!$query=mysql_query($sql)) die("Erro SQL Upload Certificado: " . mysql_error());
+
+
+        } else {
+            print "Não foi possível carregar o arquivo para o servidor.";
+        
+        }
+    }
+}
 
 
 $tpl_notificacao->block("BLOCK_CONFIRMAR");
 $tpl_notificacao->block("BLOCK_EDITADO");
 $tpl_notificacao->block("BLOCK_BOTAO");
 $tpl_notificacao->show();
+
+
+
 
 ?>

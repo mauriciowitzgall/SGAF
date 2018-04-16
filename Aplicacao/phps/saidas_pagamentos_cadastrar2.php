@@ -90,11 +90,12 @@ $sql="SELECT * FROM saidas WHERE sai_codigo=$saida";
 if (!$query = mysql_query($sql)) die("Erro SQL 2:" . mysql_error());
 $dados=mysql_fetch_assoc($query);
 $totalliquido = $dados["sai_totalliquido"];
+$frete = $dados["sai_entrega_frete"];
 $sql="SELECT sum(saipag_valor) as totpag FROM saidas_pagamentos WHERE saipag_saida=$saida";
 if (!$query = mysql_query($sql)) die("Erro SQL 3:" . mysql_error());
 $dados=mysql_fetch_assoc($query);
 $totalpagamentos = $dados["totpag"];
-if ($totalliquido==$totalpagamentos) {
+if ($totalliquido+$frete<=$totalpagamentos) {
     $sql = "
         UPDATE saidas
         SET sai_areceberquitado=1    

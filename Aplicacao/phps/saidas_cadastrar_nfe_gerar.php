@@ -13,7 +13,6 @@ require "login_verifica.php";
 
 
 
-
 $saida = $_GET["saida"];
 $indicadorpresenca = $_POST["indicadorpresenca"];
 $tipoimpressaodanfe = $_POST["tipoimpressaodanfe"];
@@ -21,12 +20,36 @@ $sql="SELECT danfe_id from nfe_danfeimpressao WHERE danfe_codigo=$tipoimpressaod
 if (!$query = mysql_query($sql)) die("<br>Erro SQL : ".mysql_error());
 $dados=mysql_fetch_assoc($query);
 $nfe_geral_danfeoucupom=$dados["danfe_id"];
-
 $ope="1"; //1=normal 2=cancelamento 3=devolucao
-
-
 $tipopagina = "saidas";
+
 include "includes.php";
+
+
+//Verifica se já foi gerado nota fiscal para esta venda
+$sql="SELECT sai_nfe,nfe_numero FROM saidas LEFT JOIN nfe on (sai_nfe=nfe_codigo) WHERE sai_codigo=$saida";
+if (!$query = mysql_query($sql)) die("<br>Erro SQL saida consulta: ".mysql_error());
+$dados=mysql_fetch_assoc($query);
+$nfe_da_venda=$dados["sai_nfe"];
+$nfe_numero=$dados["nfe_numero"];
+if ($nfe_da_venda!="") {
+  $tpl6 = new Template("templates/notificacao.html");
+  $tpl6->ICONES = $icones;
+  $tpl6->block("BLOCK_ERRO");            
+  $tpl6->block("BLOCK_NFENAOEMITIDA");
+  $tpl6->MOTIVO_COMPLEMENTO = "<b>Motivo:</b> <br> Já existe uma nota fiscal emitida para esta venda! <Br>Número: $nfe_numero <br><br>";
+  //$tpl6->block("BLOCK_MOTIVO");
+  $tpl6->BOTAOGERAL_DESTINO="saidas_cadastrar_nfe_ver.php?nfe_numero=$nfe_numero";
+  $tpl6->BOTAOGERAL_TIPO="button";
+  $tpl6->BOTAOGERAL_NOME="Ver Nota";
+  $tpl6->BOTAOGERAL_CLASSE="";
+  $tpl6->block("BLOCK_BOTAOGERAL_NOVAJANELA");            
+  $tpl6->block("BLOCK_BOTAOGERAL"); 
+  $tpl6->block("BLOCK_BOTAO_VOLTAR");
+  $tpl6->show();
+  exit;  
+ } 
+
 
 
 //Pega dados para montagem do ARRAY que emitirá a NFE
@@ -53,7 +76,7 @@ $dados=mysql_fetch_assoc($query);
 $nfe_geral_ambiente=$dados["quicnf_ambientenfe"];
 $nfe_geral_versaonfe=$dados["quicnf_versaonfe"];
 $nfe_geral_csc=$dados["quicnf_csctoken"];
-$nfe_geral_csc = str_replace('-', '', $nfe_geral_csc);
+$nfe_geral_csc =  $nfe_geral_csc;   //str_replace('-', '', $nfe_geral_csc);
 $nfe_geral_cscid=$dados["quicnf_csctokenid"];
 $nfe_geral_serie=intval($dados["quicnf_serienfe"]);
 $nfe_geral_crt=$dados["quicnf_crtnfe"];
@@ -132,11 +155,6 @@ $nfe_venda_consumidor_cep=str_replace('-', '', $nfe_venda_consumidor_cep);
 $nfe_venda_consumidor_email = $dados["pes_email"];
 $nfe_venda_troco = null; //Eu não sei se é troco a dever ou troco devolvido?!
 $nfe_venda_metodopagamento = str_pad($dados["metpag_nfecodigo"], 2, '0', STR_PAD_LEFT); // // 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
-if ($consumidor==0) { //Se for sem identificação do cliente, ou seja, cliente geral
-    $nfe_venda_indicadorcliente=1; // 0: Normal / 1: Consumidor final 
-} else {
-    $nfe_venda_indicadorcliente=0; // 0: Normal / 1: Consumidor final 
-}
 $nfe_venda_naturezaoperacao="VENDA";
 if ($areceber==1) { // Indicador de pagamento 0: a vista / 1: a prazo / 2: outros
     $nfe_venda_indicadorpagamento=1;
@@ -178,6 +196,20 @@ if (($nfe_geral_danfeoucupom==65)||($nfe_operacaodestino==3)) { //Cupom fiscal
   else $nfe_venda_indiedest_ie=$nfe_venda_consumidor_ie;
 }
 
+if (($consumidor==0)||($tipoimpressaodanfe==4)||($tipoimpressaodanfe==5)) { //Se for sem identificação do cliente, ou seja, cliente geral
+    $nfe_venda_indicadorcliente=1; // 0: Normal / 1: Consumidor final 
+    $nfe_venda_consumidor_tipopessoa="CPF";
+    $nfe_venda_consumidor_nome="";
+    $nfe_venda_consumidor_cpf="";
+    $nfe_venda_consumidor_cnpj="";
+    $nfe_venda_consumidor_cep="";
+    $nfe_venda_consumidor_endereco="";
+    $nfe_venda_consumidor_bairro="";
+
+} else {
+    $nfe_venda_indicadorcliente=0; // 0: Normal / 1: Consumidor final 
+}
+
 
 
 //Verifica se não for cupom fiscal é necessário que o endereço do cliente esteja preenchido
@@ -196,8 +228,6 @@ if (($tipoimpressaodanfe!=4)&&($tipoimpressaodanfe!=5)) {
     $semendereco=1;
   }
   if (($semendereco==1)&&($tipoimpressaodanfe!=4)&&($tipoimpressaodanfe!=5)) {
-
-
       $tpl6 = new Template("templates/notificacao.html");
       $tpl6->block("BLOCK_ATENCAO");
       $tpl6->ICONES = $icones;  
@@ -654,14 +684,69 @@ try {
   $retorno = $emissor->geraXML();
   //echo "Passou pelo geraXML () <br>";
 
+  $chave=$retorno["chave"];
+  $nfe_finalidade=1;  // 1:NFe normal / 2: NFe complementar / 3: NFe de ajsute / 4: Devolução de mercadoria
   //echo "Retorno =  (".$retorno["chave"].")<br>";
   
-  if (isset($retorno["chave"])) {
-    $venda = Nfe::find($idNFe)->update(['chave_nfe' => $retorno["chave"],'xml' => $retorno["xml"]]);
-    echo "Nota Gerada com Sucesso: ".$retorno["chave"];
+  if (isset($retorno["chave"])) { //Nota Gerada
+    
+    //Atualiza a última NFE gerada
+    $sql="UPDATE quiosques_configuracoes SET quicnf_ultimanfe=$nfe_geral_numeroproximanota WHERE quicnf_quiosque=$usuario_quiosque";
+    if (!$query = mysql_query($sql)) die("<br>Erro SQL SAIDA: ".mysql_error());
+
+    //Grava a nota gerada na tabela de NFE 
+    $sql="
+    INSERT INTO nfe (
+      nfe_numero,
+      nfe_finalidade,
+      nfe_xml,
+      nfe_chave,
+      nfe_dataemissao,
+      nfe_usuario
+    ) VALUES (
+      '$nfe_geral_numeroproximanota',
+      '$nfe_finalidade', 
+      '$xml',
+      '$chave',
+      CURRENT_TIMESTAMP,
+      '$usuario_codigo'
+    );";
+    if (!$query = mysql_query($sql)) die("<br>Erro SQL NFE: ".mysql_error()); 
+    $nfe_codigo=mysql_insert_id();
+
+    //Atualiza venda informando o numero da nota gerada
+    $sql="UPDATE saidas SET sai_nfe=$nfe_codigo WHERE sai_codigo=$saida";
+    if (!$query = mysql_query($sql)) die("<br>Erro SQL SAIDA: ".mysql_error());
+
+
+    //NFE Gerada com sucesso
+    $tpl6 = new Template("templates/notificacao.html");
+    $tpl6->ICONES = $icones;
+    $tpl6->block("BLOCK_CONFIRMAR");            
+    $tpl6->MOTIVO_COMPLEMENTO = "<br>Nota Fiscal emitida com sucesso! <br> Número: Nfe".$nfe_geral_numeroproximanota." <br><br>";
+    $tpl6->BOTAOGERAL_DESTINO="saidas_cadastrar_nfe_ver.php?nfe_numero=$nfe_geral_numeroproximanota";
+    $tpl6->BOTAOGERAL_TIPO="button";
+    $tpl6->BOTAOGERAL_NOME="Ver Nota";
+    $tpl6->BOTAOGERAL_CLASSE="";
+    $tpl6->block("BLOCK_BOTAOGERAL_NOVAJANELA");            
+    $tpl6->block("BLOCK_BOTAOGERAL"); 
+    $tpl6->BOTAOGERAL_DESTINO="saidas.php";
+    $tpl6->BOTAOGERAL_TIPO="button";
+    $tpl6->BOTAOGERAL_NOME="Continuar";
+    $tpl6->BOTAOGERAL_CLASSE="";
+    $tpl6->block("BLOCK_BOTAOGERAL_AUTOFOCO");            
+    $tpl6->block("BLOCK_BOTAOGERAL");  
+    $tpl6->show();
+    exit;
+
+
+    //$emissor->GeraPDF($nfe_geral_numeroproximanota);
+    
+    //echo "Nota Gerada com Sucesso: ".$retorno["chave"];
   }
   else {
       //echo $retorno["error"];
+
       
       //NFE Rejeitada pela RECEITA FEDERAL
       $tpl6 = new Template("templates/notificacao.html");
@@ -680,7 +765,7 @@ try {
 }
 
 
-//Atualiza a última NFE gerada
+
 
 
 //Quando se trata de um cancelamento, pergunta ao cliente se ele deseja gerar uma nova venda com os mesmo produto (duplicar a venda). Isto facilita para o usuário quando trata-se de uma venda com muitos itens, ele não precisa fazer uma nova venda tudo do zero caso só deseje editar um ou outro item

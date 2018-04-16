@@ -222,14 +222,14 @@ while ($dados=  mysql_fetch_assoc($query)) {
         $tpl->IMAGEM_PASTA="$icones";
         $tpl->IMAGEM_TITULO="Nota Fiscal";
         //Verificar se foi emitido nota
-        $sql3="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida  AND nfe_devolucao=$numero";
-        if (!$query3 = mysql_query($sql3)) die("Erro NFE Emitida: (((" . mysql_error().")))");
-        $linhas3 = mysql_num_rows($query3);
-        $dados3=mysql_fetch_assoc($query3);
-        $numero_nota=$dados3["nfe_codigo"];
-        if ($linhas3==0) $temnota=0; else  $temnota=1;
+        $sql="SELECT saidev_nfe,nfe_numero FROM saidas_devolucoes LEFT JOIN nfe on (saidev_nfe=nfe_codigo) WHERE saidev_saida=$saida";
+        if (!$query = mysql_query($sql)) die("<br>Erro SQL saida consulta: ".mysql_error());
+        $dados=mysql_fetch_assoc($query);
+        $nfe_da_devolucao=$dados["saidev_nfe"];
+        $nfe_numero=$dados["nfe_numero"];
+        if ($nfe_da_devolucao!="") $temnota=1; else $temnota=0;
         if ($temnota==1) {
-            $tpl->LINK="saidas_cadastrar_nfe_ver.php?numero_nota=$numero_nota";
+            $tpl->LINK="saidas_cadastrar_nfe_ver.php?nfe_numero=$nfe_numero";
             $tpl->LINK_TARGET="_blank";
             $tpl->IMAGEM_NOMEARQUIVO="nfe_ver3.png";
         } else {
@@ -248,10 +248,12 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $tpl->IMAGEM_PASTA="$icones";
     $tpl->IMAGEM_TITULO="Remover";
     //Verificar se foi emitido nota
-    $sql3="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida  AND nfe_devolucao=$numero";
-    if (!$query3 = mysql_query($sql3)) die("Erro Botão remover devolucao: (((" . mysql_error().")))");
-    $linhas3 = mysql_num_rows($query3);
-    if ($linhas3==0) $temnota=0; else  $temnota=1;
+    $sql="SELECT saidev_nfe,nfe_numero FROM saidas_devolucoes LEFT JOIN nfe on (saidev_nfe=nfe_codigo) WHERE saidev_saida=$saida";
+    if (!$query = mysql_query($sql)) die("<br>Erro SQL saida consulta: ".mysql_error());
+    $dados=mysql_fetch_assoc($query);
+    $nfe_da_devolucao=$dados["saidev_nfe"];
+    $nfe_numero=$dados["nfe_numero"];
+    if ($nfe_da_devolucao!="") $temnota=1; else $temnota=0;
     if ($temnota==1) {
         $tpl->IMAGEM_NOMEARQUIVO="remover_desabilitado.png"; 
         $tpl->block("BLOCK_LISTA_COLUNA_IMAGEM_SEMLINK");

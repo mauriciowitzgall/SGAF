@@ -18238,7 +18238,7 @@ UPDATE `configuracoes` SET `cnf_versao`='v4.1' WHERE `cnf_codigo`='1';
 
 UPDATE `configuracoes` SET `cnf_versao`='v4.1.2b' WHERE `cnf_codigo`='1';
 
-ALTER TABLE `sgaf`.`configuracoes` 
+ALTER TABLE `configuracoes` 
 ADD COLUMN `cnf_dataversao` DATETIME NOT NULL AFTER `cnf_versao`;
 
 UPDATE `configuracoes` SET `cnf_versao`='v4.1.2', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
@@ -18258,13 +18258,35 @@ UPDATE `configuracoes` SET `cnf_versao`='v4.1.2' WHERE `cnf_codigo`='1';
 
 UPDATE `configuracoes` SET `cnf_versao`='v4.1.3dev' WHERE `cnf_codigo`='1';
 
-ALTER TABLE `sgaf`.`saidas` 
+ALTER TABLE `saidas` 
 ADD COLUMN `sai_horaentrega` TIME NULL DEFAULT NULL AFTER `sai_entrega_concluida`;
 
 
-ALTER TABLE `sgaf_agape3`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 CHANGE COLUMN `quicnf_serienfe` `quicnf_serienfe` INT(3) NULL DEFAULT NULL ;
 
-ALTER TABLE `sgaf_agape3`.`saidas` 
+ALTER TABLE `saidas` 
 ADD COLUMN `sai_entrega_frete` FLOAT NULL DEFAULT NULL AFTER `sai_horaentrega`;
 
+
+ALTER TABLE `quiosques_configuracoes` 
+ADD COLUMN `quicnf_fazfrete` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_fazentregas`;
+
+ALTER TABLE `sgaf_agape_dev`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_pfx_tipo` VARCHAR(70) NULL AFTER `quicnf_pfx`,
+ADD COLUMN `quicnf_pfx_nome` VARCHAR(70) NULL AFTER `quicnf_pfx_tipo`;
+
+
+ALTER TABLE `sgaf_agape_dev`.`nfe_vendas` 
+DROP COLUMN `nfe_devolucao`,
+DROP COLUMN `nfe_notareferenciada`,
+CHANGE COLUMN `nfe_finalidade` `nfe_finalidade` INT(1) NOT NULL AFTER `nfe_numero`,
+CHANGE COLUMN `nfe_xml` `nfe_xml` BLOB NOT NULL AFTER `nfe_finalidade`,
+ADD COLUMN `nfe_chave` VARCHAR(44) NOT NULL AFTER `nfe_xml`, RENAME TO  `sgaf_agape_dev`.`nfe` ;
+
+ALTER TABLE `sgaf_agape_dev`.`saidas` 
+ADD COLUMN `sai_nfe` BIGINT(20) NULL AFTER `sai_fretemetpag_bandeira`;
+
+ALTER TABLE `sgaf_agape_dev`.`saidas_devolucoes` 
+CHANGE COLUMN `saidev_numero` `saidev_numero` BIGINT(20) NOT NULL ,
+ADD COLUMN `saidev_nfe` BIGINT(20) NULL AFTER `saidev_valliq`;

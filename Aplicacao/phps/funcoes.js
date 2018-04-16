@@ -741,19 +741,7 @@ function popula_quiosque_tiponegociacao(valor) {
     });
 }
 
-function valorareceber (valor) {
-    if (valor==1) {
-        document.form1.metodopag.disabled = true;
-        $("tr[id=tr_metodopag]").hide();
-        document.form1.dinheiro.disabled = true;
-        $("tr[id=tr_dinheiro]").hide();
-    } else {
-        $("tr[id=tr_metodopag]").show();
-        document.form1.metodopag.disabled = false;
-        $("tr[id=tr_dinheiro]").show();
-        document.form1.dinheiro.disabled = false;
-    }
-}
+
 
 
 function popula_acertos_dataminmax(valor,valorqui) {

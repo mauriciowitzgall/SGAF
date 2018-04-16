@@ -86,6 +86,35 @@ if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
     exit;
 }
 
+
+//Verifica se já foi gerado nota fiscal para esta venda
+if ($saida!="") {
+    
+    $sql="SELECT sai_nfe,nfe_numero FROM saidas LEFT JOIN nfe on (sai_nfe=nfe_codigo) WHERE sai_codigo=$saida";
+    if (!$query = mysql_query($sql)) die("<br>Erro SQL saida consulta: ".mysql_error());
+    $dados=mysql_fetch_assoc($query);
+    $nfe_da_venda=$dados["sai_nfe"];
+    $nfe_numero=$dados["nfe_numero"];
+    if ($nfe_da_venda!="") {
+      $tpl6 = new Template("templates/notificacao.html");
+      $tpl6->ICONES = $icones;
+      $tpl6->block("BLOCK_ERRO");            
+      $tpl6->block("BLOCK_NFENAOEMITIDA");
+      $tpl6->MOTIVO_COMPLEMENTO = "<b>Motivo:</b> <br> Já existe uma nota fiscal emitida para esta venda! <Br>Número: $nfe_numero <br><br>";
+      //$tpl6->block("BLOCK_MOTIVO");
+      $tpl6->BOTAOGERAL_DESTINO="saidas_cadastrar_nfe_ver.php?nfe_numero=$nfe_numero";
+      $tpl6->BOTAOGERAL_TIPO="button";
+      $tpl6->BOTAOGERAL_NOME="Ver Nota";
+      $tpl6->BOTAOGERAL_CLASSE="";
+      $tpl6->block("BLOCK_BOTAOGERAL_NOVAJANELA");            
+      $tpl6->block("BLOCK_BOTAOGERAL"); 
+      $tpl6->block("BLOCK_BOTAO_VOLTAR");
+      $tpl6->show();
+      exit;  
+     } 
+}
+
+
 //CONTROLE DA OPERAÇÃO
 $dataatual = date("Y/m/d");
 $horaatual = date("H:i:s");
@@ -2180,11 +2209,10 @@ if ($passo == 2) {
     //Botão Eliminar Venda
     //Verificar se foi emitido nota e se possui devolucoes,  se sim então não permitir a eliminação da venda
     if ($usamodulofiscal==1) {
-        $sql="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
-        if (!$query = mysql_query($sql)) die("Erro BOTÃO ELIMINAR VENDA 1: (((" . mysql_error().")))");
-        $linhas = mysql_num_rows($query);
-        if ($linhas==0) $temnota=0; else $temnota=1;
-    }  else $temnota=0;
+        if ($nfe_da_venda!="") $temnota=1; else $temnota=0;  
+    }  else  {
+        $temnota=0;
+    }
     //Verifica se há devoluções
     if ($usadevolucoes==1) {
         $sql="SELECT * FROM saidas_devolucoes WHERE saidev_saida=$saida";

@@ -1488,14 +1488,16 @@ if ($ope != 4) {
 
     //Botão Cancelar Nota
     //Verificar se foi emitido nota
-    $sql="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
-    if (!$query = mysql_query($sql)) die("Erro BOTÃO Cancelar Nota: (((" . mysql_error().")))");
-    $linhas = mysql_num_rows($query);
-    if ($linhas==0) $temnota=0; else $temnota=1;
+    $sql="SELECT sai_nfe,nfe_numero FROM saidas LEFT JOIN nfe on (sai_nfe=nfe_codigo) WHERE sai_codigo=$saida";
+    if (!$query = mysql_query($sql)) die("<br>Erro SQL saida consulta: ".mysql_error());
+    $dados=mysql_fetch_assoc($query);
+    $nfe_da_venda=$dados["sai_nfe"];
+    $nfe_numero=$dados["nfe_numero"];
+    if ($nfe_da_venda!="") $temnota=1; else $temnota=0;
     if (($temnota==1)&&($usamodulofiscal==1)) {
         $tpl4->COLUNA_TAMANHO="";
         $tpl4->COLUNA_ALINHAMENTO  ="";                
-        $tpl4->COLUNA_LINK_ARQUIVO="saidas_cadastrar_nfe.php?codigo=$saida&ope=2";
+        $tpl4->COLUNA_LINK_ARQUIVO="nfe_cancelar.php?codigo=$saida&finalidade=2&nfe_numero=$nfe_numero&nfe_codigo=$nfe_codigo";
         $tpl4->COLUNA_LINK_CLASSE="";
         $tpl4->COLUNA_LINK_TARGET="";
         $tpl4->block(BLOCK_COLUNA_LINK);  

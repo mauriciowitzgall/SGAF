@@ -34,6 +34,7 @@ $consumidor_nome=$dados["pes_nome"];
 $datavenda=$dados["sai_datacadastro"];
 $horavenda=$dados["sai_horacadastro"];
 $qtd_parcelas=$dados["sai_qtdparcelas"];
+$frete=$dados["sai_entrega_frete"];
 $venda_totalcomdesconto=$dados["sai_totalcomdesconto"];
 $venda_totalbruto=$dados["sai_totalbruto"];
 $venda_descontovalor=$dados["sai_descontovalor"];
@@ -176,14 +177,23 @@ $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
 
+//Campo Filtro Frete
+$tpl->CAMPO_TITULO = "Frete";
+$tpl->CAMPO_VALOR = "R$ " . number_format($frete, 2, ',', '.');
+$tpl->CAMPO_TAMANHO = "";
+$tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
+$tpl->block("BLOCK_FILTRO_CAMPO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
 //Campo Filtro Total a receber
 $tpl->CAMPO_TITULO = "Saldo Pendente";
-$saldofinal=$totalliquido-$pag_total;
+$saldofinal=$totalliquido-$pag_total+$frete;
 $tpl->CAMPO_VALOR = "R$ " . number_format($saldofinal, 2, ',', '.');
 $tpl->CAMPO_TAMANHO = "";
 $tpl->block("BLOCK_FILTRO_CAMPO_DESABILITADO");
 $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
+
 
 
 //Botão Cadastrar novo pagamento

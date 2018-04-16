@@ -71,12 +71,14 @@ if ($usuario_grupo == 4) {
 }
 
 //Verificar se foi emitido nota e se possui devolucoes,  se sim então não permitir a eliminação da venda
-$sql="SELECT * FROM nfe_vendas WHERE nfe_numero=$saida";
-if (!$query = mysql_query($sql)) die("Erro BOTÃO ELIMINAR VENDA 1: (((" . mysql_error().")))");
-$linhas = mysql_num_rows($query);
-if ($linhas==0) { 
-    $temnota=0;
-} else {
+$sql="SELECT sai_nfe,nfe_numero FROM saidas LEFT JOIN nfe on (sai_nfe=nfe_codigo) WHERE sai_codigo=$saida";
+if (!$query = mysql_query($sql)) die("<br>Erro SQL saida consulta: ".mysql_error());
+$dados=mysql_fetch_assoc($query);
+$nfe_da_venda=$dados["sai_nfe"];
+$nfe_numero=$dados["nfe_numero"];
+if ($nfe_da_venda!="") $temnota=1; else $temnota=0;
+
+if ($temnota==1) {
     $temnota=1;
     $tpl6 = new Template("templates/notificacao.html");
     $tpl6->block("BLOCK_ERRO");

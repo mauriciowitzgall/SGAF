@@ -31,6 +31,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $usamulticaixas=$dados["quicnf_multicaixas"];
     $permiteedicaoreferencianavenda=$dados["quicnf_permiteedicaoreferencianavenda"];
     $fazacertos=$dados["quicnf_fazacertos"];
+    $fazfrete=$dados["quicnf_fazfrete"];
     $fazfechamentos=$dados["quicnf_fazfechamentos"];
     $permitevendasareceber=$dados["quicnf_vendasareceber"];
     $usacodigobarrasinterno=$dados["quicnf_usacodigobarrasinterno"];
