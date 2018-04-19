@@ -17,6 +17,8 @@ $tpl->SUBTITULO = "DETALHES";
 
 //Pega todos os dados da entrada a partir do codigo
 $entrada = $_GET['codigo'];
+$operacao = $_GET['ope'];
+
 $sql = "
     SELECT * 
     FROM entradas 
@@ -38,7 +40,6 @@ if (($usuario_grupo == 5) && ($usuario_codigo != $fornecedor)) {
 }
 
 
-$tpl->block("BLOCK_CABECALHO_OPERACAO");
 
 //Codigo da Entrada
 $tpl->SELECT_DESABILITADO = " disabled ";
@@ -116,10 +117,12 @@ $tpl->block("BLOCK_DATAHORA");
 $tpl->block("BLOCK_VENDA_VALUNI_CABECALHO");
 if ($tiponegociacao==2) {
     $tpl->block("BLOCK_CUSTO_CABECALHO");
-    $tpl->block("BLOCK_SUBPRODUTOS_CABECALHO");
+    if ($usaproducao==1) $tpl->block("BLOCK_SUBPRODUTOS_CABECALHO");
 }
-$tpl->block("BLOCK_VENDA_CABECALHO");
+if ($operacao!=4) $tpl->block("BLOCK_VENDA_CABECALHO");
 $tpl->OPER_COLSPAN="2";
+if ($operacao!=4) $tpl->block("BLOCK_CABECALHO_OPERACAO");
+
 
 
 //Pega todos os dados da listagem de produtos da entrada
@@ -193,63 +196,67 @@ while ($dados = mysql_fetch_array($query)) {
     $tpl->ENTRADAS_VALIDADE = converte_data($validade);
     
     //Subprodutos
-    if ($tiponegociacao==2) {
-        
-    
-        $subprodutos_retirado_do_estoque=$dados["entpro_retiradodoestoquesubprodutos"];
-        $temsubprodutos2=$dados["entpro_temsubprodutos"];
-        if ($temsubprodutos2==1) { //mostra icone
-            $tpl->NOMEARQUIVO="subproduto.png";
-            $tpl->TITULO="Este é um produto composto (possui sub-produtos)";
+    if ($usaproducao==1) {
+        if ($tiponegociacao==2) {
+            $subprodutos_retirado_do_estoque=$dados["entpro_retiradodoestoquesubprodutos"];
+            $temsubprodutos2=$dados["entpro_temsubprodutos"];
+            if ($temsubprodutos2==1) { //mostra icone
+                $tpl->NOMEARQUIVO="subproduto.png";
+                $tpl->TITULO="Este é um produto composto (possui sub-produtos)";
 
-            if ($subprodutos_retirado_do_estoque==1) {
-                $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="saidas.png";
-                $tpl->SUBPRODUTOS_TITULO="Os subprodutos foram retirados do estoque";
-                $tpl->SUBPRODUTOS_ALINHAMENTO="right";
-                $tpl->SUBPRODUTOS_NOMEICONEARQUIVO_VER="procurar.png";
-                $tpl->block("BLOCK_SUBPRODUTOS");
-                $tpl->block("BLOCK_SUBPRODUTOS_VER");
-                $tpl->SUBPRODUTOS_COLSPAN="";
-            }
-            else if ($subprodutos_retirado_do_estoque==2) {
-                $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="saidas2.png";
-                $tpl->SUBPRODUTOS_NOMEICONEARQUIVO_VER="procurar_desabilitado.png";
-                $tpl->SUBPRODUTOS_TITULO="Optou-se por não realizar a retirada dos sub-produtos do estoque";
-                $tpl->SUBPRODUTOS_COLSPAN="";
-                $tpl->SUBPRODUTOS_ALINHAMENTO="right";
-                $tpl->block("BLOCK_SUBPRODUTOS");
-                $tpl->block("BLOCK_SUBPRODUTOS_VER");
-            } else { //não foi deicido ainda o que ferá se vai tirar do estoque ou não
+                if ($subprodutos_retirado_do_estoque==1) {
+                    $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="saidas.png";
+                    $tpl->SUBPRODUTOS_TITULO="Os subprodutos foram retirados do estoque";
+                    $tpl->SUBPRODUTOS_ALINHAMENTO="right";
+                    $tpl->SUBPRODUTOS_NOMEICONEARQUIVO_VER="procurar.png";
+                    $tpl->block("BLOCK_SUBPRODUTOS");
+                    $tpl->block("BLOCK_SUBPRODUTOS_VER");
+                    $tpl->SUBPRODUTOS_COLSPAN="";
+                }
+                else if ($subprodutos_retirado_do_estoque==2) {
+                    $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="saidas2.png";
+                    $tpl->SUBPRODUTOS_NOMEICONEARQUIVO_VER="procurar_desabilitado.png";
+                    $tpl->SUBPRODUTOS_TITULO="Optou-se por não realizar a retirada dos sub-produtos do estoque";
+                    $tpl->SUBPRODUTOS_COLSPAN="";
+                    $tpl->SUBPRODUTOS_ALINHAMENTO="right";
+                    $tpl->block("BLOCK_SUBPRODUTOS");
+                    $tpl->block("BLOCK_SUBPRODUTOS_VER");
+                } else { //não foi deicido ainda o que ferá se vai tirar do estoque ou não
+                    $tpl->SUBPRODUTOS_COLSPAN="2";
+                    $tpl->SUBPRODUTOS_ALINHAMENTO="center";
+                    $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="atencao.png";
+                    $tpl->SUBPRODUTOS_TITULO="Ainda não decidiu-se se será realizado a retirada dos sub-produtos do estoque";
+                    $tpl->block("BLOCK_SUBPRODUTOS");
+
+
+                }
+            } else { //não mostra icone
+                $tpl->NOMEARQUIVO="subproduto2.png";
+                $tpl->TITULO="Este é não é um produto composto.";
                 $tpl->SUBPRODUTOS_COLSPAN="2";
-                $tpl->SUBPRODUTOS_ALINHAMENTO="center";
-                $tpl->SUBPRODUTOS_NOMEICONEARQUIVO="atencao.png";
-                $tpl->SUBPRODUTOS_TITULO="Ainda não decidiu-se se será realizado a retirada dos sub-produtos do estoque";
-                $tpl->block("BLOCK_SUBPRODUTOS");
-
 
             }
-        } else { //não mostra icone
-            $tpl->NOMEARQUIVO="subproduto2.png";
-            $tpl->TITULO="Este é não é um produto composto.";
-            $tpl->SUBPRODUTOS_COLSPAN="2";
-
+            $tpl->block("BLOCK_SUBPRODUTOS_TEM");    
+            $tpl->block("BLOCK_SUBPRODUTOS_MOSTRAR");    
         }
-        $tpl->block("BLOCK_SUBPRODUTOS_TEM");    
-        $tpl->block("BLOCK_SUBPRODUTOS_MOSTRAR");    
     }
     
     $tpl->IMPRIMIR_LINK = "entradas_etiquetas.php?lote=$entrada&numero=$numero";
     $tpl->IMPRIMIR = $icones . "etiquetas.png";
 
-    $tpl->block("BLOCK_LISTA_OPERACAO_ETIQUETAS");
+    //Coluna Etiquetas
+    if ($operacao!=4) $tpl->block("BLOCK_LISTA_OPERACAO_ETIQUETAS");
     
 
-    $tpl->ICONES_ARQUIVO="vendas.png";
-    $tpl->ICONES_CAMINHO="$icones";
-    $tpl->ICONES_TITULO="Ver Vendas";
-    $tpl->VERVENDAS_PRODUTO="$produto_codigo";
-    $tpl->VERVENDAS_LOTE="$lote";
-    $tpl->block("BLOCK_LISTA_OPERACAO_VERVENDAS");
+    //Coluna Vendas 
+    if ($operacao!=4) {
+        $tpl->ICONES_ARQUIVO="vendas.png";
+        $tpl->ICONES_CAMINHO="$icones";
+        $tpl->ICONES_TITULO="Ver Vendas";
+        $tpl->VERVENDAS_PRODUTO="$produto_codigo";
+        $tpl->VERVENDAS_LOTE="$lote";
+        $tpl->block("BLOCK_LISTA_OPERACAO_VERVENDAS");
+    }
 
     $tpl->block("BLOCK_LISTA_OPERACAO");
     $tpl->block("BLOCK_LISTA");
@@ -259,7 +266,7 @@ while ($dados = mysql_fetch_array($query)) {
 
 if ($tiponegociacao == 2) {
     $tpl->block("BLOCK_CUSTO_RODAPE");
-    $tpl->block("BLOCK_SUBPRODUTOS_RODAPE");
+    if ($usaproducao==1 )$tpl->block("BLOCK_SUBPRODUTOS_RODAPE");
     $tpl->block("BLOCK_VENDA_VALUNI_RODAPE");
     
 } else {
@@ -296,11 +303,15 @@ $tpl->TOTAL_CUSTO = "$tot9";
   $tpl->TOTAL_LUCRO = "$tot10";
  */
 
-//Rodapé imprimir etiqueta
-$tpl->block("BLOCK_LISTA_NADA_OPERACAO");
-//Rodapé ver vendas
-$tpl->block("BLOCK_LISTA_NADA_OPERACAO");
+if ($operacao!=4) {
+    //Rodapé imprimir etiqueta
+    $tpl->block("BLOCK_LISTA_NADA_OPERACAO");
+    //Rodapé ver vendas
+    $tpl->block("BLOCK_LISTA_NADA_OPERACAO");
+}
 
+
+if ($operacao!=4) {
 
 
 //$tpl->block("BLOCK_BOTAO_VOLTAR");
@@ -308,6 +319,8 @@ $tpl->block("BLOCK_BOTAO_FECHAR");
 $tpl->block("BLOCK_BOTAO_IMPRIMIR");
 /* if ($tiponegociacao == 2)
   $tpl->block("BLOCK_BOTAO_IMPRIMIR_CUSTO"); */
+}
+
 $tpl->block("BLOCK_PASSO3");
 
 

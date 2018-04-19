@@ -1404,7 +1404,7 @@ $tpl->show();
 
 //BOTÕES 
 
-if ($ope != 4) {
+if ($ope != 4) { // 4=imprimir
     $tpl4 = new Template("templates/botoes1.html");
     
     //Botão Fechar
