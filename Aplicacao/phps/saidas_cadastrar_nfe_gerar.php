@@ -471,6 +471,7 @@ join produtos on (saipro_produto=pro_codigo)
 left join nfe_cfop on (pro_cfop=cfop_codigo)
 left join nfe_ncm on (pro_ncm=ncm_codigo)
 WHERE saipro_saida=$saida
+AND pro_incluirnanfe=1
 ";
 if (!$query = mysql_query($sql)) die("<br>Erro SQL SAIDA PRODUTOS: ".mysql_error());
 $nfe_venda_qtditens=mysql_num_rows($query);
@@ -489,7 +490,9 @@ while ($dados=mysql_fetch_assoc($query)) {
   if ($tipocontagem==2) $nfe_venda_item_tipocontagem="KG"; //UN KG LT
   if ($tipocontagem==3) $nfe_venda_item_tipocontagem="LT"; //UN KG LT
   $nfe_venda_item_quantidade=$dados["saipro_quantidade"];
-  $nfe_venda_item_valuni=$dados["saipro_valorunitario"];
+  if ($dados["saipro_porcao"]>0) $temporcao=1; else $temporcao=0;
+  if ($temporcao==1)  echo $nfe_venda_item_valuni= number_format($dados["saipro_valortotal"]/$dados["saipro_quantidade"],2,".","");
+  else  echo $nfe_venda_item_valuni=$dados["saipro_valorunitario"];
   $nfe_venda_item_valtot=$dados["saipro_valortotal"]; //bruto
   $nfe_venda_item_totalcompoenfe=1; //Indica se o valor total compoe ou nao na NFe // 0: Valor do Item não compoe o valor total da NFe / 1: Valor do item compoes o valor total da NFe
   $nfe_venda_item_origem=$dados["pro_origem"]; // 0 - Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8;  1 - Estrangeira - Importação direta, exceto a indicada no código 6;  2 - Estrangeira - Adquirida no mercado interno, exceto a indicada no código 7; 3 - Nacional, mercadoria ou bem com Conteúdo de Importação superior a 40% e inferior ou igual a 70%; 4 - Nacional, cuja produção tenha sido feita em conformidade com os processos produtivos básicos de que tratam as legislações citadas nos Ajustes; 5 - Nacional, mercadoria ou bem com Conteúdo de Importação inferior ou igual a 40%;  6 - Estrangeira - Importação direta, sem similar nacional, constante em lista da CAMEX e gás natural; 7 - Estrangeira - Adquirida no mercado interno, sem similar nacional, constante lista CAMEX e gás natural. 8 - Nacional, mercadoria ou bem com Conteúdo de Importação superior a 70%;
@@ -667,12 +670,13 @@ while ($dados=mysql_fetch_assoc($query)) {
 
 }
 
-//echo "<br>---------<br><br>".json_encode($arr). "<br><br>";
-//echo json_encode($dadosNfe). "<br><br>";
-//echo json_encode($dadosNfeItens). "<br><br>---------<br><br>";
+echo "<br>---------<br><br>".json_encode($arr). "<br><br>";
+echo json_encode($dadosNfe). "<br><br>";
+echo json_encode($dadosNfeItens). "<br><br>---------<br><br>";
 
 
 try { 
+  //echo  "<br><br>";
   $configJson = json_encode($arr);
   $dadosNfeJson = json_encode($dadosNfe);
   $dadosNfeItensJson = json_encode($dadosNfeItens);

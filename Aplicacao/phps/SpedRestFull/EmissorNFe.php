@@ -36,8 +36,8 @@ class EmissorNFe {
     //$url = Storage::url('1000364088.pfx');
 
     // echo($url); die();
-    $content = file_get_contents("SpedRestFull/includes/1000543641.pfx");
-    $this->tools = new Tools($configJson, Certificate::readPfx($content, 'Valmor9'));
+    $content = file_get_contents("SpedRestFull/includes/agape.pfx");
+    $this->tools = new Tools($configJson, Certificate::readPfx($content, '00011000'));
   }
 
   public function emiteNFe() {

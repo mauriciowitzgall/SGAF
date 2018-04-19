@@ -18290,3 +18290,7 @@ ADD COLUMN `sai_nfe` BIGINT(20) NULL AFTER `sai_fretemetpag_bandeira`;
 ALTER TABLE `sgaf_agape_dev`.`saidas_devolucoes` 
 CHANGE COLUMN `saidev_numero` `saidev_numero` BIGINT(20) NOT NULL ,
 ADD COLUMN `saidev_nfe` BIGINT(20) NULL AFTER `saidev_valliq`;
+
+
+ALTER TABLE `sgaf_agape_dev`.`produtos` 
+ADD COLUMN `pro_incluirnanfe` INT(1) NOT NULL DEFAULT 0 AFTER `pro_evendido`;

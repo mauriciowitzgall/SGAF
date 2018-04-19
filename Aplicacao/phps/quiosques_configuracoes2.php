@@ -180,7 +180,6 @@ if ($usamodulofiscal==1) {
         $nome = $ext;
         
         //Upload para o banco de dados
-        echo "$arquivo";
         if ( $arquivo != "none" ) {
             $fp = fopen($arquivo, "rb");
             $conteudo = fread($fp, $tamanho);

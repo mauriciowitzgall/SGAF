@@ -31,6 +31,7 @@ $descricao = $_POST['descricao'];
 $tiponegociacao = $_POST['box'];
 $codigounico = $_POST['codigounico'];
 $dadosfiscais = $_POST['dadosfiscais'];
+$incluirnanfe = $_POST['incluirnanfe'];
 $controlarestoque = $_POST['controlarestoque'];
 if ($usaestoque==0) $controlarestoque=0;
 $evendido = $_POST['evendido'];
@@ -156,6 +157,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         pro_pis,
         pro_cofins,
         pro_origem,
+        pro_incluirnanfe,
         pro_evendido
         $filtro_controlarestoque_campos
     ) VALUES (
@@ -186,6 +188,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         $pis,
         $cofins,
         $origem,
+        $incluirnanfe,
         $evendido
         $filtro_controlarestoque_valor
     );";
@@ -284,6 +287,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     pro_pis=$pis,
     pro_cofins=$cofins,
     pro_origem=$origem,
+    pro_incluirnanfe=$incluirnanfe,
     pro_evendido=$evendido
     $filtro_controlarestoque_update
     WHERE pro_codigo = '$codigo'

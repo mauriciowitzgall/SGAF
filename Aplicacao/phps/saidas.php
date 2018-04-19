@@ -530,6 +530,8 @@ if ($filtro_devolucao <> "")
     $filtro_devolucao = " and saidev_numero = $filtro_devolucao ";
 if ($filtro_areceber <> "")
     $sql_filtro_areceber = " and sai_areceber = $filtro_areceber ";
+if ($filtro_areceber_quitado <> "")
+    $sql_filtro_areceber_quitado = " and sai_areceberquitado=$filtro_areceber_quitado ";
 if ($fazentregas==1) {
     if ($filtro_classificacao == 1) $sql_filtro_classificacao = " order by sai_codigo desc ";
     else $sql_filtro_classificacao = " order by sai_entrega=1 desc, sai_entrega_concluida=0 desc, sai_dataentrega, sai_horaentrega ";
@@ -548,7 +550,7 @@ if ($filtro_areceber!=1) {
 
 //Se  o for filtrado para mostrar apenas as vendas a receber, o resultado deve mostrar vendas de outros dias e outros caixas.
 if ($filtro_areceber==1) $sql_filtro_caixaoperacao="";
-$sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_valorbruliq." ".$sql_filtro_fornecedor . " " . $sql_filtro_caixaoperacao." ".$sql_filtro_id." ".$sql_filtro_status. " ".$sql_filtro_areceber." ".$filtro_devolucao." ".$sql_filtro_data;
+$sql_filtro = $sql_filtro_numero . " " . $sql_filtro_consumidor . " " . $sql_filtro_caixa . " " . $sql_filtro_tipo . " " . $sql_filtro_produto . " " . $sql_filtro_lote . " " . $sql_filtro_valorbruliq." ".$sql_filtro_fornecedor . " " . $sql_filtro_caixaoperacao." ".$sql_filtro_id." ".$sql_filtro_status. " ".$sql_filtro_areceber." ".$filtro_devolucao." ".$sql_filtro_data." ". $sql_filtro_areceber_quitado;
 
 
 //SQL Principal das linhas

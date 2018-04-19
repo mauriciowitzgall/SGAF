@@ -55,7 +55,7 @@ $areceber = $_REQUEST["areceber2"];
 $dinheiro = $_REQUEST["dinheiro2"];
 if ($areceber == 1)
     $troco = 0;
-else
+else 
     $troco = $_REQUEST["troco2"];
 $troco_devolvido = number_format(dinheiro_para_numero($_REQUEST["troco_devolvido"]), 2, '.', '');
 
@@ -92,6 +92,7 @@ $totalliq = $total + $forcado;
   echo "totalliq=$totalliq<br>";
  */
 
+echo "($areceber)";
 
 //Se for saida do tipo Venda (não devolução)
 if ($tipo == 1) {

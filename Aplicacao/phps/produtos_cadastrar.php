@@ -53,6 +53,7 @@ while ($array = mysql_fetch_array($query)) {
     $cofins=$array['pro_cofins'];
     $origem_codigo=$array['pro_origem'];
     $dadosfiscais=$array['pro_dadosfiscais'];
+    $incluirnanfe=$array['pro_incluirnanfe'];
     $controlarestoque=$array['pro_controlarestoque'];
     $evendido=$array['pro_evendpido'];
     $valunicusto=$array['pro_valunicusto'];
@@ -74,8 +75,10 @@ While ($dados2=  mysql_fetch_assoc($query2)) {
 if ($operacao==1) {
     if ($usamodulofiscal==1) {
         $dadosfiscais=1;
+        $incluirnanfe=1;
     } else {
         $dadosfiscais=0;
+        $incluirnanfe=0;
     }  
 } 
 
@@ -286,7 +289,7 @@ if ($linhas == 0) {
             </td>
         </tr>
 
-
+        <?php if ($usavendas==1) { ?>
         <tr  id="linha_evendido">
             <td align="right" width="200px"><b>É Vendido? <label class="obrigatorio"></label></b></td>
             <td align="left" valign="bottom">
@@ -303,7 +306,8 @@ if ($linhas == 0) {
                 </select>
                 <span class="dicacampo"> </span>
             </td>
-        </tr>        
+        </tr> 
+        <?php } ?>       
 
         <tr id="linha_tiponeg">  
             <td align="right" width="200px">
@@ -379,8 +383,8 @@ if ($linhas == 0) {
             </td>
         </tr> 
         <?php } ?>
-        
-        
+     
+        <?php if ($usamodulofiscal==1) { ?>      
         <tr>
             <td align="right" width="200px"><b>Dados Fiscais: <label class="obrigatorio"></label></b></td>
             <td align="left" valign="bottom">
@@ -390,8 +394,18 @@ if ($linhas == 0) {
                 </select>
                 <span class="dicacampo"> </span>
             </td>
-        </tr>        
-        
+        </tr>  
+        <tr id="linha_incluirnfe">
+            <td align="right" width="200px"><b>Incluir na NFE: <label class="obrigatorio"></label></b></td>
+            <td align="left" valign="bottom">
+                <select name="incluirnanfe" onchange="" class="campopadrao" required="required" <?php if ($ver == 1) echo" disabled "; ?> >
+                    <option value="0" <?php if ($incluirnanfe==0) echo " selected ";  ?>>Não</option>
+                    <option value="1" <?php if ($incluirnanfe==1) echo " selected ";  ?>>Sim</option>
+                </select>
+                <span class="dicacampo"> </span>
+            </td>
+        </tr>  
+        <?php  } ?>         
         <tr id="linha_ncm">
             <td align="right" width="200px"><b>NCM: <label class="obrigatorio"></label></b>
                 <img width="12px" class="" src="<?php echo $icones; ?>info.png" alt="Nomenclatura Comum do Merscosul" title="Nomenclatura Comum do Merscosul">

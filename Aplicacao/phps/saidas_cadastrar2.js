@@ -262,6 +262,23 @@ function mascara_dinheiro() {
 }
 
 
+function valorareceber (valor) {
+    if (valor==1) {
+        document.form1.metodopag.disabled = true;
+        $("tr[id=tr_metodopag]").hide();
+        document.form1.dinheiro.disabled = true;
+        $("tr[id=tr_dinheiro]").hide();
+        document.form1.cartaobandeira.disabled = true;
+        $("tr[id=tr_cartaobandeira]").hide();
+    } else {
+        $("tr[id=tr_metodopag]").show();
+        document.form1.metodopag.disabled = false;
+        $("tr[id=tr_dinheiro]").show();
+        document.form1.dinheiro.disabled = false;
+        document.form1.cartaobandeira.disabled = false;
+        $("tr[id=tr_cartaobandeira]").show();        
+    }
+}
 
 
 function recalcula_total() {
