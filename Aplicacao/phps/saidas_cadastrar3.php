@@ -92,7 +92,6 @@ $totalliq = $total + $forcado;
   echo "totalliq=$totalliq<br>";
  */
 
-echo "($areceber)";
 
 //Se for saida do tipo Venda (não devolução)
 if ($tipo == 1) {
@@ -192,7 +191,8 @@ if ($usamodulofiscal==1) {
     $tpl_notificacao->block("BLOCK_BOTAOGERAL");    
     
     //Botão gerar nota fiscal DEPOIS
-    $tpl_notificacao->BOTAOGERAL_DESTINO="saidas.php";
+    if ($tiposai == "3") $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_devolucao.php";
+    else $tpl_notificacao->BOTAOGERAL_DESTINO="saidas.php";
     //$tpl->block("BLOCK_BOTAOGERAL_NOVAJANELA");
     $tpl_notificacao->BOTAOGERAL_TIPO="button";
     $tpl_notificacao->BOTAOGERAL_NOME="DEPOIS";

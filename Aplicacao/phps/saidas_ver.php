@@ -1430,7 +1430,7 @@ if ($ope != 4) {
     $tpl4->block("BLOCK_COLUNA");
 
     //Botão Devoluções
-    if (($usadevolucoes==1)&&($status_venda==1)) {
+    if (($usadevolucoes==1)&&($status_venda==1)&&($tiposaida!=3)) {
         $sql12="SELECT count(saidev_numero) as qtd_devolucoes FROM saidas_devolucoes WHERE saidev_saida=$saida";
         if (!$query12=mysql_query($sql12)) die("Erro de SQL12:" . mysql_error());
         $dados12=mysql_fetch_assoc($query12);

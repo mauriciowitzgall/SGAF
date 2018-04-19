@@ -212,11 +212,11 @@ $tpl2->CABECALHO_COLUNA_TAMANHO = "";
 $tpl2->CABECALHO_COLUNA_NOME = "DATA";
 $tpl2->block("BLOCK_CABECALHO_COLUNA");
 $tpl2->CABECALHO_COLUNA_COLSPAN = "";
-$tpl2->CABECALHO_COLUNA_TAMANHO = "";
+$tpl2->CABECALHO_COLUNA_TAMANHO = "23%";
 $tpl2->CABECALHO_COLUNA_NOME = "MOTIVO";
 $tpl2->block("BLOCK_CABECALHO_COLUNA");
 $tpl2->CABECALHO_COLUNA_COLSPAN = "";
-$tpl2->CABECALHO_COLUNA_TAMANHO = "";
+$tpl2->CABECALHO_COLUNA_TAMANHO = "30%";
 $tpl2->CABECALHO_COLUNA_NOME = "DESCRIÇÃO";
 $tpl2->block("BLOCK_CABECALHO_COLUNA");
 $tpl2->CABECALHO_COLUNA_COLSPAN = "";
@@ -356,7 +356,8 @@ while ($dados = mysql_fetch_assoc($query)) {
     //Opera��o Ver
     $tpl2->COLUNA_TAMANHO = "35px";
     $tpl2->COLUNA_ALINHAMENTO = "center";
-    $tpl2->CONTEUDO_LINK_ARQUIVO = "saidas_ver.php?codigo=$numero&tiposaida=3&ope=3";
+    $tpl2->CONTEUDO_LINK_ARQUIVO = "saidas_ver.php?codigo=$numero&tiposaida=3&ope=3&modal=1&passo=1";
+    $tpl2->block("BLOCK_CONTEUDO_LINK_NOVAJANELA");
     $tpl2->block("BLOCK_CONTEUDO_LINK");
     $tpl2->block("BLOCK_OPERACAO_DETALHES_HABILITADO");
     $tpl2->block("BLOCK_OPERACAO_DETALHES");
