@@ -199,7 +199,7 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 //Botão Cadastrar novo pagamento
 $caixaoperacao=pessoa_caixaoperacao($usuario_codigo);
 if ($caixaoperacao=="") $temcaixaoperacao=0; else $temcaixaoperacao=1;
-if ($saldofinal==0) {
+if ($saldofinal<=0) {
     $tpl->LINK = "";
     $tpl->BOTAO_NOME = "NOVO PAGAMENTO";
     $tpl->BOTAO_TITULO="Não é possível realizar novos pagamentos porque a venda foi completamente paga!";
