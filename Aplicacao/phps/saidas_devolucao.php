@@ -28,6 +28,7 @@ $tpl_filtro->FORM_NOME = "form_filtro";
 $tpl_filtro->block("BLOCK_FORM");
 
 $filtro_numero = $_POST["filtro_numero"];
+$filtro_produto = $_POST["filtro_produto"];
 $filtro_motivo = $_POST["filtro_motivo"];
 $filtro_descricao = $_POST["filtro_descricao"];
 $filtro_supervisor = $_POST["filtro_supervisor"];
@@ -41,8 +42,23 @@ $tpl_filtro->CAMPO_TIPO = "text";
 $tpl_filtro->CAMPO_QTDCARACTERES = "";
 $tpl_filtro->CAMPO_NOME = "filtro_numero";
 $tpl_filtro->CAMPO_ONKEYUP = "valida_filtro_saidas_devolucao_numero()";
-$tpl_filtro->CAMPO_TAMANHO = "";
+$tpl_filtro->CAMPO_TAMANHO = "10px";
 $tpl_filtro->CAMPO_VALOR = $filtro_numero;
+$tpl_filtro->block("BLOCK_CAMPO_FILTRO");
+$tpl_filtro->block("BLOCK_CAMPO");
+$tpl_filtro->block("BLOCK_ESPACO");
+$tpl_filtro->block("BLOCK_COLUNA");
+
+
+//Filtro Produto
+$tpl_filtro->CAMPO_TITULO = "Produto";
+$tpl_filtro->block("BLOCK_CAMPO_TITULO");
+$tpl_filtro->CAMPO_TIPO = "text";
+$tpl_filtro->CAMPO_QTDCARACTERES = "";
+$tpl_filtro->CAMPO_NOME = "filtro_produto";
+$tpl_filtro->CAMPO_ONKEYUP = "";
+$tpl_filtro->CAMPO_TAMANHO = "40px";
+$tpl_filtro->CAMPO_VALOR = $filtro_produto;
 $tpl_filtro->block("BLOCK_CAMPO_FILTRO");
 $tpl_filtro->block("BLOCK_CAMPO");
 $tpl_filtro->block("BLOCK_ESPACO");
@@ -230,18 +246,20 @@ $tpl2->block("BLOCK_CABECALHO_COLUNA");
 $tpl2->block("BLOCK_CABECALHO_LINHA");
 $tpl2->block("BLOCK_CABECALHO");
 
-//Valida��o de filtros
+//Validação de filtros
 $sql_filtro = "";
 if (!empty($filtro_descricao))
-    $sql_filtro = " and sai_descricao like '%$filtro_descricao%' ";
+    $sql_filtro = $sql_filtro." and sai_descricao like '%$filtro_descricao%' ";
 if (!empty($filtro_numero))
-    $sql_filtro = " and sai_codigo = $filtro_numero ";
+    $sql_filtro = $sql_filtro." and sai_codigo = $filtro_numero ";
+if (!empty($filtro_produto))
+    $sql_filtro = $sql_filtro." and pro_nome like '%$filtro_produto%' ";
 if (!empty($filtro_motivo))
-    $sql_filtro = " and sai_saidajustificada = $filtro_motivo ";
+    $sql_filtro = $sql_filtro." and sai_saidajustificada = $filtro_motivo ";
 if (!empty($filtro_supervisor))
-    $sql_filtro = " and sai_caixa = $filtro_supervisor ";
+    $sql_filtro = $sql_filtro." and sai_caixa = $filtro_supervisor ";
 if (!empty($filtro_fornecedor))
-    $sql_filtro = " and ent_fornecedor = $filtro_fornecedor ";
+    $sql_filtro = $sql_filtro." and ent_fornecedor = $filtro_fornecedor ";
 
 
 
@@ -252,7 +270,8 @@ $sql = "
     left join caixas_operacoes on (sai_caixaoperacaonumero=caiopo_numero)
     left JOIN pessoas on (caiopo_operador=pes_codigo)
     left JOIN saidas_produtos on (saipro_saida=sai_codigo)
-    left JOIN entradas on (ent_codigo=saipro_lote)
+    left JOIN entradas on (ent_codigo=saipro_lote)    
+    left join produtos on (saipro_produto=pro_codigo)
     WHERE sai_tipo=3
     $sql_filtro
     ORDER BY sai_codigo DESC
