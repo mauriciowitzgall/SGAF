@@ -191,13 +191,22 @@ if ($usamodulofiscal==1) {
     $tpl_notificacao->block("BLOCK_BOTAOGERAL");    
     
     //Botão gerar nota fiscal DEPOIS
+    $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_ver.php?codigo=$saida&tiposaida=$tiposai&ope=4";
+    $tpl_notificacao->block("BLOCK_BOTAOGERAL_NOVAJANELA");
+    $tpl_notificacao->BOTAOGERAL_TIPO="button";
+    $tpl_notificacao->BOTAOGERAL_NOME="IMPRIMIR";
+    //$tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
+    $tpl_notificacao->block("BLOCK_BOTAOGERAL");   
+
+
+    //Botão Imprimir
     if ($tiposai == "3") $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_devolucao.php";
     else $tpl_notificacao->BOTAOGERAL_DESTINO="saidas.php";
     //$tpl->block("BLOCK_BOTAOGERAL_NOVAJANELA");
     $tpl_notificacao->BOTAOGERAL_TIPO="button";
-    $tpl_notificacao->BOTAOGERAL_NOME="DEPOIS";
+    $tpl_notificacao->BOTAOGERAL_NOME="CONTINUAR";
     $tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
-    $tpl_notificacao->block("BLOCK_BOTAOGERAL");      
+    $tpl_notificacao->block("BLOCK_BOTAOGERAL"); 
     
 } else { //Venda padrão ou devolução sem usar módulo fiscal
     
