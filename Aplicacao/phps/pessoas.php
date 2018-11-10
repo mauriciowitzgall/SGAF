@@ -197,6 +197,13 @@ $tpl->CABECALHO_COLUNA_COLSPAN = "";
 $tpl->CABECALHO_COLUNA_NOME = "TELEFONE 01";
 $tpl->block("BLOCK_LISTA_CABECALHO");
 
+if ($usagrupoconsumidores==1) {
+    $tpl->CABECALHO_COLUNA_TAMANHO = "";
+    $tpl->CABECALHO_COLUNA_COLSPAN = "2";
+    $tpl->CABECALHO_COLUNA_NOME = "GRUPOS";
+    $tpl->block("BLOCK_LISTA_CABECALHO");
+}
+
 if (($usaestoque==1)||($usavendas==1)||($usaproducao==1)||($usacaixa==1)) {
     $tpl->CABECALHO_COLUNA_TAMANHO = "";
     $tpl->CABECALHO_COLUNA_COLSPAN = "";
@@ -543,6 +550,20 @@ while ($dados = mysql_fetch_assoc($query)) {
         $tpl->block("BLOCK_LISTA_COLUNA_ICONES");
     }
     $tpl->CODIGO="$codigo";
+
+    //Operadores
+    if ($usagrupoconsumidores==1) {
+        $sql2="SELECT * FROM pessoas_grupoconsumidores WHERE pesgrucon_pessoa=$codigo";
+        if (!$query2=mysql_query($sql2)) die("Erro SQL: ".mysql_error());
+        $qtd_grupo = $dados2 = mysql_num_rows($query2);
+        $tpl->LISTA_COLUNA2_ALINHAMENTO="right";
+        $tpl->LISTA_COLUNA2_VALOR="($qtd_grupo)";
+        $tpl->LISTA_COLUNA2_ALINHAMENTO2="left"; 
+        $tpl->LISTA_COLUNA2_LINK="pessoas_grupoconsumidores.php?pessoa=$codigo";
+        $tpl->IMAGEM_PASTA="$icones";
+        $tpl->block("BLOCK_LISTA_COLUNA2");
+    }
+
 
     //Atenção
     $tpl->ICONE_ARQUIVO="$icones";

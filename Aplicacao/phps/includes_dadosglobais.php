@@ -46,7 +46,14 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $fazentregas=$dados["quicnf_fazentregas"];
     $usaprateleira=$dados["quicnf_usaprateleira"];
     $identificacaoconsumidorvenda=$dados["quicnf_identificacaoconsumidorvenda"];
+    $filtro_saida_ultimosdias=$dados["quicnf_filtrosaidaultimosdias"];
+    $usagrupoconsumidores=1;
 }
+
+
+if (($filtro_saida_ultimosdias==0)||($filtro_saida_ultimosdias=="")) $filtro_saida_ultimosdias=7; //em dias
+
+
 $sql="SELECT * FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$usuario_quiosque";
 if (!$query= mysql_query($sql)) die("Erro SQL INCLUDES: " . mysql_error());
 $quiosque_consignacao=0;

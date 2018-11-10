@@ -222,11 +222,11 @@ while ($dados=  mysql_fetch_assoc($query)) {
         $tpl->IMAGEM_PASTA="$icones";
         $tpl->IMAGEM_TITULO="Nota Fiscal";
         //Verificar se foi emitido nota
-        $sql="SELECT saidev_nfe,nfe_numero FROM saidas_devolucoes LEFT JOIN nfe on (saidev_nfe=nfe_codigo) WHERE saidev_saida=$saida";
-        if (!$query = mysql_query($sql)) die("<br>Erro SQL saida consulta: ".mysql_error());
-        $dados=mysql_fetch_assoc($query);
-        $nfe_da_devolucao=$dados["saidev_nfe"];
-        $nfe_numero=$dados["nfe_numero"];
+        $sql3="SELECT saidev_nfe,nfe_numero FROM saidas_devolucoes LEFT JOIN nfe on (saidev_nfe=nfe_codigo) WHERE saidev_saida=$saida";
+        if (!$query3 = mysql_query($sql3)) die("<br>Erro SQL saida consulta: ".mysql_error());
+        $dados3=mysql_fetch_assoc($query3);
+        $nfe_da_devolucao=$dados3["saidev_nfe"];
+        $nfe_numero=$dados3["nfe_numero"];
         if ($nfe_da_devolucao!="") $temnota=1; else $temnota=0;
         if ($temnota==1) {
             $tpl->LINK="saidas_cadastrar_nfe_ver.php?nfe_numero=$nfe_numero";
@@ -248,11 +248,11 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $tpl->IMAGEM_PASTA="$icones";
     $tpl->IMAGEM_TITULO="Remover";
     //Verificar se foi emitido nota
-    $sql="SELECT saidev_nfe,nfe_numero FROM saidas_devolucoes LEFT JOIN nfe on (saidev_nfe=nfe_codigo) WHERE saidev_saida=$saida";
-    if (!$query = mysql_query($sql)) die("<br>Erro SQL saida consulta: ".mysql_error());
-    $dados=mysql_fetch_assoc($query);
-    $nfe_da_devolucao=$dados["saidev_nfe"];
-    $nfe_numero=$dados["nfe_numero"];
+    $sql4="SELECT saidev_nfe,nfe_numero FROM saidas_devolucoes LEFT JOIN nfe on (saidev_nfe=nfe_codigo) WHERE saidev_saida=$saida";
+    if (!$query4 = mysql_query($sql4)) die("<br>Erro SQL saida consulta: ".mysql_error());
+    $dados4=mysql_fetch_assoc($query4);
+    $nfe_da_devolucao=$dados4["saidev_nfe"];
+    $nfe_numero=$dados4["nfe_numero"];
     if ($nfe_da_devolucao!="") $temnota=1; else $temnota=0;
     if ($temnota==1) {
         $tpl->IMAGEM_NOMEARQUIVO="remover_desabilitado.png"; 

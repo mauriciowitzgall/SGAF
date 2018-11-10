@@ -48,6 +48,7 @@ $classificacaopadraoestoque = $_POST['classificacaopadraoestoque'];
 $devolucoessobrevendas = $_POST['devolucoessobrevendas'];
 $pagamentosparciais = $_POST['pagamentosparciais'];
 $permiteedicaoreferencianavenda = $_POST['permiteedicaoreferencianavenda'];
+$filtrosaida_ultimosdias = $_POST['filtrosaida_ultimosdias'];
 
     
 $cpf = $_POST['cpf'];
@@ -135,6 +136,7 @@ SET
     quicnf_fazfechamentos='$fazfechamentos',
     quicnf_fazfrete='$fazfrete',
     quicnf_fazacertos='$fazacertos',
+    quicnf_filtrosaidaultimosdias='$filtrosaida_ultimosdias',
     quicnf_usavendaporcoes='$usavendaporcoes'
     $complemento    
 WHERE

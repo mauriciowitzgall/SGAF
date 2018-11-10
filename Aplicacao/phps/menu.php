@@ -276,6 +276,24 @@ if ($usuario_grupo<>4) {
             }
 
         }
+
+
+        //Sub-menu Pessoas
+        if ($tipopagina == "pessoas") {
+
+            //Grupo de consumidores
+            if ($permissao_consumidores_grupos_ver == 1) {
+                $tpl_menu->LINK = "consumidores_grupos.php";
+                $tpl_menu->IMAGEM_PASTA = $icones2;
+                $tpl_menu->IMAGEM_ARQUIVO = "consumidor.png";
+                
+                $tpl_menu->IMAGEM_TITULO = "Consumidores Grupos";
+                $tpl_menu->TITULO = "Consumidores Grupos";
+                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                $tpl_menu->block("BLOCK_MENU_ITEM");
+            }           
+
+        }
         //Sub-menu Estoque
         if ($tipopagina == "estoque") {
 

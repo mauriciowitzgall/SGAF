@@ -236,7 +236,7 @@ while ($dados3=  mysql_fetch_assoc($query3)) {
     $nome_valuni="valuni_"."$itemvenda";
     $nome_valtot="valtot_"."$itemvenda";
     $nome_valtot_comdesconto="valtot_comdesconto_"."$itemvenda";
-    $tpl->LISTA_COLUNA_VALOR= "<input type='number' pattern='[0-9]+$' min='0' max='$qtdlimite' name='$nome' id='$id' $desabilita class='campopadrao' style='width:70px' onblur='verifica_qtd_digitada(this, $itemvenda)' onkeyup='mascara_qtd(this.name,$produto_tipocontagem)'> / $qtdlimite $produto_tipocontagem_sigla";
+    $tpl->LISTA_COLUNA_VALOR= "<input type='text'  min='0' max='$qtdlimite' name='$nome' id='$id' $desabilita class='campopadrao' style='width:70px' onblur='verifica_qtd_digitada(this, $itemvenda)' onkeyup='mascara_qtd(this.name,$produto_tipocontagem)'> / $qtdlimite $produto_tipocontagem_sigla";
     $tpl->block("BLOCK_LISTA_COLUNA");
 
 

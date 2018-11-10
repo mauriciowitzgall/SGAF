@@ -18272,25 +18272,28 @@ ADD COLUMN `sai_entrega_frete` FLOAT NULL DEFAULT NULL AFTER `sai_horaentrega`;
 ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_fazfrete` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_fazentregas`;
 
-ALTER TABLE `sgaf_agape_dev`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_pfx_tipo` VARCHAR(70) NULL AFTER `quicnf_pfx`,
 ADD COLUMN `quicnf_pfx_nome` VARCHAR(70) NULL AFTER `quicnf_pfx_tipo`;
 
 
-ALTER TABLE `sgaf_agape_dev`.`nfe_vendas` 
+ALTER TABLE `nfe_vendas` 
 DROP COLUMN `nfe_devolucao`,
 DROP COLUMN `nfe_notareferenciada`,
 CHANGE COLUMN `nfe_finalidade` `nfe_finalidade` INT(1) NOT NULL AFTER `nfe_numero`,
 CHANGE COLUMN `nfe_xml` `nfe_xml` BLOB NOT NULL AFTER `nfe_finalidade`,
-ADD COLUMN `nfe_chave` VARCHAR(44) NOT NULL AFTER `nfe_xml`, RENAME TO  `sgaf_agape_dev`.`nfe` ;
+ADD COLUMN `nfe_chave` VARCHAR(44) NOT NULL AFTER `nfe_xml`, RENAME TO  `nfe` ;
 
-ALTER TABLE `sgaf_agape_dev`.`saidas` 
+ALTER TABLE `saidas` 
 ADD COLUMN `sai_nfe` BIGINT(20) NULL AFTER `sai_fretemetpag_bandeira`;
 
-ALTER TABLE `sgaf_agape_dev`.`saidas_devolucoes` 
+ALTER TABLE `saidas_devolucoes` 
 CHANGE COLUMN `saidev_numero` `saidev_numero` BIGINT(20) NOT NULL ,
 ADD COLUMN `saidev_nfe` BIGINT(20) NULL AFTER `saidev_valliq`;
 
 
-ALTER TABLE `sgaf_agape_dev`.`produtos` 
+ALTER TABLE `produtos` 
 ADD COLUMN `pro_incluirnanfe` INT(1) NOT NULL DEFAULT 0 AFTER `pro_evendido`;
+
+ALTER TABLE `sgaf_agape`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_filtrosaidaultimosdias` INT NOT NULL DEFAULT 7 AFTER `quicnf_fazfrete`;

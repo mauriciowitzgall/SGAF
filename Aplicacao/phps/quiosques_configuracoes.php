@@ -83,6 +83,7 @@ $sql="SELECT *
      $quiosque_estado=$dados["est_codigo"];
      $quiosque_estado_sigla=$dados["est_sigla"];
      $permiteedicaoreferencianavenda=$dados["quicnf_permiteedicaoreferencianavenda"];
+     $filtrosaida_ultimosdias=$dados["quicnf_filtrosaidaultimosdias"];
  }
 
 //Template de Título e Sub-título
@@ -763,6 +764,26 @@ $tpl1->OPTION_NOME = "Não";
 if ($usamodulofiscal=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
 $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
+//Filtro Saídas Motrar últimos x dias na listagem
+$tpl1->TITULO = "Filtro padrão listagem vendas";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->CAMPO_TIPO="number";
+$tpl1->CAMPO_NOME="filtrosaida_ultimosdias";
+$tpl1->CAMPO_ID="filtrosaida_ultimosdias";
+$tpl1->CAMPO_TAMANHO="5";
+$tpl1->CAMPO_VALOR="$filtrosaida_ultimosdias";
+$tpl1->CAMPO_QTD_CARACTERES="9";
+if ($usavendas=='1') $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
+$tpl1->CAMPO_DICA="";
+$tpl1->block("BLOCK_CAMPO_NORMAL"); 
+$tpl1->block("BLOCK_CAMPO");
+$tpl1->TEXTO_ID="";
+$tpl1->TEXTO="dias";
+$tpl1->block("BLOCK_TEXTO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 

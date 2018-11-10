@@ -1,0 +1,14 @@
+CREATE TABLE `sgaf_agape`.`consumidores_grupos` (
+  `congru_codigo` INT NOT NULL AUTO_INCREMENT,
+  `congru_nome` VARCHAR(100) NULL,
+  PRIMARY KEY (`congru_codigo`));
+
+INSERT INTO `sgaf_agape`.`consumidores_grupos` (`congru_codigo`, `congru_nome`) VALUES ('1', 'Representante - Odirlei');
+INSERT INTO `sgaf_agape`.`consumidores_grupos` (`congru_codigo`, `congru_nome`) VALUES ('2', 'Distribuidores');
+INSERT INTO `sgaf_agape`.`consumidores_grupos` (`congru_codigo`, `congru_nome`) VALUES ('3', 'Venda Direta/Final');
+
+
+CREATE TABLE `sgaf_agape`.`pessoas_grupoconsumidores` (
+  `pesgrucon_pessoa` INT NOT NULL,
+  `pesgrucon_grupo` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`pesgrucon_pessoa`, `pesgrucon_grupo`));

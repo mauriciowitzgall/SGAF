@@ -8,7 +8,7 @@ if ($permissao_saidas_cadastrar <> 1) {
 
 $tipopagina = "saidas";
 
-print_r($_REQUEST);
+//print_r($_REQUEST);
 
 include "includes.php";
 //include "funcoes.php";

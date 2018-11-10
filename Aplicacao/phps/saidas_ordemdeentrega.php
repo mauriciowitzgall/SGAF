@@ -47,7 +47,7 @@ if ($areceber==1) $metpag_nome="À Receber";
 else $metpag_nome=$dados["metpag_nome"];
 $valbru=$dados["sai_totalbruto"];
 $desconto=$dados["sai_descontovalor"];
-$valliq=$dados["sai_totalcomdesconto"];
+$valliq=$dados["sai_totalliquido"];
 $consumidor_nome=$dados["pes_nome"];
 $consumidor_cpf=$dados["pes_cpf"];
 $consumidor_cnpj=$dados["pes_cnpj"];

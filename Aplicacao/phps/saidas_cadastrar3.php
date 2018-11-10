@@ -146,6 +146,7 @@ $sql = "SELECT * FROM saidas WHERE sai_codigo=$saida";
 if (!$query=mysql_query($sql)) die("Erro SQL 8:" . mysql_error());
 $dados=mysql_fetch_assoc($query);
 $consumidor=$dados["sai_consumidor"];
+$entrega=$dados["sai_entrega"];
 $areceber=$dados["sai_areceber"];
 if (($consumidor==0)&&($areceber==1)) {
 
@@ -222,18 +223,27 @@ if ($usamodulofiscal==1) {
     $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_ver.php?codigo=$saida&tiposaida=$tiposai&ope=4";
     $tpl_notificacao->block("BLOCK_BOTAOGERAL_NOVAJANELA");
     $tpl_notificacao->BOTAOGERAL_TIPO="button";
-    $tpl_notificacao->BOTAOGERAL_NOME="IMPRIMIR";
+    $tpl_notificacao->BOTAOGERAL_NOME="IMP. VENDA";
     //$tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
     $tpl_notificacao->block("BLOCK_BOTAOGERAL");
 
 
+    //Botão imprimir ficha de entrega
+    if ($entrega==1) {
+      $tpl_notificacao->BOTAOGERAL_DESTINO= "saidas_ordemdeentrega.php?codigo=$saida&tiposaida=1&ope=4";
+      $tpl_notificacao->block("BLOCK_BOTAOGERAL_NOVAJANELA");
+      $tpl_notificacao->BOTAOGERAL_TIPO="button";
+      $tpl_notificacao->BOTAOGERAL_NOME="IMP. ENTREGA";
+      //$tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
+      $tpl_notificacao->block("BLOCK_BOTAOGERAL");    
+    }
 
     //Botão cadastrar mais
     if (($identificacaoconsumidorvenda==3)&&($usacomanda==0)) $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar.php?tiposaida=$tiposai&operacao=1&passo=2";
     else $tpl_notificacao->BOTAOGERAL_DESTINO="saidas_cadastrar.php?tiposaida=$tiposai&operacao=1&passo=1";
     //$tpl->block("BLOCK_BOTAOGERAL_NOVAJANELA");
     $tpl_notificacao->BOTAOGERAL_TIPO="button";
-    $tpl_notificacao->BOTAOGERAL_NOME="REALIZAR NOVA SAIDA";
+    $tpl_notificacao->BOTAOGERAL_NOME="NOVA VENDA";
     $tpl_notificacao->block("BLOCK_BOTAOGERAL_AUTOFOCO");
     $tpl_notificacao->block("BLOCK_BOTAOGERAL");
 

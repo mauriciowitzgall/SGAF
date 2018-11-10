@@ -160,6 +160,12 @@ if (!isset($_SESSION["usuario_cpf"])
     $permissao_caixas_operacoes_abrir = $dados["gruper_caixas_operacoes_abrir"];
     $permissao_caixas_operacoes_encerrar = $dados["gruper_caixas_operacoes_encerrar"];
     $permissao_caixas_trocar = $dados["gruper_caixas_trocar"];
+    //$permissao_consumidores_grupos_ver = $dados["gruper_consumidores_grupos_ver"];
+    $permissao_consumidores_grupos_ver = 1;
+    $permissao_consumidores_grupos_editar = 1;
+    $permissao_consumidores_grupos_excluir = 1;
+    $permissao_consumidores_grupos_cadastrar = 1;
+
 }
 
 //Verifica os tipos de negociação do quiosque

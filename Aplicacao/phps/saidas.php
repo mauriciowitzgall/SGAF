@@ -1,5 +1,8 @@
 <?php
 
+$dataatual = date("Y-m-d");
+
+
 //Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if (($permissao_saidas_ver <> 1)) {
@@ -60,7 +63,7 @@ if ($usavendas!=1) {
 
 //Se não tiver nehuma saida registra e nenhum caixa criado então sugerir criar caixa e abri-lo
 if ($usacaixa==1) {
-    $sql = "SELECT * FROM saidas WHERE sai_quiosque=$usuario_quiosque";
+    $sql = "SELECT * FROM saidas WHERE sai_quiosque=$usuario_quiosque LIMIT 2";
     $query = mysql_query($sql);
     if (!$query)    die("Erro: " . mysql_error());
     $linhas_saidas = mysql_num_rows($query);
@@ -94,8 +97,10 @@ $filtro_consumidor = $_POST["filtro_consumidor"];
 $filtro_fornecedor = $_POST["filtro_fornecedor"];
 $filtro_tipo = $_POST["filtro_tipo"];
 $filtro_lote = $_REQUEST["filtro_lote"];
-$filtro_data = $_REQUEST["filtro_data"];
-$filtro_data = $_REQUEST["filtro_data"];
+if ($_REQUEST["filtro_data_de"]=="") $filtro_data_de = date('Y-m-d', strtotime($stop_date . " -$filtro_saida_ultimosdias day"));
+else $filtro_data_de = $_REQUEST["filtro_data_de"];
+if ($_REQUEST["filtro_data_ate"]=="") $filtro_data_ate = $dataatual;
+else $filtro_data_ate = $_REQUEST["filtro_data_ate"];
 $filtro_valorbruliq = $_REQUEST["filtro_valorbruliq"];
 $filtro_valorbruliq_mostra = $_REQUEST["filtro_valorbruliq"];
 $filtro_valorbruliq = str_replace('.', '', $filtro_valorbruliq);
@@ -103,6 +108,8 @@ $filtro_valorbruliq = str_replace(',', '.', $filtro_valorbruliq);
 $filtro_valorbruliq = str_replace('R$ ', '', $filtro_valorbruliq);
 
 $usacomanda=usacomanda($usuario_quiosque);
+
+
 
 
 //Se o usuario tem uma caixa definido então mostrar apenas as saidas deste
@@ -217,17 +224,6 @@ $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_ESPACO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
-//Filtro Data da venda
-$tpl->CAMPO2_TITULO = "Data da Venda";
-$tpl->CAMPO2_TAMANHO = "";
-$tpl->CAMPO2_TIPO = "date";
-$tpl->CAMPO2_NOME = "filtro_data";
-$tpl->CAMPO2_VALOR = $filtro_data;
-$tpl->CAMPO2_QTD_CARACTERES = "";
-$tpl->CAMPO2_ONKEYUP = "";
-$tpl->block("BLOCK_FILTRO_CAMPO2");
-$tpl->block("BLOCK_FILTRO_ESPACO");
-$tpl->block("BLOCK_FILTRO_COLUNA");
 
 //Filtro Nº Operação Caixa
 if (($caixaoperacao=="")&&($usacaixa==1)) {
@@ -244,6 +240,29 @@ if (($caixaoperacao=="")&&($usacaixa==1)) {
 
 //Filtro fim
 $tpl->block("BLOCK_FILTRO");
+
+//Filtro Data da venda
+$tpl->CAMPO2_TITULO = "De";
+$tpl->CAMPO2_TAMANHO = "";
+$tpl->CAMPO2_TIPO = "date";
+$tpl->CAMPO2_NOME = "filtro_data_de";
+$tpl->CAMPO2_VALOR = $filtro_data_de;
+$tpl->CAMPO2_QTD_CARACTERES = "";
+$tpl->CAMPO2_ONKEYUP = "";
+$tpl->block("BLOCK_FILTRO_CAMPO2");
+$tpl->block("BLOCK_FILTRO_ESPACO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+
+$tpl->CAMPO2_TITULO = "Até";
+$tpl->CAMPO2_TAMANHO = "";
+$tpl->CAMPO2_TIPO = "date";
+$tpl->CAMPO2_NOME = "filtro_data_ate";
+$tpl->CAMPO2_VALOR = $filtro_data_ate;
+$tpl->CAMPO2_QTD_CARACTERES = "";
+$tpl->CAMPO2_ONKEYUP = "";
+$tpl->block("BLOCK_FILTRO_CAMPO2");
+$tpl->block("BLOCK_FILTRO_ESPACO");
+$tpl->block("BLOCK_FILTRO_COLUNA");
 
 //Comanda
 if ($usacomanda==1) {
@@ -567,6 +586,8 @@ left join pessoas on (pes_codigo=caiopo_operador)
 LEFT JOIN saidas_devolucoes on (sai_codigo=saidev_saida)
 LEFT JOIN nfe on (sai_nfe=nfe_codigo)
 WHERE sai_quiosque=$usuario_quiosque and
+sai_datacadastro >= '$filtro_data_de' and
+sai_datacadastro <= '$filtro_data_ate' and 
 sai_tipo=1 $sql_filtro 
 $sql_filtro_classificacao
 ";
@@ -695,7 +716,9 @@ if ($linhas == 0) {
             $tpl->LISTA_COLUNA_VALOR = "Cliente Geral";
         } else {
             $sql2 = "SELECT pes_nome FROM pessoas WHERE pes_codigo=$consumidor";
-            $query2 = mysql_query($sql2);
+            $query2 =
+
+             mysql_query($sql2);
             if (!$query2)
                 die("Erro 56: " . mysql_error());
             while ($dados2 = mysql_fetch_assoc($query2)) {

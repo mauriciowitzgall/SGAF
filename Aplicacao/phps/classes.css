@@ -485,3 +485,7 @@
 .some {
     display: none;
 }
+.texto_vermelho_negrito {
+    color: red;
+    font-weight: bold;   
+}

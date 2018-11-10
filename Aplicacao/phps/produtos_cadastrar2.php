@@ -31,7 +31,11 @@ $descricao = $_POST['descricao'];
 $tiponegociacao = $_POST['box'];
 $codigounico = $_POST['codigounico'];
 $dadosfiscais = $_POST['dadosfiscais'];
+if ($dadosfiscais=="")  {
+    $dadosfiscais=1;    
+}
 $incluirnanfe = $_POST['incluirnanfe'];
+if ($incluirnanfe=="") $incluirnanfe=0;
 $controlarestoque = $_POST['controlarestoque'];
 if ($usaestoque==0) $controlarestoque=0;
 $evendido = $_POST['evendido'];
@@ -182,12 +186,12 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         '$referencia',
         '$subproduto',
         '$dadosfiscais',
-        $ncm,
-        $cfop,
-        $ipi,
-        $pis,
-        $cofins,
-        $origem,
+        '$ncm',
+        '$cfop',
+        '$ipi',
+        '$pis',
+        '$cofins',
+        '$origem',
         $incluirnanfe,
         $evendido
         $filtro_controlarestoque_valor
@@ -262,6 +266,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     } else {
         $filtro_controlarestoque_update=", pro_controlarestoque=$controlarestoque ";
     }
+
     $sql = "UPDATE produtos SET 
     pro_nome='$nome',
     pro_tipocontagem='$tipo',
@@ -281,12 +286,12 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     pro_podesersubproduto='$subproduto',
     pro_dadosfiscais=$dadosfiscais,
     pro_industrializado=$industrializado,
-    pro_ncm=$ncm,
-    pro_cfop=$cfop,
-    pro_ipi=$ipi,
-    pro_pis=$pis,
-    pro_cofins=$cofins,
-    pro_origem=$origem,
+    pro_ncm='$ncm',
+    pro_cfop='$cfop',
+    pro_ipi='$ipi',
+    pro_pis='$pis',
+    pro_cofins='$cofins',
+    pro_origem='$origem',
     pro_incluirnanfe=$incluirnanfe,
     pro_evendido=$evendido
     $filtro_controlarestoque_update
