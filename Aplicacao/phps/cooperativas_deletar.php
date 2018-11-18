@@ -47,6 +47,12 @@ if (($usuario_grupo==1)||(($usuario_grupo==7))) {
         $sql3 = "DELETE FROM mestre_pessoas_tipo WHERE mespestip_pessoa in (SELECT pes_codigo FROM pessoas WHERE pes_cooperativa=$codigo and (pes_grupopermissoes != 1 OR pes_grupopermissoes is null))";
         $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL2: " . mysql_error());
 
+        // Grupos de consumidores
+        $sql3 = "DELETE FROM pessoas_grupoconsumidores WHERE pesgrucon_pessoa in (SELECT pes_codigo FROM pessoas WHERE pes_cooperativa=$codigo and (pes_grupopermissoes != 1 OR pes_grupopermissoes is null))";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL1: " . mysql_error());
+        $sql3 = "DELETE FROM consumidores_grupos WHERE 1";
+        $query3 = mysql_query($sql3); if (!$query3) die("Erro SQL3: " . mysql_error());
+
         
         // Categorias de produtos
         $sql3 = "DELETE FROM produtos_categorias WHERE cat_cooperativa=$codigo";

@@ -18295,5 +18295,11 @@ ADD COLUMN `saidev_nfe` BIGINT(20) NULL AFTER `saidev_valliq`;
 ALTER TABLE `produtos` 
 ADD COLUMN `pro_incluirnanfe` INT(1) NOT NULL DEFAULT 0 AFTER `pro_evendido`;
 
-ALTER TABLE `sgaf_agape`.`quiosques_configuracoes` 
+ALTER TABLE `sgaf`.`quiosques_configuracoes` 
 ADD COLUMN `quicnf_filtrosaidaultimosdias` INT NOT NULL DEFAULT 7 AFTER `quicnf_fazfrete`;
+
+UPDATE `configuracoes` SET `cnf_versao`='v4.1.3' WHERE `cnf_codigo`='1';
+
+------ FIM ------
+
+------ INICIO ??? ------ 

@@ -1,8 +1,8 @@
 <?php 
 $hostname = "localhost";
-$db = "sgaf_agape";
+$db = "sgaf";
 $user = "root";
-$pass = "@GAPEadmin17";
+$pass = "";
 
 $link = mysql_connect($hostname, $user, $pass);
 if (!$link) {
