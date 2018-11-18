@@ -402,6 +402,15 @@ if ($operacao == "cadastrar") {
     //Cria o vinculo do tipo com a pessoa
     $ultimo = mysql_insert_id();
     $pessoa = $ultimo;
+
+    //Grava Log
+    $sql_logs="
+        INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao, aud_sql) 
+        VALUES ('$usuario_cpf','$usuario_nome','INSERT','pessoas','Cadastrou uma nova pessoa ($nome) codigo ($ultimo)', '')
+    ";
+    if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error());    
+
+
     
     foreach ($tipo as $tipo) {
         $sql2 = "
@@ -484,6 +493,13 @@ if ($operacao == "cadastrar") {
     ";
     if (!mysql_query($sql))
         die("Erro8: " . mysql_error());
+
+    //Grava Log
+    $sql_logs="
+        INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao, aud_sql) 
+        VALUES ('$usuario_cpf','$usuario_nome','UPDATE','pessoas','Atualizou a pessoa ($codigo)', '')
+    ";
+    if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error());    
 
     //Se o usu�rio est� editando seu pr�prio cadastro ent�o n�o � alterado o Tipo
     if ($codigo != $usuario_codigo) {

@@ -18297,3 +18297,35 @@ ADD COLUMN `pro_incluirnanfe` INT(1) NOT NULL DEFAULT 0 AFTER `pro_evendido`;
 
 ALTER TABLE `sgaf_agape`.`quiosques_configuracoes` 
 ADD COLUMN `quicnf_filtrosaidaultimosdias` INT NOT NULL DEFAULT 7 AFTER `quicnf_fazfrete`;
+
+
+CREATE TABLE `sgaf_agape`.`consumidores_grupos` (
+  `congru_codigo` INT NOT NULL AUTO_INCREMENT,
+  `congru_nome` VARCHAR(100) NULL,
+  PRIMARY KEY (`congru_codigo`));
+
+
+CREATE TABLE `sgaf_agape`.`pessoas_grupoconsumidores` (
+  `pesgrucon_pessoa` INT NOT NULL,
+  `pesgrucon_grupo` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`pesgrucon_pessoa`, `pesgrucon_grupo`));
+
+
+CREATE TABLE `sgaf_agape`.`auditoria` (
+  `aud_codigo` INT NOT NULL AUTO_INCREMENT,
+  `aud_usuario` INT NOT NULL,
+  `aud_data` TIMESTAMP NOT NULL,
+  `aud_operacao` VARCHAR(15) NOT NULL,
+  `aud_tabela` VARCHAR(50) NOT NULL,
+  `aud_descricao` TEXT NULL,
+  PRIMARY KEY (`aud_codigo`));
+
+ALTER TABLE `sgaf_agape`.`auditoria` 
+CHANGE COLUMN `aud_usuario` `aud_usuario_nome` VARCHAR(45) NOT NULL ,
+ADD COLUMN `aud_usuario_cpf` VARCHAR(11) NOT NULL AFTER `aud_usuario_nome`;
+
+
+ALTER TABLE `sgaf_agape`.`auditoria` 
+CHANGE COLUMN `aud_descricao` `aud_descricao` TEXT NOT NULL ,
+ADD COLUMN `aud_sql` TEXT NOT NULL AFTER `aud_descricao`;
+

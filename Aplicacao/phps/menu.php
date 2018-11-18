@@ -249,6 +249,18 @@ if ($usuario_grupo<>4) {
                 $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
                 $tpl_menu->block("BLOCK_MENU_ITEM");
             }
+
+
+            
+            //Auditoria
+            if ($usuario_grupo == 1) {
+                $tpl_menu->IMAGEM_TITULO = "Auditoria";
+                $tpl_menu->TITULO = "Auditoria";
+                $tpl_menu->IMAGEM_ARQUIVO = "auditoria.png";
+                $tpl_menu->LINK = "auditoria.php";
+                $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+                $tpl_menu->block("BLOCK_MENU_ITEM");
+            }            
         
         }
 

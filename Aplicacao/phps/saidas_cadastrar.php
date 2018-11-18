@@ -618,6 +618,13 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                     $sql16 = "INSERT INTO estoque (etq_quiosque,etq_produto,etq_fornecedor,etq_lote,etq_quantidade,etq_valorunitario,etq_validade)
                     VALUES ('$usuario_quiosque','$produto_usar','$fornecedor','$lote_usar','$qtd_usar','$valuni','$validade')";
                     if (!$query16 = mysql_query($sql16)) die("Erro de SQL4 (inserir no estoque): " . mysql_error());
+
+                    //Grava Log
+                    $sql_logs="
+                        INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao, aud_sql) 
+                        VALUES ('$usuario_cpf','$usuario_nome','INSERT','estoque','Cadastrou um novo produto no estoque ($produto_usar) lote ($lote) quantidade ($qtd_usar) valor unitario ($valuni) validade ($validade) empresa/quiosque ($usuario_quiosque)', '')
+                    ";
+                    if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error());  
                     
                 }
 
@@ -630,6 +637,13 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
             //Elimina o protudo da Saída
             $sql_del = "DELETE FROM saidas_produtos WHERE saipro_saida=$saida and saipro_codigo=$saipro";
             if (!$query_del = mysql_query($sql_del))  die("Erro de SQL55:" . mysql_error());
+
+            //Grava Log
+            $sql_logs="
+                INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao, aud_sql) 
+                VALUES ('$usuario_cpf','$usuario_nome','DELETE','saidas_produtos','Removeu o item ($saipro) da saida ($saida)', '')
+            ";
+            if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error());                  
 
         }
         
@@ -670,6 +684,14 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                         '$saida','$produto','$lote','$qtd','$valunisai','$valtotsai',$porcao,$porcao_qtd
                     )        
                     ";
+
+                    //Grava Log
+                    $sql_logs="
+                        INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao, aud_sql) 
+                        VALUES ('$usuario_cpf','$usuario_nome','INSERT','saidas_produtos','Inseriu um novo item ($produto) na venda ($saida) lote ($lote) quantidade ($qtd) valor unitario ($valunisai) porção ($porcao) porção quantidade ($porcao_qtd) valor total ($valtotsai)', '')
+                    ";
+                    if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error());  
+
                     $query_saida_produto = mysql_query($sql_saida_produto);
                     if (!$query_saida_produto) {
                         die("Erro de SQL61: " . mysql_error());
@@ -711,6 +733,14 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                     if (!$query_retirar) {
                         die("Erro de SQL8:" . mysql_error());
                     }
+
+                    //Grava Log
+                    $sql_logs="
+                        INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao, aud_sql) 
+                        VALUES ('$usuario_cpf','$usuario_nome','UPDATE','estoque','Atualizou o estoque do produto ($produto) lote ($lote) quantidade ($qtdfinal)', '')
+                    ";
+                    if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error());  
+
 
                     //Se a quantidade do etoque zerou ent�o eliminar o produto do estoque
                     if ($qtdfinal == "0") {
@@ -782,6 +812,15 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                             ";
                             if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL68: " . mysql_error());
 
+                            $ultimo_gravado=mysql_insert_id();
+
+                            //Grava Log
+                            $sql_logs="
+                                INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao, aud_sql) 
+                                VALUES ('$usuario_cpf','$usuario_nome','INSERT','saidas_produtos','Inseriu novo item ($ultimo_gravado) na venda ($saida) produto ($produto) lote ($lote_estoque) quantidade ($qtd_estoque) valor unitário ($valuni) valor total ($valtot) porção ($porcao) quantidade porção ($qtd_porcao_aretirar) lote principal ($lote_principal)', '')
+                            ";
+                            if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error());    
+
                             //Atualiza o item relacionado caso o sistema ignore lotes.
                             //echo "<br><br>".
                             $sql44="SELECT max(saipro_codigo) as item_maior FROM saidas_produtos WHERE saipro_saida=$saida";
@@ -802,6 +841,14 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                             //Eliminar o produto do estoque pois a quantidade zerou
                             $sql = "DELETE FROM estoque WHERE etq_quiosque=$usuario_quiosque and etq_produto=$produto and etq_lote=$lote_estoque";
                             if (!$query = mysql_query($sql)) die("Erro de SQL10:" . mysql_error());
+
+
+                            //Grava Log
+                            $sql_logs="
+                                INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao, aud_sql) 
+                                VALUES ('$usuario_cpf','$usuario_nome','DELETE','estoque','Removeu do estoque o produto ($produto) lote ($lote_estoque) quiosque ($usuario_quiosque)', '')
+                            ";
+                            if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error());                                   
 
                             //Calcula a quantidade restante para usar no proximo lote   
                             $qtd_aretirar=$qtd_aretirar - $qtd_estoque;
@@ -830,6 +877,15 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                             ";
                             if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL64: " . mysql_error());
 
+
+                            //Grava Log
+                            $ultimo_gravado=$mysql_insert_id();
+                            $sql_logs="
+                                INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao, aud_sql) 
+                                VALUES ('$usuario_cpf','$usuario_nome','INSERT','saidas_produtos','Inseriu novo item ($ultimo_gravado) na venda ($saida) produto ($produto) lote ($lote_estoque) quantidade ($qtd_aretirar) valor unitário ($valuni) valor total ($valtot) porção ($porcao) quantidade porção ($qtd_porcao_aretirar) lote principal ($lote_principal)', '')
+                            ";
+                            if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error());     
+
                             $sql44="SELECT max(saipro_codigo) as item_maior FROM saidas_produtos WHERE saipro_saida=$saida";
                             if (!$query44 = mysql_query($sql44)) die("Erro de SQL44: " . mysql_error());
                             $dados44=mysql_fetch_assoc($query44);
@@ -856,6 +912,14 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                                 etq_lote=$lote_estoque
                             ";
                             if (!$query_retirar = mysql_query($sql_retirar))  die("Erro de SQL8:" . mysql_error());
+
+                            //Grava Log
+                            $sql_logs="
+                                INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao, aud_sql) 
+                                VALUES ('$usuario_cpf','$usuario_nome','UPDATE','estoque','Atualizou o estoque do produto ($produto) lote ($lote_estoque) quantidade retirada ($qtd_aretirar)', '')
+                            ";
+                            if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error()); 
+                                                           
                         }
                         if ($saldo>=0) break;
 
@@ -877,6 +941,14 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
             )        
             ";
             if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL68: " . mysql_error());
+
+            
+            //Grava Log
+            $sql_logs="
+                INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao, aud_sql) 
+                VALUES ('$usuario_cpf','$usuario_nome','INSERT','saidas_produtos','Inseriu novo item ($produto) na venda ($saida) valor unitário ($valunisai) quantidade ($qtd) valor total ($valtotsai) porção ($porcao) porção quantidade ($porcao_qtd)', '')
+            ";
+            if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error()); 
 
             //Atualiza o item relacionado caso o sistema ignore lotes.
             //echo "<br><br>".
@@ -933,6 +1005,16 @@ if (($saida == 0) && ($passo == 2)) {
         ";
         $query1 = mysql_query($sql1); if (!$query1) die("Erro de SQL108: " . mysql_error());
         $consumidor = mysql_insert_id();
+
+
+        //Grava Log
+        $sql_logs="
+            INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao, aud_sql,aud_quiosque) 
+            VALUES ('$usuario_cpf','$usuario_nome','INSERT','pessoas','Inseriu nova pessoa ($cliente_nome) a partir da venda ($saida), cpf/cnpj ($consumidor_cpf2 $consumidor_cnpj2)', '','$usuario_quiosque')
+        ";
+        if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error()); 
+
+
         $sql2="INSERT INTO mestre_pessoas_tipo (mespestip_pessoa,mespestip_tipo) VALUES ($consumidor,6)";
         $query2 = mysql_query($sql2); if (!$query2) die("Erro de SQL2: " . mysql_error());
 

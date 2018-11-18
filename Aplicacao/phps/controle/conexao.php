@@ -2,7 +2,7 @@
 $hostname = "localhost";
 $db = "sgaf_agape";
 $user = "root";
-$pass = "@GAPEadmin17";
+$pass = "mautito";
 
 $link = mysql_connect($hostname, $user, $pass);
 if (!$link) {
