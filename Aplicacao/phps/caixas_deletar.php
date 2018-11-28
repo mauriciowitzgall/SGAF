@@ -58,6 +58,13 @@ if ($situacao==1) {
     exit;
 }
 
+
+//Remove os operadore do caixa desativado/excluido
+$sql3 = "DELETE FROM caixas_operadores WHERE caiope_caixa=$codigo";
+$query3 = mysql_query($sql3);
+if (!$query3)    die("Erro SQL excluir operadores do caixa :" . mysql_error());
+
+    
 //Deleta o caixa. Na realidade apenas desativa
 $sql3 = "UPDATE caixas SET cai_status=0 WHERE cai_codigo=$codigo";
 $query3 = mysql_query($sql3);
@@ -67,7 +74,6 @@ $tpl6->block("BLOCK_CONFIRMAR");
 $tpl6->block("BLOCK_APAGADO");
 $tpl6->DESTINO = "caixas.php";
 $tpl6->block("BLOCK_BOTAO");
-
 
 
 $tpl6->show();

@@ -37,6 +37,7 @@ while ($array = mysql_fetch_array($query)) {
     $marca = $array['pro_marca'];
     $recipiente = $array['pro_recipiente'];
     $volume = $array['pro_volume'];
+    $pesoliquido = number_format($array['pro_pesoliquido'],3);
     $composicao = $array['pro_composicao'];
     $codigounico = $array['pro_codigounico'];
     $industrializado = $array['pro_industrializado'];
@@ -213,10 +214,15 @@ if ($linhas == 0) {
            </td>
        </tr>
         
+       <tr id="id_pesoliquido">
+            <td align="right" width="200px"><b>Peso liquido: <label class=""></label></b></td>
+            <td align="left" width=""><input  onkeypress="" placeholder="0,000" id="" type="text" name="pesoliquido" id="pesoliquido" size="18" class="campopadrao"  value="<?php echo "$pesoliquido"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"> litros</span></td>
+       </tr>        
        <tr id="id_volume">
             <td align="right" width="200px"><b>Volume: <label class="obrigatorio"></label></b></td>
             <td align="left" width=""><input  onkeypress=""  id="capitalizar" type="text" name="volume"  size="15" class="campopadrao"  value="<?php echo "$volume"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"> Ex: 150g ou 200ml</span></td>
         </tr>
+
         <tr id="id_recipiente">
             <td align="right" width="200px"><b>Recipiente / Embalagem: <label class="obrigatorio"></label></b></td>
             <td align="left" width="">

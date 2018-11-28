@@ -1,5 +1,5 @@
 window.onload = function() {
-    metodopagamento();
+    
 
     //Se estiver parametrizado para nao acetar vendas a receber então ocultar o campo e padronizar a opção Não
     permitevendasareceber = $("input[name=permitevendasareceber]").val();
@@ -13,6 +13,7 @@ window.onload = function() {
     }
 
     valorareceber($("select[name=areceber]").val());
+    metodopagamento();
 
 
 }
@@ -48,16 +49,17 @@ function metodopagamento() {
         $("tr[id=tr_recebidodinheiro]").hide();
         document.form1.recebidocartao.required=false;
         $("tr[id=tr_recebidocartao]").hide();
-        $("tr[id=tr_recebidomistototal]").hide();
+        $("tr[id=tr_recebidomistototal]").hide();       
         $("tr[id=tr_cartaobandeira]").hide();
+        document.form1.cartaobandeira.required=false;        
         passo=$("input[name=passo]").val();
+         
         if (passo==1) {
             $("input[name=dinheiro]").val("");
             document.form1.dinheiro.disabled = false;
         } else if (passo==2) {
             //O php desabilita o campo
         }
-        document.form1.cartaobandeira.required=false;        
 
     } else if (valor==2) { //Cartão de Crédito
         $("tr[id=tr_dinheiro]").show();
@@ -177,13 +179,18 @@ function desconto2(campo) {
     });
 
 
-    frete=$("#frete").val();
-    frete=frete.split(" ");
-    frete=frete[1];
-    frete=frete.replace(".","");
-    frete=frete.replace(",",".");
-    frete=parseFloat(frete);
-    frete=frete.toFixed(2);
+    if ($("#frete").val()>=0) {
+        frete=$("#frete").val();
+        frete=frete.split(" ");
+        frete=frete[1];
+        frete=frete.replace(".","");
+        frete=frete.replace(",",".");
+        frete=parseFloat(frete);
+        frete=frete.toFixed(2);
+    } else {
+        frete=0;
+    }
+
 
     //Atualiza percentual de desconto conforme o valor digitado
     total2=$("#valbru").val();

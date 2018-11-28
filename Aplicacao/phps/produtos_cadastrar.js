@@ -273,8 +273,16 @@ window.onload = function(){
         $("tr[id=linha_controlarestoque]").hide();
     }
 
-    //referencia_valida_caracteres_especiais("");
 
+
+    
+            
+    $("input[name=pesoliquido]").priceFormat({
+        prefix: '',
+        centsLimit: 3,
+        centsSeparator: ',',
+        thousandsSeparator: '.'
+    });   
 
 
     $('#form1').submit(function() {

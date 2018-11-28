@@ -18329,3 +18329,11 @@ ALTER TABLE `sgaf_agape`.`auditoria`
 CHANGE COLUMN `aud_descricao` `aud_descricao` TEXT NOT NULL ,
 ADD COLUMN `aud_sql` TEXT NOT NULL AFTER `aud_descricao`;
 
+
+ALTER TABLE `sgaf_agape`.`produtos` 
+ADD COLUMN `pro_pesoliquido` FLOAT NULL DEFAULT NULL AFTER `pro_volume`;
+
+ALTER TABLE `sgaf_agape`.`saidas_produtos` 
+ADD COLUMN `saipro_pesoliquido` FLOAT NULL AFTER `saipro_itemconjunto`,
+ADD COLUMN `saipro_totalpesoliquido` FLOAT NULL AFTER `saipro_pesoliquido`;
+

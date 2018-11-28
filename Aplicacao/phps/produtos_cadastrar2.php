@@ -20,6 +20,10 @@ $tipo = $_POST['tipo'];
 $marca = $_POST['marca'];
 $recipiente = $_POST['recipiente'];
 $volume = $_POST['volume'];
+$pesoliquido = $_POST['pesoliquido'];
+$pesoliquido = str_replace(".", "",$pesoliquido);
+$pesoliquido = str_replace( ",", ".",$pesoliquido);
+if ($pesoliquido=="") $pesoliquido=0;
 $composicao = $_POST['composicao'];
 $industrializado = $_POST['industrializado'];
 $subproduto = $_POST['subproduto'];
@@ -142,6 +146,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         pro_horacriacao,
         pro_cooperativa,
         pro_volume,
+        pro_pesoliquido,
         pro_marca,
         pro_recipiente,
         pro_composicao,
@@ -173,6 +178,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         '$hora',
         $usuario_cooperativa,
         '$volume',
+        $pesoliquido,
         '$marca',
         '$recipiente',
         '$composicao',
@@ -201,15 +207,6 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
         die("Erro22: " . mysql_error());
     $ultimo = mysql_insert_id();
     $produto = $ultimo;
-
-    //Grava Log
-    $sql_logs="
-        INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao,aud_sql) 
-        VALUES ('$usuario_cpf','$usuario_nome','INSERT','produtos','Cadastrou um novo produto ($nome) codigo ($ultimo)','$sql')
-    ";
-    if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error());
-
-
     foreach ($tiponegociacao as $tiponegociacao) {
         $sql2 = "
             INSERT INTO 
@@ -285,6 +282,7 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     pro_horaedicao='$hora',
     pro_cooperativa='$usuario_cooperativa',
     pro_volume='$volume',
+    pro_pesoliquido='$pesoliquido',
     pro_marca='$marca',
     pro_recipiente='$recipiente',
     pro_composicao='$composicao',
@@ -308,14 +306,6 @@ if ($codigo == "") { //caso seja um cadastro novo fazer isso
     ";
     if (!mysql_query($sql))
         die("Erro: " . mysql_error());
-
-    //Grava Log
-    $sql_logs="
-        INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao, aud_sql) 
-        VALUES ('$usuario_cpf','$usuario_nome','UPDATE','produtos','Atualizou o produto ($codigo)', '')
-    ";
-    if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error());
-
     //Deleta os tipos de negociação para depois incluir de novo no novo formato
     $sqldel = " DELETE FROM mestre_produtos_tipo WHERE mesprotip_produto='$codigo'";
     if (!mysql_query($sqldel))
