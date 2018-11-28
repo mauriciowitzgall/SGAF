@@ -184,49 +184,53 @@ $tpl->block("BLOCK_FILTRO_ESPACO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
 //Filtro Fornecedor
-$tpl->SELECT_TITULO = "Fornecedor";
-$tpl->SELECT_NOME = "filtro_fornecedor";
-$tpl->SELECT_OBRIGATORIO = "";
-$sql = "
-SELECT DISTINCT pes_codigo, pes_nome 
-FROM saidas_produtos
-JOIN saidas on (saipro_saida=sai_codigo)
-JOIN entradas on (saipro_lote=ent_codigo)
-JOIN pessoas on (ent_fornecedor=pes_codigo)
-WHERE pes_cooperativa=$usuario_cooperativa 
-and sai_tipo=1
-ORDER BY pes_nome";
-$query = mysql_query($sql);
-if (!$query)
-    die("Erro SQL2" . mysql_error());
-while ($dados = mysql_fetch_assoc($query)) {
-    $tpl->SELECT_OPTION_CODIGO = $dados["pes_codigo"];
-    $tpl->SELECT_OPTION_NOME = $dados["pes_nome"];
-    if ($filtro_fornecedor == $dados["pes_codigo"])
-        $tpl->SELECT_OPTION_SELECIONADO = " selected ";
-    else
-        $tpl->SELECT_OPTION_SELECIONADO = " ";
-    $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+    if ($usuario_grupo!=4) {
+    $tpl->SELECT_TITULO = "Fornecedor";
+    $tpl->SELECT_NOME = "filtro_fornecedor";
+    $tpl->SELECT_OBRIGATORIO = "";
+    $sql = "
+    SELECT DISTINCT pes_codigo, pes_nome 
+    FROM saidas_produtos
+    JOIN saidas on (saipro_saida=sai_codigo)
+    JOIN entradas on (saipro_lote=ent_codigo)
+    JOIN pessoas on (ent_fornecedor=pes_codigo)
+    WHERE pes_cooperativa=$usuario_cooperativa 
+    and sai_tipo=1
+    ORDER BY pes_nome";
+    $query = mysql_query($sql);
+    if (!$query)
+        die("Erro SQL2" . mysql_error());
+    while ($dados = mysql_fetch_assoc($query)) {
+        $tpl->SELECT_OPTION_CODIGO = $dados["pes_codigo"];
+        $tpl->SELECT_OPTION_NOME = $dados["pes_nome"];
+        if ($filtro_fornecedor == $dados["pes_codigo"])
+            $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+        else
+            $tpl->SELECT_OPTION_SELECIONADO = " ";
+        $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+    }
+    $tpl->block("BLOCK_FILTRO_SELECT_OPTIONPADRAO");
+    $tpl->block("BLOCK_FILTRO_SELECT");
+    $tpl->block("BLOCK_FILTRO_ESPACO");
+    $tpl->block("BLOCK_FILTRO_COLUNA");
 }
-$tpl->block("BLOCK_FILTRO_SELECT_OPTIONPADRAO");
-$tpl->block("BLOCK_FILTRO_SELECT");
-$tpl->block("BLOCK_FILTRO_ESPACO");
-$tpl->block("BLOCK_FILTRO_COLUNA");
 
 //Filtro Nº Lote
-$tpl->CAMPO_TITULO = "Nº Lote";
-$tpl->CAMPO_TAMANHO = "10";
-$tpl->CAMPO_NOME = "filtro_lote";
-$tpl->CAMPO_VALOR = $filtro_lote;
-$tpl->CAMPO_QTD_CARACTERES = "";
-$tpl->CAMPO_ONKEYUP = "";
-$tpl->block("BLOCK_FILTRO_CAMPO");
-$tpl->block("BLOCK_FILTRO_ESPACO");
-$tpl->block("BLOCK_FILTRO_COLUNA");
+if ($usuario_grupo!=4) {
+    $tpl->CAMPO_TITULO = "Nº Lote";
+    $tpl->CAMPO_TAMANHO = "10";
+    $tpl->CAMPO_NOME = "filtro_lote";
+    $tpl->CAMPO_VALOR = $filtro_lote;
+    $tpl->CAMPO_QTD_CARACTERES = "";
+    $tpl->CAMPO_ONKEYUP = "";
+    $tpl->block("BLOCK_FILTRO_CAMPO");
+    $tpl->block("BLOCK_FILTRO_ESPACO");
+    $tpl->block("BLOCK_FILTRO_COLUNA");
+}
 
 
 //Filtro Nº Operação Caixa
-if (($caixaoperacao=="")&&($usacaixa==1)) {
+if (($caixaoperacao=="")&&($usacaixa==1)&&($usuario_grupo!=4)) {
     $tpl->CAMPO_TITULO = "Nº Caixa Oper.";
     $tpl->CAMPO_TAMANHO = "10";
     $tpl->CAMPO_NOME = "filtro_caixaoperacao";
@@ -278,26 +282,27 @@ if ($usacomanda==1) {
 }
 
 //Filtro Status
-$tpl->SELECT_TITULO = "Status";
-$tpl->SELECT_NOME = "filtro_status";
-$tpl->SELECT_OBRIGATORIO = "";
-$tpl->block("BLOCK_FILTRO_SELECT_OPTIONPADRAO");
-if ($filtro_status=="") $tpl->SELECT_OPTION_SELECIONADO = " selected ";
-else $tpl->SELECT_OPTION_SELECIONADO = "  ";
-
-$tpl->SELECT_OPTION_CODIGO = "1";
-$tpl->SELECT_OPTION_NOME = "Completas";
-if ($filtro_status == 1) $tpl->SELECT_OPTION_SELECIONADO = " selected ";
-else $tpl->SELECT_OPTION_SELECIONADO = "  ";
-$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
-$tpl->SELECT_OPTION_CODIGO = "2";
-$tpl->SELECT_OPTION_NOME = "Icompletas";
-if ($filtro_status == 2) $tpl->SELECT_OPTION_SELECIONADO = " selected ";
-else $tpl->SELECT_OPTION_SELECIONADO = "  ";
-$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
-$tpl->block("BLOCK_FILTRO_SELECT");
-$tpl->block("BLOCK_FILTRO_ESPACO");
-$tpl->block("BLOCK_FILTRO_COLUNA");
+if ($usuario_grupo!=4) {
+    $tpl->SELECT_TITULO = "Status";
+    $tpl->SELECT_NOME = "filtro_status";
+    $tpl->SELECT_OBRIGATORIO = "";
+    $tpl->block("BLOCK_FILTRO_SELECT_OPTIONPADRAO");
+    if ($filtro_status=="") $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+    else $tpl->SELECT_OPTION_SELECIONADO = "  ";
+    $tpl->SELECT_OPTION_CODIGO = "1";
+    $tpl->SELECT_OPTION_NOME = "Completas";
+    if ($filtro_status == 1) $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+    else $tpl->SELECT_OPTION_SELECIONADO = "  ";
+    $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+    $tpl->SELECT_OPTION_CODIGO = "2";
+    $tpl->SELECT_OPTION_NOME = "Icompletas";
+    if ($filtro_status == 2) $tpl->SELECT_OPTION_SELECIONADO = " selected ";
+    else $tpl->SELECT_OPTION_SELECIONADO = "  ";
+    $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+    $tpl->block("BLOCK_FILTRO_SELECT");
+    $tpl->block("BLOCK_FILTRO_ESPACO");
+    $tpl->block("BLOCK_FILTRO_COLUNA");
+}
 
 
 //Filtro A receber Caderninho
@@ -332,7 +337,7 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 
 
 //Filtro A receber Caderninho Quitado
-$tpl->SELECT_TITULO = "À receber quitado";
+$tpl->SELECT_TITULO = "À receber Quitado";
 $tpl->SELECT_NOME = "filtro_areceber_quitado";
 $tpl->SELECT_OBRIGATORIO = "";
 if ($filtro_areceber_quitado=="") $tpl->SELECT_OPTION_SELECIONADO = " selected ";
@@ -354,7 +359,7 @@ $tpl->block("BLOCK_FILTRO_COLUNA");
 
 
 //Filtro Nº Devolução
-if ($usadevolucoes==1) {
+if (($usadevolucoes==1)&&($usuario_grupo!=4)) {
     $tpl->CAMPO_TITULO = "Nº Devolução";
     $tpl->CAMPO_TAMANHO = "10";
     $tpl->CAMPO_NOME = "filtro_devolucao";
@@ -368,15 +373,17 @@ if ($usadevolucoes==1) {
 
 
 //Filtro Valor da Venda
-$tpl->CAMPO_TITULO = "Valor Bruto/Liquido";
-$tpl->CAMPO_TAMANHO = "18";
-$tpl->CAMPO_NOME = "filtro_valorbruliq";
-$tpl->CAMPO_VALOR = $filtro_valorbruliq_mostra;
-$tpl->CAMPO_QTD_CARACTERES = "";
-$tpl->CAMPO_ONKEYUP = "mascara_filtro_valorbruliq();";
-$tpl->block("BLOCK_FILTRO_CAMPO");
-$tpl->block("BLOCK_FILTRO_ESPACO");
-$tpl->block("BLOCK_FILTRO_COLUNA");
+if ($usuario_grupo!=4) {
+    $tpl->CAMPO_TITULO = "Valor Bruto/Liquido";
+    $tpl->CAMPO_TAMANHO = "18";
+    $tpl->CAMPO_NOME = "filtro_valorbruliq";
+    $tpl->CAMPO_VALOR = $filtro_valorbruliq_mostra;
+    $tpl->CAMPO_QTD_CARACTERES = "";
+    $tpl->CAMPO_ONKEYUP = "mascara_filtro_valorbruliq();";
+    $tpl->block("BLOCK_FILTRO_CAMPO");
+    $tpl->block("BLOCK_FILTRO_ESPACO");
+    $tpl->block("BLOCK_FILTRO_COLUNA");
+}
 
 
 
@@ -397,12 +404,11 @@ $tpl->block("BLOCK_FILTRO_SELECT_OPTION");
 $tpl->block("BLOCK_FILTRO_SELECT");
 $tpl->block("BLOCK_FILTRO_ESPACO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
-
-
 $tpl->block("BLOCK_FILTRO");
 
-//Inicio da tabela de listagem
 
+
+//Inicio da tabela de listagem
 //Cabeçalho da lista
 
 //Nº
@@ -1043,36 +1049,6 @@ if ($linhas == 0) {
             $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");
         }
 
-        //Financeiro/Pagamento da venda
-        $sql1="SELECT saipag_saida FROM saidas_pagamentos WHERE saipag_saida=$saida";
-        $query1 = mysql_query($sql1); if (!$query1) die("Erro de SQL (1):" . mysql_error());
-        $linhas1 = mysql_num_rows($query1);
-        $qtd_pagamentos = $linhas1;
-        if ($nfe_da_venda!="") $temnota=1; else $temnota=0;  
-        if ($qtd_pagamentos>0) {
-            $tpl->LINK = "#";
-            $tpl->OPERACAO_NOME = "Você não pode editar pagamento unico se houver pagamentos parciais";
-            $tpl->LINK_COMPLEMENTO = "";              
-            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento_desabilitado.png";
-        } else if ($qtd_itens==0) {
-            $tpl->LINK = "#";
-            $tpl->OPERACAO_NOME = "Não há itens nesta venda, ela está vazia. Não há o que ser acertado.";
-            $tpl->LINK_COMPLEMENTO = "";              
-            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento_desabilitado.png";
-        } else if ($temnota==1) {
-            $tpl->LINK = "#";
-            $tpl->OPERACAO_NOME = "Não é possivel editar vendas com Nota Fiscal emitida!";
-            $tpl->LINK_COMPLEMENTO = "";              
-            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento_desabilitado.png";            
-        } else {
-            $tpl->LINK = "saidas_cadastrar2.php";
-            $tpl->OPERACAO_NOME = "Pagamento/Financeiro";
-            $tpl->LINK_COMPLEMENTO = "saida=$saida&tiposai=1&passo=1";                                    
-            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento.png";
-        }
-        //$tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_NOVAPAGINA");            
-        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");   
-        $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");     
 
         //Verifica se algum produto desta saida foi acertado
         $sql22 = "SELECT saipro_acertado FROM `saidas_produtos` WHERE saipro_saida=$numero and saipro_acertado !=0";
@@ -1102,8 +1078,53 @@ if ($linhas == 0) {
         $linhas17=mysql_num_rows($query17);
         if ($linhas17>0) $tempagamentos=1;
 
+        //Financeiro/Pagamento da venda
+        $sql1="SELECT saipag_saida FROM saidas_pagamentos WHERE saipag_saida=$saida";
+        $query1 = mysql_query($sql1); if (!$query1) die("Erro de SQL (1):" . mysql_error());
+        $linhas1 = mysql_num_rows($query1);
+        $qtd_pagamentos = $linhas1;
+        if ($nfe_da_venda!="") $temnota=1; else $temnota=0;  
+        if ($qtd_pagamentos>0) {
+            $tpl->LINK = "#";
+            $tpl->OPERACAO_NOME = "Você não pode editar pagamento unico se houver pagamentos parciais";
+            $tpl->LINK_COMPLEMENTO = "";              
+            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento_desabilitado.png";
+        } else if ($qtd_itens==0) {
+            $tpl->LINK = "#";
+            $tpl->OPERACAO_NOME = "Não há itens nesta venda, ela está vazia. Não há o que ser acertado.";
+            $tpl->LINK_COMPLEMENTO = "";              
+            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento_desabilitado.png";
+        } else if ($temnota==1) {
+            $tpl->LINK = "#";
+            $tpl->OPERACAO_NOME = "Não é possivel editar vendas com Nota Fiscal emitida!";
+            $tpl->LINK_COMPLEMENTO = "";              
+            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento_desabilitado.png";            
+        } else if ($linhas22 > 0) {
+            $tpl->LINK = "#";
+            $tpl->OPERACAO_NOME = "Você não pode editar esta Saída porque algum produto desta venda já foi acertado com o fornecedor!";
+            $tpl->LINK_COMPLEMENTO = "";              
+            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento_desabilitado.png";
+        } else if ($temdevolucoes == 1) {
+            $tpl->LINK = "#";
+            $tpl->OPERACAO_NOME = "Você não pode editar vendas que possuem DEVOLUÇÕES!";
+            $tpl->LINK_COMPLEMENTO = "";              
+            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento_desabilitado.png";
+        } else if (($areceber!=1)&&($usuario_grupo==4)) {
+            $tpl->LINK = "#";
+            $tpl->OPERACAO_NOME = "Você não pode alterar informações financeiras de vendas que não sejam a receber";
+            $tpl->LINK_COMPLEMENTO = "";              
+            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento_desabilitado.png";
+        } else {
+            $tpl->LINK = "saidas_cadastrar2.php";
+            $tpl->OPERACAO_NOME = "Pagamento/Financeiro";
+            $tpl->LINK_COMPLEMENTO = "saida=$saida&tiposai=1&passo=1";
+            $tpl->ICONE_ARQUIVO = $icones . "venda_pagamento.png";
+        }
+        //$tpl->block("BLOCK_LISTA_COLUNA_OPERACAO_NOVAPAGINA");            
+        $tpl->block("BLOCK_LISTA_COLUNA_OPERACAO");   
+        $tpl->block("BLOCK_LISTA_COLUNA_CONTEUDO");     
 
-        
+                
 
         //editar 
         if (($usacomanda==1)||($identificacaoconsumidorvenda!=3)) $passo=1; else $passo=2;
