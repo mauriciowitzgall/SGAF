@@ -695,14 +695,37 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                 //(Isso acontece quando o usu�rio inclui um produto na lista e pressiona F5)
                 if ($qtdfinal >= 0) {
                     //Inserindo os produtos na Saída
+                    
+                    //Calcula peso liquido
+                    $sql_produto="SELECT * FROM produtos where pro_codigo=$produto";
+                    if (!$query_produto = mysql_query($sql_produto)) die("Erro de SQL produto: " . mysql_error());
+                    $dados_produto=mysql_fetch_assoc($query_produto);
+                    $produto_tipocontagem=$dados_produto["pro_tipocontagem"];
+                    $produto_pesoliquido=$dados_produto["pro_pesoliquido"];
+                    if ($porcao>0) {
+                        $sql_porcao="SELECT * FROM produtos_porcoes where propor_produto=$produto and propor_codigo=$porcao";
+                        if (!$query_porcao = mysql_query($sql_porcao)) die("Erro de SQL porção: " . mysql_error());
+                        $dados_porcao=mysql_fetch_assoc($query_porcao);
+                        $porcao_quantidade_referencial=$dados_porcao["propor_quantidade"];                    
+                    }
+                    if (($produto_tipocontagem==3)||($produto_tipocontagem==2)) {
+                        if ($porcao>0) $pesoliquido=$porcao_quantidade_referencial;
+                        else $pesoliquido=$qtd;
+                        $totalpesoliquido=$qtd;
+                    } else if ($produto_tipocontagem==1) {
+                            $pesoliquido=$produto_pesoliquido;
+                            $totalpesoliquido=$produto_pesoliquido*$qtd;
+                    }
+
                     $sql_saida_produto = "
                     INSERT INTO saidas_produtos (
-                        saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade
+                        saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade,saipro_pesoliquido,saipro_totalpesoliquido
                     )
                     VALUES (
-                        '$saida','$produto','$lote','$qtd','$valunisai','$valtotsai',$porcao,$porcao_qtd
+                        '$saida','$produto','$lote','$qtd','$valunisai','$valtotsai',$porcao,$porcao_qtd, $pesoliquido, $totalpesoliquido
                     )        
                     ";
+
 
                     //Grava Log
                     $sql_logs="
@@ -828,12 +851,34 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                             else $valtot= $valuni * $qtd_estoque;
                             
                             //Insere o registro nas saídas
+
+
+                            //Calcula peso liquido
+                            $sql_produto="SELECT * FROM produtos where pro_codigo=$produto";
+                            if (!$query_produto = mysql_query($sql_produto)) die("Erro de SQL produto: " . mysql_error());
+                            $dados_produto=mysql_fetch_assoc($query_produto);
+                            $produto_tipocontagem=$dados_produto["pro_tipocontagem"];
+                            $produto_pesoliquido=$dados_produto["pro_pesoliquido"];
+                            if ($porcao>0) {
+                                $sql_porcao="SELECT * FROM produtos_porcoes where propor_produto=$produto and propor_codigo=$porcao";
+                                if (!$query_porcao = mysql_query($sql_porcao)) die("Erro de SQL porção: " . mysql_error());
+                                $dados_porcao=mysql_fetch_assoc($query_porcao);
+                                $porcao_quantidade_referencial=$dados_porcao["propor_quantidade"];                    
+                            }           
+                            if (($produto_tipocontagem==3)||($produto_tipocontagem==2)) {
+                                if ($porcao>0) $pesoliquido=$porcao_quantidade_referencial;
+                                else $pesoliquido=$qtd_estoque;
+                                $totalpesoliquido=$qtd_estoque;
+                            } else if ($produto_tipocontagem==1) {
+                                    $pesoliquido=$produto_pesoliquido;
+                                    $totalpesoliquido=$produto_pesoliquido*$qtd_estoque;
+                            }
                             $sql_saida_produto = "
                             INSERT INTO saidas_produtos (
-                                saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade,saipro_loteconjunto
+                                saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade,saipro_loteconjunto,saipro_pesoliquido,saipro_totalpesoliquido
                             )
                             VALUES (
-                                '$saida','$produto','$lote_estoque','$qtd_estoque','$valuni','$valtot',$porcao,$qtd_porcao_aretirar,'$lote_principal'
+                                '$saida','$produto','$lote_estoque','$qtd_estoque','$valuni','$valtot',$porcao,$qtd_porcao_aretirar,'$lote_principal', $pesoliquido, $totalpesoliquido
                             )        
                             ";
                             if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL68: " . mysql_error());
@@ -893,12 +938,32 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
 
                             //Insere o registro nas saídas
                             //echo "<br><br>".
+                            //Calcula peso liquido
+                            $sql_produto="SELECT * FROM produtos where pro_codigo=$produto";
+                            if (!$query_produto = mysql_query($sql_produto)) die("Erro de SQL produto: " . mysql_error());
+                            $dados_produto=mysql_fetch_assoc($query_produto);
+                            $produto_tipocontagem=$dados_produto["pro_tipocontagem"];
+                            $produto_pesoliquido=$dados_produto["pro_pesoliquido"];
+                            if ($porcao>0) {
+                                $sql_porcao="SELECT * FROM produtos_porcoes where propor_produto=$produto and propor_codigo=$porcao";
+                                if (!$query_porcao = mysql_query($sql_porcao)) die("Erro de SQL porção: " . mysql_error());
+                                $dados_porcao=mysql_fetch_assoc($query_porcao);
+                                $porcao_quantidade_referencial=$dados_porcao["propor_quantidade"];                    
+                            }                            
+                            if (($produto_tipocontagem==3)||($produto_tipocontagem==2)) {
+                                if ($porcao>0) $pesoliquido=$porcao_quantidade_referencial;
+                                else $pesoliquido=$qtd_aretirar;
+                                $totalpesoliquido=$qtd_aretirar;
+                            } else if ($produto_tipocontagem==1) {
+                                    $pesoliquido=$produto_pesoliquido;
+                                    $totalpesoliquido=$produto_pesoliquido*$qtd_aretirar;
+                            }
                             $sql_saida_produto = "
                             INSERT INTO saidas_produtos (
-                                saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade,saipro_loteconjunto
+                                saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade,saipro_loteconjunto,saipro_pesoliquido,saipro_totalpesoliquido
                             )
                             VALUES (
-                                '$saida','$produto','$lote_estoque','$qtd_aretirar','$valuni','$valtot',$porcao,$qtd_porcao_aretirar,'$lote_principal'
+                                '$saida','$produto','$lote_estoque','$qtd_aretirar','$valuni','$valtot',$porcao,$qtd_porcao_aretirar,'$lote_principal', $pesoliquido, $totalpesoliquido
                             )        
                             ";
                             if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL64: " . mysql_error());
@@ -958,12 +1023,32 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
             
             //echo "inserir sem retirar do estoque";
             $produto=trim($produto);
+            //Calcula peso liquido
+            $sql_produto="SELECT * FROM produtos where pro_codigo=$produto";
+            if (!$query_produto = mysql_query($sql_produto)) die("Erro de SQL produto: " . mysql_error());
+            $dados_produto=mysql_fetch_assoc($query_produto);
+            $produto_tipocontagem=$dados_produto["pro_tipocontagem"];
+            $produto_pesoliquido=$dados_produto["pro_pesoliquido"];
+            if ($porcao>0) {
+                $sql_porcao="SELECT * FROM produtos_porcoes where propor_produto=$produto and propor_codigo=$porcao";
+                if (!$query_porcao = mysql_query($sql_porcao)) die("Erro de SQL porção: " . mysql_error());
+                $dados_porcao=mysql_fetch_assoc($query_porcao);
+                $porcao_quantidade_referencial=$dados_porcao["propor_quantidade"];                    
+            }                              
+            if (($produto_tipocontagem==3)||($produto_tipocontagem==2)) {
+                if ($porcao>0) $pesoliquido=$porcao_quantidade_referencial;
+                else $pesoliquido=$qtd;
+                $totalpesoliquido=$qtd;
+            } else if ($produto_tipocontagem==1) {
+                    $pesoliquido=$produto_pesoliquido;
+                    $totalpesoliquido=$produto_pesoliquido*$qtd;
+            }
             $sql_saida_produto = "
             INSERT INTO saidas_produtos (
-                saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade
+                saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade,saipro_pesoliquido,saipro_totalpesoliquido
             )
             VALUES (
-                '$saida','$produto','0','$qtd','$valunisai','$valtotsai',$porcao,$porcao_qtd
+                '$saida','$produto','0','$qtd','$valunisai','$valtotsai',$porcao,$porcao_qtd, $pesoliquido, $totalpesoliquido
             )        
             ";
             if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL68: " . mysql_error());
