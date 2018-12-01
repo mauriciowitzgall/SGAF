@@ -1,0 +1,15 @@
+Orientações
+
+
+Implatação Dalvir
+- Na hora de receber a compra de do valmor, fazer num papel a contagem e entregar para a Thais conferir e lançar. Com isso cria-se a cultura da conferencia para saber se tem lançamento errado vindo da agape ou se teve irregularidades durante transporte, e se tiver erro corrige nos 2 sistemas 
+
+
+FIANLIZANDO VERSÃO
+- Organizar o arquivo banco_alteracoes.sql, tirando o nome do banco de dados, inserindo os comentários que dizem que encerrou a versão
+- Inser no arquivo banco_alteracoes.sql SQL que atualiza a versão do sistema no banco de dados para versão de produção, ou seja, sem o _dev
+- Executar SQL acima citado
+- Limpar os registros do banco, excluir cooperativa
+- Conferir se ficou lixo no banco de dados ao excluir cooperativa
+- Remover usuário e senha digitados no arquivo conexao.php  
+- Exportar SQL do banco atual e colocar na pasta bancos
