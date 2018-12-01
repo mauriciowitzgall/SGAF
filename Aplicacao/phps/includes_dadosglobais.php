@@ -58,9 +58,10 @@ $sql="SELECT * FROM quiosques_tiponegociacao WHERE quitipneg_quiosque=$usuario_q
 if (!$query= mysql_query($sql)) die("Erro SQL INCLUDES: " . mysql_error());
 $quiosque_consignacao=0;
 $quiosque_revenda=0;
+$tipnegqtd=0;
 while ($dados=  mysql_fetch_assoc($query)) {  
-    if ($dados["quitipneg_tipo"]==1) $quiosque_consignacao=1;
-    if ($dados["quitipneg_tipo"]==2) $quiosque_revenda=1;
+    if ($dados["quitipneg_tipo"]==1) { $quiosque_consignacao=1; $tipnegqt+=1; }
+    if ($dados["quitipneg_tipo"]==2) { $quiosque_revenda=1; $tipnegqtd+=1; }
 }
 
 

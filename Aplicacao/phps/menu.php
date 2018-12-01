@@ -100,17 +100,18 @@ if ($usuario_grupo<>4) {
 
         //Saidas
         if (($usaestoque==1)||($usavendas==1)) {
-            if ($usavendas==1) {
-                $tpl_menu->IMAGEM_TITULO = "Vendas";
-                $tpl_menu->TITULO = "Vendas";
-                $tpl_menu->IMAGEM_ARQUIVO = "vendas.png";
-                $tpl_menu->LINK = "saidas.php";
-            } else {
+            if ($usaestoque==1) {
                 $tpl_menu->IMAGEM_TITULO = "Saídas";
                 $tpl_menu->TITULO = "Saídas";
                 $tpl_menu->IMAGEM_ARQUIVO = "saidas.png";
-                $tpl_menu->LINK = "saidas_devolucao.php";
+            } else if ($usavendas==1) {
+                $tpl_menu->IMAGEM_TITULO = "Vendas";
+                $tpl_menu->TITULO = "Vendas";
+                $tpl_menu->IMAGEM_ARQUIVO = "vendas.png";
             }
+            if ($usavendas) $tpl_menu->LINK = "saidas.php";                
+            else $tpl_menu->LINK = "saidas_devolucao.php";                
+            
             $tpl_menu->TD_LARGURA = "110px";
             if ($permissao_saidas_ver == 1) {
                 if ($usuario_quiosque != 0) {
@@ -306,6 +307,30 @@ if ($usuario_grupo<>4) {
             }           
 
         }
+
+
+        //Sub-menu Entradas
+        if ($tipopagina == "entradas") {
+            
+            //Ajustes
+            $tpl_menu->LINK = "entradas_cadastrar.php";
+            $tpl_menu->IMAGEM_ARQUIVO = "entradas.png";
+            $tpl_menu->IMAGEM_TITULO = "Ajustes";
+            $tpl_menu->TITULO = "Ajustes";
+            $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+            $tpl_menu->block("BLOCK_MENU_ITEM");                
+
+            //Compras
+            $tpl_menu->LINK = "entradas_cadastrar.php";
+            $tpl_menu->IMAGEM_ARQUIVO = "compras.png";
+            $tpl_menu->IMAGEM_TITULO = "Compras";
+            $tpl_menu->TITULO = "Compras";
+            $tpl_menu->block("BLOCK_MENU_ITEM_IMG");
+            $tpl_menu->block("BLOCK_MENU_ITEM");
+
+        }
+
+
         //Sub-menu Estoque
         if ($tipopagina == "estoque") {
 

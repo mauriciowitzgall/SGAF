@@ -20,9 +20,9 @@ include "includes.php";
 <body onload="valida_filtro_entradas_numero()">
     <table summary="" class="tabela1" border="0" >
         <tr>
-            <td width="35px"><img width="50px" src="<?php echo $icones; ?>entradas.png" alt="" ></td>
+            <td width="35px"><img width="50px" src="<?php echo $icones; ?>compras.png" alt="" ></td>
             <td valign="bottom">
-                <label class="titulo" > ENTRADAS</label><br />
+                <label class="titulo" > COMPRAS</label><br />
                 <label class="subtitulo"> PESQUISA/LISTAGEM </label>
             </td>
         </tr>
@@ -170,7 +170,9 @@ $sql = "
             <tr valign="middle" class="tabelacabecalho1">
                 <td width="35px">LOTE</td>
                 <td width="" colspan="2">DATA</td>            
-                <td width="">TIPO NEG.</td>            
+                <?php if ($tipnegqtd!=1) { ?>
+                <td width="">TIPO NEG.</td>    
+                <?php } ?>        
                 <td width="">FORNECEDOR</td>
                 <td width="">SUPERVISOR</td>
                 <td width="">QTD. PROD.</td>            
@@ -249,6 +251,7 @@ $sql = "
                     <td width="35px"><?php echo converte_hora($hora); ?></td>
 
                     <!-- COLUNA TIPO NEGOCIAÇÃO -->    
+                    <?php if ($tipnegqtd!=1) { ?>}
                     <td align="center">                     
                         <?php
                         $sql11 = "SELECT ent_tiponegociacao FROM entradas WHERE ent_codigo=$codigo";
@@ -265,7 +268,9 @@ $sql = "
                         }
                         ?>    
                         <img width="15px" src="<?php echo $imagemtip; ?>" title="<?php echo $titulo; ?>" alt="<?php echo $titulo; ?>"/>
-                    </td>                    
+                    </td>  
+                    <?php } ?>
+
                     <!-- COLUNA FORNECEDOR -->
                     <td>
                         <a href="pessoas_cadastrar.php?codigo=<?php echo $fornecedor; ?>&operacao=ver" class="link">
@@ -281,7 +286,8 @@ $sql = "
                             }
                             ?>
                         </a>
-                    </td>             
+                    </td>
+
 
                     <!-- COLUNA SUPERVISOR -->
                     <td>
