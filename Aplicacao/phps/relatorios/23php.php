@@ -118,9 +118,6 @@ $tpl_lista = new Template("../templates/lista2.html");
 $tpl_lista->block("BLOCK_TABELA_CHEIA");
 
 //Cabeçalho
-
-
-
 $tpl_lista->TEXTO = "CONSUMIDOR";
 $tpl_lista->COLUNA_ALINHAMENTO = "left";
 $tpl_lista->COLUNA_TAMANHO = "30%";
@@ -196,20 +193,13 @@ $tpl_lista->block("BLOCK_CORPO");
 $cont=0;
 
 
-
 $sql=" 
 SELECT sai_codigo, saipro_codigo, sai_datacadastro, sai_horacadastro, pes_nome, pro_referencia, pro_nome, saipro_quantidade, (
     SELECT sum(saidevpro_qtddevolvida)
     FROM saidas_devolucoes_produtos 
     WHERE saidevpro_saida=sai_codigo
     and saidevpro_itemsaida=saipro_codigo
-) as qtd_devolvida,
-saipro_quantidade-(
-    SELECT sum(saidevpro_qtddevolvida)
-    FROM saidas_devolucoes_produtos 
-    WHERE saidevpro_saida=sai_codigo
-    and saidevpro_itemsaida=saipro_codigo
-) as saldo_devedor
+) as qtd_devolvida
 FROM saidas_produtos
 JOIN saidas on (sai_codigo=saipro_saida)
 join produtos on (pro_codigo=saipro_produto)

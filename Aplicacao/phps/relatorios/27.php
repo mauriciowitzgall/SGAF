@@ -1,6 +1,6 @@
 <?php
 
-//
+
 
 $tpl_rel->COLUNA_ALINHAMENTO = "right";
 $tpl_rel->COLUNA_TAMANHO = "200px";
@@ -87,6 +87,29 @@ $tpl_rel->block("BLOCK_CONTEUDO");
 $tpl_rel->block("BLOCK_COLUNA");
 $tpl_rel->block("BLOCK_LINHA");
 
+//Tipo de relatório 
+$tpl_rel->TITULO = "Tipo de relatório";
+$tpl_rel->COLUNA_ALINHAMENTO = "right";
+$tpl_rel->block("BLOCK_TITULO");
+$tpl_rel->block("BLOCK_CONTEUDO");
+$tpl_rel->block("BLOCK_COLUNA");
+$tpl_rel->COLUNA_ALINHAMENTO = "left";
+$tpl_rel->COLUNA_TAMANHO = "";
+$tpl_rel->COLUNA_ROWSPAN = "";
+$tpl_rel->SELECT_NOME = "tiporel";
+$tpl_rel->SELECT_TAMANHO = "";
+$tpl_rel->block("BLOCK_SELECT_PADRAO");
+$tpl_rel->block("BLOCK_OPTION_SELECIONADO");
+$tpl_rel->OPTION_VALOR = 1;
+$tpl_rel->OPTION_TEXTO = "Sintético";
+$tpl_rel->block("BLOCK_OPTION");
+$tpl_rel->OPTION_VALOR = 2;
+$tpl_rel->OPTION_TEXTO = "Analítico";
+$tpl_rel->block("BLOCK_OPTION");
+$tpl_rel->block("BLOCK_SELECT");
+$tpl_rel->block("BLOCK_CONTEUDO");
+$tpl_rel->block("BLOCK_COLUNA");
+$tpl_rel->block("BLOCK_LINHA");
 
 //Mostrar Ano
 $tpl_rel->TITULO = "Mostrar ano";
@@ -100,12 +123,12 @@ $tpl_rel->COLUNA_ROWSPAN = "";
 $tpl_rel->SELECT_NOME = "mostraano";
 $tpl_rel->SELECT_TAMANHO = "";
 $tpl_rel->block("BLOCK_SELECT_PADRAO");
+$tpl_rel->block("BLOCK_OPTION_SELECIONADO");
 $tpl_rel->OPTION_VALOR = 1;
 $tpl_rel->OPTION_TEXTO = "Sim";
 $tpl_rel->block("BLOCK_OPTION");
 $tpl_rel->OPTION_VALOR = 0;
 $tpl_rel->OPTION_TEXTO = "Não";
-$tpl_rel->block("BLOCK_OPTION_SELECIONADO");
 $tpl_rel->block("BLOCK_OPTION");
 $tpl_rel->block("BLOCK_SELECT");
 $tpl_rel->block("BLOCK_CONTEUDO");
@@ -124,13 +147,13 @@ $tpl_rel->COLUNA_TAMANHO = "";
 $tpl_rel->COLUNA_ROWSPAN = "";
 $tpl_rel->SELECT_NOME = "mostrames";
 $tpl_rel->SELECT_TAMANHO = "";
+$tpl_rel->block("BLOCK_OPTION_SELECIONADO");
 $tpl_rel->block("BLOCK_SELECT_PADRAO");
 $tpl_rel->OPTION_VALOR = 1;
 $tpl_rel->OPTION_TEXTO = "Sim";
 $tpl_rel->block("BLOCK_OPTION");
 $tpl_rel->OPTION_VALOR = 0;
 $tpl_rel->OPTION_TEXTO = "Não";
-$tpl_rel->block("BLOCK_OPTION_SELECIONADO");
 $tpl_rel->block("BLOCK_OPTION");
 $tpl_rel->block("BLOCK_SELECT");
 $tpl_rel->block("BLOCK_CONTEUDO");
@@ -150,17 +173,19 @@ $tpl_rel->COLUNA_ROWSPAN = "";
 $tpl_rel->SELECT_NOME = "mostradia";
 $tpl_rel->SELECT_TAMANHO = "";
 $tpl_rel->block("BLOCK_SELECT_PADRAO");
+$tpl_rel->block("BLOCK_OPTION_SELECIONADO");
 $tpl_rel->OPTION_VALOR = 1;
 $tpl_rel->OPTION_TEXTO = "Sim";
 $tpl_rel->block("BLOCK_OPTION");
 $tpl_rel->OPTION_VALOR = 0;
 $tpl_rel->OPTION_TEXTO = "Não";
-$tpl_rel->block("BLOCK_OPTION_SELECIONADO");
 $tpl_rel->block("BLOCK_OPTION");
 $tpl_rel->block("BLOCK_SELECT");
 $tpl_rel->block("BLOCK_CONTEUDO");
 $tpl_rel->block("BLOCK_COLUNA");
 $tpl_rel->block("BLOCK_LINHA");
+
+
 
 ?>
 
