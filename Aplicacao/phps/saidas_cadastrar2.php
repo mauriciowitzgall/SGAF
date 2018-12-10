@@ -84,6 +84,10 @@ if ($passo==1) {
     $dinheiro=$dados["sai_dinheiro"];
 }
 
+if ($areceber==1) {
+    $total=$valbru-$descval;
+}
+
 
 
 /*

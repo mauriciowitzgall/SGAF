@@ -45,18 +45,19 @@ $valbru=$_REQUEST["valbru2"];
 $descper = $_REQUEST["descper2"];
 $descval = $_REQUEST["descval2"];
 $total = $_REQUEST["total2"];
+if ($descval>0) $total=$valbru-$descval;
 $metodopag = $_REQUEST["metodopag2"];
 $recebidodinheiro = $_REQUEST["recebidodinheiro"];
 $recebidocartao = $_REQUEST["recebidocartao"];
 $cartaobandeira = $_REQUEST["cartaobandeira"];
-
-
 $areceber = $_REQUEST["areceber2"];
 $dinheiro = $_REQUEST["dinheiro2"];
-if ($areceber == 1)
+if ($areceber == 1) {
     $troco = 0;
-else 
+} else {
     $troco = $_REQUEST["troco2"];
+}
+
 $troco_devolvido = number_format(dinheiro_para_numero($_REQUEST["troco_devolvido"]), 2, '.', '');
 
 //rint_r($_REQUEST);
@@ -79,18 +80,20 @@ if ($forcado > 0) {
 //Calcula o valor liquido total da Sa�da
 $totalliq = $total + $forcado;
 
-/*
-  echo "<br>valbru=$valbru<br>";
-  echo "descper=$descper<br>";
-  echo "descval=$descval<br>";
-  echo "total=$total<br>";
-  echo "dinheiro=$dinheiro<br>";
-  echo "troco=$troco<br>";
 
-  echo "trocodevolvido=$troco_devolvido<br>";
-  echo "forcado=$forcado<br>";
-  echo "totalliq=$totalliq<br>";
- */
+//Se for a receber zera todos os outros valores
+if ($areceber==1) {
+    $recebidodinheiro=0;
+    $recebidocartao=0;
+    $cartaobandeira=0;
+    $forcadoacre=0;
+    $forcadodesc=0;
+    $troco_devolvido=0;
+    $troco=0;
+    $dinheiro=0;
+    $totalliq=$total;
+  }
+
 
 
 //Se for saida do tipo Venda (não devolução)
