@@ -63,6 +63,5 @@ while ($dados=  mysql_fetch_assoc($query)) {
     if ($dados["quitipneg_tipo"]==1) { $quiosque_consignacao=1; $tipnegqt+=1; }
     if ($dados["quitipneg_tipo"]==2) { $quiosque_revenda=1; $tipnegqtd+=1; }
 }
-
-
+$dataatual = date("Y-m-d");
 ?>

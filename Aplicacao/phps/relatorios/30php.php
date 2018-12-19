@@ -41,7 +41,7 @@ $tpl_lista->block("BLOCK_COLUNA");
 $tpl_lista->TEXTO = "RESERVADO";
 $tpl_lista->COLUNA_ALINHAMENTO = "center";
 $tpl_lista->COLUNA_TAMANHO = "";
-$tpl_lista->COLUNA_COLSPAN = "";
+$tpl_lista->COLUNA_COLSPAN = "2";
 $tpl_lista->block("BLOCK_COLUNA_PADRAO");
 $tpl_lista->block("BLOCK_TEXTO");
 $tpl_lista->block("BLOCK_CONTEUDO");
@@ -49,7 +49,7 @@ $tpl_lista->block("BLOCK_COLUNA");
 $tpl_lista->TEXTO = "FÍSICO ESPERADO";
 $tpl_lista->COLUNA_ALINHAMENTO = "center";
 $tpl_lista->COLUNA_TAMANHO = "";
-$tpl_lista->COLUNA_COLSPAN = "";
+$tpl_lista->COLUNA_COLSPAN = "2";
 $tpl_lista->block("BLOCK_COLUNA_PADRAO");
 $tpl_lista->block("BLOCK_TEXTO");
 $tpl_lista->block("BLOCK_CONTEUDO");
@@ -135,6 +135,80 @@ while ($dados = mysql_fetch_assoc($query)) {
     $tpl_lista->block("BLOCK_TEXTO");
     $tpl_lista->block("BLOCK_CONTEUDO");
     $tpl_lista->block("BLOCK_COLUNA");
+
+
+    //Reservado
+    $tpl_lista->COLUNA_COLSPAN = "";
+    $sql2="
+        SELECT sum(saipro_quantidade) as qtd_reservado
+        FROM saidas_produtos 
+        JOIN saidas on (sai_codigo=saipro_saida)
+        join produtos on (saipro_produto=pro_codigo)
+        WHERE sai_quiosque=$usuario_quiosque
+        and sai_entrega=1
+        and sai_entrega_concluida=0
+        and sai_dataentrega >= '$dataatual'
+        and saipro_produto=$produto_codigo
+    ";
+    if (!$query2 = mysql_query($sql2))  die("Erro SQL2:" . mysql_error());
+    $dados2 = mysql_fetch_assoc($query2); 
+    $reservado=$dados2["qtd_reservado"];  
+    if (($produto_tipocontagem==2)||($produto_tipocontagem==3)) $tpl_lista->TEXTO = number_format($reservado,3,",",".");
+    else $tpl_lista->TEXTO = number_format($reservado,0,",",".");
+    $tpl_lista->COLUNA_ALINHAMENTO = "right";
+    $tpl_lista->block("BLOCK_COLUNA_PADRAO");
+    $tpl_lista->COLUNA_COLSPAN = "";              
+    $tpl_lista->block("BLOCK_TEXTO");
+    $tpl_lista->block("BLOCK_CONTEUDO");
+    $tpl_lista->block("BLOCK_COLUNA");
+    $tpl_lista->COLUNA_COLSPAN = "";
+    $tpl_lista->TEXTO = $produto_tipocontagem_sigla;
+    $tpl_lista->COLUNA_ALINHAMENTO = "left";
+    $tpl_lista->block("BLOCK_COLUNA_PADRAO");
+    $tpl_lista->COLUNA_COLSPAN = "";              
+    $tpl_lista->block("BLOCK_TEXTO");
+    $tpl_lista->block("BLOCK_CONTEUDO");
+    $tpl_lista->block("BLOCK_COLUNA");
+
+
+    //Físico esperado
+    $fisico_esperado=$sistema-$reservado;
+    if (($produto_tipocontagem==2)||($produto_tipocontagem==3)) $tpl_lista->TEXTO = number_format($fisico_esperado,3,",",".");
+    else $tpl_lista->TEXTO = number_format($fisico_esperado,0,",",".");
+    $tpl_lista->COLUNA_ALINHAMENTO = "right";
+    $tpl_lista->block("BLOCK_COLUNA_PADRAO");
+    $tpl_lista->COLUNA_COLSPAN = "";              
+    $tpl_lista->block("BLOCK_TEXTO");
+    $tpl_lista->block("BLOCK_CONTEUDO");
+    $tpl_lista->block("BLOCK_COLUNA");
+    $tpl_lista->COLUNA_COLSPAN = "";
+    $tpl_lista->TEXTO = $produto_tipocontagem_sigla;
+    $tpl_lista->COLUNA_ALINHAMENTO = "left";
+    $tpl_lista->block("BLOCK_COLUNA_PADRAO");
+    $tpl_lista->COLUNA_COLSPAN = "";              
+    $tpl_lista->block("BLOCK_TEXTO");
+    $tpl_lista->block("BLOCK_CONTEUDO");
+    $tpl_lista->block("BLOCK_COLUNA");
+
+    //Físico contato
+    $tpl_lista->COLUNA_COLSPAN = "";
+    $tpl_lista->TEXTO = "";
+    $tpl_lista->COLUNA_ALINHAMENTO = "";
+    $tpl_lista->block("BLOCK_COLUNA_PADRAO");
+    $tpl_lista->COLUNA_COLSPAN = "";              
+    $tpl_lista->block("BLOCK_TEXTO");
+    $tpl_lista->block("BLOCK_CONTEUDO");
+    $tpl_lista->block("BLOCK_COLUNA");
+
+    //Diferença
+    $tpl_lista->COLUNA_COLSPAN = "";
+    $tpl_lista->TEXTO = "";
+    $tpl_lista->COLUNA_ALINHAMENTO = "";
+    $tpl_lista->block("BLOCK_COLUNA_PADRAO");
+    $tpl_lista->COLUNA_COLSPAN = "";              
+    $tpl_lista->block("BLOCK_TEXTO");
+    $tpl_lista->block("BLOCK_CONTEUDO");
+    $tpl_lista->block("BLOCK_COLUNA");    
 
 
     $tpl_lista->block("BLOCK_LINHA");

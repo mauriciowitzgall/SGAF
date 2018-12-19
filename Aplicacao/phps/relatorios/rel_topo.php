@@ -4,6 +4,7 @@ include "../controle/conexao.php";
 include "../controle/conexao_tipo.php";
 include "../funcoes.php";
 require "../login_verifica.php";
+$dataatual = date("Y-m-d");
 ?>
 <html>
     <head>
