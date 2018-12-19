@@ -354,7 +354,6 @@ if ((($operacao=="")||($operacao==1))||(($operacao==2)&&($paravenda==1))) {
 
 
     //Observação
-    echo "($obsnaentrada / $entrada)";
     if ($obsnaentrada==1) {
         $tpl->OBS="$obs";
         if (($passo==2)||($operacao==2)) $tpl->block("BLOCK_OBS_DESABILITADA");

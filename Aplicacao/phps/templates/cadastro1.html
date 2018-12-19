@@ -55,6 +55,7 @@
                 "
                 rowspan="{COLUNA_ROWSPAN}" 
                 colspan="{COLUNA_COLSPAN}"
+                valign="{COLUNA_VALIGN}"
                 >
                 <!-- BEGIN BLOCK_CONTEUDO --> 
 
@@ -138,55 +139,55 @@
                         <!-- BEGIN BLOCK_CAMPO_DINAMICO -->
                         class=" {CAMPO_CLASSE} " 
                         <!-- END BLOCK_CAMPO_DINAMICO -->   
+                    >
+                    <!-- END BLOCK_CAMPO --> 
+
+
+                    <!-- BEGIN BLOCK_SELECT --> 
+                    <select
+                    name="{SELECT_NOME}"
+                    id="{SELECT_ID}"
+                    size="{SELECT_TAMANHO}"                 
+                    onchange="{SELECT_AOTROCAR}" 
+                    onclick="{SELECT_AOCLICAR}" 
+
+
+                    <!-- BEGIN BLOCK_SELECT_AUTOFOCO -->
+                    autofocus
+                    <!-- END BLOCK_SELECT_AUTOFOCO -->
+
+                    <!-- BEGIN BLOCK_SELECT_DESABILITADO -->
+                    disabled                 
+                    <!-- END BLOCK_SELECT_DESABILITADO -->
+
+                    <!-- BEGIN BLOCK_SELECT_OBRIGATORIO -->
+                    required                 
+                    <!-- END BLOCK_SELECT_OBRIGATORIO -->
+
+                    <!-- BEGIN BLOCK_SELECT_PADRAO -->
+                    class="campopadrao {SELECT_CLASSE} " 
+                    <!-- END BLOCK_SELECT_PADRAO -->                
+
+                    <!-- BEGIN BLOCK_SELECT_DINAMICO -->
+                    class=" {SELECT_CLASSE} " 
+                    <!-- END BLOCK_SELECT_DINAMICO -->                   
+                    >           
+                    <!-- BEGIN BLOCK_OPTION_PADRAO --> 
+                    <option value="">Selecione</option>
+                    <!-- END BLOCK_OPTION_PADRAO --> 
+                    >           
+                    <!-- BEGIN BLOCK_OPTION_TODOS --> 
+                    <option value="">Todos</option>
+                    <!-- END BLOCK_OPTION_TODOS --> 
+
+                    <!-- BEGIN BLOCK_OPTION --> 
+                    <option 
+                        value="{OPTION_VALOR}" 
+                        <!-- BEGIN BLOCK_OPTION_SELECIONADO -->
+                        selected
+                        <!-- END BLOCK_OPTION_SELECIONADO -->
                         >
-                        <!-- END BLOCK_CAMPO --> 
-
-
-                        <!-- BEGIN BLOCK_SELECT --> 
-                        <select
-                        name="{SELECT_NOME}"
-                        id="{SELECT_ID}"
-                        size="{SELECT_TAMANHO}"                 
-                        onchange="{SELECT_AOTROCAR}" 
-                        onclick="{SELECT_AOCLICAR}" 
-
-
-                        <!-- BEGIN BLOCK_SELECT_AUTOFOCO -->
-                        autofocus
-                        <!-- END BLOCK_SELECT_AUTOFOCO -->
-
-                        <!-- BEGIN BLOCK_SELECT_DESABILITADO -->
-                        disabled                 
-                        <!-- END BLOCK_SELECT_DESABILITADO -->
-
-                        <!-- BEGIN BLOCK_SELECT_OBRIGATORIO -->
-                        required                 
-                        <!-- END BLOCK_SELECT_OBRIGATORIO -->
-
-                        <!-- BEGIN BLOCK_SELECT_PADRAO -->
-                        class="campopadrao {SELECT_CLASSE} " 
-                        <!-- END BLOCK_SELECT_PADRAO -->                
-
-                        <!-- BEGIN BLOCK_SELECT_DINAMICO -->
-                        class=" {SELECT_CLASSE} " 
-                        <!-- END BLOCK_SELECT_DINAMICO -->                   
-                        >           
-                        <!-- BEGIN BLOCK_OPTION_PADRAO --> 
-                        <option value="">Selecione</option>
-                        <!-- END BLOCK_OPTION_PADRAO --> 
-                        >           
-                        <!-- BEGIN BLOCK_OPTION_TODOS --> 
-                        <option value="">Todos</option>
-                        <!-- END BLOCK_OPTION_TODOS --> 
-
-                        <!-- BEGIN BLOCK_OPTION --> 
-                        <option 
-                            value="{OPTION_VALOR}" 
-                            <!-- BEGIN BLOCK_OPTION_SELECIONADO -->
-                            selected
-                            <!-- END BLOCK_OPTION_SELECIONADO -->
-                            >
-                            {OPTION_TEXTO}
+                        {OPTION_TEXTO}
                     </option> 
                     <!-- END BLOCK_OPTION --> 
                 </select>
@@ -295,7 +296,7 @@
 
                     <!-- BEGIN BLOCK_BR -->            
                     <br />
-                <!-- END BLOCK_BR -->            
+                    <!-- END BLOCK_BR -->            
 
 
 

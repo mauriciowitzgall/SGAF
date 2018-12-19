@@ -388,12 +388,14 @@ function desabilita_campos() {
 function verifica_incluir() {
     var valoruni = $("input[name=valuni]").val();
     var quant = $("input[name=qtd]").val();
+    
+    if (valoruni == null) valoruni=0;
+    console.log(valoruni);
     valorvendazero=$("input[name=valorvendazero]").val();
-    valoruni=valoruni.replace("R$ ","");
-    valoruni=valoruni.replace(".","");
-    valoruni=valoruni.replace(",",".");
+    //valoruni=valoruni.replace("R$ ","");
+    //valoruni=valoruni.replace(".","");
+    //valoruni=valoruni.replace(",",".");
     if (valoruni) valoruni=parseFloat(valoruni);
-    //console.log(valoruni);
     if ((valorvendazero==0)&&((valoruni == "") || (valoruni == 'R$ 0,00') || (valoruni == '0') || (valoruni == 'R$ 0,0') || (quant == '0') || (quant == '') || (quant == '0,00'))) {
         document.forms["form1"].incluir.disabled = true;
         //alert('desabilita');
