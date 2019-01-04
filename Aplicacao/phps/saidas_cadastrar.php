@@ -188,6 +188,8 @@ if ($retirar_produto == '1') {
         if (!$query)
             die("Erro de SQL98:" . mysql_error());
         while ($dados = mysql_fetch_assoc($query)) {
+            $datavenda = $dados["sai_datacadastro"];
+            $horavenda = $dados["sai_horacadastro"];
             $consumidor = $dados["sai_consumidor"];
             $consumidor_cpf = $dados["pes_cpf"];
             $consumidor_cnpj = $dados["pes_cnpj"];
@@ -203,7 +205,8 @@ if ($retirar_produto == '1') {
             $pega_dados_do_banco=1;
         }
     } else { //Caso seja uma venda nova, cadastro
-
+        $datavenda = $_REQUEST["datavenda"];
+        $horavenda = $_REQUEST["horavenda"];
         $consumidor = $_REQUEST["consumidor"];
         $saida = $_REQUEST["saida"];
 
@@ -217,6 +220,8 @@ if ($retirar_produto == '1') {
             
             $cliente_nome = $_POST["cliente_nome"];
             $tipopessoa = $_POST["tipopessoa"];
+            $datavenda = $_REQUEST["datavenda"];
+            $horavenda = $_REQUEST["horavenda"];
             $consumidor_cpf=$_POST["cpf"];
             $consumidor_cnpj=$_POST["cnpj"];
             $consumidor_fone=$_POST["fone"];
@@ -351,9 +356,11 @@ if (($operacao==2)&&($passo==2)&&($tiposaida!=3)&&(($usacomanda==1)||($identific
     if ($id_novo=="") $id_novo=$id;
     $obs=$_POST["obs"];
     $consumidor=$_REQUEST["consumidor"];
+    $datavenda=$_REQUEST["datavenda"];
+    $horavenda=$_REQUEST["horavenda"];
 
-    //Atualiza consumidor e obs
-    $sql11= "UPDATE saidas SET sai_consumidor=$consumidor, sai_id=$id_novo, sai_obs='$obs' WHERE sai_codigo=$saida";
+    //Atualiza consumidor, obs e data de cadastro
+    $sql11= "UPDATE saidas SET sai_consumidor=$consumidor, sai_id=$id_novo, sai_obs='$obs', sai_datacadastro='$datavenda', sai_horacadastro='$horavenda' WHERE sai_codigo=$saida";
     if (!$query11 = mysql_query($sql11)) die("<br>Erro11:" . mysql_error());
 
 
@@ -527,7 +534,7 @@ if ($usaestoque==1) {
 
 //Inicio do formulário de saidas
 $tpl1 = new Template("saidas_cadastrar.html");
-$tpl1->LINK_DESTINO = "saidas_cadastrar.php?tiposaida=$tiposaida&operacao=$operacao&codigo=$saida&id=$id&editarconsumidor=$editarconsumidor";
+$tpl1->LINK_DESTINO = "saidas_cadastrar.php?tiposaida=$tiposaida&operacao=$operacao&codigo=$saida&id=$id&editarconsumidor=$editarconsumidor&horavenda=$horavenda&datavenda=$datavenda";
 $tpl1->LINK_ATUAL = "saidas_cadastrar.php?tiposaida=$tiposaida&operacao=$operacao&codigo=$saida&id=$id&editarconsumidor=$editarconsumidor";
 $tpl1->ICONES_CAMINHO = $icones;
 
@@ -1137,9 +1144,9 @@ if (($saida == 0) && ($passo == 2)) {
 
         $sql_saida = "
         INSERT INTO
-            saidas (sai_quiosque, sai_caixaoperacaonumero, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro,sai_usuarioquecadastrou, sai_id,sai_obs, sai_entrega, sai_dataentrega,sai_entrega_fone1, sai_entrega_fone2, sai_entrega_endereco, sai_entrega_endereco_numero, sai_entrega_bairro, sai_entrega_cidade, sai_entrega_concluida, sai_horaentrega, sai_entrega_frete )
+            saidas (sai_quiosque, sai_caixaoperacaonumero, sai_consumidor, sai_tipo, sai_saidajustificada,sai_descricao, sai_datacadastro, sai_horacadastro,sai_status,sai_datahoracadastro,sai_usuarioquecadastrou, sai_id,sai_obs, sai_entrega, sai_dataentrega,sai_entrega_fone1, sai_entrega_fone2, sai_entrega_endereco, sai_entrega_endereco_numero, sai_entrega_bairro, sai_entrega_cidade, sai_entrega_concluida, sai_horaentrega, sai_entrega_frete)
         VALUES
-            ('$usuario_quiosque','$usuario_caixa_operacao','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horaatual',2,'$datahoracadastro',$usuario_codigo, $id, '$obs','$entrega','$entrega_dataentrega','$entrega_fone1','$entrega_fone2','$entrega_endereco','$entrega_endereco_numero','$entrega_bairro',$entrega_cidade, 0 , '$entrega_horaentrega', '$entrega_frete')        
+            ('$usuario_quiosque','$usuario_caixa_operacao','$consumidor','$tiposaida','$motivo','$descricao','$dataatual','$horavenda',2,'$datavenda',$usuario_codigo, $id, '$obs','$entrega','$entrega_dataentrega','$entrega_fone1','$entrega_fone2','$entrega_endereco','$entrega_endereco_numero','$entrega_bairro',$entrega_cidade, 0 , '$entrega_horaentrega', '$entrega_frete')        
         ";
         $query_saida = mysql_query($sql_saida);
         if (!$query_saida)
@@ -1229,6 +1236,53 @@ if ($tiposaida == 1) {
     $tpl1->block("BLOCK_TEXTO");
     $tpl1->block("BLOCK_CONTEUDO");
 
+    $tpl1->block("BLOCK_ITEM");
+
+
+    //Data da Venda
+    $tpl1->TR_ID="linha_datavenda";
+    $tpl1->CAMPO_QTD_CARACTERES = "8";
+    $tpl1->TITULO = "Data da venda";
+    $tpl1->ASTERISCO = "";
+    $tpl1->block("BLOCK_TITULO");
+    $tpl1->CAMPO_DICA="";
+    $tpl1->CAMPO_TIPO = "date";
+    $tpl1->CAMPO_NOME = "datavenda";
+    $tpl1->CAMPO_TAMANHO = "";
+    $tpl1->CAMPO_ESTILO = "";
+    $tpl1->CAMPO_FOCO = ""; 
+    if ($datavenda=="") $datavenda=date("Y-m-d");
+    $tpl1->CAMPO_VALOR = "$datavenda";
+    $tpl1->CAMPO_OBRIGATORIO = "  ";
+    if ($passo!=1) {
+        $tpl1->CAMPO_DESABILITADO = " disabled";
+    } else {
+        $tpl1->CAMPO_DESABILITADO = " ";
+    }
+    $tpl1->CAMPO_ONKEYUP = "";
+    $tpl1->CAMPO_ONKEYDOWN = "";
+    $tpl1->CAMPO_ONFOCUS = "";
+    $tpl1->block("BLOCK_CAMPO");
+    $tpl1->block("BLOCK_CONTEUDO");
+    $tpl1->CAMPO_DICA="";
+    $tpl1->CAMPO_TIPO = "time";
+    $tpl1->CAMPO_NOME = "horavenda";
+    $tpl1->CAMPO_TAMANHO = "";
+    $tpl1->CAMPO_ESTILO = "";
+    $tpl1->CAMPO_FOCO = "";
+    if ($horavenda=="") $horavenda=date("H:i");
+    $tpl1->CAMPO_VALOR = "$horavenda";
+    $tpl1->CAMPO_OBRIGATORIO = "  ";
+    if ($passo!=1) {
+        $tpl1->CAMPO_DESABILITADO = " disabled";
+    } else {
+        $tpl1->CAMPO_DESABILITADO = " ";
+    }
+    $tpl1->CAMPO_ONKEYUP = "";
+    $tpl1->CAMPO_ONKEYDOWN = "";
+    $tpl1->CAMPO_ONFOCUS = "";
+    $tpl1->block("BLOCK_CAMPO");
+    $tpl1->block("BLOCK_CONTEUDO");
     $tpl1->block("BLOCK_ITEM");
     
     

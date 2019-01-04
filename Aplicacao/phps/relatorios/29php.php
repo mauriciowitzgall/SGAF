@@ -142,6 +142,7 @@ $sql = "
     
     order by $sql_orderby
 ";
+mysql_query("set_time_limit(0);");
 $query = mysql_query($sql);
 if (!$query)die("Erro 15:" . mysql_error());
 
@@ -270,4 +271,5 @@ $tpl_lista->block("BLOCK_LISTAGEM");
 $tpl_lista->show();
 
 include "rel_baixo.php";
+//mysql_query("set_time_limit(300);");
 ?>

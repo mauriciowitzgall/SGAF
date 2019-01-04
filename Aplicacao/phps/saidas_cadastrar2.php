@@ -33,6 +33,8 @@ if (($usuario_caixa_operacao=="")&&($usuario_grupo==4)) {
 }
 
 $saida = $_REQUEST["saida"];
+$datavenda = $_REQUEST["datavenda"];
+$horavenda = $_REQUEST["horavenda"];
 $passo = $_REQUEST["passo"];
 $tiposai = $_REQUEST["tiposai"];
 $descper=$_POST["descper"];
@@ -103,7 +105,7 @@ if ((($dinheiro <= $total) && ($passo == 2))||(($metodopag==6)||($metodopag==7))
 
     echo "
         <script language='javaScript'>
-            window.location.href='saidas_cadastrar3.php?troco_devolvido=0&passo=2&saida=$saida&total2=$total&descper2=$descper&descval2=$descval&dinheiro2=$dinheiro&troco2=$troco&troco_devolvido=$troco_devolvido&valbru2=$valbru&areceber2=$areceber&metodopag2=$metodopag&tiposai=$tiposai&recebidodinheiro=$recebidodinheiro&recebidocartao=$recebidocartao&frete=$frete&cartaobandeira=$cartaobandeira'
+            window.location.href='saidas_cadastrar3.php?troco_devolvido=0&passo=2&saida=$saida&total2=$total&descper2=$descper&descval2=$descval&dinheiro2=$dinheiro&troco2=$troco&troco_devolvido=$troco_devolvido&valbru2=$valbru&areceber2=$areceber&metodopag2=$metodopag&tiposai=$tiposai&recebidodinheiro=$recebidodinheiro&recebidocartao=$recebidocartao&frete=$frete&cartaobandeira=$cartaobandeira$&atavenda=$datavenda&horavenda=$horavenda'
         </script>";   
 }
 
