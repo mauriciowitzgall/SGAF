@@ -48,6 +48,7 @@ else $metpag_nome=$dados["metpag_nome"];
 $valbru=$dados["sai_totalbruto"];
 $desconto=$dados["sai_descontovalor"];
 $valliq=$dados["sai_totalliquido"];
+$consumidor=$dados["pes_codigo"];
 $consumidor_nome=$dados["pes_nome"];
 $consumidor_cpf=$dados["pes_cpf"];
 $consumidor_cnpj=$dados["pes_cnpj"];
@@ -59,7 +60,6 @@ if ($consumidor_tipopessoa==1) {
     if ($consumidor_cnpj!="") $consumidor_documento=mask($consumidor_cnpj,"##.###.###/####-##");
     else $consumidor_documento="";
 }
-
 if ($consumidor_documento!="") $consumidor_documento="($consumidor_documento)";
 $entrega_endereco=$dados["sai_entrega_endereco"];
 $entrega_endereco_numero=$dados["sai_entrega_endereco_numero"];
@@ -69,17 +69,37 @@ $entrega_fone1=$dados["sai_entrega_fone1"];
 $entrega_fone2=$dados["sai_entrega_fone2"];
 $obs=$dados["sai_obs"];
 $entrega_cidade=$dados["cid_nome"];
+$entrega=$dados["sai_entrega"];
+if ($entrega==0) $tementrega="Não";
+else  $tementrega="Sim";
 $dataatual=date("d/m/Y");
 
-/*
-//Template de Título e Sub-título
-$tpl_titulo = new Template("templates/titulos.html");
-$tpl_titulo->TITULO = "ENTREGAS";
-$tpl_titulo->SUBTITULO = "DETALHES DA ENTREGA";
-$tpl_titulo->NOME_ARQUIVO_ICONE = "entregas.png";
-$tpl_titulo->ICONES_CAMINHO = "$icones";
-$tpl_titulo->show();
-*/
+
+//Se a venda estiver marcada para NÃO ENTREGAR no cliente, deve-se buscar os dados do cadastro da pessoa ao invez de buscar os dados de entrega. Isso se dá porque alguns usuarios usam a ficha de entrega como documento principal, e não usa a visualização/detalhes da venda.
+if ($entrega==0) {
+    $sql="
+        SELECT * 
+        FROM pessoas
+        left join cidades on (pes_cidade=cid_codigo)
+        WHERE pes_codigo=$consumidor
+    ";
+    if (!$query=mysql_query($sql)) die("SQL ERROR: ".mysql_error());
+    $dados= mysql_fetch_assoc($query);
+
+    $saida_dataentrega_convertido="---";
+    $saida_horaentrega_convertido="";
+    $obs="---";
+    $entrega_endereco=$dados["pes_endereco"];
+    $entrega_endereco_numero=$dados["pes_numero"];
+    $entrega_bairro=$dados["pes_bairro"];
+    $entrega_cidade=$dados["cid_nome"];
+    $entrega_fone1=$dados["pes_fone1"];
+    $entrega_fone2=$dados["pes_fone2"];
+
+
+}
+
+
 
 
 $cont=1;
@@ -250,25 +270,25 @@ while ($cont<=2) {
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "right";
     $tpl2->LISTA_COLUNA_CLASSE = "";
     $tpl2->LISTA_COLUNA_TAMANHO = "";
-    $tpl2->LISTA_COLUNA_VALOR = "<b>Telefone 1:</b>";
+    $tpl2->LISTA_COLUNA_VALOR = "<b>Telefone(s):</b>";
     $tpl2->block("BLOCK_LISTA_COLUNA");
     $tpl2->LISTA_COLUNA_COLSPAN = "";
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
     $tpl2->LISTA_COLUNA_CLASSE = "";
     $tpl2->LISTA_COLUNA_TAMANHO = "";
-    $tpl2->LISTA_COLUNA_VALOR = "$entrega_fone1";
+    $tpl2->LISTA_COLUNA_VALOR = "$entrega_fone1  $entrega_fone2";
     $tpl2->block("BLOCK_LISTA_COLUNA");
         $tpl2->LISTA_COLUNA_COLSPAN = "";
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "right";
     $tpl2->LISTA_COLUNA_CLASSE = "";
     $tpl2->LISTA_COLUNA_TAMANHO = "";
-    $tpl2->LISTA_COLUNA_VALOR = "<b>Telefone 2:</b>";
+    $tpl2->LISTA_COLUNA_VALOR = "<b>Entregar no cliente:</b>";
     $tpl2->block("BLOCK_LISTA_COLUNA");
     $tpl2->LISTA_COLUNA_COLSPAN = "";
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
     $tpl2->LISTA_COLUNA_CLASSE = "";
     $tpl2->LISTA_COLUNA_TAMANHO = "";
-    $tpl2->LISTA_COLUNA_VALOR = "$entrega_fone2";
+    $tpl2->LISTA_COLUNA_VALOR = "$tementrega";
     $tpl2->block("BLOCK_LISTA_COLUNA");
     $tpl2->block("BLOCK_LISTA");
 
@@ -485,7 +505,7 @@ while ($cont<=2) {
     $tpl2->LISTA_COLUNA_ALINHAMENTO = "left";
     $tpl2->LISTA_COLUNA_CLASSE = "";
     $tpl2->LISTA_COLUNA_TAMANHO = "";
-    $tpl2->LISTA_COLUNA_VALOR = "Sendo de minha total responsabilidade a manutenção e entrega dos equipamentos no mesmo estado de conservação que recebi. Estes devem ser entregues até 4 dias após a data deste documento. Será cobrado uma multa de R$ 100,00 a cada dia de atraso.<br> CIENTE DO TERMO, E DATA ATUAL $dataatual, FIRMO ABAIXO: <Br>";
+    $tpl2->LISTA_COLUNA_VALOR = "Sendo de minha total responsabilidade a manutenção e entrega dos equipamentos no mesmo estado de conservação que recebi. Estes devem ser entregues até 2 dias após a data deste documento. Será cobrado uma multa de R$ 100,00 a cada dia de atraso.<br> CIENTE DO TERMO, E DATA ATUAL $dataatual, FIRMO ABAIXO: <Br>";
     $tpl2->block("BLOCK_LISTA_COLUNA");
     $tpl2->block("BLOCK_LISTA");
 
