@@ -880,6 +880,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                                     $pesoliquido=$produto_pesoliquido;
                                     $totalpesoliquido=$produto_pesoliquido*$qtd_estoque;
                             }
+                            if ($pesoliquido=="") $pesoliquido=0;
                             $sql_saida_produto = "
                             INSERT INTO saidas_produtos (
                                 saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade,saipro_loteconjunto,saipro_pesoliquido,saipro_totalpesoliquido
@@ -888,7 +889,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                                 '$saida','$produto','$lote_estoque','$qtd_estoque','$valuni','$valtot',$porcao,$qtd_porcao_aretirar,'$lote_principal', $pesoliquido, $totalpesoliquido
                             )        
                             ";
-                            if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL68: " . mysql_error());
+                            if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL681: " . mysql_error());
 
                             $ultimo_gravado=mysql_insert_id();
 
@@ -1050,6 +1051,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                     $pesoliquido=$produto_pesoliquido;
                     $totalpesoliquido=$produto_pesoliquido*$qtd;
             }
+            if ($pesoliquido=="") $pesoliquido=0;
             $sql_saida_produto = "
             INSERT INTO saidas_produtos (
                 saipro_saida, saipro_produto, saipro_lote, saipro_quantidade, saipro_valorunitario,saipro_valortotal,saipro_porcao,saipro_porcao_quantidade,saipro_pesoliquido,saipro_totalpesoliquido
@@ -1058,7 +1060,7 @@ if ($retirar_produto == '1') { //Se o usuário clicou no excluir produto da list
                 '$saida','$produto','0','$qtd','$valunisai','$valtotsai',$porcao,$porcao_qtd, $pesoliquido, $totalpesoliquido
             )        
             ";
-            if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL68: " . mysql_error());
+            if (!$query_saida_produto = mysql_query($sql_saida_produto)) die("Erro de SQL682: " . mysql_error());
 
             
             //Grava Log

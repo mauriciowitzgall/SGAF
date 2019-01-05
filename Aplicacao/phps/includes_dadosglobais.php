@@ -53,6 +53,7 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $obrigacadastropessoacpf=$dados["quicnf_cadastro_pessoa_obrigatorio_cpf"];
     $obrigacadastropessoatelefone1=$dados["quicnf_cadastro_pessoa_obrigatorio_telefone1"];
     $obrigacadastropessoaemail=$dados["quicnf_cadastro_pessoa_obrigatorio_email"];
+    $obrigacadastroprodutopesoliquido=$dados["quicnf_cadastro_produto_obrigatorio_pesoliquido"];
     $usagrupoconsumidores=1;
 }
 

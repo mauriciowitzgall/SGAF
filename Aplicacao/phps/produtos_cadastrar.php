@@ -216,7 +216,7 @@ if ($linhas == 0) {
         
        <tr id="id_pesoliquido">
             <td align="right" width="200px"><b>Peso liquido: <label class=""></label></b></td>
-            <td align="left" width=""><input  onkeypress="" placeholder="0,000" id="" type="text" name="pesoliquido" id="pesoliquido" size="18" class="campopadrao"  value="<?php echo "$pesoliquido"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder=""><span class="dicacampo"> litros</span></td>
+            <td align="left" width=""><input  onkeypress="" placeholder="0,000" id="" type="text" name="pesoliquido" id="pesoliquido" size="18" class="campopadrao"  value="<?php echo "$pesoliquido"; ?>" <?php if ($ver == 1) echo" disabled "; ?> placeholder="" <?php if ($obrigacadastroprodutopesoliquido==1) echo " required ";  ?>><span class="dicacampo"> litros</span></td>
        </tr>        
        <tr id="id_volume">
             <td align="right" width="200px"><b>Volume: <label class="obrigatorio"></label></b></td>

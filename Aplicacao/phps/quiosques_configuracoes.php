@@ -63,6 +63,7 @@ $sql="SELECT *
      $cadastropessoacpf=$dados["quicnf_cadastro_pessoa_obrigatorio_cpf"];
      $cadastropessoatelefone1=$dados["quicnf_cadastro_pessoa_obrigatorio_telefone1"];
      $cadastropessoaemail=$dados["quicnf_cadastro_pessoa_obrigatorio_email"];
+     $cadastroprodutopesoliquido=$dados["quicnf_cadastro_produto_obrigatorio_pesoliquido"];
      $identificacaoconsumidorvenda=$dados["quicnf_identificacaoconsumidorvenda"];
      $vendasareceber=$dados["quicnf_vendasareceber"];
      $geririmobilizado=$dados["quicnf_geririmobilizado"];
@@ -155,6 +156,32 @@ $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
+
+
+//Obrigar cadastro produto peso liquido
+$tpl1->TITULO = "Obrigar preenchimento no cadastro de produto: peso liquido";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_cadastroprodutopesoliquido";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "cadastroprodutopesoliquido";
+$tpl1->SELECT_ID = "cadastroprodutopesoliquido";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($cadastroprodutopesoliquido=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($cadastroprodutopesoliquido=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
 
 //Usa EAN
 $tpl1->TITULO = "Usa EAN";
@@ -421,7 +448,6 @@ $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
-
 
 
 //Usa Módulo Produção

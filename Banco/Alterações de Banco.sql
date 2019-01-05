@@ -18349,3 +18349,6 @@ ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_bairro` INT(1) NOT NULL DEFAULT 0
 
 ALTER TABLE `sgaf_agape`.`quiosques_configuracoes` 
 CHANGE COLUMN `quicnf_cadastro_pessoa_obrigatorio_cidade` `quicnf_cadastro_pessoa_obrigatorio_cpf` INT(1) NOT NULL DEFAULT '0' ;
+
+ALTER TABLE `sgaf_agape`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_cadastro_produto_obrigatorio_pesoliquido` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastro_pessoa_obrigatorio_bairro`;
