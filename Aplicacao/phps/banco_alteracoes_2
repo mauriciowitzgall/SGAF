@@ -1,7 +1,0 @@
-ALTER TABLE `sgaf_agape`.`produtos` 
-ADD COLUMN `pro_pesoliquido` FLOAT NULL DEFAULT NULL AFTER `pro_volume`;
-
-ALTER TABLE `sgaf_agape`.`saidas_produtos` 
-ADD COLUMN `saipro_pesoliquido` FLOAT NULL AFTER `saipro_itemconjunto`,
-ADD COLUMN `saipro_totalpesoliquido` FLOAT NULL AFTER `saipro_pesoliquido`;
-

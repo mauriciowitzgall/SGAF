@@ -47,6 +47,12 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $usaprateleira=$dados["quicnf_usaprateleira"];
     $identificacaoconsumidorvenda=$dados["quicnf_identificacaoconsumidorvenda"];
     $filtro_saida_ultimosdias=$dados["quicnf_filtrosaidaultimosdias"];
+    $cadastrorapidocompleto=$dados["quicnf_cadastrorapidocompleto"];
+    $obrigacadastropessoaendereco=$dados["quicnf_cadastro_pessoa_obrigatorio_endereco"];
+    $obrigacadastropessoabairro=$dados["quicnf_cadastro_pessoa_obrigatorio_bairro"];
+    $obrigacadastropessoacidade=$dados["quicnf_cadastro_pessoa_obrigatorio_cidade"];
+    $obrigacadastropessoatelefone1=$dados["quicnf_cadastro_pessoa_obrigatorio_telefone1"];
+    $obrigacadastropessoaemail=$dados["quicnf_cadastro_pessoa_obrigatorio_email"];
     $usagrupoconsumidores=1;
 }
 

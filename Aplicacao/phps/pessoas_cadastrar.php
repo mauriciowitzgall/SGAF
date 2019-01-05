@@ -11,6 +11,7 @@ require "login_verifica.php";
 
 $codigo = $_GET["codigo"];
 $operacao = $_GET["operacao"];
+$cpf = $_GET["cpf"];
 $modal = $_GET["modal"];
 if ($operacao == "cadastrar")
     $oper_num = 1;
@@ -411,7 +412,6 @@ $tpl1->block("BLOCK_TITULO");
 $tpl1->SELECT_NOME = "cidade";
 $tpl1->SELECT_ID = "cidade";
 $tpl1->SELECT_TAMANHO = "";
-//$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
 $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT_OPTION_PADRAO");
 //Se a operação for editar então mostrar os options, e o option em questão selecionado
@@ -772,6 +772,8 @@ $tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
 $tpl1->block("BLOCK_CAMPO_NORMAL");
 if ($operacao == 'ver')
     $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+if ($obrigacadastropessoaendereco==1)
+    $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
 $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->CAMPO_QTD_CARACTERES = "";
@@ -850,6 +852,8 @@ $tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
 $tpl1->block("BLOCK_CAMPO_NORMAL");
 IF ($operacao == 'ver')
     $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+if ($obrigacadastropessoabairro==1)
+    $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
 $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
@@ -892,6 +896,8 @@ $tpl1->CAMPO_QTD_CARACTERES = 15;
 $tpl1->block("BLOCK_CAMPO_NORMAL");
 IF ($operacao == 'ver')
     $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+if ($obrigacadastropessoatelefone1==1)
+    $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");    
 $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->CAMPO_TIPO = "text";
@@ -999,6 +1005,8 @@ $tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
 $tpl1->block("BLOCK_CAMPO_NORMAL");
 IF ($operacao == 'ver')
     $tpl1->block("BLOCK_CAMPO_DESABILITADO");
+if ($obrigacadastropessoaemail==1)
+    $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");    
 $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");

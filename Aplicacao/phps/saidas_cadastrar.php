@@ -1464,6 +1464,7 @@ if ($tiposaida == 1) {
     $tpl1->block("BLOCK_ICONE_TAMANHOPADRAO");
     $tpl1->block("BLOCK_ICONE");
     $tpl1->block("BLOCK_CONTEUDO");
+    
     //Cadastrar
     $tpl1->ICONE_DESTINO="pessoas_cadastrar.php?modal=1&operacao=cadastrar";
     $tpl1->ICONE_ALVO="_blank";

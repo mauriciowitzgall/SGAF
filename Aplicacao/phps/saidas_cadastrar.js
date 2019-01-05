@@ -1516,6 +1516,7 @@ function seleciona_tipo_pessoa(valor) {
 
 
 function verifica_cpf(valor) {
+    cpf= valor;
 
     valor = valor.replace("_", "");
     valor = valor.replace("_", "");
@@ -1552,10 +1553,17 @@ function verifica_cpf(valor) {
                 valor3 = valor.replace("\n", "");
                 if (valor3=="naocadastrado") {
                     //alert("Cadastrar");
-                    $("select[name=consumidor]").hide();
-                    $("input[name=cliente_nome]").show();
-                    document.forms["form1"].cliente_nome.disabled = false;
-                    document.forms["form1"].cliente_nome.focus();
+                    cadastrorapidocompleto=$("input[name=cadastrorapidocompleto]").val();
+                    if (cadastrorapidocompleto==1) {                        
+                        link="pessoas_cadastrar.php?modal=1&operacao=cadastrar&cpf="+cpf;
+                        window.open(link,'_blank');
+
+                    } else {
+                        $("select[name=consumidor]").hide();
+                        $("input[name=cliente_nome]").show();
+                        document.forms["form1"].cliente_nome.disabled = false;
+                        document.forms["form1"].cliente_nome.focus();
+                    }
 
                 } else {
                     valor3=parseInt(valor3);

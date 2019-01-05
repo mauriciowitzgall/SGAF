@@ -18337,3 +18337,12 @@ ALTER TABLE `sgaf_agape`.`saidas_produtos`
 ADD COLUMN `saipro_pesoliquido` FLOAT NULL AFTER `saipro_itemconjunto`,
 ADD COLUMN `saipro_totalpesoliquido` FLOAT NULL AFTER `saipro_pesoliquido`;
 
+ALTER TABLE `sgaf_agape`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_cadastrorapidocompleto` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_filtrosaidaultimosdias`;
+
+ALTER TABLE `sgaf_agape`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_telefone1` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastrorapidocompleto`,
+ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_email` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastro_pessoa_obrigatorio_telefone1`,
+ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_endereco` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastro_pessoa_obrigatorio_email`,
+ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_cidade` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastro_pessoa_obrigatorio_endereco`,
+ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_bairro` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastro_pessoa_obrigatorio_cidade`;

@@ -48,5 +48,6 @@ $modal=$_GET["modal"];
             <input name="usuario_quiosque_pais" id="usuario_quiosque_pais" type="hidden" value="<?php echo $usuario_quiosque_pais; ?>">
             <input name="usuario_quiosque_estado" id="usuario_quiosque_estado" type="hidden" value="<?php echo $usuario_quiosque_estado; ?>">
             <input name="usuario_quiosque_cidade" id="usuario_quiosque_cidade" type="hidden" value="<?php echo $usuario_quiosque_cidade; ?>">
+            <input name="cadastrorapidocompleto" id="cadastrorapidocompleto" type="hidden" value="<?php echo $cadastrorapidocompleto; ?>">            
             <input name="configuracao_fazentregas" id="configuracao_fazentregas" type="hidden" value="<?php echo $fazentregas; ?>">
             <div class="corpo">
