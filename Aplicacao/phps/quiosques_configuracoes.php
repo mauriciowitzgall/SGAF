@@ -60,7 +60,7 @@ $sql="SELECT *
      $cadastrorapidocompleto=$dados["quicnf_cadastrorapidocompleto"];
      $cadastropessoaendereco=$dados["quicnf_cadastro_pessoa_obrigatorio_endereco"];
      $cadastropessoabairro=$dados["quicnf_cadastro_pessoa_obrigatorio_bairro"];
-     $cadastropessoacidade=$dados["quicnf_cadastro_pessoa_obrigatorio_cidade"];
+     $cadastropessoacpf=$dados["quicnf_cadastro_pessoa_obrigatorio_cpf"];
      $cadastropessoatelefone1=$dados["quicnf_cadastro_pessoa_obrigatorio_telefone1"];
      $cadastropessoaemail=$dados["quicnf_cadastro_pessoa_obrigatorio_email"];
      $identificacaoconsumidorvenda=$dados["quicnf_identificacaoconsumidorvenda"];
@@ -299,6 +299,32 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
+
+//Obrigar cadastro pessoa cpf
+$tpl1->TITULO = "Obrigar preenchimento no cadastro de pessoa: cpf";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="linha_cadastropessoacpf";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "cadastropessoacpf";
+$tpl1->SELECT_ID = "cadastropessoacpf";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($cadastropessoacpf=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($cadastropessoacpf=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+
 //Obrigar cadastro pessoa endereço
 $tpl1->TITULO = "Obrigar preenchimento no cadastro de pessoa: endereço";
 $tpl1->block("BLOCK_TITULO");
@@ -317,32 +343,6 @@ $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->OPTION_VALOR = 0;
 $tpl1->OPTION_NOME = "Não";
 if ($cadastropessoaendereco=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-$tpl1->block("BLOCK_SELECT_OPTION");
-$tpl1->block("BLOCK_SELECT_NORMAL");
-$tpl1->block("BLOCK_SELECT");
-$tpl1->block("BLOCK_CONTEUDO");
-$tpl1->block("BLOCK_ITEM");
-
-
-
-//Obrigar cadastro pessoa cidade
-$tpl1->TITULO = "Obrigar preenchimento no cadastro de pessoa: cidade";
-$tpl1->block("BLOCK_TITULO");
-$tpl1->LINHA_ID="linha_cadastropessoacidade";
-$tpl1->block("BLOCK_LINHA_ID");
-$tpl1->SELECT_NOME = "cadastropessoacidade";
-$tpl1->SELECT_ID = "cadastropessoacidade";
-$tpl1->SELECT_TAMANHO = "";
-$tpl1->SELECT_ONCHANGE = "";
-$tpl1->block("BLOCK_SELECT_ONCHANGE");
-$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
-$tpl1->OPTION_VALOR = 1;
-$tpl1->OPTION_NOME = "Sim";
-if ($cadastropessoacidade=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
-$tpl1->block("BLOCK_SELECT_OPTION");
-$tpl1->OPTION_VALOR = 0;
-$tpl1->OPTION_NOME = "Não";
-if ($cadastropessoacidade=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
 $tpl1->block("BLOCK_SELECT_OPTION");
 $tpl1->block("BLOCK_SELECT_NORMAL");
 $tpl1->block("BLOCK_SELECT");

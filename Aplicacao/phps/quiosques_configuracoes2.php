@@ -25,7 +25,7 @@ $identificacaoconsumidorvenda = $_POST['identificacaoconsumidorvenda'];
 $comandaduplicada = $_POST['comandaduplicada'];
 $cadastropessoaendereco = $_POST['cadastropessoaendereco'];
 $cadastropessoabairro = $_POST['cadastropessoabairro'];
-$cadastropessoacidade = $_POST['cadastropessoacidade'];
+$cadastropessoacpf = $_POST['cadastropessoacpf'];
 $cadastropessoatelefone1 = $_POST['cadastropessoatelefone1'];
 $cadastropessoaemail = $_POST['cadastropessoaemail'];
 $cadastrorapidocompleto = $_POST['cadastrorapidocompleto'];
@@ -118,7 +118,7 @@ SET
     quicnf_identificacaoconsumidorvenda='$identificacaoconsumidorvenda',
     quicnf_cadastro_pessoa_obrigatorio_bairro='$cadastropessoabairro',
     quicnf_cadastro_pessoa_obrigatorio_endereco='$cadastropessoaendereco',
-    quicnf_cadastro_pessoa_obrigatorio_cidade='$cadastropessoacidade',
+    quicnf_cadastro_pessoa_obrigatorio_cpf='$cadastropessoacpf',
     quicnf_cadastro_pessoa_obrigatorio_telefone1='$cadastropessoatelefone1',
     quicnf_cadastro_pessoa_obrigatorio_email='$cadastropessoaemail',
     quicnf_comandaduplicada='$comandaduplicada',

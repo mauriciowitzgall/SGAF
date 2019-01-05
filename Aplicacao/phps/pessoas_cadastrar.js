@@ -2,6 +2,8 @@ function verifica_usuario (tipopessoa) {
     
     //Se a pessoa marcar para ter acesso ao sistema ela deve preencher o CPF ou CNPJ para poder logar
     var acesso = $("select[name=possuiacesso]").val();            
+    var obrigacadastropessoacpf=$("input[name=obrigacadastropessoacpf]").val();  
+    
     if (acesso==0) {
         document.form1.cpf.required=false;
         document.form1.cnpj.required=false;
@@ -28,6 +30,10 @@ function verifica_usuario (tipopessoa) {
     } else {
         //alert("Erro grave de Javascript! Verifique a funcao verifica_usuario no arquivo pessoas_cadastrar.js");
     }
+    if (obrigacadastropessoacpf==1) {
+        document.form1.cpf.required=true;
+    }
+            
 }
 function pessoas_popula_quiosque (valor) {
     $.post("pessoas_popula_quiosque.php",{
@@ -45,6 +51,7 @@ function pessoas_popula_quiosque (valor) {
 
 function tipo_pessoa(valor) {
     var usamodulofiscal=$("input[name=usamodulofiscal]").val();
+    var obrigacadastropessoacpf=$("input[name=obrigacadastropessoacpf]").val(); 
     if (usamodulofiscal==1) {
         $("input[name=cidade").attr("required", true);
     } else {
@@ -80,6 +87,7 @@ function tipo_pessoa(valor) {
             $("input[name=cpf]").attr("required", false);
             $("select[name=cidade]").attr("required", false);                    
         }
+        if (obrigacadastropessoacpf==1)  $("input[name=cpf]").attr("required", true);
     } else if (valor==2) { //Pessoa Jurídica
         //alert('2');
         //$("tr[id=tr_categoria]").show(); 

@@ -18346,3 +18346,6 @@ ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_email` INT(1) NOT NULL DEFAULT 0 
 ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_endereco` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastro_pessoa_obrigatorio_email`,
 ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_cidade` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastro_pessoa_obrigatorio_endereco`,
 ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_bairro` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastro_pessoa_obrigatorio_cidade`;
+
+ALTER TABLE `sgaf_agape`.`quiosques_configuracoes` 
+CHANGE COLUMN `quicnf_cadastro_pessoa_obrigatorio_cidade` `quicnf_cadastro_pessoa_obrigatorio_cpf` INT(1) NOT NULL DEFAULT '0' ;

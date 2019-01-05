@@ -1539,18 +1539,18 @@ function verifica_cpf(valor) {
             $.post("saidas_verifica_cpf.php", {
                 cpf: valor            
             }, function(valor3) {
-                valor = valor3.replace("\r", ""); 
-                valor = valor.replace("\r", ""); 
-                valor = valor.replace("\r", ""); 
-                valor = valor.replace("\r", ""); 
-                valor = valor.replace("\t", "");
-                valor = valor.replace("\t", "");
-                valor = valor.replace("\t", "");
-                valor = valor.replace("\t", "");
-                valor = valor.replace("\n", "");
-                valor = valor.replace("\n", "");
-                valor = valor.replace("\n", "");
-                valor3 = valor.replace("\n", "");
+                valor3 = valor3.replace("\r", ""); 
+                valor3 = valor3.replace("\r", ""); 
+                valor3 = valor3.replace("\r", ""); 
+                valor3 = valor3.replace("\r", ""); 
+                valor3 = valor3.replace("\t", "");
+                valor3 = valor3.replace("\t", "");
+                valor3 = valor3.replace("\t", "");
+                valor3 = valor3.replace("\t", "");
+                valor3 = valor3.replace("\n", "");
+                valor3 = valor3.replace("\n", "");
+                valor3 = valor3.replace("\n", "");
+                valor3 = valor3.replace("\n", "");
                 if (valor3=="naocadastrado") {
                     //alert("Cadastrar");
                     cadastrorapidocompleto=$("input[name=cadastrorapidocompleto]").val();

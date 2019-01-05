@@ -464,7 +464,9 @@ $tpl1->CAMPO_ONCLICK = "this.select();";
 $tpl1->CAMPO_TAMANHO = "14";
 $tpl1->CAMPO_VALOR = $cpf;
 $tpl1->CAMPO_QTD_CARACTERES = 14;
-$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+//$tpl1->block("BLOCK_CAMPO_AUTOSELECIONAR");
+if ($obrigacadastropessoacpf==1)
+    $tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
 $tpl1->block("BLOCK_CAMPO_NORMAL");
 if ($cpf_desabilitado == 1) {
     $tpl1->block("BLOCK_CAMPO_DESABILITADO");
@@ -473,8 +475,7 @@ if ($cpf_desabilitado == 1) {
     $tpl1->CAMPOOCULTO_VALOR = "$cpf";
     $tpl1->block("BLOCK_CAMPOSOCULTOS");
 }
-//$tpl1->block("BLOCK_CAMPO_OBRIGATORIO");
-IF ($operacao == 'ver')
+if ($operacao == 'ver')
     $tpl1->block("BLOCK_CAMPO_DESABILITADO");
 $tpl1->block("BLOCK_CAMPO");
 $tpl1->block("BLOCK_CONTEUDO");
