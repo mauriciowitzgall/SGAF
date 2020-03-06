@@ -18376,18 +18376,13 @@ ALTER TABLE `sgaf`.`auditoria`
 ADD COLUMN `aud_tela` VARCHAR(70) NULL AFTER `aud_usuario`;
 
 
-
+UPDATE `configuracoes` SET `cnf_versao`='v4.1.3' WHERE `cnf_codigo`='1';
 
 ------ FIM ------
 
------- INICIO v4.1.3 ------ 
+------ INICIO v4.1.4 ------ 
 
 UPDATE `configuracoes` SET `cnf_versao`='v4.1.4dev' WHERE `cnf_codigo`='1';
-
-
-
-
-
 
 
 
