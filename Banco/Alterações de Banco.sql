@@ -18194,26 +18194,26 @@ UPDATE `configuracoes` SET `cnf_versao`='v4.1.1', `cnf_dataversao`=now() WHERE `
 ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_obsnavenda` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_valorvendazero`;
 
-ALTER TABLE `sgaf`.`saidas` 
+ALTER TABLE `saidas` 
 ADD COLUMN `sai_obs` TEXT NULL AFTER `sai_cartaobandeira`;
 
-ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_obsnaentrada` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_obsnavenda`;
 
 
-ALTER TABLE `sgaf`.`entradas` 
+ALTER TABLE `entradas` 
 ADD COLUMN `ent_obs` TEXT NULL AFTER `ent_paravenda`;
 
 
-ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+ALTER TABLE `quiosques_configuracoes` 
 ADD COLUMN `quicnf_fazentregas` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_obsnaentrada`;
 
-DELETE FROM `sgaf`.`paises` WHERE `pai_codigo`='13';
-DELETE FROM `sgaf`.`paises` WHERE `pai_codigo`='12';
-DELETE FROM `sgaf`.`paises` WHERE `pai_codigo`='11';
-DELETE FROM `sgaf`.`paises` WHERE `pai_codigo`='14';
+DELETE FROM `paises` WHERE `pai_codigo`='13';
+DELETE FROM `paises` WHERE `pai_codigo`='12';
+DELETE FROM `paises` WHERE `pai_codigo`='11';
+DELETE FROM `paises` WHERE `pai_codigo`='14';
 
-ALTER TABLE `sgaf`.`saidas` 
+ALTER TABLE `saidas` 
 ADD COLUMN `sai_entrega` INT(1) NULL AFTER `sai_obs`,
 ADD COLUMN `sai_dataentrega` DATE NULL AFTER `sai_entrega`,
 ADD COLUMN `sai_entrega_endereco` VARCHAR(70) NULL AFTER `sai_dataentrega`,
@@ -18222,11 +18222,11 @@ ADD COLUMN `sai_entrega_bairro` VARCHAR(70) NULL AFTER `sai_entrega_endereco_num
 ADD COLUMN `sai_entrega_cidade` INT NULL AFTER `sai_entrega_bairro`;
 
 
-ALTER TABLE `sgaf`.`saidas` 
+ALTER TABLE `saidas` 
 ADD COLUMN `sai_entrega_fone1` VARCHAR(14) NULL AFTER `sai_entrega_cidade`,
 ADD COLUMN `sai_entrega_fone2` VARCHAR(14) NULL AFTER `sai_entrega_fone1`;
 
-ALTER TABLE `sgaf`.`saidas` 
+ALTER TABLE `saidas` 
 ADD COLUMN `sai_entrega_concluida` INT(1) NULL AFTER `sai_entrega_fone2`;
 
 
@@ -18244,9 +18244,9 @@ ADD COLUMN `cnf_dataversao` DATETIME NOT NULL AFTER `cnf_versao`;
 UPDATE `configuracoes` SET `cnf_versao`='v4.1.2', `cnf_dataversao`=now() WHERE `cnf_codigo`='1';
 
 
-ALTER TABLE `sgaf`.`produtos` 
+ALTER TABLE `produtos` 
 DROP FOREIGN KEY `fk_nfe_ncm`;
-ALTER TABLE `sgaf`.`produtos` 
+ALTER TABLE `produtos` 
 ENGINE = MyISAM ,
 DROP INDEX `pro_ncm` ;
 
@@ -18285,7 +18285,7 @@ CHANGE COLUMN `nfe_xml` `nfe_xml` BLOB NOT NULL AFTER `nfe_finalidade`,
 ADD COLUMN `nfe_chave` VARCHAR(44) NOT NULL AFTER `nfe_xml`, RENAME TO  `nfe` ;
 
 ALTER TABLE `saidas` 
-ADD COLUMN `sai_nfe` BIGINT(20) NULL AFTER `sai_fretemetpag_bandeira`;
+ADD COLUMN `sai_nfe` BIGINT(20) NULL AFTER `sai_entrega_frete`;
 
 ALTER TABLE `saidas_devolucoes` 
 CHANGE COLUMN `saidev_numero` `saidev_numero` BIGINT(20) NOT NULL ,
@@ -18295,23 +18295,23 @@ ADD COLUMN `saidev_nfe` BIGINT(20) NULL AFTER `saidev_valliq`;
 ALTER TABLE `produtos` 
 ADD COLUMN `pro_incluirnanfe` INT(1) NOT NULL DEFAULT 0 AFTER `pro_evendido`;
 
-ALTER TABLE `sgaf_agape`.`quiosques_configuracoes` 
+ALTER TABLE .`quiosques_configuracoes` 
 ADD COLUMN `quicnf_filtrosaidaultimosdias` INT NOT NULL DEFAULT 7 AFTER `quicnf_fazfrete`;
 
 
-CREATE TABLE `sgaf_agape`.`consumidores_grupos` (
+CREATE TABLE .`consumidores_grupos` (
   `congru_codigo` INT NOT NULL AUTO_INCREMENT,
   `congru_nome` VARCHAR(100) NULL,
   PRIMARY KEY (`congru_codigo`));
 
 
-CREATE TABLE `sgaf_agape`.`pessoas_grupoconsumidores` (
+CREATE TABLE .`pessoas_grupoconsumidores` (
   `pesgrucon_pessoa` INT NOT NULL,
   `pesgrucon_grupo` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`pesgrucon_pessoa`, `pesgrucon_grupo`));
 
 
-CREATE TABLE `sgaf_agape`.`auditoria` (
+CREATE TABLE .`auditoria` (
   `aud_codigo` INT NOT NULL AUTO_INCREMENT,
   `aud_usuario` INT NOT NULL,
   `aud_data` TIMESTAMP NOT NULL,
@@ -18320,35 +18320,74 @@ CREATE TABLE `sgaf_agape`.`auditoria` (
   `aud_descricao` TEXT NULL,
   PRIMARY KEY (`aud_codigo`));
 
-ALTER TABLE `sgaf_agape`.`auditoria` 
+ALTER TABLE .`auditoria` 
 CHANGE COLUMN `aud_usuario` `aud_usuario_nome` VARCHAR(45) NOT NULL ,
 ADD COLUMN `aud_usuario_cpf` VARCHAR(11) NOT NULL AFTER `aud_usuario_nome`;
 
 
-ALTER TABLE `sgaf_agape`.`auditoria` 
+ALTER TABLE .`auditoria` 
 CHANGE COLUMN `aud_descricao` `aud_descricao` TEXT NOT NULL ,
 ADD COLUMN `aud_sql` TEXT NOT NULL AFTER `aud_descricao`;
 
 
-ALTER TABLE `sgaf_agape`.`produtos` 
+ALTER TABLE .`produtos` 
 ADD COLUMN `pro_pesoliquido` FLOAT NULL DEFAULT NULL AFTER `pro_volume`;
 
-ALTER TABLE `sgaf_agape`.`saidas_produtos` 
+ALTER TABLE .`saidas_produtos` 
 ADD COLUMN `saipro_pesoliquido` FLOAT NULL AFTER `saipro_itemconjunto`,
 ADD COLUMN `saipro_totalpesoliquido` FLOAT NULL AFTER `saipro_pesoliquido`;
 
-ALTER TABLE `sgaf_agape`.`quiosques_configuracoes` 
+ALTER TABLE .`quiosques_configuracoes` 
 ADD COLUMN `quicnf_cadastrorapidocompleto` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_filtrosaidaultimosdias`;
 
-ALTER TABLE `sgaf_agape`.`quiosques_configuracoes` 
+ALTER TABLE .`quiosques_configuracoes` 
 ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_telefone1` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastrorapidocompleto`,
 ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_email` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastro_pessoa_obrigatorio_telefone1`,
 ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_endereco` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastro_pessoa_obrigatorio_email`,
 ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_cidade` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastro_pessoa_obrigatorio_endereco`,
 ADD COLUMN `quicnf_cadastro_pessoa_obrigatorio_bairro` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastro_pessoa_obrigatorio_cidade`;
 
-ALTER TABLE `sgaf_agape`.`quiosques_configuracoes` 
+ALTER TABLE .`quiosques_configuracoes` 
 CHANGE COLUMN `quicnf_cadastro_pessoa_obrigatorio_cidade` `quicnf_cadastro_pessoa_obrigatorio_cpf` INT(1) NOT NULL DEFAULT '0' ;
 
-ALTER TABLE `sgaf_agape`.`quiosques_configuracoes` 
-ADD COLUMN `quicnf_cadastro_produto_obrigatorio_pesoliquido` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastro_pessoa_obrigatorio_bairro`;
+ALTER TABLE .`quiosques_configuracoes` 
+UPDATE `configuracoes` SET `cnf_versao`='v4.1.3' WHERE `cnf_codigo`='1';
+
+
+CREATE TABLE `auditoria` (
+  `aud_codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `aud_usuario_nome` varchar(45) NOT NULL,
+  `aud_usuario_cpf` varchar(11) NOT NULL,
+  `aud_data` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `aud_operacao` varchar(15) NOT NULL,
+  `aud_tabela` varchar(50) NOT NULL,
+  `aud_descricao` text NOT NULL,
+  `aud_sql` text NOT NULL,
+  PRIMARY KEY (`aud_codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `sgaf`.`auditoria` 
+ADD COLUMN `aud_quiosque` INT(11) NOT NULL AFTER `aud_sql`;
+
+ALTER TABLE `sgaf`.`auditoria` 
+ADD COLUMN `aud_usuario` INT(11) NULL AFTER `aud_quiosque`;
+
+ALTER TABLE `sgaf`.`auditoria` 
+ADD COLUMN `aud_tela` VARCHAR(70) NULL AFTER `aud_usuario`;
+
+
+
+
+------ FIM ------
+
+------ INICIO v4.1.3 ------ 
+
+UPDATE `configuracoes` SET `cnf_versao`='v4.1.4dev' WHERE `cnf_codigo`='1';
+
+
+
+
+
+
+
+
