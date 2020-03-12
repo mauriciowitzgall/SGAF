@@ -73,6 +73,10 @@ $sql="SELECT *
      $fazfrete = $dados['quicnf_fazfrete'];
      $fazacertos = $dados['quicnf_fazacertos'];     
      $usaproducao=$dados["quicnf_usamoduloproducao"];
+     $usaauditoria=$dados["quicnf_usaauditoria"];
+     $auditoria_vendas=$dados["quicnf_auditoria_vendas"];
+     $auditoria_entradas=$dados["quicnf_auditoria_entradas"];
+     $auditoria_requisicoes=$dados["quicnf_auditoria_requisicoes"];
      $classificacaopadraoestoque=$dados["quicnf_classificacaopadraoestoque"];
      $devolucoessobrevendas=$dados["quicnf_devolucoessobrevendas"];
      $pagamentosparciais=$dados["quicnf_pagamentosparciais"];
@@ -1623,7 +1627,98 @@ $tpl1->block("BLOCK_CONTEUDO");
 $tpl1->block("BLOCK_ITEM");
 
 
+//Usa auditoria
+$tpl1->TITULO = "5- MODULO AUDITORIA";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "usaauditoria";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($usaauditoria=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($usaauditoria=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
 
+
+//Telas monitorada pela auditoria: Vendas
+$tpl1->TITULO = "Vendas";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "auditoria_vendas";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($auditoria_vendas=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($auditoria_vendas=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//Telas monitorada pela auditoria: Requisições
+$tpl1->TITULO = "Requisições";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "auditoria_requisicoes";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($auditoria_requisicoes=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($auditoria_requisicoes=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
+
+//Telas monitorada pela auditoria: Entradas
+$tpl1->TITULO = "Entradas";
+$tpl1->block("BLOCK_TITULO");
+$tpl1->LINHA_ID="";
+$tpl1->block("BLOCK_LINHA_ID");
+$tpl1->SELECT_NOME = "auditoria_entradas";
+$tpl1->SELECT_TAMANHO = "";
+$tpl1->SELECT_ONCHANGE = "";
+$tpl1->block("BLOCK_SELECT_ONCHANGE");
+$tpl1->block("BLOCK_SELECT_OBRIGATORIO");
+$tpl1->OPTION_VALOR = 0;
+$tpl1->OPTION_NOME = "Não";
+if ($auditoria_entradas=='0') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->OPTION_VALOR = 1;
+$tpl1->OPTION_NOME = "Sim";
+if ($auditoria_entradas=='1') $tpl1->block("BLOCK_SELECT_OPTION_SELECIONADO");
+$tpl1->block("BLOCK_SELECT_OPTION");
+$tpl1->block("BLOCK_SELECT_NORMAL");
+$tpl1->block("BLOCK_SELECT");
+$tpl1->block("BLOCK_CONTEUDO");
+$tpl1->block("BLOCK_ITEM");
 
 //-------------
 

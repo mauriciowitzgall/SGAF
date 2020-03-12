@@ -254,7 +254,7 @@ if ($usuario_grupo<>4) {
 
             
             //Auditoria
-            if ($usuario_grupo == 1) {
+            if ($usaauditoria==1) {
                 $tpl_menu->IMAGEM_TITULO = "Auditoria";
                 $tpl_menu->TITULO = "Auditoria";
                 $tpl_menu->IMAGEM_ARQUIVO = "auditoria.png";

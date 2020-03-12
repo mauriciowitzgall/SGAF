@@ -55,6 +55,10 @@ $classificacaopadraoestoque = $_POST['classificacaopadraoestoque'];
 $devolucoessobrevendas = $_POST['devolucoessobrevendas'];
 $pagamentosparciais = $_POST['pagamentosparciais'];
 $permiteedicaoreferencianavenda = $_POST['permiteedicaoreferencianavenda'];
+$usaauditoria = $_POST['usaauditoria'];
+$auditoria_vendas = $_POST['auditoria_vendas'];
+$auditoria_entradas = $_POST['auditoria_entradas'];
+$auditoria_requisicoes = $_POST['auditoria_requisicoes'];
 $filtrosaida_ultimosdias = $_POST['filtrosaida_ultimosdias'];
 
     
@@ -102,7 +106,7 @@ $tpl_notificacao = new Template("templates/notificacao.html");
 $tpl_notificacao->ICONES = $icones;
 $tpl_notificacao->DESTINO = "quiosques_configuracoes.php";
 
- $sql = "
+$sql = "
 UPDATE
     quiosques_configuracoes
 SET            
@@ -151,7 +155,11 @@ SET
     quicnf_fazfrete='$fazfrete',
     quicnf_fazacertos='$fazacertos',
     quicnf_filtrosaidaultimosdias='$filtrosaida_ultimosdias',
-    quicnf_usavendaporcoes='$usavendaporcoes'
+    quicnf_usavendaporcoes='$usavendaporcoes',
+    quicnf_usaauditoria='$usaauditoria',
+    quicnf_auditoria_vendas='$auditoria_vendas',
+    quicnf_auditoria_entradas='$auditoria_entradas',
+    quicnf_auditoria_requisicoes='$auditoria_requisicoes'
     $complemento    
 WHERE
     quicnf_quiosque=$quiosque

@@ -18385,4 +18385,20 @@ UPDATE `configuracoes` SET `cnf_versao`='v4.1.3' WHERE `cnf_codigo`='1';
 UPDATE `configuracoes` SET `cnf_versao`='v4.1.4dev' WHERE `cnf_codigo`='1';
 
 
+ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_usaauditoria` INT(1) NOT NULL DEFAULT 0 AFTER `quicnf_cadastro_produto_obrigatorio_pesoliquido`;
 
+ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+ADD COLUMN `quicnf_vendas` INT(1) NULL AFTER `quicnf_usaauditoria`,
+ADD COLUMN `quicnf_entradas` INT(1) NULL AFTER `quicnf_vendas`,
+ADD COLUMN `quicnf_requisicoes` INT(1) NULL AFTER `quicnf_entradas`;
+
+ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+CHANGE COLUMN `quicnf_vendas` `quicnf_vendas` INT(1) NULL DEFAULT 0 ,
+CHANGE COLUMN `quicnf_entradas` `quicnf_entradas` INT(1) NULL DEFAULT 0 ,
+CHANGE COLUMN `quicnf_requisicoes` `quicnf_requisicoes` INT(1) NULL DEFAULT 0 ;
+
+ALTER TABLE `sgaf`.`quiosques_configuracoes` 
+CHANGE COLUMN `quicnf_vendas` `quicnf_vendas` INT(1) NOT NULL DEFAULT '0' ,
+CHANGE COLUMN `quicnf_entradas` `quicnf_entradas` INT(1) NOT NULL DEFAULT '0' ,
+CHANGE COLUMN `quicnf_requisicoes` `quicnf_requisicoes` INT(1) NOT NULL DEFAULT '0' ;

@@ -54,6 +54,10 @@ while ($dados=  mysql_fetch_assoc($query)) {
     $obrigacadastropessoatelefone1=$dados["quicnf_cadastro_pessoa_obrigatorio_telefone1"];
     $obrigacadastropessoaemail=$dados["quicnf_cadastro_pessoa_obrigatorio_email"];
     $obrigacadastroprodutopesoliquido=$dados["quicnf_cadastro_produto_obrigatorio_pesoliquido"];
+    $usaauditoria=$dados["quicnf_usaauditoria"];
+    $auditoria_entradas=$dados["quicnf_auditoria_entradas"];
+    $auditoria_vendas=$dados["quicnf_auditoria_vendas"];
+    $auditoria_requisicoes=$dados["quicnf_auditoria_requisicoes"];
     $usagrupoconsumidores=1;
 }
 
