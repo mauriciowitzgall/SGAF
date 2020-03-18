@@ -230,7 +230,15 @@ function verifica_entrega (valor) {
                     document.form1.estado.required=true;
                     document.form1.pais.required=true; 
                     if (consumidor_existente==1) { //Trata-se de um consumidor já cadastrado 
-                        //Pegar dados do banco e popular os campos de endereço da tela.
+                        
+                        
+                        //Verifica se atualmente no banco de dados esta venda esta definido para fazer entregas
+                        //se sim, o sistema deve popular os dados da entrega na tela
+                        //se não, o sistema deverá popular os dados do cadastro pessoal do cliente.
+
+
+
+                        //Pegar dados do banco e popular os campos de endereço da tela a partir do cadastro pessoal do cliente
                         $.post("saidas_consumidor_existente_comentrega.php", { consumidor: consumidor }, function(valor2) {
                             valor2=valor2.split("|");
                             consumidor_codigo=valor2[0];

@@ -74,8 +74,7 @@
                     style="{CAMPO_ESTILO}" 
                     <!-- END BLOCK_FILTRO_CAMPO_ESTILO -->                    
                     >
-                <!-- BEGIN BLOCK_ICONE --> 
-                         
+                <!-- BEGIN BLOCK_ICONE -->                          
                 <img 
                     src="{ICONE_ARQUIVO}" 
                     width="
@@ -95,14 +94,51 @@
             <!-- BEGIN BLOCK_FILTRO_CAMPO_TEXTO -->
             <td width="{CAMPO_TEXTO_TAMANHO}">{CAMPO_TEXTO_TEXTO}</td>  
             <!-- END BLOCK_FILTRO_CAMPO_TEXTO -->
-            
-            
-
 
             <td width="15px"></td>
-
-
             <!-- END BLOCK_FILTRO_CAMPO -->
+
+            <!-- BEGIN BLOCK_FILTRO_CAMPO2 -->
+            <td width="{COLUNA_TAMANHO}"><b>&nbsp;{CAMPO2_TITULO}</b><br>
+                <input 
+                    size="{CAMPO2_TAMANHO}" 
+                    type="{CAMPO2_TIPO}" 
+                    name="{CAMPO2_NOME}" 
+                    id="{CAMPO2_NOME}"
+                    class="campopadrao" 
+                    value="{CAMPO2_VALOR}" 
+                    maxlength="{CAMPO2_QTD_CARACTERES}" 
+                    onkeyup="{CAMPO2_ONKEYUP}" 
+                    <!-- BEGIN BLOCK_FILTRO_CAMPO2_DESABILITADO -->
+                    disabled 
+                    <!-- END BLOCK_FILTRO_CAMPO2_DESABILITADO -->                    
+                    <!-- BEGIN BLOCK_FILTRO_CAMPO2_ESTILO -->
+                    style="{CAMPO2_ESTILO}" 
+                    <!-- END BLOCK_FILTRO_CAMPO2_ESTILO -->                    
+                    >
+                <!-- BEGIN BLOCK_ICONE2 -->                          
+                <img 
+                    src="{ICONE2_ARQUIVO}" 
+                    width="
+                    <!-- BEGIN BLOCK_ICONE2_TAMANHOPADRAO --> 
+                    12px
+                    <!-- END BLOCK_ICONE2_TAMANHOPADRAO -->                
+                    {ICONE2_TAMANHO}
+                    " 
+                    title="{ICONE2_DICA}" 
+                    alt="{ICONE2_ALTERNATIVO}"
+                    id="{ICONE2_ID}"
+                    onclick="{ICONE2_AOCLICAR}
+                    " 
+                    >
+                <!-- END BLOCK_ICONE2 --> 
+            </td>
+            <!-- BEGIN BLOCK_FILTRO_CAMPO2_TEXTO -->
+            <td width="{CAMPO2_TEXTO_TAMANHO}">{CAMPO2_TEXTO_TEXTO}</td>  
+            <!-- END BLOCK_FILTRO_CAMPO2_TEXTO -->
+
+            <td width="15px"></td>
+            <!-- END BLOCK_FILTRO_CAMPO2 -->            
             
                
             <!-- BEGIN BLOCK_FILTRO_SELECT -->

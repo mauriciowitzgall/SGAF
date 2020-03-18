@@ -16,7 +16,14 @@ $filtro_usuario_nome=$_REQUEST["filtro_usuario_nome"];
 $filtro_tela=$_REQUEST["filtro_tela"];
 $filtro_tabela=$_REQUEST["filtro_tabela"];
 $filtro_operacao=$_REQUEST["filtro_operacao"];
+$filtro_de=$_REQUEST["filtro_de"];
+$filtro_ate=$_REQUEST["filtro_ate"];
+$filtro_de_hora=$_REQUEST["filtro_de_hora"];
+$filtro_ate_hora=$_REQUEST["filtro_ate_hora"];
+if ($filtro_de_hora=="") $filtro_de_hora="00:00";
+if ($filtro_ate_hora=="") $filtro_ate_hora="23:59";
 $filtro_descricao=$_REQUEST["filtro_descricao"];
+
 
 
 //Template de Título e Sub-título
@@ -78,11 +85,26 @@ $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
 // Filtro operacao
-$tpl->CAMPO_TITULO = "Operação";
-$tpl->CAMPO_NOME = "filtro_operacao";
-$tpl->CAMPO_VALOR = $filtro_operacao;
-$tpl->CAMPO_TAMANHO = "25";
-$tpl->block("BLOCK_FILTRO_CAMPO");
+$tpl->SELECT_TITULO="Operação";
+$tpl->SELECT_NOME="filtro_operacao";
+$tpl->SELECT_TAMANHO="";
+$tpl->OPTION_VALOR="";
+$tpl->OPTION_NOME="Qualquer";
+if ($filtro_operacao=="") $tpl->block("BLOCK_FILTRO_SELECT_OPTION_SELECIONADO");
+$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+$tpl->OPTION_VALOR="INSERT";
+$tpl->OPTION_NOME="Inseriu";
+if ($filtro_operacao=="INSERT") $tpl->block("BLOCK_FILTRO_SELECT_OPTION_SELECIONADO");
+$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+$tpl->OPTION_VALOR="UPDATE";
+$tpl->OPTION_NOME="Atualizou";
+if ($filtro_operacao=="UPDATE") $tpl->block("BLOCK_FILTRO_SELECT_OPTION_SELECIONADO");
+$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+$tpl->OPTION_VALOR="DELETE";
+$tpl->OPTION_NOME="Removeu";
+if ($filtro_operacao=="DELETE") $tpl->block("BLOCK_FILTRO_SELECT_OPTION_SELECIONADO");
+$tpl->block("BLOCK_FILTRO_SELECT_OPTION");
+$tpl->block("BLOCK_FILTRO_SELECT");
 $tpl->block("BLOCK_FILTRO_COLUNA");
 
 
@@ -95,10 +117,39 @@ $tpl->CAMPO_VALOR = $filtro_descricao;
 $tpl->CAMPO_TAMANHO = "30";
 $tpl->block("BLOCK_FILTRO_CAMPO");
 $tpl->block("BLOCK_FILTRO_COLUNA");
-$tpl->block("BLOCK_FILTRO");
+
+
+// Filtro Datas
+$tpl->CAMPO2_TITULO = "De";
+$tpl->CAMPO2_TIPO = "date";
+$tpl->CAMPO2_NOME = "filtro_de";
+$tpl->CAMPO2_VALOR = "$filtro_de";
+$tpl->CAMPO2_TAMANHO = "12";
+$tpl->block("BLOCK_FILTRO_CAMPO2");
+$tpl->CAMPO2_TITULO = "";
+$tpl->CAMPO2_TIPO = "time";
+$tpl->CAMPO2_NOME = "filtro_de_hora";
+$tpl->CAMPO2_VALOR = "$filtro_de_hora";
+$tpl->CAMPO2_TAMANHO = "12";
+$tpl->block("BLOCK_FILTRO_CAMPO2");
+$tpl->block("BLOCK_FILTRO_COLUNA");
+$tpl->CAMPO2_TITULO = "Até";
+$tpl->CAMPO2_TIPO = "date";
+$tpl->CAMPO2_NOME = "filtro_ate";
+$tpl->CAMPO2_VALOR = "$filtro_ate";
+$tpl->CAMPO2_TAMANHO = "12";
+$tpl->block("BLOCK_FILTRO_CAMPO2");
+$tpl->CAMPO2_TITULO = "";
+$tpl->CAMPO2_TIPO = "time";
+$tpl->CAMPO2_NOME = "filtro_ate_hora";
+$tpl->CAMPO2_VALOR = "$filtro_ate_hora";
+$tpl->CAMPO2_TAMANHO = "12";
+$tpl->block("BLOCK_FILTRO_CAMPO2");
+$tpl->block("BLOCK_FILTRO_COLUNA");
 
 $tpl->block("BLOCK_FILTRO_BOTOES");
 
+$tpl->block("BLOCK_FILTRO");
 $tpl->block("BLOCK_FILTRO");
 
 
@@ -149,6 +200,8 @@ if ($filtro_usuario_nome<>"") $sql_filtro.="AND aud_usuario_nome like '%$filtro_
 if ($filtro_tela<>"") $sql_filtro.="AND aud_tela like '%$filtro_tela%'";
 if ($filtro_tabela<>"") $sql_filtro.="AND aud_tabela like '%$filtro_tabela%'";
 if ($filtro_operacao<>"") $sql_filtro.="AND aud_operacao like '%$filtro_operacao%'";
+if ($filtro_de<>"") $sql_filtro.="AND aud_data >=  '$filtro_de $filtro_de_hora'";
+if ($filtro_ate<>"") $sql_filtro.="AND aud_data <= '$filtro_ate $filtro_ate_hora'";
 
 
 $filtro_descricao=str_replace(' ','%',$filtro_descricao);
@@ -227,7 +280,10 @@ while ($dados=  mysql_fetch_assoc($query)) {
    $tpl->LISTA_COLUNA_ALINHAMENTO="";
    $tpl->LISTA_COLUNA_CLASSE="";
    $tpl->LISTA_COLUNA_TAMANHO="";
-   $tpl->LISTA_COLUNA_VALOR= "$operacao";
+   if ($operacao=="INSERT") $operacao_nome="Inseriu";
+   else if ($operacao=="UPDATE") $operacao_nome="Atualizou";
+   else if ($operacao=="DELETE") $operacao_nome="Removeu";
+   $tpl->LISTA_COLUNA_VALOR= "$operacao_nome";
    $tpl->block("BLOCK_LISTA_COLUNA");
     
     //Descrição

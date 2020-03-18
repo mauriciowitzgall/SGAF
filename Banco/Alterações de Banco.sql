@@ -18402,3 +18402,7 @@ ALTER TABLE `sgaf`.`quiosques_configuracoes`
 CHANGE COLUMN `quicnf_vendas` `quicnf_vendas` INT(1) NOT NULL DEFAULT '0' ,
 CHANGE COLUMN `quicnf_entradas` `quicnf_entradas` INT(1) NOT NULL DEFAULT '0' ,
 CHANGE COLUMN `quicnf_requisicoes` `quicnf_requisicoes` INT(1) NOT NULL DEFAULT '0' ;
+
+ALTER TABLE `sgaf`.`auditoria` 
+CHANGE COLUMN `aud_sql` `aud_sql` TEXT NULL ,
+CHANGE COLUMN `aud_tela` `aud_tela` VARCHAR(70) NOT NULL ;

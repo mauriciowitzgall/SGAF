@@ -5,28 +5,37 @@ include "controle/conexao.php";
 include "controle/conexao_tipo.php";
 
 $consumidor=$_POST["consumidor"];
+$saida="11111";
 
-
-$sql = "
-    SELECT *
-    FROM pessoas
-    left join cidades on (pes_cidade=cid_codigo)
-    left join estados on (est_codigo=cid_estado)
-    WHERE pes_codigo=$consumidor
-";
+$sql = "SELECT sai_entrega FROM saidas WHERE sai_codigo=$saida";
 $query = mysql_query($sql); if (!$query) die("Erro: " . mysql_error());
-while ($dados = mysql_fetch_array($query)) {
-    $codigo=$dados["pes_codigo"];
-    $nome= $dados['pes_nome'];
-    $fone1= $dados['pes_fone1'];
-    $fone2= $dados['pes_fone2'];
-    $endereco= $dados['pes_endereco'];
-    $endereco_numero= $dados['pes_numero'];
-    $bairro= $dados['pes_bairro'];
-    $cidade= $dados['pes_cidade'];
-    $estado= $dados['cid_estado'];
-    $pais= $dados['est_pais'];
+$dados = mysql_fetch_array($query);
+$entrega_atual=$dados['sai_entrega'];
 
-    echo "$codigo|$nome|$fone1|$fone2|$endereco|$bairro|$cidade|$estado|$pais|$endereco_numero";
+if ($entrega_atual==1) {
+
+} else {
+    $sql = "
+        SELECT *
+        FROM pessoas
+        left join cidades on (pes_cidade=cid_codigo)
+        left join estados on (est_codigo=cid_estado)
+        WHERE pes_codigo=$consumidor
+    ";
+    $query = mysql_query($sql); if (!$query) die("Erro: " . mysql_error());
+    while ($dados = mysql_fetch_array($query)) {
+        $codigo=$dados["pes_codigo"];
+        $nome= $dados['pes_nome'];
+        $fone1= $dados['pes_fone1'];
+        $fone2= $dados['pes_fone2'];
+        $endereco= $dados['pes_endereco'];
+        $endereco_numero= $dados['pes_numero'];
+        $bairro= $dados['pes_bairro'];
+        $cidade= $dados['pes_cidade'];
+        $estado= $dados['cid_estado'];
+        $pais= $dados['est_pais'];
+
+    }
+echo "$codigo|$nome|$fone1|$fone2|$endereco|$bairro|$cidade|$estado|$pais|$endereco_numero";
 }
 ?>

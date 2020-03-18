@@ -1,5 +1,5 @@
 <?php
-
+$tela="entradas_cadastrar";
 //Verifica se o usu�rio tem permiss�o para acessar este conte�do
 require "login_verifica.php";
 if ($permissao_entradas_cadastrar <> 1) {
@@ -392,6 +392,16 @@ if ($passo != "") {
         }
         $entrada = mysql_insert_id();
         $tpl->ENTRADA = $entrada;
+        
+        //Grava Log
+        $sql_executado=str_replace("'","\'",$sql);
+        $sql_logs="
+            INSERT INTO auditoria (aud_usuario_cpf,aud_usuario_nome, aud_operacao, aud_tabela, aud_descricao, aud_sql, aud_quiosque,aud_tela) 
+            VALUES ('$usuario_cpf','$usuario_nome','INSERT','entradas','Cadastrou uma nova entrada ($entrada) com status (2 Incompleto)', ' $sql_executado','$usuario_quiosque','$tela')
+        ";
+        if (!$query_logs = mysql_query($sql_logs)) die("Erro ao gravar LOG de auditoria <br>". mysql_error());  
+
+        
     }
 
 
